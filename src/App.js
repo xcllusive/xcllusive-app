@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import BusinessPage from './pages/BusinessPage';
+
+//import BusinessEditPage from './pages/BusinessEditPage';
+import BusinessListPage from './pages/BusinessListPage';
 
 class App extends Component {
   render() {
     return (
+      /*<div>
+        <BusinessEditPage />        
+      </div>    */
       <div>
-        <BusinessPage />
+        <BusinessListPage />
       </div>
     );
   }
