@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 //import BusinessEditPage from './pages/BusinessEditPage';
-import BusinessListPage from './pages/BusinessListPage';
+import ListPage from './pages/Business/ListPage';
 
 class App extends Component {
   render() {
@@ -10,7 +10,7 @@ class App extends Component {
         <BusinessEditPage />        
       </div>    */
       <div>
-        <BusinessListPage />
+        <ListPage />
       </div>
     );
   }
