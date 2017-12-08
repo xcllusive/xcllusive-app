@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
-//import BusinessEditPage from './pages/BusinessEditPage';
-import ListPage from './pages/Business/ListPage';
+import EditPage from './pages/Business/EditPage';
+//import ListPage from './pages/Business/ListPage';
 
 class App extends Component {
   render() {
     return (
-      /*<div>
-        <BusinessEditPage />        
-      </div>    */
       <div>
-        <ListPage />
+        <EditPage />
       </div>
+      /*<div>
+        <ListPage />
+      </div>*/
     );
   }
 }
