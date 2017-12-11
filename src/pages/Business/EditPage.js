@@ -7,9 +7,11 @@ import {
   Form,
   Radio,
   Table,
-  Button
+  Button,
+  Icon
 } from 'semantic-ui-react';
 import BusinessDetail from '../../components/BusinessDetail';
+import './Business.css';
 
 const agent = [
   { key: 'Z', text: 'Zoran', value: 'Zoran' },
@@ -36,6 +38,24 @@ const ownerTime = [
 const rating = [
   { key: '1', text: '1. Awesome', value: '1' },
   { key: '2', text: '2. Good', value: '2' }
+];
+
+const product = [
+  { key: '1', text: 'Business Sale', value: 'BS' },
+  { key: '2', text: 'Seller Assist', value: 'SA' },
+  { key: '3', text: 'Franchise Sale', value: 'FS' }
+];
+
+const state = [
+  { key: '1', text: 'ACT', value: 'ACT' },
+  { key: '1', text: 'NT', value: 'NT' },
+  { key: '1', text: 'NSW', value: 'NSW' },
+  { key: '2', text: 'QLD', value: 'QLD' },
+  { key: '2', text: 'SA', value: 'SA' },
+  { key: '2', text: 'TAS', value: 'TAS' },
+  { key: '2', text: 'VIC', value: 'VIC' },
+  { key: '2', text: 'WA', value: 'WA' },
+  { key: '3', text: '', value: 'FS' }
 ];
 
 const array = [
@@ -87,7 +107,7 @@ class BusinessEditPage extends Component {
           </Statistic>
           <Statistic color="blue">
             <Statistic.Value>1,000,000</Statistic.Value>
-            <Statistic.Label>$</Statistic.Label>
+            <Statistic.Label>Price</Statistic.Label>
           </Statistic>
           <Statistic color="blue">
             <Statistic.Value>Business Sale</Statistic.Value>
@@ -109,137 +129,71 @@ class BusinessEditPage extends Component {
             <Statistic.Value>Under Offer</Statistic.Value>
           </Statistic>
         </Statistic.Group>
-        <Segment size={'mini'} inverted tertiary color="black" clearing>
-          <Header color="white" as="h4" floated="left">
-            {' '}
-            Business Detail{' '}
+        <Segment size={'mini'} inverted color="blue">
+          <Header color="white" as="h7" textAlign="left">
+            Business Detail
           </Header>
-          <Header color="white" as="h4" floated="right">
-            {' '}
-            Enquiry Date: 06/12/2017{' '}
+          <Header color="white" as="h7" floated="right">
+            Enquiry Date: 06/12/2017
           </Header>
         </Segment>
         <Grid celled divided="vertically">
           <Grid.Row columns={2}>
-            <Grid.Column>
-              <Header color="teal" textAlign="center" size="medium">
-                Main Details
-              </Header>
+            <Grid.Column color="">
               <BusinessDetail />
-              <Form>
-                <Form.Input
-                  label="Listing Agent"
-                  placeholder="Zoran Sarabaca"
-                  readOnly
-                />
-                <Form.Button primary>Reassign Business</Form.Button>
+              <Form size="tiny">
+                <Form.Group inline>
+                  <Form.Input
+                    label="Listing Agent"
+                    placeholder="Zoran Sarabaca"
+                    readOnly
+                  />
+                  <Form.Button primary compact>
+                    <Icon name="edit" />
+                    Reassign Business
+                  </Form.Button>
+                  <Form.Button compact color="blue">
+                    <Icon name="file pdf outline" />
+                    PDF
+                  </Form.Button>
+                  <Form.Button
+                    className="row AppraisalManagement"
+                    compact
+                    color="vk"
+                  >
+                    <Icon name="file text" />
+                    Appraisal Mgt
+                  </Form.Button>
+                </Form.Group>
               </Form>
             </Grid.Column>
-            <Grid.Column>
-              <Header color="teal" textAlign="center" size="medium">
-                Other Details
-              </Header>
-              <Form>
+            <Grid.Column color="">
+              <Form size="tiny">
                 <Form.Group widths="equal">
-                  <Form.Input
-                    label="Business name (Secondary name)"
-                    placeholder="Insert another business name"
-                  />
-                  <Form.Input
-                    label="ABN"
-                    placeholder="Insert ABN of the business name"
-                  />
+                  <Form.Input label="Business name (Secondary)" />
+                  <Form.Input label="ABN" />
+                  <Form.Input label="Website" />
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input
-                    label="Street"
-                    placeholder="Insert a street name"
-                  />
+                  <Form.Input label="Street" />
+                  <Form.Input label="Suburb" />
+                  <Form.Select label="State" options={state} />
+                  <Form.Input label="Post code" />
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input label="Suburb" placeholder="Insert a last name" />
-                  <Form.Input label="Suburb" placeholder="Insert a last name" />
-                  <Form.Input
-                    label="Post code"
-                    placeholder="Insert a post code"
-                  />
+                  <Form.Select label="Rating" options={rating} />
+                  <Form.Select label="Product" options={product} />
+                  <Form.Select label="Agent" options={agent} />
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input label="Website" placeholder="Insert a website" />
-                  <Form.Input label="Fax" placeholder="Insert a fax" />
+                  <Form.Select label="Industry" options={industry} />
+                  <Form.Select label="Business Type" options={businessType} />
+                  <Form.Select label="Owner's time" options={ownerTime} />
                 </Form.Group>
-                <Form.Group widths="equal">
-                  <Form.Select
-                    label="Agent"
-                    options={agent}
-                    placeholder="Agent"
-                  />
-                  <Form.Select
-                    label="Business Stage"
-                    options={businessStage}
-                    placeholder="Business Stage"
-                  />
-                </Form.Group>
-                <Form.Group widths="equal">
-                  <Form.Select
-                    label="Business Type"
-                    options={businessType}
-                    placeholder="Business Type"
-                  />
-                  <Form.Select
-                    label="Industry"
-                    options={industry}
-                    placeholder="Industry"
-                  />
-                </Form.Group>
-                <Form.Group widths="equal">
-                  <Form.Select
-                    label="Owner's time"
-                    options={ownerTime}
-                    placeholder="Owner's time"
-                  />
-                  <Form.Select
-                    label="Rating"
-                    options={rating}
-                    placeholder="Rating"
-                  />
-                </Form.Group>
-                <Form.Checkbox
-                  label="Notify Owner for IM request"
-                  defaultChecked
-                />
-                <Form.Group inline>
-                  <label>Type of Business Sale: </label>
-                  <Form.Field
-                    control={Radio}
-                    toggle
-                    label="Business Sale"
-                    value="BS"
-                    checked={this.state.value === 'BS'}
-                    onChange={this.handleChange}
-                  />
-                  <Form.Field
-                    control={Radio}
-                    toggle
-                    label="Seller Assist"
-                    value="SA"
-                    checked={this.state.value === 'SA'}
-                    onChange={this.handleChange}
-                  />
-                  <Form.Field
-                    control={Radio}
-                    toggle
-                    label="Franchise Sale"
-                    value="FS"
-                    checked={this.state.value === 'FS'}
-                    onChange={this.handleChange}
-                  />
-                </Form.Group>
-                <Form.Group inline>
+                <Form.Group inline widths="equal">
                   <label>Eligible for 120 Day Guarantee? </label>
                   <Form.Field
                     control={Radio}
-                    toggle
                     label="Yes"
                     value="Yes"
                     checked={this.state.value === 'Yes'}
@@ -247,29 +201,42 @@ class BusinessEditPage extends Component {
                   />
                   <Form.Field
                     control={Radio}
-                    toggle
                     label="No"
                     value="No"
                     checked={this.state.value === 'No'}
                     onChange={this.handleChange}
                   />
+                  <Form.Checkbox
+                    label="Notify Owner for IM request"
+                    defaultChecked
+                  />
                 </Form.Group>
                 <Form.Group inline>
-                  <Form.Button color="green">Appraisal Management</Form.Button>
-                  <Form.Button floated="right" color="red">
-                    SAVE
-                  </Form.Button>
+                  <Form.Group inline>
+                    <Form.Select
+                      label="Business Stage"
+                      options={businessStage}
+                    />
+                    <Form.Button compact color="green">
+                      <Icon name="forward" />
+                      Next Stage
+                    </Form.Button>
+                    <Form.Button compact color="red">
+                      <Icon name="save" />
+                      SAVE
+                    </Form.Button>
+                  </Form.Group>
                 </Form.Group>
               </Form>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={1}>
-            <Grid.Column>
-              <Header color="teal" textAlign="center" size="medium">
-                Communication Logs
-              </Header>
-              <Button color="facebook" content="New Communication" />
-              <Table color="grey" celled inverted selectable>
+            <Grid.Column color="">
+              <Button floated="left" color="facebook">
+                <Icon name="commenting" />
+                New Communication
+              </Button>
+              <Table size="small" color="blue" celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Data</Table.HeaderCell>
@@ -313,9 +280,6 @@ class BusinessEditPage extends Component {
                 placeholder="09/12/2017"
                 readOnly
               />
-              <Form.Button floated="right" color="red">
-                SAVE
-              </Form.Button>
             </Form.Group>
           </Form>
         </Grid>

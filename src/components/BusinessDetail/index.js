@@ -11,58 +11,23 @@ class BusinessDetail extends Component {
   render() {
     return (
       <div>
-        <Form>
+        <Form size="tiny">
           <Form.Group widths="equal">
-            <Form.Input
-              required
-              label="Business name"
-              placeholder="Insert a business name"
-            />
+            <Form.Input required label="Business name" />
+            <Form.Input required label="First name" />
+            <Form.Input required label="Last name" />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Input
-              required
-              label="First name"
-              placeholder="Insert a first name"
-            />
-            <Form.Input
-              required
-              label="Last name"
-              placeholder="Insert a last name"
-            />
+            <Form.Input label="Telephone" />
+            <Form.Input label="Telephone 2" />
+            <Form.Input label="Fax" />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Input required label="Email" placeholder="Insert an email" />
+            <Form.Input required label="Email" />
+            <Form.Dropdown label="Source" selection options={options} />
+            <Form.Input label="Source Notes" />
           </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Input label="Telephone" placeholder="Insert a telephone" />
-            <Form.Input
-              label="Telephone 2"
-              placeholder="Insert a second telephone"
-            />
-            <Form.Input
-              label="Telephone 3"
-              placeholder="Insert a third telephone"
-            />
-          </Form.Group>
-          <Form.TextArea
-            label="Notes"
-            placeholder="Notes about the business..."
-          />
-          <div>
-            <b>Source</b> *
-          </div>
-          <Form.Dropdown
-            selection
-            options={options}
-            placeholder="Choose an option"
-          />
-          <Form.Group widths="equal">
-            <Form.Input
-              label="Source Notes"
-              placeholder="Insert a source notes"
-            />
-          </Form.Group>
+          <Form.TextArea label="Notes" />
         </Form>
       </div>
     );

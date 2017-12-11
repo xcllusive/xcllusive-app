@@ -1,0 +1,17 @@
+body {
+  background-color: #f7f7f7;
+}
+
+.AppraisalManagement button {
+  background-color: #586870;
+  color: #fff;
+  cursor: pointer;
+  width: 120px;
+  margin-top: 30px;
+  position: relative;
+  top: 1px;
+  left: 30px;
+  height: 50px;
+  border: 1px solid gray;
+  padding: 7px;
+}
