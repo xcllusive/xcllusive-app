@@ -175,22 +175,16 @@ class BusinessEditPage extends Component {
                   <Form.Input label="Website" />
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input label="Street" />
-                  <Form.Input label="Suburb" />
-                  <Form.Select label="State" options={state} />
-                  <Form.Input label="Post code" />
+                  <Form.Input className="Street" label="Street" />
+                  <Form.Input className="Suburb" label="Suburb" />
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Select label="Rating" options={rating} />
-                  <Form.Select label="Product" options={product} />
-                  <Form.Select label="Agent" options={agent} />
-                </Form.Group>
-                <Form.Group widths="equal">
-                  <Form.Select label="Industry" options={industry} />
-                  <Form.Select label="Business Type" options={businessType} />
-                  <Form.Select label="Owner's time" options={ownerTime} />
-                </Form.Group>
-                <Form.Group inline widths="equal">
+                  <Form.Select
+                    className="State"
+                    label="State"
+                    options={state}
+                  />
+                  <Form.Input className="PostCode" label="Post code" />
                   <label>Eligible for 120 Day Guarantee? </label>
                   <Form.Field
                     control={Radio}
@@ -210,6 +204,16 @@ class BusinessEditPage extends Component {
                     label="Notify Owner for IM request"
                     defaultChecked
                   />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Select label="Rating" options={rating} />
+                  <Form.Select label="Product" options={product} />
+                  <Form.Select label="Agent" options={agent} />
+                </Form.Group>
+                <Form.Group widths="equal">
+                  <Form.Select label="Industry" options={industry} />
+                  <Form.Select label="Business Type" options={businessType} />
+                  <Form.Select label="Owner's time" options={ownerTime} />
                 </Form.Group>
                 <Form.Group inline>
                   <Form.Group inline>
