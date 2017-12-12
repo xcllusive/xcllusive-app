@@ -75,7 +75,7 @@ class BusinessListPage extends Component {
           </Grid.Column>
           <Grid.Row />
         </Grid>
-        <Statistic.Group size={'mini'} color="green" widths="6">
+        <Statistic.Group size={'mini'} color="blue" widths="6">
           <Statistic>
             <Statistic.Value>10</Statistic.Value>
             <Statistic.Label>Potencial Listinig</Statistic.Label>
@@ -121,7 +121,7 @@ class BusinessListPage extends Component {
             <div align="left"> FOR SALE </div>
           </b>
         </h2>
-        <Table color="grey" celled inverted selectable>
+        <Table color="blue" celled inverted selectable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Business ID</Table.HeaderCell>
