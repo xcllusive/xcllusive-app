@@ -11,24 +11,24 @@ class BusinessDetail extends Component {
   render() {
     return (
       <div>
-        <Form size="tiny">
-          <Form.Group widths="equal">
-            <Form.Input required label="Business name" />
-            <Form.Input required label="First name" />
-            <Form.Input required label="Last name" />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Input label="Telephone" />
-            <Form.Input label="Telephone 2" />
-            <Form.Input label="Fax" />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Input required label="Email" />
-            <Form.Dropdown label="Source" selection options={options} />
-            <Form.Input label="Source Notes" />
-          </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Input required label="Business name" />
+          <Form.Input required label="First name" />
+          <Form.Input required label="Last name" />
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Input label="Telephone" />
+          <Form.Input label="Telephone 2" />
+          <Form.Input label="Fax" />
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Input required label="Email" />
+          <Form.Dropdown label="Source" selection options={options} />
+          <Form.Input label="Source Notes" />
+        </Form.Group>
+        <Form.Group widths="equal">
           <Form.TextArea label="Notes" />
-        </Form>
+        </Form.Group>
       </div>
     );
   }

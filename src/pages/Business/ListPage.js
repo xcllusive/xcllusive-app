@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Link } from 'react-router-dom';
+
 import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react';
 
 import Header from '../../components/Header';
@@ -132,7 +134,15 @@ class BusinessListPage extends Component {
           <Table.Body>
             {array.map(item => {
               return (
-                <Table.Row active key={item.businessID}>
+                <Table.Row
+                  active
+                  key={item.businessID}
+                  onClick={() =>
+                    this.props.history.push(
+                      `${this.props.match.path}/${item.businessID}`
+                    )
+                  }
+                >
                   <Table.Cell>{item.businessID}</Table.Cell>
                   <Table.Cell>{item.businessName}</Table.Cell>
                   <Table.Cell>{item.contactName}</Table.Cell>

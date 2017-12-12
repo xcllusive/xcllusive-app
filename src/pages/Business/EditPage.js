@@ -100,7 +100,7 @@ class BusinessEditPage extends Component {
   render() {
     return (
       <div>
-        <Statistic.Group size={'mini'} widths="7">
+        <Statistic.Group size="mini" widths={7}>
           <Statistic color="orange">
             <Statistic.Value>Business Name</Statistic.Value>
             <Statistic.Label>Business ID</Statistic.Label>
@@ -129,38 +129,34 @@ class BusinessEditPage extends Component {
             <Statistic.Value>Under Offer</Statistic.Value>
           </Statistic>
         </Statistic.Group>
-        <Segment size={'mini'} inverted color="blue">
-          <Header color="white" as="h7" textAlign="left">
+        <Segment size="mini" inverted color="blue">
+          <Header as="h7" textAlign="left">
             Business Detail
           </Header>
-          <Header color="white" as="h7" floated="right">
+          <Header as="h7" floated="right">
             Enquiry Date: 06/12/2017
           </Header>
         </Segment>
         <Grid celled divided="vertically">
           <Grid.Row columns={2}>
-            <Grid.Column color="">
-              <BusinessDetail />
+            <Grid.Column>
               <Form size="tiny">
+                <BusinessDetail />
                 <Form.Group inline>
                   <Form.Input
                     label="Listing Agent"
-                    placeholder="Zoran Sarabaca"
+                    placeholder="Zoran Saraba"
                     readOnly
                   />
-                  <Form.Button primary compact>
+                  <Form.Button primary>
                     <Icon name="edit" />
-                    Reassign Business
+                    Reassign Business's
                   </Form.Button>
-                  <Form.Button compact color="blue">
+                  <Form.Button color="blue">
                     <Icon name="file pdf outline" />
                     PDF
                   </Form.Button>
-                  <Form.Button
-                    className="row AppraisalManagement"
-                    compact
-                    color="vk"
-                  >
+                  <Form.Button color="vk">
                     <Icon name="file text" />
                     Appraisal Mgt
                   </Form.Button>
