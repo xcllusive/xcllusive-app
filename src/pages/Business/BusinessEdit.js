@@ -12,7 +12,7 @@ import {
   Tab
 } from 'semantic-ui-react';
 import BusinessDetail from '../../components/BusinessDetail';
-import './Business.css';
+import './BusinessEdit.css';
 
 const agent = [
   { key: 'Z', text: 'Zoran', value: 'Zoran' },
@@ -62,7 +62,7 @@ const panes = [
   {
     menuItem: 'Business Detail',
     render: () => (
-      <Tab.Pane attached={false}>
+      <Tab.Pane className="BusinessDetail" attached={false}>
         <Segment size="mini" inverted color="blue">
           <Header as="h7" textAlign="left">
             Business Detail
@@ -232,30 +232,35 @@ const panes = [
 const array = [
   {
     businessID: 'BS2000',
+    logID: '0001',
     dataLog: '01/12/2017',
     logText: 'Send IM to Buyer B001',
     FollowUpStatus: 'Pending'
   },
   {
     businessID: 'BS2001',
+    logID: '0002',
     dataLog: '02/12/2017',
     logText: 'Send IM to Buyer B111',
     FollowUpStatus: 'Done'
   },
   {
     businessID: 'BS2002',
+    logID: '0003',
     dataLog: '03/12/2017',
     logText: 'Send IM to Buyer B1234',
     FollowUpStatus: 'Pending'
   },
   {
     businessID: 'BS2003',
+    logID: '0004',
     dataLog: '04/12/2017',
     logText: 'Send IM to Buyer B1010',
     FollowUpStatus: 'Done'
   },
   {
     businessID: 'BS2004',
+    logID: '0005',
     dataLog: '05/12/2017',
     logText: 'Send IM to Buyer B4321',
     FollowUpStatus: 'Done'
@@ -303,7 +308,7 @@ class BusinessEditPage extends Component {
         <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         <Grid celled divided="vertically">
           <Grid.Row columns={1}>
-            <Grid.Column color="">
+            <Grid.Column>
               <Button floated="left" color="facebook">
                 <Icon name="commenting" />
                 New Communication
@@ -311,6 +316,7 @@ class BusinessEditPage extends Component {
               <Table size="small" color="blue" celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
+                    <Table.HeaderCell>LogID</Table.HeaderCell>
                     <Table.HeaderCell>Data</Table.HeaderCell>
                     <Table.HeaderCell>Log</Table.HeaderCell>
                     <Table.HeaderCell>Follow Up Status</Table.HeaderCell>
@@ -319,7 +325,18 @@ class BusinessEditPage extends Component {
                 <Table.Body>
                   {array.map(item => {
                     return (
-                      <Table.Row active key={item.businessID}>
+                      <Table.Row
+                        active
+                        key={item.logID}
+                        onClick={() =>
+                          this.props.history.push(
+                            `${this.props.match.path}/${item.businessID}/${
+                              item.logID
+                            }`
+                          )
+                        }
+                      >
+                        <Table.Cell>{item.logID}</Table.Cell>
                         <Table.Cell>{item.dataLog}</Table.Cell>
                         <Table.Cell>{item.logText}</Table.Cell>
                         <Table.Cell>{item.FollowUpStatus}</Table.Cell>

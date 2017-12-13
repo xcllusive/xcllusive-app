@@ -16,8 +16,9 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import ListPage from './Business/ListPage';
-import EditPage from './Business/EditPage';
+import ListPage from './Business/BusinessList';
+import EditPage from './Business/BusinessEdit';
+import LogPage from './Business/BusinessLog';
 
 const Wrapper = styled.div`
   min-height: 100vh !important;
@@ -26,8 +27,8 @@ const Wrapper = styled.div`
 const Layout = ({ match }) => (
   <div>
     <Menu pointing secondary attached="top">
-      <Menu.Item>
-        <Header as="h4">Xcllusive</Header>
+      <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
+        <Header as="h2">Xcllusive </Header>
       </Menu.Item>
       <Menu.Item name="buyer" as={NavLink} to={`${match.url}buyer`} />
       <Menu.Item name="business" as={NavLink} to={`${match.url}business`} />
@@ -53,8 +54,15 @@ const Layout = ({ match }) => (
           render={() => <span>dashboard</span>}
         />
         <Route path={`${match.path}business`} exact component={ListPage} />
-        <Route path={`${match.path}business/:userId`} component={EditPage} />
-        <Route path={`${match.path}buyer`} render={() => <span>buyer</span>} />
+        <Route
+          path={`${match.path}business/:businessID`}
+          component={EditPage}
+        />
+        <Route
+          path={`${match.path}business/:businessID/:logID`}
+          component={LogPage}
+        />
+        <Route path={`${match.path}buyer`} exact component={LogPage} />
         <Route
           path={`${match.path}presale`}
           render={() => <span>presale</span>}
@@ -67,7 +75,7 @@ const Layout = ({ match }) => (
           path={`${match.path}clientManager`}
           render={() => <span>clientManager</span>}
         />
-        <Route render={() => <span>não encontrado</span>} />
+        <Route render={() => <span>not found!</span>} />
         <Redirect to={`${match.url}`} />
       </Switch>
     </Container>

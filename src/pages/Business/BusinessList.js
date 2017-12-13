@@ -63,18 +63,6 @@ class BusinessListPage extends Component {
   render() {
     return (
       <div>
-        <Grid verticalAlign={'middle'}>
-          <Grid.Column floated={'left'}>
-            <Header title="Business" />
-          </Grid.Column>
-          <Grid.Column floated={'right'} width={3}>
-            <Button onClick={() => this._toggleModal(true)} color="blue">
-              <Icon name="add" />
-              New Business
-            </Button>
-          </Grid.Column>
-          <Grid.Row />
-        </Grid>
         <Statistic.Group size={'mini'} color="blue" widths="6">
           <Statistic>
             <Statistic.Value>10</Statistic.Value>
@@ -102,15 +90,17 @@ class BusinessListPage extends Component {
           </Statistic>
         </Statistic.Group>
         <Grid centered>
-          <Grid.Row>
-            <Grid.Column textAlign="center" width={5}>
-              <Input
-                fluid
-                action={{ icon: 'search' }}
-                placeholder="Find Business..."
-              />
-            </Grid.Column>
-          </Grid.Row>
+          <Grid.Column textAlign="center" width={5}>
+            <Input
+              fluid
+              action={{ icon: 'search' }}
+              placeholder="Find businesses..."
+            />
+            <Button onClick={() => this._toggleModal(true)} color="facebook">
+              <Icon name="add" />
+              New Business
+            </Button>
+          </Grid.Column>
         </Grid>
         <AddModal
           teste={this.state.modalOpen}
