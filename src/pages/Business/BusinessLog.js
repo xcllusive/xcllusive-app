@@ -92,21 +92,40 @@ class BusinessLogPage extends Component {
             />
           </Grid.Column>
         </Grid>
-        <Form size="tiny">
+        <Form>
           <Form.Group widths="equal">
             <Form.TextArea label="Communication text" />
             <Form.TextArea label="Notes" />
           </Form.Group>
           <Form.Group widths="equal">
-            <Button floated="rigth" color="facebook">
-              <Icon name="commenting" />
-              New Communication
-            </Button>
-            <Button floated="rigth" color="vk">
-              <Icon name="commenting" />
-              Finalise Communication
-            </Button>
+            <Form.Input
+              width={10}
+              label="Follow up Date"
+              placeholder="01/01/2018"
+            />
           </Form.Group>
+          <Grid textAlign="center">
+            <Grid.Column>
+              <Form.Group widths="equal">
+                <Button color="blue">
+                  <Icon name="commenting" />
+                  New Communication
+                </Button>
+                <Button color="linkedin">
+                  <Icon name="commenting" />
+                  Finalise Communication
+                </Button>
+                <Button color="vk">
+                  <Icon name="commenting" />
+                  Save and Retun to Business
+                </Button>
+                <Button color="facebook">
+                  <Icon name="commenting" />
+                  Save and Retun to Main Menu
+                </Button>
+              </Form.Group>
+            </Grid.Column>
+          </Grid>
         </Form>
         <Label size={'big'}>Log History</Label>
         <Table color="blue" celled inverted selectable>

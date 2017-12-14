@@ -56,6 +56,7 @@ const Layout = ({ match }) => (
         <Route path={`${match.path}business`} exact component={ListPage} />
         <Route
           path={`${match.path}business/:businessID`}
+          exact
           component={EditPage}
         />
         <Route

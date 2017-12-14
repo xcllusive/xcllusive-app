@@ -238,28 +238,28 @@ const array = [
     FollowUpStatus: 'Pending'
   },
   {
-    businessID: 'BS2001',
+    businessID: 'BS2000',
     logID: '0002',
     dataLog: '02/12/2017',
     logText: 'Send IM to Buyer B111',
     FollowUpStatus: 'Done'
   },
   {
-    businessID: 'BS2002',
+    businessID: 'BS2000',
     logID: '0003',
     dataLog: '03/12/2017',
     logText: 'Send IM to Buyer B1234',
     FollowUpStatus: 'Pending'
   },
   {
-    businessID: 'BS2003',
+    businessID: 'BS2000',
     logID: '0004',
     dataLog: '04/12/2017',
     logText: 'Send IM to Buyer B1010',
     FollowUpStatus: 'Done'
   },
   {
-    businessID: 'BS2004',
+    businessID: 'BS2000',
     logID: '0005',
     dataLog: '05/12/2017',
     logText: 'Send IM to Buyer B4321',
