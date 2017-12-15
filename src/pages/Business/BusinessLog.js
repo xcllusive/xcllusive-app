@@ -141,7 +141,15 @@ class BusinessLogPage extends Component {
           <Table.Body>
             {array.map(item => {
               return (
-                <Table.Row active key={item.logID}>
+                <Table.Row
+                  active
+                  key={item.logID}
+                  onClick={() =>
+                    this.props.history.push(
+                      `${this.props.match.path}/${item.logID}`
+                    )
+                  }
+                >
                   <Table.Cell>{item.logID}</Table.Cell>
                   <Table.Cell>{item.dateLog}</Table.Cell>
                   <Table.Cell>{item.textLog}</Table.Cell>
