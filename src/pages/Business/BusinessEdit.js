@@ -313,7 +313,7 @@ class BusinessEditPage extends Component {
                 <Icon name="commenting" />
                 New Communication
               </Button>
-              <Table size="small" color="blue" celled inverted selectable>
+              <Table size={'small'} color="blue" celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>LogID</Table.HeaderCell>

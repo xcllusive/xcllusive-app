@@ -19,6 +19,7 @@ import { bindActionCreators } from 'redux';
 import ListPage from './Business/BusinessList';
 import EditPage from './Business/BusinessEdit';
 import LogPage from './Business/BusinessLog';
+import BuyerPage from './Buyer/Buyer';
 
 const Wrapper = styled.div`
   min-height: 100vh !important;
@@ -63,7 +64,7 @@ const Layout = ({ match }) => (
           path={`${match.path}business/:businessID/:logID`}
           component={LogPage}
         />
-        <Route path={`${match.path}buyer`} exact component={LogPage} />
+        <Route path={`${match.path}buyer`} exact component={BuyerPage} />
         <Route
           path={`${match.path}presale`}
           render={() => <span>presale</span>}
