@@ -271,8 +271,6 @@ class BusinessEditPage extends Component {
   state = {};
   handleChange = (e, { value }) => this.setState({ value });
 
-  //handleChange = (e, { value }) => this.setState({ value });
-
   render() {
     return (
       <div>

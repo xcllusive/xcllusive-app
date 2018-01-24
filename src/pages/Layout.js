@@ -20,6 +20,7 @@ import ListPage from './Business/BusinessList';
 import EditPage from './Business/BusinessEdit';
 import LogPage from './Business/BusinessLog';
 import BuyerPage from './Buyer/Buyer';
+import UserPage from './SystemSettings/SystemSettings';
 
 const Wrapper = styled.div`
   min-height: 100vh !important;
@@ -27,18 +28,23 @@ const Wrapper = styled.div`
 
 const Layout = ({ match }) => (
   <div>
-    <Menu pointing secondary attached="top">
+    <Menu pointing secondary attached="top" color={'blue'} stackable>
       <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
         <Header as="h2">Xcllusive </Header>
       </Menu.Item>
       <Menu.Item name="buyer" as={NavLink} to={`${match.url}buyer`} />
       <Menu.Item name="business" as={NavLink} to={`${match.url}business`} />
-      <Menu.Item name="presale" as={NavLink} to={`${match.url}presale`} />
+      <Menu.Item name="pre sale" as={NavLink} to={`${match.url}presale`} />
       <Menu.Item name="resources" as={NavLink} to={`${match.url}resources`} />
       <Menu.Item
         name="client manager"
         as={NavLink}
         to={`${match.url}clientManager`}
+      />
+      <Menu.Item
+        name="system settings"
+        as={NavLink}
+        to={`${match.url}systemSettings`}
       />
       <Menu.Menu position="right">
         <Menu.Item onClick={() => {}} position="right">
@@ -76,6 +82,11 @@ const Layout = ({ match }) => (
         <Route
           path={`${match.path}clientManager`}
           render={() => <span>clientManager</span>}
+        />
+        <Route
+          path={`${match.path}systemSettings`}
+          exact
+          component={UserPage}
         />
         <Route render={() => <span>not found!</span>} />
         <Redirect to={`${match.url}`} />
