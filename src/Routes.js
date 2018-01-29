@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
 import { Dimmer, Loader } from 'semantic-ui-react';
 
-import { Layout, LoginPage, NotFoundPage } from './pages';
+import { Layout, LoginPage } from './pages';
 
 const PrivateRoute = ({ component: Component, authenticated, ...rest }) => (
   <Route

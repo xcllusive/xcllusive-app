@@ -1,12 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
-import styled from 'styled-components';
-import { Container, Menu, Icon, Header } from 'semantic-ui-react';
 
-/* redux */
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Menu, Icon, Header } from 'semantic-ui-react';
 
 import ListPage from './Business/BusinessList';
 import EditPage from './Business/BusinessEdit';

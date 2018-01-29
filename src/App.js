@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 
 import { store } from './redux/store';
-import { loginSuccess } from './redux/ducks/auth';
+// import { loginSuccess } from './redux/ducks/auth'
 import Routes from './Routes';
 import { theme } from './styles';
 

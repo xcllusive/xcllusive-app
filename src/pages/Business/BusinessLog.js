@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { Link } from 'react-router-dom';
-
 import {
   Statistic,
   Grid,
@@ -13,8 +11,6 @@ import {
   Button,
   Icon
 } from 'semantic-ui-react';
-
-import Header from '../../components/Header';
 
 const array = [
   {

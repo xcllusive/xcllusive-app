@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 
-import { Link } from 'react-router-dom';
-
 import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react';
 
-import Header from '../../components/Header';
 import AddModal from './AddModal';
 
 const array = [
