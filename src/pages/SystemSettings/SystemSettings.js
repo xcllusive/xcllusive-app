@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Table,
-  Icon,
-  Button,
-  Input,
-  Grid,
-  Tab,
-  Segment,
-  Form,
-  Radio
-} from 'semantic-ui-react';
+import { Tab, Segment } from 'semantic-ui-react';
 
 import Header from '../../components/Header';
 
