@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
 
-import { Route, Switch, NavLink, Redirect, Link } from 'react-router-dom';
-import {
-  Container,
-  Sidebar,
-  Segment,
-  Menu,
-  Image,
-  Icon,
-  Header
-} from 'semantic-ui-react';
+import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import { Container, Menu, Icon, Header } from 'semantic-ui-react';
 
 /* redux */
 import { connect } from 'react-redux';
@@ -21,10 +13,6 @@ import EditPage from './Business/BusinessEdit';
 import LogPage from './Business/BusinessLog';
 import BuyerPage from './Buyer/Buyer';
 import UserPage from './SystemSettings/SystemSettings';
-
-const Wrapper = styled.div`
-  min-height: 100vh !important;
-`;
 
 const Layout = ({ match }) => (
   <div>
@@ -53,52 +41,40 @@ const Layout = ({ match }) => (
         </Menu.Item>
       </Menu.Menu>
     </Menu>
-    <Container fluid>
-      <Switch>
-        <Route
-          path={`${match.path}`}
-          exact
-          render={() => <span>dashboard</span>}
-        />
-        <Route path={`${match.path}business`} exact component={ListPage} />
-        <Route
-          path={`${match.path}business/:businessID`}
-          exact
-          component={EditPage}
-        />
-        <Route
-          path={`${match.path}business/:businessID/:logID`}
-          component={LogPage}
-        />
-        <Route path={`${match.path}buyer`} exact component={BuyerPage} />
-        <Route
-          path={`${match.path}presale`}
-          render={() => <span>presale</span>}
-        />
-        <Route
-          path={`${match.path}resources`}
-          render={() => <span>resources</span>}
-        />
-        <Route
-          path={`${match.path}clientManager`}
-          render={() => <span>clientManager</span>}
-        />
-        <Route
-          path={`${match.path}systemSettings`}
-          exact
-          component={UserPage}
-        />
-        <Route render={() => <span>not found!</span>} />
-        <Redirect to={`${match.url}`} />
-      </Switch>
-    </Container>
+    <Switch>
+      <Route
+        path={`${match.path}`}
+        exact
+        render={() => <span>dashboard</span>}
+      />
+      <Route path={`${match.path}business`} exact component={ListPage} />
+      <Route
+        path={`${match.path}business/:businessID`}
+        exact
+        component={EditPage}
+      />
+      <Route
+        path={`${match.path}business/:businessID/:logID`}
+        component={LogPage}
+      />
+      <Route path={`${match.path}buyer`} exact component={BuyerPage} />
+      <Route
+        path={`${match.path}presale`}
+        render={() => <span>presale</span>}
+      />
+      <Route
+        path={`${match.path}resources`}
+        render={() => <span>resources</span>}
+      />
+      <Route
+        path={`${match.path}clientManager`}
+        render={() => <span>clientManager</span>}
+      />
+      <Route path={`${match.path}systemSettings`} exact component={UserPage} />
+      <Route render={() => <span>not found!</span>} />
+      <Redirect to={`${match.url}`} />
+    </Switch>
   </div>
 );
-
-const mapStateToprops = state => ({
-  state
-});
-
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default Layout;
