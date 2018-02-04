@@ -1,4 +1,4 @@
-import { getAll, getSearching } from '../../services/api/user';
+import { getAll, getSearching } from '../../services/api/user'
 
 // Action Types
 
@@ -6,7 +6,7 @@ export const Types = {
   USER_LOADING: 'USER_LOADING',
   USER_SUCCESS: 'USER_SUCCESS',
   USER_FAILURE: 'USER_FAILURE'
-};
+}
 
 // Reducer
 
@@ -14,7 +14,7 @@ const initialState = {
   error: null,
   isLoading: false,
   users: []
-};
+}
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -22,22 +22,22 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLoading: action.payload
-      };
+      }
     case Types.USER_SUCCESS:
       return {
         ...state,
         isLoading: false,
         users: action.payload,
         error: null
-      };
+      }
     case Types.USER_FAILURE:
       return {
         ...state,
         isLoading: false,
         error: action.payload
-      };
+      }
     default:
-      return state;
+      return state
   }
 }
 
@@ -47,29 +47,29 @@ export const userLoading = value => {
   return {
     type: Types.USER_LOADING,
     payload: value
-  };
-};
+  }
+}
 
 const userResponse = array => {
   return {
     type: Types.USER_SUCCESS,
     payload: array
-  };
-};
+  }
+}
 
 const userError = value => {
   return {
     type: Types.USER_FAILURE,
     payload: value
-  };
-};
+  }
+}
 
 export const getUsers = (options = false, search = false) => async dispatch => {
-  dispatch(userLoading(true));
+  dispatch(userLoading(true))
   try {
-    const users = search ? await getSearching(search) : await getAll(options);
-    dispatch(userResponse(users));
+    const users = search ? await getSearching(search) : await getAll(options)
+    dispatch(userResponse(users))
   } catch (error) {
-    dispatch(userError(error));
+    dispatch(userError(error))
   }
-};
+}

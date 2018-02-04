@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react';
+import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react'
 
-import AddModal from './AddModal';
+import AddModal from './AddModal'
 
-import Wrapper from '../../components/Wrapper';
-import GridRow from 'semantic-ui-react/dist/commonjs/collections/Grid/GridRow';
+import Wrapper from '../../components/Wrapper'
+import GridRow from 'semantic-ui-react/dist/commonjs/collections/Grid/GridRow'
 
 const array = [
   {
@@ -43,28 +43,28 @@ const array = [
     logText: 'Filemaker server 12',
     followUpDate: '01/02/2018'
   }
-];
+]
 
 class BusinessListPage extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       modalOpen: false
-    };
+    }
   }
 
   _toggleModal(value) {
-    console.log(this.state);
+    console.log(this.state)
     this.setState({
       modalOpen: value
-    });
+    })
   }
 
   render() {
     return (
       <div>
         <Wrapper>
-          <Statistic.Group size={'mini'} color="blue" widths="6">
+          <Statistic.Group size={'mini'} color='blue' widths='6'>
             <Statistic>
               <Statistic.Value>10</Statistic.Value>
               <Statistic.Label>Potencial Listinig</Statistic.Label>
@@ -90,7 +90,7 @@ class BusinessListPage extends Component {
               <Statistic.Label>Withdrawn</Statistic.Label>
             </Statistic>
           </Statistic.Group>
-          <Grid padded="horizontally"> 
+          <Grid padded='horizontally'> 
             <Grid.Row>
               <Grid.Column floated='center' textAlign='center' width={5}>
                 <Input
@@ -144,14 +144,14 @@ class BusinessListPage extends Component {
                     <Table.Cell>{item.logText}</Table.Cell>
                     <Table.Cell>{item.followUpDate}</Table.Cell>
                   </Table.Row>
-                );
+                )
               })}
             </Table.Body>
           </Table>
         </Wrapper>
       </div>
-    );
+    )
   }
 }
 
-export default BusinessListPage;
+export default BusinessListPage

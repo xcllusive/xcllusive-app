@@ -1,4 +1,4 @@
-import request from './';
+import request from './'
 
 export const login = (email, password) => {
   return request({
@@ -8,12 +8,12 @@ export const login = (email, password) => {
       email,
       password
     }
-  });
-};
+  })
+}
 
 export const loginWithToken = () => {
   return request({
     method: 'get',
     url: '/auth/loginWithToken'
-  });
-};
+  })
+}

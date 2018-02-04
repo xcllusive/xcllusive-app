@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 import {
   Statistic,
@@ -10,7 +10,7 @@ import {
   Label,
   Button,
   Icon
-} from 'semantic-ui-react';
+} from 'semantic-ui-react'
 
 const array = [
   {
@@ -48,75 +48,75 @@ const array = [
     followUpDate: '10/02/2018',
     status: 'Pending'
   }
-];
+]
 
 class BusinessLogPage extends Component {
   render() {
     return (
       <div>
-        <Statistic.Group size="mini" widths={5}>
-          <Statistic color="orange">
+        <Statistic.Group size='mini' widths={5}>
+          <Statistic color='orange'>
             <Statistic.Value>Business Name</Statistic.Value>
             <Statistic.Label>Business ID</Statistic.Label>
           </Statistic>
-          <Statistic color="blue">
+          <Statistic color='blue'>
             <Statistic.Value>Peter Park</Statistic.Value>
             <Statistic.Label>Name</Statistic.Label>
           </Statistic>
-          <Statistic color="blue">
+          <Statistic color='blue'>
             <Statistic.Value>peter_park@xcllusive.com.au</Statistic.Value>
             <Statistic.Label>Email</Statistic.Label>
           </Statistic>
-          <Statistic color="blue">
+          <Statistic color='blue'>
             <Statistic.Value>0468 123 321</Statistic.Value>
             <Statistic.Label>Telephone</Statistic.Label>
           </Statistic>
-          <Statistic color="blue">
+          <Statistic color='blue'>
             <Statistic.Value>01/12/2017 03:10:01</Statistic.Value>
             <Statistic.Label>Creation Time</Statistic.Label>
           </Statistic>
         </Statistic.Group>
-        <Segment size="small" inverted color="blue">
+        <Segment size='small' inverted color='blue'>
           <h4>Business Log Detail</h4>
         </Segment>
         <Grid centered>
-          <Grid.Column textAlign="center" width={5}>
+          <Grid.Column textAlign='center' width={5}>
             <Input
               fluid
               action={{ icon: 'search' }}
-              placeholder="Find logs..."
+              placeholder='Find logs...'
             />
           </Grid.Column>
         </Grid>
         <Form>
-          <Form.Group widths="equal">
-            <Form.TextArea label="Communication text" />
-            <Form.TextArea label="Notes" />
+          <Form.Group widths='equal'>
+            <Form.TextArea label='Communication text' />
+            <Form.TextArea label='Notes' />
           </Form.Group>
-          <Form.Group widths="equal">
+          <Form.Group widths='equal'>
             <Form.Input
               width={10}
-              label="Follow up Date"
-              placeholder="01/01/2018"
+              label='Follow up Date'
+              placeholder='01/01/2018'
             />
           </Form.Group>
-          <Grid textAlign="center">
+          <Grid textAlign='center'>
             <Grid.Column>
-              <Form.Group widths="equal">
-                <Button color="blue">
-                  <Icon name="commenting" />
+              <Form.Group widths='equal'>
+                <Button color='blue'>
+                  <Icon name='commenting' />
                   New Communication
                 </Button>
-                <Button color="linkedin">
-                  <Icon name="commenting" />
+                <Button color='linkedin'>
+                  <Icon name='commenting' />
                   Finalise Communication
                 </Button>
-                <Button color="vk">
-                  <Icon name="commenting" />
+                <Button color='vk'>
+                  <Icon name='commenting' />
                   Save and Retun to Business
                 </Button>
-                <Button color="facebook">
-                  <Icon name="commenting" />
+                <Button color='facebook'>
+                  <Icon name='commenting' />
                   Save and Retun to Main Menu
                 </Button>
               </Form.Group>
@@ -124,7 +124,7 @@ class BusinessLogPage extends Component {
           </Grid>
         </Form>
         <Label size={'big'}>Log History</Label>
-        <Table color="blue" celled inverted selectable>
+        <Table color='blue' celled inverted selectable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Log ID</Table.HeaderCell>
@@ -152,37 +152,37 @@ class BusinessLogPage extends Component {
                   <Table.Cell>{item.followUpDate}</Table.Cell>
                   <Table.Cell>{item.status}</Table.Cell>
                 </Table.Row>
-              );
+              )
             })}
           </Table.Body>
         </Table>
         <Form>
           <Form.Group inline>
             <Form.Input
-              label="Created By"
-              placeholder="Zoran Sarabaca"
+              label='Created By'
+              placeholder='Zoran Sarabaca'
               readOnly
             />
             <Form.Input
-              label="Creation Date"
-              placeholder="08/12/2017"
+              label='Creation Date'
+              placeholder='08/12/2017'
               readOnly
             />
             <Form.Input
-              label="Modified By"
-              placeholder="Cayo Bayestorff"
+              label='Modified By'
+              placeholder='Cayo Bayestorff'
               readOnly
             />
             <Form.Input
-              label="Modified Date"
-              placeholder="09/12/2017"
+              label='Modified Date'
+              placeholder='09/12/2017'
               readOnly
             />
           </Form.Group>
         </Form>
       </div>
-    );
+    )
   }
 }
 
-export default BusinessLogPage;
+export default BusinessLogPage

@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import React, { Component } from 'react'
+import { BrowserRouter, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { ThemeProvider } from 'styled-components'
 
-import { store } from './redux/store';
-import { loginWithToken, loginAppLoading } from './redux/ducks/auth';
-import Routes from './Routes';
-import { theme } from './styles';
+import { store } from './redux/store'
+import { loginWithToken, loginAppLoading } from './redux/ducks/auth'
+import Routes from './Routes'
+import { theme } from './styles'
 
-import setAuthorizationHeader from './utils/setAuthorizationHeader';
+import setAuthorizationHeader from './utils/setAuthorizationHeader'
 
 class App extends Component {
   componentWillMount() {
     if (window.localStorage.xcllusiveJWT) {
-      setAuthorizationHeader(window.localStorage.xcllusiveJWT);
-      store.dispatch(loginWithToken());
+      setAuthorizationHeader(window.localStorage.xcllusiveJWT)
+      store.dispatch(loginWithToken())
     } else {
-      store.dispatch(loginAppLoading(false));
+      store.dispatch(loginAppLoading(false))
     }
   }
 
@@ -29,8 +29,8 @@ class App extends Component {
           </BrowserRouter>
         </ThemeProvider>
       </Provider>
-    );
+    )
   }
 }
 
-export default App;
+export default App

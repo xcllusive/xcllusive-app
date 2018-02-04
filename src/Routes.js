@@ -1,48 +1,48 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Switch } from 'react-router-dom';
-import { Dimmer, Loader } from 'semantic-ui-react';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { Switch } from 'react-router-dom'
+import { Dimmer, Loader } from 'semantic-ui-react'
 
-import { PrivateRoute, PublicRoute } from './components/routes';
+import { PrivateRoute, PublicRoute } from './components/routes'
 
-import { Layout, LoginPage } from './pages';
+import { Layout, LoginPage } from './pages'
 
 const Routes = ({ isAuthenticated, isAppLoading, location }) => {
   if (isAppLoading) {
     return (
       <Dimmer page active>
-        <Loader content="Carregando" />
+        <Loader content='Carregando' />
       </Dimmer>
-    );
+    )
   } else {
     return (
       <Switch>
         <PublicRoute
           exact
           location={location}
-          path="/auth"
+          path='/auth'
           component={LoginPage}
         />
         <PrivateRoute
-          path="/"
+          path='/'
           component={Layout}
           authenticated={isAuthenticated}
         />
       </Switch>
-    );
+    )
   }
-};
+}
 
 Routes.propTypes = {
   isAuthenticated: PropTypes.bool,
   isAppLoading: PropTypes.bool,
   location: PropTypes.object
-};
+}
 
 const mapStateToProps = ({ auth }) => ({
   isAuthenticated: auth.isAuthenticated,
   isAppLoading: auth.isAppLoading
-});
+})
 
-export default connect(mapStateToProps)(Routes);
+export default connect(mapStateToProps)(Routes)

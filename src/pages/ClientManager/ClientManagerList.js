@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react';
+import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react'
 
-import Wrapper from '../../components/Wrapper';
+import Wrapper from '../../components/Wrapper'
 
 const array = [
   {
@@ -40,28 +40,28 @@ const array = [
     logText: 'Filemaker server 12',
     followUpDate: '01/02/2018'
   }
-];
+]
 
 class ClientManagerList extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       modalOpen: false
-    };
+    }
   }
 
   _toggleModal(value) {
-    console.log(this.state);
+    console.log(this.state)
     this.setState({
       modalOpen: value
-    });
+    })
   }
 
   render() {
     return (
       <div>
         <Wrapper>          
-          <Grid padded="horizontally">              
+          <Grid padded='horizontally'>              
             <Grid.Row columns={2}>
               <Grid.Column floated='left' width={2}>
                 <Button onClick={() => this._toggleModal(true)} color='facebook'>
@@ -119,7 +119,7 @@ class ClientManagerList extends Component {
                         <Table.Cell>{item.phone}</Table.Cell>
                         <Table.Cell>{item.email}</Table.Cell>
                         </Table.Row>
-                      );
+                      )
                     })}
                   </Table.Body>
                 </Table>
@@ -148,7 +148,7 @@ class ClientManagerList extends Component {
                       <Table.Cell>{item.price}</Table.Cell>
                       <Table.Cell>{item.notes}</Table.Cell>
                       </Table.Row>
-                      );
+                      )
                     })}
                   </Table.Body>
                 </Table>
@@ -157,8 +157,8 @@ class ClientManagerList extends Component {
           </Grid>
         </Wrapper>
       </div>
-    );
+    )
   }
 }
 
-export default ClientManagerList;
+export default ClientManagerList

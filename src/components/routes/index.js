@@ -1,4 +1,4 @@
-import PrivateRoute from './PrivateRoute';
-import PublicRoute from './PublicRoute';
+import PrivateRoute from './PrivateRoute'
+import PublicRoute from './PublicRoute'
 
-export { PrivateRoute, PublicRoute };
+export { PrivateRoute, PublicRoute }

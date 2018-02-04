@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react';
+import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
-import Wrapper from '../../components/Wrapper';
+import Wrapper from '../../components/Wrapper'
 
 const arrayForSale = [
   {
@@ -41,7 +41,7 @@ const arrayForSale = [
     makeNewScore: ' ',
     record: 'Score Overdue: Locked'
   }
-];
+]
 
 const arrayunderOffer = [
   {
@@ -51,7 +51,7 @@ const arrayunderOffer = [
     sendGroupEmail: ' ',
     dayOnTheMarket: '10'
   }
-];
+]
 
 const arrayBrokersProgress = [
   {
@@ -94,7 +94,7 @@ const arrayBrokersProgress = [
     imStatus: 'In progress',
     broker: 'Zoran'
   }
-];
+]
 
 const arrayIMWaitingApproval = [
   {
@@ -102,9 +102,9 @@ const arrayIMWaitingApproval = [
     businessName: 'New Business',
     daysSinceGenerated: '',
     imCompleted: '27.30%',
-    imStatus: "Waiting for Owner's Approval"
+    imStatus: 'Waiting for Owner's Approval'
   }
-];
+]
 
 class BuyerPage extends Component {
   render() {
@@ -116,19 +116,19 @@ class BuyerPage extends Component {
               <Input
                 fluid
                 action={{ icon: 'search' }}
-                placeholder="Find buyers..."
+                placeholder='Find buyers...'
               />
             </Grid.Column>
             <Grid.Column width={4}>
               <Input
                 fluid
                 action={{ icon: 'search' }}
-                placeholder="Find businesses..."
+                placeholder='Find businesses...'
               />
             </Grid.Column>
-            <Grid.Column width={2} floated="right">
-              <Button color="facebook" onClick={() => this._toggleModal(true)}>
-                <Icon name="add" />
+            <Grid.Column width={2} floated='right'>
+              <Button color='facebook' onClick={() => this._toggleModal(true)}>
+                <Icon name='add' />
                 New Buyer
               </Button>
             </Grid.Column>
@@ -136,10 +136,10 @@ class BuyerPage extends Component {
           <Grid.Row>
             <h2>
               <b>
-                <div align="left"> Businesses For Sale </div>
+                <div align='left'> Businesses For Sale </div>
               </b>
             </h2>
-            <Table color="blue" celled inverted selectable size={'small'}>
+            <Table color='blue' celled inverted selectable size={'small'}>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Business ID</Table.HeaderCell>
@@ -171,8 +171,8 @@ class BuyerPage extends Component {
                       <Table.Cell>{forSale.businessName}</Table.Cell>
                       <Table.Cell>{forSale.followUpTask}</Table.Cell>
                       <Table.Cell>
-                        <Button size="small" color="instagram">
-                          <Icon name="mail" />
+                        <Button size='small' color='instagram'>
+                          <Icon name='mail' />
                         </Button>
                       </Table.Cell>
                       <Table.Cell>{forSale.dayOnTheMarket}</Table.Cell>
@@ -181,24 +181,24 @@ class BuyerPage extends Component {
                       <Table.Cell>{forSale.sent}</Table.Cell>
                       <Table.Cell>
                         <Button size={'small'} color={'instagram'}>
-                          <Icon name="star" />
+                          <Icon name='star' />
                         </Button>
                       </Table.Cell>
                       <Table.Cell>{forSale.record}</Table.Cell>
                       <Table.Cell>
                         <Button size={'small'} color={'instagram'}>
-                          <Icon name="file pdf outline" />
+                          <Icon name='file pdf outline' />
                           PDF
                         </Button>
                       </Table.Cell>
                     </Table.Row>
-                  );
+                  )
                 })}
               </Table.Body>
             </Table>
             <h2>
               <b>
-                <div align="left"> Businesses Under Offer </div>
+                <div align='left'> Businesses Under Offer </div>
               </b>
             </h2>
             <Table color={'blue'} celled inverted selectable size={'small'}>
@@ -228,18 +228,18 @@ class BuyerPage extends Component {
                       <Table.Cell>{underOffer.followUpTask}</Table.Cell>
                       <Table.Cell>
                         <Button size={'small'} color={'instagram'}>
-                          <Icon name="mail" />
+                          <Icon name='mail' />
                         </Button>
                       </Table.Cell>
                       <Table.Cell>{underOffer.dayOnTheMarket}</Table.Cell>
                     </Table.Row>
-                  );
+                  )
                 })}
               </Table.Body>
             </Table>
             <h2>
               <b>
-                <div align="left"> IM Waiting for Approval </div>
+                <div align='left'> IM Waiting for Approval </div>
               </b>
             </h2>
             <Table color={'blue'} celled inverted selectable size={'small'}>
@@ -275,19 +275,19 @@ class BuyerPage extends Component {
                       <Table.Cell>{IMWaitingApproval.imCompleted}</Table.Cell>
                       <Table.Cell>
                         <Button size={'small'} color={'instagram'}>
-                          <Icon name="file pdf outline" />
+                          <Icon name='file pdf outline' />
                           PDF
                         </Button>
                       </Table.Cell>
                       <Table.Cell>{IMWaitingApproval.imStatus}</Table.Cell>
                     </Table.Row>
-                  );
+                  )
                 })}
               </Table.Body>
             </Table>
             <h2>
               <b>
-                <div align="left">Broker's IMs in Progress</div>
+                <div align='left'>Broker's IMs in Progress</div>
               </b>
             </h2>
             <Table color={'blue'} celled inverted selectable size={'small'}>
@@ -326,15 +326,15 @@ class BuyerPage extends Component {
                       <Table.Cell>{brokersProgress.broker}</Table.Cell>
                       <Table.Cell>
                         <Button size={'small'} color={'instagram'}>
-                          <Icon name="file pdf outline" />
+                          <Icon name='file pdf outline' />
                           PDF
                         </Button>
                         <Button size={'small'} color={'instagram'}>
-                          <Icon name="edit" />
+                          <Icon name='edit' />
                           Edit IM
                         </Button>
                         <Button size={'small'} color={'yellow'}>
-                          <Icon name="warning sign" />
+                          <Icon name='warning sign' />
                         </Button>
                         <Button size={'small'} color={'youtube'}>
                           Amend IM
@@ -344,15 +344,15 @@ class BuyerPage extends Component {
                         </Button>
                       </Table.Cell>
                     </Table.Row>
-                  );
+                  )
                 })}
               </Table.Body>
             </Table>
           </Grid.Row>
         </Grid>
       </Wrapper>
-    );
+    )
   }
 }
 
-export default BuyerPage;
+export default BuyerPage
