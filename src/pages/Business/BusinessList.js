@@ -4,6 +4,9 @@ import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react';
 
 import AddModal from './AddModal';
 
+import Wrapper from '../../components/Wrapper';
+import GridRow from 'semantic-ui-react/dist/commonjs/collections/Grid/GridRow';
+
 const array = [
   {
     businessID: 'BS2000',
@@ -60,86 +63,92 @@ class BusinessListPage extends Component {
   render() {
     return (
       <div>
-        <Statistic.Group size={'mini'} color="blue" widths="6">
-          <Statistic>
-            <Statistic.Value>10</Statistic.Value>
-            <Statistic.Label>Potencial Listinig</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>20</Statistic.Value>
-            <Statistic.Label>Listinig Negotiation</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>30</Statistic.Value>
-            <Statistic.Label>Sales Memo</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>40</Statistic.Value>
-            <Statistic.Label>For Sale</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>50</Statistic.Value>
-            <Statistic.Label>Sold</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>60</Statistic.Value>
-            <Statistic.Label>Withdrawn</Statistic.Label>
-          </Statistic>
-        </Statistic.Group>
-        <Grid centered>
-          <Grid.Column textAlign="center" width={5}>
-            <Input
-              fluid
-              action={{ icon: 'search' }}
-              placeholder="Find businesses..."
-            />
-            <Button onClick={() => this._toggleModal(true)} color="facebook">
-              <Icon name="add" />
-              New Business
-            </Button>
-          </Grid.Column>
-        </Grid>
-        <AddModal
-          teste={this.state.modalOpen}
-          funcao={() => this._toggleModal(false)}
-        />
-        <h2>
-          <b>
-            <div align="left"> FOR SALE </div>
-          </b>
-        </h2>
-        <Table color="blue" celled inverted selectable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Business ID</Table.HeaderCell>
-              <Table.HeaderCell>Business Name</Table.HeaderCell>
-              <Table.HeaderCell>Contact Name</Table.HeaderCell>
-              <Table.HeaderCell>Log Text</Table.HeaderCell>
-              <Table.HeaderCell>Follow Up date</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {array.map(item => {
-              return (
-                <Table.Row
-                  active
-                  key={item.businessID}
-                  onClick={() =>
-                    this.props.history.push(
-                      `${this.props.match.path}/${item.businessID}`
-                    )
-                  }
-                >
-                  <Table.Cell>{item.businessID}</Table.Cell>
-                  <Table.Cell>{item.businessName}</Table.Cell>
-                  <Table.Cell>{item.contactName}</Table.Cell>
-                  <Table.Cell>{item.logText}</Table.Cell>
-                  <Table.Cell>{item.followUpDate}</Table.Cell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+        <Wrapper>
+          <Statistic.Group size={'mini'} color="blue" widths="6">
+            <Statistic>
+              <Statistic.Value>10</Statistic.Value>
+              <Statistic.Label>Potencial Listinig</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>20</Statistic.Value>
+              <Statistic.Label>Listinig Negotiation</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>30</Statistic.Value>
+              <Statistic.Label>Sales Memo</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>40</Statistic.Value>
+              <Statistic.Label>For Sale</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>50</Statistic.Value>
+              <Statistic.Label>Sold</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>60</Statistic.Value>
+              <Statistic.Label>Withdrawn</Statistic.Label>
+            </Statistic>
+          </Statistic.Group>
+          <Grid padded="horizontally"> 
+            <Grid.Row>
+              <Grid.Column floated='center' textAlign='center' width={5}>
+                <Input
+                  fluid
+                  action={{ icon: 'search' }}
+                  placeholder='Find businesses...'
+                />
+              </Grid.Column>
+              <Grid.Column floated='right' width={2}>
+                <Button onClick={() => this._toggleModal(true)} color='facebook'>
+                  <Icon name='add' />
+                  New Business
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <AddModal
+            teste={this.state.modalOpen}
+            funcao={() => this._toggleModal(false)}
+          />
+          <h2>
+            <b>
+              <div align='left'> FOR SALE </div>
+            </b>
+          </h2>
+          <Table color='blue' celled inverted selectable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Business ID</Table.HeaderCell>
+                <Table.HeaderCell>Business Name</Table.HeaderCell>
+                <Table.HeaderCell>Contact Name</Table.HeaderCell>
+                <Table.HeaderCell>Log Text</Table.HeaderCell>
+                <Table.HeaderCell>Follow Up date</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {array.map(item => {
+                return (
+                  <Table.Row
+                    active
+                    key={item.businessID}
+                    onClick={() =>
+                      this.props.history.push(
+                        `${this.props.match.path}/${item.businessID}`
+                      )
+                    }
+                  >
+                    <Table.Cell>{item.businessID}</Table.Cell>
+                    <Table.Cell>{item.businessName}</Table.Cell>
+                    <Table.Cell>{item.contactName}</Table.Cell>
+                    <Table.Cell>{item.logText}</Table.Cell>
+                    <Table.Cell>{item.followUpDate}</Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table>
+        </Wrapper>
       </div>
     );
   }

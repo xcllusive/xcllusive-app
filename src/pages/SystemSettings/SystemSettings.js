@@ -3,19 +3,16 @@ import { Tab, Segment } from 'semantic-ui-react';
 
 import Header from '../../components/Header';
 
-import NewUserModal from './NewUserModal';
-
 import UserList from './UserList';
 
 class SystemSettingsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalOpen: false,
       panes: [
         {
           menuItem: 'Users',
-          render: () => <UserList toggleModal={this._toggleModal} />
+          render: () => <UserList/>
         },
         {
           menuItem: 'Email Templates',
@@ -33,12 +30,6 @@ class SystemSettingsPage extends Component {
     };
   }
 
-  _toggleModal = () => {
-    this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen
-    }));
-  };
-
   render() {
     return (
       <div>
@@ -46,8 +37,7 @@ class SystemSettingsPage extends Component {
           renderActiveOnly
           menu={{ secondary: true, pointing: true }}
           panes={this.state.panes}
-        />
-        <NewUserModal teste={this.state.modalOpen} funcao={this._toggleModal} />
+        />        
       </div>
     );
   }
