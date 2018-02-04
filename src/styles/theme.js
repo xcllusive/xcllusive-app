@@ -7,4 +7,4 @@ export const theme = {
   primaryTextColor: '#212121',
   secondaryTextColor: '#757575',
   dividerColor: '#BDBDBD'
-};
+}
