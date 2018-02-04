@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
-import { Form, Icon, Message } from 'semantic-ui-react';
-import Yup from 'yup';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withFormik } from 'formik'
+import { Form, Icon, Message } from 'semantic-ui-react'
+import Yup from 'yup'
 
 class LoginForm extends Component {
   render() {
@@ -16,16 +16,16 @@ class LoginForm extends Component {
       handleSubmit,
       errorApi,
       isValid
-    } = this.props;
+    } = this.props
     return (
       <Form onSubmit={handleSubmit}>
         <Form.Field>
           <Form.Input
-            size="small"
-            icon="mail outline"
-            placeholder="E-mail"
-            name="email"
-            autoComplete="email"
+            size='small'
+            icon='mail outline'
+            placeholder='E-mail'
+            name='email'
+            autoComplete='email'
             value={values.email}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -34,12 +34,12 @@ class LoginForm extends Component {
         </Form.Field>
         <Form.Field>
           <Form.Input
-            size="small"
-            icon="key"
-            placeholder="Password"
-            type="password"
-            name="password"
-            autoComplete="password"
+            size='small'
+            icon='key'
+            placeholder='Password'
+            type='password'
+            name='password'
+            autoComplete='password'
             value={values.password}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -50,14 +50,14 @@ class LoginForm extends Component {
           <Form.Button
             fluid
             icon
-            labelPosition="right"
-            size="small"
-            color="instagram"
+            labelPosition='right'
+            size='small'
+            color='instagram'
             disabled={isSubmitting || !isValid}
             loading={this.props.isLoading}
           >
             Login
-            <Icon name="right arrow" />
+            <Icon name='right arrow' />
           </Form.Button>
         </Form.Field>
         <Message
@@ -79,7 +79,7 @@ class LoginForm extends Component {
           </Message.List>
         </Message>
       </Form>
-    );
+    )
   }
 }
 
@@ -94,12 +94,12 @@ LoginForm.propTypes = {
   errorApi: PropTypes.string,
   isValid: PropTypes.bool,
   isLoading: PropTypes.bool
-};
+}
 
 const mapPropsToValues = () => ({
   email: '',
   password: ''
-});
+})
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -109,11 +109,11 @@ const validationSchema = Yup.object().shape({
     .required('Password is required.')
     .min(4, 'Password required minimum 4 characters.')
     .max(128, 'Password required max 128 characters.')
-});
+})
 
 const handleSubmit = ({ email, password }, { props, setSubmitting }) =>
-  props.submit(email, password).then(() => setSubmitting(false));
+  props.submit(email, password).then(() => setSubmitting(false))
 
 export default withFormik({ mapPropsToValues, validationSchema, handleSubmit })(
   LoginForm
-);
+)
