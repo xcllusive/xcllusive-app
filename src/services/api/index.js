@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-  baseURL: 'http://localhost:3000'
+  baseURL: 'http://localhost:5000'
 });
 
 const request = async options => {
@@ -11,14 +11,15 @@ const request = async options => {
 
   const onError = error => {
     if (error.response) {
-      console.error('Status:', error.response.status);
-      console.error('Data:', error.response.data);
-      console.error('Headers:', error.response.headers);
-    } else {
-      console.error('Error Message:', error.message);
+      // console.error('Status:', error.response.status)
+      // console.error('Data:', error.response.data)
+      // console.error('Headers:', error.response.headers)
+
+      return Promise.reject(error.response.data.error);
     }
 
-    return Promise.reject(error.response || error.message);
+    // console.error('Error Message:', error.message)
+    return Promise.reject(error.message);
   };
 
   try {

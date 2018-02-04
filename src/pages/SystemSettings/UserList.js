@@ -1,12 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { getUsers } from '../../redux/ducks/user';
-import NewUserModal from './NewUserModal'
-
 import styled from 'styled-components';
-
 import {
   Table,
   Input,
@@ -17,6 +12,8 @@ import {
   Dimmer,
   Loader
 } from 'semantic-ui-react';
+
+import { getUsers } from '../../redux/ducks/user';
 
 import Wrapper from '../../components/Wrapper';
 
@@ -42,9 +39,13 @@ class UserList extends React.Component {
   }
 
   _handleChangeCheckBox = (e, { value }) => {
-    this.setState(prevState => ({
-      [value]: !prevState[value]
-    }));
+    const options = {
+      admin: this.state.admin,
+      staff: this.state.staff,
+      introducer: this.state.introducer
+    };
+    this.setState(prevState => ({ [value]: !prevState[value] }));
+    this.props.getUsers(options);
   };
 
   _onSearch = (e, { value }) => {
@@ -52,7 +53,7 @@ class UserList extends React.Component {
       inputSearch: value
     });
     clearTimeout(this.timer);
-    this.timer = setTimeout(this.props.getUsers(value), 1000);
+    this.timer = setTimeout(this.props.getUsers(value), 2000);
   };
 
   _toggleModal = (user, e) => {
@@ -75,8 +76,9 @@ class UserList extends React.Component {
             <Grid.Column width={5}>
               <Input
                 fluid
-                icon='search'
-                placeholder='Find users...'
+                icon="search"
+                loading={this.state.isLoading}
+                placeholder="Find users..."
                 onChange={this._onSearch}
                 value={this.state.inputSearch}
               />
@@ -114,7 +116,7 @@ class UserList extends React.Component {
             <Dimmer inverted active={this.props.isLoading}>
               <Loader inverted />
             </Dimmer>
-            <Table color='blue' inverted selectable celled>
+            <Table color="blue" basic selectable striped>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>ID</Table.HeaderCell>
@@ -122,18 +124,13 @@ class UserList extends React.Component {
                   <Table.HeaderCell>User Type</Table.HeaderCell>
                   <Table.HeaderCell>Listing Agent</Table.HeaderCell>
                   <Table.HeaderCell>Buyer</Table.HeaderCell>
-                  <Table.HeaderCell>Business</Table.HeaderCell>
-                  <Table.HeaderCell>Pre Sale</Table.HeaderCell> 
-                  <Table.HeaderCell>Resources</Table.HeaderCell>
                   <Table.HeaderCell>Client Manager</Table.HeaderCell>
-                  <Table.HeaderCell>System Settings</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {this.props.users.map(user => {
                   return (
-                    <Table.Row active key={user.id}
-                      onClick={ (e) => this._toggleModal(user, e) }>
+                    <Table.Row key={user.id}>
                       <Table.Cell>{user.id}</Table.Cell>
                       <Table.Cell>{user.firstName} {user.lastName}</Table.Cell>
                       <Table.Cell>{user.userTypeId}</Table.Cell>

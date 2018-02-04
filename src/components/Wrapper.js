@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const WrapperStyled = styled.div`
@@ -10,5 +11,9 @@ class Wrapper extends Component {
     return <WrapperStyled>{this.props.children}</WrapperStyled>;
   }
 }
+
+Wrapper.propTypes = {
+  children: PropTypes.element.isRequired
+};
 
 export default Wrapper;
