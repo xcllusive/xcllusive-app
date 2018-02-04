@@ -1,29 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Route, BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { Dimmer, Loader } from 'semantic-ui-react';
+
+import { PrivateRoute, PublicRoute } from './components/routes';
 
 import { Layout, LoginPage } from './pages';
 
-const PrivateRoute = ({ component: Component, authenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      authenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: props.location }
-          }}
-        />
-      )
-    }
-  />
-);
-
-const Routes = ({ isAuthenticated, isAppLoading }) => {
+const Routes = ({ isAuthenticated, isAppLoading, location }) => {
   if (isAppLoading) {
     return (
       <Dimmer page active>
@@ -32,19 +17,27 @@ const Routes = ({ isAuthenticated, isAppLoading }) => {
     );
   } else {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route path="/auth" component={LoginPage} />
-          <PrivateRoute
-            path="/"
-            component={Layout}
-            authenticated={isAuthenticated}
-          />
-          <Redirect to="/auth" />
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <PublicRoute
+          exact
+          location={location}
+          path="/auth"
+          component={LoginPage}
+        />
+        <PrivateRoute
+          path="/"
+          component={Layout}
+          authenticated={isAuthenticated}
+        />
+      </Switch>
     );
   }
+};
+
+Routes.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  isAppLoading: PropTypes.bool,
+  location: PropTypes.object
 };
 
 const mapStateToProps = ({ auth }) => ({

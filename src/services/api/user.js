@@ -1,21 +1,21 @@
 import request from './';
 
-const get = id => {
+export const get = id => {
   return request({
     url: `/user/${id}`
   });
 };
 
-const getAll = search => {
+export const getAll = (options = false) => {
   return request({
-    url: '/users'
+    url: '/users',
+    params: options
   });
 };
 
-const getSearching = search => {
+export const getSearching = search => {
   return request({
-    url: `/users?search=${search}`
+    url: '/users',
+    params: search
   });
 };
-
-export { get, getAll, getSearching };

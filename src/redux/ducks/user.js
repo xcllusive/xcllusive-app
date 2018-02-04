@@ -64,14 +64,12 @@ const userError = value => {
   };
 };
 
-export const getUsers = (search = false) => {
-  return async dispatch => {
-    dispatch(userLoading(true));
-    try {
-      const users = search ? await getSearching(search) : await getAll();
-      dispatch(userResponse(users));
-    } catch (error) {
-      dispatch(userError(error));
-    }
-  };
+export const getUsers = (options = false, search = false) => async dispatch => {
+  dispatch(userLoading(true));
+  try {
+    const users = search ? await getSearching(search) : await getAll(options);
+    dispatch(userResponse(users));
+  } catch (error) {
+    dispatch(userError(error));
+  }
 };

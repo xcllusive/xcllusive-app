@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Tab, Segment } from 'semantic-ui-react';
-
-import Header from '../../components/Header';
+import { Tab, Segment, Header } from 'semantic-ui-react';
 
 import NewUserModal from './NewUserModal';
 

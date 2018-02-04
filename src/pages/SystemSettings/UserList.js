@@ -1,11 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { getUsers } from '../../redux/ducks/user';
-
 import styled from 'styled-components';
-
 import {
   Table,
   Input,
@@ -16,6 +12,8 @@ import {
   Dimmer,
   Loader
 } from 'semantic-ui-react';
+
+import { getUsers } from '../../redux/ducks/user';
 
 import Wrapper from '../../components/Wrapper';
 
@@ -39,9 +37,13 @@ class UserList extends React.Component {
   }
 
   _handleChangeCheckBox = (e, { value }) => {
-    this.setState(prevState => ({
-      [value]: !prevState[value]
-    }));
+    const options = {
+      admin: this.state.admin,
+      staff: this.state.staff,
+      introducer: this.state.introducer
+    };
+    this.setState(prevState => ({ [value]: !prevState[value] }));
+    this.props.getUsers(options);
   };
 
   _onSearch = (e, { value }) => {
@@ -49,7 +51,7 @@ class UserList extends React.Component {
       inputSearch: value
     });
     clearTimeout(this.timer);
-    this.timer = setTimeout(this.props.getUsers(value), 1000);
+    this.timer = setTimeout(this.props.getUsers(value), 2000);
   };
 
   render() {
@@ -61,6 +63,7 @@ class UserList extends React.Component {
               <Input
                 fluid
                 icon="search"
+                loading={this.state.isLoading}
                 placeholder="Find users..."
                 onChange={this._onSearch}
                 value={this.state.inputSearch}
@@ -99,7 +102,7 @@ class UserList extends React.Component {
             <Dimmer inverted active={this.props.isLoading}>
               <Loader inverted />
             </Dimmer>
-            <Table color="blue" inverted selectable striped>
+            <Table color="blue" basic selectable striped>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>ID</Table.HeaderCell>
@@ -117,7 +120,7 @@ class UserList extends React.Component {
               <Table.Body>
                 {this.props.users.map(user => {
                   return (
-                    <Table.Row active key={user.id}>
+                    <Table.Row key={user.id}>
                       <Table.Cell>{user.id}</Table.Cell>
                       <Table.Cell>{user.firstName}</Table.Cell>
                       <Table.Cell>{user.userTypeId}</Table.Cell>

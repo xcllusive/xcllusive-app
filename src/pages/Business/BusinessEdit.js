@@ -11,8 +11,8 @@ import {
   Icon,
   Tab
 } from 'semantic-ui-react';
+
 import BusinessDetail from '../../components/BusinessDetail';
-import './BusinessEdit.css';
 
 const agent = [
   { key: 'Z', text: 'Zoran', value: 'Zoran' },
@@ -143,7 +143,7 @@ const panes = [
                 <Form.Group widths="equal">
                   <Form.Select label="Industry" options={industry} />
                   <Form.Select label="Business Type" options={businessType} />
-                  <Form.Select label="Owner's time" options={ownerTime} />
+                  <Form.Select label={`Owner 's time`} options={ownerTime} />
                 </Form.Group>
                 <Form.Group inline>
                   <Form.Select label="Business Stage" options={businessStage} />
@@ -268,7 +268,6 @@ const array = [
 ];
 
 class BusinessEditPage extends Component {
-  state = {};
   handleChange = (e, { value }) => this.setState({ value });
 
   render() {
