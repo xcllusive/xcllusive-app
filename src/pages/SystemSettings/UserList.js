@@ -28,7 +28,9 @@ class UserList extends React.Component {
       admin: true,
       staff: true,
       introducer: true,
-      inputSearch: ''
+      inputSearch: '',
+      modalOpen: false,
+      user: null
     };
   }
 
@@ -54,10 +56,22 @@ class UserList extends React.Component {
     this.timer = setTimeout(this.props.getUsers(value), 2000);
   };
 
+  _toggleModal = (user, e) => {
+    //e.preventDefault()
+    //console.log(user)
+    this.setState(prevState => ({
+      modalOpen: !prevState.modalOpen,
+      user      
+    }));
+  };
+
   render() {
+    if (this.state.modalOpen) {
+      return <NewUserModal modalOpen={this.state.modalOpen} funcao={this._toggleModal} user={this.state.user} />
+    }
     return (
       <Wrapper>
-        <Grid padded="horizontally">
+        <Grid padded='horizontally'>
           <Grid.Row>
             <Grid.Column width={5}>
               <Input
@@ -69,31 +83,31 @@ class UserList extends React.Component {
                 value={this.state.inputSearch}
               />
             </Grid.Column>
-            <Grid.Column width={5} verticalAlign="middle">
+            <Grid.Column width={5} verticalAlign='middle'>
               <Checkbox
                 as={CheckboxFormatted}
-                label="Admin"
-                value="admin"
+                label='Admin'
+                value='admin'
                 checked={this.state.admin === true}
                 onChange={this._handleChangeCheckBox}
               />
               <Checkbox
                 as={CheckboxFormatted}
-                label="Staff"
-                value="staff"
+                label='Staff'
+                value='staff'
                 checked={this.state.staff === true}
                 onChange={this._handleChangeCheckBox}
               />
               <Checkbox
-                label="Introducer"
-                value="introducer"
+                label='Introducer'
+                value='introducer'
                 checked={this.state.introducer === true}
                 onChange={this._handleChangeCheckBox}
               />
             </Grid.Column>
-            <Grid.Column width={2} floated="right">
-              <Button onClick={() => this.props.toggleModal()} color="facebook">
-                <Icon name="add" />
+            <Grid.Column width={2} floated='right'>
+              <Button onClick={this._toggleModal} color='facebook'>
+                <Icon name='add' />
                 New User
               </Button>
             </Grid.Column>
@@ -110,11 +124,7 @@ class UserList extends React.Component {
                   <Table.HeaderCell>User Type</Table.HeaderCell>
                   <Table.HeaderCell>Listing Agent</Table.HeaderCell>
                   <Table.HeaderCell>Buyer</Table.HeaderCell>
-                  <Table.HeaderCell>Business</Table.HeaderCell>
-                  <Table.HeaderCell>Pre Sale</Table.HeaderCell>
-                  <Table.HeaderCell>Resources</Table.HeaderCell>
                   <Table.HeaderCell>Client Manager</Table.HeaderCell>
-                  <Table.HeaderCell>System Settings</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -122,7 +132,7 @@ class UserList extends React.Component {
                   return (
                     <Table.Row key={user.id}>
                       <Table.Cell>{user.id}</Table.Cell>
-                      <Table.Cell>{user.firstName}</Table.Cell>
+                      <Table.Cell>{user.firstName} {user.lastName}</Table.Cell>
                       <Table.Cell>{user.userTypeId}</Table.Cell>
                       <Table.Cell>{user.listingAgent}</Table.Cell>
                       <Table.Cell>{user.buyer}</Table.Cell>
