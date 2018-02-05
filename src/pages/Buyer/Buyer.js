@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import PropTypes from 'prop-types'
+
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
 import Wrapper from '../../components/Wrapper'
@@ -102,12 +104,12 @@ const arrayIMWaitingApproval = [
     businessName: 'New Business',
     daysSinceGenerated: '',
     imCompleted: '27.30%',
-    imStatus: 'Waiting for Owner's Approval'
+    imStatus: 'Waiting for Owner`s Approval'
   }
 ]
 
 class BuyerPage extends Component {
-  render() {
+  render () {
     return (
       <Wrapper>
         <Grid padded>
@@ -353,6 +355,11 @@ class BuyerPage extends Component {
       </Wrapper>
     )
   }
+}
+
+BuyerPage.propTypes = {
+  history: PropTypes.func,
+  match: PropTypes.func
 }
 
 export default BuyerPage

@@ -26,7 +26,7 @@ const initialState = {
   isLoading: false
 }
 
-export default function reducer(state = initialState, action) {
+export default function reducer (state = initialState, action) {
   switch (action.type) {
     case Types.AUTH_SUCCESS:
       return {
@@ -73,7 +73,7 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 
-function loginError(error) {
+function loginError (error) {
   return {
     type: Types.AUTH_FAILURE,
     payload: error

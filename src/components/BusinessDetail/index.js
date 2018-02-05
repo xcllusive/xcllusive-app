@@ -8,7 +8,7 @@ const options = [
 ]
 
 class BusinessDetail extends Component {
-  render() {
+  render () {
     return (
       <div>
         <Form.Group widths='equal'>

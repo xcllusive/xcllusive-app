@@ -43,21 +43,21 @@ const array = [
 ]
 
 class ClientManagerList extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       modalOpen: false
     }
   }
 
-  _toggleModal(value) {
+  _toggleModal (value) {
     console.log(this.state)
     this.setState({
       modalOpen: value
     })
   }
 
-  render() {
+  render () {
     return (
       <div>
         <Wrapper>          

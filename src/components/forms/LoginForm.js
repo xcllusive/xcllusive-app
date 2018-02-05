@@ -5,7 +5,7 @@ import { Form, Icon, Message } from 'semantic-ui-react'
 import Yup from 'yup'
 
 class LoginForm extends Component {
-  render() {
+  render () {
     const {
       values,
       touched,

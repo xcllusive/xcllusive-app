@@ -11,7 +11,7 @@ import { theme } from './styles'
 import setAuthorizationHeader from './utils/setAuthorizationHeader'
 
 class App extends Component {
-  componentWillMount() {
+  componentWillMount () {
     if (window.localStorage.xcllusiveJWT) {
       setAuthorizationHeader(window.localStorage.xcllusiveJWT)
       store.dispatch(loginWithToken())
@@ -20,7 +20,7 @@ class App extends Component {
     }
   }
 
-  render() {
+  render () {
     return (
       <Provider store={store}>
         <ThemeProvider theme={theme}>

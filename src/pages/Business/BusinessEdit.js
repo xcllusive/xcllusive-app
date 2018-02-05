@@ -120,14 +120,12 @@ const panes = [
                     control={Radio}
                     label='Yes'
                     value='Yes'
-                    //checked={this.state.value === 'Yes'}
                     onChange={this.handleChange}
                   />
                   <Form.Field
                     control={Radio}
                     label='No'
                     value='No'
-                    //checked={this.state.value === 'No'}
                     onChange={this.handleChange}
                   />
                   <Form.Checkbox
@@ -143,7 +141,7 @@ const panes = [
                 <Form.Group widths='equal'>
                   <Form.Select label='Industry' options={industry} />
                   <Form.Select label='Business Type' options={businessType} />
-                  <Form.Select label={`Owner 's time`} options={ownerTime} />
+                  <Form.Select label={'Owner`s time'} options={ownerTime} />
                 </Form.Group>
                 <Form.Group inline>
                   <Form.Select label='Business Stage' options={businessStage} />
@@ -268,9 +266,12 @@ const array = [
 ]
 
 class BusinessEditPage extends Component {
-  handleChange = (e, { value }) => this.setState({ value })
+  constructor (props) {
+    super(props)
+    this.handleChange = (e, { value }) => this.setState({ value })
+  }
 
-  render() {
+  render () {
     return (
       <div>
         <Statistic.Group size='mini' widths={7}>

@@ -7,7 +7,7 @@ const WrapperStyled = styled.div`
 `
 
 class Wrapper extends Component {
-  render() {
+  render () {
     return <WrapperStyled>{this.props.children}</WrapperStyled>
   }
 }

@@ -18,8 +18,11 @@ const Wrapper = styled.div`
 `
 
 class LoginPage extends React.Component {
-  state = {
-    redirectToReferrer: false
+  constructor (props) {
+    super(props)
+    this.state = {
+      redirectToReferrer: false
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,7 +35,7 @@ class LoginPage extends React.Component {
     this.setState({ modalOpen: false })
   }
 
-  render() {
+  render () {
     const { from } = this.props.location.state || { from: { pathname: '/' } }
     const { redirectToReferrer } = this.state
 
