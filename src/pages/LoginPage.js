@@ -13,9 +13,9 @@ import LoginForm from '../components/forms/LoginForm'
 import logo from '../assets/images/logo.jpg'
 
 const Wrapper = styled.div`
-  height: 100vh
-  padding-top: 10%
-  background-color: #dfe6e9
+  height: 100vh;
+  padding-top: 10%;
+  background-color: #dfe6e9;
 `
 
 class LoginPage extends React.Component {
