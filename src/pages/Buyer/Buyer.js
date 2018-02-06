@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import PropTypes from 'prop-types'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
@@ -65,7 +64,7 @@ const arrayBrokersProgress = [
     broker: 'Jim Lund'
   },
   {
-    businessID: 'BS2030',
+    businessID: 'BS2031',
     businessName: 'Testing Buss',
     daysSinceGenerated: '300',
     imCompleted: '51.80%',
@@ -73,7 +72,7 @@ const arrayBrokersProgress = [
     broker: 'Nick Wolski'
   },
   {
-    businessID: 'BS2030',
+    businessID: 'BS2032',
     businessName: 'Business Hello',
     daysSinceGenerated: '100',
     imCompleted: '100.00%',
@@ -81,7 +80,7 @@ const arrayBrokersProgress = [
     broker: 'Peter George'
   },
   {
-    businessID: 'BS2030',
+    businessID: 'BS2033',
     businessName: 'New Business',
     daysSinceGenerated: '500',
     imCompleted: '75.65%',
@@ -89,7 +88,7 @@ const arrayBrokersProgress = [
     broker: 'Mark'
   },
   {
-    businessID: 'BS2030',
+    businessID: 'BS2034',
     businessName: 'New Business',
     daysSinceGenerated: '500',
     imCompleted: '00.00%',
@@ -129,7 +128,7 @@ class BuyerPage extends Component {
               />
             </Grid.Column>
             <Grid.Column width={2} floated='right'>
-              <Button color='facebook' onClick={() => this._toggleModal(true)}>
+              <Button color='facebook' onClick={() => {}}>
                 <Icon name='add' />
                 New Buyer
               </Button>
@@ -358,8 +357,8 @@ class BuyerPage extends Component {
 }
 
 BuyerPage.propTypes = {
-  history: PropTypes.func,
-  match: PropTypes.func
+  history: PropTypes.object,
+  match: PropTypes.object
 }
 
 export default BuyerPage

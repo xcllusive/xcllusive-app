@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Modal, Form, Icon, Checkbox } from 'semantic-ui-react'
-
 import styled from 'styled-components'
 
 const officeRegion = [
@@ -20,8 +20,8 @@ const userType = [
 ]
 
 const state = [
-  { key: '1', text: 'NSW', value: '1' },
-  { key: '2', text: 'ACT', value: '2' }
+  { key: '1', text: 'SDA', value: '1' },
+  { key: '2', text: 'ASD', value: '2' }
 ]
 
 const CheckboxFormatted = styled.div`
@@ -29,10 +29,9 @@ const CheckboxFormatted = styled.div`
 `
 
 class NewUserModal extends Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
-    this.state = {      
+    this.state = {
       inputSearch: '',
       user: null
     }
@@ -45,41 +44,40 @@ class NewUserModal extends Component {
   }
 
   _renderTitle = () => {
-    return this.props.user ?
-    this.props.user.firstName :
-    'New User'
+    return this.props.user
+      ? this.props.user.firstName
+      : 'New User'
   }
 
-  render() {
-    console.log(this.props.user)
-    return (            
+  render () {
+    return (
       <Modal open={this.props.modalOpen}>
         <Modal.Header align='center'> {this.props.user !== undefined ? `${this.props.user.firstName} ${this.props.user.lastName}` : 'New User'}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group widths='equal'>
-              <Form.Input required label='Username' value={this.props.user.userName}/>
-              <Form.Input required label='Password' value={this.props.user.password}/>
+              <Form.Input required label='Username' value={this.props.user.userName} />
+              <Form.Input required label='Password' value={this.props.user.password} />
             </Form.Group>
-            <Form.Group widths='equal'>              
+            <Form.Group widths='equal'>
               <Form.Input required label='First Name' value={this.props.user.firstName} />
-              <Form.Input required label='Last Name' value={this.props.user.lastName}/>
-              <Form.Input required label='Email' value={this.props.user.email}/>             
+              <Form.Input required label='Last Name' value={this.props.user.lastName} />
+              <Form.Input required label='Email' value={this.props.user.email} />
             </Form.Group>
             <Form.Group widths='equal'>
-              <Form.Input label='Home Phone' value={this.props.user.phoneHome}/>
-              <Form.Input label='Work Phone' value={this.props.user.phoneWork}/>
-              <Form.Input label='Mobile Phone' value={this.props.user.phoneMobile}/>
+              <Form.Input label='Home Phone' value={this.props.user.phoneHome} />
+              <Form.Input label='Work Phone' value={this.props.user.phoneWork} />
+              <Form.Input label='Mobile Phone' value={this.props.user.phoneMobile} />
             </Form.Group>
             <Form.Group widths='equal'>
-              <Form.Select                
+              <Form.Select
                 label='State'
-                options={this.props.user.state}
+                options={state}
                 value={this.props.user.state}
               />
-              <Form.Input label='Suburb' value={this.props.user.suburb}/>
-              <Form.Input label='Street' value={this.props.user.street}/>
-              <Form.Input label='Post Code' value={this.props.user.postCode}/>
+              <Form.Input label='Suburb' value={this.props.user.suburb} />
+              <Form.Input label='Street' value={this.props.user.street} />
+              <Form.Input label='Post Code' value={this.props.user.postCode} />
             </Form.Group>
             <Form.Group widths='equal'>
               <Form.Select required label='Office Region' options={officeRegion} value={this.props.user.dataRegion} />
@@ -94,7 +92,7 @@ class NewUserModal extends Component {
                 value='buyerMenu'
                 checked={this.state.buyerMenu === true}
                 onChange={this._handleChangeCheckBox}
-              />           
+              />
               <Checkbox
                 as={CheckboxFormatted}
                 label='Business'
@@ -129,12 +127,12 @@ class NewUserModal extends Component {
                 value='systemSettingsMenu'
                 checked={this.state.systemSettingsMenu === true}
                 onChange={this._handleChangeCheckBox}
-              />              
+              />
             </Form.Group>
             <Form.Group>
               <Form.Button color='blue'>
                 <Icon name='save' />
-                {this.props.user !== undefined ? 'Update User' : 'Create User'}                
+                {this.props.user !== undefined ? 'Update User' : 'Create User'}
               </Form.Button>
               <Form.Button color='red' onClick={this.props.funcao}>
                 <Icon name='cancel' />
@@ -146,6 +144,12 @@ class NewUserModal extends Component {
       </Modal>
     )
   }
+}
+
+NewUserModal.propTypes = {
+  user: PropTypes.object,
+  modalOpen: PropTypes.bool,
+  funcao: PropTypes.func
 }
 
 export default NewUserModal

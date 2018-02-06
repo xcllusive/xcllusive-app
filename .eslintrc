@@ -13,8 +13,12 @@
     "browser": true
   },
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 8,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
   },
+  "parser": "babel-eslint",
   "extends": [
     "standard",
     "standard-react"

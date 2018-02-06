@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import {
   Statistic,
@@ -51,7 +52,7 @@ const array = [
 ]
 
 class BusinessLogPage extends Component {
-  render() {
+  render () {
     return (
       <div>
         <Statistic.Group size='mini' widths={5}>
@@ -183,6 +184,11 @@ class BusinessLogPage extends Component {
       </div>
     )
   }
+}
+
+BusinessLogPage.propTypes = {
+  history: PropTypes.object,
+  match: PropTypes.object
 }
 
 export default BusinessLogPage

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Modal, Form, Icon } from 'semantic-ui-react'
 import BusinessDetail from '../../components/BusinessDetail'
 
 class AddModal extends Component {
-  render() {
+  render () {
     return (
       <Modal open={this.props.teste}>
         <Modal.Header align='center'>New Business</Modal.Header>
@@ -25,6 +26,11 @@ class AddModal extends Component {
       </Modal>
     )
   }
+}
+
+AddModal.propTypes = {
+  funcao: PropTypes.func,
+  teste: PropTypes.bool
 }
 
 export default AddModal

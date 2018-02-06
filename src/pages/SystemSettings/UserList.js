@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import styled from 'styled-components'
@@ -16,13 +17,14 @@ import {
 import { getUsers } from '../../redux/ducks/user'
 
 import Wrapper from '../../components/Wrapper'
+import NewUserModal from './NewUserModal'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em
 `
 
 class UserList extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       admin: true,
@@ -34,7 +36,7 @@ class UserList extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.getUsers()
   }
 
@@ -56,16 +58,14 @@ class UserList extends React.Component {
     this.timer = setTimeout(this.props.getUsers(value), 2000)
   }
 
-  _toggleModal = (user, e) => {
-    //e.preventDefault()
-    //console.log(user)
+  _toggleModal = user => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen,
-      user      
+      user
     }))
   }
 
-  render() {
+  render () {
     if (this.state.modalOpen) {
       return <NewUserModal modalOpen={this.state.modalOpen} funcao={this._toggleModal} user={this.state.user} />
     }
@@ -124,7 +124,11 @@ class UserList extends React.Component {
                   <Table.HeaderCell>User Type</Table.HeaderCell>
                   <Table.HeaderCell>Listing Agent</Table.HeaderCell>
                   <Table.HeaderCell>Buyer</Table.HeaderCell>
+                  <Table.HeaderCell>Business</Table.HeaderCell>
+                  <Table.HeaderCell>Pre Sale</Table.HeaderCell>
+                  <Table.HeaderCell>Resources</Table.HeaderCell>
                   <Table.HeaderCell>Client Manager</Table.HeaderCell>
+                  <Table.HeaderCell>Systems Settings</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -151,6 +155,12 @@ class UserList extends React.Component {
       </Wrapper>
     )
   }
+}
+
+UserList.propTypes = {
+  isLoading: PropTypes.bool,
+  users: PropTypes.array,
+  getUsers: PropTypes.func
 }
 
 const mapStateToProps = state => {

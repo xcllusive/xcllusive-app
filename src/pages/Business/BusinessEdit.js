@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
   Header,
   Segment,
@@ -11,7 +12,7 @@ import {
   Icon,
   Tab
 } from 'semantic-ui-react'
-
+import Wrapper from '../../components/Wrapper'
 import BusinessDetail from '../../components/BusinessDetail'
 
 const agent = [
@@ -49,13 +50,13 @@ const product = [
 
 const state = [
   { key: '1', text: 'ACT', value: 'ACT' },
-  { key: '1', text: 'NT', value: 'NT' },
-  { key: '1', text: 'NSW', value: 'NSW' },
-  { key: '2', text: 'QLD', value: 'QLD' },
-  { key: '2', text: 'SA', value: 'SA' },
-  { key: '2', text: 'TAS', value: 'TAS' },
-  { key: '2', text: 'VIC', value: 'VIC' },
-  { key: '2', text: 'WA', value: 'WA' }
+  { key: '2', text: 'NT', value: 'NT' },
+  { key: '3', text: 'NSW', value: 'NSW' },
+  { key: '4', text: 'QLD', value: 'QLD' },
+  { key: '5', text: 'SA', value: 'SA' },
+  { key: '6', text: 'TAS', value: 'TAS' },
+  { key: '7', text: 'VIC', value: 'VIC' },
+  { key: '8', text: 'WA', value: 'WA' }
 ]
 
 const panes = [
@@ -64,10 +65,10 @@ const panes = [
     render: () => (
       <Tab.Pane className='BusinessDetail' attached={false}>
         <Segment size='mini' inverted color='blue'>
-          <Header as='h7' textAlign='left'>
+          <Header as='h6' textAlign='left'>
             Business Detail
           </Header>
-          <Header as='h7' floated='right'>
+          <Header as='h6' floated='right'>
             Enquiry Date: 06/12/2017
           </Header>
         </Segment>
@@ -169,10 +170,10 @@ const panes = [
           <Grid.Row columns={2}>
             <Grid.Column>
               <Segment size='mini' inverted color='blue'>
-                <Header as='h7' textAlign='left'>
+                <Header as='h6' textAlign='left'>
                   Business Pricing
                 </Header>
-                <Header as='h7' floated='right'>
+                <Header as='h6' floated='right'>
                   (For Sale)
                 </Header>
               </Segment>
@@ -194,10 +195,10 @@ const panes = [
             </Grid.Column>
             <Grid.Column>
               <Segment size='mini' inverted color='blue'>
-                <Header as='h7' textAlign='left'>
+                <Header as='h6' textAlign='left'>
                   Sales Information
                 </Header>
-                <Header as='h7' floated='right'>
+                <Header as='h6' floated='right'>
                   (Deposit and Sold)
                 </Header>
               </Segment>
@@ -273,7 +274,7 @@ class BusinessEditPage extends Component {
 
   render () {
     return (
-      <div>
+      <Wrapper>
         <Statistic.Group size='mini' widths={7}>
           <Statistic color='orange'>
             <Statistic.Value>Business Name</Statistic.Value>
@@ -370,9 +371,14 @@ class BusinessEditPage extends Component {
             </Form.Group>
           </Form>
         </Grid>
-      </div>
+      </Wrapper>
     )
   }
+}
+
+BusinessEditPage.propTypes = {
+  history: PropTypes.object,
+  match: PropTypes.object
 }
 
 export default BusinessEditPage

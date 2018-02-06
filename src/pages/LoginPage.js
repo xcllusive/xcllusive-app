@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -25,7 +26,7 @@ class LoginPage extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.isAuthenticated) this.props.history.push('/')
   }
 
@@ -62,6 +63,15 @@ class LoginPage extends React.Component {
       </Wrapper>
     )
   }
+}
+
+LoginPage.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  error: PropTypes.string,
+  location: PropTypes.object,
+  history: PropTypes.object,
+  login: PropTypes.func
 }
 
 const mapStateToProps = state => {

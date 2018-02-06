@@ -13,7 +13,12 @@ class Wrapper extends Component {
 }
 
 Wrapper.propTypes = {
-  children: PropTypes.element.isRequired
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.func,
+    PropTypes.element
+  ]).isRequired
 }
 
 export default Wrapper
