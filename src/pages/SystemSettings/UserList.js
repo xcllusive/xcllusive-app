@@ -40,14 +40,18 @@ class UserList extends React.Component {
     this.props.getUsers()
   }
 
-  _handleChangeCheckBox = (e, { value }) => {
+  _getUsersWithFilter = () => {
     const options = {
       admin: this.state.admin,
       staff: this.state.staff,
       introducer: this.state.introducer
     }
-    this.setState(prevState => ({ [value]: !prevState[value] }))
     this.props.getUsers(options)
+  }
+
+  _handleChangeCheckBox = (e, { value }) => {
+    this.setState({ [value]: !this.state[value] }, () => this._getUsersWithFilter())
+    // this.setState(prevState => (({ [value]: !prevState[value] }, this._getUsersWithFilter())))
   }
 
   _onSearch = (e, { value }) => {
