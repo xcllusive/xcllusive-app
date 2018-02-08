@@ -120,7 +120,7 @@ class UserList extends React.Component {
             <Dimmer inverted active={this.props.isLoading}>
               <Loader inverted />
             </Dimmer>
-            <Table color='blue' basic selectable>
+            <Table selectable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>ID</Table.HeaderCell>
@@ -138,7 +138,7 @@ class UserList extends React.Component {
               <Table.Body>
                 {this.props.users.map(user => {
                   return (
-                    <Table.Row key={user.id}>
+                    <Table.Row onClick={(e) => this._toggleModal(user, e)} key={user.id}>
                       <Table.Cell>{user.id}</Table.Cell>
                       <Table.Cell>{user.firstName} {user.lastName}</Table.Cell>
                       <Table.Cell>{user.userTypeId}</Table.Cell>

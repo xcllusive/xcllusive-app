@@ -37,6 +37,20 @@ const CheckboxFormatted = styled.div`
   padding-right: 1em`
 
 class NewUserForm extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      inputSearch: '',
+      user: '',
+      userForm: ''
+    }
+  }
+  _handleChangeCheckBox = (e, { value }) => {
+    this.setState(prevState => ({
+      [value]: !prevState[value]
+    }))
+  }
+
   render () {
     const {
       values,
@@ -53,7 +67,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='Email'
               name='email'
-              value={values.email}
+              value={this.props.userForm.email !== undefined ? this.props.userForm.email : values.email}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -64,7 +78,7 @@ class NewUserForm extends Component {
               type='password'
               label='Password'
               name='password'
-              value={values.password}
+              value={this.props.userForm.password !== undefined ? this.props.userForm.password : values.password}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -74,7 +88,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='First Name'
               name='firstName'
-              value={values.firstName}
+              value={this.props.userForm.firstName !== undefined ? this.props.userForm.firstName : values.firstName}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -84,7 +98,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='Last Name'
               name='lastName'
-              value={values.lastName}
+              value={this.props.userForm.lastName !== undefined ? this.props.userForm.lastName : values.lastName}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -96,7 +110,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='Home Phone'
               name='phoneHome'
-              value={values.phoneHome}
+              value={this.props.userForm.phoneHome !== undefined ? this.props.userForm.phoneHome : values.phoneHome}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -106,7 +120,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='Work Phone'
               name='phoneWork'
-              value={values.phoneWork}
+              value={this.props.userForm.phoneWork !== undefined ? this.props.userForm.phoneWork : values.phoneWork}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -116,7 +130,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='Mobile Phone'
               name='phoneMobile'
-              value={values.phoneMobile}
+              value={this.props.userForm.phoneMobile !== undefined ? this.props.userForm.phoneMobile : values.phoneMobile}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -129,14 +143,14 @@ class NewUserForm extends Component {
               label='State'
               name='state'
               options={state}
-              value={values.state}
+              value={this.props.userForm.state !== undefined ? this.props.userForm.state : values.state}
             />
           </Form.Field>
           <Form.Field>
             <Form.Input
               label='Suburb'
               name='suburb'
-              value={values.suburb}
+              value={this.props.userForm.suburb !== undefined ? this.props.userForm.suburb : values.suburb}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -146,7 +160,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='Street'
               name='street'
-              value={values.street}
+              value={this.props.userForm.street !== undefined ? this.props.userForm.street : values.street}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -156,7 +170,7 @@ class NewUserForm extends Component {
             <Form.Input
               label='Post Code'
               name='postCode'
-              value={values.postCode}
+              value={this.props.userForm.postCode !== undefined ? this.props.userForm.postCode : values.postCode}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -169,7 +183,7 @@ class NewUserForm extends Component {
               label='Office Region'
               name='dataRegion'
               options={dataRegion}
-              value={values.dataRegion}
+              value={this.props.userForm.dataRegion !== undefined ? this.props.userForm.dataRegion : values.dataRegion}
             />
             {errors.dataRegion && touched.dataRegion && <Label basic color='red' pointing content={errors.dataRegion} />}
           </Form.Field>
@@ -178,7 +192,7 @@ class NewUserForm extends Component {
               label='Listing Agent'
               name='listingAgent'
               options={listingAgent}
-              value={values.listingAgent}
+              value={this.props.userForm.listingAgent !== undefined ? this.props.userForm.listingAgent : values.listingAgent}
             />
             {errors.listingAgent && touched.listingAgent && <Label basic color='red' pointing content={errors.listingAgent} />}
           </Form.Field>
@@ -187,7 +201,7 @@ class NewUserForm extends Component {
               label='User Type'
               name='userType'
               options={userType}
-              value={values.userTypeId}
+              value={this.props.userForm.userTypeId !== undefined ? this.props.userForm.userTypeId : values.userTypeId}
             />
             {errors.userType && touched.userType && <Label basic color='red' pointing content={errors.userType} />}
           </Form.Field>
@@ -240,7 +254,7 @@ class NewUserForm extends Component {
         <Form.Group>
           <Form.Button color='blue'>
             <Icon name='save' />
-            {this.props.user !== undefined ? 'Update User' : 'Create User'}
+            {this.props.userForm.email !== undefined ? 'Update User' : 'Create User'}
           </Form.Button>
           <Form.Button color='red' onClick={this.props.funcao}>
             <Icon name='cancel' />
@@ -253,8 +267,8 @@ class NewUserForm extends Component {
 }
 
 NewUserForm.propTypes = {
-  user: '',
-  funcao: '',
+  userForm: PropTypes.object,
+  funcao: PropTypes.func,
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,

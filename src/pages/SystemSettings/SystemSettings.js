@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Tab, Segment, Header } from 'semantic-ui-react'
+import { Tab } from 'semantic-ui-react'
 
 import UserList from './UserList'
 
@@ -13,16 +13,7 @@ class SystemSettingsPage extends Component {
           render: () => <UserList />
         },
         {
-          menuItem: 'Email Templates',
-          render: () => (
-            <Tab.Pane attached={false}>
-              <Segment size='mini' inverted color='blue'>
-                <Header as='h7' textAlign='left'>
-                  Users
-                </Header>
-              </Segment>
-            </Tab.Pane>
-          )
+          menuItem: 'Email Templates'
         }
       ]
     }
