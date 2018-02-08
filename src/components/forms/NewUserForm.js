@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withFormik } from 'formik'
-import { Form, Icon, Label, Checkbox } from 'semantic-ui-react'
+import { Form, Label, Checkbox } from 'semantic-ui-react'
 import styled from 'styled-components'
 import Yup from 'yup'
 
@@ -207,59 +207,63 @@ class NewUserForm extends Component {
           </Form.Field>
         </Form.Group>
         <Form.Group widths='equal'>
-          <h4><b><div align='left'> Menu Access: </div></b></h4>
-          <Checkbox
-            as={CheckboxFormatted}
-            label='Buyer'
-            value='buyerMenu'
-            checked={this.state.buyerMenu === true}
-            onChange={this._handleChangeCheckBox}
-          />
-          <Checkbox
-            as={CheckboxFormatted}
-            label='Business'
-            value='businessMenu'
-            checked={this.state.businessMenu === true}
-            onChange={this._handleChangeCheckBox}
-          />
-          <Checkbox
-            as={CheckboxFormatted}
-            label='Pre Sale'
-            value='preSaleMenu'
-            checked={this.state.preSaleMenu === true}
-            onChange={this._handleChangeCheckBox}
-          />
-          <Checkbox
-            as={CheckboxFormatted}
-            label='Resources'
-            value='resourcesMenu'
-            checked={this.state.resourcesMenu === true}
-            onChange={this._handleChangeCheckBox}
-          />
-          <Checkbox
-            as={CheckboxFormatted}
-            label='Client Manager'
-            value='clientManagerMenu'
-            checked={this.state.clientManagerMenu === true}
-            onChange={this._handleChangeCheckBox}
-          />
-          <Checkbox
-            as={CheckboxFormatted}
-            label='System Settings'
-            value='systemSettingsMenu'
-            checked={this.state.systemSettingsMenu === true}
-            onChange={this._handleChangeCheckBox}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Button color='blue'>
-            <Icon name='save' />
-            {this.props.userForm.email !== undefined ? 'Update User' : 'Create User'}
-          </Form.Button>
-          <Form.Button color='red' onClick={this.props.funcao}>
-            <Icon name='cancel' />
-            Cancel
-          </Form.Button>
+          <Form.Field width={9}>
+            <label>Menu Access:</label>
+          </Form.Field>
+          <Form.Field width={2}>
+            <Checkbox
+              as={CheckboxFormatted}
+              label='Buyer'
+              value='buyerMenu'
+              checked={this.state.buyerMenu === true}
+              onChange={this._handleChangeCheckBox}
+            />
+          </Form.Field>
+          <Form.Field width={2}>
+            <Checkbox
+              as={CheckboxFormatted}
+              label='Business'
+              value='businessMenu'
+              checked={this.state.businessMenu === true}
+              onChange={this._handleChangeCheckBox}
+            />
+          </Form.Field>
+          <Form.Field width={11}>
+            <Checkbox
+              as={CheckboxFormatted}
+              label='Pre Sale'
+              value='preSaleMenu'
+              checked={this.state.preSaleMenu === true}
+              onChange={this._handleChangeCheckBox}
+            />
+          </Form.Field>
+          <Form.Field width={10}>
+            <Checkbox
+              as={CheckboxFormatted}
+              label='Resources'
+              value='resourcesMenu'
+              checked={this.state.resourcesMenu === true}
+              onChange={this._handleChangeCheckBox}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Checkbox
+              as={CheckboxFormatted}
+              label='Client Manager'
+              value='clientManagerMenu'
+              checked={this.state.clientManagerMenu === true}
+              onChange={this._handleChangeCheckBox}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Checkbox
+              as={CheckboxFormatted}
+              label='System Settings'
+              value='systemSettingsMenu'
+              checked={this.state.systemSettingsMenu === true}
+              onChange={this._handleChangeCheckBox}
+            />
+          </Form.Field>
         </Form.Group>
       </Form>
     )
@@ -268,7 +272,6 @@ class NewUserForm extends Component {
 
 NewUserForm.propTypes = {
   userForm: PropTypes.object,
-  funcao: PropTypes.func,
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,

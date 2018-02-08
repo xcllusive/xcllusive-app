@@ -70,11 +70,23 @@ class UserList extends React.Component {
   }
 
   render () {
-    if (this.state.modalOpen) {
-      return <NewUserModal modalOpen={this.state.modalOpen} funcao={this._toggleModal} user={this.state.user} />
-    }
+    // if (this.state.modalOpen) {
+    //   return (
+    //     <NewUserModal
+    //       modalOpen={this.state.modalOpen}
+    //       toggleModal={this._toggleModal}
+    //       user={this.state.user}
+    //     />
+    //   )
+    // }
     return (
       <Wrapper>
+        <NewUserModal
+          open={this.state.modalOpen}
+          modalOpen={this.state.modalOpen}
+          toggleModal={this._toggleModal}
+          user={this.state.user}
+        />
         <Grid padded='horizontally'>
           <Grid.Row>
             <Grid.Column width={5}>
