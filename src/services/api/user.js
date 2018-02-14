@@ -7,7 +7,7 @@ export const get = id => {
 }
 
 export const getAll = (options, search) => {
-  if (search) options.search = search
+  if (search && search.length > 1) options.search = search
   return request({
     url: '/user',
     params: options
