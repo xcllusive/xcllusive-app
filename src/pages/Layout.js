@@ -16,18 +16,34 @@ import BuyerPage from './Buyer/Buyer'
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
 
-const Layout = ({ match, logout }) => (
+const Layout = ({ match, logout, menu }) => (
   <div>
     <Menu pointing stackable secondary attached='top' color={'blue'}>
       <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
         <Header as='h2'>Xcllusive</Header>
       </Menu.Item>
-      <Menu.Item name='buyer' as={NavLink} to={`${match.url}buyer`} />
-      <Menu.Item name='business' as={NavLink} to={`${match.url}business`} />
-      <Menu.Item name='pre sale' as={NavLink} to={`${match.url}presale`} />
-      <Menu.Item name='resources' as={NavLink} to={`${match.url}resources`} />
-      <Menu.Item name='client manager' as={NavLink} to={`${match.url}clientManager`} />
-      <Menu.Item name='system settings' as={NavLink} to={`${match.url}systemSettings`} />
+      {
+        menu.map(item => {
+          if (item === 'USER_MENU') {
+            return <Menu.Item key={item} name='buyer' as={NavLink} to={`${match.url}buyer`} />
+          }
+          if (item === 'BUSINESS_MENU') {
+            return <Menu.Item key={item} name='business' as={NavLink} to={`${match.url}business`} />
+          }
+          if (item === 'PRESALE_MENU') {
+            return <Menu.Item key={item} name='pre sale' as={NavLink} to={`${match.url}presale`} />
+          }
+          if (item === 'RESOURCES_MENU') {
+            return <Menu.Item key={item} name='resources' as={NavLink} to={`${match.url}resources`} />
+          }
+          if (item === 'CLIENT_MANAGER_MENU') {
+            return <Menu.Item key={item} name='client manager' as={NavLink} to={`${match.url}clientManager`} />
+          }
+          if (item === 'SYSTEM_SETTINGS_MENU') {
+            return <Menu.Item key={item} name='system settings' as={NavLink} to={`${match.url}systemSettings`} />
+          }
+        })
+      }
       <Menu.Menu position='right'>
         <Menu.Item onClick={() => logout()} position='right'>
           <Icon name='toggle right' />
@@ -73,12 +89,13 @@ const Layout = ({ match, logout }) => (
 
 Layout.propTypes = {
   match: PropTypes.object,
-  logout: PropTypes.func
+  logout: PropTypes.func,
+  menu: PropTypes.array
 }
 
 const mapStateToProps = state => {
   return {
-    menu: state.auth.user.menu
+    menu: state.auth.user.roles
   }
 }
 

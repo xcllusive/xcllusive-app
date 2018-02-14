@@ -26,15 +26,17 @@ class LoginPage extends React.Component {
     }
   }
 
+  shouldComponentUpdate (nextProps) {
+    if (nextProps.isAuthenticated) return false
+
+    return true
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.isAuthenticated) this.props.history.push('/')
   }
 
   _submit = (email, password) => this.props.login(email, password)
-
-  _handleClose = () => {
-    this.setState({ modalOpen: false })
-  }
 
   render () {
     const { from } = this.props.location.state || { from: { pathname: '/' } }

@@ -17,7 +17,7 @@ import {
 import { getUsers } from '../../redux/ducks/user'
 
 import Wrapper from '../../components/Wrapper'
-import NewUserModal from './NewUserModal'
+import NewUserForm from '../../components/forms/NewUserForm'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em
@@ -51,7 +51,6 @@ class UserList extends React.Component {
 
   _handleChangeCheckBox = (e, { value }) => {
     this.setState({ [value]: !this.state[value] }, () => this._getUsersWithFilter())
-    // this.setState(prevState => (({ [value]: !prevState[value] }, this._getUsersWithFilter())))
   }
 
   _onSearch = (e, { value }) => {
@@ -70,18 +69,9 @@ class UserList extends React.Component {
   }
 
   render () {
-    // if (this.state.modalOpen) {
-    //   return (
-    //     <NewUserModal
-    //       modalOpen={this.state.modalOpen}
-    //       toggleModal={this._toggleModal}
-    //       user={this.state.user}
-    //     />
-    //   )
-    // }
     return (
       <Wrapper>
-        <NewUserModal
+        <NewUserForm
           open={this.state.modalOpen}
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
@@ -154,7 +144,7 @@ class UserList extends React.Component {
                       <Table.Cell>{user.id}</Table.Cell>
                       <Table.Cell>{user.firstName} {user.lastName}</Table.Cell>
                       <Table.Cell>{user.userTypeId}</Table.Cell>
-                      <Table.Cell>{user.listingAgent}</Table.Cell>
+                      <Table.Cell>{user.listingAgent === 1 ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>{user.buyer}</Table.Cell>
                       <Table.Cell>{user.business}</Table.Cell>
                       <Table.Cell>{user.preSale}</Table.Cell>

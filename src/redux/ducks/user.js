@@ -1,11 +1,17 @@
-import { getAll, getSearching } from '../../services/api/user'
+import {
+  getAll,
+  getSearching,
+  create
+} from '../../services/api/user'
 
 // Action Types
 
 export const Types = {
-  USER_LOADING: 'USER_LOADING',
-  USER_SUCCESS: 'USER_SUCCESS',
-  USER_FAILURE: 'USER_FAILURE'
+  GET_USER_LOADING: 'GET_USER_LOADING',
+  GET_USER_SUCCESS: 'GET_USER_SUCCESS',
+  GET_USER_FAILURE: 'GET_USER_FAILURE',
+  CREATE_USER_LOADING: 'CREATE_USER_LOADING',
+  CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS'
 }
 
 // Reducer
@@ -18,23 +24,34 @@ const initialState = {
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
-    case Types.USER_LOADING:
+    case Types.GET_USER_LOADING:
       return {
         ...state,
         isLoading: action.payload
       }
-    case Types.USER_SUCCESS:
+    case Types.GET_USER_SUCCESS:
       return {
         ...state,
         isLoading: false,
         users: action.payload,
         error: null
       }
-    case Types.USER_FAILURE:
+    case Types.GET_USER_FAILURE:
       return {
         ...state,
         isLoading: false,
         error: action.payload
+      }
+    case Types.CREATE_USER_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload
+      }
+    case Types.CREATE_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        error: null
       }
     default:
       return state
@@ -43,29 +60,39 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const userLoading = value => {
+export const userLoading = (value, type) => {
   return {
-    type: Types.USER_LOADING,
+    type: Types[type],
     payload: value
   }
 }
 
 const userResponse = array => {
   return {
-    type: Types.USER_SUCCESS,
+    type: Types.GET_USER_SUCCESS,
     payload: array
   }
 }
 
 const userError = value => {
   return {
-    type: Types.USER_FAILURE,
+    type: Types.GET_USER_FAILURE,
     payload: value
   }
 }
 
+export const createUser = user => async dispatch => {
+  dispatch(userLoading(true, 'CREATE_USER_LOADING'))
+  try {
+    await create(user)
+    dispatch({type: Types.CREATE_USER_SUCCESS})
+  } catch (error) {
+    dispatch(userError(error))
+  }
+}
+
 export const getUsers = (options = false, search = false) => async dispatch => {
-  dispatch(userLoading(true))
+  dispatch(userLoading(true, 'GET_USER_LOADING'))
   try {
     const users = search ? await getSearching(search) : await getAll(options)
     dispatch(userResponse(users))

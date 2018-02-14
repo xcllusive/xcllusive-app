@@ -1,54 +1,52 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Checkbox } from 'semantic-ui-react'
+import { Modal, Form, Label, Checkbox, Icon, Button } from 'semantic-ui-react'
 import styled from 'styled-components'
 import Yup from 'yup'
 
+import { createUser } from '../../redux/ducks/user'
+
 const dataRegion = [
-  { key: '1', text: 'Sydney Office', value: 'Sydney Office' },
-  { key: '2', text: 'Melbourne Office', value: 'Melbourne Office' },
-  { key: '3', text: 'Gosford Office', value: 'Gosford Office' },
-  { key: '4', text: 'Cowra Office', value: 'Cowra Office' },
-  { key: '5', text: 'Camberra Office', value: 'Camberra Office' }
+  { key: 1, text: 'Sydney Office', value: 'Sydney Office' },
+  { key: 2, text: 'Melbourne Office', value: 'Melbourne Office' },
+  { key: 3, text: 'Gosford Office', value: 'Gosford Office' },
+  { key: 4, text: 'Cowra Office', value: 'Cowra Office' },
+  { key: 5, text: 'Camberra Office', value: 'Camberra Office' }
 ]
 
 const listingAgent = [
-  { key: '1', text: 'Yes', value: '1' },
-  { key: '2', text: 'No', value: '2' }
+  { key: 1, text: 'Yes', value: 1 },
+  { key: 2, text: 'No', value: 0 }
 ]
 
 const userType = [
-  { key: '1', text: 'Admin', value: '1' },
-  { key: '2', text: 'Staff', value: '2' },
-  { key: '3', text: 'Introducer', value: '3' }
+  { key: 1, text: 'Admin', value: 'Admin' },
+  { key: 2, text: 'Staff', value: 'Staff' },
+  { key: 3, text: 'Introducer', value: 'Introducer' }
 ]
 
 const state = [
-  { key: '1', text: 'NSW', value: 'NSW' },
-  { key: '2', text: 'QLD', value: 'QLD' },
-  { key: '3', text: 'SA', value: 'SA' },
-  { key: '4', text: 'TAS', value: 'TAS' },
-  { key: '5', text: 'VIC', value: 'VIC' },
-  { key: '6', text: 'WA', value: 'WA' }
+  { key: 1, text: 'NSW', value: 'NSW' },
+  { key: 2, text: 'QLD', value: 'QLD' },
+  { key: 3, text: 'SA', value: 'SA' },
+  { key: 4, text: 'TAS', value: 'TAS' },
+  { key: 5, text: 'VIC', value: 'VIC' },
+  { key: 6, text: 'WA', value: 'WA' }
 ]
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em`
 
 class NewUserForm extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      inputSearch: '',
-      user: '',
-      userForm: ''
-    }
-  }
   _handleChangeCheckBox = (e, { value }) => {
-    this.setState(prevState => ({
-      [value]: !prevState[value]
-    }))
+    this.props.setFieldValue(value, !this.props.values[value])
+  }
+
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
   }
 
   render () {
@@ -58,226 +56,276 @@ class NewUserForm extends Component {
       errors,
       handleChange,
       handleBlur,
-      handleSubmit
+      handleSubmit,
+      isSubmitting,
+      isValid,
+      isLoading,
+      modalOpen,
+      toggleModal
     } = this.props
     return (
-      <Form onSubmit={handleSubmit}>
-        <Form.Group widths='equal'>
-          <Form.Field>
-            <Form.Input
-              label='Email'
-              name='email'
-              value={this.props.userForm.email !== undefined ? this.props.userForm.email : values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.email && touched.email && <Label basic color='red' pointing content={errors.email} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              type='password'
-              label='Password'
-              name='password'
-              value={this.props.userForm.password !== undefined ? this.props.userForm.password : values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.password && touched.password && <Label basic color='red' pointing content={errors.password} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='First Name'
-              name='firstName'
-              value={this.props.userForm.firstName !== undefined ? this.props.userForm.firstName : values.firstName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.firstName && touched.firstName && <Label basic color='red' pointing content={errors.firstName} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Last Name'
-              name='lastName'
-              value={this.props.userForm.lastName !== undefined ? this.props.userForm.lastName : values.lastName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.lastName && touched.lastName && <Label basic color='red' pointing content={errors.lastName} />}
-          </Form.Field>
-        </Form.Group>
-        <Form.Group widths='equal'>
-          <Form.Field>
-            <Form.Input
-              label='Home Phone'
-              name='phoneHome'
-              value={this.props.userForm.phoneHome !== undefined ? this.props.userForm.phoneHome : values.phoneHome}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.phoneHome && touched.phoneHome && <Label basic color='red' pointing content={errors.phoneHome} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Work Phone'
-              name='phoneWork'
-              value={this.props.userForm.phoneWork !== undefined ? this.props.userForm.phoneWork : values.phoneWork}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.phoneWork && touched.phoneWork && <Label basic color='red' pointing content={errors.phoneWork} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Mobile Phone'
-              name='phoneMobile'
-              value={this.props.userForm.phoneMobile !== undefined ? this.props.userForm.phoneMobile : values.phoneMobile}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.phoneMobile && touched.phoneMobile && <Label basic color='red' pointing content={errors.phoneMobile} />}
-          </Form.Field>
-        </Form.Group>
-        <Form.Group widths='equal'>
-          <Form.Field>
-            <Form.Select
-              label='State'
-              name='state'
-              options={state}
-              value={this.props.userForm.state !== undefined ? this.props.userForm.state : values.state}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Suburb'
-              name='suburb'
-              value={this.props.userForm.suburb !== undefined ? this.props.userForm.suburb : values.suburb}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.suburb && touched.suburb && <Label basic color='red' pointing content={errors.suburb} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Street'
-              name='street'
-              value={this.props.userForm.street !== undefined ? this.props.userForm.street : values.street}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.street && touched.street && <Label basic color='red' pointing content={errors.street} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Post Code'
-              name='postCode'
-              value={this.props.userForm.postCode !== undefined ? this.props.userForm.postCode : values.postCode}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.postCode && touched.postCode && <Label basic color='red' pointing content={errors.postCode} />}
-          </Form.Field>
-        </Form.Group>
-        <Form.Group widths='equal'>
-          <Form.Field>
-            <Form.Select
-              label='Office Region'
-              name='dataRegion'
-              options={dataRegion}
-              value={this.props.userForm.dataRegion !== undefined ? this.props.userForm.dataRegion : values.dataRegion}
-            />
-            {errors.dataRegion && touched.dataRegion && <Label basic color='red' pointing content={errors.dataRegion} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Select
-              label='Listing Agent'
-              name='listingAgent'
-              options={listingAgent}
-              value={this.props.userForm.listingAgent !== undefined ? this.props.userForm.listingAgent : values.listingAgent}
-            />
-            {errors.listingAgent && touched.listingAgent && <Label basic color='red' pointing content={errors.listingAgent} />}
-          </Form.Field>
-          <Form.Field>
-            <Form.Select
-              label='User Type'
-              name='userType'
-              options={userType}
-              value={this.props.userForm.userTypeId !== undefined ? this.props.userForm.userTypeId : values.userTypeId}
-            />
-            {errors.userType && touched.userType && <Label basic color='red' pointing content={errors.userType} />}
-          </Form.Field>
-        </Form.Group>
-        <Form.Group widths='equal'>
-          <Form.Field width={9}>
-            <label>Menu Access:</label>
-          </Form.Field>
-          <Form.Field width={2}>
-            <Checkbox
-              as={CheckboxFormatted}
-              label='Buyer'
-              value='buyerMenu'
-              checked={this.state.buyerMenu === true}
-              onChange={this._handleChangeCheckBox}
-            />
-          </Form.Field>
-          <Form.Field width={2}>
-            <Checkbox
-              as={CheckboxFormatted}
-              label='Business'
-              value='businessMenu'
-              checked={this.state.businessMenu === true}
-              onChange={this._handleChangeCheckBox}
-            />
-          </Form.Field>
-          <Form.Field width={11}>
-            <Checkbox
-              as={CheckboxFormatted}
-              label='Pre Sale'
-              value='preSaleMenu'
-              checked={this.state.preSaleMenu === true}
-              onChange={this._handleChangeCheckBox}
-            />
-          </Form.Field>
-          <Form.Field width={10}>
-            <Checkbox
-              as={CheckboxFormatted}
-              label='Resources'
-              value='resourcesMenu'
-              checked={this.state.resourcesMenu === true}
-              onChange={this._handleChangeCheckBox}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Checkbox
-              as={CheckboxFormatted}
-              label='Client Manager'
-              value='clientManagerMenu'
-              checked={this.state.clientManagerMenu === true}
-              onChange={this._handleChangeCheckBox}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Checkbox
-              as={CheckboxFormatted}
-              label='System Settings'
-              value='systemSettingsMenu'
-              checked={this.state.systemSettingsMenu === true}
-              onChange={this._handleChangeCheckBox}
-            />
-          </Form.Field>
-        </Form.Group>
-      </Form>
+      <Modal
+        dimmer={'blurring'}
+        open={modalOpen}
+      >
+        <Modal.Header align='center'>New User</Modal.Header>
+        <Modal.Content>
+          <Form>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <Form.Input
+                  label='Email'
+                  name='email'
+                  autoComplete='email'
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.email && touched.email && <Label basic color='red' pointing content={errors.email} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  type='password'
+                  label='Password'
+                  name='password'
+                  autoComplete='password'
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.password && touched.password && <Label basic color='red' pointing content={errors.password} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label='First Name'
+                  name='firstName'
+                  autoComplete='firstName'
+                  value={values.firstName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.firstName && touched.firstName && <Label basic color='red' pointing content={errors.firstName} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label='Last Name'
+                  name='lastName'
+                  autoComplete='lastName'
+                  value={values.lastName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.lastName && touched.lastName && <Label basic color='red' pointing content={errors.lastName} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <Form.Input
+                  label='Home Phone'
+                  name='phoneHome'
+                  autoComplete='phoneHome'
+                  value={values.phoneHome}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.phoneHome && touched.phoneHome && <Label basic color='red' pointing content={errors.phoneHome} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label='Work Phone'
+                  name='phoneWork'
+                  autoComplete='phoneWork'
+                  value={values.phoneWork}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.phoneWork && touched.phoneWork && <Label basic color='red' pointing content={errors.phoneWork} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label='Mobile Phone'
+                  name='phoneMobile'
+                  autoComplete='phoneMobile'
+                  value={values.phoneMobile}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.phoneMobile && touched.phoneMobile && <Label basic color='red' pointing content={errors.phoneMobile} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <Form.Select
+                  label='State'
+                  name='state'
+                  options={state}
+                  value={values.state}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label='Suburb'
+                  name='suburb'
+                  autoComplete='suburb'
+                  value={values.suburb}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.suburb && touched.suburb && <Label basic color='red' pointing content={errors.suburb} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label='Street'
+                  name='street'
+                  autoComplete='street'
+                  value={values.street}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.street && touched.street && <Label basic color='red' pointing content={errors.street} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label='Post Code'
+                  name='postCode'
+                  autoComplete='postCode'
+                  value={values.postCode}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.postCode && touched.postCode && <Label basic color='red' pointing content={errors.postCode} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <Form.Select
+                  label='Office Region'
+                  name='dataRegion'
+                  options={dataRegion}
+                  value={values.dataRegion}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.dataRegion && touched.dataRegion && <Label basic color='red' pointing content={errors.dataRegion} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  label='Listing Agent'
+                  name='listingAgent'
+                  options={listingAgent}
+                  value={values.listingAgent}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.listingAgent && touched.listingAgent && <Label basic color='red' pointing content={errors.listingAgent} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  label='User Type'
+                  name='userType'
+                  options={userType}
+                  value={values.userType}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.userType && touched.userType && <Label basic color='red' pointing content={errors.userType} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths='equal'>
+              <Form.Field width={9}>
+                <label>Menu Access:</label>
+              </Form.Field>
+              <Form.Field width={2}>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label='Buyer'
+                  value='buyerMenu'
+                  checked={values.buyerMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+              <Form.Field width={2}>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label='Business'
+                  value='businessMenu'
+                  checked={values.businessMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+              <Form.Field width={11}>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label='Pre Sale'
+                  value='preSaleMenu'
+                  checked={values.preSaleMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+              <Form.Field width={10}>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label='Resources'
+                  value='resourcesMenu'
+                  checked={values.resourcesMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+              <Form.Field width={14}>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label='Client Manager'
+                  value='clientManagerMenu'
+                  checked={values.clientManagerMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  name='systemSettingsMenu'
+                  label='System Settings'
+                  value='systemSettingsMenu'
+                  checked={values.systemSettingsMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+            </Form.Group>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            color='blue'
+            disabled={isSubmitting || !isValid}
+            loading={isLoading}
+            onClick={handleSubmit}
+          >
+            <Icon name='save' />
+            Create User
+          </Button>
+          <Button
+            color='red'
+            onClick={toggleModal}
+          >
+            <Icon name='cancel' />
+            Cancel
+          </Button>
+        </Modal.Actions>
+      </Modal>
     )
   }
 }
 
 NewUserForm.propTypes = {
-  userForm: PropTypes.object,
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
-  handleSubmit: PropTypes.func
+  handleSubmit: PropTypes.func,
+  setFieldValue: PropTypes.func,
+  toggleModal: PropTypes.func,
+  isSubmitting: PropTypes.bool,
+  isValid: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  modalOpen: PropTypes.bool
 }
 
 const mapPropsToValues = () => ({
@@ -292,7 +340,13 @@ const mapPropsToValues = () => ({
   street: '',
   postCode: '',
   listingAgent: '',
-  userType: ''
+  userType: '',
+  buyerMenu: false,
+  businessMenu: false,
+  preSaleMenu: false,
+  resourcesMenu: false,
+  clientManagerMenu: false,
+  systemSettingsMenu: false
 })
 
 const validationSchema = Yup.object().shape({
@@ -323,15 +377,31 @@ const validationSchema = Yup.object().shape({
     .integer('Only numbers are permitted.'),
   dataRegion: Yup.string()
     .required('Office Region is required.'),
-  listingAgent: Yup.string()
+  listingAgent: Yup.number()
     .required('Listing Agent is required.'),
   userType: Yup.string()
     .required('User Type is required.')
 })
 
-const handleSubmit = ({ email, firstName }) =>
-  console.log(email, firstName)
+const handleSubmit = (values, { props, setSubmitting }) => {
+  props.createUser(values)
+  setSubmitting(false)
+}
 
-export default withFormik({ mapPropsToValues, validationSchema, handleSubmit })(
-  NewUserForm
+const mapStateToProps = state => {
+  return {
+    isLoading: state.user.isLoading
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ createUser }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withFormik({
+    mapPropsToValues,
+    validationSchema,
+    handleSubmit
+  })(NewUserForm)
 )

@@ -52,7 +52,7 @@ class LoginForm extends Component {
             icon
             labelPosition='right'
             size='small'
-            color='instagram'
+            color='blue'
             disabled={isSubmitting || !isValid}
             loading={this.props.isLoading}
           >

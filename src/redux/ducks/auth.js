@@ -32,7 +32,10 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        user: action.payload,
+        user: {
+          ...action.payload,
+          roles: JSON.parse(action.payload.roles)
+        },
         error: null,
         isAuthenticated: true,
         isAppLoading: false

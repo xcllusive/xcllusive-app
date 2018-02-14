@@ -19,3 +19,11 @@ export const getSearching = search => {
     params: search
   })
 }
+
+export const create = user => {
+  return request({
+    method: 'post',
+    url: '/users',
+    data: user
+  })
+}
