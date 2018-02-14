@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import _ from 'lodash'
 import styled from 'styled-components'
 import {
   Table,
@@ -27,38 +28,49 @@ class UserList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      admin: true,
-      staff: true,
-      introducer: true,
       inputSearch: '',
+      optionsSearch: {
+        admin: true,
+        staff: true,
+        introducer: true
+      },
       modalOpen: false,
       user: null
     }
   }
 
-  componentWillMount () {
-    this.props.getUsers()
+  async componentWillReceiveProps (nextProps) {
+    if (this.props.userCreated !== nextProps.userCreated) {
+      await this._toggleModal({})
+      this.props.getUsers()
+    }
   }
 
-  _getUsersWithFilter = () => {
-    const options = {
-      admin: this.state.admin,
-      staff: this.state.staff,
-      introducer: this.state.introducer
-    }
-    this.props.getUsers(options)
+  componentWillMount () {
+    this.props.getUsers()
+    this.timer = null
   }
 
   _handleChangeCheckBox = (e, { value }) => {
-    this.setState({ [value]: !this.state[value] }, () => this._getUsersWithFilter())
+    this.setState(
+      {
+        optionsSearch: {
+          ...this.state.optionsSearch,
+          [value]: !this.state.optionsSearch[value]
+        }
+      },
+      () => this.props.getUsers(this.state.optionsSearch)
+    )
   }
 
   _onSearch = (e, { value }) => {
+    if (this.timer) clearTimeout(this.timer)
+
     this.setState({
       inputSearch: value
     })
-    clearTimeout(this.timer)
-    this.timer = setTimeout(this.props.getUsers(value), 2000)
+
+    this.timer = setTimeout(() => this.props.getUsers(this.state.optionsSearch, value), 1000)
   }
 
   _toggleModal = user => {
@@ -72,9 +84,9 @@ class UserList extends React.Component {
     return (
       <Wrapper>
         <NewUserForm
-          open={this.state.modalOpen}
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
+          userCreated={this.props.userCreated}
           user={this.state.user}
         />
         <Grid padded='horizontally'>
@@ -94,20 +106,20 @@ class UserList extends React.Component {
                 as={CheckboxFormatted}
                 label='Admin'
                 value='admin'
-                checked={this.state.admin === true}
+                checked={this.state.optionsSearch.admin === true}
                 onChange={this._handleChangeCheckBox}
               />
               <Checkbox
                 as={CheckboxFormatted}
                 label='Staff'
                 value='staff'
-                checked={this.state.staff === true}
+                checked={this.state.optionsSearch.staff === true}
                 onChange={this._handleChangeCheckBox}
               />
               <Checkbox
                 label='Introducer'
                 value='introducer'
-                checked={this.state.introducer === true}
+                checked={this.state.optionsSearch.introducer === true}
                 onChange={this._handleChangeCheckBox}
               />
             </Grid.Column>
@@ -122,7 +134,7 @@ class UserList extends React.Component {
             <Dimmer inverted active={this.props.isLoading}>
               <Loader inverted />
             </Dimmer>
-            <Table selectable>
+            <Table selectable striped>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>ID</Table.HeaderCell>
@@ -139,18 +151,19 @@ class UserList extends React.Component {
               </Table.Header>
               <Table.Body>
                 {this.props.users.map(user => {
+                  let roles = user.roles.length > 0 ? JSON.parse(user.roles) : []
                   return (
                     <Table.Row onClick={(e) => this._toggleModal(user, e)} key={user.id}>
-                      <Table.Cell>{user.id}</Table.Cell>
-                      <Table.Cell>{user.firstName} {user.lastName}</Table.Cell>
-                      <Table.Cell>{user.userTypeId}</Table.Cell>
-                      <Table.Cell>{user.listingAgent === 1 ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{user.buyer}</Table.Cell>
-                      <Table.Cell>{user.business}</Table.Cell>
-                      <Table.Cell>{user.preSale}</Table.Cell>
-                      <Table.Cell>{user.resources}</Table.Cell>
-                      <Table.Cell>{user.clientManager}</Table.Cell>
-                      <Table.Cell>{user.systemSettings}</Table.Cell>
+                      <Table.Cell>{ user.id }</Table.Cell>
+                      <Table.Cell>{ `${user.firstName} ${user.lastName}` }</Table.Cell>
+                      <Table.Cell>{ user.userType }</Table.Cell>
+                      <Table.Cell>{ user.listingAgent === 1 ? 'Yes' : 'No' }</Table.Cell>
+                      <Table.Cell>{ _.includes(roles, 'BUYER_MENU') ? 'Yes' : 'No' }</Table.Cell>
+                      <Table.Cell>{ _.includes(roles, 'BUSINESS_MENU') ? 'Yes' : 'No' }</Table.Cell>
+                      <Table.Cell>{ _.includes(roles, 'PRESALE_MENU') ? 'Yes' : 'No' }</Table.Cell>
+                      <Table.Cell>{ _.includes(roles, 'RESOURCES_MENU') ? 'Yes' : 'No' }</Table.Cell>
+                      <Table.Cell>{ _.includes(roles, 'CLIENT_MANAGER_MENU') ? 'Yes' : 'No' }</Table.Cell>
+                      <Table.Cell>{ _.includes(roles, 'SYSTEM_SETTINGS_MENU') ? 'Yes' : 'No' }</Table.Cell>
                     </Table.Row>
                   )
                 })}
@@ -166,14 +179,16 @@ class UserList extends React.Component {
 UserList.propTypes = {
   isLoading: PropTypes.bool,
   users: PropTypes.array,
-  getUsers: PropTypes.func
+  getUsers: PropTypes.func,
+  userCreated: PropTypes.bool
 }
 
 const mapStateToProps = state => {
   return {
     isLoading: state.user.isLoading,
     users: state.user.users,
-    error: state.user.error
+    error: state.user.error,
+    userCreated: state.user.userCreated
   }
 }
 

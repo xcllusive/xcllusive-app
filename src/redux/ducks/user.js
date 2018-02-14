@@ -1,6 +1,5 @@
 import {
   getAll,
-  getSearching,
   create
 } from '../../services/api/user'
 
@@ -50,6 +49,7 @@ export default function reducer (state = initialState, action) {
     case Types.CREATE_USER_SUCCESS:
       return {
         ...state,
+        userCreated: true,
         isLoading: false,
         error: null
       }
@@ -94,7 +94,7 @@ export const createUser = user => async dispatch => {
 export const getUsers = (options = false, search = false) => async dispatch => {
   dispatch(userLoading(true, 'GET_USER_LOADING'))
   try {
-    const users = search ? await getSearching(search) : await getAll(options)
+    const users = await getAll(options, search)
     dispatch(userResponse(users))
   } catch (error) {
     dispatch(userError(error))

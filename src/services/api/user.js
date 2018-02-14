@@ -6,24 +6,18 @@ export const get = id => {
   })
 }
 
-export const getAll = (options = false) => {
+export const getAll = (options, search) => {
+  if (search) options.search = search
   return request({
-    url: '/users',
+    url: '/user',
     params: options
-  })
-}
-
-export const getSearching = search => {
-  return request({
-    url: '/users',
-    params: search
   })
 }
 
 export const create = user => {
   return request({
     method: 'post',
-    url: '/users',
+    url: '/user',
     data: user
   })
 }

@@ -41,6 +41,10 @@ const CheckboxFormatted = styled.div`
   padding-right: 1em`
 
 class NewUserForm extends Component {
+  componentWillReceiveProps (nextProps) {
+    if (this.props.userCreated !== nextProps.userCreated) this.props.resetForm()
+  }
+
   _handleChangeCheckBox = (e, { value }) => {
     this.props.setFieldValue(value, !this.props.values[value])
   }
@@ -325,7 +329,9 @@ NewUserForm.propTypes = {
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   isLoading: PropTypes.bool,
-  modalOpen: PropTypes.bool
+  modalOpen: PropTypes.bool,
+  userCreated: PropTypes.bool,
+  resetForm: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
