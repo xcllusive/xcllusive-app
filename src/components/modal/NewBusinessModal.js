@@ -1,17 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'semantic-ui-react'
-import NewUserForm from '../../components/forms/NewUserForm'
+import NewBusinessForm from '../../components/forms/NewBusinessForm'
 
-class NewUserModal extends Component {
+class NewBusinessModal extends Component {
   render () {
     return (
       <Modal
         dimmer={'blurring'}
         open={this.props.modalOpen}
-      > 
-        <NewUserForm
-          userForm={this.props.user}
+      >
+        <NewBusinessForm
           toggleModal={this.props.toggleModal}
         />
       </Modal>
@@ -19,10 +18,9 @@ class NewUserModal extends Component {
   }
 }
 
-NewUserModal.propTypes = {
-  user: PropTypes.object,
-  modalOpen: PropTypes.bool,
-  toggleModal: PropTypes.func
+NewBusinessModal.propTypes = {
+  toggleModal: PropTypes.func,
+  modalOpen: PropTypes.bool
 }
 
-export default NewUserModal
+export default NewBusinessModal

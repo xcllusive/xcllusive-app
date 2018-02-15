@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react'
 
-import AddModal from './AddModal'
+import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import Wrapper from '../../components/Wrapper'
 
 const array = [
@@ -51,15 +51,20 @@ class BusinessListPage extends Component {
     }
   }
 
-  _toggleModal (value) {
-    this.setState({
-      modalOpen: value
-    })
+  _toggleModal = business => {
+    this.setState(prevState => ({
+      modalOpen: !prevState.modalOpen,
+      business
+    }))
   }
 
   render () {
     return (
       <Wrapper>
+        <NewBusinessForm
+          modalOpen={this.state.modalOpen}
+          toggleModal={this._toggleModal}
+        />
         <Statistic.Group size={'mini'} color='blue' widths='6'>
           <Statistic>
             <Statistic.Value>10</Statistic.Value>
@@ -96,17 +101,13 @@ class BusinessListPage extends Component {
               />
             </Grid.Column>
             <Grid.Column floated='right' width={2}>
-              <Button onClick={() => this._toggleModal(true)} color='facebook'>
+              <Button onClick={this._toggleModal} color='facebook'>
                 <Icon name='add' />
                 New Business
               </Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <AddModal
-          teste={this.state.modalOpen}
-          funcao={() => this._toggleModal(false)}
-        />
         <h2>
           <b>
             <div align='left'> FOR SALE </div>
