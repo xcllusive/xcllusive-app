@@ -78,6 +78,7 @@ class NewUserForm extends Component {
             <Form.Group widths='equal'>
               <Form.Field>
                 <Form.Input
+                  required
                   label='Email'
                   name='email'
                   autoComplete='email'
@@ -89,6 +90,7 @@ class NewUserForm extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Input
+                  required
                   type='password'
                   label='Password'
                   name='password'
@@ -101,6 +103,7 @@ class NewUserForm extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Input
+                  required
                   label='First Name'
                   name='firstName'
                   autoComplete='firstName'
@@ -112,6 +115,7 @@ class NewUserForm extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Input
+                  required
                   label='Last Name'
                   name='lastName'
                   autoComplete='lastName'
@@ -203,6 +207,7 @@ class NewUserForm extends Component {
             <Form.Group widths='equal'>
               <Form.Field>
                 <Form.Select
+                  required
                   label='Office Region'
                   name='dataRegion'
                   options={dataRegion}
@@ -213,6 +218,7 @@ class NewUserForm extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Select
+                  required
                   label='Listing Agent'
                   name='listingAgent'
                   options={listingAgent}
@@ -223,6 +229,7 @@ class NewUserForm extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Select
+                  required
                   label='User Type'
                   name='userType'
                   options={userType}
