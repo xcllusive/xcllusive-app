@@ -7,7 +7,8 @@ export const get = id => {
 }
 
 export const getAll = (options, search) => {
-  if (search && search.length > 1) options.search = search
+  if (search && search.length > 0) options.search = search
+  if (search.length < 1) delete options.search
   return request({
     url: '/user',
     params: options

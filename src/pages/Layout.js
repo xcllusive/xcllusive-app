@@ -24,7 +24,7 @@ const Layout = ({ match, logout, menu }) => (
       </Menu.Item>
       {
         menu.map(item => {
-          if (item === 'USER_MENU') {
+          if (item === 'BUYER_MENU') {
             return <Menu.Item key={item} name='buyer' as={NavLink} to={`${match.url}buyer`} />
           }
           if (item === 'BUSINESS_MENU') {
