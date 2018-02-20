@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 //  import BusinessDetail from '../../components/BusinessDetail'
 import Yup from 'yup'
+
+import { createBusiness } from '../../redux/ducks/business'
 
 class NewBusinessForm extends Component {
   constructor (props) {
@@ -334,13 +339,22 @@ const validationSchema = Yup.object().shape({
     .max(2000, 'Source Notes require max 2000 characters.')
 })
 
-const handleSubmit = (value, {setSubmitting}) => {
-  //  props.createBusiness(values)
-  console.log(value.firstName)
+const handleSubmit = (values, {props, setSubmitting}) => {
+  props.createBusiness(values)
   setSubmitting(false)
 }
 
-export default (
+const mapStateToProps = state => {
+  return {
+    isLoading: state.business.isLoading
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ createBusiness }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
     validationSchema,

@@ -53,7 +53,7 @@ class BusinessListPage extends Component {
   }
 
   async componentWillReceiveProps (nextProps) {
-    if (this.props.businessCreated !== nextProps.businessCreated) {
+    if (this.props.isCreatedBusiness !== nextProps.isCreatedBusiness) {
       await this._toggleModal({})
       //  this.props.getUsers()
     }
@@ -72,16 +72,15 @@ class BusinessListPage extends Component {
         <NewBusinessForm
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
-          businessCreated={this.props.businessCreated}
         />
         <Statistic.Group size={'mini'} color='blue' widths='6'>
           <Statistic>
             <Statistic.Value>10</Statistic.Value>
-            <Statistic.Label>Potencial Listinig</Statistic.Label>
+            <Statistic.Label>Potencial Listing</Statistic.Label>
           </Statistic>
           <Statistic>
             <Statistic.Value>20</Statistic.Value>
-            <Statistic.Label>Listinig Negotiation</Statistic.Label>
+            <Statistic.Label>Listing Negotiation</Statistic.Label>
           </Statistic>
           <Statistic>
             <Statistic.Value>30</Statistic.Value>
@@ -162,12 +161,12 @@ class BusinessListPage extends Component {
 BusinessListPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
-  businessCreated: PropTypes.bool
+  isCreatedBusiness: PropTypes.bool
 }
 
 const mapStateToProps = state => {
   return {
-    businessCreated: state.user.businessCreated
+    isCreatedBusiness: state.business.isCreatedBusiness
   }
 }
 
