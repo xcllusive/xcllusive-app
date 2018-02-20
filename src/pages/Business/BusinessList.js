@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react'
+
+import { getBusiness } from '../../redux/ducks/business'
 
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import Wrapper from '../../components/Wrapper'
 
-const array = [
+/* const array = [
   {
     businessID: 'BS2000',
     businessName: 'New Business',
@@ -42,20 +45,21 @@ const array = [
     logText: 'Filemaker server 12',
     followUpDate: '01/02/2018'
   }
-]
+] */
 
 class BusinessListPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpen: false
+      modalOpen: false,
+      business: null
     }
   }
 
   async componentWillReceiveProps (nextProps) {
     if (this.props.isCreatedBusiness !== nextProps.isCreatedBusiness) {
       await this._toggleModal({})
-      //  this.props.getUsers()
+      //  this.props.getBusiness()
     }
   }
 
@@ -132,25 +136,19 @@ class BusinessListPage extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {array.map(item => {
-              return (
-                <Table.Row
-                  active
-                  key={item.businessID}
-                  onClick={() =>
-                    this.props.history.push(
-                      `${this.props.match.path}/${item.businessID}`
-                    )
-                  }
-                >
-                  <Table.Cell>{item.businessID}</Table.Cell>
-                  <Table.Cell>{item.businessName}</Table.Cell>
-                  <Table.Cell>{item.contactName}</Table.Cell>
-                  <Table.Cell>{item.logText}</Table.Cell>
-                  <Table.Cell>{item.followUpDate}</Table.Cell>
-                </Table.Row>
-              )
-            })}
+            {
+              this.props.business.map(business => {
+                return (
+                  <Table.Row onClick={(e) => this._toggleModal(business, e)} key={business.id}>
+                    <Table.Cell>{''}</Table.Cell>
+                    <Table.Cell>{business.businessName}</Table.Cell>
+                    <Table.Cell>{''}</Table.Cell>
+                    <Table.Cell>{''}</Table.Cell>
+                    <Table.Cell>{''}</Table.Cell>
+                  </Table.Row>
+                )
+              })
+            }
           </Table.Body>
         </Table>
       </Wrapper>
@@ -159,15 +157,20 @@ class BusinessListPage extends Component {
 }
 
 BusinessListPage.propTypes = {
-  history: PropTypes.object,
-  match: PropTypes.object,
+  business: PropTypes.array,
   isCreatedBusiness: PropTypes.bool
+  //  getBusiness: PropTypes.func
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ getBusiness }, dispatch)
 }
 
 const mapStateToProps = state => {
   return {
-    isCreatedBusiness: state.business.isCreatedBusiness
+    isCreatedBusiness: state.business.isCreatedBusiness,
+    business: state.business.business
   }
 }
 
-export default connect(mapStateToProps)(BusinessListPage)
+export default connect(mapStateToProps, mapDispatchToProps)(BusinessListPage)
