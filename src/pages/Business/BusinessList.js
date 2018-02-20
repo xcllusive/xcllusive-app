@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react'
 
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
@@ -51,6 +52,13 @@ class BusinessListPage extends Component {
     }
   }
 
+  async componentWillReceiveProps (nextProps) {
+    if (this.props.businessCreated !== nextProps.businessCreated) {
+      await this._toggleModal({})
+      //  this.props.getUsers()
+    }
+  }
+
   _toggleModal = business => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen,
@@ -64,6 +72,7 @@ class BusinessListPage extends Component {
         <NewBusinessForm
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
+          businessCreated={this.props.businessCreated}
         />
         <Statistic.Group size={'mini'} color='blue' widths='6'>
           <Statistic>
@@ -152,7 +161,14 @@ class BusinessListPage extends Component {
 
 BusinessListPage.propTypes = {
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  businessCreated: PropTypes.bool
 }
 
-export default BusinessListPage
+const mapStateToProps = state => {
+  return {
+    businessCreated: state.user.businessCreated
+  }
+}
+
+export default connect(mapStateToProps)(BusinessListPage)

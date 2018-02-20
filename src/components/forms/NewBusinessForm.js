@@ -94,6 +94,10 @@ const option = [
 ]
 
 class NewBusinessForm extends Component {
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+  }
+
   render () {
     const {
       modalOpen,
@@ -102,7 +106,11 @@ class NewBusinessForm extends Component {
       handleChange,
       handleBlur,
       errors,
-      touched
+      touched,
+      handleSubmit,
+      isSubmitting,
+      isValid,
+      isLoading
     } = this.props
     return (
       <Modal
@@ -199,22 +207,19 @@ class NewBusinessForm extends Component {
                 {errors.vendorEmail && touched.vendorEmail && <Label basic color='red' pointing content={errors.vendorEmail} />}
               </Form.Field>
               <Form.Field>
-                <Form.Dropdown
+                <Form.Select
                   required
                   label='Source'
-                  selection
                   options={option}
                   name='businessSource'
                   autoComplete='businessSource'
-                  value={values.option}
-                  //  onChange={handleChange}
-                  //  onBlur={handleBlur}
+                  value={values.businessSource}
+                  onChange={this._handleSelectChange}
                 />
                 {errors.businessSource && touched.businessSource && <Label basic color='red' pointing content={errors.businessSource} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  required
                   label='Source Notes'
                   name='sourceNotes'
                   autoComplete='sourceNotes'
@@ -244,12 +249,12 @@ class NewBusinessForm extends Component {
         <Modal.Actions>
           <Button
             color='blue'
-            //  disabled={isSubmitting || !isValid}
-            //  loading={isLoading}
-            //  onClick={handleSubmit}
+            disabled={isSubmitting || !isValid}
+            loading={isLoading}
+            onClick={handleSubmit}
           >
             <Icon name='save' />
-            Create User
+            Create Business
           </Button>
           <Button
             color='red'
@@ -271,7 +276,12 @@ NewBusinessForm.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
-  touched: PropTypes.object
+  touched: PropTypes.object,
+  isSubmitting: PropTypes.bool,
+  isValid: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  handleSubmit: PropTypes.func,
+  setFieldValue: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -311,12 +321,20 @@ const validationSchema = Yup.object().shape({
   sourceNotes: Yup.string()
     .max(40, 'Source Notes require max 40 characters.'),
   description: Yup.string()
+    .required('Notes is required.')
     .max(2000, 'Source Notes require max 2000 characters.')
 })
+
+const handleSubmit = (value, {setSubmitting}) => {
+  //  props.createBusiness(values)
+  console.log(value.firstName)
+  setSubmitting(false)
+}
 
 export default (
   withFormik({
     mapPropsToValues,
-    validationSchema
+    validationSchema,
+    handleSubmit
   })(NewBusinessForm)
 )
