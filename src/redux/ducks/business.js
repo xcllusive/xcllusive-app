@@ -50,7 +50,7 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        users: action.payload,
+        business: action.payload,
         error: null
       }
     case Types.GET_BUSINESS_FAILURE:
@@ -104,10 +104,10 @@ export const createBusiness = business => async dispatch => {
   }
 }
 
-export const getBusiness = (options = false, search = false) => async dispatch => {
+export const getBusiness = (search = false) => async dispatch => {
   dispatch(businessLoading(true, 'GET_BUSINESS_LOADING'))
   try {
-    const business = await getAll(options, search)
+    const business = await getAll(search)
     dispatch(businessResponse(business))
   } catch (error) {
     dispatch(businessError(error))

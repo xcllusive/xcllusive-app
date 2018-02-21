@@ -81,7 +81,6 @@ class UserList extends React.Component {
   }
 
   render () {
-    console.log('test ', this.state.user)
     return (
       <Wrapper>
         <NewUserForm

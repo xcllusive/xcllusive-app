@@ -6,12 +6,10 @@ export const get = id => {
   })
 }
 
-export const getAll = (options, search) => {
-  if (search && search.length > 0) options.search = search
-  if (search.length < 1) delete options.search
+export const getAll = (search) => {
   return request({
     url: '/business',
-    params: options
+    params: search
   })
 }
 

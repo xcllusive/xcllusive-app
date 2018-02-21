@@ -63,6 +63,10 @@ class BusinessListPage extends Component {
     }
   }
 
+  componentWillMount () {
+    this.props.getBusiness()
+  }
+
   _toggleModal = business => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen,
@@ -139,10 +143,18 @@ class BusinessListPage extends Component {
             {
               this.props.business.map(business => {
                 return (
-                  <Table.Row onClick={(e) => this._toggleModal(business, e)} key={business.id}>
-                    <Table.Cell>{''}</Table.Cell>
+                  <Table.Row
+                    active
+                    key={business.id}
+                    onClick={() =>
+                      this.props.history.push(
+                        `${this.props.match.path}/${business.id}`
+                      )
+                    }
+                  >
+                    <Table.Cell>{`BS${business.id}`}</Table.Cell>
                     <Table.Cell>{business.businessName}</Table.Cell>
-                    <Table.Cell>{''}</Table.Cell>
+                    <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
                     <Table.Cell>{''}</Table.Cell>
                     <Table.Cell>{''}</Table.Cell>
                   </Table.Row>
@@ -158,8 +170,10 @@ class BusinessListPage extends Component {
 
 BusinessListPage.propTypes = {
   business: PropTypes.array,
-  isCreatedBusiness: PropTypes.bool
-  //  getBusiness: PropTypes.func
+  isCreatedBusiness: PropTypes.bool,
+  getBusiness: PropTypes.func,
+  history: PropTypes.object,
+  match: PropTypes.object
 }
 
 const mapDispatchToProps = dispatch => {
