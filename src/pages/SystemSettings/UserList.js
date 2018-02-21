@@ -17,7 +17,7 @@ import {
 
 import { getUsers } from '../../redux/ducks/user'
 
-import Wrapper from '../../components/Wrapper'
+import Wrapper from '../../components/content/Wrapper'
 import NewUserForm from '../../components/forms/NewUserForm'
 
 const CheckboxFormatted = styled.div`

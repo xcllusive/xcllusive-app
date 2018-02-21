@@ -7,59 +7,21 @@ import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react'
 import { getBusiness } from '../../redux/ducks/business'
 
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
-import Wrapper from '../../components/Wrapper'
-
-/* const array = [
-  {
-    businessID: 'BS2000',
-    businessName: 'New Business',
-    contactName: 'John Johnson',
-    logText: 'testing',
-    followUpDate: '01/01/2018'
-  },
-  {
-    businessID: 'BS2001',
-    businessName: 'Business 1',
-    contactName: 'Peter Park',
-    logText: 'business spider man',
-    followUpDate: '01/01/2019'
-  },
-  {
-    businessID: 'BS2002',
-    businessName: 'Business 2',
-    contactName: 'Zoran Sarabaca',
-    logText: 'Zorans business',
-    followUpDate: '01/01/2017'
-  },
-  {
-    businessID: 'BS2003',
-    businessName: 'Business 3',
-    contactName: 'Steve Jobs',
-    logText: 'Apple',
-    followUpDate: '01/12/2018'
-  },
-  {
-    businessID: 'BS2004',
-    businessName: 'Business 4',
-    contactName: 'FileMaker',
-    logText: 'Filemaker server 12',
-    followUpDate: '01/02/2018'
-  }
-] */
+import Wrapper from '../../components/content/Wrapper'
+import GridBusinessStage from '../../components/content/GridBusinessStage'
 
 class BusinessListPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpen: false,
-      business: null
+      modalOpen: false
     }
   }
 
   async componentWillReceiveProps (nextProps) {
     if (this.props.isCreatedBusiness !== nextProps.isCreatedBusiness) {
       await this._toggleModal({})
-      //  this.props.getBusiness()
+      this.props.getBusiness()
     }
   }
 
@@ -67,10 +29,9 @@ class BusinessListPage extends Component {
     this.props.getBusiness()
   }
 
-  _toggleModal = business => {
+  _toggleModal = () => {
     this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen,
-      business
+      modalOpen: !prevState.modalOpen
     }))
   }
 
@@ -81,32 +42,34 @@ class BusinessListPage extends Component {
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
         />
-        <Statistic.Group size={'mini'} color='blue' widths='6'>
-          <Statistic>
-            <Statistic.Value>10</Statistic.Value>
-            <Statistic.Label>Potencial Listing</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>20</Statistic.Value>
-            <Statistic.Label>Listing Negotiation</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>30</Statistic.Value>
-            <Statistic.Label>Sales Memo</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>40</Statistic.Value>
-            <Statistic.Label>For Sale</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>50</Statistic.Value>
-            <Statistic.Label>Sold</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>60</Statistic.Value>
-            <Statistic.Label>Withdrawn</Statistic.Label>
-          </Statistic>
-        </Statistic.Group>
+        <GridBusinessStage>
+          <Statistic.Group size='mini' color='blue' widths={6}>
+            <Statistic>
+              <Statistic.Value>10</Statistic.Value>
+              <Statistic.Label>Potencial Listing</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>20</Statistic.Value>
+              <Statistic.Label>Listing Negotiation</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>30</Statistic.Value>
+              <Statistic.Label>Sales Memo</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>40</Statistic.Value>
+              <Statistic.Label>For Sale</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>50</Statistic.Value>
+              <Statistic.Label>Sold</Statistic.Label>
+            </Statistic>
+            <Statistic>
+              <Statistic.Value>60</Statistic.Value>
+              <Statistic.Label>Withdrawn</Statistic.Label>
+            </Statistic>
+          </Statistic.Group>
+        </GridBusinessStage>
         <Grid padded='horizontally'>
           <Grid.Row>
             <Grid.Column floated='left' textAlign='center' width={5}>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
-import Wrapper from '../../components/Wrapper'
+import Wrapper from '../../components/content/Wrapper'
 
 const array = [
   {

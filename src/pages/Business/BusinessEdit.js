@@ -12,7 +12,7 @@ import {
   Icon,
   Tab
 } from 'semantic-ui-react'
-import Wrapper from '../../components/Wrapper'
+import Wrapper from '../../components/content/Wrapper'
 import BusinessDetail from '../../components/BusinessDetail'
 
 const agent = [
@@ -65,7 +65,7 @@ const panes = [
     render: () => (
       <Tab.Pane className='BusinessDetail' attached={false}>
         <Segment size='mini' inverted color='blue'>
-          <Header as='h6' textAlign='left'>
+          <Header as='h3' textAlign='left'>
             Business Detail
           </Header>
           <Header as='h6' floated='right'>
