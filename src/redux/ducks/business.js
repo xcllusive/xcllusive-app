@@ -105,6 +105,11 @@ export const createBusiness = business => async dispatch => {
 }
 
 export const getBusiness = (search = false) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESS_LOADING,
+    payload: true
+  })
+
   dispatch(businessLoading(true, 'GET_BUSINESS_LOADING'))
   try {
     const business = await getAll(search)

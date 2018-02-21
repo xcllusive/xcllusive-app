@@ -6,58 +6,13 @@ import {
   Statistic,
   Grid,
   Form,
-  Radio,
   Table,
   Button,
   Icon,
   Tab
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
-import BusinessDetail from '../../components/BusinessDetail'
-
-const agent = [
-  { key: 'Z', text: 'Zoran', value: 'Zoran' },
-  { key: 'C', text: 'Cayo', value: 'Cayo' }
-]
-
-const businessStage = [
-  { key: 'U', text: 'Under Offer', value: 'UnderOffer' },
-  { key: 'F', text: 'For Sale', value: 'ForSale' }
-]
-
-const businessType = [
-  { key: 'T', text: 'Transport', value: 'Transport' },
-  { key: 'E', text: 'Export', value: 'Export' }
-]
-const industry = [
-  { key: 'U', text: 'Car', value: 'Car' },
-  { key: 'F', text: 'Fashion', value: 'Fashion' }
-]
-const ownerTime = [
-  { key: '1', text: '< 5 days', value: '1' },
-  { key: '2', text: '5 days', value: '2' }
-]
-const rating = [
-  { key: '1', text: '1. Awesome', value: '1' },
-  { key: '2', text: '2. Good', value: '2' }
-]
-
-const product = [
-  { key: '1', text: 'Business Sale', value: 'BS' },
-  { key: '2', text: 'Seller Assist', value: 'SA' },
-  { key: '3', text: 'Franchise Sale', value: 'FS' }
-]
-
-const state = [
-  { key: '1', text: 'ACT', value: 'ACT' },
-  { key: '2', text: 'NT', value: 'NT' },
-  { key: '3', text: 'NSW', value: 'NSW' },
-  { key: '4', text: 'QLD', value: 'QLD' },
-  { key: '5', text: 'SA', value: 'SA' },
-  { key: '6', text: 'TAS', value: 'TAS' },
-  { key: '7', text: 'VIC', value: 'VIC' },
-  { key: '8', text: 'WA', value: 'WA' }
-]
+import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 
 const panes = [
   {
@@ -72,93 +27,7 @@ const panes = [
             Enquiry Date: 06/12/2017
           </Header>
         </Segment>
-        <Grid celled divided='vertically'>
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <Form size='tiny'>
-                <BusinessDetail />
-                <Form.Group inline>
-                  <Form.Input
-                    label='Listing Agent'
-                    placeholder='Zoran Sarabaca'
-                    readOnly
-                  />
-                  <Form.Button primary>
-                    <Icon name='edit' />
-                    Reassign Business
-                  </Form.Button>
-                  <Form.Button color='blue'>
-                    <Icon name='file pdf outline' />
-                    PDF
-                  </Form.Button>
-                  <Form.Button color='vk'>
-                    <Icon name='file text' />
-                    Appraisal Mgt
-                  </Form.Button>
-                </Form.Group>
-              </Form>
-            </Grid.Column>
-            <Grid.Column>
-              <Form size='tiny'>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Business name (Secondary)' />
-                  <Form.Input label='ABN' />
-                  <Form.Input label='Website' />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Input className='Street' label='Street' />
-                  <Form.Input className='Suburb' label='Suburb' />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Select
-                    className='State'
-                    label='State'
-                    options={state}
-                  />
-                  <Form.Input className='PostCode' label='Post code' />
-                  <label>Eligible for 120 Day Guarantee? </label>
-                  <Form.Field
-                    control={Radio}
-                    label='Yes'
-                    value='Yes'
-                    onChange={this.handleChange}
-                  />
-                  <Form.Field
-                    control={Radio}
-                    label='No'
-                    value='No'
-                    onChange={this.handleChange}
-                  />
-                  <Form.Checkbox
-                    label='Notify Owner for IM request'
-                    defaultChecked
-                  />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Select label='Rating' options={rating} />
-                  <Form.Select label='Product' options={product} />
-                  <Form.Select label='Agent' options={agent} />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Select label='Industry' options={industry} />
-                  <Form.Select label='Business Type' options={businessType} />
-                  <Form.Select label={'Owner`s time'} options={ownerTime} />
-                </Form.Group>
-                <Form.Group inline>
-                  <Form.Select label='Business Stage' options={businessStage} />
-                  <Form.Button compact color='green'>
-                    <Icon name='forward' />
-                    Next Stage
-                  </Form.Button>
-                  <Form.Button compact color='red'>
-                    <Icon name='save' />
-                    SAVE
-                  </Form.Button>
-                </Form.Group>
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <EditBusinessDetailForm />
       </Tab.Pane>
     )
   },
