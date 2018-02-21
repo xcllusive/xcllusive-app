@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Table, Icon, Button, Input, Grid, Statistic } from 'semantic-ui-react'
+import { Table, Icon, Button, Input, Grid, Statistic, Dimmer, Loader, Header } from 'semantic-ui-react'
 
 import { getBusiness } from '../../redux/ducks/business'
 
@@ -36,6 +36,13 @@ class BusinessListPage extends Component {
   }
 
   render () {
+    const {
+      isLoading,
+      business,
+      history,
+      match
+    } = this.props
+
     return (
       <Wrapper>
         <NewBusinessForm
@@ -86,46 +93,47 @@ class BusinessListPage extends Component {
               </Button>
             </Grid.Column>
           </Grid.Row>
+          <Grid.Row>
+            <Dimmer inverted active={isLoading}>
+              <Loader inverted />
+            </Dimmer>
+            <Header>FOR SALE</Header>
+            <Table color='blue' celled inverted selectable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Business ID</Table.HeaderCell>
+                  <Table.HeaderCell>Business Name</Table.HeaderCell>
+                  <Table.HeaderCell>Contact Name</Table.HeaderCell>
+                  <Table.HeaderCell>Log Text</Table.HeaderCell>
+                  <Table.HeaderCell>Follow Up date</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {
+                  business.map(business => {
+                    return (
+                      <Table.Row
+                        active
+                        key={business.id}
+                        onClick={() =>
+                          history.push(
+                            `${match.path}/${business.id}`
+                          )
+                        }
+                      >
+                        <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                        <Table.Cell>{business.businessName}</Table.Cell>
+                        <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
+                        <Table.Cell>{''}</Table.Cell>
+                        <Table.Cell>{''}</Table.Cell>
+                      </Table.Row>
+                    )
+                  })
+                }
+              </Table.Body>
+            </Table>
+          </Grid.Row>
         </Grid>
-        <h2>
-          <b>
-            <div align='left'> FOR SALE </div>
-          </b>
-        </h2>
-        <Table color='blue' celled inverted selectable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Business ID</Table.HeaderCell>
-              <Table.HeaderCell>Business Name</Table.HeaderCell>
-              <Table.HeaderCell>Contact Name</Table.HeaderCell>
-              <Table.HeaderCell>Log Text</Table.HeaderCell>
-              <Table.HeaderCell>Follow Up date</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {
-              this.props.business.map(business => {
-                return (
-                  <Table.Row
-                    active
-                    key={business.id}
-                    onClick={() =>
-                      this.props.history.push(
-                        `${this.props.match.path}/${business.id}`
-                      )
-                    }
-                  >
-                    <Table.Cell>{`BS${business.id}`}</Table.Cell>
-                    <Table.Cell>{business.businessName}</Table.Cell>
-                    <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
-                    <Table.Cell>{''}</Table.Cell>
-                    <Table.Cell>{''}</Table.Cell>
-                  </Table.Row>
-                )
-              })
-            }
-          </Table.Body>
-        </Table>
       </Wrapper>
     )
   }
@@ -136,7 +144,8 @@ BusinessListPage.propTypes = {
   isCreatedBusiness: PropTypes.bool,
   getBusiness: PropTypes.func,
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  isLoading: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {
@@ -146,6 +155,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     isCreatedBusiness: state.business.isCreatedBusiness,
+    isLoading: state.business.isLoading,
     business: state.business.business
   }
 }
