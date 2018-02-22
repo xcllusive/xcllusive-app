@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Table, Icon, Button, Input, Grid, Statistic, Dimmer, Loader, Header } from 'semantic-ui-react'
 
-import { getBusiness } from '../../redux/ducks/business'
+import { getBusinesses } from '../../redux/ducks/business'
 
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import Wrapper from '../../components/content/Wrapper'
@@ -22,12 +22,12 @@ class BusinessListPage extends Component {
   async componentWillReceiveProps (nextProps) {
     if (this.props.isCreatedBusiness !== nextProps.isCreatedBusiness) {
       await this._toggleModal({})
-      this.props.getBusiness()
+      this.props.getBusinesses()
     }
   }
 
   componentWillMount () {
-    this.props.getBusiness()
+    this.props.getBusinesses()
     this.timer = null
   }
 
@@ -38,7 +38,7 @@ class BusinessListPage extends Component {
       inputSearch: value
     })
 
-    this.timer = setTimeout(() => this.props.getBusiness(value), 1000)
+    this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
   }
 
   _toggleModal = business => {
@@ -125,7 +125,7 @@ class BusinessListPage extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  this.props.business.map(business => {
+                  this.props.businesses.map(business => {
                     return (
                       <Table.Row
                         active
@@ -155,23 +155,23 @@ class BusinessListPage extends Component {
 }
 
 BusinessListPage.propTypes = {
-  business: PropTypes.array,
+  businesses: PropTypes.array,
   isCreatedBusiness: PropTypes.bool,
-  getBusiness: PropTypes.func,
+  getBusinesses: PropTypes.func,
   history: PropTypes.object,
   match: PropTypes.object,
   isLoading: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness }, dispatch)
+  return bindActionCreators({ getBusinesses }, dispatch)
 }
 
 const mapStateToProps = state => {
   return {
     isCreatedBusiness: state.business.isCreatedBusiness,
-    isLoading: state.business.isLoading,
-    business: state.business.business
+    isLoading: state.business.isLoadingGetBusinesses,
+    businesses: state.business.businesses
   }
 }
 

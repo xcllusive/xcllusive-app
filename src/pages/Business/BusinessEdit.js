@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import {
   Header,
   Segment,
@@ -13,89 +15,36 @@ import {
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
+import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
-const panes = [
-  {
-    menuItem: 'Business Detail',
-    render: () => (
-      <Tab.Pane className='BusinessDetail' attached={false}>
-        <Segment size='mini' inverted color='blue'>
-          <Header as='h3' textAlign='left'>
-            Business Detail
-          </Header>
-          <Header as='h6' floated='right'>
-            Enquiry Date: 06/12/2017
-          </Header>
-        </Segment>
-        <EditBusinessDetailForm />
-      </Tab.Pane>
-    )
-  },
-  {
-    menuItem: 'Pricing/Information',
-    render: () => (
-      <Tab.Pane attached={false}>
-        <Grid celled divided='vertically'>
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <Segment size='mini' inverted color='blue'>
-                <Header as='h6' textAlign='left'>
-                  Business Pricing
-                </Header>
-                <Header as='h6' floated='right'>
-                  (For Sale)
-                </Header>
-              </Segment>
-              <Form size='tiny'>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Listed Price' />
-                  <Form.Input label='Current Price' />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Engagement Fee' />
-                  <Form.Input label='Commission %' />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Minimum Com $' />
-                  <Form.Input label='Appraisal High $' />
-                  <Form.Input label='Appraisal Low $' />
-                </Form.Group>
-              </Form>
-            </Grid.Column>
-            <Grid.Column>
-              <Segment size='mini' inverted color='blue'>
-                <Header as='h6' textAlign='left'>
-                  Sales Information
-                </Header>
-                <Header as='h6' floated='right'>
-                  (Deposit and Sold)
-                </Header>
-              </Segment>
-              <Form size='tiny'>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Deposit Taken $' readOnly />
-                  <Form.Input label='Dep. Taken Date' readOnly />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Commission $' readOnly />
-                  <Form.Input label='Settlement Date' readOnly />
-                  <Form.Input label='Sold Price' readOnly />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Attached Purchaser' readOnly />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.TextArea label='Search Notes' />
-                  <Form.TextArea label='Conclusion Notes' />
-                </Form.Group>
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Tab.Pane>
-    )
-  }
-]
+import { getBusiness } from '../../redux/ducks/business'
+
+// const panes = [
+//   {
+//     menuItem: 'Business Detail',
+//     render: () => (
+//       <Tab.Pane className='BusinessDetail' attached={false}>
+//         <Segment size='mini' inverted color='blue'>
+//           <Header as='h3' textAlign='left'>
+//             Business Detail
+//           </Header>
+//           <Header as='h6' floated='right'>
+//             Enquiry Date: 06/12/2017
+//           </Header>
+//         </Segment>
+//         <EditBusinessDetailForm business={this.props.business} />
+//       </Tab.Pane>
+//     )
+//   },
+//   {
+//     menuItem: 'Pricing/Information',
+//     render: () => (
+//       <Tab.Pane attached={false}>
+//         <EditBusinessPriceForm />
+//       </Tab.Pane>
+//     )
+//   }
+// ]
 
 const array = [
   {
@@ -141,8 +90,8 @@ class BusinessEditPage extends Component {
     this.handleChange = (e, { value }) => this.setState({ value })
   }
 
-  componentWillMount () {
-    console.log(this.props.match.params.id)
+  componentDidMount () {
+    this.props.getBusiness(this.props.match.params.id)
   }
 
   render () {
@@ -177,7 +126,49 @@ class BusinessEditPage extends Component {
             <Statistic.Value>Under Offer</Statistic.Value>
           </Statistic>
         </Statistic.Group>
-        <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+
+        <Tab menu={{ secondary: true, pointing: true }}
+          panes={[
+            {
+              menuItem: 'Business Detail',
+              render: (props) => (
+                <Tab.Pane className='BusinessDetail' attached={false}>
+                  <Segment size='mini' inverted color='blue'>
+                    <Header as='h3' textAlign='left'>
+                      Business Detail
+                    </Header>
+                    <Header as='h6' floated='right'>
+                      Enquiry Date: 06/12/2017
+                    </Header>
+                  </Segment>
+                  <EditBusinessDetailForm business={props.business} />
+                </Tab.Pane>
+              )
+            },
+            {
+              menuItem: 'Pricing/Information',
+              render: () => (
+                <Tab.Pane attached={false}>
+                  <EditBusinessPriceForm />
+                </Tab.Pane>
+              )
+            }
+          ]}
+
+        >
+          <Tab.Pane className='BusinessDetail' active activeIndex={1} defaultActiveIndex={1}>
+            <Segment size='mini' inverted color='blue'>
+              <Header as='h3' textAlign='left'>
+                Business Detail
+              </Header>
+              <Header as='h6' floated='right'>
+                Enquiry Date: 06/12/2017
+              </Header>
+            </Segment>
+            <EditBusinessDetailForm business={this.props.business} />
+          </Tab.Pane>
+        </Tab>
+
         <Grid celled divided='vertically'>
           <Grid.Row columns={1}>
             <Grid.Column>
@@ -251,7 +242,20 @@ class BusinessEditPage extends Component {
 
 BusinessEditPage.propTypes = {
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  getBusiness: PropTypes.func,
+  business: PropTypes.object
 }
 
-export default BusinessEditPage
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ getBusiness }, dispatch)
+}
+
+const mapStateToProps = state => {
+  return {
+    isLoading: state.business.isLoadingGetBusiness,
+    business: state.business.business
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BusinessEditPage)

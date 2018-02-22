@@ -57,6 +57,10 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
+  componentWillMount () {
+    console.log(this.props.business)
+  }
+
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
@@ -76,6 +80,7 @@ class EditBusinessDetailForm extends Component {
       state
     } = this.state
 
+    console.log('form: ', this.props.business)
     return (
       <Grid celled divided='vertically'>
         <Grid.Row columns={2}>
@@ -439,7 +444,8 @@ EditBusinessDetailForm.propTypes = {
   handleSubmit: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = () => ({

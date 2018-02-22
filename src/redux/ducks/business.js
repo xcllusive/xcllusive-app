@@ -1,4 +1,4 @@
-import {create, getAll} from '../../services/api/business'
+import { get, getAll, create } from '../../services/api/business'
 
 // Action Types
 
@@ -8,16 +8,22 @@ export const Types = {
   CREATE_BUSINESS_FAILURE: 'CREATE_BUSINESS_FAILURE',
   GET_BUSINESS_LOADING: 'GET_BUSINESS_LOADING',
   GET_BUSINESS_SUCCESS: 'GET_BUSINESS_SUCCESS',
-  GET_BUSINESS_FAILURE: 'GET_BUSINESS_FAILURE'
+  GET_BUSINESS_FAILURE: 'GET_BUSINESS_FAILURE',
+  GET_BUSINESSES_LOADING: 'GET_BUSINESSES_LOADING',
+  GET_BUSINESSES_SUCCESS: 'GET_BUSINESSES_SUCCESS',
+  GET_BUSINESSES_FAILURE: 'GET_BUSINESSES_FAILURE'
 }
 
 // Reducer
 
 const initialState = {
   error: null,
-  isLoading: false,
-  business: [],
-  isCreatedBusiness: false
+  business: {},
+  businesses: [],
+  isCreatedBusiness: false,
+  isLoadingGetBusiness: false,
+  isLoadingGetBusinesses: false,
+  isLoadingCreateBusiness: false
 }
 
 export default function reducer (state = initialState, action) {
@@ -25,38 +31,53 @@ export default function reducer (state = initialState, action) {
     case Types.CREATE_BUSINESS_LOADING:
       return {
         ...state,
-        isLoading: action.payload
+        isLoadingCreateBusiness: action.payload
       }
     case Types.CREATE_BUSINESS_SUCCESS:
       return {
         ...state,
-        isLoading: false,
+        isLoadingCreateBusiness: false,
         error: false,
         isCreatedBusiness: true
       }
     case Types.CREATE_BUSINESS_FAILURE:
       return {
         ...state,
-        isLoading: false,
+        isLoadingCreateBusiness: false,
         error: action.payload,
         isCreatedBusiness: false
+      }
+    case Types.GET_BUSINESSES_LOADING:
+      return {
+        ...state,
+        isLoadingGetBusinesses: action.payload
+      }
+    case Types.GET_BUSINESSES_SUCCESS:
+      return {
+        ...state,
+        isLoadingGetBusinesses: false,
+        businesses: action.payload,
+        error: null
+      }
+    case Types.GET_BUSINESSES_FAILURE:
+      return {
+        ...state,
+        isLoadingGetBusinesses: false,
+        error: action.payload
       }
     case Types.GET_BUSINESS_LOADING:
       return {
         ...state,
-        isLoading: action.payload
+        isLoadingGetBusiness: action.payload
       }
     case Types.GET_BUSINESS_SUCCESS:
       return {
         ...state,
-        isLoading: false,
-        business: action.payload,
-        error: null
+        business: action.payload
       }
     case Types.GET_BUSINESS_FAILURE:
       return {
         ...state,
-        isLoading: false,
         error: action.payload
       }
     default:
@@ -90,20 +111,39 @@ export const createBusiness = business => async dispatch => {
   }
 }
 
-export const getBusiness = (search = false) => async dispatch => {
+export const getBusiness = id => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESS_LOADING,
     payload: true
   })
   try {
-    const business = await getAll(search)
+    const business = await get(id)
     dispatch({
       type: Types.GET_BUSINESS_SUCCESS,
       payload: business
     })
   } catch (error) {
     dispatch({
-      type: Types.CREATE_BUSINESS_FAILURE,
+      type: Types.GET_BUSINESS_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const getBusinesses = (search = false) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESSES_LOADING,
+    payload: true
+  })
+  try {
+    const businesses = await getAll(search)
+    dispatch({
+      type: Types.GET_BUSINESSES_SUCCESS,
+      payload: businesses
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESSES_FAILURE,
       payload: error
     })
   }
