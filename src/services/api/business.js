@@ -7,9 +7,12 @@ export const get = id => {
 }
 
 export const getAll = (search) => {
+  const params = {}
+
+  if (search && search.length > 0) params.search = search
   return request({
     url: '/business',
-    params: search
+    params
   })
 }
 

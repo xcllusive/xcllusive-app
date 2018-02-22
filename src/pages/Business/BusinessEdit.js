@@ -141,6 +141,10 @@ class BusinessEditPage extends Component {
     this.handleChange = (e, { value }) => this.setState({ value })
   }
 
+  componentWillMount () {
+    console.log(this.props.match.params.id)
+  }
+
   render () {
     return (
       <Wrapper>

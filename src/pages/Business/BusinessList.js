@@ -14,7 +14,8 @@ class BusinessListPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpen: false
+      modalOpen: false,
+      inputSearch: ''
     }
   }
 
@@ -27,18 +28,29 @@ class BusinessListPage extends Component {
 
   componentWillMount () {
     this.props.getBusiness()
+    this.timer = null
   }
 
-  _toggleModal = () => {
+  _onSearch = (e, { value }) => {
+    if (this.timer) clearTimeout(this.timer)
+
+    this.setState({
+      inputSearch: value
+    })
+
+    this.timer = setTimeout(() => this.props.getBusiness(value), 1000)
+  }
+
+  _toggleModal = business => {
     this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen
+      modalOpen: !prevState.modalOpen,
+      business
     }))
   }
 
   render () {
     const {
       isLoading,
-      business,
       history,
       match
     } = this.props
@@ -82,8 +94,11 @@ class BusinessListPage extends Component {
             <Grid.Column floated='left' textAlign='center' width={5}>
               <Input
                 fluid
-                action={{ icon: 'search' }}
+                icon='search'
+                loading={this.state.isLoading}
                 placeholder='Find businesses...'
+                onChange={this._onSearch}
+                value={this.state.inputSearch}
               />
             </Grid.Column>
             <Grid.Column floated='right' width={2}>
@@ -110,7 +125,7 @@ class BusinessListPage extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  business.map(business => {
+                  this.props.business.map(business => {
                     return (
                       <Table.Row
                         active

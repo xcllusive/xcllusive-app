@@ -134,7 +134,7 @@ class UserList extends React.Component {
             <Dimmer inverted active={this.props.isLoading}>
               <Loader inverted />
             </Dimmer>
-            <Table selectable striped>
+            <Table color='blue' celled inverted selectable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>ID</Table.HeaderCell>
@@ -154,7 +154,7 @@ class UserList extends React.Component {
                   this.props.users.map(user => {
                     let roles = user.roles.length > 0 ? JSON.parse(user.roles) : []
                     return (
-                      <Table.Row onClick={(e) => this._toggleModal(user, e)} key={user.id}>
+                      <Table.Row active onClick={(e) => this._toggleModal(user, e)} key={user.id}>
                         <Table.Cell>{ user.id }</Table.Cell>
                         <Table.Cell>{ `${user.firstName} ${user.lastName}` }</Table.Cell>
                         <Table.Cell>{ user.userType }</Table.Cell>

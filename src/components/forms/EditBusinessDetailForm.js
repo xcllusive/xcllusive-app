@@ -7,49 +7,32 @@ import { connect } from 'react-redux'
 
 import Yup from 'yup'
 
-const state = [
-  { key: '1', text: 'ACT', value: 'ACT' },
-  { key: '2', text: 'NT', value: 'NT' },
-  { key: '3', text: 'NSW', value: 'NSW' },
-  { key: '4', text: 'QLD', value: 'QLD' },
-  { key: '5', text: 'SA', value: 'SA' },
-  { key: '6', text: 'TAS', value: 'TAS' },
-  { key: '7', text: 'VIC', value: 'VIC' },
-  { key: '8', text: 'WA', value: 'WA' }
-]
-
 const rating = [
-  { key: '1', text: '1. Awesome', value: '1' },
-  { key: '2', text: '2. Good', value: '2' }
+  { key: '1', text: 'Verify file rating.txt', value: 'verify' }
 ]
 
-const agent = [
+const staffAccountName = [
   { key: 'Z', text: 'Zoran', value: 'Zoran' },
   { key: 'C', text: 'Cayo', value: 'Cayo' }
 ]
 
-const product = [
-  { key: '1', text: 'Business Sale', value: 'BS' },
-  { key: '2', text: 'Seller Assist', value: 'SA' },
-  { key: '3', text: 'Franchise Sale', value: 'FS' }
+const businessCat = [
+  { key: 'F', text: 'Verify file industry', value: 'verify' }
 ]
 
 const industry = [
-  { key: 'U', text: 'Car', value: 'Car' },
-  { key: 'F', text: 'Fashion', value: 'Fashion' }
+  { key: 'F', text: 'Verify file industry', value: 'verify' }
 ]
 
 const businessType = [
-  { key: 'T', text: 'Transport', value: 'Transport' },
-  { key: 'E', text: 'Export', value: 'Export' }
+  { key: 'T', text: 'Verify file businessType', value: 'verify' }
 ]
 
-const ownerTime = [
-  { key: '1', text: '< 5 days', value: '1' },
-  { key: '2', text: '5 days', value: '2' }
+const ownersTime = [
+  { key: '1', text: 'verify file ownersTime', value: 'verify' }
 ]
 
-const businessStage = [
+const stage = [
   { key: 'U', text: 'Under Offer', value: 'UnderOffer' },
   { key: 'F', text: 'For Sale', value: 'ForSale' }
 ]
@@ -59,93 +42,34 @@ class EditBusinessDetailForm extends Component {
     super(props)
     this.state = {
       sourceOptions: [
-        { key: 1, text: 'Google', value: 'Google' },
-        { key: 2, text: 'Yahoo/Bing', value: 'Yahoo/Bing' },
-        { key: 3, text: 'Google (SCBB website)', value: 'Google (SCBB website)' },
-        { key: 4, text: 'Ask.com', value: 'Ask.com' },
-        { key: 5, text: 'Sensis', value: 'Sensis' },
-        { key: 6, text: 'MyBusValuation Website', value: 'MyBusValuation Website' },
-        { key: 7, text: 'Referral', value: 'Referral' },
-        { key: 8, text: 'Referral Network Contact', value: 'Referral Network Contact' },
-        { key: 9, text: 'Introducing Partner', value: 'Introducing Partner' },
-        { key: 10, text: 'Zoran Presentation', value: 'Zoran Presentation' },
-        { key: 11, text: 'Mailout (To Buyers)', value: 'Mailout (To Buyers)' },
-        { key: 12, text: 'Mailout (To Sellers)', value: 'Mailout (To Sellers)' },
-        { key: 13, text: 'Mailout (To Sellers) Forward', value: 'Mailout (To Sellers) Forward' },
-        { key: 14, text: 'Mailout (To Buyers) Forward', value: 'Mailout (To Buyers) Forward' },
-        { key: 15, text: 'WWW', value: 'WWW' },
-        { key: 16, text: 'Seek', value: 'Seek' },
-        { key: 17, text: 'RealCommercial', value: 'RealCommercial' },
-        { key: 18, text: 'AIBB', value: 'AIBB' },
-        { key: 19, text: 'AllHomes', value: 'AllHomes' },
-        { key: 20, text: 'Anybusiness.com.au', value: 'Anybusiness.com.au' },
-        { key: 21, text: 'BxBox', value: 'BxBox' },
-        { key: 22, text: 'Business2sell', value: 'Business2sell' },
-        { key: 23, text: 'BSale.com.au', value: 'BSale.com.au' },
-        { key: 24, text: 'Businessforsale.com', value: 'Businessforsale.com' },
-        { key: 25, text: 'Businessesforsale.com', value: 'Businessesforsale.com' },
-        { key: 26, text: 'Businessesview.com.au', value: 'Businessesview.com.au' },
-        { key: 27, text: 'Gumtree', value: 'Gumtree' },
-        { key: 28, text: 'Bizbo', value: 'Bizbo' },
-        { key: 29, text: 'BizBuySell', value: 'BizBuySell' },
-        { key: 30, text: 'BizClassifieds', value: 'BizClassifieds' },
-        { key: 31, text: 'Domain', value: 'Domain' },
-        { key: 32, text: 'Constant Contact', value: 'Constant Contact' },
-        { key: 33, text: 'Constant Contact Forward', value: 'Constant Contact Forward' },
-        { key: 34, text: 'AustralianBiz e-newsletter', value: 'AustralianBiz e-newsletter' },
-        { key: 35, text: 'Yellow Pages', value: 'Yellow Pages' },
-        { key: 36, text: 'New Source', value: 'New Source' },
-        { key: 37, text: 'Seminar- Attendee', value: 'Seminar- Attendee' },
-        { key: 38, text: 'Seminar- Non-Attendee', value: 'Seminar- Non-Attendee' },
-        { key: 39, text: 'Agent Referral- Denise Hall', value: 'Agent Referral- Denise Hall' },
-        { key: 40, text: 'Agent Referral- Choon Ng', value: 'Agent Referral- Choon Ng' },
-        { key: 41, text: 'Agent Referral- Jim Lund', value: 'Agent Referral- Jim Lund' },
-        { key: 42, text: 'Agent Referral- Mark Attard', value: 'Agent Referral- Mark Attard' },
-        { key: 43, text: 'Agent Referral- Rai Kollegger', value: 'Agent Referral- Rai Kollegger' },
-        { key: 44, text: 'Agent Referral- Peter George', value: 'Agent Referral- Peter George' },
-        { key: 45, text: 'Agent Referral- Frank Sassin', value: 'Agent Referral- Frank Sassin' },
-        { key: 46, text: 'Agent Referral- Mark Willoughby', value: 'Agent Referral- Mark Willoughby' },
-        { key: 47, text: 'Agent Referral- Keith Brooke', value: 'Agent Referral- Keith Brooke' },
-        { key: 48, text: 'Agent Referral- Zoran Sarabaca', value: 'Agent Referral- Zoran Sarabaca' },
-        { key: 49, text: 'Agent Referral- Nick Wolski', value: 'Agent Referral- Nick Wolski' },
-        { key: 50, text: 'Agent Referral- Angus Suter', value: 'Agent Referral- Angus Suter' },
-        { key: 51, text: 'Lead Nurture- RUDE Download', value: 'Lead Nurture- RUDE Download' },
-        { key: 52, text: 'Lead Nurture- Sellability', value: 'Lead Nurture- Sellability' },
-        { key: 53, text: 'Lead Nurture- Recovery', value: 'Lead Nurture- Recovery' },
-        { key: 54, text: 'Lead Nurture', value: 'Lead Nurture' },
-        { key: 55, text: 'PR: Article', value: 'PR: Article' },
-        { key: 56, text: 'Referral: Administrator', value: 'Referral: Administrator' },
-        { key: 57, text: 'You Tube', value: 'You Tube' },
-        { key: 58, text: 'Direct Email', value: 'Direct Email' },
-        { key: 59, text: 'Paper: Central Coast Express Advocate', value: 'Paper: Central Coast Express Advocate' },
-        { key: 60, text: 'Paper: SMH', value: 'Paper: SMH' },
-        { key: 61, text: 'Paper: Sydney Business Catalogue', value: 'Paper: Sydney Business Catalogue' },
-        { key: 62, text: 'Local Paper advert', value: 'Local Paper advert' },
-        { key: 63, text: 'Magazine: Central Coast Business Review', value: 'Magazine: Central Coast Business Review' },
-        { key: 64, text: 'Magazine: In The Blank', value: 'Magazine: In The Blank' },
-        { key: 65, text: 'Magazine: SME', value: 'Magazine: SME' },
-        { key: 66, text: 'Industry Newsletter', value: 'Industry Newsletter' },
-        { key: 67, text: 'Industry Website', value: 'Industry Website' },
-        { key: 68, text: 'Previous Buyer', value: 'Previous Buyer' },
-        { key: 69, text: 'Previous Vendor', value: 'Previous Vendor' },
-        { key: 70, text: 'Vendor Referral', value: 'Vendor Referral' },
-        { key: 71, text: 'Buyer Referral', value: 'Buyer Referral' },
-        { key: 72, text: 'Cold Calling', value: 'Cold Calling' },
-        { key: 73, text: 'Door Knocking', value: 'Door Knocking' },
-        { key: 74, text: 'Networking', value: 'Networking' },
-        { key: 75, text: 'Google Remarketing', value: 'Google Remarketing' },
-        { key: 76, text: 'Blog', value: 'Blog' },
-        { key: 77, text: 'Xcllusive Website', value: 'Xcllusive Website' },
-        { key: 78, text: 'Accountant/Solicitor - from xcll website', value: 'Accountant/Solicitor - from xcll website' },
-        { key: 79, text: 'Unknown', value: 'Unknown' },
-        { key: 80, text: 'Facebook', value: 'Facebook' },
-        { key: 81, text: 'Facebook (organic)', value: 'Facebook (organic)' },
-        { key: 82, text: 'Telstra 1234', value: 'Telstra 1234' },
-        { key: 83, text: 'Hospitality trader', value: 'Hospitality trader' },
-        { key: 84, text: 'Canberra Weekly', value: 'Canberra Weekly' },
-        { key: 85, text: '-', value: '-' }
-      ]
+        { key: 1, text: 'Verify file sourceOptions', value: 'Google' }
+      ],
+      state: [
+        { key: '1', text: 'ACT', value: 'ACT' },
+        { key: '2', text: 'NT', value: 'NT' },
+        { key: '3', text: 'NSW', value: 'NSW' },
+        { key: '4', text: 'QLD', value: 'QLD' },
+        { key: '5', text: 'SA', value: 'SA' },
+        { key: '6', text: 'TAS', value: 'TAS' },
+        { key: '7', text: 'VIC', value: 'VIC' },
+        { key: '8', text: 'WA', value: 'WA' }
+      ],
+      data120DayGuaranteeOptions: {
+        yes: false,
+        no: true
+      }
     }
+  }
+
+  _handleChangeCheckBox = (e, { value }) => {
+    this.setState(
+      {
+        data120DayGuaranteeOptions: {
+          ...this.state.data120DayGuaranteeOptions,
+          [value]: !this.state.data120DayGuaranteeOptions[value]
+        }
+      }
+    )
   }
 
   render () {
@@ -153,19 +77,21 @@ class EditBusinessDetailForm extends Component {
       values,
       handleChange,
       handleBlur,
+      handleSubmit,
       errors,
       touched
     } = this.props
 
     const {
-      sourceOptions
+      sourceOptions,
+      state
     } = this.state
 
     return (
       <Grid celled divided='vertically'>
         <Grid.Row columns={2}>
           <Grid.Column>
-            <Form size='tiny'>
+            <Form size='tiny' onSubmit={handleSubmit} novalidate>
               <Form.Group widths='equal'>
                 <Form.Field>
                   <Form.Input
@@ -380,8 +306,7 @@ class EditBusinessDetailForm extends Component {
                     options={state}
                     autoComplete='state'
                     value={values.state}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={this._handleSelectChange}
                   />
                   {errors.state && touched.state && <Label basic color='red' pointing content={errors.state} />}
                 </Form.Field>
@@ -400,32 +325,107 @@ class EditBusinessDetailForm extends Component {
                 <Form.Field
                   control={Radio}
                   label='Yes'
-                  value='Yes'
-                  onChange={this.handleChange}
+                  value={values.data120DayGuarantee}
+                  onChange={this._handleChangeCheckBox}
+                  checked={this.state.data120DayGuaranteeOptions.yes === true}
                 />
                 <Form.Field
                   control={Radio}
                   label='No'
-                  value='No'
-                  onChange={this.handleChange}
+                  value={values.data120DayGuarantee}
+                  onChange={this._handleChangeCheckBox}
+                  checked={this.state.data120DayGuaranteeOptions.no === true}
                 />
                 <Form.Checkbox
                   label='Notify Owner for IM request'
+                  value={values.notifyOwner}
                   defaultChecked
                 />
+                {errors.notifyOwner && touched.notifyOwner && <Label basic color='red' pointing content={errors.notifyOwner} />}
               </Form.Group>
               <Form.Group widths='equal'>
-                <Form.Select label='Rating' options={rating} />
-                <Form.Select label='Product' options={product} />
-                <Form.Select label='Agent' options={agent} />
+                <Form.Field>
+                  <Form.Select
+                    label='Rating'
+                    options={rating}
+                    name='rating'
+                    autoComplete='rating'
+                    value={values.rating}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.rating && touched.rating && <Label basic color='red' pointing content={errors.rating} />}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Select
+                    required
+                    label='Product'
+                    options={businessCat}
+                    name='businessCat'
+                    autoComplete='businessCat'
+                    value={values.businessCat}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.businessCat && touched.businessCat && <Label basic color='red' pointing content={errors.businessCat} />}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Select
+                    label='Agent'
+                    options={staffAccountName}
+                    name='staffAccountName'
+                    autoComplete='staffAccountName'
+                    value={values.staffAccountName}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.staffAccountName && touched.staffAccountName && <Label basic color='red' pointing content={errors.staffAccountName} />}
+                </Form.Field>
               </Form.Group>
               <Form.Group widths='equal'>
-                <Form.Select label='Industry' options={industry} />
-                <Form.Select label='Business Type' options={businessType} />
-                <Form.Select label={'Owner`s time'} options={ownerTime} />
+                <Form.Field>
+                  <Form.Select
+                    label='Industry'
+                    options={industry}
+                    name='industry'
+                    autoComplete='industry'
+                    value={values.industry}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.industry && touched.industry && <Label basic color='red' pointing content={errors.industry} />}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Select
+                    label='Business Type'
+                    options={businessType}
+                    name='businessType'
+                    autoComplete='businessType'
+                    value={values.businessType}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.businessType && touched.businessType && <Label basic color='red' pointing content={errors.businessType} />}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Select
+                    label='Owner`s time'
+                    options={ownersTime}
+                    name='ownersTime'
+                    autoComplete='ownersTime'
+                    value={values.ownersTime}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.ownersTime && touched.ownersTime && <Label basic color='red' pointing content={errors.ownersTime} />}
+                </Form.Field>
               </Form.Group>
               <Form.Group inline>
-                <Form.Select label='Business Stage' options={businessStage} />
+                <Form.Field>
+                  <Form.Select
+                    label='Business Stage'
+                    options={stage}
+                    name='stage'
+                    autoComplete='stage'
+                    value={values.stage}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.stage && touched.stage && <Label basic color='red' pointing content={errors.stage} />}
+                </Form.Field>
                 <Form.Button compact color='green'>
                   <Icon name='forward' />
                   Next Stage
@@ -447,11 +447,12 @@ EditBusinessDetailForm.propTypes = {
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
+  handleSubmit: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object
 }
 
-const mapsPropsToValues = () => ({
+const mapPropsToValues = () => ({
   businessName: '',
   firstNameV: '',
   lastNameV: '',
@@ -499,9 +500,14 @@ const validationSchema = Yup.object().shape({
     .max(11, 'ABN require max 11 integers.')
 })
 
-export default connect()(
+const handleSubmit = (values) => {
+  console.log(values)
+}
+
+export default connect(null, null)(
   withFormik({
-    mapsPropsToValues,
-    validationSchema
+    mapPropsToValues,
+    validationSchema,
+    handleSubmit
   })(EditBusinessDetailForm)
 )

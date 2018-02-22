@@ -61,11 +61,11 @@ const Layout = ({ match, logout, menu }) => (
       <Route
         exact
         component={EditPage}
-        path={`${match.path}business/:businessID`}
+        path={`${match.path}business/:id`}
       />
       <Route
         component={LogPage}
-        path={`${match.path}business/:businessID/:logID`}
+        path={`${match.path}business/:id/:logID`}
       />
       <Route exact component={BuyerPage} path={`${match.path}buyer`} />
       <Route

@@ -72,20 +72,6 @@ export const businessLoading = (value, type) => {
   }
 }
 
-const businessResponse = array => {
-  return {
-    type: Types.GET_BUSINESS_SUCCESS,
-    payload: array
-  }
-}
-
-const businessError = value => {
-  return {
-    type: Types.GET_BUSINESS_FAILURE,
-    payload: value
-  }
-}
-
 export const createBusiness = business => async dispatch => {
   dispatch({
     type: Types.CREATE_BUSINESS_LOADING,
@@ -109,12 +95,16 @@ export const getBusiness = (search = false) => async dispatch => {
     type: Types.GET_BUSINESS_LOADING,
     payload: true
   })
-
-  dispatch(businessLoading(true, 'GET_BUSINESS_LOADING'))
   try {
     const business = await getAll(search)
-    dispatch(businessResponse(business))
+    dispatch({
+      type: Types.GET_BUSINESS_SUCCESS,
+      payload: business
+    })
   } catch (error) {
-    dispatch(businessError(error))
+    dispatch({
+      type: Types.CREATE_BUSINESS_FAILURE,
+      payload: error
+    })
   }
 }
