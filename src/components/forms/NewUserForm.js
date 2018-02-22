@@ -248,7 +248,7 @@ class NewUserForm extends Component {
                   as={CheckboxFormatted}
                   label='Buyer'
                   value='buyerMenu'
-                  checked={values.buyerMenu === true}
+                  checked={values.buyerMenu}
                   onChange={this._handleChangeCheckBox}
                 />
               </Form.Field>
@@ -257,7 +257,7 @@ class NewUserForm extends Component {
                   as={CheckboxFormatted}
                   label='Business'
                   value='businessMenu'
-                  checked={values.businessMenu === true}
+                  checked={values.businessMenu}
                   onChange={this._handleChangeCheckBox}
                 />
               </Form.Field>

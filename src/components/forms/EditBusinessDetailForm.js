@@ -53,23 +53,12 @@ class EditBusinessDetailForm extends Component {
         { key: '6', text: 'TAS', value: 'TAS' },
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
-      ],
-      data120DayGuaranteeOptions: {
-        yes: false,
-        no: true
-      }
+      ]
     }
   }
 
-  _handleChangeCheckBox = (e, { value }) => {
-    this.setState(
-      {
-        data120DayGuaranteeOptions: {
-          ...this.state.data120DayGuaranteeOptions,
-          [value]: !this.state.data120DayGuaranteeOptions[value]
-        }
-      }
-    )
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
   }
 
   render () {
@@ -91,7 +80,7 @@ class EditBusinessDetailForm extends Component {
       <Grid celled divided='vertically'>
         <Grid.Row columns={2}>
           <Grid.Column>
-            <Form size='tiny' onSubmit={handleSubmit} novalidate>
+            <Form noValidate size='tiny' onSubmit={handleSubmit}>
               <Form.Group widths='equal'>
                 <Form.Field>
                   <Form.Input
@@ -325,23 +314,23 @@ class EditBusinessDetailForm extends Component {
                 <Form.Field
                   control={Radio}
                   label='Yes'
-                  value={values.data120DayGuarantee}
+                  name='data120DayGuarantee'
                   onChange={this._handleChangeCheckBox}
-                  checked={this.state.data120DayGuaranteeOptions.yes === true}
+                  checked={values.data120DayGuarantee}
                 />
                 <Form.Field
                   control={Radio}
                   label='No'
-                  value={values.data120DayGuarantee}
+                  name='data120DayGuarantee'
+                  checked={!values.data120DayGuarantee}
                   onChange={this._handleChangeCheckBox}
-                  checked={this.state.data120DayGuaranteeOptions.no === true}
                 />
                 <Form.Checkbox
                   label='Notify Owner for IM request'
-                  value={values.notifyOwner}
-                  defaultChecked
+                  name='notifyOwner'
+                  checked={values.notifyOwner}
+                  onChange={this._handleChangeCheckBox}
                 />
-                {errors.notifyOwner && touched.notifyOwner && <Label basic color='red' pointing content={errors.notifyOwner} />}
               </Form.Group>
               <Form.Group widths='equal'>
                 <Form.Field>
@@ -449,7 +438,8 @@ EditBusinessDetailForm.propTypes = {
   handleBlur: PropTypes.func,
   handleSubmit: PropTypes.func,
   errors: PropTypes.object,
-  touched: PropTypes.object
+  touched: PropTypes.object,
+  setFieldValue: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -464,7 +454,9 @@ const mapPropsToValues = () => ({
   sourceNotes: '',
   description: '',
   businessNameSecondary: '',
-  businessABN: ''
+  businessABN: '',
+  data120DayGuarantee: false,
+  notifyOwner: true
 
 })
 
