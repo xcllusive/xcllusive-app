@@ -19,33 +19,6 @@ import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
 import { getBusiness } from '../../redux/ducks/business'
 
-// const panes = [
-//   {
-//     menuItem: 'Business Detail',
-//     render: () => (
-//       <Tab.Pane className='BusinessDetail' attached={false}>
-//         <Segment size='mini' inverted color='blue'>
-//           <Header as='h3' textAlign='left'>
-//             Business Detail
-//           </Header>
-//           <Header as='h6' floated='right'>
-//             Enquiry Date: 06/12/2017
-//           </Header>
-//         </Segment>
-//         <EditBusinessDetailForm business={this.props.business} />
-//       </Tab.Pane>
-//     )
-//   },
-//   {
-//     menuItem: 'Pricing/Information',
-//     render: () => (
-//       <Tab.Pane attached={false}>
-//         <EditBusinessPriceForm />
-//       </Tab.Pane>
-//     )
-//   }
-// ]
-
 const array = [
   {
     businessID: 'BS2000',
@@ -131,7 +104,7 @@ class BusinessEditPage extends Component {
           panes={[
             {
               menuItem: 'Business Detail',
-              render: (props) => (
+              render: () => (
                 <Tab.Pane className='BusinessDetail' attached={false}>
                   <Segment size='mini' inverted color='blue'>
                     <Header as='h3' textAlign='left'>
@@ -141,7 +114,7 @@ class BusinessEditPage extends Component {
                       Enquiry Date: 06/12/2017
                     </Header>
                   </Segment>
-                  <EditBusinessDetailForm business={props.business} />
+                  <EditBusinessDetailForm business={this.props.business} />
                 </Tab.Pane>
               )
             },
@@ -154,20 +127,7 @@ class BusinessEditPage extends Component {
               )
             }
           ]}
-
-        >
-          <Tab.Pane className='BusinessDetail' active activeIndex={1} defaultActiveIndex={1}>
-            <Segment size='mini' inverted color='blue'>
-              <Header as='h3' textAlign='left'>
-                Business Detail
-              </Header>
-              <Header as='h6' floated='right'>
-                Enquiry Date: 06/12/2017
-              </Header>
-            </Segment>
-            <EditBusinessDetailForm business={this.props.business} />
-          </Tab.Pane>
-        </Tab>
+        />
 
         <Grid celled divided='vertically'>
           <Grid.Row columns={1}>
