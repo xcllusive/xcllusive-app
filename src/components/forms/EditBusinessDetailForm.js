@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import _ from 'lodash'
+
 import { withFormik } from 'formik'
 import { Form, Icon, Grid, Radio, Label } from 'semantic-ui-react'
 import { connect } from 'react-redux'
@@ -80,7 +82,7 @@ class EditBusinessDetailForm extends Component {
       state
     } = this.state
 
-    console.log('form: ', this.props.business)
+    console.log('form: ', values)
     return (
       <Grid celled divided='vertically'>
         <Grid.Row columns={2}>
@@ -448,23 +450,29 @@ EditBusinessDetailForm.propTypes = {
   business: PropTypes.object
 }
 
-const mapPropsToValues = () => ({
-  businessName: '',
-  firstNameV: '',
-  lastNameV: '',
-  vendorPhone1: '',
-  vendorPhone2: '',
-  vendorPhone3: '',
-  vendorEmail: '',
-  businessSource: '',
-  sourceNotes: '',
-  description: '',
-  businessNameSecondary: '',
-  businessABN: '',
-  data120DayGuarantee: false,
-  notifyOwner: true
-
-})
+const mapPropsToValues = props => {
+  if (props.business) {
+    props.business.data120DayGuarantee = props.business.data120DayGuarantee ? props.business.data120DayGuarantee : false
+    props.business.notifyOwner = props.business.notifyOwner ? props.business.notifyOwner : false
+    return _.mapValues(props.business, value => value == null ? '' : value)
+  }
+  return {
+    businessName: '',
+    firstNameV: '',
+    lastNameV: '',
+    vendorPhone1: '',
+    vendorPhone2: '',
+    vendorPhone3: '',
+    vendorEmail: '',
+    businessSource: '',
+    sourceNotes: '',
+    description: '',
+    businessNameSecondary: '',
+    businessABN: '',
+    data120DayGuarantee: false,
+    notifyOwner: true
+  }
+}
 
 const validationSchema = Yup.object().shape({
   businessName: Yup.string()
@@ -506,6 +514,7 @@ export default connect(null, null)(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit
+    handleSubmit,
+    enableReinitialize: true
   })(EditBusinessDetailForm)
 )
