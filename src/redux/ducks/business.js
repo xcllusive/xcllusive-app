@@ -187,17 +187,17 @@ export const getBusinesses = (search = false) => async dispatch => {
 
 export const updateBusiness = business => async dispatch => {
   dispatch({
-    type: Types.UPDATE_BUSINESSES_LOADING,
+    type: Types.UPDATE_BUSINESS_LOADING,
     payload: true
   })
   try {
     await update(business)
     dispatch({
-      type: Types.UPDATE_BUSINESSES_SUCCESS
+      type: Types.UPDATE_BUSINESS_SUCCESS
     })
   } catch (error) {
     dispatch({
-      type: Types.UPDATE_BUSINESSES_FAILURE,
+      type: Types.UPDATE_BUSINESS_FAILURE,
       payload: error
     })
   }

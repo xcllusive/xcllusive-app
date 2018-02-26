@@ -15,7 +15,7 @@ import {
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
-import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
+//  import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
 import { getBusiness } from '../../redux/ducks/business'
 
@@ -117,7 +117,7 @@ class BusinessEditPage extends Component {
                   <EditBusinessDetailForm business={this.props.business} />
                 </Tab.Pane>
               )
-            },
+            }/* ,
             {
               menuItem: 'Pricing/Information',
               render: () => (
@@ -125,7 +125,7 @@ class BusinessEditPage extends Component {
                   <EditBusinessPriceForm />
                 </Tab.Pane>
               )
-            }
+            } */
           ]}
         />
 

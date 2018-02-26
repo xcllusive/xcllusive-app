@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Tab } from 'semantic-ui-react'
 
 import UserList from './UserList'
+import BusinessRegisters from './BusinessRegisters'
 
 class SystemSettingsPage extends Component {
   constructor (props) {
@@ -14,6 +15,10 @@ class SystemSettingsPage extends Component {
         },
         {
           menuItem: 'Email Templates'
+        },
+        {
+          menuItem: 'Business Registers',
+          render: () => <BusinessRegisters />
         }
       ]
     }

@@ -202,7 +202,6 @@ class EditBusinessDetailForm extends Component {
               <Form.Group widths='equal'>
                 <Form.Field>
                   <Form.TextArea
-                    required
                     label='Notes'
                     name='description'
                     autoComplete='description'
