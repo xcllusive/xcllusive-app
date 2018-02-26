@@ -82,7 +82,7 @@ class BusinessRegisters extends Component {
           </Grid.Row>
           <Grid.Row columns={3}>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table color='blue' celled inverted>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -97,10 +97,12 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{'ID'}</Table.Cell>
                         <Table.Cell>{'LABEL'}</Table.Cell>
                         <Table.Cell>
-                          <Icon key={item.buyerID}
+                          <Icon link
                             onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
                             color='red' name='trash' />
-                          <Icon color='green' name='edit' />
+                          <Icon color='green' name='edit' link
+                            onClick={() => this._toggleModal(true)}
+                          />
                         </Table.Cell>
                       </Table.Row>
                     )
