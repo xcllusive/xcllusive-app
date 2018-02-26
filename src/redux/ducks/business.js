@@ -1,4 +1,4 @@
-import { get, getAll, create } from '../../services/api/business'
+import { get, getAll, create, update } from '../../services/api/business'
 
 // Action Types
 
@@ -6,6 +6,9 @@ export const Types = {
   CREATE_BUSINESS_LOADING: 'CREATE_BUSINESS_LOADING',
   CREATE_BUSINESS_SUCCESS: 'CREATE_BUSINESS_SUCCESS',
   CREATE_BUSINESS_FAILURE: 'CREATE_BUSINESS_FAILURE',
+  UPDATE_BUSINESS_LOADING: 'UPDATE_BUSINESS_LOADING',
+  UPDATE_BUSINESS_SUCCESS: 'UPDATE_BUSINESS_LOADING',
+  UPDATE_BUSINESS_FAILURE: 'UPDATE_BUSINESS_LOADING',
   GET_BUSINESS_LOADING: 'GET_BUSINESS_LOADING',
   GET_BUSINESS_SUCCESS: 'GET_BUSINESS_SUCCESS',
   GET_BUSINESS_FAILURE: 'GET_BUSINESS_FAILURE',
@@ -23,7 +26,12 @@ const initialState = {
   isCreatedBusiness: false,
   isLoadingGetBusiness: false,
   isLoadingGetBusinesses: false,
-  isLoadingCreateBusiness: false
+  isLoadingCreateBusiness: false,
+  update: {
+    isLoading: false,
+    isUpdated: false,
+    error: null
+  }
 }
 
 export default function reducer (state = initialState, action) {
@@ -79,6 +87,34 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         error: action.payload
+      }
+    case Types.UPDATE_BUSINESS_LOADING:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: action.payload
+        }
+      }
+    case Types.UPDATE_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: true,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_FAILURE:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
       }
     default:
       return state
@@ -144,6 +180,24 @@ export const getBusinesses = (search = false) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_BUSINESSES_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const updateBusiness = business => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_BUSINESSES_LOADING,
+    payload: true
+  })
+  try {
+    await update(business)
+    dispatch({
+      type: Types.UPDATE_BUSINESSES_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_BUSINESSES_FAILURE,
       payload: error
     })
   }

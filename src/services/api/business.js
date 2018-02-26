@@ -23,3 +23,11 @@ export const create = business => {
     data: business
   })
 }
+
+export const update = business => {
+  return request({
+    method: 'post',
+    url: `/business/${business.id}`,
+    data: business
+  })
+}

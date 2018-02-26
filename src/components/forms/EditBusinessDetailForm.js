@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import _ from 'lodash'
-
 import { withFormik } from 'formik'
 import { Form, Icon, Grid, Radio, Label } from 'semantic-ui-react'
-import { connect } from 'react-redux'
-
 import Yup from 'yup'
+
+import { updateBusiness } from '../../redux/ducks/business'
 
 const rating = [
   { key: '1', text: 'Verify file rating.txt', value: 'verify' }
@@ -59,8 +59,10 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
-  componentWillMount () {
-    console.log(this.props.business)
+  componentWillReceiveProps (nextProps) {
+    if (this.props.isUpdated !== nextProps.isUpdated) {
+      alert('Business updated')
+    }
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -82,7 +84,6 @@ class EditBusinessDetailForm extends Component {
       state
     } = this.state
 
-    console.log('form: ', values)
     return (
       <Grid celled divided='vertically'>
         <Grid.Row columns={2}>
@@ -426,7 +427,7 @@ class EditBusinessDetailForm extends Component {
                   <Icon name='forward' />
                   Next Stage
                 </Form.Button>
-                <Form.Button compact color='red'>
+                <Form.Button compact color='red' onClick={handleSubmit}>
                   <Icon name='save' />
                   SAVE
                 </Form.Button>
@@ -447,7 +448,7 @@ EditBusinessDetailForm.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
-  business: PropTypes.object
+  isUpdated: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -506,11 +507,22 @@ const validationSchema = Yup.object().shape({
     .max(11, 'ABN require max 11 integers.')
 })
 
-const handleSubmit = (values) => {
-  console.log(values)
+const handleSubmit = (values, {props, setSubmitting}) => {
+  props.updateBusiness(values).then(setSubmitting(false))
 }
 
-export default connect(null, null)(
+const mapStateToProps = state => {
+  return {
+    isLoading: state.business.update.isLoading,
+    isUpdated: state.business.update.isUpdated
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ updateBusiness }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
     validationSchema,
