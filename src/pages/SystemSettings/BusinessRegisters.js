@@ -5,6 +5,8 @@ import { Table, Icon, Button, Grid } from 'semantic-ui-react'
 
 import Wrapper from '../../components/content/Wrapper'
 
+import NewBusinessRegisterForm from '../../components/forms/NewBusinessRegisterForm'
+
 const array = [
   {
     businessID: 'BS2000',
@@ -51,15 +53,19 @@ class BusinessRegisters extends Component {
     }
   }
 
-  _toggleModal (value) {
-    this.setState({
-      modalOpen: value
-    })
+  _toggleModal () {
+    this.setState(prevState => ({
+      modalOpen: !prevState.modalOpen
+    }))
   }
 
   render () {
     return (
       <Wrapper>
+        <NewBusinessRegisterForm
+          modalOpen={this.state.modalOpen}
+          toggleModal={this._toggleModal}
+        />
         <Grid padded='horizontally'>
           <Grid.Row columns={1}>
             <Grid.Column floated='left' width={2}>
@@ -97,12 +103,12 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{'ID'}</Table.Cell>
                         <Table.Cell>{'LABEL'}</Table.Cell>
                         <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(true)}
+                          />
                           <Icon link
                             onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
                             color='red' name='trash' />
-                          <Icon color='green' name='edit' link
-                            onClick={() => this._toggleModal(true)}
-                          />
                         </Table.Cell>
                       </Table.Row>
                     )
