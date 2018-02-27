@@ -61,7 +61,7 @@ class EditBusinessDetailForm extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (this.props.isUpdated !== nextProps.isUpdated) {
-      alert('Business updated')
+      alert(nextProps.isUpdated)
     }
   }
 
@@ -452,9 +452,45 @@ EditBusinessDetailForm.propTypes = {
 
 const mapPropsToValues = props => {
   if (props.business) {
-    props.business.data120DayGuarantee = props.business.data120DayGuarantee ? props.business.data120DayGuarantee : false
-    props.business.notifyOwner = props.business.notifyOwner ? props.business.notifyOwner : false
-    return _.mapValues(props.business, value => value == null ? '' : value)
+    const {
+      id,
+      businessName,
+      firstNameV,
+      lastNameV,
+      vendorPhone1,
+      vendorPhone2,
+      vendorPhone3,
+      vendorEmail,
+      businessSource,
+      sourceNote,
+      description,
+      businessNameSecondary,
+      businessABN,
+      data120DayGuarantee,
+      notifyOwner
+    } = props.business
+
+    const business = {
+      id,
+      businessName,
+      firstNameV,
+      lastNameV,
+      vendorPhone1,
+      vendorPhone2,
+      vendorPhone3,
+      vendorEmail,
+      businessSource,
+      sourceNote,
+      description,
+      businessNameSecondary,
+      businessABN,
+      data120DayGuarantee,
+      notifyOwner
+    }
+
+    business.data120DayGuarantee = business.data120DayGuarantee !== ''
+    business.notifyOwner = business.data120DayGuarantee !== ''
+    return _.mapValues(business, value => value == null ? '' : value)
   }
   return {
     businessName: '',

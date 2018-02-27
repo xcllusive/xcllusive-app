@@ -7,8 +7,8 @@ export const Types = {
   CREATE_BUSINESS_SUCCESS: 'CREATE_BUSINESS_SUCCESS',
   CREATE_BUSINESS_FAILURE: 'CREATE_BUSINESS_FAILURE',
   UPDATE_BUSINESS_LOADING: 'UPDATE_BUSINESS_LOADING',
-  UPDATE_BUSINESS_SUCCESS: 'UPDATE_BUSINESS_LOADING',
-  UPDATE_BUSINESS_FAILURE: 'UPDATE_BUSINESS_LOADING',
+  UPDATE_BUSINESS_SUCCESS: 'UPDATE_BUSINESS_SUCCESS',
+  UPDATE_BUSINESS_FAILURE: 'UPDATE_BUSINESS_FAILURE',
   GET_BUSINESS_LOADING: 'GET_BUSINESS_LOADING',
   GET_BUSINESS_SUCCESS: 'GET_BUSINESS_SUCCESS',
   GET_BUSINESS_FAILURE: 'GET_BUSINESS_FAILURE',
@@ -102,7 +102,7 @@ export default function reducer (state = initialState, action) {
         update: {
           ...state.update,
           isLoading: false,
-          isUpdated: true,
+          isUpdated: action.payload,
           error: null
         }
       }
@@ -191,9 +191,10 @@ export const updateBusiness = business => async dispatch => {
     payload: true
   })
   try {
-    await update(business)
+    const response = await update(business)
     dispatch({
-      type: Types.UPDATE_BUSINESS_SUCCESS
+      type: Types.UPDATE_BUSINESS_SUCCESS,
+      payload: response.message
     })
   } catch (error) {
     dispatch({
