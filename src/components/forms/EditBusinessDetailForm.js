@@ -562,13 +562,9 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 
 const mapStateToProps = state => {
   return {
-<<<<<<< HEAD
-    isLoading: state.business.update.isLoading
-=======
     isLoading: state.business.update.isLoading,
     isLoadingGet: state.business.isLoadingGetBusiness,
     isUpdated: state.business.update.isUpdated
->>>>>>> b519cd010740cc9faf7f7299045c0baf4b87a392
   }
 }
 
