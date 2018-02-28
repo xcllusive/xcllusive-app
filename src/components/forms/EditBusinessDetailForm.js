@@ -63,6 +63,10 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+  }
+
   componentWillReceiveProps (nextProps) {
     if (this.props.isUpdated !== nextProps.isUpdated) {
       alert(nextProps.isUpdated)
@@ -172,6 +176,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Input
                     required
                     label='Email'
+                    icon='mail'
                     name='vendorEmail'
                     autoComplete='vendorEmail'
                     value={values.vendorEmail}
@@ -220,7 +225,7 @@ class EditBusinessDetailForm extends Component {
               <Form.Group inline>
                 <Form.Input
                   label='Listing Agent'
-                  placeholder='Zoran Sarabaca'
+                  placeholder={values.listingAgent}
                   readOnly
                 />
                 <Form.Button primary>
@@ -266,6 +271,7 @@ class EditBusinessDetailForm extends Component {
                 <Form.Field>
                   <Form.Input
                     label='Website'
+                    icon='chrome'
                     name='businessURL'
                     autoComplete='businessURL'
                     value={values.businessURL}
@@ -463,16 +469,18 @@ const mapPropsToValues = props => {
       vendorPhone3,
       vendorEmail,
       businessSource,
-      sourceNote,
+      sourceNotes,
       description,
       businessNameSecondary,
       businessABN,
       businessURL,
       address1,
       suburb,
+      state,
       postCode,
       data120DayGuarantee,
-      notifyOwner
+      notifyOwner,
+      listingAgent
     } = props.business
 
     const business = {
@@ -485,16 +493,18 @@ const mapPropsToValues = props => {
       vendorPhone3,
       vendorEmail,
       businessSource,
-      sourceNote,
+      sourceNotes,
       description,
       businessNameSecondary,
       businessABN,
       businessURL,
       address1,
       suburb,
+      state,
       postCode,
       data120DayGuarantee,
-      notifyOwner
+      notifyOwner,
+      listingAgent
     }
 
     business.data120DayGuarantee = business.data120DayGuarantee !== ''
@@ -519,7 +529,8 @@ const mapPropsToValues = props => {
     suburb: '',
     postCode: '',
     data120DayGuarantee: false,
-    notifyOwner: true
+    notifyOwner: true,
+    listingAgent: ''
   }
 }
 
@@ -554,6 +565,8 @@ const validationSchema = Yup.object().shape({
   businessABN: Yup.string()
     .min(11, 'ABN require min 11 integers.')
     .max(11, 'ABN require max 11 integers.'),
+  businessURL: Yup.string()
+    .url('You must type a valid URL.'),
   address1: Yup.string()
     .max(11, 'Street require max 100 characters.'),
   suburb: Yup.string()
