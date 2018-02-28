@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { get, getAll, create, update } from '../../services/api/business'
 
 // Action Types
@@ -196,10 +197,12 @@ export const updateBusiness = business => async dispatch => {
       type: Types.UPDATE_BUSINESS_SUCCESS,
       payload: response.message
     })
+    toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.UPDATE_BUSINESS_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }

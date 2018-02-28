@@ -59,12 +59,6 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (this.props.isUpdated !== nextProps.isUpdated) {
-      alert(nextProps.isUpdated)
-    }
-  }
-
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
@@ -446,8 +440,7 @@ EditBusinessDetailForm.propTypes = {
   handleSubmit: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  setFieldValue: PropTypes.func,
-  isUpdated: PropTypes.bool
+  setFieldValue: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -548,8 +541,7 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.business.update.isLoading,
-    isUpdated: state.business.update.isUpdated
+    isLoading: state.business.update.isLoading
   }
 }
 
