@@ -34,11 +34,6 @@ const ownersTime = [
   { key: '1', text: 'verify file ownersTime', value: 'verify' }
 ]
 
-const stage = [
-  { key: 'U', text: 'Under Offer', value: 'UnderOffer' },
-  { key: 'F', text: 'For Sale', value: 'ForSale' }
-]
-
 class EditBusinessDetailForm extends Component {
   constructor (props) {
     super(props)
@@ -55,6 +50,15 @@ class EditBusinessDetailForm extends Component {
         { key: '6', text: 'TAS', value: 'TAS' },
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
+      ],
+      stage: [
+        { key: '1', text: 'Potential Listing', value: '1' },
+        { key: '2', text: 'Meeting', value: '2' },
+        { key: '3', text: 'Data Gathering', value: '3' },
+        { key: '4', text: 'Appraisal', value: '4' },
+        { key: '5', text: 'Closing Stage', value: '5' },
+        { key: '6', text: 'SALES MEMORANDUM', value: '6' },
+        { key: '7', text: 'LOST', value: '7' }
       ]
     }
   }
@@ -75,7 +79,8 @@ class EditBusinessDetailForm extends Component {
 
     const {
       sourceOptions,
-      state
+      state,
+      stage
     } = this.state
 
     return (
@@ -256,12 +261,12 @@ class EditBusinessDetailForm extends Component {
                   <Form.Input
                     label='Website'
                     name='businessURL'
-                    autoComplete='BusinessURL'
-                    value={values.BusinessURL}
+                    autoComplete='businessURL'
+                    value={values.businessURL}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.BusinessURL && touched.BusinessURL && <Label basic color='red' pointing content={errors.BusinessURL} />}
+                  {errors.businessURL && touched.businessURL && <Label basic color='red' pointing content={errors.businessURL} />}
                 </Form.Field>
               </Form.Group>
               <Form.Group widths='equal'>
@@ -416,10 +421,6 @@ class EditBusinessDetailForm extends Component {
                   />
                   {errors.stage && touched.stage && <Label basic color='red' pointing content={errors.stage} />}
                 </Form.Field>
-                <Form.Button compact color='green'>
-                  <Icon name='forward' />
-                  Next Stage
-                </Form.Button>
                 <Form.Button compact color='red' onClick={handleSubmit}>
                   <Icon name='save' />
                   SAVE
@@ -459,6 +460,10 @@ const mapPropsToValues = props => {
       description,
       businessNameSecondary,
       businessABN,
+      businessURL,
+      address1,
+      suburb,
+      postCode,
       data120DayGuarantee,
       notifyOwner
     } = props.business
@@ -477,6 +482,10 @@ const mapPropsToValues = props => {
       description,
       businessNameSecondary,
       businessABN,
+      businessURL,
+      address1,
+      suburb,
+      postCode,
       data120DayGuarantee,
       notifyOwner
     }
@@ -498,6 +507,10 @@ const mapPropsToValues = props => {
     description: '',
     businessNameSecondary: '',
     businessABN: '',
+    businessURL: '',
+    address1: '',
+    suburb: '',
+    postCode: '',
     data120DayGuarantee: false,
     notifyOwner: true
   }
@@ -532,7 +545,15 @@ const validationSchema = Yup.object().shape({
   businessNameSecondary: Yup.string()
     .max(120, 'Source Notes require max 120 characters.'),
   businessABN: Yup.string()
-    .max(11, 'ABN require max 11 integers.')
+    .min(11, 'ABN require min 11 integers.')
+    .max(11, 'ABN require max 11 integers.'),
+  address1: Yup.string()
+    .max(11, 'Street require max 100 characters.'),
+  suburb: Yup.string()
+    .max(11, 'Suburb require max 100 characters.'),
+  postCode: Yup.string()
+    .min(4, 'Post Code require min 4 integers.')
+    .max(4, 'Post Code require max 4 integers.')
 })
 
 const handleSubmit = (values, {props, setSubmitting}) => {
@@ -541,7 +562,13 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 
 const mapStateToProps = state => {
   return {
+<<<<<<< HEAD
     isLoading: state.business.update.isLoading
+=======
+    isLoading: state.business.update.isLoading,
+    isLoadingGet: state.business.isLoadingGetBusiness,
+    isUpdated: state.business.update.isUpdated
+>>>>>>> b519cd010740cc9faf7f7299045c0baf4b87a392
   }
 }
 
