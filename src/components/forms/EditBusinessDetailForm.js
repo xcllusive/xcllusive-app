@@ -63,6 +63,7 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
+<<<<<<< HEAD
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
@@ -73,6 +74,8 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
+=======
+>>>>>>> 047e9cc1cdfeb81366c6fb2b85d7349c30e5fa24
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
@@ -453,8 +456,7 @@ EditBusinessDetailForm.propTypes = {
   handleSubmit: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  setFieldValue: PropTypes.func,
-  isUpdated: PropTypes.bool
+  setFieldValue: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -582,9 +584,13 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 
 const mapStateToProps = state => {
   return {
+<<<<<<< HEAD
+    isLoading: state.business.update.isLoading
+=======
     isLoading: state.business.update.isLoading,
     isLoadingGet: state.business.isLoadingGetBusiness,
     isUpdated: state.business.update.isUpdated
+>>>>>>> b519cd010740cc9faf7f7299045c0baf4b87a392
   }
 }
 

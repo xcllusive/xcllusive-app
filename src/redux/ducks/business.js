@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { get, getAll, create, update,
   createBusinessSource as createBusinessSourceAPI,
   createBusinessRating as createBusinessRatingAPI,
@@ -5,6 +6,10 @@ import { get, getAll, create, update,
   createBusinessIndustry as createBusinessIndustryAPI,
   createBusinessType as createBusinessTypeAPI,
   createBusinessOwnersTime as createBusinessOwnersTimeAPI } from '../../services/api/business'
+=======
+import { toast } from 'react-toastify'
+import { get, getAll, create, update } from '../../services/api/business'
+>>>>>>> 047e9cc1cdfeb81366c6fb2b85d7349c30e5fa24
 
 // Action Types
 
@@ -221,11 +226,13 @@ export const updateBusiness = business => async dispatch => {
       type: Types.UPDATE_BUSINESS_SUCCESS,
       payload: response.message
     })
+    toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.UPDATE_BUSINESS_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }
 
