@@ -4,11 +4,10 @@ import { Route, Switch, NavLink, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Menu, Icon, Header } from 'semantic-ui-react'
-
+import { ToastContainer } from 'react-toastify'
 import { logout } from '../redux/ducks/auth'
 
 import { NotFoundPage } from './'
-
 import ListPage from './Business/BusinessList'
 import EditPage from './Business/BusinessEdit'
 import LogPage from './Business/BusinessLog'
@@ -18,6 +17,7 @@ import ClientManagerList from './ClientManager/ClientManagerList'
 
 const Layout = ({ match, logout, menu }) => (
   <div>
+    <ToastContainer position='bottom-right' />
     <Menu pointing stackable secondary attached='top' color={'blue'}>
       <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
         <Header as='h2'>Xcllusive</Header>
