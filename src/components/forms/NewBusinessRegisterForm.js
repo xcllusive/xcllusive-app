@@ -3,14 +3,24 @@ import PropTypes from 'prop-types'
 //  import { connect } from 'react-redux'
 //  import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Label, Checkbox, Icon, Button } from 'semantic-ui-react'
-import styled from 'styled-components'
+import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import Yup from 'yup'
 
-const CheckboxFormatted = styled.div`
-  padding-right: 1em`
-
 class NewBusinessRegisterForm extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      businessRegister: [
+        { key: '1', text: 'Business Source', value: '1' },
+        { key: '2', text: 'Business Rating', value: '2' },
+        { key: '3', text: 'Business Product', value: '3' },
+        { key: '4', text: 'Business Industry', value: '4' },
+        { key: '5', text: 'Business Type', value: '5' },
+        { key: '6', text: 'Business Owner`s Time', value: '6' }
+      ]
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
   }
 
@@ -36,6 +46,9 @@ class NewBusinessRegisterForm extends Component {
       modalOpen,
       toggleModal
     } = this.props
+    const {
+      businessRegister
+    } = this.state
     return (
       <Modal
         dimmer={'blurring'}
@@ -44,76 +57,22 @@ class NewBusinessRegisterForm extends Component {
         <Modal.Header align='center'>New Business Register</Modal.Header>
         <Modal.Content>
           <Form>
-            <Form.Group widths='equal'>
-              <Form.Field width={9}>
-                <label>Business Register:</label>
-              </Form.Field>
-              <Form.Field width={2}>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  label='Business Source'
-                  value='businessSource'
-                  checked={values.businessSource}
-                  onChange={this._handleChangeCheckBox}
+            <Form.Group>
+              <Form.Field width={4}>
+                <Form.Select
+                  required
+                  label='Business Register'
+                  name='businessRegister'
+                  options={businessRegister}
+                  autoComplete='businessRegister'
+                  value={values.businessRegister}
+                  onChange={this._handleSelectChange}
                 />
-              </Form.Field>
-              <Form.Field width={2}>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  label='Business Rating'
-                  value='businessRating'
-                  checked={values.businessRating}
-                  onChange={this._handleChangeCheckBox}
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  label='Business Product'
-                  value='businessProduct'
-                  checked={values.businessProduct}
-                  onChange={this._handleChangeCheckBox}
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  label='Business Industry'
-                  value='businessIndustry'
-                  checked={values.businessIndustry}
-                  onChange={this._handleChangeCheckBox}
-                />
-              </Form.Field>
-              <Form.Field width={2}>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  label='Business Type'
-                  value='businessType'
-                  checked={values.businessType}
-                  onChange={this._handleChangeCheckBox}
-                />
-              </Form.Field>
-              <Form.Field>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  label='Business Owner`s Time'
-                  value='businessOwnersTime'
-                  checked={values.businessOwnersTime}
-                  onChange={this._handleChangeCheckBox}
-                />
+                {errors.businessRegister && touched.businessRegister && <Label basic color='red' pointing content={errors.businessRegister} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <Form.Field width={1}>
-                <Form.Input
-                  label='ID'
-                  name='id'
-                  autoComplete='id'
-                  value={values.id}
-                  readOnly
-                />
-              </Form.Field>
-              <Form.Field width={15}>
+              <Form.Field width={16}>
                 <Form.Input
                   required
                   label='Label'
@@ -167,15 +126,17 @@ NewBusinessRegisterForm.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  id: '',
-  label: ''
+  label: '',
+  businessRegister: ''
 })
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
     .min(2, 'Label required minimum 2 characters.')
-    .max(200, 'Label require max 200 characters.')
+    .max(200, 'Label require max 200 characters.'),
+  businessRegister: Yup.string()
+    .required('Business Register is required.')
 })
 
 /* const handleSubmit = (values, { props, setSubmitting }) => {

@@ -53,7 +53,7 @@ class BusinessRegisters extends Component {
     }
   }
 
-  _toggleModal () {
+  _toggleModal = () => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen
     }))
@@ -68,7 +68,7 @@ class BusinessRegisters extends Component {
         />
         <Grid padded='horizontally'>
           <Grid.Row columns={1}>
-            <Grid.Column floated='left' width={2}>
+            <Grid.Column floated='right' width={2}>
               <Button onClick={() => this._toggleModal(true)} color='facebook'>
                 <Icon name='add' />
                   New Register

@@ -65,7 +65,7 @@ class BusinessListPage extends Component {
           <Statistic.Group size='mini' color='blue' widths={6}>
             <Statistic>
               <Statistic.Value>10</Statistic.Value>
-              <Statistic.Label>Potencial Listing</Statistic.Label>
+              <Statistic.Label>Potential Listing</Statistic.Label>
             </Statistic>
             <Statistic>
               <Statistic.Value>20</Statistic.Value>
