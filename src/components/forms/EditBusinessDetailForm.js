@@ -7,7 +7,7 @@ import { withFormik } from 'formik'
 import { Form, Icon, Grid, Radio, Label } from 'semantic-ui-react'
 import Yup from 'yup'
 
-import { updateBusiness } from '../../redux/ducks/business'
+//  import { updateBusiness } from '../../redux/ducks/business'
 
 const rating = [
   { key: '1', text: 'Verify file rating.txt', value: 'verify' }
@@ -63,7 +63,6 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
-<<<<<<< HEAD
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
@@ -74,8 +73,6 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
-=======
->>>>>>> 047e9cc1cdfeb81366c6fb2b85d7349c30e5fa24
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
@@ -179,7 +176,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Input
                     required
                     label='Email'
-                    icon='mail'
+                    icon={<Icon name='mail' inverted circular link onClick={() => (window.location.href = `mailto:${values.vendorEmail}`)} />}
                     name='vendorEmail'
                     autoComplete='vendorEmail'
                     value={values.vendorEmail}
@@ -274,7 +271,7 @@ class EditBusinessDetailForm extends Component {
                 <Form.Field>
                   <Form.Input
                     label='Website'
-                    icon='chrome'
+                    icon={<Icon name='chrome' inverted circular link onClick={() => (window.open(`${values.businessURL}`))} />}
                     name='businessURL'
                     autoComplete='businessURL'
                     value={values.businessURL}
@@ -568,7 +565,7 @@ const validationSchema = Yup.object().shape({
     .min(11, 'ABN require min 11 integers.')
     .max(11, 'ABN require max 11 integers.'),
   businessURL: Yup.string()
-    .url('You must type a valid URL.'),
+    .url('You must type a valid URL (http://website.com.au).'),
   address1: Yup.string()
     .max(11, 'Street require max 100 characters.'),
   suburb: Yup.string()
@@ -583,19 +580,14 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 }
 
 const mapStateToProps = state => {
-  return {
-<<<<<<< HEAD
-    isLoading: state.business.update.isLoading
-=======
-    isLoading: state.business.update.isLoading,
-    isLoadingGet: state.business.isLoadingGetBusiness,
-    isUpdated: state.business.update.isUpdated
->>>>>>> b519cd010740cc9faf7f7299045c0baf4b87a392
-  }
+  isLoading: state.business.update.isLoading
+  isLoading: state.business.update.isLoading,
+  isLoadingGet: state.business.isLoadingGetBusiness,
+  isUpdated: state.business.update.isUpdated
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness }, dispatch)
+  return bindActionCreators({}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
