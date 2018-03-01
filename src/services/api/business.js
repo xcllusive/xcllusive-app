@@ -40,3 +40,7 @@ export const createBusinessRegister = () => {
     data: businessSource
   }) */
 }
+
+export const reassignBusiness = () => {
+  console.log('dale')
+}

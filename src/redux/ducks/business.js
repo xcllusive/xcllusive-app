@@ -1,4 +1,7 @@
-import { get, getAll, create, update, createBusinessRegister as createBusinessRegisterAPI } from '../../services/api/business'
+import { get, getAll, create, update,
+  createBusinessRegister as createBusinessRegisterAPI,
+  reassignBusiness as reassignBusinessAPI
+} from '../../services/api/business'
 import { toast } from 'react-toastify'
 
 // Action Types
@@ -18,7 +21,10 @@ export const Types = {
   GET_BUSINESSES_FAILURE: 'GET_BUSINESSES_FAILURE',
   CREATE_BUSINESS_REGISTER_LOADING: 'CREATE_BUSINESS_REGISTER_LOADING',
   CREATE_BUSINESS_REGISTER_SUCCESS: 'CREATE_BUSINESS_REGISTER_SUCCESS',
-  CREATE_BUSINESS_REGISTER_FAILURE: 'CREATE_BUSINESS_REGISTER_FAILURE'
+  CREATE_BUSINESS_REGISTER_FAILURE: 'CREATE_BUSINESS_REGISTER_FAILURE',
+  CREATE_REASSIGN_BUSINESS_LOADING: 'CREATE_REASSIGN_BUSINESS_LOADING',
+  CREATE_REASSIGN_BUSINESS_SUCCESS: 'CREATE_REASSIGN_BUSINESS_SUCCESS',
+  CREATE_REASSIGN_BUSINESS_FAILURE: 'CREATE_REASSIGN_BUSINESS_FAILURE'
 
 }
 
@@ -224,6 +230,24 @@ export const createBusinessRegister = businessRegister => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.CREATE_BUSINESS_REGISTER_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const reassignBusiness = reassignBusiness => async dispatch => {
+  dispatch({
+    type: Types.CREATE_REASSIGN_BUSINESS_LOADING,
+    payload: true
+  })
+  try {
+    await reassignBusinessAPI(reassignBusiness)
+    dispatch({
+      type: Types.CREATE_REASSIGN_BUSINESS_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_REASSIGN_BUSINESS_FAILURE,
       payload: error
     })
   }

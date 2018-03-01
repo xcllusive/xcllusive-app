@@ -4,16 +4,15 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
-
 import Yup from 'yup'
 
-import { createBusinessRegister } from '../../redux/ducks/business'
+import { reassignBusiness } from '../../redux/ducks/business'
 
-class NewBusinessRegisterForm extends Component {
+class ReassignBusinessForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      businessRegister: [
+      listingAgent: [
         { key: '1', text: 'Business Source', value: '1' },
         { key: '2', text: 'Business Rating', value: '2' },
         { key: '3', text: 'Business Product', value: '3' },
@@ -36,8 +35,6 @@ class NewBusinessRegisterForm extends Component {
       values,
       touched,
       errors,
-      handleChange,
-      handleBlur,
       handleSubmit,
       isSubmitting,
       isValid,
@@ -46,42 +43,30 @@ class NewBusinessRegisterForm extends Component {
       toggleModal
     } = this.props
     const {
-      businessRegister
+      listingAgent
     } = this.state
     return (
       <Modal
         dimmer={'blurring'}
         open={modalOpen}
       >
-        <Modal.Header align='center'>New Business Register</Modal.Header>
+        <Modal.Header align='center'>Reassign Business to New Listing Agent</Modal.Header>
         <Modal.Content>
           <Form>
+            <h4>IMPORTANT: You are able to reassign the LISTING agent- not the sales agent. Once this is done, the responsibility of listing this business will be transferred to the allocated Listing Agent. Only do this if this is your intention.</h4>
             <Form.Group>
-              <Form.Field width={4}>
+              <Form.Field width={6}>
                 <Form.Select
                   required
-                  label='Business Register'
-                  name='businessRegister'
-                  options={businessRegister}
-                  autoComplete='businessRegister'
-                  value={values.businessRegister}
+                  label='Reassign Business To New Listing Agent'
+                  name='listingAgent'
+                  options={listingAgent}
+                  autoComplete='listingAgent'
+                  //  value={this.props.business}
+                  value={values.listingAgent}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessRegister && touched.businessRegister && <Label basic color='red' pointing content={errors.businessRegister} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field width={16}>
-                <Form.Input
-                  required
-                  label='Label'
-                  name='label'
-                  autoComplete='label'
-                  value={values.label}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.label && touched.label && <Label basic color='red' pointing content={errors.label} />}
+                {errors.listingAgent && touched.listingAgent && <Label basic color='red' pointing content={errors.listingAgent} />}
               </Form.Field>
             </Form.Group>
           </Form>
@@ -94,7 +79,7 @@ class NewBusinessRegisterForm extends Component {
             onClick={handleSubmit}
           >
             <Icon name='save' />
-            Create Register
+            Save and Return
           </Button>
           <Button
             color='red'
@@ -109,12 +94,10 @@ class NewBusinessRegisterForm extends Component {
   }
 }
 
-NewBusinessRegisterForm.propTypes = {
+ReassignBusinessForm.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   toggleModal: PropTypes.func,
@@ -125,22 +108,17 @@ NewBusinessRegisterForm.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  label: '',
-  businessRegister: ''
+  listingAgent: ''
 })
 
 const validationSchema = Yup.object().shape({
-  label: Yup.string()
-    .required('Label is required.')
-    .min(2, 'Label required minimum 2 characters.')
-    .max(200, 'Label require max 200 characters.'),
-  businessRegister: Yup.string()
-    .required('Business Register is required.')
+  listingAgent: Yup.string()
+    .required('Listing Agent is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  console.log('oii ', values.businessRegister)
-  props.createBusinessRegister(values)
+  console.log('oii ', values.listingAgent)
+  props.reassignBusiness(values)
   setSubmitting(false)
 }
 
@@ -152,12 +130,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    createBusinessRegister }, dispatch)
+    reassignBusiness }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     validationSchema,
     mapPropsToValues,
-    handleSubmit})(NewBusinessRegisterForm)
+    handleSubmit})(ReassignBusinessForm)
 )
