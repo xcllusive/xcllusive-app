@@ -1,5 +1,15 @@
+<<<<<<< HEAD
+import { get, getAll, create, update,
+  createBusinessSource as createBusinessSourceAPI,
+  createBusinessRating as createBusinessRatingAPI,
+  createBusinessProduct as createBusinessProductAPI,
+  createBusinessIndustry as createBusinessIndustryAPI,
+  createBusinessType as createBusinessTypeAPI,
+  createBusinessOwnersTime as createBusinessOwnersTimeAPI } from '../../services/api/business'
+=======
 import { toast } from 'react-toastify'
 import { get, getAll, create, update } from '../../services/api/business'
+>>>>>>> 047e9cc1cdfeb81366c6fb2b85d7349c30e5fa24
 
 // Action Types
 
@@ -15,7 +25,26 @@ export const Types = {
   GET_BUSINESS_FAILURE: 'GET_BUSINESS_FAILURE',
   GET_BUSINESSES_LOADING: 'GET_BUSINESSES_LOADING',
   GET_BUSINESSES_SUCCESS: 'GET_BUSINESSES_SUCCESS',
-  GET_BUSINESSES_FAILURE: 'GET_BUSINESSES_FAILURE'
+  GET_BUSINESSES_FAILURE: 'GET_BUSINESSES_FAILURE',
+  CREATE_BUSINESS_SOURCE_LOADING: 'CREATE_BUSINESS_SOURCE_LOADING',
+  CREATE_BUSINESS_SOURCE_SUCCESS: 'CREATE_BUSINESS_SOURCE_SUCCESS',
+  CREATE_BUSINESS_SOURCE_FAILURE: 'CREATE_BUSINESS_SOURCE_FAILURE',
+  CREATE_BUSINESS_RATING_LOADING: 'CREATE_BUSINESS_RATING_LOADING',
+  CREATE_BUSINESS_RATING_SUCCESS: 'CREATE_BUSINESS_RATING_SUCCESS',
+  CREATE_BUSINESS_RATING_FAILURE: 'CREATE_BUSINESS_RATING_FAILURE',
+  CREATE_BUSINESS_PRODUCT_LOADING: 'CREATE_BUSINESS_PRODUCT_LOADING',
+  CREATE_BUSINESS_PRODUCT_SUCCESS: 'CREATE_BUSINESS_PRODUCT_SUCCESS',
+  CREATE_BUSINESS_PRODUCT_FAILURE: 'CREATE_BUSINESS_PRODUCT_FAILURE',
+  CREATE_BUSINESS_INDUSTRY_LOADING: 'CREATE_BUSINESS_INDUSTRY_LOADING',
+  CREATE_BUSINESS_INDUSTRY_SUCCESS: 'CREATE_BUSINESS_INDUSTRY_SUCCESS',
+  CREATE_BUSINESS_INDUSTRY_FAILURE: 'CREATE_BUSINESS_INDUSTRY_FAILURE',
+  CREATE_BUSINESS_TYPE_LOADING: 'CREATE_BUSINESS_TYPE_LOADING',
+  CREATE_BUSINESS_TYPE_SUCCESS: 'CREATE_BUSINESS_TYPE_SUCCESS',
+  CREATE_BUSINESS_TYPE_FAILURE: 'CREATE_BUSINESS_TYPE_FAILURE',
+  CREATE_BUSINESS_OWNERSTIME_LOADING: 'CREATE_BUSINESS_OWNERSTIME_LOADING',
+  CREATE_BUSINESS_OWNERSTIME_SUCCESS: 'CREATE_BUSINESS_OWNERSTIME_SUCCESS',
+  CREATE_BUSINESS_OWNERSTIME_FAILURE: 'CREATE_BUSINESS_OWNERSTIME_FAILURE'
+
 }
 
 // Reducer
@@ -204,5 +233,113 @@ export const updateBusiness = business => async dispatch => {
       payload: error
     })
     toast.error(error)
+  }
+}
+
+export const createBusinessSource = businessSource => async dispatch => {
+  dispatch({
+    type: Types.CREATE_BUSINESS_SOURCE_LOADING,
+    payload: true
+  })
+  try {
+    await createBusinessSourceAPI(businessSource)
+    dispatch({
+      type: Types.CREATE_BUSINESS_SOURCE_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_BUSINESS_SOURCE_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const createBusinessRating = businessRating => async dispatch => {
+  dispatch({
+    type: Types.CREATE_BUSINESS_RATING_LOADING,
+    payload: true
+  })
+  try {
+    await createBusinessRatingAPI(businessRating)
+    dispatch({
+      type: Types.CREATE_BUSINESS_RATING_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_BUSINESS_RATING_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const createBusinessProduct = businessProduct => async dispatch => {
+  dispatch({
+    type: Types.CREATE_BUSINESS_PRODUCT_LOADING,
+    payload: true
+  })
+  try {
+    await createBusinessProductAPI(businessProduct)
+    dispatch({
+      type: Types.CREATE_BUSINESS_PRODUCT_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_BUSINESS_PRODUCT_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const createBusinessIndustry = businessIndustry => async dispatch => {
+  dispatch({
+    type: Types.CREATE_BUSINESS_INDUSTRY_LOADING,
+    payload: true
+  })
+  try {
+    await createBusinessIndustryAPI(businessIndustry)
+    dispatch({
+      type: Types.CREATE_BUSINESS_INDUSTRY_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_BUSINESS_INDUSTRY_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const createBusinessType = businessType => async dispatch => {
+  dispatch({
+    type: Types.CREATE_BUSINESS_TYPE_LOADING,
+    payload: true
+  })
+  try {
+    await createBusinessTypeAPI(businessType)
+    dispatch({
+      type: Types.CREATE_BUSINESS_TYPE_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_BUSINESS_TYPE_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const createBusinessOwnersTime = businessOwnersTime => async dispatch => {
+  dispatch({
+    type: Types.CREATE_BUSINESS_OWNERSTIME_LOADING,
+    payload: true
+  })
+  try {
+    await createBusinessOwnersTimeAPI(businessOwnersTime)
+    dispatch({
+      type: Types.CREATE_BUSINESS_TYPE_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_BUSINESS_TYPE_FAILURE,
+      payload: error
+    })
   }
 }

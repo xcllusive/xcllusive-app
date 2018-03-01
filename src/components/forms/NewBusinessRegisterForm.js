@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-//  import { connect } from 'react-redux'
-//  import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import Yup from 'yup'
+
+import { createBusinessSource, createBusinessRating, createBusinessProduct, createBusinessIndustry, createBusinessType, createBusinessOwnersTime } from '../../redux/ducks/business'
 
 class NewBusinessRegisterForm extends Component {
   constructor (props) {
@@ -139,23 +141,36 @@ const validationSchema = Yup.object().shape({
     .required('Business Register is required.')
 })
 
-/* const handleSubmit = (values, { props, setSubmitting }) => {
-  props.createUser(values)
+const handleSubmit = (values, { props, setSubmitting }) => {
+  console.log('oii ', values.businessRegister)
+  if (values.businessRegister === 1) props.createBusinessSource(values)
+  if (values.businessRegister === 2) props.createBusinessRating(values)
+  if (values.businessRegister === 3) props.createBusinessProduct(values)
+  if (values.businessRegister === 4) props.createBusinessIndustry(values)
+  if (values.businessRegister === 5) props.createBusinessType(values)
+  if (values.businessRegister === 6) props.createBusinessOwnersTime(values)
   setSubmitting(false)
-} */
+}
 
-/* const mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    isLoading: state.user.isLoading
+    isLoading: state.business.isLoading
   }
-} */
+}
 
-/* const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ createUser }, dispatch)
-} */
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    createBusinessSource,
+    createBusinessRating,
+    createBusinessProduct,
+    createBusinessIndustry,
+    createBusinessType,
+    createBusinessOwnersTime }, dispatch)
+}
 
-export default (
+export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     validationSchema,
-    mapPropsToValues})(NewBusinessRegisterForm)
+    mapPropsToValues,
+    handleSubmit})(NewBusinessRegisterForm)
 )

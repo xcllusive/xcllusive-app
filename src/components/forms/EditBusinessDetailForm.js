@@ -7,7 +7,7 @@ import { withFormik } from 'formik'
 import { Form, Icon, Grid, Radio, Label } from 'semantic-ui-react'
 import Yup from 'yup'
 
-import { updateBusiness } from '../../redux/ducks/business'
+//  import { updateBusiness } from '../../redux/ducks/business'
 
 const rating = [
   { key: '1', text: 'Verify file rating.txt', value: 'verify' }
@@ -60,6 +60,16 @@ class EditBusinessDetailForm extends Component {
         { key: '6', text: 'SALES MEMORANDUM', value: '6' },
         { key: '7', text: 'LOST', value: '7' }
       ]
+    }
+  }
+
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.isUpdated !== nextProps.isUpdated) {
+      alert(nextProps.isUpdated)
     }
   }
 
@@ -166,6 +176,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Input
                     required
                     label='Email'
+                    icon={<Icon name='mail' inverted circular link onClick={() => (window.location.href = `mailto:${values.vendorEmail}`)} />}
                     name='vendorEmail'
                     autoComplete='vendorEmail'
                     value={values.vendorEmail}
@@ -214,7 +225,7 @@ class EditBusinessDetailForm extends Component {
               <Form.Group inline>
                 <Form.Input
                   label='Listing Agent'
-                  placeholder='Zoran Sarabaca'
+                  placeholder={values.listingAgent}
                   readOnly
                 />
                 <Form.Button primary>
@@ -260,6 +271,7 @@ class EditBusinessDetailForm extends Component {
                 <Form.Field>
                   <Form.Input
                     label='Website'
+                    icon={<Icon name='chrome' inverted circular link onClick={() => (window.open(`${values.businessURL}`))} />}
                     name='businessURL'
                     autoComplete='businessURL'
                     value={values.businessURL}
@@ -456,16 +468,18 @@ const mapPropsToValues = props => {
       vendorPhone3,
       vendorEmail,
       businessSource,
-      sourceNote,
+      sourceNotes,
       description,
       businessNameSecondary,
       businessABN,
       businessURL,
       address1,
       suburb,
+      state,
       postCode,
       data120DayGuarantee,
-      notifyOwner
+      notifyOwner,
+      listingAgent
     } = props.business
 
     const business = {
@@ -478,16 +492,18 @@ const mapPropsToValues = props => {
       vendorPhone3,
       vendorEmail,
       businessSource,
-      sourceNote,
+      sourceNotes,
       description,
       businessNameSecondary,
       businessABN,
       businessURL,
       address1,
       suburb,
+      state,
       postCode,
       data120DayGuarantee,
-      notifyOwner
+      notifyOwner,
+      listingAgent
     }
 
     business.data120DayGuarantee = business.data120DayGuarantee !== ''
@@ -512,7 +528,8 @@ const mapPropsToValues = props => {
     suburb: '',
     postCode: '',
     data120DayGuarantee: false,
-    notifyOwner: true
+    notifyOwner: true,
+    listingAgent: ''
   }
 }
 
@@ -547,6 +564,8 @@ const validationSchema = Yup.object().shape({
   businessABN: Yup.string()
     .min(11, 'ABN require min 11 integers.')
     .max(11, 'ABN require max 11 integers.'),
+  businessURL: Yup.string()
+    .url('You must type a valid URL (http://website.com.au).'),
   address1: Yup.string()
     .max(11, 'Street require max 100 characters.'),
   suburb: Yup.string()
@@ -561,15 +580,22 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 }
 
 const mapStateToProps = state => {
+<<<<<<< HEAD
   return {
     isLoading: state.business.update.isLoading,
     isLoadingGet: state.business.isLoadingGetBusiness,
     isUpdated: state.business.update.isUpdated
   }
+=======
+  isLoading: state.business.update.isLoading
+  isLoading: state.business.update.isLoading,
+  isLoadingGet: state.business.isLoadingGetBusiness,
+  isUpdated: state.business.update.isUpdated
+>>>>>>> b4fcf8c97150da79f052ddd62408603d393f9bfc
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness }, dispatch)
+  return bindActionCreators({}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
