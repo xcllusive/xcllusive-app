@@ -7,7 +7,7 @@ import { withFormik } from 'formik'
 import { Form, Icon, Grid, Radio, Label } from 'semantic-ui-react'
 import Yup from 'yup'
 
-//  import { updateBusiness } from '../../redux/ducks/business'
+import { updateBusiness } from '../../redux/ducks/business'
 
 const rating = [
   { key: '1', text: 'Verify file rating.txt', value: 'verify' }
@@ -453,7 +453,8 @@ EditBusinessDetailForm.propTypes = {
   handleSubmit: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  isUpdated: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -580,22 +581,15 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 }
 
 const mapStateToProps = state => {
-<<<<<<< HEAD
   return {
     isLoading: state.business.update.isLoading,
     isLoadingGet: state.business.isLoadingGetBusiness,
     isUpdated: state.business.update.isUpdated
   }
-=======
-  isLoading: state.business.update.isLoading
-  isLoading: state.business.update.isLoading,
-  isLoadingGet: state.business.isLoadingGetBusiness,
-  isUpdated: state.business.update.isUpdated
->>>>>>> b4fcf8c97150da79f052ddd62408603d393f9bfc
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch)
+  return bindActionCreators({ updateBusiness }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { get, getAll, create, update,
   createBusinessSource as createBusinessSourceAPI,
   createBusinessRating as createBusinessRatingAPI,
@@ -6,10 +5,7 @@ import { get, getAll, create, update,
   createBusinessIndustry as createBusinessIndustryAPI,
   createBusinessType as createBusinessTypeAPI,
   createBusinessOwnersTime as createBusinessOwnersTimeAPI } from '../../services/api/business'
-=======
 import { toast } from 'react-toastify'
-import { get, getAll, create, update } from '../../services/api/business'
->>>>>>> 047e9cc1cdfeb81366c6fb2b85d7349c30e5fa24
 
 // Action Types
 

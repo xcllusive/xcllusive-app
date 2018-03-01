@@ -470,7 +470,11 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.createUser(values)
+  if (props.user && props.user.id) {
+    props.updateUser(values)
+  } else {
+    props.createUser(values)
+  }
   setSubmitting(false)
 }
 
