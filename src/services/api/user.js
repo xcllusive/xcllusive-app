@@ -22,3 +22,11 @@ export const create = user => {
     data: user
   })
 }
+
+export const update = user => {
+  return request({
+    method: 'put',
+    url: '/user',
+    data: user
+  })
+}

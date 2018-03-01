@@ -8,7 +8,7 @@ import { Modal, Form, Label, Checkbox, Icon, Button } from 'semantic-ui-react'
 import styled from 'styled-components'
 import Yup from 'yup'
 
-import { createUser } from '../../redux/ducks/user'
+import { createUser, updateUser } from '../../redux/ducks/user'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em`
@@ -391,6 +391,7 @@ const mapPropsToValues = props => {
   if (props && props.user.id) {
     const roles = JSON.parse(props.user.roles)
     return {
+      id: props.user.id,
       email: props.user.email,
       password: false,
       firstName: props.user.firstName,
@@ -485,7 +486,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ createUser }, dispatch)
+  return bindActionCreators({ createUser, updateUser }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(

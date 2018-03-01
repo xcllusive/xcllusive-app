@@ -1,7 +1,9 @@
 import {
   getAll,
-  create
+  create,
+  update
 } from '../../services/api/user'
+import { toast } from 'react-toastify'
 
 // Action Types
 
@@ -10,7 +12,10 @@ export const Types = {
   GET_USER_SUCCESS: 'GET_USER_SUCCESS',
   GET_USER_FAILURE: 'GET_USER_FAILURE',
   CREATE_USER_LOADING: 'CREATE_USER_LOADING',
-  CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS'
+  CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS',
+  UPDATE_USER_LOADING: 'UPDATE_USER_LOADING',
+  UPDATE_USER_SUCCESS: 'UPDATE_USER_SUCCESS',
+  UPDATE_USER_FAILURE: 'UPDATE_USER_FAILURE'
 }
 
 // Reducer
@@ -18,7 +23,12 @@ export const Types = {
 const initialState = {
   error: null,
   isLoading: false,
-  users: []
+  users: [],
+  update: {
+    isLoading: false,
+    isUpdated: null,
+    error: null
+  }
 }
 
 export default function reducer (state = initialState, action) {
@@ -52,6 +62,33 @@ export default function reducer (state = initialState, action) {
         userCreated: true,
         isLoading: false,
         error: null
+      }
+    case Types.UPDATE_USER_LOADING:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: action.payload
+        }
+      }
+    case Types.UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: action.payload
+        }
+      }
+    case Types.UPDATE_USER_FAILURE:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
       }
     default:
       return state
@@ -88,6 +125,24 @@ export const createUser = user => async dispatch => {
     dispatch({type: Types.CREATE_USER_SUCCESS})
   } catch (error) {
     dispatch(userError(error))
+  }
+}
+
+export const updateUser = user => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_USER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await update(user)
+    dispatch({type: Types.UPDATE_USER_SUCCESS})
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_USER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
   }
 }
 
