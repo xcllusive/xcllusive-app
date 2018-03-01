@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
@@ -9,38 +10,42 @@ import Yup from 'yup'
 
 import { createUser } from '../../redux/ducks/user'
 
-const dataRegion = [
-  { key: 1, text: 'Sydney Office', value: 'Sydney Office' },
-  { key: 2, text: 'Melbourne Office', value: 'Melbourne Office' },
-  { key: 3, text: 'Gosford Office', value: 'Gosford Office' },
-  { key: 4, text: 'Cowra Office', value: 'Cowra Office' },
-  { key: 5, text: 'Camberra Office', value: 'Camberra Office' }
-]
-
-const listingAgent = [
-  { key: 1, text: 'Yes', value: 1 },
-  { key: 2, text: 'No', value: 0 }
-]
-
-const userType = [
-  { key: 1, text: 'Admin', value: 'Admin' },
-  { key: 2, text: 'Staff', value: 'Staff' },
-  { key: 3, text: 'Introducer', value: 'Introducer' }
-]
-
-const state = [
-  { key: 1, text: 'NSW', value: 'NSW' },
-  { key: 2, text: 'QLD', value: 'QLD' },
-  { key: 3, text: 'SA', value: 'SA' },
-  { key: 4, text: 'TAS', value: 'TAS' },
-  { key: 5, text: 'VIC', value: 'VIC' },
-  { key: 6, text: 'WA', value: 'WA' }
-]
-
 const CheckboxFormatted = styled.div`
   padding-right: 1em`
 
 class NewUserForm extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      formOptions: {
+        dataRegion: [
+          { key: 1, text: 'Sydney Office', value: 'Sydney Office' },
+          { key: 2, text: 'Melbourne Office', value: 'Melbourne Office' },
+          { key: 3, text: 'Gosford Office', value: 'Gosford Office' },
+          { key: 4, text: 'Cowra Office', value: 'Cowra Office' },
+          { key: 5, text: 'Camberra Office', value: 'Camberra Office' }
+        ],
+        listingAgent: [
+          { key: 1, text: 'Yes', value: 1 },
+          { key: 2, text: 'No', value: 0 }
+        ],
+        userType: [
+          { key: 1, text: 'Admin', value: 'Admin' },
+          { key: 2, text: 'Staff', value: 'Staff' },
+          { key: 3, text: 'Introducer', value: 'Introducer' }
+        ],
+        state: [
+          { key: 1, text: 'NSW', value: 'NSW' },
+          { key: 2, text: 'QLD', value: 'QLD' },
+          { key: 3, text: 'SA', value: 'SA' },
+          { key: 4, text: 'TAS', value: 'TAS' },
+          { key: 5, text: 'VIC', value: 'VIC' },
+          { key: 6, text: 'WA', value: 'WA' }
+        ]
+      },
+      inputPasswordShow: true
+    }
+  }
   componentWillReceiveProps (nextProps) {
     if (this.props.userCreated !== nextProps.userCreated) this.props.resetForm()
   }
@@ -53,7 +58,28 @@ class NewUserForm extends Component {
     this.props.setFieldValue(name, value)
   }
 
+  _canChangePassword = () => {
+    this.setState(prevState => ({
+      inputPasswordShow: !prevState.inputPasswordShow
+    }),
+    () => {
+      if (this.state.inputPasswordShow) {
+        this.props.setFieldValue('password', false)
+      } else {
+        this.props.setFieldValue('password', '')
+      }
+    }
+    )
+  }
+
   render () {
+    const {
+      dataRegion,
+      listingAgent,
+      userType,
+      state
+    } = this.state.formOptions
+
     const {
       values,
       touched,
@@ -67,12 +93,13 @@ class NewUserForm extends Component {
       modalOpen,
       toggleModal
     } = this.props
+    console.log(values)
     return (
       <Modal
         dimmer={'blurring'}
         open={modalOpen}
       >
-        <Modal.Header align='center'>New User</Modal.Header>
+        <Modal.Header align='center'>{ (this.props.user && this.props.user.id) ? 'Edit User' : 'New User' }</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group widths='equal'>
@@ -90,7 +117,7 @@ class NewUserForm extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  required
+                  action={(this.props.user && this.props.user.id !== '')}
                   type='password'
                   label='Password'
                   name='password'
@@ -98,9 +125,27 @@ class NewUserForm extends Component {
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                />
-                {errors.password && touched.password && <Label basic color='red' pointing content={errors.password} />}
+                >
+                  {
+                    this.props.user && this.props.user.id ? (
+                      <div>
+                        <input
+                          disabled={this.state.inputPasswordShow}
+                          type='password'
+                          name='password'
+                          autoComplete='password'
+                          value={values.password}
+                          onChange={handleChange}
+                          onBlur={handleBlur} />
+                        <Button onClick={this._canChangePassword} content='Change Password' />
+                      </div>
+                    ) : null
+                  }
+                </Form.Input>
+                { errors.password && touched.password && <Label basic color='red' pointing content={errors.password} /> }
               </Form.Field>
+            </Form.Group>
+            <Form.Group widths='equal'>
               <Form.Field>
                 <Form.Input
                   required
@@ -309,7 +354,7 @@ class NewUserForm extends Component {
             onClick={handleSubmit}
           >
             <Icon name='save' />
-            Create User
+            { (this.props.user && this.props.user.id) ? 'Edit User' : 'Create User' }
           </Button>
           <Button
             color='red'
@@ -338,29 +383,57 @@ NewUserForm.propTypes = {
   isLoading: PropTypes.bool,
   modalOpen: PropTypes.bool,
   userCreated: PropTypes.bool,
-  resetForm: PropTypes.func
+  resetForm: PropTypes.func,
+  user: PropTypes.object
 }
 
-const mapPropsToValues = () => ({
-  email: '',
-  password: '',
-  firstName: '',
-  lastName: '',
-  phoneHome: '',
-  phoneWork: '',
-  phoneMobile: '',
-  suburb: '',
-  street: '',
-  postCode: '',
-  listingAgent: '',
-  userType: '',
-  buyerMenu: false,
-  businessMenu: false,
-  preSaleMenu: false,
-  resourcesMenu: false,
-  clientManagerMenu: false,
-  systemSettingsMenu: false
-})
+const mapPropsToValues = props => {
+  if (props && props.user.id) {
+    const roles = JSON.parse(props.user.roles)
+    return {
+      email: props.user.email,
+      password: false,
+      firstName: props.user.firstName,
+      lastName: props.user.lastName,
+      phoneHome: props.user.phoneHome,
+      phoneWork: props.user.phoneWork,
+      phoneMobile: props.user.phoneMobile,
+      suburb: props.user.suburb,
+      street: props.user.street,
+      postCode: props.user.postCode,
+      dataRegion: props.user.dataRegion,
+      listingAgent: props.user.listingAgent,
+      userType: props.user.userType,
+      buyerMenu: _.includes(roles, 'BUYER_MENU'),
+      businessMenu: _.includes(roles, 'BUSINESS_MENU'),
+      preSaleMenu: _.includes(roles, 'PRESALE_MENU'),
+      resourcesMenu: _.includes(roles, 'RESOURCES_MENU'),
+      clientManagerMenu: _.includes(roles, 'CLIENT_MANAGER_MENU'),
+      systemSettingsMenu: _.includes(roles, 'SYSTEM_SETTINGS_MENU')
+    }
+  }
+  return {
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    phoneHome: '',
+    phoneWork: '',
+    phoneMobile: '',
+    suburb: '',
+    street: '',
+    postCode: '',
+    dataRegion: '',
+    listingAgent: '',
+    userType: '',
+    buyerMenu: false,
+    businessMenu: false,
+    preSaleMenu: false,
+    resourcesMenu: false,
+    clientManagerMenu: false,
+    systemSettingsMenu: false
+  }
+}
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()

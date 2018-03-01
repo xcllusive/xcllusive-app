@@ -35,7 +35,7 @@ class UserList extends React.Component {
         introducer: true
       },
       modalOpen: false,
-      user: null
+      user: false
     }
   }
 
@@ -52,14 +52,13 @@ class UserList extends React.Component {
   }
 
   _handleChangeCheckBox = (e, { value }) => {
-    this.setState(
-      {
-        optionsSearch: {
-          ...this.state.optionsSearch,
-          [value]: !this.state.optionsSearch[value]
-        }
-      },
-      () => this.props.getUsers(this.state.optionsSearch, this.state.inputSearch)
+    this.setState({
+      optionsSearch: {
+        ...this.state.optionsSearch,
+        [value]: !this.state.optionsSearch[value]
+      }
+    },
+    () => this.props.getUsers(this.state.optionsSearch, this.state.inputSearch)
     )
   }
 
@@ -83,12 +82,16 @@ class UserList extends React.Component {
   render () {
     return (
       <Wrapper>
-        <NewUserForm
-          modalOpen={this.state.modalOpen}
-          toggleModal={this._toggleModal}
-          userCreated={this.props.userCreated}
-          user={this.state.user}
-        />
+        {
+          this.state.modalOpen ? (
+            <NewUserForm
+              modalOpen={this.state.modalOpen}
+              toggleModal={this._toggleModal}
+              userCreated={this.props.userCreated}
+              user={this.state.user}
+            />
+          ) : null
+        }
         <Grid padded='horizontally'>
           <Grid.Row>
             <Grid.Column width={5}>
@@ -154,7 +157,7 @@ class UserList extends React.Component {
                   this.props.users.map(user => {
                     let roles = user.roles.length > 0 ? JSON.parse(user.roles) : []
                     return (
-                      <Table.Row active onClick={(e) => this._toggleModal(user, e)} key={user.id}>
+                      <Table.Row active onClick={() => this._toggleModal(user)} key={user.id}>
                         <Table.Cell>{ user.id }</Table.Cell>
                         <Table.Cell>{ `${user.firstName} ${user.lastName}` }</Table.Cell>
                         <Table.Cell>{ user.userType }</Table.Cell>
