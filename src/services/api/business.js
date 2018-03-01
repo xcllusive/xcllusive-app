@@ -32,53 +32,8 @@ export const update = business => {
   })
 }
 
-export const createBusinessSource = () => {
+export const createBusinessRegister = () => {
   console.log('test1')
-  /* return request({
-    method: 'post',
-    url: `/business/${business.id}`,
-    data: businessSource
-  }) */
-}
-
-export const createBusinessRating = () => {
-  console.log('test2')
-  /* return request({
-    method: 'post',
-    url: `/business/${business.id}`,
-    data: businessSource
-  }) */
-}
-
-export const createBusinessProduct = () => {
-  console.log('test3')
-  /* return request({
-    method: 'post',
-    url: `/business/${business.id}`,
-    data: businessSource
-  }) */
-}
-
-export const createBusinessIndustry = () => {
-  console.log('test4')
-  /* return request({
-    method: 'post',
-    url: `/business/${business.id}`,
-    data: businessSource
-  }) */
-}
-
-export const createBusinessType = () => {
-  console.log('test5')
-  /* return request({
-    method: 'post',
-    url: `/business/${business.id}`,
-    data: businessSource
-  }) */
-}
-
-export const createBusinessOwnersTime = () => {
-  console.log('test6')
   /* return request({
     method: 'post',
     url: `/business/${business.id}`,

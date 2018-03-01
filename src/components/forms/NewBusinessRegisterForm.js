@@ -6,7 +6,7 @@ import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import Yup from 'yup'
 
-import { createBusinessSource, createBusinessRating, createBusinessProduct, createBusinessIndustry, createBusinessType, createBusinessOwnersTime } from '../../redux/ducks/business'
+import { createBusinessRegister } from '../../redux/ducks/business'
 
 class NewBusinessRegisterForm extends Component {
   constructor (props) {
@@ -143,12 +143,7 @@ const validationSchema = Yup.object().shape({
 
 const handleSubmit = (values, { props, setSubmitting }) => {
   console.log('oii ', values.businessRegister)
-  if (values.businessRegister === 1) props.createBusinessSource(values)
-  if (values.businessRegister === 2) props.createBusinessRating(values)
-  if (values.businessRegister === 3) props.createBusinessProduct(values)
-  if (values.businessRegister === 4) props.createBusinessIndustry(values)
-  if (values.businessRegister === 5) props.createBusinessType(values)
-  if (values.businessRegister === 6) props.createBusinessOwnersTime(values)
+  props.createBusinessRegister(values)
   setSubmitting(false)
 }
 
@@ -160,12 +155,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    createBusinessSource,
-    createBusinessRating,
-    createBusinessProduct,
-    createBusinessIndustry,
-    createBusinessType,
-    createBusinessOwnersTime }, dispatch)
+    createBusinessRegister }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
