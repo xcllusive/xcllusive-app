@@ -21,7 +21,6 @@ const Layout = ({ match, logout, menu }) => (
       <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
         <Header as='h2'>Xcllusive</Header>
       </Menu.Item>
-      <ToastContainer position='bottom-right' />
       {
         menu.map(item => {
           if (item === 'BUYER_MENU') {
@@ -51,6 +50,7 @@ const Layout = ({ match, logout, menu }) => (
         </Menu.Item>
       </Menu.Menu>
     </Menu>
+    <ToastContainer position='bottom-right' />
     <Switch>
       <Route
         exact
