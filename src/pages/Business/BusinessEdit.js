@@ -63,6 +63,12 @@ class BusinessEditPage extends Component {
     this.handleChange = (e, { value }) => this.setState({ value })
   }
 
+  componentWillReceiveProps (nextprops) {
+    if (nextprops.error && this.props.error !== nextprops.error) {
+      this.props.history.goBack()
+    }
+  }
+
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
   }
@@ -204,7 +210,8 @@ BusinessEditPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   getBusiness: PropTypes.func,
-  business: PropTypes.object
+  business: PropTypes.object,
+  error: PropTypes.string
 }
 
 const mapDispatchToProps = dispatch => {
@@ -213,8 +220,9 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.business.isLoadingGetBusiness,
-    business: state.business.business
+    isLoading: state.business.get.isLoading,
+    business: state.business.get.object,
+    error: state.business.get.error
   }
 }
 

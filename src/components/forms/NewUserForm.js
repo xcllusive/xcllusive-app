@@ -87,9 +87,9 @@ class NewUserForm extends Component {
       handleChange,
       handleBlur,
       handleSubmit,
-      isSubmitting,
       isValid,
-      isLoading,
+      createLoading,
+      updateLoading,
       modalOpen,
       toggleModal
     } = this.props
@@ -350,8 +350,8 @@ class NewUserForm extends Component {
         <Modal.Actions>
           <Button
             color='blue'
-            disabled={isSubmitting || !isValid}
-            loading={isLoading}
+            disabled={createLoading || updateLoading || !isValid}
+            loading={createLoading || updateLoading}
             onClick={handleSubmit}
           >
             <Icon name='save' />
@@ -379,9 +379,9 @@ NewUserForm.propTypes = {
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   toggleModal: PropTypes.func,
-  isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  isLoading: PropTypes.bool,
+  createLoading: PropTypes.bool,
+  updateLoading: PropTypes.bool,
   modalOpen: PropTypes.bool,
   userCreated: PropTypes.bool,
   resetForm: PropTypes.func,
@@ -475,16 +475,16 @@ const validationSchema = Yup.object().shape({
 
 const handleSubmit = (values, { props, setSubmitting }) => {
   if (props.user && props.user.id) {
-    props.updateUser(values)
+    props.updateUser(values).then(setSubmitting(false))
   } else {
-    props.createUser(values)
+    props.createUser(values).then(setSubmitting(false))
   }
-  setSubmitting(false)
 }
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.user.isLoading
+    createLoading: state.user.create.isLoading,
+    updateLoading: state.user.update.isLoading
   }
 }
 

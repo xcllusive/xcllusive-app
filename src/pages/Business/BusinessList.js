@@ -20,7 +20,7 @@ class BusinessListPage extends Component {
   }
 
   async componentWillReceiveProps (nextProps) {
-    if (this.props.isCreatedBusiness !== nextProps.isCreatedBusiness) {
+    if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
       await this._toggleModal({})
       this.props.getBusinesses()
     }
@@ -57,6 +57,9 @@ class BusinessListPage extends Component {
 
     return (
       <Wrapper>
+        <Dimmer inverted active={isLoading}>
+          <Loader inverted />
+        </Dimmer>
         <NewBusinessForm
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
@@ -109,9 +112,6 @@ class BusinessListPage extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Dimmer inverted active={isLoading}>
-              <Loader inverted />
-            </Dimmer>
             <Header>FOR SALE</Header>
             <Table color='blue' celled inverted selectable>
               <Table.Header>
@@ -156,11 +156,11 @@ class BusinessListPage extends Component {
 
 BusinessListPage.propTypes = {
   businesses: PropTypes.array,
-  isCreatedBusiness: PropTypes.bool,
+  isCreated: PropTypes.bool,
+  isLoading: PropTypes.bool,
   getBusinesses: PropTypes.func,
   history: PropTypes.object,
-  match: PropTypes.object,
-  isLoading: PropTypes.bool
+  match: PropTypes.object
 }
 
 const mapDispatchToProps = dispatch => {
@@ -169,9 +169,9 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    isCreatedBusiness: state.business.isCreatedBusiness,
-    isLoading: state.business.isLoadingGetBusinesses,
-    businesses: state.business.businesses
+    isCreated: state.business.create.isCreated,
+    isLoading: state.business.getAll.isLoading,
+    businesses: state.business.getAll.array
   }
 }
 

@@ -346,7 +346,7 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.business.isLoading
+    isLoading: state.business.create.isLoading
   }
 }
 

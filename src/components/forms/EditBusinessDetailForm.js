@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import { withFormik } from 'formik'
-import { Form, Icon, Grid, Radio, Label } from 'semantic-ui-react'
+import { Form, Icon, Grid, Radio, Label, Dimmer, Loader } from 'semantic-ui-react'
 import Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness } from '../../redux/ducks/business'
@@ -68,20 +68,13 @@ class EditBusinessDetailForm extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (this.props.isUpdated !== nextProps.isUpdated) {
-      alert(nextProps.isUpdated)
-    }
-  }
-
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _toggleModal = business => {
+  _toggleModal = () => {
     this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen,
-      business
+      modalOpen: !prevState.modalOpen
     }))
   }
 
@@ -92,7 +85,11 @@ class EditBusinessDetailForm extends Component {
       handleBlur,
       handleSubmit,
       errors,
-      touched
+      touched,
+      isLoadingGet,
+      isLoadingUpdate,
+      isValid,
+      isSubmitting
     } = this.props
 
     const {
@@ -102,10 +99,13 @@ class EditBusinessDetailForm extends Component {
     } = this.state
     return (
       <Wrapper>
+        <Dimmer inverted active={isLoadingGet}>
+          <Loader inverted />
+        </Dimmer>
         <ReassignBusinessForm
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
-          business={this.state.business}
+          business={this.props.business}
         />
         <Grid celled divided='vertically'>
           <Grid.Row columns={2}>
@@ -189,7 +189,7 @@ class EditBusinessDetailForm extends Component {
                     <Form.Input
                       required
                       label='Email'
-                      icon={<Icon name='mail' inverted circular link onClick={() => (window.location.href = `mailto:${values.vendorEmail}`)} />}
+                      icon={<Icon name='mail' inverted circular link onClick={() => window.open(`mailto:${values.vendorEmail}`, '_blank')} />}
                       name='vendorEmail'
                       autoComplete='vendorEmail'
                       value={values.vendorEmail}
@@ -284,7 +284,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Field>
                     <Form.Input
                       label='Website'
-                      icon={<Icon name='chrome' inverted circular link onClick={() => (window.open(`${values.businessURL}`))} />}
+                      icon={<Icon name='chrome' inverted circular link onClick={() => (window.open(`${values.businessURL}`, '_blank'))} />}
                       name='businessURL'
                       autoComplete='businessURL'
                       value={values.businessURL}
@@ -446,9 +446,14 @@ class EditBusinessDetailForm extends Component {
                     />
                     {errors.stage && touched.stage && <Label basic color='red' pointing content={errors.stage} />}
                   </Form.Field>
-                  <Form.Button compact color='red' onClick={handleSubmit}>
+                  <Form.Button
+                    disabled={isSubmitting || !isValid}
+                    loading={isLoadingUpdate}
+                    color='red'
+                    onClick={handleSubmit}
+                  >
                     <Icon name='save' />
-                    SAVE
+                    Save
                   </Form.Button>
                 </Form.Group>
               </Form>
@@ -468,7 +473,11 @@ EditBusinessDetailForm.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isUpdated: PropTypes.bool
+  isLoadingGet: PropTypes.bool,
+  isLoadingUpdate: PropTypes.bool,
+  isSubmitting: PropTypes.bool,
+  isValid: PropTypes.bool,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -596,9 +605,8 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.business.update.isLoading,
-    isLoadingGet: state.business.isLoadingGetBusiness,
-    isUpdated: state.business.update.isUpdated
+    isLoadingGet: state.business.get.isLoading,
+    isLoadingUpdate: state.business.update.isLoading
   }
 }
 

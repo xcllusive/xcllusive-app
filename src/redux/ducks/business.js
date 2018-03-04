@@ -31,13 +31,21 @@ export const Types = {
 // Reducer
 
 const initialState = {
-  error: null,
-  business: {},
-  businesses: [],
-  isCreatedBusiness: false,
-  isLoadingGetBusiness: false,
-  isLoadingGetBusinesses: false,
-  isLoadingCreateBusiness: false,
+  getAll: {
+    isLoading: false,
+    array: [],
+    error: null
+  },
+  get: {
+    isLoading: false,
+    object: {},
+    error: null
+  },
+  create: {
+    isLoading: false,
+    isCreated: false,
+    error: null
+  },
   update: {
     isLoading: false,
     isUpdated: false,
@@ -50,61 +58,96 @@ export default function reducer (state = initialState, action) {
     case Types.CREATE_BUSINESS_LOADING:
       return {
         ...state,
-        isLoadingCreateBusiness: action.payload
+        create: {
+          ...state.create,
+          isLoading: action.payload,
+          error: null
+        }
       }
     case Types.CREATE_BUSINESS_SUCCESS:
       return {
         ...state,
-        isLoadingCreateBusiness: false,
-        error: false,
-        isCreatedBusiness: true
+        create: {
+          ...state.create,
+          isLoading: false,
+          isCreated: true,
+          error: null
+        }
       }
     case Types.CREATE_BUSINESS_FAILURE:
       return {
         ...state,
-        isLoadingCreateBusiness: false,
-        error: action.payload,
-        isCreatedBusiness: false
+        create: {
+          ...state.create,
+          isLoading: false,
+          isCreated: false,
+          error: action.payload
+        }
       }
     case Types.GET_BUSINESSES_LOADING:
       return {
         ...state,
-        isLoadingGetBusinesses: action.payload
+        getAll: {
+          ...state.getAll,
+          isLoading: action.payload,
+          error: null
+        }
       }
     case Types.GET_BUSINESSES_SUCCESS:
       return {
         ...state,
-        isLoadingGetBusinesses: false,
-        businesses: action.payload,
-        error: null
+        getAll: {
+          ...state.getAll,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
       }
     case Types.GET_BUSINESSES_FAILURE:
       return {
         ...state,
-        isLoadingGetBusinesses: false,
-        error: action.payload
+        getAll: {
+          ...state.getAll,
+          isLoading: false,
+          error: action.payload
+        }
       }
     case Types.GET_BUSINESS_LOADING:
       return {
         ...state,
-        isLoadingGetBusiness: action.payload
+        get: {
+          ...state.get,
+          object: {},
+          isLoading: action.payload,
+          error: null
+        }
       }
     case Types.GET_BUSINESS_SUCCESS:
       return {
         ...state,
-        business: action.payload
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
       }
     case Types.GET_BUSINESS_FAILURE:
       return {
         ...state,
-        error: action.payload
+        get: {
+          ...state.get,
+          isLoading: false,
+          error: action.payload
+        }
       }
     case Types.UPDATE_BUSINESS_LOADING:
       return {
         ...state,
         update: {
           ...state.update,
-          isLoading: action.payload
+          isLoading: action.payload,
+          error: null
         }
       }
     case Types.UPDATE_BUSINESS_SUCCESS:
@@ -174,6 +217,7 @@ export const getBusiness = id => async dispatch => {
       type: Types.GET_BUSINESS_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }
 
@@ -193,6 +237,7 @@ export const getBusinesses = (search = false) => async dispatch => {
       type: Types.GET_BUSINESSES_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }
 
