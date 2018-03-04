@@ -213,6 +213,7 @@ class NewUserForm extends Component {
                   name='state'
                   options={state}
                   value={values.state}
+                  onChange={this._handleSelectChange}
                 />
               </Form.Field>
               <Form.Field>
@@ -399,6 +400,7 @@ const mapPropsToValues = props => {
       phoneHome: props.user.phoneHome,
       phoneWork: props.user.phoneWork,
       phoneMobile: props.user.phoneMobile,
+      state: props.user.state,
       suburb: props.user.suburb,
       street: props.user.street,
       postCode: props.user.postCode,
@@ -421,6 +423,7 @@ const mapPropsToValues = props => {
     phoneHome: '',
     phoneWork: '',
     phoneMobile: '',
+    state: '',
     suburb: '',
     street: '',
     postCode: '',

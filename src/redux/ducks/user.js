@@ -21,12 +21,19 @@ export const Types = {
 // Reducer
 
 const initialState = {
-  error: null,
-  isLoading: false,
-  users: [],
+  get: {
+    isLoading: false,
+    array: [],
+    error: null
+  },
+  create: {
+    isLoading: false,
+    isCreated: false,
+    error: null
+  },
   update: {
     isLoading: false,
-    isUpdated: null,
+    isUpdated: false,
     error: null
   }
 }
@@ -36,39 +43,66 @@ export default function reducer (state = initialState, action) {
     case Types.GET_USER_LOADING:
       return {
         ...state,
-        isLoading: action.payload
+        get: {
+          ...state.get,
+          isLoading: action.payload
+        }
       }
     case Types.GET_USER_SUCCESS:
       return {
         ...state,
-        isLoading: false,
-        users: action.payload,
-        error: null
+        get: {
+          ...state.get,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
       }
     case Types.GET_USER_FAILURE:
       return {
         ...state,
-        isLoading: false,
-        error: action.payload
+        get: {
+          ...state.get,
+          isLoading: false,
+          error: action.payload
+        }
       }
     case Types.CREATE_USER_LOADING:
       return {
         ...state,
-        isLoading: action.payload
+        create: {
+          ...state.create,
+          isLoading: action.payload,
+          isCreated: false
+        }
       }
     case Types.CREATE_USER_SUCCESS:
       return {
         ...state,
-        userCreated: true,
-        isLoading: false,
-        error: null
+        create: {
+          ...state.create,
+          isLoading: false,
+          isCreated: true,
+          error: null
+        }
+      }
+    case Types.CREATE_USER_FAILURE:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          isLoading: false,
+          isCreated: false,
+          error: action.payload
+        }
       }
     case Types.UPDATE_USER_LOADING:
       return {
         ...state,
         update: {
           ...state.update,
-          isLoading: action.payload
+          isLoading: action.payload,
+          isUpdated: false
         }
       }
     case Types.UPDATE_USER_SUCCESS:
@@ -77,7 +111,7 @@ export default function reducer (state = initialState, action) {
         update: {
           ...state.update,
           isLoading: false,
-          isUpdated: action.payload
+          isUpdated: true
         }
       }
     case Types.UPDATE_USER_FAILURE:
@@ -134,9 +168,9 @@ export const updateUser = user => async dispatch => {
     payload: true
   })
   try {
-    const response = await update(user)
+    await update(user)
     dispatch({type: Types.UPDATE_USER_SUCCESS})
-    toast.success(response.message)
+    toast.success('User updated with success')
   } catch (error) {
     dispatch({
       type: Types.UPDATE_USER_FAILURE,

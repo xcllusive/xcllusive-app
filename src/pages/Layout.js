@@ -17,11 +17,11 @@ import ClientManagerList from './ClientManager/ClientManagerList'
 
 const Layout = ({ match, logout, menu }) => (
   <div>
-    <ToastContainer position='bottom-right' />
-    <Menu pointing stackable secondary attached='top' color={'blue'}>
+    <Menu pointing stackable secondary attached='top' color='blue'>
       <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
         <Header as='h2'>Xcllusive</Header>
       </Menu.Item>
+      <ToastContainer position='bottom-right' />
       {
         menu.map(item => {
           if (item === 'BUYER_MENU') {

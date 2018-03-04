@@ -40,7 +40,11 @@ class UserList extends React.Component {
   }
 
   async componentWillReceiveProps (nextProps) {
-    if (this.props.userCreated !== nextProps.userCreated || this.props.userUpdated !== nextProps.userUpdated) {
+    if (this.props.userCreated !== nextProps.userCreated && nextProps.userCreated) {
+      await this._toggleModal({})
+      this.props.getUsers()
+    }
+    if (this.props.userUpdated !== nextProps.userUpdated && nextProps.userUpdated) {
       await this._toggleModal({})
       this.props.getUsers()
     }
@@ -191,10 +195,10 @@ UserList.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.user.isLoading,
-    users: state.user.users,
-    error: state.user.error,
-    userCreated: state.user.userCreated,
+    isLoading: state.user.get.isLoading,
+    users: state.user.get.array,
+    error: state.user.get.error,
+    userCreated: state.user.create.isCreated,
     userUpdated: state.user.update.isUpdated
   }
 }
