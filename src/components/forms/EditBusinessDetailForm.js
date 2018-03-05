@@ -353,14 +353,14 @@ class EditBusinessDetailForm extends Component {
                     control={Radio}
                     label='No'
                     name='data120DayGuarantee'
-                    checked={!values.data120DayGuarantee}
                     onChange={this._handleChangeCheckBox}
+                    checked={!values.data120DayGuarantee}
                   />
                   <Form.Checkbox
                     label='Notify Owner for IM request'
                     name='notifyOwner'
-                    checked={values.notifyOwner}
                     onChange={this._handleChangeCheckBox}
+                    checked={values.notifyOwner}
                   />
                 </Form.Group>
                 <Form.Group widths='equal'>
@@ -529,9 +529,8 @@ const mapPropsToValues = props => {
       notifyOwner,
       listingAgent
     }
-
-    business.data120DayGuarantee = business.data120DayGuarantee !== ''
-    business.notifyOwner = business.data120DayGuarantee !== ''
+    business.data120DayGuarantee = business.data120DayGuarantee !== false
+    business.notifyOwner = business.notifyOwner !== ''
     return _.mapValues(business, value => value == null ? '' : value)
   }
   return {

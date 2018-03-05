@@ -24,6 +24,10 @@ class NewBusinessRegisterForm extends Component {
     }
   }
 
+  /* componentDidMount () {
+    this.props.getBusinessRegister(values.businessRegister)
+  } */
+
   componentWillReceiveProps (nextProps) {
   }
 

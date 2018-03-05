@@ -44,3 +44,10 @@ export const createBusinessRegister = () => {
 export const reassignBusiness = () => {
   console.log('dale')
 }
+
+export const getBusinessRegister = id => {
+  return request({
+    url: '/business-register',
+    params: {businessRegister: id}
+  })
+}
