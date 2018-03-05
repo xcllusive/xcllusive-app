@@ -44,6 +44,7 @@ const initialState = {
     isLoading: false,
     object: {},
     sourceOptions: [],
+    industryOptions: [],
     error: null
   },
   create: {
@@ -135,6 +136,7 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           object: action.payload.business,
           sourceOptions: action.payload.sourceList,
+          industryOptions: action.payload.industryList,
           error: null
         }
       }

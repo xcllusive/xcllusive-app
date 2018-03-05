@@ -23,10 +23,6 @@ const businessCat = [
   { key: 'F', text: 'Verify file industry', value: 'verify' }
 ]
 
-const industry = [
-  { key: 'F', text: 'Verify file industry', value: 'verify' }
-]
-
 const businessType = [
   { key: 'T', text: 'Verify file businessType', value: 'verify' }
 ]
@@ -87,7 +83,8 @@ class EditBusinessDetailForm extends Component {
       isLoadingUpdate,
       isValid,
       isSubmitting,
-      sourceOptions
+      sourceOptions,
+      industryOptions
     } = this.props
 
     const {
@@ -401,7 +398,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Field>
                     <Form.Select
                       label='Industry'
-                      options={industry}
+                      options={industryOptions}
                       name='industry'
                       autoComplete='industry'
                       value={values.industry}
@@ -476,7 +473,8 @@ EditBusinessDetailForm.propTypes = {
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   business: PropTypes.object,
-  sourceOptions: PropTypes.array
+  sourceOptions: PropTypes.array,
+  industryOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -605,7 +603,8 @@ const mapStateToProps = state => {
   return {
     isLoadingGet: state.business.get.isLoading,
     isLoadingUpdate: state.business.update.isLoading,
-    sourceOptions: state.business.get.sourceOptions
+    sourceOptions: state.business.get.sourceOptions,
+    industryOptions: state.business.get.industryOptions
   }
 }
 
