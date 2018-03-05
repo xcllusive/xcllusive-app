@@ -32,13 +32,12 @@ export const update = business => {
   })
 }
 
-export const createBusinessRegister = () => {
-  console.log('test1')
-  /* return request({
+export const createBusinessRegister = businessRegister => {
+  return request({
     method: 'post',
-    url: `/business/${business.id}`,
-    data: businessSource
-  }) */
+    url: '/business-register',
+    data: businessRegister
+  })
 }
 
 export const reassignBusiness = () => {

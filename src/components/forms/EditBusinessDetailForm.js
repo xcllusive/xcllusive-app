@@ -39,9 +39,6 @@ class EditBusinessDetailForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      sourceOptions: [
-        { key: 1, text: 'Verify file sourceOptions', value: 'Google' }
-      ],
       state: [
         { key: '1', text: 'ACT', value: 'ACT' },
         { key: '2', text: 'NT', value: 'NT' },
@@ -89,14 +86,15 @@ class EditBusinessDetailForm extends Component {
       isLoadingGet,
       isLoadingUpdate,
       isValid,
-      isSubmitting
+      isSubmitting,
+      sourceOptions
     } = this.props
 
     const {
-      sourceOptions,
       state,
       stage
     } = this.state
+    console.log(errors)
     return (
       <Wrapper>
         <Dimmer inverted active={isLoadingGet}>
@@ -477,7 +475,8 @@ EditBusinessDetailForm.propTypes = {
   isLoadingUpdate: PropTypes.bool,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  business: PropTypes.object
+  business: PropTypes.object,
+  sourceOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -605,7 +604,8 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 const mapStateToProps = state => {
   return {
     isLoadingGet: state.business.get.isLoading,
-    isLoadingUpdate: state.business.update.isLoading
+    isLoadingUpdate: state.business.update.isLoading,
+    sourceOptions: state.business.get.sourceOptions
   }
 }
 
