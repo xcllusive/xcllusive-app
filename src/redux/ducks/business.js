@@ -39,6 +39,7 @@ const initialState = {
   get: {
     isLoading: false,
     object: {},
+    sourceOptions: [],
     error: null
   },
   create: {
@@ -128,7 +129,8 @@ export default function reducer (state = initialState, action) {
         get: {
           ...state.get,
           isLoading: false,
-          object: action.payload,
+          object: action.payload.business,
+          sourceOptions: action.payload.sourceList,
           error: null
         }
       }
