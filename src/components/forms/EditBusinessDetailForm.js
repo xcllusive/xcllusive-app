@@ -342,24 +342,24 @@ class EditBusinessDetailForm extends Component {
                     <Form.Select
                       label='Rating'
                       options={ratingOptions}
-                      name='rating'
-                      autoComplete='rating'
-                      value={values.rating}
+                      name='businessRating'
+                      autoComplete='businessRating'
+                      value={values.businessRating}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.rating && touched.rating && <Label basic color='red' pointing content={errors.rating} />}
+                    {errors.businessRating && touched.businessRating && <Label basic color='red' pointing content={errors.businessRating} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
                       required
                       label='Product'
                       options={productOptions}
-                      name='businessCat'
-                      autoComplete='businessCat'
-                      value={values.businessCat}
+                      name='businessProduct'
+                      autoComplete='businessProduct'
+                      value={values.businessProduct}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.businessCat && touched.businessCat && <Label basic color='red' pointing content={errors.businessCat} />}
+                    {errors.businessProduct && touched.businessProduct && <Label basic color='red' pointing content={errors.businessProduct} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -378,12 +378,12 @@ class EditBusinessDetailForm extends Component {
                     <Form.Select
                       label='Industry'
                       options={industryOptions}
-                      name='industry'
-                      autoComplete='industry'
-                      value={values.industry}
+                      name='businessIndustry'
+                      autoComplete='businessIndustry'
+                      value={values.businessIndustry}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.industry && touched.industry && <Label basic color='red' pointing content={errors.industry} />}
+                    {errors.businessIndustry && touched.businessIndustry && <Label basic color='red' pointing content={errors.businessIndustry} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -400,12 +400,12 @@ class EditBusinessDetailForm extends Component {
                     <Form.Select
                       label='Owner`s time'
                       options={ownersTimeOptions}
-                      name='ownersTime'
-                      autoComplete='ownersTime'
-                      value={values.ownersTime}
+                      name='businessOwnersTime'
+                      autoComplete='businessOwnersTime'
+                      value={values.businessOwnersTime}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.ownersTime && touched.ownersTime && <Label basic color='red' pointing content={errors.ownersTime} />}
+                    {errors.businessOwnersTime && touched.businessOwnersTime && <Label basic color='red' pointing content={errors.businessOwnersTime} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
@@ -472,7 +472,6 @@ const mapPropsToValues = props => {
       vendorPhone2,
       vendorPhone3,
       vendorEmail,
-      businessSource,
       sourceNotes,
       description,
       businessNameSecondary,
@@ -484,7 +483,13 @@ const mapPropsToValues = props => {
       postCode,
       data120DayGuarantee,
       notifyOwner,
-      listingAgent
+      listingAgent,
+      sourceId,
+      ratingId,
+      productId,
+      industryId,
+      typeId,
+      ownersTimeId
     } = props.business
 
     const business = {
@@ -496,7 +501,6 @@ const mapPropsToValues = props => {
       vendorPhone2,
       vendorPhone3,
       vendorEmail,
-      businessSource,
       sourceNotes,
       description,
       businessNameSecondary,
@@ -508,7 +512,13 @@ const mapPropsToValues = props => {
       postCode,
       data120DayGuarantee,
       notifyOwner,
-      listingAgent
+      listingAgent,
+      businessSource: sourceId,
+      businessRating: ratingId,
+      businessProduct: productId,
+      businessIndustry: industryId,
+      businessType: typeId,
+      businessOwnersTime: ownersTimeId
     }
     business.data120DayGuarantee = business.data120DayGuarantee !== false
     business.notifyOwner = business.notifyOwner !== ''
@@ -522,7 +532,6 @@ const mapPropsToValues = props => {
     vendorPhone2: '',
     vendorPhone3: '',
     vendorEmail: '',
-    businessSource: '',
     sourceNotes: '',
     description: '',
     businessNameSecondary: '',
@@ -533,7 +542,13 @@ const mapPropsToValues = props => {
     postCode: '',
     data120DayGuarantee: false,
     notifyOwner: true,
-    listingAgent: ''
+    listingAgent: '',
+    businessSource: '',
+    businessRating: '',
+    businessProduct: '',
+    businessIndustry: '',
+    businessType: '',
+    businessOwnersTime: ''
   }
 }
 

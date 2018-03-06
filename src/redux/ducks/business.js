@@ -144,7 +144,7 @@ export default function reducer (state = initialState, action) {
           productOptions: action.payload.productList,
           industryOptions: action.payload.industryList,
           typeOptions: action.payload.typeList,
-          ownersTimeOptions: action.payload.ownersTimeOptions,
+          ownersTimeOptions: action.payload.ownersTimeList,
           error: null
         }
       }
