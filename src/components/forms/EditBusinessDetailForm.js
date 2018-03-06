@@ -10,25 +10,9 @@ import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness } from '../../redux/ducks/business'
 import ReassignBusinessForm from './ReassignBusinessForm'
 
-const rating = [
-  { key: '1', text: 'Verify file rating.txt', value: 'verify' }
-]
-
 const staffAccountName = [
   { key: 'Z', text: 'Zoran', value: 'Zoran' },
   { key: 'C', text: 'Cayo', value: 'Cayo' }
-]
-
-const businessCat = [
-  { key: 'F', text: 'Verify file industry', value: 'verify' }
-]
-
-const businessType = [
-  { key: 'T', text: 'Verify file businessType', value: 'verify' }
-]
-
-const ownersTime = [
-  { key: '1', text: 'verify file ownersTime', value: 'verify' }
 ]
 
 class EditBusinessDetailForm extends Component {
@@ -44,15 +28,6 @@ class EditBusinessDetailForm extends Component {
         { key: '6', text: 'TAS', value: 'TAS' },
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
-      ],
-      stage: [
-        { key: '1', text: 'Potential Listing', value: '1' },
-        { key: '2', text: 'Meeting', value: '2' },
-        { key: '3', text: 'Data Gathering', value: '3' },
-        { key: '4', text: 'Appraisal', value: '4' },
-        { key: '5', text: 'Closing Stage', value: '5' },
-        { key: '6', text: 'SALES MEMORANDUM', value: '6' },
-        { key: '7', text: 'LOST', value: '7' }
       ]
     }
   }
@@ -84,12 +59,16 @@ class EditBusinessDetailForm extends Component {
       isValid,
       isSubmitting,
       sourceOptions,
-      industryOptions
+      ratingOptions,
+      productOptions,
+      industryOptions,
+      typeOptions,
+      ownersTimeOptions,
+      stageOptions
     } = this.props
 
     const {
-      state,
-      stage
+      state
     } = this.state
     console.log(errors)
     return (
@@ -362,7 +341,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Field>
                     <Form.Select
                       label='Rating'
-                      options={rating}
+                      options={ratingOptions}
                       name='rating'
                       autoComplete='rating'
                       value={values.rating}
@@ -374,7 +353,7 @@ class EditBusinessDetailForm extends Component {
                     <Form.Select
                       required
                       label='Product'
-                      options={businessCat}
+                      options={productOptions}
                       name='businessCat'
                       autoComplete='businessCat'
                       value={values.businessCat}
@@ -409,7 +388,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Field>
                     <Form.Select
                       label='Business Type'
-                      options={businessType}
+                      options={typeOptions}
                       name='businessType'
                       autoComplete='businessType'
                       value={values.businessType}
@@ -420,7 +399,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Field>
                     <Form.Select
                       label='Owner`s time'
-                      options={ownersTime}
+                      options={ownersTimeOptions}
                       name='ownersTime'
                       autoComplete='ownersTime'
                       value={values.ownersTime}
@@ -433,7 +412,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Field>
                     <Form.Select
                       label='Business Stage'
-                      options={stage}
+                      options={stageOptions}
                       name='stage'
                       autoComplete='stage'
                       value={values.stage}
@@ -474,7 +453,12 @@ EditBusinessDetailForm.propTypes = {
   isValid: PropTypes.bool,
   business: PropTypes.object,
   sourceOptions: PropTypes.array,
-  industryOptions: PropTypes.array
+  productOptions: PropTypes.array,
+  ratingOptions: PropTypes.array,
+  industryOptions: PropTypes.array,
+  typeOptions: PropTypes.array,
+  ownersTimeOptions: PropTypes.array,
+  stageOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -604,7 +588,12 @@ const mapStateToProps = state => {
     isLoadingGet: state.business.get.isLoading,
     isLoadingUpdate: state.business.update.isLoading,
     sourceOptions: state.business.get.sourceOptions,
-    industryOptions: state.business.get.industryOptions
+    ratingOptions: state.business.get.ratingOptions,
+    productOptions: state.business.get.productOptions,
+    industryOptions: state.business.get.industryOptions,
+    typeOptions: state.business.get.typeOptions,
+    ownersTimeOptions: state.business.get.ownersTimeOptions,
+    stageOptions: state.business.get.stageOptions
   }
 }
 

@@ -44,7 +44,11 @@ const initialState = {
     isLoading: false,
     object: {},
     sourceOptions: [],
+    ratingOptions: [],
+    productOptions: [],
     industryOptions: [],
+    typeOptions: [],
+    ownersTimeOptions: [],
     error: null
   },
   create: {
@@ -136,7 +140,11 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           object: action.payload.business,
           sourceOptions: action.payload.sourceList,
+          ratingOptions: action.payload.ratingList,
+          productOptions: action.payload.productList,
           industryOptions: action.payload.industryList,
+          typeOptions: action.payload.typeList,
+          ownersTimeOptions: action.payload.ownersTimeOptions,
           error: null
         }
       }
