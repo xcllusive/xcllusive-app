@@ -143,7 +143,6 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  console.log('oii ', values.businessRegister)
   props.createBusinessRegister(values)
   setSubmitting(false)
 }

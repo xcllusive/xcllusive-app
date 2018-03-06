@@ -1,49 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import { Table, Icon, Button, Grid } from 'semantic-ui-react'
 
 import Wrapper from '../../components/content/Wrapper'
 
 import NewBusinessRegisterForm from '../../components/forms/NewBusinessRegisterForm'
 
-const array = [
-  {
-    businessID: 'BS2000',
-    businessName: 'New Business',
-    contactName: 'John Johnson',
-    logText: 'testing',
-    followUpDate: '01/01/2018'
-  },
-  {
-    businessID: 'BS2001',
-    businessName: 'Business 1',
-    contactName: 'Peter Park',
-    logText: 'business spider man',
-    followUpDate: '01/01/2019'
-  },
-  {
-    businessID: 'BS2002',
-    businessName: 'Business 2',
-    contactName: 'Zoran Sarabaca',
-    logText: 'Zorans business',
-    followUpDate: '01/01/2017'
-  },
-  {
-    businessID: 'BS2003',
-    businessName: 'Business 3',
-    contactName: 'Steve Jobs',
-    logText: 'Apple',
-    followUpDate: '01/12/2018'
-  },
-  {
-    businessID: 'BS2004',
-    businessName: 'Business 4',
-    contactName: 'FileMaker',
-    logText: 'Filemaker server 12',
-    followUpDate: '01/02/2018'
-  }
-]
+import { getBusiness } from '../../redux/ducks/business'
 
 class BusinessRegisters extends Component {
   constructor (props) {
@@ -51,6 +18,10 @@ class BusinessRegisters extends Component {
     this.state = {
       modalOpen: false
     }
+  }
+
+  componentDidMount () {
+    this.props.getBusiness()
   }
 
   _toggleModal = () => {
@@ -97,17 +68,17 @@ class BusinessRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
+                  {this.props.sourceOptions.map(sourceOptions => {
                     return (
                       <Table.Row active >
-                        <Table.Cell>{'ID'}</Table.Cell>
-                        <Table.Cell>{'LABEL'}</Table.Cell>
+                        <Table.Cell>{sourceOptions.value}</Table.Cell>
+                        <Table.Cell>{sourceOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
                             onClick={() => this._toggleModal(true)}
                           />
                           <Icon link
-                            onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
                             color='red' name='trash' />
                         </Table.Cell>
                       </Table.Row>
@@ -117,7 +88,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table color='blue' celled inverted>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -126,17 +97,19 @@ class BusinessRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
+                  {this.props.ratingOptions.map(ratingOptions => {
                     return (
-                      <Table.Row
-                        active
-                        key={item.buyerID}
-                        onClick={() => this.props.history.push(
-                          `${this.props.match.path}/${item.buyerID}`
-                        )}>
-                        <Table.Cell>{'ID'}</Table.Cell>
-                        <Table.Cell>{'LABEL'}</Table.Cell>
-                        <Table.Cell>{'EDIT/DELETE'}</Table.Cell>
+                      <Table.Row active >
+                        <Table.Cell>{ratingOptions.value}</Table.Cell>
+                        <Table.Cell>{ratingOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(true)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })}
@@ -144,7 +117,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table color='blue' celled inverted>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -153,17 +126,19 @@ class BusinessRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
+                  {this.props.productOptions.map(productOptions => {
                     return (
-                      <Table.Row
-                        active
-                        key={item.buyerID}
-                        onClick={() => this.props.history.push(
-                          `${this.props.match.path}/${item.buyerID}`
-                        )}>
-                        <Table.Cell>{'ID'}</Table.Cell>
-                        <Table.Cell>{'LABEL'}</Table.Cell>
-                        <Table.Cell>{'EDIT/DELETE'}</Table.Cell>
+                      <Table.Row active >
+                        <Table.Cell>{productOptions.value}</Table.Cell>
+                        <Table.Cell>{productOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(true)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })}
@@ -184,7 +159,7 @@ class BusinessRegisters extends Component {
           </Grid.Row>
           <Grid.Row columns={3}>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table color='blue' celled inverted>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -193,17 +168,19 @@ class BusinessRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
+                  {this.props.industryOptions.map(industryOptions => {
                     return (
-                      <Table.Row
-                        active
-                        key={item.buyerID}
-                        onClick={() => this.props.history.push(
-                          `${this.props.match.path}/${item.buyerID}`
-                        )}>
-                        <Table.Cell>{'ID'}</Table.Cell>
-                        <Table.Cell>{'LABEL'}</Table.Cell>
-                        <Table.Cell>{'EDIT/DELETE'}</Table.Cell>
+                      <Table.Row active >
+                        <Table.Cell>{industryOptions.value}</Table.Cell>
+                        <Table.Cell>{industryOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(true)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })}
@@ -211,7 +188,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table color='blue' celled inverted>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -220,17 +197,19 @@ class BusinessRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
+                  {this.props.typeOptions.map(typeOptions => {
                     return (
-                      <Table.Row
-                        active
-                        key={item.buyerID}
-                        onClick={() => this.props.history.push(
-                          `${this.props.match.path}/${item.buyerID}`
-                        )}>
-                        <Table.Cell>{'ID'}</Table.Cell>
-                        <Table.Cell>{'LABEL'}</Table.Cell>
-                        <Table.Cell>{'EDIT/DELETE'}</Table.Cell>
+                      <Table.Row active >
+                        <Table.Cell>{typeOptions.value}</Table.Cell>
+                        <Table.Cell>{typeOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(true)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })}
@@ -238,7 +217,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table color='blue' celled inverted>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -247,17 +226,19 @@ class BusinessRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
+                  {this.props.ownersTimeOptions.map(ownersTimeOptions => {
                     return (
-                      <Table.Row
-                        active
-                        key={item.buyerID}
-                        onClick={() => this.props.history.push(
-                          `${this.props.match.path}/${item.buyerID}`
-                        )}>
-                        <Table.Cell>{'ID'}</Table.Cell>
-                        <Table.Cell>{'LABEL'}</Table.Cell>
-                        <Table.Cell>{'EDIT/DELETE'}</Table.Cell>
+                      <Table.Row active >
+                        <Table.Cell>{ownersTimeOptions.value}</Table.Cell>
+                        <Table.Cell>{ownersTimeOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(true)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })}
@@ -272,8 +253,29 @@ class BusinessRegisters extends Component {
 }
 
 BusinessRegisters.propTypes = {
-  history: PropTypes.object,
-  match: PropTypes.object
+  getBusiness: PropTypes.func,
+  sourceOptions: PropTypes.array,
+  ratingOptions: PropTypes.array,
+  productOptions: PropTypes.array,
+  industryOptions: PropTypes.array,
+  typeOptions: PropTypes.array,
+  ownersTimeOptions: PropTypes.array
 }
 
-export default BusinessRegisters
+const mapStateToProps = state => {
+  return {
+    isLoading: state.business.get.isLoading,
+    sourceOptions: state.business.get.sourceOptions,
+    ratingOptions: state.business.get.ratingOptions,
+    productOptions: state.business.get.productOptions,
+    industryOptions: state.business.get.industryOptions,
+    typeOptions: state.business.get.typeOptions,
+    ownersTimeOptions: state.business.get.ownersTimeOptions
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ getBusiness }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)

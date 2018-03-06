@@ -78,8 +78,8 @@ class BusinessEditPage extends Component {
       <Wrapper>
         <Statistic.Group size='mini' widths={7}>
           <Statistic color='orange'>
-            <Statistic.Value>{this.props.business.businessName}</Statistic.Value>
-            <Statistic.Label>BS{this.props.business.id}</Statistic.Label>
+            <Statistic.Value>Business Name</Statistic.Value>
+            <Statistic.Label>BS</Statistic.Label>
           </Statistic>
           <Statistic color='blue'>
             <Statistic.Value>1,000,000</Statistic.Value>
@@ -102,7 +102,7 @@ class BusinessEditPage extends Component {
             <Statistic.Label>Last Feedback Score</Statistic.Label>
           </Statistic>
           <Statistic color='green'>
-            <Statistic.Value>{this.props.business.stage}</Statistic.Value>
+            <Statistic.Value>Stage</Statistic.Value>
           </Statistic>
         </Statistic.Group>
 
