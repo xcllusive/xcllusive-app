@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import { withFormik } from 'formik'
-import { Form, Icon, Grid, Radio, Label, Dimmer, Loader } from 'semantic-ui-react'
+import { Form, Icon, Grid, Radio, Label, Dimmer, Loader, Button } from 'semantic-ui-react'
 import Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness } from '../../redux/ducks/business'
@@ -28,7 +28,8 @@ class EditBusinessDetailForm extends Component {
         { key: '6', text: 'TAS', value: 'TAS' },
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
-      ]
+      ],
+      modalOpen: false
     }
   }
 
@@ -68,7 +69,8 @@ class EditBusinessDetailForm extends Component {
     } = this.props
 
     const {
-      state
+      state,
+      modalOpen
     } = this.state
 
     return (
@@ -77,17 +79,18 @@ class EditBusinessDetailForm extends Component {
           <Loader inverted />
         </Dimmer>
         {
-          this.state.modalOpen ? (
+          modalOpen ? (
             <ReassignBusinessForm
-              modalOpen={this.state.modalOpen}
+              modalOpen={modalOpen}
               toggleModal={this._toggleModal}
+              businessId={values.id}
             />
           ) : null
         }
         <Grid celled divided='vertically'>
           <Grid.Row columns={2}>
             <Grid.Column>
-              <Form noValidate size='tiny' onSubmit={handleSubmit}>
+              <Form noValidate size='tiny'>
                 <Form.Group widths='equal'>
                   <Form.Field>
                     <Form.Input
@@ -218,10 +221,10 @@ class EditBusinessDetailForm extends Component {
                     placeholder={values.listingAgent}
                     readOnly
                   />
-                  <Form.Button onClick={this._toggleModal} primary>
+                  <Button primary onClick={this._toggleModal}>
                     <Icon name='edit' />
                     Reassign Business
-                  </Form.Button>
+                  </Button>
                   <Form.Button color='blue'>
                     <Icon name='file pdf outline' />
                     PDF
@@ -424,6 +427,7 @@ class EditBusinessDetailForm extends Component {
                     {errors.stage && touched.stage && <Label basic color='red' pointing content={errors.stage} />}
                   </Form.Field>
                   <Form.Button
+                    type='submit'
                     disabled={isSubmitting || !isValid}
                     loading={isLoadingUpdate}
                     color='red'

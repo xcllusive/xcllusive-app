@@ -40,8 +40,12 @@ export const createBusinessRegister = businessRegister => {
   })
 }
 
-export const reassignBusiness = () => {
-  console.log('dale')
+export const reassignBusiness = options => {
+  return request({
+    method: 'put',
+    url: `/business/listing-agent/${options.businessId}`,
+    data: options
+  })
 }
 
 export const getBusinessRegister = id => {

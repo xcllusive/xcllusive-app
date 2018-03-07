@@ -329,6 +329,7 @@ export const createBusinessRegister = businessRegister => async dispatch => {
       type: Types.CREATE_BUSINESS_REGISTER_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }
 
@@ -338,15 +339,17 @@ export const reassignBusiness = reassignBusiness => async dispatch => {
     payload: true
   })
   try {
-    await reassignBusinessAPI(reassignBusiness)
+    const response = await reassignBusinessAPI(reassignBusiness)
     dispatch({
       type: Types.CREATE_REASSIGN_BUSINESS_SUCCESS
     })
+    toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.CREATE_REASSIGN_BUSINESS_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }
 

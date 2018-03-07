@@ -27,7 +27,7 @@ class ReassignBusinessForm extends Component {
     if (array.length > 0) {
       return array.map((item, index) => ({ key: index, text: item.firstName, value: item.id }))
     }
-    return []
+    return [{ key: 1, text: 'Nenhum usuario encontrado', value: null }]
   }
 
   render () {
@@ -59,7 +59,6 @@ class ReassignBusinessForm extends Component {
                   name='listingAgent'
                   options={this._mapValuesToArray(this.props.users)}
                   autoComplete='listingAgent'
-                  //  value={this.props.business}
                   value={values.listingAgent}
                   onChange={this._handleSelectChange}
                 />
@@ -116,7 +115,10 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.reassignBusiness(values)
+  props.reassignBusiness({
+    businessId: props.businessId,
+    listingAgentId: values.listingAgent
+  })
   setSubmitting(false)
 }
 
