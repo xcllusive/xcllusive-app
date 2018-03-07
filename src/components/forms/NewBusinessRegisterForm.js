@@ -57,7 +57,7 @@ class NewBusinessRegisterForm extends Component {
         dimmer={'blurring'}
         open={modalOpen}
       >
-        <Modal.Header align='center'>New Business Register</Modal.Header>
+        <Modal.Header align='center'>{(this.props.editBusinessRegister && this.props.editBusinessRegister.value) ? 'Edit Business Register' : 'New Business Register' }</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group>
@@ -67,6 +67,7 @@ class NewBusinessRegisterForm extends Component {
                   label='Business Register'
                   name='businessRegister'
                   options={businessRegister}
+                  //  options={(this.props.editBusinessRegister && this.props.editBusinessRegister.value) ? this.props.editBusinessRegister.value : businessRegister}
                   autoComplete='businessRegister'
                   value={values.businessRegister}
                   onChange={this._handleSelectChange}
@@ -98,7 +99,7 @@ class NewBusinessRegisterForm extends Component {
             onClick={handleSubmit}
           >
             <Icon name='save' />
-            Create Register
+            {(this.props.editBusinessRegister && this.props.editBusinessRegister.value) ? 'Edit Register' : 'Create Register'}
           </Button>
           <Button
             color='red'
@@ -125,13 +126,30 @@ NewBusinessRegisterForm.propTypes = {
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
-  modalOpen: PropTypes.bool
+  modalOpen: PropTypes.bool,
+  editBusinessRegister: PropTypes.object
 }
 
-const mapPropsToValues = () => ({
-  label: '',
-  businessRegister: ''
-})
+const mapPropsToValues = props => {
+  console.log('opsss, ', props.editBusinessRegister)
+  return {
+    label: '',
+    businessRegister: ''
+  }
+}
+
+/* const mapPropsToValues = props => {
+  if (props && props.editBusinessRegister.value) {
+    return {
+      label: props.editBusinessRegister.text,
+      businessRegister: props.editBusinessRegister.businessRegister
+    }
+  }
+  return {
+    label: '',
+    businessRegister: ''
+  }
+} */
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()

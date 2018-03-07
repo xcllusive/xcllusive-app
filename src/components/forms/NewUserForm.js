@@ -389,6 +389,7 @@ NewUserForm.propTypes = {
 }
 
 const mapPropsToValues = props => {
+  console.log('olaaaaa, ', props.user.id)
   if (props && props.user.id) {
     const roles = JSON.parse(props.user.roles)
     return {

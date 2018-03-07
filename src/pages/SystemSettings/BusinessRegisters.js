@@ -21,7 +21,6 @@ class BusinessRegisters extends Component {
   }
 
   async componentWillReceiveProps (nextProps) {
-    console.log('test nextProps, ', nextProps)
     if (this.props.createBusinessRegister !== nextProps.createBusinessRegister && nextProps.createBusinessRegister) {
       await this._toggleModal({})
       this.props.getBusinessRegister()
@@ -32,9 +31,10 @@ class BusinessRegisters extends Component {
     this.props.getBusiness()
   }
 
-  _toggleModal = () => {
+  _toggleModal = editBusinessRegister => {
     this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen
+      modalOpen: !prevState.modalOpen,
+      editBusinessRegister
     }))
   }
 
@@ -44,6 +44,7 @@ class BusinessRegisters extends Component {
         <NewBusinessRegisterForm
           modalOpen={this.state.modalOpen}
           toggleModal={this._toggleModal}
+          editBusinessRegister={this.state.editBusinessRegister}
         />
         <Grid padded='horizontally'>
           <Grid.Row columns={1}>
@@ -83,7 +84,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{sourceOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(true)}
+                            onClick={() => this._toggleModal(sourceOptions)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
