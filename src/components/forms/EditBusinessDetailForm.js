@@ -70,7 +70,7 @@ class EditBusinessDetailForm extends Component {
     const {
       state
     } = this.state
-    console.log(errors)
+
     return (
       <Wrapper>
         <Dimmer inverted active={isLoadingGet}>
