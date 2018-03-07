@@ -6,12 +6,12 @@ export const get = id => {
   })
 }
 
-export const getAll = (search) => {
+export const getAll = search => {
   const params = {}
 
   if (search && search.length > 0) params.search = search
   return request({
-    url: '/business',
+    url: '/business/',
     params
   })
 }
@@ -26,7 +26,7 @@ export const create = business => {
 
 export const update = business => {
   return request({
-    method: 'post',
+    method: 'put',
     url: `/business/${business.id}`,
     data: business
   })
