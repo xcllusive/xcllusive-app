@@ -45,7 +45,7 @@ class NewBusinessRegisterForm extends Component {
       handleSubmit,
       isSubmitting,
       isValid,
-      isLoading,
+      createLoading,
       modalOpen,
       toggleModal
     } = this.props
@@ -94,7 +94,7 @@ class NewBusinessRegisterForm extends Component {
           <Button
             color='blue'
             disabled={isSubmitting || !isValid}
-            loading={isLoading}
+            loading={createLoading}
             onClick={handleSubmit}
           >
             <Icon name='save' />
@@ -124,7 +124,7 @@ NewBusinessRegisterForm.propTypes = {
   toggleModal: PropTypes.func,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  isLoading: PropTypes.bool,
+  createLoading: PropTypes.bool,
   modalOpen: PropTypes.bool
 }
 
@@ -149,7 +149,7 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.business.isLoading
+    createLoading: state.business.createBusinessRegister.isLoading
   }
 }
 

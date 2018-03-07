@@ -60,6 +60,11 @@ const initialState = {
     isLoading: false,
     isUpdated: false,
     error: null
+  },
+  createBusinessRegister: {
+    isLoading: false,
+    isCreated: false,
+    error: null
   }
 }
 
@@ -186,6 +191,36 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CREATE_BUSINESS_REGISTER_LOADING:
+      return {
+        ...state,
+        createBusinessRegister: {
+          ...state.createBusinessRegister,
+          isLoading: action.payload,
+          isCreated: false,
+          error: null
+        }
+      }
+    case Types.CREATE_BUSINESS_REGISTER_SUCCESS:
+      return {
+        ...state,
+        createBusinessRegister: {
+          ...state.createBusinessRegister,
+          isLoading: false,
+          isCreated: true,
+          error: null
+        }
+      }
+    case Types.CREATE_BUSINESS_REGISTER_FAILURE:
+      return {
+        ...state,
+        createBusinessRegister: {
+          ...state.createBusinessRegister,
+          isLoading: false,
+          isCreated: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -284,10 +319,11 @@ export const createBusinessRegister = businessRegister => async dispatch => {
     payload: true
   })
   try {
-    await createBusinessRegisterAPI(businessRegister)
+    const response = await createBusinessRegisterAPI(businessRegister)
     dispatch({
       type: Types.CREATE_BUSINESS_REGISTER_SUCCESS
     })
+    toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.CREATE_BUSINESS_REGISTER_FAILURE,

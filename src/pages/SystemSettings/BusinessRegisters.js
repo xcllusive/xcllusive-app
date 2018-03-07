@@ -10,13 +10,21 @@ import Wrapper from '../../components/content/Wrapper'
 
 import NewBusinessRegisterForm from '../../components/forms/NewBusinessRegisterForm'
 
-import { getBusiness } from '../../redux/ducks/business'
+import { getBusiness, getBusinessRegister } from '../../redux/ducks/business'
 
 class BusinessRegisters extends Component {
   constructor (props) {
     super(props)
     this.state = {
       modalOpen: false
+    }
+  }
+
+  async componentWillReceiveProps (nextProps) {
+    console.log('test nextProps, ', nextProps)
+    if (this.props.createBusinessRegister !== nextProps.createBusinessRegister && nextProps.createBusinessRegister) {
+      await this._toggleModal({})
+      this.props.getBusinessRegister()
     }
   }
 
@@ -259,7 +267,9 @@ BusinessRegisters.propTypes = {
   productOptions: PropTypes.array,
   industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
-  ownersTimeOptions: PropTypes.array
+  ownersTimeOptions: PropTypes.array,
+  createBusinessRegister: PropTypes.bool,
+  getBusinessRegister: PropTypes.func
 }
 
 const mapStateToProps = state => {
@@ -270,12 +280,13 @@ const mapStateToProps = state => {
     productOptions: state.business.get.productOptions,
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
-    ownersTimeOptions: state.business.get.ownersTimeOptions
+    ownersTimeOptions: state.business.get.ownersTimeOptions,
+    createBusinessRegister: state.business.createBusinessRegister.isCreated
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness }, dispatch)
+  return bindActionCreators({ getBusiness, getBusinessRegister }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)
