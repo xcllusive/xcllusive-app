@@ -76,11 +76,14 @@ class EditBusinessDetailForm extends Component {
         <Dimmer inverted active={isLoadingGet}>
           <Loader inverted />
         </Dimmer>
-        <ReassignBusinessForm
-          modalOpen={this.state.modalOpen}
-          toggleModal={this._toggleModal}
-          business={this.props.business}
-        />
+        {
+          this.state.modalOpen ? (
+            <ReassignBusinessForm
+              modalOpen={this.state.modalOpen}
+              toggleModal={this._toggleModal}
+            />
+          ) : null
+        }
         <Grid celled divided='vertically'>
           <Grid.Row columns={2}>
             <Grid.Column>
@@ -451,7 +454,6 @@ EditBusinessDetailForm.propTypes = {
   isLoadingUpdate: PropTypes.bool,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  business: PropTypes.object,
   sourceOptions: PropTypes.array,
   productOptions: PropTypes.array,
   ratingOptions: PropTypes.array,

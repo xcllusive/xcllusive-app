@@ -7,27 +7,27 @@ import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import Yup from 'yup'
 
 import { reassignBusiness } from '../../redux/ducks/business'
+import { getUsers } from '../../redux/ducks/user'
 
 class ReassignBusinessForm extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      listingAgent: [
-        { key: '1', text: 'Business Source', value: '1' },
-        { key: '2', text: 'Business Rating', value: '2' },
-        { key: '3', text: 'Business Product', value: '3' },
-        { key: '4', text: 'Business Industry', value: '4' },
-        { key: '5', text: 'Business Type', value: '5' },
-        { key: '6', text: 'Business Owner`s Time', value: '6' }
-      ]
-    }
+    this.state = {}
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentDidMount = () => {
+    this.props.getUsers()
   }
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+  }
+
+  _mapValuesToArray = (array) => {
+    if (array.length > 0) {
+      return array.map((item, index) => ({ key: index, text: item.firstName, value: item.id }))
+    }
+    return []
   }
 
   render () {
@@ -42,9 +42,6 @@ class ReassignBusinessForm extends Component {
       modalOpen,
       toggleModal
     } = this.props
-    const {
-      listingAgent
-    } = this.state
     return (
       <Modal
         dimmer={'blurring'}
@@ -60,7 +57,7 @@ class ReassignBusinessForm extends Component {
                   required
                   label='Reassign Business To New Listing Agent'
                   name='listingAgent'
-                  options={listingAgent}
+                  options={this._mapValuesToArray(this.props.users)}
                   autoComplete='listingAgent'
                   //  value={this.props.business}
                   value={values.listingAgent}
@@ -104,7 +101,9 @@ ReassignBusinessForm.propTypes = {
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   isLoading: PropTypes.bool,
-  modalOpen: PropTypes.bool
+  modalOpen: PropTypes.bool,
+  users: PropTypes.array,
+  getUsers: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -117,20 +116,20 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  console.log('oii ', values.listingAgent)
   props.reassignBusiness(values)
   setSubmitting(false)
 }
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.business.isLoading
+    isLoading: state.business.isLoading,
+    users: state.user.get.array
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    reassignBusiness }, dispatch)
+    reassignBusiness, getUsers }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
