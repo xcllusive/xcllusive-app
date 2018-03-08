@@ -73,6 +73,11 @@ const initialState = {
     isLoading: false,
     isUpdated: false,
     error: null
+  },
+  reassignBusiness: {
+    isLoading: false,
+    isReassigned: false,
+    error: null
   }
 }
 
@@ -256,6 +261,36 @@ export default function reducer (state = initialState, action) {
           ...state.updateBusinessRegister,
           isLoading: false,
           isUpdated: false,
+          error: action.payload
+        }
+      }
+    case Types.CREATE_REASSIGN_BUSINESS_LOADING:
+      return {
+        ...state,
+        reassignBusiness: {
+          ...state.reassignBusiness,
+          isLoading: action.payload,
+          isReassigned: false,
+          error: null
+        }
+      }
+    case Types.CREATE_REASSIGN_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        reassignBusiness: {
+          ...state.reassignBusiness,
+          isLoading: false,
+          isReassigned: true,
+          error: null
+        }
+      }
+    case Types.CREATE_REASSIGN_BUSINESS_FAILURE:
+      return {
+        ...state,
+        reassignBusiness: {
+          ...state.reassignBusiness,
+          isLoading: false,
+          isReassigned: false,
           error: action.payload
         }
       }

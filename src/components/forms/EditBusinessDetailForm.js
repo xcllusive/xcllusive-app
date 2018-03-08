@@ -7,7 +7,7 @@ import { withFormik } from 'formik'
 import { Form, Icon, Grid, Radio, Label, Dimmer, Loader, Button } from 'semantic-ui-react'
 import Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
-import { updateBusiness } from '../../redux/ducks/business'
+import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import ReassignBusinessForm from './ReassignBusinessForm'
 
 const staffAccountName = [
@@ -30,6 +30,18 @@ class EditBusinessDetailForm extends Component {
         { key: '8', text: 'WA', value: 'WA' }
       ],
       modalOpen: false
+    }
+  }
+
+  componentDidMount () {
+    this.props.setFieldValue('id', this.state.id)
+  }
+
+  async componentWillReceiveProps (nextProps) {
+    if (this.props.reassignedBusiness !== nextProps.reassignedBusiness && nextProps.reassignedBusiness) {
+      await this._toggleModal({})
+      this.props.getBusiness()
+      // HOW CAN I BRING ID???
     }
   }
 
@@ -464,7 +476,9 @@ EditBusinessDetailForm.propTypes = {
   industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
   ownersTimeOptions: PropTypes.array,
-  stageOptions: PropTypes.array
+  stageOptions: PropTypes.array,
+  reassignedBusiness: PropTypes.bool,
+  getBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -614,12 +628,13 @@ const mapStateToProps = state => {
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
     ownersTimeOptions: state.business.get.ownersTimeOptions,
-    stageOptions: state.business.get.stageOptions
+    stageOptions: state.business.get.stageOptions,
+    reassignedBusiness: state.business.reassignBusiness.isReassigned
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness }, dispatch)
+  return bindActionCreators({ updateBusiness, getBusiness }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(

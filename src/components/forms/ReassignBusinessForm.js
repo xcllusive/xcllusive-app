@@ -38,7 +38,7 @@ class ReassignBusinessForm extends Component {
       handleSubmit,
       isSubmitting,
       isValid,
-      isLoading,
+      createLoading,
       modalOpen,
       toggleModal
     } = this.props
@@ -71,7 +71,7 @@ class ReassignBusinessForm extends Component {
           <Button
             color='blue'
             disabled={isSubmitting || !isValid}
-            loading={isLoading}
+            loading={createLoading}
             onClick={handleSubmit}
           >
             <Icon name='save' />
@@ -99,10 +99,10 @@ ReassignBusinessForm.propTypes = {
   toggleModal: PropTypes.func,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  isLoading: PropTypes.bool,
   modalOpen: PropTypes.bool,
   users: PropTypes.array,
-  getUsers: PropTypes.func
+  getUsers: PropTypes.func,
+  createLoading: PropTypes.bool
 }
 
 const mapPropsToValues = () => ({
@@ -124,7 +124,7 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.business.isLoading,
+    createLoading: state.business.reassignBusiness.isLoading,
     users: state.user.get.array
   }
 }
