@@ -1,7 +1,8 @@
 import { get, getAll, create, update,
   createBusinessRegister as createBusinessRegisterAPI,
   reassignBusiness as reassignBusinessAPI,
-  getBusinessRegister as getBusinessRegisterAPI
+  getBusinessRegister as getBusinessRegisterAPI,
+  updateBusinessRegister as updateBusinessRegisterAPI
 } from '../../services/api/business'
 import { toast } from 'react-toastify'
 
@@ -28,8 +29,10 @@ export const Types = {
   CREATE_REASSIGN_BUSINESS_FAILURE: 'CREATE_REASSIGN_BUSINESS_FAILURE',
   GET_BUSINESS_REGISTER_LOADING: 'GET_BUSINESS_REGISTER_LOADING',
   GET_BUSINESS_REGISTER_SUCCESS: 'GET_BUSINESS_REGISTER_SUCCESS',
-  GET_BUSINESS_REGISTER_FAILURE: 'GET_BUSINESS_REGISTER_FAILURE'
-
+  GET_BUSINESS_REGISTER_FAILURE: 'GET_BUSINESS_REGISTER_FAILURE',
+  UPDATE_BUSINESS_REGISTER_LOADING: 'UPDATE_BUSINESS_REGISTER_LOADING',
+  UPDATE_BUSINESS_REGISTER_SUCCESS: 'UPDATE_BUSINESS_REGISTER_SUCCESS',
+  UPDATE_BUSINESS_REGISTER_FAILURE: 'UPDATE_BUSINESS_REGISTER_FAILURE'
 }
 
 // Reducer
@@ -62,6 +65,11 @@ const initialState = {
     error: null
   },
   createBusinessRegister: {
+    isLoading: false,
+    isCreated: false,
+    error: null
+  },
+  updateBusinessRegister: {
     isLoading: false,
     isCreated: false,
     error: null
@@ -221,6 +229,36 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.UPDATE_BUSINESS_REGISTER_LOADING:
+      return {
+        ...state,
+        updateBusinessRegister: {
+          ...state.updateBusinessRegister,
+          isLoading: action.payload,
+          isCreated: false,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_REGISTER_SUCCESS:
+      return {
+        ...state,
+        updateBusinessRegister: {
+          ...state.updateBusinessRegister,
+          isLoading: false,
+          isCreated: true,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_REGISTER_FAILURE:
+      return {
+        ...state,
+        updateBusinessRegister: {
+          ...state.updateBusinessRegister,
+          isLoading: false,
+          isCreated: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -327,6 +365,26 @@ export const createBusinessRegister = businessRegister => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.CREATE_BUSINESS_REGISTER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const updateBusinessRegister = businessRegister => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_BUSINESS_REGISTER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await updateBusinessRegisterAPI(businessRegister)
+    dispatch({
+      type: Types.UPDATE_BUSINESS_REGISTER_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_BUSINESS_REGISTER_FAILURE,
       payload: error
     })
     toast.error(error)

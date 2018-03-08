@@ -24,9 +24,9 @@ class NewBusinessRegisterForm extends Component {
     }
   }
 
-  /* componentDidMount () {
-    this.props.getBusinessRegister(values.businessRegister)
-  } */
+  componentDidMount () {
+    this.props.setFieldValue('businessRegisterKey', this.state.businessRegister)
+  }
 
   componentWillReceiveProps (nextProps) {
   }
@@ -43,11 +43,11 @@ class NewBusinessRegisterForm extends Component {
       handleChange,
       handleBlur,
       handleSubmit,
-      isSubmitting,
       isValid,
       createLoading,
       modalOpen,
-      toggleModal
+      toggleModal,
+      updateLoading
     } = this.props
     const {
       businessRegister
@@ -67,7 +67,6 @@ class NewBusinessRegisterForm extends Component {
                   label='Business Register'
                   name='businessRegister'
                   options={businessRegister}
-                  //  options={(this.props.editBusinessRegister && this.props.editBusinessRegister.value) ? this.props.editBusinessRegister.value : businessRegister}
                   autoComplete='businessRegister'
                   value={values.businessRegister}
                   onChange={this._handleSelectChange}
@@ -94,8 +93,8 @@ class NewBusinessRegisterForm extends Component {
         <Modal.Actions>
           <Button
             color='blue'
-            disabled={isSubmitting || !isValid}
-            loading={createLoading}
+            disabled={createLoading || updateLoading || !isValid}
+            loading={createLoading || updateLoading}
             onClick={handleSubmit}
           >
             <Icon name='save' />
@@ -123,33 +122,25 @@ NewBusinessRegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   toggleModal: PropTypes.func,
-  isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
   modalOpen: PropTypes.bool,
-  editBusinessRegister: PropTypes.object
+  editBusinessRegister: PropTypes.object,
+  updateLoading: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
-  console.log('opsss, ', props.editBusinessRegister)
-  return {
-    label: '',
-    businessRegister: ''
-  }
-}
-
-/* const mapPropsToValues = props => {
-  if (props && props.editBusinessRegister.value) {
+  if (props && props.editBusinessRegister) {
     return {
-      label: props.editBusinessRegister.text,
-      businessRegister: props.editBusinessRegister.businessRegister
+      businessRegister: props.registerType,
+      label: props.editBusinessRegister.text
     }
   }
   return {
-    label: '',
-    businessRegister: ''
+    businessRegister: '',
+    label: ''
   }
-} */
+}
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
@@ -167,7 +158,8 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 
 const mapStateToProps = state => {
   return {
-    createLoading: state.business.createBusinessRegister.isLoading
+    createLoading: state.business.createBusinessRegister.isLoading,
+    updateLoading: state.business.updateBusinessRegister.isLoading
   }
 }
 

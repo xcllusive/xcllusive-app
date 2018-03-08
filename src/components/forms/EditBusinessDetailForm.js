@@ -526,8 +526,8 @@ const mapPropsToValues = props => {
       businessType: typeId,
       businessOwnersTime: ownersTimeId
     }
-    business.data120DayGuarantee = business.data120DayGuarantee !== false
-    business.notifyOwner = business.notifyOwner !== ''
+    business.data120DayGuarantee = business.data120DayGuarantee === '1'
+    business.notifyOwner = business.notifyOwner === '1'
     return _.mapValues(business, value => value == null ? '' : value)
   }
   return {

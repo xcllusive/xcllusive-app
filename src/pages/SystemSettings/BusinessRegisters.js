@@ -31,21 +31,27 @@ class BusinessRegisters extends Component {
     this.props.getBusiness()
   }
 
-  _toggleModal = editBusinessRegister => {
+  _toggleModal = (editBusinessRegister, registerType) => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen,
-      editBusinessRegister
+      editBusinessRegister,
+      registerType
     }))
   }
 
   render () {
     return (
       <Wrapper>
-        <NewBusinessRegisterForm
-          modalOpen={this.state.modalOpen}
-          toggleModal={this._toggleModal}
-          editBusinessRegister={this.state.editBusinessRegister}
-        />
+        {
+          this.state.modalOpen ? (
+            <NewBusinessRegisterForm
+              modalOpen={this.state.modalOpen}
+              toggleModal={this._toggleModal}
+              editBusinessRegister={this.state.editBusinessRegister}
+              registerType={this.state.registerType}
+            />
+          ) : null
+        }
         <Grid padded='horizontally'>
           <Grid.Row columns={1}>
             <Grid.Column floated='right' width={2}>
@@ -84,7 +90,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{sourceOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(sourceOptions)}
+                            onClick={() => this._toggleModal(sourceOptions, 1)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
@@ -113,7 +119,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{ratingOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(true)}
+                            onClick={() => this._toggleModal(ratingOptions, 2)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
@@ -142,7 +148,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{productOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(true)}
+                            onClick={() => this._toggleModal(productOptions, 3)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
@@ -184,7 +190,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{industryOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(true)}
+                            onClick={() => this._toggleModal(industryOptions, 3)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
@@ -213,7 +219,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{typeOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(true)}
+                            onClick={() => this._toggleModal(typeOptions, 4)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
@@ -242,7 +248,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{ownersTimeOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(true)}
+                            onClick={() => this._toggleModal(ownersTimeOptions, 6)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
