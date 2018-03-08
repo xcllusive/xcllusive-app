@@ -7,7 +7,7 @@ import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 
 import Yup from 'yup'
 
-import { createBusinessRegister } from '../../redux/ducks/business'
+import { createBusinessRegister, updateBusinessRegister } from '../../redux/ducks/business'
 
 class NewBusinessRegisterForm extends Component {
   constructor (props) {
@@ -152,8 +152,11 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.createBusinessRegister(values)
-  setSubmitting(false)
+  if (props.editBusinessRegister) {
+    props.updateBusinessRegister(values).then(setSubmitting(false))
+  } else {
+    props.createBusinessRegister(values).then(setSubmitting(false))
+  }
 }
 
 const mapStateToProps = state => {
@@ -165,7 +168,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    createBusinessRegister }, dispatch)
+    createBusinessRegister, updateBusinessRegister }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(

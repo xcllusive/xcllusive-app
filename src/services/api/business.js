@@ -40,13 +40,13 @@ export const createBusinessRegister = businessRegister => {
   })
 }
 
-export const updateBusinessRegister = businessRegister => {
+export const updateBusinessRegister = () => {
   console.log('testando...')
-  return request({
+  /* return request({
     method: 'post',
     url: '/business-register',
     data: businessRegister
-  })
+  }) */
 }
 
 export const reassignBusiness = options => {

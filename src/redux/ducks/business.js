@@ -71,7 +71,7 @@ const initialState = {
   },
   updateBusinessRegister: {
     isLoading: false,
-    isCreated: false,
+    isUpdated: false,
     error: null
   }
 }
@@ -235,7 +235,7 @@ export default function reducer (state = initialState, action) {
         updateBusinessRegister: {
           ...state.updateBusinessRegister,
           isLoading: action.payload,
-          isCreated: false,
+          isUpdated: false,
           error: null
         }
       }
@@ -245,7 +245,7 @@ export default function reducer (state = initialState, action) {
         updateBusinessRegister: {
           ...state.updateBusinessRegister,
           isLoading: false,
-          isCreated: true,
+          isUpdated: true,
           error: null
         }
       }
@@ -255,7 +255,7 @@ export default function reducer (state = initialState, action) {
         updateBusinessRegister: {
           ...state.updateBusinessRegister,
           isLoading: false,
-          isCreated: false,
+          isUpdated: false,
           error: action.payload
         }
       }

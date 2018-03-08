@@ -25,6 +25,10 @@ class BusinessRegisters extends Component {
       await this._toggleModal({})
       this.props.getBusinessRegister()
     }
+    if (this.props.updateBusinessRegister !== nextProps.updateBusinessRegister && nextProps.updateBusinessRegister) {
+      await this._toggleModal({})
+      this.props.getBusinessRegister()
+    }
   }
 
   componentDidMount () {
@@ -190,7 +194,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{industryOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(industryOptions, 3)}
+                            onClick={() => this._toggleModal(industryOptions, 4)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
@@ -219,7 +223,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{typeOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(typeOptions, 4)}
+                            onClick={() => this._toggleModal(typeOptions, 5)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
@@ -276,7 +280,8 @@ BusinessRegisters.propTypes = {
   typeOptions: PropTypes.array,
   ownersTimeOptions: PropTypes.array,
   createBusinessRegister: PropTypes.bool,
-  getBusinessRegister: PropTypes.func
+  getBusinessRegister: PropTypes.func,
+  updateBusinessRegister: PropTypes.bool
 }
 
 const mapStateToProps = state => {
@@ -288,7 +293,8 @@ const mapStateToProps = state => {
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
     ownersTimeOptions: state.business.get.ownersTimeOptions,
-    createBusinessRegister: state.business.createBusinessRegister.isCreated
+    createBusinessRegister: state.business.createBusinessRegister.isCreated,
+    updateBusinessRegister: state.business.updateBusinessRegister.isUpdated
   }
 }
 
