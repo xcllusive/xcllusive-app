@@ -11,11 +11,6 @@ import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import ReassignBusinessForm from './ReassignBusinessForm'
 import StageSalesMemoForm from './StageSalesMemoForm'
 
-const staffAccountName = [
-  { key: 'Z', text: 'Zoran', value: 'Zoran' },
-  { key: 'C', text: 'Cayo', value: 'Cayo' }
-]
-
 class EditBusinessDetailForm extends Component {
   constructor (props) {
     super(props)
@@ -74,7 +69,8 @@ class EditBusinessDetailForm extends Component {
       industryOptions,
       typeOptions,
       ownersTimeOptions,
-      stageOptions
+      stageOptions,
+      usersStaff
     } = this.props
 
     const {
@@ -103,7 +99,7 @@ class EditBusinessDetailForm extends Component {
             <StageSalesMemoForm
               modalOpen={modalOpenStageSalesMemo}
               toggleModal={() => this._toggleModal('modalOpenStageSalesMemo')}
-              businessId={values.id}
+              business={this.props.business}
             />
           ) : null
         }
@@ -390,7 +386,7 @@ class EditBusinessDetailForm extends Component {
                   <Form.Field>
                     <Form.Select
                       label='Agent'
-                      options={staffAccountName}
+                      options={usersStaff}
                       name='staffAccountName'
                       autoComplete='staffAccountName'
                       value={values.staffAccountName}
@@ -487,7 +483,8 @@ EditBusinessDetailForm.propTypes = {
   stageOptions: PropTypes.array,
   reassignedBusiness: PropTypes.bool,
   getBusiness: PropTypes.func,
-  business: PropTypes.object
+  business: PropTypes.object,
+  usersStaff: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -518,7 +515,8 @@ const mapPropsToValues = props => {
       productId,
       industryId,
       typeId,
-      ownersTimeId
+      ownersTimeId,
+      staffAccountName
     } = props.business
 
     const business = {
@@ -547,7 +545,8 @@ const mapPropsToValues = props => {
       businessProduct: productId,
       businessIndustry: industryId,
       businessType: typeId,
-      businessOwnersTime: ownersTimeId
+      businessOwnersTime: ownersTimeId,
+      staffAccountName
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     business.notifyOwner = business.notifyOwner === '1'
@@ -638,7 +637,8 @@ const mapStateToProps = state => {
     typeOptions: state.business.get.typeOptions,
     ownersTimeOptions: state.business.get.ownersTimeOptions,
     stageOptions: state.business.get.stageOptions,
-    reassignedBusiness: state.business.reassignBusiness.isReassigned
+    reassignedBusiness: state.business.reassignBusiness.isReassigned,
+    usersStaff: state.business.get.usersStaff
   }
 }
 

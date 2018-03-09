@@ -163,6 +163,7 @@ export default function reducer (state = initialState, action) {
           industryOptions: action.payload.industryList,
           typeOptions: action.payload.typeList,
           ownersTimeOptions: action.payload.ownersTimeList,
+          usersStaff: action.payload.usersStaff,
           error: null
         }
       }

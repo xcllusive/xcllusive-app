@@ -25,6 +25,10 @@ class StageSalesMemoForm extends Component {
     return [{ key: 1, text: 'Nenhum usuario encontrado', value: null }]
   }
 
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
+  }
+
   render () {
     const {
       values,
