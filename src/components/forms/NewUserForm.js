@@ -93,7 +93,6 @@ class NewUserForm extends Component {
       modalOpen,
       toggleModal
     } = this.props
-    console.log(values)
     return (
       <Modal
         dimmer={'blurring'}

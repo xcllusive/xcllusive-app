@@ -94,6 +94,7 @@ class EditBusinessDetailForm extends Component {
               modalOpen={modalOpenReassignBusiness}
               toggleModal={() => this._toggleModal('modalOpenReassignBusiness')}
               businessId={values.id}
+              listingAgent={values.listingAgent}
             />
           ) : null
         }

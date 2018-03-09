@@ -70,6 +70,7 @@ class NewBusinessRegisterForm extends Component {
                   autoComplete='businessRegister'
                   value={values.businessRegister}
                   onChange={this._handleSelectChange}
+                  disabled={(this.props.editBusinessRegister && this.props.editBusinessRegister.value)}
                 />
                 {errors.businessRegister && touched.businessRegister && <Label basic color='red' pointing content={errors.businessRegister} />}
               </Form.Field>

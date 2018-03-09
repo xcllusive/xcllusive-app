@@ -105,9 +105,16 @@ ReassignBusinessForm.propTypes = {
   createLoading: PropTypes.bool
 }
 
-const mapPropsToValues = () => ({
-  listingAgent: ''
-})
+const mapPropsToValues = (props) => {
+  if (props && props.listingAgent) {
+    return {
+      listingAgent: props.listingAgent
+    }
+  }
+  return {
+    listingAgent: ''
+  }
+}
 
 const validationSchema = Yup.object().shape({
   listingAgent: Yup.string()
