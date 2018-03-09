@@ -9,6 +9,7 @@ import Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import ReassignBusinessForm from './ReassignBusinessForm'
+import StageSalesMemoForm from './StageSalesMemoForm'
 
 const staffAccountName = [
   { key: 'Z', text: 'Zoran', value: 'Zoran' },
@@ -29,7 +30,8 @@ class EditBusinessDetailForm extends Component {
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
       ],
-      modalOpen: false
+      modalOpen: false,
+      modalOpenStageSalesMemo: false
     }
   }
 
@@ -55,7 +57,8 @@ class EditBusinessDetailForm extends Component {
 
   _toggleModal = () => {
     this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen
+      modalOpen: !prevState.modalOpen,
+      modalOpenStageSalesMemo: !prevState.modalOpenStageSalesMemo
     }))
   }
 
@@ -82,7 +85,8 @@ class EditBusinessDetailForm extends Component {
 
     const {
       state,
-      modalOpen
+      modalOpen,
+      modalOpenStageSalesMemo
     } = this.state
 
     return (
@@ -94,6 +98,15 @@ class EditBusinessDetailForm extends Component {
           modalOpen ? (
             <ReassignBusinessForm
               modalOpen={modalOpen}
+              toggleModal={this._toggleModal}
+              businessId={values.id}
+            />
+          ) : null
+        }
+        {
+          modalOpenStageSalesMemo ? (
+            <StageSalesMemoForm
+              modalOpenStageSalesMemo={modalOpenStageSalesMemo}
               toggleModal={this._toggleModal}
               businessId={values.id}
             />
@@ -237,7 +250,7 @@ class EditBusinessDetailForm extends Component {
                     <Icon name='edit' />
                     Reassign Business
                   </Button>
-                  <Form.Button color='blue'>
+                  <Form.Button color='blue' onClick={this._toggleModal}>
                     <Icon name='file pdf outline' />
                     PDF
                   </Form.Button>
