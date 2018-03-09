@@ -14,11 +14,6 @@ const staffAccountName = [
 ]
 
 class StageSalesMemoForm extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
-
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
@@ -39,7 +34,7 @@ class StageSalesMemoForm extends Component {
       isSubmitting,
       isValid,
       createLoading,
-      modalOpenStageSalesMemo,
+      modalOpen,
       toggleModal,
       productOptions,
       industryOptions,
@@ -50,7 +45,7 @@ class StageSalesMemoForm extends Component {
     return (
       <Modal
         dimmer={'blurring'}
-        open={modalOpenStageSalesMemo}
+        open={modalOpen}
       >
         <Modal.Header align='center'>What to enter for 'Sales Memorandum' Stage</Modal.Header>
         <Modal.Content>
@@ -167,7 +162,7 @@ class StageSalesMemoForm extends Component {
           </Button>
           <Button
             color='red'
-            onClick={toggleModal}
+            onClick={() => toggleModal('modalOpenStageSalesMemo')}
           >
             <Icon name='cancel' />
             Cancel
@@ -187,7 +182,7 @@ StageSalesMemoForm.propTypes = {
   toggleModal: PropTypes.func,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  modalOpenStageSalesMemo: PropTypes.bool,
+  modalOpen: PropTypes.bool,
   createLoading: PropTypes.bool,
   productOptions: PropTypes.array,
   industryOptions: PropTypes.array,

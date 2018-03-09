@@ -79,7 +79,7 @@ class ReassignBusinessForm extends Component {
           </Button>
           <Button
             color='red'
-            onClick={toggleModal}
+            onClick={() => toggleModal('modalOpenReassignBusiness')}
           >
             <Icon name='cancel' />
             Cancel

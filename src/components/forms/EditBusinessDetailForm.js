@@ -30,20 +30,15 @@ class EditBusinessDetailForm extends Component {
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
       ],
-      modalOpen: false,
+      modalOpenReassignBusiness: false,
       modalOpenStageSalesMemo: false
     }
   }
 
-  componentDidMount () {
-    this.props.setFieldValue('id', this.state.id)
-  }
-
   async componentWillReceiveProps (nextProps) {
     if (this.props.reassignedBusiness !== nextProps.reassignedBusiness && nextProps.reassignedBusiness) {
-      await this._toggleModal({})
-      this.props.getBusiness()
-      // HOW CAN I BRING ID???
+      await this._toggleModal('modalOpenReassignBusiness')
+      this.props.getBusiness(nextProps.business.id)
     }
   }
 
@@ -55,10 +50,9 @@ class EditBusinessDetailForm extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _toggleModal = () => {
+  _toggleModal = (modal) => {
     this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen,
-      modalOpenStageSalesMemo: !prevState.modalOpenStageSalesMemo
+      [modal]: !prevState[modal]
     }))
   }
 
@@ -85,7 +79,7 @@ class EditBusinessDetailForm extends Component {
 
     const {
       state,
-      modalOpen,
+      modalOpenReassignBusiness,
       modalOpenStageSalesMemo
     } = this.state
 
@@ -95,10 +89,10 @@ class EditBusinessDetailForm extends Component {
           <Loader inverted />
         </Dimmer>
         {
-          modalOpen ? (
+          modalOpenReassignBusiness ? (
             <ReassignBusinessForm
-              modalOpen={modalOpen}
-              toggleModal={this._toggleModal}
+              modalOpen={modalOpenReassignBusiness}
+              toggleModal={() => this._toggleModal('modalOpenReassignBusiness')}
               businessId={values.id}
             />
           ) : null
@@ -106,8 +100,8 @@ class EditBusinessDetailForm extends Component {
         {
           modalOpenStageSalesMemo ? (
             <StageSalesMemoForm
-              modalOpenStageSalesMemo={modalOpenStageSalesMemo}
-              toggleModal={this._toggleModal}
+              modalOpen={modalOpenStageSalesMemo}
+              toggleModal={() => this._toggleModal('modalOpenStageSalesMemo')}
               businessId={values.id}
             />
           ) : null
@@ -246,11 +240,11 @@ class EditBusinessDetailForm extends Component {
                     placeholder={values.listingAgent}
                     readOnly
                   />
-                  <Button primary onClick={this._toggleModal}>
+                  <Button primary onClick={() => this._toggleModal('modalOpenReassignBusiness')}>
                     <Icon name='edit' />
                     Reassign Business
                   </Button>
-                  <Form.Button color='blue' onClick={this._toggleModal}>
+                  <Form.Button color='blue' onClick={() => this._toggleModal('modalOpenStageSalesMemo')}>
                     <Icon name='file pdf outline' />
                     PDF
                   </Form.Button>
@@ -491,7 +485,8 @@ EditBusinessDetailForm.propTypes = {
   ownersTimeOptions: PropTypes.array,
   stageOptions: PropTypes.array,
   reassignedBusiness: PropTypes.bool,
-  getBusiness: PropTypes.func
+  getBusiness: PropTypes.func,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = props => {
