@@ -10,7 +10,7 @@ import Wrapper from '../../components/content/Wrapper'
 
 import NewBusinessRegisterForm from '../../components/forms/NewBusinessRegisterForm'
 
-import { getBusiness, getBusinessRegister } from '../../redux/ducks/business'
+import { getBusiness } from '../../redux/ducks/business'
 
 class BusinessRegisters extends Component {
   constructor (props) {
@@ -22,12 +22,12 @@ class BusinessRegisters extends Component {
 
   async componentWillReceiveProps (nextProps) {
     if (this.props.createBusinessRegister !== nextProps.createBusinessRegister && nextProps.createBusinessRegister) {
-      await this._toggleModal({})
-      this.props.getBusinessRegister()
+      await this._toggleModal(false, false)
+      this.props.getBusiness()
     }
     if (this.props.updateBusinessRegister !== nextProps.updateBusinessRegister && nextProps.updateBusinessRegister) {
-      await this._toggleModal({})
-      this.props.getBusinessRegister()
+      await this._toggleModal(false, false)
+      this.props.getBusiness()
     }
   }
 
@@ -59,7 +59,7 @@ class BusinessRegisters extends Component {
         <Grid padded='horizontally'>
           <Grid.Row columns={1}>
             <Grid.Column floated='right' width={2}>
-              <Button onClick={() => this._toggleModal(true)} color='facebook'>
+              <Button onClick={() => this._toggleModal(false, false)} color='facebook'>
                 <Icon name='add' />
                   New Register
               </Button>
@@ -280,7 +280,6 @@ BusinessRegisters.propTypes = {
   typeOptions: PropTypes.array,
   ownersTimeOptions: PropTypes.array,
   createBusinessRegister: PropTypes.bool,
-  getBusinessRegister: PropTypes.func,
   updateBusinessRegister: PropTypes.bool
 }
 
@@ -299,7 +298,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, getBusinessRegister }, dispatch)
+  return bindActionCreators({ getBusiness }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)
