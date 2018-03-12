@@ -10,6 +10,7 @@ import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import ReassignBusinessForm from './ReassignBusinessForm'
 import StageSalesMemoForm from './StageSalesMemoForm'
+import StageLostForm from './StageLostForm'
 
 class EditBusinessDetailForm extends Component {
   constructor (props) {
@@ -26,7 +27,8 @@ class EditBusinessDetailForm extends Component {
         { key: '8', text: 'WA', value: 'WA' }
       ],
       modalOpenReassignBusiness: false,
-      modalOpenStageSalesMemo: false
+      modalOpenStageSalesMemo: false,
+      modalOpenStageLost: false
     }
   }
 
@@ -80,7 +82,8 @@ class EditBusinessDetailForm extends Component {
     const {
       state,
       modalOpenReassignBusiness,
-      modalOpenStageSalesMemo
+      modalOpenStageSalesMemo,
+      modalOpenStageLost
     } = this.state
 
     return (
@@ -103,6 +106,15 @@ class EditBusinessDetailForm extends Component {
             <StageSalesMemoForm
               modalOpen={modalOpenStageSalesMemo}
               toggleModal={() => this._toggleModal('modalOpenStageSalesMemo')}
+              business={this.props.business}
+            />
+          ) : null
+        }
+        {
+          modalOpenStageLost ? (
+            <StageLostForm
+              modalOpen={modalOpenStageLost}
+              toggleModal={() => this._toggleModal('modalOpenStageLost')}
               business={this.props.business}
             />
           ) : null
@@ -249,7 +261,7 @@ class EditBusinessDetailForm extends Component {
                     <Icon name='file pdf outline' />
                     PDF
                   </Form.Button>
-                  <Form.Button color='vk'>
+                  <Form.Button color='vk' onClick={() => this._toggleModal('modalOpenStageLost')}>
                     <Icon name='file text' />
                     Appraisal Mgt
                   </Form.Button>
