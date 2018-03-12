@@ -16,7 +16,9 @@ class BusinessRegisters extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpen: false
+      modalOpen: false,
+      editBusinessRegister: false,
+      registerType: null
     }
   }
 
