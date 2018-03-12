@@ -46,6 +46,7 @@ const initialState = {
   get: {
     isLoading: false,
     object: {},
+    stageOptions: [],
     sourceOptions: [],
     ratingOptions: [],
     productOptions: [],
@@ -157,6 +158,7 @@ export default function reducer (state = initialState, action) {
           ...state.get,
           isLoading: false,
           object: action.payload.business,
+          stageOptions: action.payload.stageList,
           sourceOptions: action.payload.sourceList,
           ratingOptions: action.payload.ratingList,
           productOptions: action.payload.productList,

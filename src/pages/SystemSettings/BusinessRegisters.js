@@ -65,18 +65,50 @@ class BusinessRegisters extends Component {
               </Button>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column floated='left' width={5}>
+          <Grid.Row columns={4}>
+            <Grid.Column floated='left' width={4}>
+              <h5><b><div align='left'> Business Stage </div></b></h5>
+            </Grid.Column>
+            <Grid.Column floated='left' width={4}>
               <h5><b><div align='left'> Business Source </div></b></h5>
             </Grid.Column>
-            <Grid.Column floated='left' width={5}>
+            <Grid.Column floated='left' width={4}>
               <h5><b><div align='left'> Business Rating </div></b></h5>
             </Grid.Column>
-            <Grid.Column floated='left' width={5}>
+            <Grid.Column floated='left' width={4}>
               <h5><b><div align='left'> Business Product </div></b></h5>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={3}>
+          <Grid.Row columns={4}>
+            <Grid.Column>
+              <Table color='blue' celled inverted>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.stageOptions.map(stageOptions => {
+                    return (
+                      <Table.Row active >
+                        <Table.Cell>{stageOptions.value}</Table.Cell>
+                        <Table.Cell>{stageOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(stageOptions, 0)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+            </Grid.Column>
             <Grid.Column>
               <Table color='blue' celled inverted>
                 <Table.Header>
@@ -273,6 +305,7 @@ class BusinessRegisters extends Component {
 
 BusinessRegisters.propTypes = {
   getBusiness: PropTypes.func,
+  stageOptions: PropTypes.array,
   sourceOptions: PropTypes.array,
   ratingOptions: PropTypes.array,
   productOptions: PropTypes.array,
@@ -286,6 +319,7 @@ BusinessRegisters.propTypes = {
 const mapStateToProps = state => {
   return {
     isLoading: state.business.get.isLoading,
+    stageOptions: state.business.get.stageOptions,
     sourceOptions: state.business.get.sourceOptions,
     ratingOptions: state.business.get.ratingOptions,
     productOptions: state.business.get.productOptions,

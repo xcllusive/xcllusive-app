@@ -14,6 +14,7 @@ class NewBusinessRegisterForm extends Component {
     super(props)
     this.state = {
       businessRegister: [
+        { key: 0, text: 'Business Stage', value: 0 },
         { key: 1, text: 'Business Source', value: 1 },
         { key: 2, text: 'Business Rating', value: 2 },
         { key: 3, text: 'Business Product', value: 3 },
