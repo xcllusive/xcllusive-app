@@ -2,7 +2,8 @@ import { get, getAll, create, update,
   createBusinessRegister as createBusinessRegisterAPI,
   reassignBusiness as reassignBusinessAPI,
   getBusinessRegister as getBusinessRegisterAPI,
-  updateBusinessRegister as updateBusinessRegisterAPI
+  updateBusinessRegister as updateBusinessRegisterAPI,
+  updateStageSalesMemo as updateStageSalesMemoAPI
 } from '../../services/api/business'
 import { toast } from 'react-toastify'
 
@@ -32,7 +33,10 @@ export const Types = {
   GET_BUSINESS_REGISTER_FAILURE: 'GET_BUSINESS_REGISTER_FAILURE',
   UPDATE_BUSINESS_REGISTER_LOADING: 'UPDATE_BUSINESS_REGISTER_LOADING',
   UPDATE_BUSINESS_REGISTER_SUCCESS: 'UPDATE_BUSINESS_REGISTER_SUCCESS',
-  UPDATE_BUSINESS_REGISTER_FAILURE: 'UPDATE_BUSINESS_REGISTER_FAILURE'
+  UPDATE_BUSINESS_REGISTER_FAILURE: 'UPDATE_BUSINESS_REGISTER_FAILURE',
+  UPDATE_STAGE_SALES_MEMO_LOADING: 'UPDATE_STAGE_SALES_MEMO_LOADING',
+  UPDATE_STAGE_SALES_MEMO_SUCCESS: 'UPDATE_STAGE_SALES_MEMO_SUCCESS',
+  UPDATE_STAGE_SALES_MEMO_FAILURE: 'UPDATE_STAGE_SALES_MEMO_FAILURE'
 }
 
 // Reducer
@@ -78,6 +82,11 @@ const initialState = {
   reassignBusiness: {
     isLoading: false,
     isReassigned: false,
+    error: null
+  },
+  updateStageSalesMemo: {
+    isLoading: false,
+    isUpdated: false,
     error: null
   }
 }
@@ -297,6 +306,36 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.UPDATE_STAGE_SALES_MEMO_LOADING:
+      return {
+        ...state,
+        updateStageSalesMemo: {
+          ...state.updateStageSalesMemo,
+          isLoading: action.payload,
+          isUpdated: false,
+          error: null
+        }
+      }
+    case Types.UPDATE_STAGE_SALES_MEMO_SUCCESS:
+      return {
+        ...state,
+        updateStageSalesMemo: {
+          ...state.updateStageSalesMemo,
+          isLoading: false,
+          isUpdated: true,
+          error: null
+        }
+      }
+    case Types.UPDATE_STAGE_SALES_MEMO_FAILURE:
+      return {
+        ...state,
+        updateStageSalesMemo: {
+          ...state.updateStageSalesMemo,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -463,6 +502,26 @@ export const getBusinessRegister = id => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_BUSINESS_REGISTER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_STAGE_SALES_MEMO_LOADING,
+    payload: true
+  })
+  try {
+    const response = await updateStageSalesMemoAPI(stageSalesMemo)
+    dispatch({
+      type: Types.UPDATE_STAGE_SALES_MEMO_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_STAGE_SALES_MEMO_FAILURE,
       payload: error
     })
     toast.error(error)

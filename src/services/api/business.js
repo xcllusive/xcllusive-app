@@ -63,3 +63,7 @@ export const getBusinessRegister = id => {
     params: {businessRegister: id}
   })
 }
+
+export const updateStageSalesMemo = () => {
+  console.log('updateStageSalesMemo')
+}

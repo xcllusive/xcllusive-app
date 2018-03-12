@@ -4,14 +4,9 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { updateBusiness } from '../../redux/ducks/business'
+import { updateStageSalesMemo } from '../../redux/ducks/business'
 import { Modal, Form, Label, Icon, Button, Radio } from 'semantic-ui-react'
 import Yup from 'yup'
-
-const staffAccountName = [
-  { key: 'Z', text: 'Zoran', value: 'Zoran' },
-  { key: 'C', text: 'Cayo', value: 'Cayo' }
-]
 
 class StageSalesMemoForm extends Component {
   _handleSelectChange = (e, { name, value }) => {
@@ -37,14 +32,15 @@ class StageSalesMemoForm extends Component {
       handleSubmit,
       isSubmitting,
       isValid,
-      createLoading,
       modalOpen,
       toggleModal,
       productOptions,
       industryOptions,
       typeOptions,
       ownersTimeOptions,
-      ratingOptions
+      ratingOptions,
+      usersStaff,
+      updateLoading
     } = this.props
     return (
       <Modal
@@ -91,7 +87,7 @@ class StageSalesMemoForm extends Component {
                 <Form.Select
                   required
                   label='Agent'
-                  options={staffAccountName}
+                  options={usersStaff}
                   name='staffAccountName'
                   autoComplete='staffAccountName'
                   value={values.staffAccountName}
@@ -152,13 +148,21 @@ class StageSalesMemoForm extends Component {
                 {errors.businessRating && touched.businessRating && <Label basic color='red' pointing content={errors.businessRating} />}
               </Form.Field>
             </Form.Group>
+            <Form.Group>
+              <Form.Checkbox
+                label='Mark all `Pending` communications with this Vendor as `Done`'
+                name='notifyOwner'
+                onChange={this._handleChangeCheckBox}
+                //  checked={values.true}
+              />
+            </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
             color='blue'
             disabled={isSubmitting || !isValid}
-            loading={createLoading}
+            loading={updateLoading}
             onClick={handleSubmit}
           >
             <Icon name='save' />
@@ -187,12 +191,13 @@ StageSalesMemoForm.propTypes = {
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   modalOpen: PropTypes.bool,
-  createLoading: PropTypes.bool,
   productOptions: PropTypes.array,
   industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
   ownersTimeOptions: PropTypes.array,
-  ratingOptions: PropTypes.array
+  ratingOptions: PropTypes.array,
+  usersStaff: PropTypes.array,
+  updateLoading: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -203,7 +208,8 @@ const mapPropsToValues = props => {
       typeId,
       industryId,
       ownersTimeId,
-      ratingId
+      ratingId,
+      staffAccountName
     } = props.business
 
     const business = {
@@ -212,7 +218,8 @@ const mapPropsToValues = props => {
       businessType: typeId,
       businessIndustry: industryId,
       businessOwnersTime: ownersTimeId,
-      businessRating: ratingId
+      businessRating: ratingId,
+      staffAccountName
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     return _.mapValues(business, value => value == null ? '' : value)
@@ -231,7 +238,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, {props, setSubmitting}) => {
-  props.updateBusiness(values).then(setSubmitting(false))
+  props.updateStageSalesMemo(values).then(setSubmitting(false))
 }
 
 const mapStateToProps = state => {
@@ -240,12 +247,14 @@ const mapStateToProps = state => {
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
     ownersTimeOptions: state.business.get.ownersTimeOptions,
-    ratingOptions: state.business.get.ratingOptions
+    ratingOptions: state.business.get.ratingOptions,
+    usersStaff: state.business.get.usersStaff,
+    updateLoading: state.business.updateStageSalesMemo.isLoading
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({updateBusiness}, dispatch)
+  return bindActionCreators({updateStageSalesMemo}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
