@@ -81,7 +81,7 @@ class BusinessRegisters extends Component {
           </Grid.Row>
           <Grid.Row columns={4}>
             <Grid.Column>
-              <Table color='blue' celled inverted>
+              <Table color='blue' celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -110,7 +110,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted>
+              <Table color='blue' celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -139,7 +139,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted>
+              <Table color='blue' celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -168,7 +168,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted>
+              <Table color='blue' celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -210,7 +210,7 @@ class BusinessRegisters extends Component {
           </Grid.Row>
           <Grid.Row columns={3}>
             <Grid.Column>
-              <Table color='blue' celled inverted>
+              <Table color='blue' celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -239,7 +239,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted>
+              <Table color='blue' celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -268,7 +268,7 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted>
+              <Table color='blue' celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
