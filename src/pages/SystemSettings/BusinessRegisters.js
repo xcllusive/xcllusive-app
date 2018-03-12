@@ -97,7 +97,7 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{stageOptions.text}</Table.Cell>
                         <Table.Cell>
                           <Icon name='edit' link
-                            onClick={() => this._toggleModal(stageOptions, 0)}
+                            onClick={() => this._toggleModal(stageOptions, 7)}
                           />
                           <Icon link
                             //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
