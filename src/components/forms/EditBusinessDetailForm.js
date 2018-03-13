@@ -41,6 +41,10 @@ class EditBusinessDetailForm extends Component {
       await this._toggleModal('modalOpenStageSalesMemo')
       this.props.getBusiness(nextProps.business.id)
     }
+    if (this.props.updateStageLost !== nextProps.updateStageLost && nextProps.updateStageLost) {
+      await this._toggleModal('modalOpenStageLost')
+      this.props.getBusiness(nextProps.business.id)
+    }
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -500,7 +504,8 @@ EditBusinessDetailForm.propTypes = {
   getBusiness: PropTypes.func,
   business: PropTypes.object,
   usersStaff: PropTypes.array,
-  updateStageSalesMemo: PropTypes.bool
+  updateStageSalesMemo: PropTypes.bool,
+  updateStageLost: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -655,7 +660,8 @@ const mapStateToProps = state => {
     stageOptions: state.business.get.stageOptions,
     reassignedBusiness: state.business.reassignBusiness.isReassigned,
     usersStaff: state.business.get.usersStaff,
-    updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated
+    updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated,
+    updateStageLost: state.business.updateStageLost.isUpdated
   }
 }
 

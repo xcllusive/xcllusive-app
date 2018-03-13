@@ -3,7 +3,8 @@ import { get, getAll, create, update,
   reassignBusiness as reassignBusinessAPI,
   getBusinessRegister as getBusinessRegisterAPI,
   updateBusinessRegister as updateBusinessRegisterAPI,
-  updateStageSalesMemo as updateStageSalesMemoAPI
+  updateStageSalesMemo as updateStageSalesMemoAPI,
+  updateStageLost as updateStageLostAPI
 } from '../../services/api/business'
 import { toast } from 'react-toastify'
 
@@ -37,7 +38,10 @@ export const Types = {
   UPDATE_BUSINESS_REGISTER_FAILURE: 'UPDATE_BUSINESS_REGISTER_FAILURE',
   UPDATE_STAGE_SALES_MEMO_LOADING: 'UPDATE_STAGE_SALES_MEMO_LOADING',
   UPDATE_STAGE_SALES_MEMO_SUCCESS: 'UPDATE_STAGE_SALES_MEMO_SUCCESS',
-  UPDATE_STAGE_SALES_MEMO_FAILURE: 'UPDATE_STAGE_SALES_MEMO_FAILURE'
+  UPDATE_STAGE_SALES_MEMO_FAILURE: 'UPDATE_STAGE_SALES_MEMO_FAILURE',
+  UPDATE_STAGE_LOST_LOADING: 'UPDATE_STAGE_LOST_LOADING',
+  UPDATE_STAGE_LOST_SUCCESS: 'UPDATE_STAGE_LOST_SUCCESS',
+  UPDATE_STAGE_LOST_FAILURE: 'UPDATE_STAGE_LOST_FAILURE'
 }
 
 // Reducer
@@ -88,6 +92,11 @@ const initialState = {
     error: null
   },
   updateStageSalesMemo: {
+    isLoading: false,
+    isUpdated: false,
+    error: null
+  },
+  updateStageLost: {
     isLoading: false,
     isUpdated: false,
     error: null
@@ -348,6 +357,36 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.UPDATE_STAGE_LOST_LOADING:
+      return {
+        ...state,
+        updateStageLost: {
+          ...state.updateStageLost,
+          isLoading: action.payload,
+          isUpdated: false,
+          error: null
+        }
+      }
+    case Types.UPDATE_STAGE_LOST_SUCCESS:
+      return {
+        ...state,
+        updateStageLost: {
+          ...state.updateStageLost,
+          isLoading: false,
+          isUpdated: true,
+          error: null
+        }
+      }
+    case Types.UPDATE_STAGE_LOST_FAILURE:
+      return {
+        ...state,
+        updateStageLost: {
+          ...state.updateStageLost,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -540,6 +579,26 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_STAGE_SALES_MEMO_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const updateStageLost = stageLost => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_STAGE_LOST_LOADING,
+    payload: true
+  })
+  try {
+    const response = await updateStageLostAPI(stageLost)
+    dispatch({
+      type: Types.UPDATE_STAGE_LOST_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_STAGE_LOST_FAILURE,
       payload: error
     })
     toast.error(error)

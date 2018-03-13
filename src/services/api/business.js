@@ -67,3 +67,7 @@ export const getBusinessRegister = id => {
 export const updateStageSalesMemo = () => {
   console.log('updateStageSalesMemo')
 }
+
+export const updateStageLost = () => {
+  console.log('updateStageLost')
+}

@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { updateStageSalesMemo } from '../../redux/ducks/business'
+import { updateStageLost } from '../../redux/ducks/business'
 import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
-import Yup from 'yup'
 
 class StageLostForm extends Component {
   _handleSelectChange = (e, { name, value }) => {
@@ -178,7 +177,7 @@ class StageLostForm extends Component {
           </Button>
           <Button
             color='red'
-            onClick={() => toggleModal('modalOpenStageLostForm')}
+            onClick={() => toggleModal('modalOpenStageLost')}
           >
             <Icon name='cancel' />
             Cancel
@@ -228,29 +227,25 @@ const mapPropsToValues = props => {
   }
 }
 
-const validationSchema = Yup.object().shape({
-})
-
 const handleSubmit = (values, {props, setSubmitting}) => {
-  props.updateStageSalesMemo(values).then(setSubmitting(false))
+  props.updateStageLost(values).then(setSubmitting(false))
 }
 
 const mapStateToProps = state => {
   return {
     ratingOptions: state.business.get.ratingOptions,
-    updateLoading: state.business.updateStageSalesMemo.isLoading,
+    updateLoading: state.business.updateStageLost.isLoading,
     stageNotSignedOptions: state.business.get.stageNotSignedOptions,
     stageNotWantOptions: state.business.get.stageNotWantOptions
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({updateStageSalesMemo}, dispatch)
+  return bindActionCreators({updateStageLost}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
-    validationSchema,
     mapPropsToValues,
     handleSubmit})(StageLostForm)
 )
