@@ -11,13 +11,15 @@ import {
   Table,
   Button,
   Icon,
-  Tab
+  Tab,
+  Dimmer,
+  Loader
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
-import { getBusiness } from '../../redux/ducks/business'
+import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
 
 const array = [
   {
@@ -69,11 +71,29 @@ class BusinessEditPage extends Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.getBusiness(this.props.match.params.id)
   }
 
+  shouldComponentUpdate (nextprops) {
+    if (this.props.isLoading === nextprops.isLoading) return false
+
+    return true
+  }
+
+  componentWillUnmount () {
+    this.props.cleanBusiness()
+  }
+
   render () {
+    if (this.props.isLoading) {
+      return (
+        <Dimmer inverted active={this.props.isLoading}>
+          <Loader inverted />
+        </Dimmer>
+      )
+    }
+
     return (
       <Wrapper>
         <Statistic.Group size='mini' widths={7}>
@@ -210,12 +230,14 @@ BusinessEditPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   getBusiness: PropTypes.func,
+  cleanBusiness: PropTypes.func,
   business: PropTypes.object,
-  error: PropTypes.string
+  error: PropTypes.string,
+  isLoading: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness }, dispatch)
+  return bindActionCreators({ getBusiness, cleanBusiness }, dispatch)
 }
 
 const mapStateToProps = state => {

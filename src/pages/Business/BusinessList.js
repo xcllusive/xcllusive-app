@@ -13,22 +13,22 @@ import GridBusinessStage from '../../components/content/GridBusinessStage'
 class BusinessListPage extends Component {
   constructor (props) {
     super(props)
+    this.timer = null
     this.state = {
       modalOpen: false,
       inputSearch: ''
     }
   }
 
+  async componentWillMount () {
+    await this.props.getBusinesses()
+  }
+
   async componentWillReceiveProps (nextProps) {
-    if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
+    if (nextProps.isCreated && (this.props.isCreated !== nextProps.isCreated)) {
       await this._toggleModal({})
       this.props.getBusinesses()
     }
-  }
-
-  componentWillMount () {
-    this.props.getBusinesses()
-    this.timer = null
   }
 
   _onSearch = (e, { value }) => {
@@ -52,18 +52,32 @@ class BusinessListPage extends Component {
     const {
       isLoading,
       history,
-      match
+      match,
+      businesses
     } = this.props
 
-    return (
-      <Wrapper>
+    const {
+      modalOpen
+    } = this.state
+
+    if (isLoading) {
+      return (
         <Dimmer inverted active={isLoading}>
           <Loader inverted />
         </Dimmer>
-        <NewBusinessForm
-          modalOpen={this.state.modalOpen}
-          toggleModal={this._toggleModal}
-        />
+      )
+    }
+
+    return (
+      <Wrapper>
+        {
+          modalOpen ? (
+            <NewBusinessForm
+              modalOpen={modalOpen}
+              toggleModal={this._toggleModal}
+            />
+          ) : null
+        }
         <GridBusinessStage>
           <Statistic.Group size='mini' color='blue' widths={6}>
             <Statistic>
@@ -104,8 +118,8 @@ class BusinessListPage extends Component {
                 value={this.state.inputSearch}
               />
             </Grid.Column>
-            <Grid.Column floated='right' width={2}>
-              <Button onClick={this._toggleModal} color='facebook'>
+            <Grid.Column floated='right' width={3}>
+              <Button onClick={this._toggleModal} color='facebook' floated='right'>
                 <Icon name='add' />
                 New Business
               </Button>
@@ -125,7 +139,7 @@ class BusinessListPage extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  this.props.businesses.map(business => {
+                  businesses.map(business => {
                     return (
                       <Table.Row
                         active

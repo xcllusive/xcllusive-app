@@ -1,27 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
-//  import BusinessDetail from '../../components/BusinessDetail'
 import Yup from 'yup'
 
-import { createBusiness, getBusiness } from '../../redux/ducks/business'
+import { createBusiness } from '../../redux/ducks/business'
+import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 
 class NewBusinessForm extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-    }
-  }
-  _handleSelectChange = (e, { name, value }) => {
-    this.props.setFieldValue(name, value)
+  componentWillMount () {
+    this.props.getBusinessRegister(1)
   }
 
-  componentDidMount () {
-    this.props.getBusiness()
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
   }
 
   render () {
@@ -37,10 +31,9 @@ class NewBusinessForm extends Component {
       isSubmitting,
       isValid,
       isLoading,
-      sourceOptions
+      sourceOptions,
+      dropDownLoading
     } = this.props
-
-    //  const {} = this.state
 
     return (
       <Modal
@@ -143,6 +136,8 @@ class NewBusinessForm extends Component {
                   options={sourceOptions}
                   name='businessSource'
                   autoComplete='businessSource'
+                  loading={dropDownLoading}
+                  disabled={dropDownLoading}
                   value={values.businessSource}
                   onChange={this._handleSelectChange}
                 />
@@ -213,7 +208,8 @@ NewBusinessForm.propTypes = {
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   sourceOptions: PropTypes.array,
-  getBusiness: PropTypes.func
+  getBusinessRegister: PropTypes.func,
+  dropDownLoading: PropTypes.bool
 }
 
 const mapPropsToValues = () => ({
@@ -248,7 +244,7 @@ const validationSchema = Yup.object().shape({
   vendorEmail: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  businessSource: Yup.string()
+  businessSource: Yup.number()
     .required('Source is required.'),
   sourceNotes: Yup.string()
     .max(40, 'Source Notes require max 40 characters.'),
@@ -265,12 +261,13 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 const mapStateToProps = state => {
   return {
     isLoading: state.business.create.isLoading,
-    sourceOptions: state.business.get.sourceOptions
+    sourceOptions: state.businessRegister.get.source.array,
+    dropDownLoading: state.businessRegister.get.source.isLoading
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ createBusiness, getBusiness }, dispatch)
+  return bindActionCreators({ createBusiness, getBusinessRegister }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
