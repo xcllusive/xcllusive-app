@@ -19,7 +19,7 @@ import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
-import { getBusiness } from '../../redux/ducks/business'
+import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
 
 const array = [
   {
@@ -72,12 +72,20 @@ class BusinessEditPage extends Component {
   }
 
   componentWillMount () {
-    console.log('will edit')
     this.props.getBusiness(this.props.match.params.id)
   }
 
+  shouldComponentUpdate (nextprops) {
+    if (this.props.isLoading === nextprops.isLoading) return false
+
+    return true
+  }
+
+  componentWillUnmount () {
+    this.props.cleanBusiness()
+  }
+
   render () {
-    console.log('render edit')
     if (this.props.isLoading) {
       return (
         <Dimmer inverted active={this.props.isLoading}>
@@ -222,13 +230,14 @@ BusinessEditPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   getBusiness: PropTypes.func,
+  cleanBusiness: PropTypes.func,
   business: PropTypes.object,
   error: PropTypes.string,
   isLoading: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness }, dispatch)
+  return bindActionCreators({ getBusiness, cleanBusiness }, dispatch)
 }
 
 const mapStateToProps = state => {

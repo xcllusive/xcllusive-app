@@ -32,10 +32,6 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
-  componentDidMount () {
-    console.log('didmount form')
-  }
-
   async componentWillReceiveProps (nextProps) {
     if (this.props.reassignedBusiness !== nextProps.reassignedBusiness && nextProps.reassignedBusiness) {
       await this._toggleModal('modalOpenReassignBusiness')
@@ -557,7 +553,7 @@ const mapPropsToValues = props => {
       address1,
       suburb,
       state,
-      postCode,
+      postCode: postCode && postCode.length > 3 ? postCode : '0000',
       data120DayGuarantee,
       notifyOwner,
       listingAgent,
@@ -588,7 +584,7 @@ const mapPropsToValues = props => {
     businessURL: '',
     address1: '',
     suburb: '',
-    postCode: '',
+    postCode: '0000',
     data120DayGuarantee: false,
     notifyOwner: true,
     listingAgent: '',

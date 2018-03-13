@@ -244,7 +244,7 @@ const validationSchema = Yup.object().shape({
   vendorEmail: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  businessSource: Yup.string()
+  businessSource: Yup.number()
     .required('Source is required.'),
   sourceNotes: Yup.string()
     .max(40, 'Source Notes require max 40 characters.'),

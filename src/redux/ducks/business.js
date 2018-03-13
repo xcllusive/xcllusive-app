@@ -19,6 +19,7 @@ export const Types = {
   GET_BUSINESS_LOADING: 'GET_BUSINESS_LOADING',
   GET_BUSINESS_SUCCESS: 'GET_BUSINESS_SUCCESS',
   GET_BUSINESS_FAILURE: 'GET_BUSINESS_FAILURE',
+  CLEAN_BUSINESS: 'CLEAN_BUSINESS',
   GET_BUSINESSES_LOADING: 'GET_BUSINESSES_LOADING',
   GET_BUSINESSES_SUCCESS: 'GET_BUSINESSES_SUCCESS',
   GET_BUSINESSES_FAILURE: 'GET_BUSINESSES_FAILURE',
@@ -48,7 +49,7 @@ const initialState = {
     error: null
   },
   get: {
-    isLoading: false,
+    isLoading: true,
     object: {},
     stageOptions: [],
     sourceOptions: [],
@@ -185,6 +186,13 @@ export default function reducer (state = initialState, action) {
           ...state.get,
           isLoading: false,
           error: action.payload
+        }
+      }
+    case Types.CLEAN_BUSINESS:
+      return {
+        ...state,
+        get: {
+          ...initialState.get
         }
       }
     case Types.UPDATE_BUSINESS_LOADING:
@@ -385,6 +393,12 @@ export const getBusiness = id => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const cleanBusiness = () => dispatch => {
+  dispatch({
+    type: Types.CLEAN_BUSINESS
+  })
 }
 
 export const getBusinesses = (search = false) => async dispatch => {
