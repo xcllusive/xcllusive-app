@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageSalesMemo } from '../../redux/ducks/business'
-import { Modal, Form, Label, Icon, Button, Radio } from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
 import Yup from 'yup'
 
 class StageLostForm extends Component {
@@ -93,7 +93,7 @@ class StageLostForm extends Component {
               />
             </Form.Group>
             <Form.Group>
-              <label>Did you meet with this vendor? </label>
+              <label>Did we want this business?</label>
               <Form.Field
                 control={Radio}
                 label='Yes'
@@ -108,6 +108,54 @@ class StageLostForm extends Component {
                 onChange={this._handleChangeCheckBox}
                 checked={!values.saleNotesLostWant}
               />
+            </Form.Group>
+            <Form.Group>
+              <Form.Field>
+                <Form.Select
+                  required
+                  label='Why did they not sign with us?'
+                  options={ratingOptions}
+                  name='recoveryStageNotSigned'
+                  autoComplete='recoveryStageNotSigned'
+                  value={values.recoveryStageNotSigned}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.recoveryStageNotSigned && touched.recoveryStageNotSigned && <Label basic color='red' pointing content={errors.recoveryStageNotSigned} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  required
+                  label='Why did we not want then?'
+                  options={ratingOptions}
+                  name='recoveryStageNotWant'
+                  autoComplete='recoveryStageNotWant'
+                  value={values.recoveryStageNotWant}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.recoveryStageNotWant && touched.recoveryStageNotWant && <Label basic color='red' pointing content={errors.recoveryStageNotWant} />}
+              </Form.Field>
+            </Form.Group>
+            <Divider horizontal>(Optional) Set Follow up date</Divider>
+            <Form.Group>
+              <Form.Checkbox
+                label='Make a Follow up log.'
+                name='notifyOwner'
+                onChange={this._handleChangeCheckBox}
+                //  checked={values.true}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Field>
+                <Form.TextArea
+                  label=''
+                  name='afterSalesNotes'
+                  autoComplete='afterSalesNotes'
+                  value={values.afterSalesNotes}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
+              </Form.Field>
             </Form.Group>
           </Form.Group>
         </Modal.Content>
