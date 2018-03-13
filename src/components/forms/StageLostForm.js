@@ -29,7 +29,9 @@ class StageLostForm extends Component {
       ratingOptions,
       updateLoading,
       handleChange,
-      handleBlur
+      handleBlur,
+      stageNotSignedOptions,
+      stageNotWantOptions
     } = this.props
     return (
       <Modal
@@ -116,7 +118,7 @@ class StageLostForm extends Component {
                     <Form.Select
                       required
                       label='Why did they not sign with us?'
-                      options={ratingOptions}
+                      options={stageNotSignedOptions}
                       name='recoveryStageNotSigned'
                       autoComplete='recoveryStageNotSigned'
                       value={values.recoveryStageNotSigned}
@@ -129,7 +131,7 @@ class StageLostForm extends Component {
                     <Form.Select
                       required
                       label='Why did we not want then?'
-                      options={ratingOptions}
+                      options={stageNotWantOptions}
                       name='recoveryStageNotWant'
                       autoComplete='recoveryStageNotWant'
                       value={values.recoveryStageNotWant}
@@ -200,7 +202,9 @@ StageLostForm.propTypes = {
   ratingOptions: PropTypes.array,
   updateLoading: PropTypes.bool,
   handleChange: PropTypes.func,
-  handleBlur: PropTypes.func
+  handleBlur: PropTypes.func,
+  stageNotSignedOptions: PropTypes.array,
+  stageNotWantOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -234,7 +238,9 @@ const handleSubmit = (values, {props, setSubmitting}) => {
 const mapStateToProps = state => {
   return {
     ratingOptions: state.business.get.ratingOptions,
-    updateLoading: state.business.updateStageSalesMemo.isLoading
+    updateLoading: state.business.updateStageSalesMemo.isLoading,
+    stageNotSignedOptions: state.business.get.stageNotSignedOptions,
+    stageNotWantOptions: state.business.get.stageNotWantOptions
   }
 }
 

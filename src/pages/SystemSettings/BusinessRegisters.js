@@ -67,10 +67,7 @@ class BusinessRegisters extends Component {
               </Button>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={4}>
-            <Grid.Column floated='left' width={4}>
-              <h5><b><div align='left'> Business Stage </div></b></h5>
-            </Grid.Column>
+          <Grid.Row columns={3}>
             <Grid.Column floated='left' width={4}>
               <h5><b><div align='left'> Business Source </div></b></h5>
             </Grid.Column>
@@ -81,36 +78,7 @@ class BusinessRegisters extends Component {
               <h5><b><div align='left'> Business Product </div></b></h5>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={4}>
-            <Grid.Column>
-              <Table color='blue' celled inverted selectable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Label</Table.HeaderCell>
-                    <Table.HeaderCell>Settings</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.stageOptions.map(stageOptions => {
-                    return (
-                      <Table.Row active >
-                        <Table.Cell>{stageOptions.value}</Table.Cell>
-                        <Table.Cell>{stageOptions.text}</Table.Cell>
-                        <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(stageOptions, 7)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
-                        </Table.Cell>
-                      </Table.Row>
-                    )
-                  })}
-                </Table.Body>
-              </Table>
-            </Grid.Column>
+          <Grid.Row columns={3}>
             <Grid.Column>
               <Table color='blue' celled inverted selectable>
                 <Table.Header>
@@ -299,6 +267,106 @@ class BusinessRegisters extends Component {
               </Table>
             </Grid.Column>
           </Grid.Row>
+          <Grid.Row columns={3}>
+            <Grid.Column floated='left' width={4}>
+              <h5><b><div align='left'> Business Stage </div></b></h5>
+            </Grid.Column>
+            <Grid.Column floated='left' width={4}>
+              <h5><b><div align='left'> Stage Not Signed </div></b></h5>
+            </Grid.Column>
+            <Grid.Column floated='left' width={4}>
+              <h5><b><div align='left'> Stage Not Want </div></b></h5>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={3}>
+            <Grid.Column>
+              <Table color='blue' celled inverted selectable>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.stageOptions.map(stageOptions => {
+                    return (
+                      <Table.Row active >
+                        <Table.Cell>{stageOptions.value}</Table.Cell>
+                        <Table.Cell>{stageOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(stageOptions, 7)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+            </Grid.Column>
+            <Grid.Column>
+              <Table color='blue' celled inverted selectable>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.stageNotSignedOptions.map(stageNotSignedOptions => {
+                    return (
+                      <Table.Row active >
+                        <Table.Cell>{stageNotSignedOptions.value}</Table.Cell>
+                        <Table.Cell>{stageNotSignedOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(stageNotSignedOptions, 8)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+            </Grid.Column>
+            <Grid.Column>
+              <Table color='blue' celled inverted selectable>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.stageNotWantOptions.map(stageNotWantOptions => {
+                    return (
+                      <Table.Row active >
+                        <Table.Cell>{stageNotWantOptions.value}</Table.Cell>
+                        <Table.Cell>{stageNotWantOptions.text}</Table.Cell>
+                        <Table.Cell>
+                          <Icon name='edit' link
+                            onClick={() => this._toggleModal(stageNotWantOptions, 9)}
+                          />
+                          <Icon link
+                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
+                            color='red' name='trash' />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </Wrapper>
     )
@@ -315,7 +383,9 @@ BusinessRegisters.propTypes = {
   typeOptions: PropTypes.array,
   ownersTimeOptions: PropTypes.array,
   createBusinessRegister: PropTypes.bool,
-  updateBusinessRegister: PropTypes.bool
+  updateBusinessRegister: PropTypes.bool,
+  stageNotSignedOptions: PropTypes.array,
+  stageNotWantOptions: PropTypes.array
 }
 
 const mapStateToProps = state => {
@@ -329,7 +399,9 @@ const mapStateToProps = state => {
     typeOptions: state.business.get.typeOptions,
     ownersTimeOptions: state.business.get.ownersTimeOptions,
     createBusinessRegister: state.business.createBusinessRegister.isCreated,
-    updateBusinessRegister: state.business.updateBusinessRegister.isUpdated
+    updateBusinessRegister: state.business.updateBusinessRegister.isUpdated,
+    stageNotSignedOptions: state.business.get.stageNotSignedOptions,
+    stageNotWantOptions: state.business.get.stageNotWantOptions
   }
 }
 

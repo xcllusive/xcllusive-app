@@ -58,6 +58,8 @@ const initialState = {
     industryOptions: [],
     typeOptions: [],
     ownersTimeOptions: [],
+    stageNotSignedOptions: [],
+    stageNotWantOptions: [],
     error: null
   },
   create: {
@@ -176,6 +178,8 @@ export default function reducer (state = initialState, action) {
           typeOptions: action.payload.typeList,
           ownersTimeOptions: action.payload.ownersTimeList,
           usersStaff: action.payload.usersStaff,
+          stageNotSignedOptions: action.payload.stageNotSignedList,
+          stageNotWantOptions: action.payload.stageNotWantList,
           error: null
         }
       }

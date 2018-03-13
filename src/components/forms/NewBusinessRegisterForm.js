@@ -20,7 +20,9 @@ class NewBusinessRegisterForm extends Component {
         { key: 4, text: 'Business Industry', value: 4 },
         { key: 5, text: 'Business Type', value: 5 },
         { key: 6, text: 'Business Owner`s Time', value: 6 },
-        { key: 7, text: 'Business Stage', value: 7 }
+        { key: 7, text: 'Business Stage', value: 7 },
+        { key: 8, text: 'Stage Not Signed', value: 8 },
+        { key: 9, text: 'Stage Not Want', value: 9 }
       ]
     }
   }

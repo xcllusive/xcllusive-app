@@ -58,7 +58,6 @@ class EditBusinessDetailForm extends Component {
   }
 
   render () {
-    console.log('render form')
     const {
       values,
       handleChange,
