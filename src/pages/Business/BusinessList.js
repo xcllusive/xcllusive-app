@@ -118,8 +118,8 @@ class BusinessListPage extends Component {
                 value={this.state.inputSearch}
               />
             </Grid.Column>
-            <Grid.Column floated='right' width={2}>
-              <Button onClick={this._toggleModal} color='facebook'>
+            <Grid.Column floated='right' width={3}>
+              <Button onClick={this._toggleModal} color='facebook' floated='right'>
                 <Icon name='add' />
                 New Business
               </Button>
