@@ -38,10 +38,10 @@ class StageLostForm extends Component {
       >
         <Modal.Header align='center'>Change the business stage to 'Lost'</Modal.Header>
         <Modal.Content>
-          <Form.Group>
+          <Form>
             <h5>Please select a business rating*. IMPORTANT: Once you have marked this business as 'Lost' you can change it back to a potential listing by searching for it and changing the stage manually.</h5>
             <Form.Group>
-              <Form.Field>
+              <Form.Field width={10}>
                 <Form.Select
                   required
                   label='Rating'
@@ -55,7 +55,7 @@ class StageLostForm extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <Form.Field>
+              <Form.Field width={10}>
                 <Form.TextArea
                   label='Lost Notes'
                   name='afterSalesNotes'
@@ -70,9 +70,9 @@ class StageLostForm extends Component {
             <Form.Group>
               <Form.Checkbox
                 label='Mark all `Pending` communications with this Vendor as `Done`'
-                name='notifyOwner'
+                name='pendingDone'
                 onChange={this._handleChangeCheckBox}
-                //  checked={values.true}
+                checked={values.pendingDone}
               />
             </Form.Group>
             <Form.Group>
@@ -110,30 +110,35 @@ class StageLostForm extends Component {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Field>
-                <Form.Select
-                  required
-                  label='Why did they not sign with us?'
-                  options={ratingOptions}
-                  name='recoveryStageNotSigned'
-                  autoComplete='recoveryStageNotSigned'
-                  value={values.recoveryStageNotSigned}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.recoveryStageNotSigned && touched.recoveryStageNotSigned && <Label basic color='red' pointing content={errors.recoveryStageNotSigned} />}
-              </Form.Field>
-              <Form.Field>
-                <Form.Select
-                  required
-                  label='Why did we not want then?'
-                  options={ratingOptions}
-                  name='recoveryStageNotWant'
-                  autoComplete='recoveryStageNotWant'
-                  value={values.recoveryStageNotWant}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.recoveryStageNotWant && touched.recoveryStageNotWant && <Label basic color='red' pointing content={errors.recoveryStageNotWant} />}
-              </Form.Field>
+              {
+                this.props.values.saleNotesLostWant ? (
+                  <Form.Field width={10}>
+                    <Form.Select
+                      required
+                      label='Why did they not sign with us?'
+                      options={ratingOptions}
+                      name='recoveryStageNotSigned'
+                      autoComplete='recoveryStageNotSigned'
+                      value={values.recoveryStageNotSigned}
+                      onChange={this._handleSelectChange}
+                    />
+                    {errors.recoveryStageNotSigned && touched.recoveryStageNotSigned && <Label basic color='red' pointing content={errors.recoveryStageNotSigned} />}
+                  </Form.Field>
+                ) : (
+                  <Form.Field width={10}>
+                    <Form.Select
+                      required
+                      label='Why did we not want then?'
+                      options={ratingOptions}
+                      name='recoveryStageNotWant'
+                      autoComplete='recoveryStageNotWant'
+                      value={values.recoveryStageNotWant}
+                      onChange={this._handleSelectChange}
+                    />
+                    {errors.recoveryStageNotWant && touched.recoveryStageNotWant && <Label basic color='red' pointing content={errors.recoveryStageNotWant} />}
+                  </Form.Field>
+                )
+              }
             </Form.Group>
             <Divider horizontal>(Optional) Set Follow up date</Divider>
             <Form.Group>
@@ -145,7 +150,7 @@ class StageLostForm extends Component {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Field>
+              <Form.Field width={10}>
                 <Form.TextArea
                   label=''
                   name='afterSalesNotes'
@@ -157,7 +162,7 @@ class StageLostForm extends Component {
                 {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
               </Form.Field>
             </Form.Group>
-          </Form.Group>
+          </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
@@ -171,7 +176,7 @@ class StageLostForm extends Component {
           </Button>
           <Button
             color='red'
-            onClick={() => toggleModal('modalOpenStageSalesMemo')}
+            onClick={() => toggleModal('modalOpenStageLostForm')}
           >
             <Icon name='cancel' />
             Cancel
@@ -213,7 +218,9 @@ const mapPropsToValues = props => {
   }
   return {
     businessRating: '',
-    saleNotesLostMeeting: false
+    saleNotesLostMeeting: false,
+    pendingDone: true,
+    saleNotesLostWant: false
   }
 }
 

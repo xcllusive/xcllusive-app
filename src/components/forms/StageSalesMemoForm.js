@@ -151,9 +151,9 @@ class StageSalesMemoForm extends Component {
             <Form.Group>
               <Form.Checkbox
                 label='Mark all `Pending` communications with this Vendor as `Done`'
-                name='notifyOwner'
+                name='pendingDone'
                 onChange={this._handleChangeCheckBox}
-                //  checked={values.true}
+                checked={values.pendingDone}
               />
             </Form.Group>
           </Form>
@@ -230,7 +230,8 @@ const mapPropsToValues = props => {
     businessType: '',
     businessIndustry: '',
     businessOwnersTime: '',
-    businessRating: ''
+    businessRating: '',
+    pendingDone: true
   }
 }
 
