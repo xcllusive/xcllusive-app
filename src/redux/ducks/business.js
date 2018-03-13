@@ -43,7 +43,7 @@ export const Types = {
 
 const initialState = {
   getAll: {
-    isLoading: false,
+    isLoading: true,
     array: [],
     error: null
   },

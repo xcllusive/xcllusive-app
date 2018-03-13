@@ -11,7 +11,9 @@ import {
   Table,
   Button,
   Icon,
-  Tab
+  Tab,
+  Dimmer,
+  Loader
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
@@ -69,11 +71,21 @@ class BusinessEditPage extends Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
+    console.log('will edit')
     this.props.getBusiness(this.props.match.params.id)
   }
 
   render () {
+    console.log('render edit')
+    if (this.props.isLoading) {
+      return (
+        <Dimmer inverted active={this.props.isLoading}>
+          <Loader inverted />
+        </Dimmer>
+      )
+    }
+
     return (
       <Wrapper>
         <Statistic.Group size='mini' widths={7}>
@@ -211,7 +223,8 @@ BusinessEditPage.propTypes = {
   match: PropTypes.object,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
-  error: PropTypes.string
+  error: PropTypes.string,
+  isLoading: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {

@@ -32,6 +32,10 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
+  componentDidMount () {
+    console.log('didmount form')
+  }
+
   async componentWillReceiveProps (nextProps) {
     if (this.props.reassignedBusiness !== nextProps.reassignedBusiness && nextProps.reassignedBusiness) {
       await this._toggleModal('modalOpenReassignBusiness')
@@ -58,6 +62,7 @@ class EditBusinessDetailForm extends Component {
   }
 
   render () {
+    console.log('render form')
     const {
       values,
       handleChange,
@@ -78,7 +83,6 @@ class EditBusinessDetailForm extends Component {
       stageOptions,
       usersStaff
     } = this.props
-
     const {
       state,
       modalOpenReassignBusiness,
