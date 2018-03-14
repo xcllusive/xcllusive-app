@@ -236,6 +236,20 @@ const mapPropsToValues = props => {
 }
 
 const validationSchema = Yup.object().shape({
+  businessProduct: Yup.string()
+    .required('This field is required.'),
+  data120DayGuarantee: Yup.string()
+    .required('This field is required.'),
+  staffAccountName: Yup.string()
+    .required('This field is required.'),
+  businessType: Yup.string()
+    .required('This field is required.'),
+  businessIndustry: Yup.string()
+    .required('This field is required.'),
+  businessOwnersTime: Yup.string()
+    .required('This field is required.'),
+  businessRating: Yup.string()
+    .required('This field is required.')
 })
 
 const handleSubmit = (values, {props, setSubmitting}) => {
