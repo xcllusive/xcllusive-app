@@ -21,7 +21,6 @@ class StageLostForm extends Component {
       touched,
       errors,
       handleSubmit,
-      isSubmitting,
       isValid,
       modalOpen,
       toggleModal,
@@ -58,6 +57,7 @@ class StageLostForm extends Component {
             <Form.Group>
               <Form.Field width={10}>
                 <Form.TextArea
+                  required
                   label='Lost Notes'
                   name='afterSalesNotes'
                   autoComplete='afterSalesNotes'
@@ -145,30 +145,48 @@ class StageLostForm extends Component {
             <Form.Group>
               <Form.Checkbox
                 label='Make a Follow up log.'
-                name='notifyOwner'
+                name='followUpLog'
                 onChange={this._handleChangeCheckBox}
-                //  checked={values.true}
+                checked={values.followUpLog}
               />
             </Form.Group>
             <Form.Group>
-              <Form.Field width={10}>
-                <Form.TextArea
-                  label=''
-                  name='afterSalesNotes'
-                  autoComplete='afterSalesNotes'
-                  value={values.afterSalesNotes}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
-              </Form.Field>
+              {
+                this.props.values.followUpLog ? (
+                  <Form.Field width={10}>
+                    <Form.TextArea
+                      required
+                      label=''
+                      name='text'
+                      autoComplete='text'
+                      value={values.text}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
+                  </Form.Field>
+                ) : (
+                  <Form.Field width={10}>
+                    <Form.TextArea
+                      label=''
+                      name='text'
+                      autoComplete='text'
+                      value={values.text}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled
+                    />
+                    {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
+                  </Form.Field>
+                )
+              }
             </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
             color='blue'
-            disabled={isSubmitting || !isValid}
+            disabled={updateLoading || !isValid}
             loading={updateLoading}
             onClick={handleSubmit}
           >
@@ -195,7 +213,6 @@ StageLostForm.propTypes = {
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   toggleModal: PropTypes.func,
-  isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   modalOpen: PropTypes.bool,
   ratingOptions: PropTypes.array,
