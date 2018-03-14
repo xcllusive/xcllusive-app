@@ -98,11 +98,11 @@ class BusinessEditPage extends Component {
       <Wrapper>
         <Statistic.Group size='mini' widths={7}>
           <Statistic color='orange'>
-            <Statistic.Value>Business Name</Statistic.Value>
-            <Statistic.Label>BS</Statistic.Label>
+            <Statistic.Value>{this.props.business.businessName}</Statistic.Value>
+            <Statistic.Label>{this.props.business.id}</Statistic.Label>
           </Statistic>
           <Statistic color='blue'>
-            <Statistic.Value>1,000,000</Statistic.Value>
+            <Statistic.Value>{this.props.business.currentPrice}</Statistic.Value>
             <Statistic.Label>Price</Statistic.Label>
           </Statistic>
           <Statistic color='blue'>

@@ -45,7 +45,6 @@ class StageLostForm extends Component {
       stageNotSignedOptions,
       stageNotWantOptions
     } = this.props
-    console.log(values)
     return (
       <Modal
         dimmer={'blurring'}
@@ -170,7 +169,6 @@ class StageLostForm extends Component {
                 this.props.values.followUpLog ? (
                   <Form.Field width={10}>
                     <Form.TextArea
-                      required
                       label=''
                       name='text'
                       autoComplete='text'
@@ -191,7 +189,7 @@ class StageLostForm extends Component {
                       onBlur={handleBlur}
                       disabled
                     />
-                    {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
+                    {errors.text && touched.text && <Label basic color='red' pointing content={errors.text} />}
                   </Form.Field>
                 )
               }

@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageSalesMemo } from '../../redux/ducks/business'
-import { Modal, Form, Label, Icon, Button, Radio } from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
 import Yup from 'yup'
 
 class StageSalesMemoForm extends Component {
@@ -40,7 +40,9 @@ class StageSalesMemoForm extends Component {
       ownersTimeOptions,
       ratingOptions,
       usersStaff,
-      updateLoading
+      updateLoading,
+      handleChange,
+      handleBlur
     } = this.props
     return (
       <Modal
@@ -52,7 +54,7 @@ class StageSalesMemoForm extends Component {
           <Form>
             <h5>Fill in each box below. Make sure you fill in at least all the required fields (*). IMPORTANT: Once you click 'Save and Return' you will no longer be able to edit the 'Stage' unless you contact the main office.</h5>
             <Form.Group>
-              <Form.Field>
+              <Form.Field width={5}>
                 <Form.Select
                   required
                   label='Product'
@@ -63,6 +65,18 @@ class StageSalesMemoForm extends Component {
                   onChange={this._handleSelectChange}
                 />
                 {errors.businessProduct && touched.businessProduct && <Label basic color='red' pointing content={errors.businessProduct} />}
+              </Form.Field>
+              <Form.Field width={5}>
+                <Form.Select
+                  required
+                  label='Agent'
+                  options={usersStaff}
+                  name='staffAccountName'
+                  autoComplete='staffAccountName'
+                  value={values.staffAccountName}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.staffAccountName && touched.staffAccountName && <Label basic color='red' pointing content={errors.staffAccountName} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -83,21 +97,7 @@ class StageSalesMemoForm extends Component {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Field>
-                <Form.Select
-                  required
-                  label='Agent'
-                  options={usersStaff}
-                  name='staffAccountName'
-                  autoComplete='staffAccountName'
-                  value={values.staffAccountName}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.staffAccountName && touched.staffAccountName && <Label basic color='red' pointing content={errors.staffAccountName} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field>
+              <Form.Field width={5}>
                 <Form.Select
                   required
                   label='Business Type'
@@ -109,7 +109,7 @@ class StageSalesMemoForm extends Component {
                 />
                 {errors.businessType && touched.businessType && <Label basic color='red' pointing content={errors.businessType} />}
               </Form.Field>
-              <Form.Field>
+              <Form.Field width={5}>
                 <Form.Select
                   required
                   label='Industry'
@@ -123,7 +123,7 @@ class StageSalesMemoForm extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <Form.Field>
+              <Form.Field width={5}>
                 <Form.Select
                   required
                   label='Owner`s time'
@@ -135,7 +135,7 @@ class StageSalesMemoForm extends Component {
                 />
                 {errors.businessOwnersTime && touched.businessOwnersTime && <Label basic color='red' pointing content={errors.businessOwnersTime} />}
               </Form.Field>
-              <Form.Field>
+              <Form.Field width={5}>
                 <Form.Select
                   required
                   label='Rating'
@@ -146,6 +146,83 @@ class StageSalesMemoForm extends Component {
                   onChange={this._handleSelectChange}
                 />
                 {errors.businessRating && touched.businessRating && <Label basic color='red' pointing content={errors.businessRating} />}
+              </Form.Field>
+            </Form.Group>
+            <Divider horizontal>Business Pricing</Divider>
+            <Form.Group>
+              <Form.Field>
+                <Form.Input
+                  required
+                  label='Listed Price'
+                  name='listedPrice'
+                  autoComplete='listedPrice'
+                  value={values.listedPrice}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.listedPrice && touched.listedPrice && <Label basic color='red' pointing content={errors.listedPrice} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  required
+                  label='Engagement Fee'
+                  name='engagementFee'
+                  autoComplete='engagementFee'
+                  value={values.engagementFee}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.engagementFee && touched.engagementFee && <Label basic color='red' pointing content={errors.engagementFee} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  required
+                  label='Commission %'
+                  name='commissionPerc'
+                  autoComplete='commissionPerc'
+                  value={values.commissionPerc}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.commissionPerc && touched.commissionPerc && <Label basic color='red' pointing content={errors.commissionPerc} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field>
+                <Form.Input
+                  required
+                  label='Minimum Com $'
+                  name='minimumCharge'
+                  autoComplete='minimumCharge'
+                  value={values.minimumCharge}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.minimumCharge && touched.minimumCharge && <Label basic color='red' pointing content={errors.minimumCharge} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  required
+                  label='Appraisal High $'
+                  name='appraisalHigh'
+                  autoComplete='appraisalHigh'
+                  value={values.appraisalHigh}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.appraisalHigh && touched.appraisalHigh && <Label basic color='red' pointing content={errors.appraisalHigh} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  required
+                  label='Appraisal Low $'
+                  name='appraisalLow'
+                  autoComplete='appraisalLow'
+                  value={values.appraisalLow}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.appraisalLow && touched.appraisalLow && <Label basic color='red' pointing content={errors.appraisalLow} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -197,7 +274,9 @@ StageSalesMemoForm.propTypes = {
   ownersTimeOptions: PropTypes.array,
   ratingOptions: PropTypes.array,
   usersStaff: PropTypes.array,
-  updateLoading: PropTypes.bool
+  updateLoading: PropTypes.bool,
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -219,7 +298,8 @@ const mapPropsToValues = props => {
       businessIndustry: industryId,
       businessOwnersTime: ownersTimeId,
       businessRating: ratingId,
-      staffAccountName
+      staffAccountName,
+      minimumCharge: '10000.00'
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     return _.mapValues(business, value => value == null ? '' : value)
@@ -249,6 +329,18 @@ const validationSchema = Yup.object().shape({
   businessOwnersTime: Yup.string()
     .required('This field is required.'),
   businessRating: Yup.string()
+    .required('This field is required.'),
+  listedPrice: Yup.string()
+    .required('This field is required.'),
+  engagementFee: Yup.string()
+    .required('This field is required.'),
+  commissionPerc: Yup.string()
+    .required('This field is required.'),
+  minimumCharge: Yup.string()
+    .required('This field is required.'),
+  appraisalHigh: Yup.string()
+    .required('This field is required.'),
+  appraisalLow: Yup.string()
     .required('This field is required.')
 })
 
