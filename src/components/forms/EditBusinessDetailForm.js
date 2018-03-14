@@ -122,7 +122,7 @@ class EditBusinessDetailForm extends Component {
             />
           ) : null
         }
-        <Grid celled divided='vertically'>
+        <Grid celled='internally' divided>
           <Grid.Row columns={2}>
             <Grid.Column>
               <Form noValidate size='tiny'>

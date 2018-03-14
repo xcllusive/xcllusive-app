@@ -148,7 +148,7 @@ class BusinessEditPage extends Component {
               menuItem: 'Pricing/Information',
               render: () => (
                 <Tab.Pane attached={false}>
-                  <EditBusinessPriceForm />
+                  <EditBusinessPriceForm business={this.props.business} />
                 </Tab.Pane>
               )
             }

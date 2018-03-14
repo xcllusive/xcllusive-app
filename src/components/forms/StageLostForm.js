@@ -14,12 +14,18 @@ class StageLostForm extends Component {
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
-    console.log('first', this.props.values[name])
-    if (!this.props.values[name] && name === 'saleNotesLostWant') {
-      this.props.setFieldValue('recoveryStageNotSigned', false) && this.props.setFieldValue('recoveryStageNotWant', '')
+
+    if (name === 'saleNotesLostWant' && !this.props.values[name]) {
+      this.props.setFieldValue('recoveryStageNotSigned', '')
+      if (this.props.values['recoveryStageNotWant']) {
+        this.props.setFieldValue('recoveryStageNotWant', false)
+      }
     }
-    if (this.props.values[name] && name === 'saleNotesLostWant') {
-      this.props.setFieldValue('recoveryStageNotSigned', '') && this.props.setFieldValue('recoveryStageNotWant', false)
+    if (name === 'saleNotesLostWant' && this.props.values['saleNotesLostWant']) {
+      this.props.setFieldValue('recoveryStageNotWant', '')
+      if (this.props.values['recoveryStageNotSigned']) {
+        this.props.setFieldValue('recoveryStageNotSigned', false)
+      }
     }
   }
 
