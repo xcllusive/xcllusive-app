@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageLost } from '../../redux/ducks/business'
 import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
+import Yup from 'yup'
 
 class StageLostForm extends Component {
   _handleSelectChange = (e, { name, value }) => {
@@ -13,6 +14,13 @@ class StageLostForm extends Component {
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
+    console.log('first', this.props.values[name])
+    if (!this.props.values[name] && name === 'saleNotesLostWant') {
+      this.props.setFieldValue('recoveryStageNotSigned', false) && this.props.setFieldValue('recoveryStageNotWant', '')
+    }
+    if (this.props.values[name] && name === 'saleNotesLostWant') {
+      this.props.setFieldValue('recoveryStageNotSigned', '') && this.props.setFieldValue('recoveryStageNotWant', false)
+    }
   }
 
   render () {
@@ -31,6 +39,7 @@ class StageLostForm extends Component {
       stageNotSignedOptions,
       stageNotWantOptions
     } = this.props
+    console.log(values)
     return (
       <Modal
         dimmer={'blurring'}
@@ -206,6 +215,21 @@ class StageLostForm extends Component {
   }
 }
 
+const validationSchema = Yup.object().shape({
+  businessRating: Yup.string()
+    .required('Rating is required.'),
+  afterSalesNotes: Yup.string()
+    .required('Lost Notes is required.'),
+  saleNotesLostMeeting: Yup.string()
+    .required('This field is required.'),
+  saleNotesLostWant: Yup.string()
+    .required('Lost Notes is required.'),
+  recoveryStageNotSigned: Yup.string()
+    .required('This field is required.'),
+  recoveryStageNotWant: Yup.string()
+    .required('This field is required.')
+})
+
 StageLostForm.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
@@ -240,7 +264,8 @@ const mapPropsToValues = props => {
     businessRating: '',
     saleNotesLostMeeting: false,
     pendingDone: true,
-    saleNotesLostWant: false
+    saleNotesLostWant: false,
+    recoveryStageNotSigned: false
   }
 }
 
@@ -264,5 +289,6 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
-    handleSubmit})(StageLostForm)
+    handleSubmit,
+    validationSchema})(StageLostForm)
 )
