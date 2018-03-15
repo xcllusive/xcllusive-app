@@ -52,7 +52,7 @@ class StageSalesMemoForm extends Component {
         <Modal.Header align='center'>What to enter for 'Sales Memorandum' Stage</Modal.Header>
         <Modal.Content>
           <Form>
-            <h5>Fill in each box below. Make sure you fill in at least all the required fields (*). IMPORTANT: Once you click 'Save and Return' you will no longer be able to edit the 'Stage' unless you contact the main office.</h5>
+            <h5>IMPORTANT: Once you click 'Save and Return' you will no longer be able to edit the 'Stage' unless you contact the main office.</h5>
             <Form.Group>
               <Form.Field width={5}>
                 <Form.Select
