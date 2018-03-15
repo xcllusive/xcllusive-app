@@ -18,10 +18,12 @@ class StageLostForm extends Component {
       focused: false
     }
   }
+  _setStateDate = (date) => {
+    this.setState({ date })
+  }
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
-
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
 
@@ -37,8 +39,13 @@ class StageLostForm extends Component {
         this.props.setFieldValue('recoveryStageNotSigned', false)
       }
     }
+    if (name === 'followUpLog' && this.props.values[name]) {
+      this.props.setFieldValue('text', false)
+    }
+    if (name === 'followUpLog' && !this.props.values[name]) {
+      this.props.setFieldValue('text', '')
+    }
   }
-
   render () {
     const {
       values,
@@ -177,8 +184,9 @@ class StageLostForm extends Component {
                 this.props.values.followUpLog ? (
                   <Form.Field>
                     <SingleDatePicker
+                      displayFormat='DD/MM/YYYY'
                       date={this.state.date} // momentPropTypes.momentObj or null
-                      onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
+                      onDateChange={this._setStateDate} // PropTypes.func.isRequired
                       focused={this.state.focused} // PropTypes.bool
                       onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
                     />
@@ -186,7 +194,7 @@ class StageLostForm extends Component {
                 ) : (
                   <Form.Field>
                     <SingleDatePicker
-                      date={null} // momentPropTypes.momentObj or null
+                      date={null}
                       disabled
                     />
                   </Form.Field>
@@ -205,12 +213,15 @@ class StageLostForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
+                    {errors.text && touched.text && <Label basic color='red' pointing content={errors.text} />}
+                    <br /><br /><br /><br /><br /><br /><br />
                   </Form.Field>
                 ) : (
                   <Form.Field width={10}>
                     <Form.TextArea
                       disabled
+                      name=' '
+                      value={''}
                     />
                   </Form.Field>
                 )
@@ -253,6 +264,8 @@ const validationSchema = Yup.object().shape({
   recoveryStageNotSigned: Yup.string()
     .required('This field is required.'),
   recoveryStageNotWant: Yup.string()
+    .required('This field is required.'),
+  date: Yup.string()
     .required('This field is required.')
 })
 
@@ -291,7 +304,8 @@ const mapPropsToValues = props => {
     saleNotesLostMeeting: false,
     pendingDone: true,
     saleNotesLostWant: false,
-    recoveryStageNotSigned: false
+    recoveryStageNotSigned: false,
+    followUpLog: false
   }
 }
 
