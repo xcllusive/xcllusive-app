@@ -40,13 +40,20 @@ export const createBusinessRegister = businessRegister => {
   })
 }
 
-export const updateBusinessRegister = () => {
-  console.log('testando...')
-  /* return request({
-    method: 'post',
-    url: '/business-register',
+export const updateBusinessRegister = businessRegister => {
+  return request({
+    method: 'put',
+    url: `/business-register/${businessRegister.id}`,
     data: businessRegister
-  }) */
+  })
+}
+
+export const removeBusinessRegister = businessRegister => {
+  return request({
+    method: 'delete',
+    url: `/business-register/${businessRegister.id}`,
+    data: businessRegister
+  })
 }
 
 export const reassignBusiness = options => {

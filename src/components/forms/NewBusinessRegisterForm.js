@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
-
 import Yup from 'yup'
 
 import { createBusinessRegister, updateBusinessRegister } from '../../redux/ducks/business'
@@ -25,13 +24,6 @@ class NewBusinessRegisterForm extends Component {
         { key: 9, text: 'Stage Not Want', value: 9 }
       ]
     }
-  }
-
-  componentDidMount () {
-    this.props.setFieldValue('businessRegisterKey', this.state.businessRegister)
-  }
-
-  componentWillReceiveProps (nextProps) {
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -73,7 +65,7 @@ class NewBusinessRegisterForm extends Component {
                   autoComplete='businessRegister'
                   value={values.businessRegister}
                   onChange={this._handleSelectChange}
-                  disabled={(this.props.editBusinessRegister && this.props.editBusinessRegister.value)}
+                  disabled={(this.props.editBusinessRegister && this.props.editBusinessRegister.value !== false)}
                 />
                 {errors.businessRegister && touched.businessRegister && <Label basic color='red' pointing content={errors.businessRegister} />}
               </Form.Field>
@@ -137,6 +129,7 @@ const mapPropsToValues = props => {
   if (props && props.editBusinessRegister) {
     return {
       businessRegister: props.registerType,
+      id: props.editBusinessRegister.value,
       label: props.editBusinessRegister.text
     }
   }
