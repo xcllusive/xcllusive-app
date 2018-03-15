@@ -537,7 +537,8 @@ const mapPropsToValues = props => {
       industryId,
       typeId,
       ownersTimeId,
-      staffAccountName
+      staffAccountName,
+      stageId
     } = props.business
 
     const business = {
@@ -567,7 +568,8 @@ const mapPropsToValues = props => {
       businessIndustry: industryId,
       businessType: typeId,
       businessOwnersTime: ownersTimeId,
-      staffAccountName
+      staffAccountName,
+      stage: stageId
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     business.notifyOwner = business.notifyOwner === '1'
@@ -597,7 +599,8 @@ const mapPropsToValues = props => {
     businessProduct: '',
     businessIndustry: '',
     businessType: '',
-    businessOwnersTime: ''
+    businessOwnersTime: '',
+    stage: ''
   }
 }
 

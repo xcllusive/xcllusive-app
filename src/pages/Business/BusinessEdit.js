@@ -106,7 +106,7 @@ class BusinessEditPage extends Component {
             <Statistic.Label>Price</Statistic.Label>
           </Statistic>
           <Statistic color='blue'>
-            <Statistic.Value>Business Sale</Statistic.Value>
+            <Statistic.Value>{this.props.business.productId}</Statistic.Value>
             <Statistic.Label>Type of Business Sale</Statistic.Label>
           </Statistic>
           <Statistic color='blue'>
@@ -122,7 +122,7 @@ class BusinessEditPage extends Component {
             <Statistic.Label>Last Feedback Score</Statistic.Label>
           </Statistic>
           <Statistic color='green'>
-            <Statistic.Value>Stage</Statistic.Value>
+            <Statistic.Value>{this.props.business.stageId}</Statistic.Value>
           </Statistic>
         </Statistic.Group>
 

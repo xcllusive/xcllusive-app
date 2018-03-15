@@ -6,8 +6,18 @@ import { withFormik } from 'formik'
 import { updateStageLost } from '../../redux/ducks/business'
 import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
 import Yup from 'yup'
+import 'react-dates/initialize'
+import { SingleDatePicker } from 'react-dates'
+import 'react-dates/lib/css/_datepicker.css'
 
 class StageLostForm extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      date: null,
+      focused: false
+    }
+  }
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
@@ -53,7 +63,7 @@ class StageLostForm extends Component {
         <Modal.Header align='center'>Change the business stage to 'Lost'</Modal.Header>
         <Modal.Content>
           <Form>
-            <h5>Please select a business rating*. IMPORTANT: Once you have marked this business as 'Lost' you can change it back to a potential listing by searching for it and changing the stage manually.</h5>
+            <h5>IMPORTANT: Once you have marked this business as 'Lost' you can change it back to a potential listing by searching for it and changing the stage manually.</h5>
             <Form.Group>
               <Form.Field width={10}>
                 <Form.Select
@@ -163,6 +173,25 @@ class StageLostForm extends Component {
                 onChange={this._handleChangeCheckBox}
                 checked={values.followUpLog}
               />
+              {
+                this.props.values.followUpLog ? (
+                  <Form.Field>
+                    <SingleDatePicker
+                      date={this.state.date} // momentPropTypes.momentObj or null
+                      onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
+                      focused={this.state.focused} // PropTypes.bool
+                      onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
+                    />
+                  </Form.Field>
+                ) : (
+                  <Form.Field>
+                    <SingleDatePicker
+                      date={null} // momentPropTypes.momentObj or null
+                      disabled
+                    />
+                  </Form.Field>
+                )
+              }
             </Form.Group>
             <Form.Group>
               {
@@ -181,15 +210,8 @@ class StageLostForm extends Component {
                 ) : (
                   <Form.Field width={10}>
                     <Form.TextArea
-                      label=''
-                      name='text'
-                      autoComplete='text'
-                      value={values.text}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
                       disabled
                     />
-                    {errors.text && touched.text && <Label basic color='red' pointing content={errors.text} />}
                   </Form.Field>
                 )
               }
