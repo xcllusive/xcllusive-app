@@ -6,11 +6,10 @@ import { bindActionCreators } from 'redux'
 
 import { Table, Icon, Button, Grid } from 'semantic-ui-react'
 
+import { getBusiness, removeBusinessRegister } from '../../redux/ducks/business'
 import Wrapper from '../../components/content/Wrapper'
-
 import NewBusinessRegisterForm from '../../components/forms/NewBusinessRegisterForm'
-
-import { getBusiness } from '../../redux/ducks/business'
+import ModalConfirmDelete from '../../components/modal/ModalConfirmDelete'
 
 class BusinessRegisters extends Component {
   constructor (props) {
@@ -18,7 +17,8 @@ class BusinessRegisters extends Component {
     this.state = {
       modalOpen: false,
       editBusinessRegister: false,
-      registerType: null
+      registerType: null,
+      modalConfirmDeleteOpen: false
     }
   }
 
@@ -29,6 +29,9 @@ class BusinessRegisters extends Component {
     }
     if (this.props.updateBusinessRegister !== nextProps.updateBusinessRegister && nextProps.updateBusinessRegister) {
       await this._toggleModal(false, false)
+      this.props.getBusiness()
+    }
+    if (this.props.deleteBusinessRegister !== nextProps.deleteBusinessRegister && nextProps.deleteBusinessRegister) {
       this.props.getBusiness()
     }
   }
@@ -45,6 +48,26 @@ class BusinessRegisters extends Component {
     }))
   }
 
+  _toggleModalConfirmDelete = (id, registerType) => {
+    if (id === 'confirm') {
+      this._removeBusinessRegister(this.state.idBusinessRegisterTodelete, this.state.registerType)
+      return
+    }
+    this.setState(prevState => ({
+      modalConfirmDeleteOpen: !prevState.modalConfirmDeleteOpen,
+      idBusinessRegisterTodelete: id,
+      registerType
+    }))
+  }
+
+  _removeBusinessRegister = (id, registerType) => {
+    this.props.removeBusinessRegister({ id, registerType })
+    this.setState(prevState => ({
+      modalConfirmDeleteOpen: !prevState.modalConfirmDeleteOpen,
+      idBusinessRegisterTodelete: null
+    }))
+  }
+
   render () {
     return (
       <Wrapper>
@@ -55,6 +78,18 @@ class BusinessRegisters extends Component {
               toggleModal={this._toggleModal}
               editBusinessRegister={this.state.editBusinessRegister}
               registerType={this.state.registerType}
+            />
+          ) : null
+        }
+        {
+          this.state.modalConfirmDeleteOpen ? (
+            <ModalConfirmDelete
+              modalOpen={this.state.modalConfirmDeleteOpen}
+              toogleModalDelete={this._toggleModalConfirmDelete}
+              options={{
+                title: 'Delete Business Register',
+                text: 'Are you sure you want to delete business register?'
+              }}
             />
           ) : null
         }
@@ -95,12 +130,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{sourceOptions.value}</Table.Cell>
                         <Table.Cell>{sourceOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(sourceOptions, 1)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(sourceOptions, 1)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(sourceOptions.value, 1)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -124,12 +162,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{ratingOptions.value}</Table.Cell>
                         <Table.Cell>{ratingOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(ratingOptions, 2)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(ratingOptions, 2)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(ratingOptions.value, 2)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -153,12 +194,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{productOptions.value}</Table.Cell>
                         <Table.Cell>{productOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(productOptions, 3)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(productOptions, 3)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(productOptions.value, 3)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -195,12 +239,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{industryOptions.value}</Table.Cell>
                         <Table.Cell>{industryOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(industryOptions, 4)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(industryOptions, 4)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(industryOptions.value, 4)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -224,12 +271,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{typeOptions.value}</Table.Cell>
                         <Table.Cell>{typeOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(typeOptions, 5)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(typeOptions, 5)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(typeOptions.value, 5)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -253,12 +303,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{ownersTimeOptions.value}</Table.Cell>
                         <Table.Cell>{ownersTimeOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(ownersTimeOptions, 6)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(ownersTimeOptions, 6)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(ownersTimeOptions.value, 6)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -295,12 +348,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{stageOptions.value}</Table.Cell>
                         <Table.Cell>{stageOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(stageOptions, 7)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(stageOptions, 7)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(stageOptions.value, 7)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -324,12 +380,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{stageNotSignedOptions.value}</Table.Cell>
                         <Table.Cell>{stageNotSignedOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(stageNotSignedOptions, 8)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(stageNotSignedOptions, 8)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(stageNotSignedOptions.value, 8)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -353,12 +412,15 @@ class BusinessRegisters extends Component {
                         <Table.Cell>{stageNotWantOptions.value}</Table.Cell>
                         <Table.Cell>{stageNotWantOptions.text}</Table.Cell>
                         <Table.Cell>
-                          <Icon name='edit' link
-                            onClick={() => this._toggleModal(stageNotWantOptions, 9)}
-                          />
-                          <Icon link
-                            //  onClick={() => this.props.history.push(`${this.props.match.path}/${item.buyerID}`)}
-                            color='red' name='trash' />
+                          <Icon
+                            link
+                            name='edit'
+                            onClick={() => this._toggleModal(stageNotWantOptions, 9)} />
+                          <Icon
+                            link
+                            name='trash'
+                            color='red'
+                            onClick={() => this._toggleModalConfirmDelete(stageNotWantOptions.value, 9)} />
                         </Table.Cell>
                       </Table.Row>
                     )
@@ -375,6 +437,7 @@ class BusinessRegisters extends Component {
 
 BusinessRegisters.propTypes = {
   getBusiness: PropTypes.func,
+  removeBusinessRegister: PropTypes.func,
   stageOptions: PropTypes.array,
   sourceOptions: PropTypes.array,
   ratingOptions: PropTypes.array,
@@ -384,6 +447,7 @@ BusinessRegisters.propTypes = {
   ownersTimeOptions: PropTypes.array,
   createBusinessRegister: PropTypes.bool,
   updateBusinessRegister: PropTypes.bool,
+  deleteBusinessRegister: PropTypes.bool,
   stageNotSignedOptions: PropTypes.array,
   stageNotWantOptions: PropTypes.array
 }
@@ -400,13 +464,14 @@ const mapStateToProps = state => {
     ownersTimeOptions: state.business.get.ownersTimeOptions,
     createBusinessRegister: state.business.createBusinessRegister.isCreated,
     updateBusinessRegister: state.business.updateBusinessRegister.isUpdated,
+    deleteBusinessRegister: state.business.deleteBusinessRegister.isDeleted,
     stageNotSignedOptions: state.business.get.stageNotSignedOptions,
     stageNotWantOptions: state.business.get.stageNotWantOptions
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness }, dispatch)
+  return bindActionCreators({ getBusiness, removeBusinessRegister }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)

@@ -4,7 +4,8 @@ import { get, getAll, create, update,
   getBusinessRegister as getBusinessRegisterAPI,
   updateBusinessRegister as updateBusinessRegisterAPI,
   updateStageSalesMemo as updateStageSalesMemoAPI,
-  updateStageLost as updateStageLostAPI
+  updateStageLost as updateStageLostAPI,
+  removeBusinessRegister as removeBusinessRegisterAPI
 } from '../../services/api/business'
 import { toast } from 'react-toastify'
 
@@ -27,6 +28,9 @@ export const Types = {
   CREATE_BUSINESS_REGISTER_LOADING: 'CREATE_BUSINESS_REGISTER_LOADING',
   CREATE_BUSINESS_REGISTER_SUCCESS: 'CREATE_BUSINESS_REGISTER_SUCCESS',
   CREATE_BUSINESS_REGISTER_FAILURE: 'CREATE_BUSINESS_REGISTER_FAILURE',
+  REMOVE_BUSINESS_REGISTER_LOADING: 'REMOVE_BUSINESS_REGISTER_LOADING',
+  REMOVE_BUSINESS_REGISTER_SUCCESS: 'REMOVE_BUSINESS_REGISTER_SUCCESS',
+  REMOVE_BUSINESS_REGISTER_FAILURE: 'REMOVE_BUSINESS_REGISTER_FAILURE',
   CREATE_REASSIGN_BUSINESS_LOADING: 'CREATE_REASSIGN_BUSINESS_LOADING',
   CREATE_REASSIGN_BUSINESS_SUCCESS: 'CREATE_REASSIGN_BUSINESS_SUCCESS',
   CREATE_REASSIGN_BUSINESS_FAILURE: 'CREATE_REASSIGN_BUSINESS_FAILURE',
@@ -84,6 +88,11 @@ const initialState = {
   updateBusinessRegister: {
     isLoading: false,
     isUpdated: false,
+    error: null
+  },
+  deleteBusinessRegister: {
+    isLoading: false,
+    isDeleted: false,
     error: null
   },
   reassignBusiness: {
@@ -294,6 +303,34 @@ export default function reducer (state = initialState, action) {
           ...state.updateBusinessRegister,
           isLoading: false,
           isUpdated: false,
+          error: action.payload
+        }
+      }
+    case Types.REMOVE_BUSINESS_REGISTER_LOADING:
+      return {
+        ...state,
+        deleteBusinessRegister: {
+          ...state.deleteBusinessRegister,
+          isLoading: action.payload,
+          isDeleted: false,
+          error: null
+        }
+      }
+    case Types.REMOVE_BUSINESS_REGISTER_SUCCESS:
+      return {
+        ...state,
+        deleteBusinessRegister: {
+          ...state.deleteBusinessRegister,
+          isLoading: false,
+          isDeleted: true
+        }
+      }
+    case Types.REMOVE_BUSINESS_REGISTER_FAILURE:
+      return {
+        ...state,
+        deleteBusinessRegister: {
+          ...state.deleteBusinessRegister,
+          isLoading: false,
           error: action.payload
         }
       }
@@ -519,6 +556,26 @@ export const updateBusinessRegister = businessRegister => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_BUSINESS_REGISTER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const removeBusinessRegister = businessRegister => async dispatch => {
+  dispatch({
+    type: Types.REMOVE_BUSINESS_REGISTER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await removeBusinessRegisterAPI(businessRegister)
+    dispatch({
+      type: Types.REMOVE_BUSINESS_REGISTER_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.REMOVE_BUSINESS_REGISTER_FAILURE,
       payload: error
     })
     toast.error(error)
