@@ -214,7 +214,9 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         get: {
-          ...initialState.get
+          ...state.get,
+          isLoading: true,
+          object: {}
         }
       }
     case Types.UPDATE_BUSINESS_LOADING:
