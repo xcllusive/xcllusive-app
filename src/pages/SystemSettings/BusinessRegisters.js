@@ -126,7 +126,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.sourceOptions.map(sourceOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={sourceOptions.key} >
                         <Table.Cell>{sourceOptions.value}</Table.Cell>
                         <Table.Cell>{sourceOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -158,7 +158,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.ratingOptions.map(ratingOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={ratingOptions.key}>
                         <Table.Cell>{ratingOptions.value}</Table.Cell>
                         <Table.Cell>{ratingOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -190,7 +190,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.productOptions.map(productOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={productOptions.key}>
                         <Table.Cell>{productOptions.value}</Table.Cell>
                         <Table.Cell>{productOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -235,7 +235,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.industryOptions.map(industryOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={industryOptions.key}>
                         <Table.Cell>{industryOptions.value}</Table.Cell>
                         <Table.Cell>{industryOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -267,7 +267,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.typeOptions.map(typeOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={typeOptions.key}>
                         <Table.Cell>{typeOptions.value}</Table.Cell>
                         <Table.Cell>{typeOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -299,7 +299,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.ownersTimeOptions.map(ownersTimeOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={ownersTimeOptions.key}>
                         <Table.Cell>{ownersTimeOptions.value}</Table.Cell>
                         <Table.Cell>{ownersTimeOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -344,7 +344,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.stageOptions.map(stageOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={stageOptions.key}>
                         <Table.Cell>{stageOptions.value}</Table.Cell>
                         <Table.Cell>{stageOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -376,7 +376,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.stageNotSignedOptions.map(stageNotSignedOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={stageNotSignedOptions.key}>
                         <Table.Cell>{stageNotSignedOptions.value}</Table.Cell>
                         <Table.Cell>{stageNotSignedOptions.text}</Table.Cell>
                         <Table.Cell>
@@ -408,7 +408,7 @@ class BusinessRegisters extends Component {
                 <Table.Body>
                   {this.props.stageNotWantOptions.map(stageNotWantOptions => {
                     return (
-                      <Table.Row active >
+                      <Table.Row active key={stageNotWantOptions.key}>
                         <Table.Cell>{stageNotWantOptions.value}</Table.Cell>
                         <Table.Cell>{stageNotWantOptions.text}</Table.Cell>
                         <Table.Cell>
