@@ -88,7 +88,6 @@ class EditBusinessDetailForm extends Component {
       modalOpenStageSalesMemo,
       modalOpenStageLost
     } = this.state
-
     return (
       <Wrapper>
         <Dimmer inverted active={isLoadingGet}>
@@ -647,6 +646,14 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, {props, setSubmitting}) => {
+  if (values.stage === 6) { /* Sales Memorandum */
+    //  Open StageSalesMemo Modal
+    //  this._toggleModal('modalOpenStageSalesMemo')
+  }
+  if (values.stage === 7) { /* Lost */
+    //  Open StageLost Modal
+    //  this._toggleModal('modalOpenStageLost')
+  }
   props.updateBusiness(values).then(setSubmitting(false))
 }
 

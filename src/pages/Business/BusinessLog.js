@@ -80,7 +80,7 @@ class BusinessLogPage extends Component {
       errors,
       touched
     } = this.props
-    console.log('caayo', this.props.business)
+    //  console.log('caayo', this.props.business)
     return (
       <Wrapper>
         <div>
@@ -94,7 +94,14 @@ class BusinessLogPage extends Component {
               <Statistic.Label>Name</Statistic.Label>
             </Statistic>
             <Statistic color='blue'>
-              <Statistic.Value>peter_park@xcllusive.com.au</Statistic.Value>
+              <Statistic.Value>
+                <Icon
+                  link
+                  name='mail'
+                  onClick={() => window.open(`mailto:${values.vendorEmail}`, '_blank')}
+                />
+                {values.vendorEmail}
+              </Statistic.Value>
               <Statistic.Label>Email</Statistic.Label>
             </Statistic>
             <Statistic color='blue'>
@@ -245,8 +252,8 @@ BusinessLogPage.propTypes = {
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  getBusiness: PropTypes.func,
-  business: PropTypes.object
+  getBusiness: PropTypes.func
+  //  business: PropTypes.object
 }
 
 const mapPropsToValues = () => {
