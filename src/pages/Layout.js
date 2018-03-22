@@ -7,6 +7,7 @@ import { Menu, Icon, Header } from 'semantic-ui-react'
 import { ToastContainer } from 'react-toastify'
 import { logout } from '../redux/ducks/auth'
 
+import ModalRoot from '../components/modal/ModalRoot'
 import { NotFoundPage } from './'
 import ListPage from './Business/BusinessList'
 import EditPage from './Business/BusinessEdit'
@@ -51,6 +52,7 @@ const Layout = ({ match, logout, menu }) => (
       </Menu.Menu>
     </Menu>
     <ToastContainer position='bottom-right' />
+    <ModalRoot />
     <Switch>
       <Route
         exact

@@ -7,9 +7,9 @@ import { bindActionCreators } from 'redux'
 import { Table, Icon, Button, Grid } from 'semantic-ui-react'
 
 import { getBusiness, removeBusinessRegister } from '../../redux/ducks/business'
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import NewBusinessRegisterForm from '../../components/forms/NewBusinessRegisterForm'
-import ModalConfirmDelete from '../../components/modal/ModalConfirmDelete'
 
 class BusinessRegisters extends Component {
   constructor (props) {
@@ -49,15 +49,19 @@ class BusinessRegisters extends Component {
   }
 
   _toggleModalConfirmDelete = (id, registerType) => {
-    if (id === 'confirm') {
-      this._removeBusinessRegister(this.state.idBusinessRegisterTodelete, this.state.registerType)
-      return
-    }
-    this.setState(prevState => ({
-      modalConfirmDeleteOpen: !prevState.modalConfirmDeleteOpen,
-      idBusinessRegisterTodelete: id,
-      registerType
-    }))
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM_DELETE, {
+      options: {
+        title: 'Delete Business Register',
+        text: 'Are you sure you want to delete business register?',
+        id,
+        registerType
+      },
+      onConfirm: (isConfirmed) => {
+        if (isConfirmed) {
+          this._removeBusinessRegister(isConfirmed.id, isConfirmed.registerType)
+        }
+      }
+    })
   }
 
   _removeBusinessRegister = (id, registerType) => {
@@ -78,18 +82,6 @@ class BusinessRegisters extends Component {
               toggleModal={this._toggleModal}
               editBusinessRegister={this.state.editBusinessRegister}
               registerType={this.state.registerType}
-            />
-          ) : null
-        }
-        {
-          this.state.modalConfirmDeleteOpen ? (
-            <ModalConfirmDelete
-              modalOpen={this.state.modalConfirmDeleteOpen}
-              toogleModalDelete={this._toggleModalConfirmDelete}
-              options={{
-                title: 'Delete Business Register',
-                text: 'Are you sure you want to delete business register?'
-              }}
             />
           ) : null
         }
@@ -449,7 +441,8 @@ BusinessRegisters.propTypes = {
   updateBusinessRegister: PropTypes.bool,
   deleteBusinessRegister: PropTypes.bool,
   stageNotSignedOptions: PropTypes.array,
-  stageNotWantOptions: PropTypes.array
+  stageNotWantOptions: PropTypes.array,
+  openModal: PropTypes.func
 }
 
 const mapStateToProps = state => {
@@ -471,7 +464,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, removeBusinessRegister }, dispatch)
+  return bindActionCreators({ getBusiness, removeBusinessRegister, openModal }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)
