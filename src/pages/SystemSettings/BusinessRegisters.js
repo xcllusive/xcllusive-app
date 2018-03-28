@@ -6,29 +6,17 @@ import { bindActionCreators } from 'redux'
 
 import { Table, Icon, Button, Grid } from 'semantic-ui-react'
 
-import { getBusiness, removeBusinessRegister } from '../../redux/ducks/business'
+import { getBusiness } from '../../redux/ducks/business'
+import { removeBusinessRegister } from '../../redux/ducks/businessRegister'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
-import NewBusinessRegisterForm from '../../components/forms/NewBusinessRegisterForm'
 
 class BusinessRegisters extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      modalOpen: false,
-      editBusinessRegister: false,
-      registerType: null,
-      modalConfirmDeleteOpen: false
-    }
-  }
-
   async componentWillReceiveProps (nextProps) {
     if (this.props.createBusinessRegister !== nextProps.createBusinessRegister && nextProps.createBusinessRegister) {
-      await this._toggleModal(false, false)
       this.props.getBusiness()
     }
     if (this.props.updateBusinessRegister !== nextProps.updateBusinessRegister && nextProps.updateBusinessRegister) {
-      await this._toggleModal(false, false)
       this.props.getBusiness()
     }
     if (this.props.deleteBusinessRegister !== nextProps.deleteBusinessRegister && nextProps.deleteBusinessRegister) {
@@ -38,14 +26,6 @@ class BusinessRegisters extends Component {
 
   componentDidMount () {
     this.props.getBusiness()
-  }
-
-  _toggleModal = (editBusinessRegister, registerType) => {
-    this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen,
-      editBusinessRegister,
-      registerType
-    }))
   }
 
   _toggleModalConfirmDelete = (id, registerType) => {
@@ -66,29 +46,29 @@ class BusinessRegisters extends Component {
 
   _removeBusinessRegister = (id, registerType) => {
     this.props.removeBusinessRegister({ id, registerType })
-    this.setState(prevState => ({
-      modalConfirmDeleteOpen: !prevState.modalConfirmDeleteOpen,
-      idBusinessRegisterTodelete: null
-    }))
+  }
+
+  _editBusiness = (businessRegister, businessRegisterType) => {
+    this.props.openModal(TypesModal.MODAL_TYPE_EDIT_BUSSINES_REGISTER, {
+      title: 'Edit Business Register',
+      businessRegister,
+      businessRegisterType
+    })
+  }
+
+  _newBusiness = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSSINES_REGISTER, {
+      title: 'New Business Register'
+    })
   }
 
   render () {
     return (
       <Wrapper>
-        {
-          this.state.modalOpen ? (
-            <NewBusinessRegisterForm
-              modalOpen={this.state.modalOpen}
-              toggleModal={this._toggleModal}
-              editBusinessRegister={this.state.editBusinessRegister}
-              registerType={this.state.registerType}
-            />
-          ) : null
-        }
         <Grid padded='horizontally'>
           <Grid.Row columns={1}>
             <Grid.Column floated='right' width={2}>
-              <Button onClick={() => this._toggleModal(false, false)} color='facebook'>
+              <Button onClick={this._newBusiness} color='facebook'>
                 <Icon name='add' />
                   New Register
               </Button>
@@ -125,7 +105,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(sourceOptions, 1)} />
+                            onClick={() => this._editBusiness(sourceOptions, 1)} />
                           <Icon
                             link
                             name='trash'
@@ -157,7 +137,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(ratingOptions, 2)} />
+                            onClick={() => this._editBusiness(ratingOptions, 2)} />
                           <Icon
                             link
                             name='trash'
@@ -189,7 +169,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(productOptions, 3)} />
+                            onClick={() => this._editBusiness(productOptions, 3)} />
                           <Icon
                             link
                             name='trash'
@@ -234,7 +214,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(industryOptions, 4)} />
+                            onClick={() => this._editBusiness(industryOptions, 4)} />
                           <Icon
                             link
                             name='trash'
@@ -266,7 +246,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(typeOptions, 5)} />
+                            onClick={() => this._editBusiness(typeOptions, 5)} />
                           <Icon
                             link
                             name='trash'
@@ -298,7 +278,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(ownersTimeOptions, 6)} />
+                            onClick={() => this._editBusiness(ownersTimeOptions, 6)} />
                           <Icon
                             link
                             name='trash'
@@ -343,7 +323,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(stageOptions, 7)} />
+                            onClick={() => this._editBusiness(stageOptions, 7)} />
                           <Icon
                             link
                             name='trash'
@@ -375,7 +355,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(stageNotSignedOptions, 8)} />
+                            onClick={() => this._editBusiness(stageNotSignedOptions, 8)} />
                           <Icon
                             link
                             name='trash'
@@ -407,7 +387,7 @@ class BusinessRegisters extends Component {
                           <Icon
                             link
                             name='edit'
-                            onClick={() => this._toggleModal(stageNotWantOptions, 9)} />
+                            onClick={() => this._editBusiness(stageNotWantOptions, 9)} />
                           <Icon
                             link
                             name='trash'
@@ -455,16 +435,20 @@ const mapStateToProps = state => {
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
     ownersTimeOptions: state.business.get.ownersTimeOptions,
-    createBusinessRegister: state.business.createBusinessRegister.isCreated,
-    updateBusinessRegister: state.business.updateBusinessRegister.isUpdated,
-    deleteBusinessRegister: state.business.deleteBusinessRegister.isDeleted,
+    createBusinessRegister: state.businessRegister.create.isCreated,
+    updateBusinessRegister: state.businessRegister.update.isUpdated,
+    deleteBusinessRegister: state.businessRegister.delete.isDeleted,
     stageNotSignedOptions: state.business.get.stageNotSignedOptions,
     stageNotWantOptions: state.business.get.stageNotWantOptions
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, removeBusinessRegister, openModal }, dispatch)
+  return bindActionCreators({
+    getBusiness,
+    removeBusinessRegister,
+    openModal
+  }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)

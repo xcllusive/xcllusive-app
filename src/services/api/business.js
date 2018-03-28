@@ -32,30 +32,6 @@ export const update = business => {
   })
 }
 
-export const createBusinessRegister = businessRegister => {
-  return request({
-    method: 'post',
-    url: '/business-register',
-    data: businessRegister
-  })
-}
-
-export const updateBusinessRegister = businessRegister => {
-  return request({
-    method: 'put',
-    url: `/business-register/${businessRegister.id}`,
-    data: businessRegister
-  })
-}
-
-export const removeBusinessRegister = businessRegister => {
-  return request({
-    method: 'delete',
-    url: `/business-register/${businessRegister.id}`,
-    data: businessRegister
-  })
-}
-
 export const reassignBusiness = options => {
   return request({
     method: 'put',
