@@ -6,26 +6,31 @@ import { bindActionCreators } from 'redux'
 
 import { Table, Icon, Button, Grid } from 'semantic-ui-react'
 
-import { getBusiness } from '../../redux/ducks/business'
-import { removeBusinessRegister } from '../../redux/ducks/businessRegister'
+import { getBusinessRegister, removeBusinessRegister } from '../../redux/ducks/businessRegister'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 
 class BusinessRegisters extends Component {
-  async componentWillReceiveProps (nextProps) {
-    if (this.props.createBusinessRegister !== nextProps.createBusinessRegister && nextProps.createBusinessRegister) {
-      this.props.getBusiness()
-    }
-    if (this.props.updateBusinessRegister !== nextProps.updateBusinessRegister && nextProps.updateBusinessRegister) {
-      this.props.getBusiness()
-    }
-    if (this.props.deleteBusinessRegister !== nextProps.deleteBusinessRegister && nextProps.deleteBusinessRegister) {
-      this.props.getBusiness()
-    }
-  }
+  // async componentWillReceiveProps (nextProps) {
+  //   if (this.props.createBusinessRegister !== nextProps.createBusinessRegister && nextProps.createBusinessRegister) {
+  //     this.props.getBusiness()
+  //   }
+  //   if (this.props.updateBusinessRegister !== nextProps.updateBusinessRegister && nextProps.updateBusinessRegister) {
+  //     this.props.getBusiness()
+  //   }
+  //   if (this.props.deleteBusinessRegister !== nextProps.deleteBusinessRegister && nextProps.deleteBusinessRegister) {
+  //     this.props.getBusiness()
+  //   }
+  // }
 
   componentDidMount () {
-    this.props.getBusiness()
+    this.props.getBusinessRegister(1)
+    this.props.getBusinessRegister(2)
+    this.props.getBusinessRegister(3)
+    this.props.getBusinessRegister(4)
+    this.props.getBusinessRegister(5)
+    this.props.getBusinessRegister(6)
+    this.props.getBusinessRegister(7)
   }
 
   _toggleModalConfirmDelete = (id, registerType) => {
@@ -408,7 +413,6 @@ class BusinessRegisters extends Component {
 }
 
 BusinessRegisters.propTypes = {
-  getBusiness: PropTypes.func,
   removeBusinessRegister: PropTypes.func,
   stageOptions: PropTypes.array,
   sourceOptions: PropTypes.array,
@@ -417,24 +421,25 @@ BusinessRegisters.propTypes = {
   industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
   ownersTimeOptions: PropTypes.array,
-  createBusinessRegister: PropTypes.bool,
-  updateBusinessRegister: PropTypes.bool,
-  deleteBusinessRegister: PropTypes.bool,
+  // createBusinessRegister: PropTypes.bool,
+  // updateBusinessRegister: PropTypes.bool,
+  // deleteBusinessRegister: PropTypes.bool,
   stageNotSignedOptions: PropTypes.array,
   stageNotWantOptions: PropTypes.array,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  getBusinessRegister: PropTypes.func
 }
 
 const mapStateToProps = state => {
   return {
     isLoading: state.business.get.isLoading,
-    stageOptions: state.business.get.stageOptions,
-    sourceOptions: state.business.get.sourceOptions,
-    ratingOptions: state.business.get.ratingOptions,
-    productOptions: state.business.get.productOptions,
-    industryOptions: state.business.get.industryOptions,
-    typeOptions: state.business.get.typeOptions,
-    ownersTimeOptions: state.business.get.ownersTimeOptions,
+    stageOptions: state.businessRegister.get.stage.array,
+    sourceOptions: state.businessRegister.get.source.array,
+    ratingOptions: state.businessRegister.get.rating.array,
+    productOptions: state.businessRegister.get.product.array,
+    industryOptions: state.businessRegister.get.industry.array,
+    typeOptions: state.businessRegister.get.type.array,
+    ownersTimeOptions: state.businessRegister.get.ownersTime.array,
     createBusinessRegister: state.businessRegister.create.isCreated,
     updateBusinessRegister: state.businessRegister.update.isUpdated,
     deleteBusinessRegister: state.businessRegister.delete.isDeleted,
@@ -445,7 +450,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    getBusiness,
+    getBusinessRegister,
     removeBusinessRegister,
     openModal
   }, dispatch)

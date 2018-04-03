@@ -5,6 +5,7 @@ import { get, create, update, remove } from '../../services/api/businessRegister
 // Action Types
 
 export const Types = {
+  BUSINESS_REGISTER_SOURCE: 'BUSINESS_REGISTER_SOURCE',
   GET_BUSINESS_REGISTER_LOADING: 'GET_BUSINESS_REGISTER_LOADING',
   GET_BUSINESS_REGISTER_SUCCESS: 'GET_BUSINESS_REGISTER_SUCCESS',
   GET_BUSINESS_REGISTER_FAILURE: 'GET_BUSINESS_REGISTER_FAILURE',
@@ -19,11 +20,51 @@ export const Types = {
   REMOVE_BUSINESS_REGISTER_FAILURE: 'REMOVE_BUSINESS_REGISTER_FAILURE'
 }
 
+const TypesBusinessRegister = {
+  1: 'source',
+  2: 'rating',
+  3: 'product',
+  4: 'industry',
+  5: 'type',
+  6: 'ownersTime',
+  7: 'stage'
+}
+
 // Reducer
 
 const initialState = {
   get: {
     source: {
+      isLoading: true,
+      array: [],
+      error: null
+    },
+    rating: {
+      isLoading: true,
+      array: [],
+      error: null
+    },
+    product: {
+      isLoading: true,
+      array: [],
+      error: null
+    },
+    industry: {
+      isLoading: true,
+      array: [],
+      error: null
+    },
+    type: {
+      isLoading: true,
+      array: [],
+      error: null
+    },
+    ownersTime: {
+      isLoading: true,
+      array: [],
+      error: null
+    },
+    stage: {
       isLoading: true,
       array: [],
       error: null
@@ -53,8 +94,8 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          source: {
-            ...state.get.source,
+          [action.typeBusinessRegister]: {
+            ...state.get[action.typeBusinessRegister],
             isLoading: true,
             error: null
           }
@@ -65,10 +106,11 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          source: {
-            ...state.get.source,
+          [action.typeBusinessRegister]: {
+            ...state.get[action.typeBusinessRegister],
             isLoading: false,
-            array: action.payload
+            array: action.payload,
+            error: null
           }
         }
       }
@@ -77,8 +119,8 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          source: {
-            ...state.get.source,
+          [action.typeBusinessRegister]: {
+            ...state.get[action.typeBusinessRegister],
             isLoading: false,
             error: action.payload
           }
@@ -187,6 +229,7 @@ export const getBusinessRegister = id => async dispatch => {
     const businessRegister = await get(id)
     dispatch({
       type: Types.GET_BUSINESS_REGISTER_SUCCESS,
+      typeBusinessRegister: TypesBusinessRegister[id],
       payload: businessRegister
     })
   } catch (error) {
