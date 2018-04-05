@@ -4,13 +4,9 @@ import {
   getAll,
   create,
   update,
-  createBusinessRegister as createBusinessRegisterAPI,
   reassignBusiness as reassignBusinessAPI,
-  getBusinessRegister as getBusinessRegisterAPI,
-  updateBusinessRegister as updateBusinessRegisterAPI,
   updateStageSalesMemo as updateStageSalesMemoAPI,
-  updateStageLost as updateStageLostAPI,
-  removeBusinessRegister as removeBusinessRegisterAPI
+  updateStageLost as updateStageLostAPI
 } from '../../services/api/business'
 
 // Action Types
@@ -29,21 +25,9 @@ export const Types = {
   GET_BUSINESSES_LOADING: 'GET_BUSINESSES_LOADING',
   GET_BUSINESSES_SUCCESS: 'GET_BUSINESSES_SUCCESS',
   GET_BUSINESSES_FAILURE: 'GET_BUSINESSES_FAILURE',
-  CREATE_BUSINESS_REGISTER_LOADING: 'CREATE_BUSINESS_REGISTER_LOADING',
-  CREATE_BUSINESS_REGISTER_SUCCESS: 'CREATE_BUSINESS_REGISTER_SUCCESS',
-  CREATE_BUSINESS_REGISTER_FAILURE: 'CREATE_BUSINESS_REGISTER_FAILURE',
-  REMOVE_BUSINESS_REGISTER_LOADING: 'REMOVE_BUSINESS_REGISTER_LOADING',
-  REMOVE_BUSINESS_REGISTER_SUCCESS: 'REMOVE_BUSINESS_REGISTER_SUCCESS',
-  REMOVE_BUSINESS_REGISTER_FAILURE: 'REMOVE_BUSINESS_REGISTER_FAILURE',
   CREATE_REASSIGN_BUSINESS_LOADING: 'CREATE_REASSIGN_BUSINESS_LOADING',
   CREATE_REASSIGN_BUSINESS_SUCCESS: 'CREATE_REASSIGN_BUSINESS_SUCCESS',
   CREATE_REASSIGN_BUSINESS_FAILURE: 'CREATE_REASSIGN_BUSINESS_FAILURE',
-  GET_BUSINESS_REGISTER_LOADING: 'GET_BUSINESS_REGISTER_LOADING',
-  GET_BUSINESS_REGISTER_SUCCESS: 'GET_BUSINESS_REGISTER_SUCCESS',
-  GET_BUSINESS_REGISTER_FAILURE: 'GET_BUSINESS_REGISTER_FAILURE',
-  UPDATE_BUSINESS_REGISTER_LOADING: 'UPDATE_BUSINESS_REGISTER_LOADING',
-  UPDATE_BUSINESS_REGISTER_SUCCESS: 'UPDATE_BUSINESS_REGISTER_SUCCESS',
-  UPDATE_BUSINESS_REGISTER_FAILURE: 'UPDATE_BUSINESS_REGISTER_FAILURE',
   UPDATE_STAGE_SALES_MEMO_LOADING: 'UPDATE_STAGE_SALES_MEMO_LOADING',
   UPDATE_STAGE_SALES_MEMO_SUCCESS: 'UPDATE_STAGE_SALES_MEMO_SUCCESS',
   UPDATE_STAGE_SALES_MEMO_FAILURE: 'UPDATE_STAGE_SALES_MEMO_FAILURE',
@@ -82,21 +66,6 @@ const initialState = {
   update: {
     isLoading: false,
     isUpdated: false,
-    error: null
-  },
-  createBusinessRegister: {
-    isLoading: false,
-    isCreated: false,
-    error: null
-  },
-  updateBusinessRegister: {
-    isLoading: false,
-    isUpdated: false,
-    error: null
-  },
-  deleteBusinessRegister: {
-    isLoading: false,
-    isDeleted: false,
     error: null
   },
   reassignBusiness: {
@@ -249,94 +218,6 @@ export default function reducer (state = initialState, action) {
           ...state.update,
           isLoading: false,
           isUpdated: false,
-          error: action.payload
-        }
-      }
-    case Types.CREATE_BUSINESS_REGISTER_LOADING:
-      return {
-        ...state,
-        createBusinessRegister: {
-          ...state.createBusinessRegister,
-          isLoading: action.payload,
-          isCreated: false,
-          error: null
-        }
-      }
-    case Types.CREATE_BUSINESS_REGISTER_SUCCESS:
-      return {
-        ...state,
-        createBusinessRegister: {
-          ...state.createBusinessRegister,
-          isLoading: false,
-          isCreated: true,
-          error: null
-        }
-      }
-    case Types.CREATE_BUSINESS_REGISTER_FAILURE:
-      return {
-        ...state,
-        createBusinessRegister: {
-          ...state.createBusinessRegister,
-          isLoading: false,
-          isCreated: false,
-          error: action.payload
-        }
-      }
-    case Types.UPDATE_BUSINESS_REGISTER_LOADING:
-      return {
-        ...state,
-        updateBusinessRegister: {
-          ...state.updateBusinessRegister,
-          isLoading: action.payload,
-          isUpdated: false,
-          error: null
-        }
-      }
-    case Types.UPDATE_BUSINESS_REGISTER_SUCCESS:
-      return {
-        ...state,
-        updateBusinessRegister: {
-          ...state.updateBusinessRegister,
-          isLoading: false,
-          isUpdated: true,
-          error: null
-        }
-      }
-    case Types.UPDATE_BUSINESS_REGISTER_FAILURE:
-      return {
-        ...state,
-        updateBusinessRegister: {
-          ...state.updateBusinessRegister,
-          isLoading: false,
-          isUpdated: false,
-          error: action.payload
-        }
-      }
-    case Types.REMOVE_BUSINESS_REGISTER_LOADING:
-      return {
-        ...state,
-        deleteBusinessRegister: {
-          ...state.deleteBusinessRegister,
-          isLoading: action.payload,
-          isDeleted: false,
-          error: null
-        }
-      }
-    case Types.REMOVE_BUSINESS_REGISTER_SUCCESS:
-      return {
-        ...state,
-        deleteBusinessRegister: {
-          ...state.deleteBusinessRegister,
-          isLoading: false,
-          isDeleted: true
-        }
-      }
-    case Types.REMOVE_BUSINESS_REGISTER_FAILURE:
-      return {
-        ...state,
-        deleteBusinessRegister: {
-          ...state.deleteBusinessRegister,
-          isLoading: false,
           error: action.payload
         }
       }
@@ -526,67 +407,7 @@ export const updateBusiness = business => async (dispatch) => {
   }
 }
 
-export const createBusinessRegister = businessRegister => async (dispatch) => {
-  dispatch({
-    type: Types.CREATE_BUSINESS_REGISTER_LOADING,
-    payload: true
-  })
-  try {
-    const response = await createBusinessRegisterAPI(businessRegister)
-    dispatch({
-      type: Types.CREATE_BUSINESS_REGISTER_SUCCESS
-    })
-    toast.success(response.message)
-  } catch (error) {
-    dispatch({
-      type: Types.CREATE_BUSINESS_REGISTER_FAILURE,
-      payload: error
-    })
-    toast.error(error)
-  }
-}
-
-export const updateBusinessRegister = businessRegister => async (dispatch) => {
-  dispatch({
-    type: Types.UPDATE_BUSINESS_REGISTER_LOADING,
-    payload: true
-  })
-  try {
-    const response = await updateBusinessRegisterAPI(businessRegister)
-    dispatch({
-      type: Types.UPDATE_BUSINESS_REGISTER_SUCCESS
-    })
-    toast.success(response.message)
-  } catch (error) {
-    dispatch({
-      type: Types.UPDATE_BUSINESS_REGISTER_FAILURE,
-      payload: error
-    })
-    toast.error(error)
-  }
-}
-
-export const removeBusinessRegister = businessRegister => async (dispatch) => {
-  dispatch({
-    type: Types.REMOVE_BUSINESS_REGISTER_LOADING,
-    payload: true
-  })
-  try {
-    const response = await removeBusinessRegisterAPI(businessRegister)
-    dispatch({
-      type: Types.REMOVE_BUSINESS_REGISTER_SUCCESS
-    })
-    toast.success(response.message)
-  } catch (error) {
-    dispatch({
-      type: Types.REMOVE_BUSINESS_REGISTER_FAILURE,
-      payload: error
-    })
-    toast.error(error)
-  }
-}
-
-export const reassignBusiness = object => async (dispatch) => {
+export const reassignBusiness = reassignBusiness => async dispatch => {
   dispatch({
     type: Types.CREATE_REASSIGN_BUSINESS_LOADING,
     payload: true
@@ -606,51 +427,7 @@ export const reassignBusiness = object => async (dispatch) => {
   }
 }
 
-export const getBusinessRegister = id => async (dispatch) => {
-  dispatch({
-    type: Types.GET_BUSINESS_REGISTER_LOADING,
     payload: true
-  })
-  try {
-    const business = await getBusinessRegisterAPI(id)
-    dispatch({
-      type: Types.GET_BUSINESS_REGISTER_SUCCESS,
-      payload: business
-    })
-  } catch (error) {
-    dispatch({
-      type: Types.GET_BUSINESS_REGISTER_FAILURE,
-      payload: error
-    })
-    toast.error(error)
-  }
-}
-
-export const updateStageSalesMemo = stageSalesMemo => async (dispatch) => {
-  dispatch({
-    type: Types.UPDATE_STAGE_SALES_MEMO_LOADING,
-    payload: true
-  })
-  try {
-    const response = await updateStageSalesMemoAPI(stageSalesMemo)
-    dispatch({
-      type: Types.UPDATE_STAGE_SALES_MEMO_SUCCESS
-    })
-    toast.success(response.message)
-  } catch (error) {
-    dispatch({
-      type: Types.UPDATE_STAGE_SALES_MEMO_FAILURE,
-      payload: error
-    })
-    toast.error(error)
-  }
-}
-
-export const updateStageLost = stageLost => async (dispatch) => {
-  dispatch({
-    type: Types.UPDATE_STAGE_LOST_LOADING,
-    payload: true
-  })
   try {
     const response = await updateStageLostAPI(stageLost)
     dispatch({
