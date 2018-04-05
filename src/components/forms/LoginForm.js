@@ -1,87 +1,81 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withFormik } from 'formik'
 import { Form, Icon, Message } from 'semantic-ui-react'
 import Yup from 'yup'
 
-class LoginForm extends Component {
-  render () {
-    const {
-      values,
-      touched,
-      errors,
-      isSubmitting,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      errorApi,
-      isValid
-    } = this.props
-    return (
-      <Form onSubmit={handleSubmit}>
-        <Form.Field>
-          <Form.Input
-            size='small'
-            icon='mail outline'
-            placeholder='E-mail'
-            name='email'
-            autoComplete='email'
-            value={values.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={errors.email && touched.email}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Form.Input
-            size='small'
-            icon='key'
-            placeholder='Password'
-            type='password'
-            name='password'
-            autoComplete='password'
-            value={values.password}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={errors.password && touched.password}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Form.Button
-            fluid
-            icon
-            labelPosition='right'
-            size='small'
-            color='blue'
-            disabled={isSubmitting || !isValid}
-            loading={this.props.isLoading}
-          >
-            Login
-            <Icon name='right arrow' />
-          </Form.Button>
-        </Form.Field>
-        <Message
-          error
-          visible={
-            (errors.email && touched.email) ||
-            (errors.password && touched.password) ||
-            errorApi !== null
-          }
-        >
-          <Message.List>
-            {errors.email &&
-              touched.email && <Message.Item>{errors.email}</Message.Item>}
-            {errors.password &&
-              touched.password && (
-                <Message.Item>{errors.password}</Message.Item>
-              )}
-            {errorApi && <Message.Item>{errorApi}</Message.Item>}
-          </Message.List>
-        </Message>
-      </Form>
-    )
-  }
-}
+const LoginForm = ({
+  values,
+  touched,
+  errors,
+  isSubmitting,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  errorApi,
+  isValid,
+  isLoading
+}) => (
+  <Form onSubmit={handleSubmit}>
+    <Form.Field>
+      <Form.Input
+        size="small"
+        icon="mail outline"
+        placeholder="E-mail"
+        name="email"
+        autoComplete="email"
+        value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={errors.email && touched.email}
+      />
+    </Form.Field>
+    <Form.Field>
+      <Form.Input
+        size="small"
+        icon="key"
+        placeholder="Password"
+        type="password"
+        name="password"
+        autoComplete="password"
+        value={values.password}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={errors.password && touched.password}
+      />
+    </Form.Field>
+    <Form.Field>
+      <Form.Button
+        fluid
+        icon
+        labelPosition="right"
+        size="small"
+        color="blue"
+        disabled={isSubmitting || !isValid}
+        loading={isLoading}
+      >
+        Login
+        <Icon name="right arrow" />
+      </Form.Button>
+    </Form.Field>
+    <Message
+      error
+      visible={
+        (errors.email && touched.email) ||
+        (errors.password && touched.password) ||
+        errorApi !== null
+      }
+    >
+      <Message.List>
+        {errors.email &&
+          touched.email && <Message.Item>{errors.email}</Message.Item>}
+        {errors.password &&
+          touched.password && <Message.Item>{errors.password}</Message.Item>}
+        {errorApi && <Message.Item>{errorApi}</Message.Item>}
+      </Message.List>
+    </Message>
+  </Form>
+)
 
 LoginForm.propTypes = {
   values: PropTypes.object,

@@ -11,6 +11,6 @@ const logger = createLogger({
   collapsed: true
 })
 
-const middlewares = [ thunk, logger, routerMiddleware(history) ]
+const middlewares = [thunk, logger, routerMiddleware(history)]
 
 export const store = createStore(reducers, applyMiddleware(...middlewares))

@@ -12,26 +12,25 @@ const Routes = ({ isAuthenticated, isAppLoading, location }) => {
   if (isAppLoading) {
     return (
       <Dimmer page active>
-        <Loader content='Carregando' />
+        <Loader content="Carregando" />
       </Dimmer>
     )
-  } else {
-    return (
-      <Switch>
-        <PublicRoute
-          exact
-          location={location}
-          path='/auth'
-          component={LoginPage}
-        />
-        <PrivateRoute
-          path='/'
-          component={Layout}
-          authenticated={isAuthenticated}
-        />
-      </Switch>
-    )
   }
+  return (
+    <Switch>
+      <PublicRoute
+        exact
+        location={location}
+        path="/auth"
+        component={LoginPage}
+      />
+      <PrivateRoute
+        path="/"
+        component={Layout}
+        authenticated={isAuthenticated}
+      />
+    </Switch>
+  )
 }
 
 Routes.propTypes = {

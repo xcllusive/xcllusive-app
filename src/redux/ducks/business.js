@@ -1,4 +1,9 @@
-import { get, getAll, create, update,
+import { toast } from 'react-toastify'
+import {
+  get,
+  getAll,
+  create,
+  update,
   createBusinessRegister as createBusinessRegisterAPI,
   reassignBusiness as reassignBusinessAPI,
   getBusinessRegister as getBusinessRegisterAPI,
@@ -7,7 +12,6 @@ import { get, getAll, create, update,
   updateStageLost as updateStageLostAPI,
   removeBusinessRegister as removeBusinessRegisterAPI
 } from '../../services/api/business'
-import { toast } from 'react-toastify'
 
 // Action Types
 
@@ -432,14 +436,12 @@ export default function reducer (state = initialState, action) {
 }
 
 // Action Creators
-export const businessLoading = (value, type) => {
-  return {
-    type: Types[type],
-    payload: value
-  }
-}
+export const businessLoading = (value, type) => ({
+  type: Types[type],
+  payload: value
+})
 
-export const createBusiness = business => async dispatch => {
+export const createBusiness = business => async (dispatch) => {
   dispatch({
     type: Types.CREATE_BUSINESS_LOADING,
     payload: true
@@ -457,7 +459,7 @@ export const createBusiness = business => async dispatch => {
   }
 }
 
-export const getBusiness = id => async dispatch => {
+export const getBusiness = id => async (dispatch) => {
   dispatch({
     type: Types.GET_BUSINESS_LOADING,
     payload: true
@@ -477,13 +479,13 @@ export const getBusiness = id => async dispatch => {
   }
 }
 
-export const cleanBusiness = () => dispatch => {
+export const cleanBusiness = () => (dispatch) => {
   dispatch({
     type: Types.CLEAN_BUSINESS
   })
 }
 
-export const getBusinesses = (search = false) => async dispatch => {
+export const getBusinesses = (search = false) => async (dispatch) => {
   dispatch({
     type: Types.GET_BUSINESSES_LOADING,
     payload: true
@@ -503,7 +505,7 @@ export const getBusinesses = (search = false) => async dispatch => {
   }
 }
 
-export const updateBusiness = business => async dispatch => {
+export const updateBusiness = business => async (dispatch) => {
   dispatch({
     type: Types.UPDATE_BUSINESS_LOADING,
     payload: true
@@ -524,7 +526,7 @@ export const updateBusiness = business => async dispatch => {
   }
 }
 
-export const createBusinessRegister = businessRegister => async dispatch => {
+export const createBusinessRegister = businessRegister => async (dispatch) => {
   dispatch({
     type: Types.CREATE_BUSINESS_REGISTER_LOADING,
     payload: true
@@ -544,7 +546,7 @@ export const createBusinessRegister = businessRegister => async dispatch => {
   }
 }
 
-export const updateBusinessRegister = businessRegister => async dispatch => {
+export const updateBusinessRegister = businessRegister => async (dispatch) => {
   dispatch({
     type: Types.UPDATE_BUSINESS_REGISTER_LOADING,
     payload: true
@@ -564,7 +566,7 @@ export const updateBusinessRegister = businessRegister => async dispatch => {
   }
 }
 
-export const removeBusinessRegister = businessRegister => async dispatch => {
+export const removeBusinessRegister = businessRegister => async (dispatch) => {
   dispatch({
     type: Types.REMOVE_BUSINESS_REGISTER_LOADING,
     payload: true
@@ -584,13 +586,13 @@ export const removeBusinessRegister = businessRegister => async dispatch => {
   }
 }
 
-export const reassignBusiness = reassignBusiness => async dispatch => {
+export const reassignBusiness = object => async (dispatch) => {
   dispatch({
     type: Types.CREATE_REASSIGN_BUSINESS_LOADING,
     payload: true
   })
   try {
-    const response = await reassignBusinessAPI(reassignBusiness)
+    const response = await reassignBusinessAPI(object)
     dispatch({
       type: Types.CREATE_REASSIGN_BUSINESS_SUCCESS
     })
@@ -604,7 +606,7 @@ export const reassignBusiness = reassignBusiness => async dispatch => {
   }
 }
 
-export const getBusinessRegister = id => async dispatch => {
+export const getBusinessRegister = id => async (dispatch) => {
   dispatch({
     type: Types.GET_BUSINESS_REGISTER_LOADING,
     payload: true
@@ -624,7 +626,7 @@ export const getBusinessRegister = id => async dispatch => {
   }
 }
 
-export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
+export const updateStageSalesMemo = stageSalesMemo => async (dispatch) => {
   dispatch({
     type: Types.UPDATE_STAGE_SALES_MEMO_LOADING,
     payload: true
@@ -644,7 +646,7 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
   }
 }
 
-export const updateStageLost = stageLost => async dispatch => {
+export const updateStageLost = stageLost => async (dispatch) => {
   dispatch({
     type: Types.UPDATE_STAGE_LOST_LOADING,
     payload: true

@@ -6,8 +6,10 @@ const Wrapper = styled.div`
   text-align: center
 `
 
-export default () => (
+const NotFoundPage = () => (
   <Wrapper>
     <h3>Sorry, page not found!</h3>
   </Wrapper>
 )
+
+export default NotFoundPage

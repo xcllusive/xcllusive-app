@@ -4,7 +4,15 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageLost } from '../../redux/ducks/business'
-import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
+import {
+  Modal,
+  Form,
+  Label,
+  Icon,
+  Button,
+  Radio,
+  Divider
+} from 'semantic-ui-react'
 import Yup from 'yup'
 import 'react-dates/initialize'
 import { SingleDatePicker } from 'react-dates'
@@ -18,7 +26,7 @@ class StageLostForm extends Component {
       focused: false
     }
   }
-  _setStateDate = (date) => {
+  _setStateDate = date => {
     this.setState({ date })
   }
   _handleSelectChange = (e, { name, value }) => {
@@ -33,7 +41,10 @@ class StageLostForm extends Component {
         this.props.setFieldValue('recoveryStageNotWant', false)
       }
     }
-    if (name === 'saleNotesLostWant' && this.props.values['saleNotesLostWant']) {
+    if (
+      name === 'saleNotesLostWant' &&
+      this.props.values['saleNotesLostWant']
+    ) {
       this.props.setFieldValue('recoveryStageNotWant', '')
       if (this.props.values['recoveryStageNotSigned']) {
         this.props.setFieldValue('recoveryStageNotSigned', false)
@@ -63,46 +74,65 @@ class StageLostForm extends Component {
       stageNotWantOptions
     } = this.props
     return (
-      <Modal
-        dimmer={'blurring'}
-        open={modalOpen}
-      >
-        <Modal.Header align='center'>Change the business stage to 'Lost'</Modal.Header>
+      <Modal dimmer={'blurring'} open={modalOpen}>
+        <Modal.Header align="center">
+          Change the business stage to `Lost`
+        </Modal.Header>
         <Modal.Content>
           <Form>
-            <h5>IMPORTANT: Once you have marked this business as 'Lost' you can change it back to a potential listing by searching for it and changing the stage manually.</h5>
+            <h5>
+              IMPORTANT: Once you have marked this business as `Lost` you can
+              change it back to a potential listing by searching for it and
+              changing the stage manually.
+            </h5>
             <Form.Group>
               <Form.Field width={10}>
                 <Form.Select
                   required
-                  label='Rating'
+                  label="Rating"
                   options={ratingOptions}
-                  name='businessRating'
-                  autoComplete='businessRating'
+                  name="businessRating"
+                  autoComplete="businessRating"
                   value={values.businessRating}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessRating && touched.businessRating && <Label basic color='red' pointing content={errors.businessRating} />}
+                {errors.businessRating &&
+                  touched.businessRating && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessRating}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Field width={10}>
                 <Form.TextArea
                   required
-                  label='Lost Notes'
-                  name='afterSalesNotes'
-                  autoComplete='afterSalesNotes'
+                  label="Lost Notes"
+                  name="afterSalesNotes"
+                  autoComplete="afterSalesNotes"
                   value={values.afterSalesNotes}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color='red' pointing content={errors.afterSalesNotes} />}
+                {errors.afterSalesNotes &&
+                  touched.afterSalesNotes && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.afterSalesNotes}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Checkbox
-                label='Mark all `Pending` communications with this Vendor as `Done`'
-                name='pendingDone'
+                label="Mark all `Pending` communications with this Vendor as `Done`"
+                name="pendingDone"
                 onChange={this._handleChangeCheckBox}
                 checked={values.pendingDone}
               />
@@ -111,15 +141,15 @@ class StageLostForm extends Component {
               <label>Did you meet with this vendor? </label>
               <Form.Field
                 control={Radio}
-                label='Yes'
-                name='saleNotesLostMeeting'
+                label="Yes"
+                name="saleNotesLostMeeting"
                 onChange={this._handleChangeCheckBox}
                 checked={values.saleNotesLostMeeting}
               />
               <Form.Field
                 control={Radio}
-                label='No'
-                name='saleNotesLostMeeting'
+                label="No"
+                name="saleNotesLostMeeting"
                 onChange={this._handleChangeCheckBox}
                 checked={!values.saleNotesLostMeeting}
               />
@@ -128,122 +158,131 @@ class StageLostForm extends Component {
               <label>Did we want this business?</label>
               <Form.Field
                 control={Radio}
-                label='Yes'
-                name='saleNotesLostWant'
+                label="Yes"
+                name="saleNotesLostWant"
                 onChange={this._handleChangeCheckBox}
                 checked={values.saleNotesLostWant}
               />
               <Form.Field
                 control={Radio}
-                label='No'
-                name='saleNotesLostWant'
+                label="No"
+                name="saleNotesLostWant"
                 onChange={this._handleChangeCheckBox}
                 checked={!values.saleNotesLostWant}
               />
             </Form.Group>
             <Form.Group>
-              {
-                this.props.values.saleNotesLostWant ? (
-                  <Form.Field width={10}>
-                    <Form.Select
-                      required
-                      label='Why did they not sign with us?'
-                      options={stageNotSignedOptions}
-                      name='recoveryStageNotSigned'
-                      autoComplete='recoveryStageNotSigned'
-                      value={values.recoveryStageNotSigned}
-                      onChange={this._handleSelectChange}
+              {this.props.values.saleNotesLostWant ? (
+                <Form.Field width={10}>
+                  <Form.Select
+                    required
+                    label="Why did they not sign with us?"
+                    options={stageNotSignedOptions}
+                    name="recoveryStageNotSigned"
+                    autoComplete="recoveryStageNotSigned"
+                    value={values.recoveryStageNotSigned}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.recoveryStageNotSigned &&
+                    touched.recoveryStageNotSigned && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      content={errors.recoveryStageNotSigned}
                     />
-                    {errors.recoveryStageNotSigned && touched.recoveryStageNotSigned && <Label basic color='red' pointing content={errors.recoveryStageNotSigned} />}
-                  </Form.Field>
-                ) : (
-                  <Form.Field width={10}>
-                    <Form.Select
-                      required
-                      label='Why did we not want then?'
-                      options={stageNotWantOptions}
-                      name='recoveryStageNotWant'
-                      autoComplete='recoveryStageNotWant'
-                      value={values.recoveryStageNotWant}
-                      onChange={this._handleSelectChange}
+                  )}
+                </Form.Field>
+              ) : (
+                <Form.Field width={10}>
+                  <Form.Select
+                    required
+                    label="Why did we not want then?"
+                    options={stageNotWantOptions}
+                    name="recoveryStageNotWant"
+                    autoComplete="recoveryStageNotWant"
+                    value={values.recoveryStageNotWant}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.recoveryStageNotWant &&
+                    touched.recoveryStageNotWant && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      content={errors.recoveryStageNotWant}
                     />
-                    {errors.recoveryStageNotWant && touched.recoveryStageNotWant && <Label basic color='red' pointing content={errors.recoveryStageNotWant} />}
-                  </Form.Field>
-                )
-              }
+                  )}
+                </Form.Field>
+              )}
             </Form.Group>
             <Divider horizontal>(Optional) Set Follow up date</Divider>
             <Form.Group>
               <Form.Checkbox
-                label='Make a Follow up log.'
-                name='followUpLog'
+                label="Make a Follow up log."
+                name="followUpLog"
                 onChange={this._handleChangeCheckBox}
                 checked={values.followUpLog}
               />
-              {
-                this.props.values.followUpLog ? (
-                  <Form.Field>
-                    <SingleDatePicker
-                      displayFormat='DD/MM/YYYY'
-                      date={this.state.date} // momentPropTypes.momentObj or null
-                      onDateChange={this._setStateDate} // PropTypes.func.isRequired
-                      focused={this.state.focused} // PropTypes.bool
-                      onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
-                    />
-                  </Form.Field>
-                ) : (
-                  <Form.Field>
-                    <SingleDatePicker
-                      date={null}
-                      disabled
-                    />
-                  </Form.Field>
-                )
-              }
+              {this.props.values.followUpLog ? (
+                <Form.Field>
+                  <SingleDatePicker
+                    displayFormat="DD/MM/YYYY"
+                    date={this.state.date} // momentPropTypes.momentObj or null
+                    onDateChange={this._setStateDate} // PropTypes.func.isRequired
+                    focused={this.state.focused} // PropTypes.bool
+                    onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
+                  />
+                </Form.Field>
+              ) : (
+                <Form.Field>
+                  <SingleDatePicker date={null} disabled />
+                </Form.Field>
+              )}
             </Form.Group>
             <Form.Group>
-              {
-                this.props.values.followUpLog ? (
-                  <Form.Field width={10}>
-                    <Form.TextArea
-                      label=''
-                      name='text'
-                      autoComplete='text'
-                      value={values.text}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    {errors.text && touched.text && <Label basic color='red' pointing content={errors.text} />}
-                    <br /><br /><br /><br /><br /><br /><br />
-                  </Form.Field>
-                ) : (
-                  <Form.Field width={10}>
-                    <Form.TextArea
-                      disabled
-                      name=' '
-                      value={''}
-                    />
-                  </Form.Field>
-                )
-              }
+              {this.props.values.followUpLog ? (
+                <Form.Field width={10}>
+                  <Form.TextArea
+                    label=""
+                    name="text"
+                    autoComplete="text"
+                    value={values.text}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.text &&
+                    touched.text && (
+                    <Label basic color="red" pointing content={errors.text} />
+                  )}
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                </Form.Field>
+              ) : (
+                <Form.Field width={10}>
+                  <Form.TextArea disabled name=" " value={''} />
+                </Form.Field>
+              )}
             </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
-            color='blue'
+            color="blue"
             disabled={updateLoading || !isValid}
             loading={updateLoading}
             onClick={handleSubmit}
           >
-            <Icon name='save' />
+            <Icon name="save" />
             Save and Return
           </Button>
-          <Button
-            color='red'
-            onClick={() => toggleModal('modalOpenStageLost')}
-          >
-            <Icon name='cancel' />
+          <Button color="red" onClick={() => toggleModal('modalOpenStageLost')}>
+            <Icon name="cancel" />
             Cancel
           </Button>
         </Modal.Actions>
@@ -253,20 +292,13 @@ class StageLostForm extends Component {
 }
 
 const validationSchema = Yup.object().shape({
-  businessRating: Yup.string()
-    .required('Rating is required.'),
-  afterSalesNotes: Yup.string()
-    .required('Lost Notes is required.'),
-  saleNotesLostMeeting: Yup.string()
-    .required('This field is required.'),
-  saleNotesLostWant: Yup.string()
-    .required('Lost Notes is required.'),
-  recoveryStageNotSigned: Yup.string()
-    .required('This field is required.'),
-  recoveryStageNotWant: Yup.string()
-    .required('This field is required.'),
-  date: Yup.string()
-    .required('This field is required.')
+  businessRating: Yup.string().required('Rating is required.'),
+  afterSalesNotes: Yup.string().required('Lost Notes is required.'),
+  saleNotesLostMeeting: Yup.string().required('This field is required.'),
+  saleNotesLostWant: Yup.string().required('Lost Notes is required.'),
+  recoveryStageNotSigned: Yup.string().required('This field is required.'),
+  recoveryStageNotWant: Yup.string().required('This field is required.'),
+  date: Yup.string().required('This field is required.')
 })
 
 StageLostForm.propTypes = {
@@ -288,10 +320,7 @@ StageLostForm.propTypes = {
 
 const mapPropsToValues = props => {
   if (props.business) {
-    const {
-      ratingId,
-      saleNotesLostMeeting
-    } = props.business
+    const { ratingId, saleNotesLostMeeting } = props.business
 
     const business = {
       businessRating: ratingId,
@@ -309,7 +338,7 @@ const mapPropsToValues = props => {
   }
 }
 
-const handleSubmit = (values, {props, setSubmitting}) => {
+const handleSubmit = (values, { props, setSubmitting }) => {
   props.updateStageLost(values).then(setSubmitting(false))
 }
 
@@ -323,12 +352,13 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({updateStageLost}, dispatch)
+  return bindActionCreators({ updateStageLost }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
     handleSubmit,
-    validationSchema})(StageLostForm)
+    validationSchema
+  })(StageLostForm)
 )

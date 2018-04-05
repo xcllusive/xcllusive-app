@@ -5,7 +5,15 @@ import _ from 'lodash'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageSalesMemo } from '../../redux/ducks/business'
-import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
+import {
+  Modal,
+  Form,
+  Label,
+  Icon,
+  Button,
+  Radio,
+  Divider
+} from 'semantic-ui-react'
 import Yup from 'yup'
 
 class StageSalesMemoForm extends Component {
@@ -13,9 +21,13 @@ class StageSalesMemoForm extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  _mapValuesToArray = (array) => {
+  _mapValuesToArray = array => {
     if (array.length > 0) {
-      return array.map((item, index) => ({ key: index, text: item.firstName, value: item.firstName }))
+      return array.map((item, index) => ({
+        key: index,
+        text: item.firstName,
+        value: item.firstName
+      }))
     }
     return [{ key: 1, text: 'Nenhum usuario encontrado', value: null }]
   }
@@ -45,53 +57,75 @@ class StageSalesMemoForm extends Component {
       handleBlur
     } = this.props
     return (
-      <Modal
-        dimmer={'blurring'}
-        open={modalOpen}
-      >
-        <Modal.Header align='center'>What to enter for 'Sales Memorandum' Stage</Modal.Header>
+      <Modal dimmer={'blurring'} open={modalOpen}>
+        <Modal.Header align="center">
+          What to enter for `Sales Memorandum` Stage
+        </Modal.Header>
         <Modal.Content>
           <Form>
-            <h5>IMPORTANT: Once you click 'Save and Return' you will no longer be able to edit the 'Stage' unless you contact the main office.</h5>
+            <h5>
+              IMPORTANT: Once you click `Save and Return` you will no longer be
+              able to edit the `Stage` unless you contact the main office.
+            </h5>
             <Form.Group>
               <Form.Field width={5}>
                 <Form.Select
                   required
-                  label='Product'
+                  label="Product"
                   options={productOptions}
-                  name='businessProduct'
-                  autoComplete='businessProduct'
+                  name="businessProduct"
+                  autoComplete="businessProduct"
                   value={values.businessProduct}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessProduct && touched.businessProduct && <Label basic color='red' pointing content={errors.businessProduct} />}
+                {errors.businessProduct &&
+                  touched.businessProduct && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessProduct}
+                  />
+                )}
               </Form.Field>
               <Form.Field width={5}>
                 <Form.Select
                   required
-                  label='Agent'
+                  label="Agent"
                   options={usersStaff}
-                  name='staffAccountName'
-                  autoComplete='staffAccountName'
+                  name="staffAccountName"
+                  autoComplete="staffAccountName"
                   value={values.staffAccountName}
                   onChange={this._handleSelectChange}
                 />
-                {errors.staffAccountName && touched.staffAccountName && <Label basic color='red' pointing content={errors.staffAccountName} />}
+                {errors.staffAccountName &&
+                  touched.staffAccountName && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.staffAccountName}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <b><label>Is this business eligible for the 120 Day Guarantee?</label></b>
+              <b>
+                <label>
+                  Is this business eligible for the 120 Day Guarantee?
+                </label>
+              </b>
               <Form.Field
                 control={Radio}
-                label='Yes'
-                name='data120DayGuarantee'
+                label="Yes"
+                name="data120DayGuarantee"
                 onChange={this._handleChangeCheckBox}
                 checked={values.data120DayGuarantee}
               />
               <Form.Field
                 control={Radio}
-                label='No'
-                name='data120DayGuarantee'
+                label="No"
+                name="data120DayGuarantee"
                 onChange={this._handleChangeCheckBox}
                 checked={!values.data120DayGuarantee}
               />
@@ -100,52 +134,84 @@ class StageSalesMemoForm extends Component {
               <Form.Field width={5}>
                 <Form.Select
                   required
-                  label='Business Type'
+                  label="Business Type"
                   options={typeOptions}
-                  name='businessType'
-                  autoComplete='businessType'
+                  name="businessType"
+                  autoComplete="businessType"
                   value={values.businessType}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessType && touched.businessType && <Label basic color='red' pointing content={errors.businessType} />}
+                {errors.businessType &&
+                  touched.businessType && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessType}
+                  />
+                )}
               </Form.Field>
               <Form.Field width={5}>
                 <Form.Select
                   required
-                  label='Industry'
+                  label="Industry"
                   options={industryOptions}
-                  name='businessIndustry'
-                  autoComplete='businessIndustry'
+                  name="businessIndustry"
+                  autoComplete="businessIndustry"
                   value={values.businessIndustry}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessIndustry && touched.businessIndustry && <Label basic color='red' pointing content={errors.businessIndustry} />}
+                {errors.businessIndustry &&
+                  touched.businessIndustry && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessIndustry}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Field width={5}>
                 <Form.Select
                   required
-                  label='Owner`s time'
+                  label="Owner`s time"
                   options={ownersTimeOptions}
-                  name='businessOwnersTime'
-                  autoComplete='businessOwnersTime'
+                  name="businessOwnersTime"
+                  autoComplete="businessOwnersTime"
                   value={values.businessOwnersTime}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessOwnersTime && touched.businessOwnersTime && <Label basic color='red' pointing content={errors.businessOwnersTime} />}
+                {errors.businessOwnersTime &&
+                  touched.businessOwnersTime && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessOwnersTime}
+                  />
+                )}
               </Form.Field>
               <Form.Field width={5}>
                 <Form.Select
                   required
-                  label='Rating'
+                  label="Rating"
                   options={ratingOptions}
-                  name='businessRating'
-                  autoComplete='businessRating'
+                  name="businessRating"
+                  autoComplete="businessRating"
                   value={values.businessRating}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessRating && touched.businessRating && <Label basic color='red' pointing content={errors.businessRating} />}
+                {errors.businessRating &&
+                  touched.businessRating && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessRating}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Divider horizontal>Business Pricing</Divider>
@@ -153,82 +219,130 @@ class StageSalesMemoForm extends Component {
               <Form.Field>
                 <Form.Input
                   required
-                  label='Listed Price'
-                  name='listedPrice'
-                  autoComplete='listedPrice'
+                  label="Listed Price"
+                  name="listedPrice"
+                  autoComplete="listedPrice"
                   value={values.listedPrice}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.listedPrice && touched.listedPrice && <Label basic color='red' pointing content={errors.listedPrice} />}
+                {errors.listedPrice &&
+                  touched.listedPrice && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.listedPrice}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
                   required
-                  label='Engagement Fee'
-                  name='engagementFee'
-                  autoComplete='engagementFee'
+                  label="Engagement Fee"
+                  name="engagementFee"
+                  autoComplete="engagementFee"
                   value={values.engagementFee}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.engagementFee && touched.engagementFee && <Label basic color='red' pointing content={errors.engagementFee} />}
+                {errors.engagementFee &&
+                  touched.engagementFee && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.engagementFee}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
                   required
-                  label='Commission %'
-                  name='commissionPerc'
-                  autoComplete='commissionPerc'
+                  label="Commission %"
+                  name="commissionPerc"
+                  autoComplete="commissionPerc"
                   value={values.commissionPerc}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.commissionPerc && touched.commissionPerc && <Label basic color='red' pointing content={errors.commissionPerc} />}
+                {errors.commissionPerc &&
+                  touched.commissionPerc && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.commissionPerc}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Field>
                 <Form.Input
                   required
-                  label='Minimum Com $'
-                  name='minimumCharge'
-                  autoComplete='minimumCharge'
+                  label="Minimum Com $"
+                  name="minimumCharge"
+                  autoComplete="minimumCharge"
                   value={values.minimumCharge}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.minimumCharge && touched.minimumCharge && <Label basic color='red' pointing content={errors.minimumCharge} />}
+                {errors.minimumCharge &&
+                  touched.minimumCharge && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.minimumCharge}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
                   required
-                  label='Appraisal High $'
-                  name='appraisalHigh'
-                  autoComplete='appraisalHigh'
+                  label="Appraisal High $"
+                  name="appraisalHigh"
+                  autoComplete="appraisalHigh"
                   value={values.appraisalHigh}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.appraisalHigh && touched.appraisalHigh && <Label basic color='red' pointing content={errors.appraisalHigh} />}
+                {errors.appraisalHigh &&
+                  touched.appraisalHigh && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.appraisalHigh}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
                   required
-                  label='Appraisal Low $'
-                  name='appraisalLow'
-                  autoComplete='appraisalLow'
+                  label="Appraisal Low $"
+                  name="appraisalLow"
+                  autoComplete="appraisalLow"
                   value={values.appraisalLow}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.appraisalLow && touched.appraisalLow && <Label basic color='red' pointing content={errors.appraisalLow} />}
+                {errors.appraisalLow &&
+                  touched.appraisalLow && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.appraisalLow}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Checkbox
-                label='Mark all `Pending` communications with this Vendor as `Done`'
-                name='pendingDone'
+                label="Mark all `Pending` communications with this Vendor as `Done`"
+                name="pendingDone"
                 onChange={this._handleChangeCheckBox}
                 checked={values.pendingDone}
               />
@@ -237,19 +351,19 @@ class StageSalesMemoForm extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button
-            color='blue'
+            color="blue"
             disabled={isSubmitting || !isValid}
             loading={updateLoading}
             onClick={handleSubmit}
           >
-            <Icon name='save' />
+            <Icon name="save" />
             Save and Return
           </Button>
           <Button
-            color='red'
+            color="red"
             onClick={() => toggleModal('modalOpenStageSalesMemo')}
           >
-            <Icon name='cancel' />
+            <Icon name="cancel" />
             Cancel
           </Button>
         </Modal.Actions>
@@ -302,7 +416,7 @@ const mapPropsToValues = props => {
       minimumCharge: '10000.00'
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
-    return _.mapValues(business, value => value == null ? '' : value)
+    return _.mapValues(business, value => (value === null ? '' : value))
   }
   return {
     businessProduct: '',
@@ -316,35 +430,22 @@ const mapPropsToValues = props => {
 }
 
 const validationSchema = Yup.object().shape({
-  businessProduct: Yup.string()
-    .required('This field is required.'),
-  data120DayGuarantee: Yup.string()
-    .required('This field is required.'),
-  staffAccountName: Yup.string()
-    .required('This field is required.'),
-  businessType: Yup.string()
-    .required('This field is required.'),
-  businessIndustry: Yup.string()
-    .required('This field is required.'),
-  businessOwnersTime: Yup.string()
-    .required('This field is required.'),
-  businessRating: Yup.string()
-    .required('This field is required.'),
-  listedPrice: Yup.string()
-    .required('This field is required.'),
-  engagementFee: Yup.string()
-    .required('This field is required.'),
-  commissionPerc: Yup.string()
-    .required('This field is required.'),
-  minimumCharge: Yup.string()
-    .required('This field is required.'),
-  appraisalHigh: Yup.string()
-    .required('This field is required.'),
-  appraisalLow: Yup.string()
-    .required('This field is required.')
+  businessProduct: Yup.string().required('This field is required.'),
+  data120DayGuarantee: Yup.string().required('This field is required.'),
+  staffAccountName: Yup.string().required('This field is required.'),
+  businessType: Yup.string().required('This field is required.'),
+  businessIndustry: Yup.string().required('This field is required.'),
+  businessOwnersTime: Yup.string().required('This field is required.'),
+  businessRating: Yup.string().required('This field is required.'),
+  listedPrice: Yup.string().required('This field is required.'),
+  engagementFee: Yup.string().required('This field is required.'),
+  commissionPerc: Yup.string().required('This field is required.'),
+  minimumCharge: Yup.string().required('This field is required.'),
+  appraisalHigh: Yup.string().required('This field is required.'),
+  appraisalLow: Yup.string().required('This field is required.')
 })
 
-const handleSubmit = (values, {props, setSubmitting}) => {
+const handleSubmit = (values, { props, setSubmitting }) => {
   props.updateStageSalesMemo(values).then(setSubmitting(false))
 }
 
@@ -361,12 +462,13 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({updateStageSalesMemo}, dispatch)
+  return bindActionCreators({ updateStageSalesMemo }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     validationSchema,
     mapPropsToValues,
-    handleSubmit})(StageSalesMemoForm)
+    handleSubmit
+  })(StageSalesMemoForm)
 )

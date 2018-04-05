@@ -65,7 +65,7 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getBusinessRegister = id => async dispatch => {
+export const getBusinessRegister = id => async (dispatch) => {
   dispatch({
     type: Types.GET_BUSINESS_REGISTER_LOADING
   })

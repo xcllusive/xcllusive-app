@@ -83,34 +83,26 @@ function loginError (error) {
   }
 }
 
-export const loginLoading = value => {
-  return {
-    type: Types.AUTH_LOADING,
-    payload: value
-  }
-}
+export const loginLoading = value => ({
+  type: Types.AUTH_LOADING,
+  payload: value
+})
 
-export const loginAppLoading = value => {
-  return {
-    type: Types.AUTH_APP_LOADING,
-    payload: value
-  }
-}
+export const loginAppLoading = value => ({
+  type: Types.AUTH_APP_LOADING,
+  payload: value
+})
 
-export const loginSuccess = obj => {
-  return {
-    type: Types.AUTH_SUCCESS,
-    payload: obj
-  }
-}
+export const loginSuccess = obj => ({
+  type: Types.AUTH_SUCCESS,
+  payload: obj
+})
 
-export const userLogout = () => {
-  return {
-    type: Types.AUTH_LOGOUT
-  }
-}
+export const userLogout = () => ({
+  type: Types.AUTH_LOGOUT
+})
 
-export const login = (email, password) => async dispatch => {
+export const login = (email, password) => async (dispatch) => {
   dispatch(loginLoading(true))
   try {
     const response = await loginApi(email, password)
@@ -122,7 +114,7 @@ export const login = (email, password) => async dispatch => {
   }
 }
 
-export const loginWithToken = () => async dispatch => {
+export const loginWithToken = () => async (dispatch) => {
   try {
     const response = await loginWithTokenApi()
     dispatch(loginSuccess(response.user))
@@ -133,7 +125,7 @@ export const loginWithToken = () => async dispatch => {
   }
 }
 
-export const logout = () => dispatch => {
+export const logout = () => (dispatch) => {
   window.localStorage.removeItem('xcllusiveJWT')
   setAuthorizationHeader()
   dispatch(userLogout())

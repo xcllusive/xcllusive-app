@@ -51,8 +51,8 @@ class LoginPage extends React.Component {
         <Grid centered>
           <Grid.Row>
             <Grid.Column width={5}>
-              <Segment as='h1'>
-                <Image src={logo} alt='Logo Xcllusive' fluid centered />
+              <Segment as="h1">
+                <Image src={logo} alt="Logo Xcllusive" fluid centered />
                 <LoginForm
                   submit={this._submit}
                   isLoading={this.props.isLoading}

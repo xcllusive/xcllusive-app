@@ -36,156 +36,230 @@ class NewBusinessForm extends Component {
     } = this.props
 
     return (
-      <Modal
-        dimmer={'blurring'}
-        open={modalOpen}
-      >
-        <Modal.Header align='center'>New Business</Modal.Header>
+      <Modal dimmer={'blurring'} open={modalOpen}>
+        <Modal.Header align="center">New Business</Modal.Header>
         <Modal.Content>
           <Form>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
                   required
-                  label='Business name'
-                  name='businessName'
-                  autoComplete='businessName'
+                  label="Business name"
+                  name="businessName"
+                  autoComplete="businessName"
                   value={values.businessName}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.businessName && touched.businessName && <Label basic color='red' pointing content={errors.businessName} />}
+                {errors.businessName &&
+                  touched.businessName && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessName}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
                   required
-                  label='First name'
-                  name='firstName'
-                  autoComplete='firstName'
+                  label="First name"
+                  name="firstName"
+                  autoComplete="firstName"
                   value={values.firstName}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.firstName && touched.firstName && <Label basic color='red' pointing content={errors.firstName} />}
+                {errors.firstName &&
+                  touched.firstName && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.firstName}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
                   required
-                  label='Last name'
-                  name='lastName'
-                  autoComplete='lastName'
+                  label="Last name"
+                  name="lastName"
+                  autoComplete="lastName"
                   value={values.lastName}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.lastName && touched.lastName && <Label basic color='red' pointing content={errors.lastName} />}
+                {errors.lastName &&
+                  touched.lastName && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.lastName}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
-                  label='Telephone 1'
-                  name='vendorPhone1'
-                  autoComplete='vendorPhone1'
+                  label="Telephone 1"
+                  name="vendorPhone1"
+                  autoComplete="vendorPhone1"
                   value={values.vendorPhone1}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorPhone1 && touched.vendorPhone1 && <Label basic color='red' pointing content={errors.vendorPhone1} />}
+                {errors.vendorPhone1 &&
+                  touched.vendorPhone1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.vendorPhone1}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Telephone 2'
-                  name='vendorPhone2'
-                  autoComplete='vendorPhone2'
+                  label="Telephone 2"
+                  name="vendorPhone2"
+                  autoComplete="vendorPhone2"
                   value={values.vendorPhone2}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorPhone2 && touched.vendorPhone2 && <Label basic color='red' pointing content={errors.vendorPhone2} />}
+                {errors.vendorPhone2 &&
+                  touched.vendorPhone2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.vendorPhone2}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Telephone 3'
-                  name='vendorPhone3'
-                  autoComplete='vendorPhone3'
+                  label="Telephone 3"
+                  name="vendorPhone3"
+                  autoComplete="vendorPhone3"
                   value={values.vendorPhone3}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorPhone3 && touched.vendorPhone3 && <Label basic color='red' pointing content={errors.vendorPhone3} />}
+                {errors.vendorPhone3 &&
+                  touched.vendorPhone3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.vendorPhone3}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
                   required
-                  label='Email'
-                  name='vendorEmail'
-                  autoComplete='vendorEmail'
+                  label="Email"
+                  name="vendorEmail"
+                  autoComplete="vendorEmail"
                   value={values.vendorEmail}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorEmail && touched.vendorEmail && <Label basic color='red' pointing content={errors.vendorEmail} />}
+                {errors.vendorEmail &&
+                  touched.vendorEmail && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.vendorEmail}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Select
                   required
-                  label='Source'
+                  label="Source"
                   options={sourceOptions}
-                  name='businessSource'
-                  autoComplete='businessSource'
+                  name="businessSource"
+                  autoComplete="businessSource"
                   loading={dropDownLoading}
                   disabled={dropDownLoading}
                   value={values.businessSource}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessSource && touched.businessSource && <Label basic color='red' pointing content={errors.businessSource} />}
+                {errors.businessSource &&
+                  touched.businessSource && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessSource}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Source Notes'
-                  name='sourceNotes'
-                  autoComplete='sourceNotes'
+                  label="Source Notes"
+                  name="sourceNotes"
+                  autoComplete="sourceNotes"
                   value={values.sourceNotes}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sourceNotes && touched.sourceNotes && <Label basic color='red' pointing content={errors.sourceNotes} />}
+                {errors.sourceNotes &&
+                  touched.sourceNotes && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.sourceNotes}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.TextArea
                   required
-                  label='Notes'
-                  name='description'
-                  autoComplete='description'
+                  label="Notes"
+                  name="description"
+                  autoComplete="description"
                   value={values.description}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.description && touched.description && <Label basic color='red' pointing content={errors.description} />}
+                {errors.description &&
+                  touched.description && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.description}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
-            color='blue'
+            color="blue"
             disabled={isSubmitting || !isValid}
             loading={isLoading}
             onClick={handleSubmit}
           >
-            <Icon name='save' />
+            <Icon name="save" />
             Create Business
           </Button>
-          <Button
-            color='red'
-            onClick={toggleModal}
-          >
-            <Icon name='cancel' />
+          <Button color="red" onClick={toggleModal}>
+            <Icon name="cancel" />
             Cancel
           </Button>
         </Modal.Actions>
@@ -235,25 +309,20 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string()
     .required('Last name is required.')
     .max(40, 'Last name require max 40 characters.'),
-  vendorPhone1: Yup.string()
-    .max(15, 'Telephone 1 require max 15 characters.'),
-  vendorPhone2: Yup.string()
-    .max(15, 'Telephone 2 require max 15 characters.'),
-  vendorPhone3: Yup.string()
-    .max(15, 'Telephone 3 require max 15 characters.'),
+  vendorPhone1: Yup.string().max(15, 'Telephone 1 require max 15 characters.'),
+  vendorPhone2: Yup.string().max(15, 'Telephone 2 require max 15 characters.'),
+  vendorPhone3: Yup.string().max(15, 'Telephone 3 require max 15 characters.'),
   vendorEmail: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  businessSource: Yup.number()
-    .required('Source is required.'),
-  sourceNotes: Yup.string()
-    .max(40, 'Source Notes require max 40 characters.'),
+  businessSource: Yup.number().required('Source is required.'),
+  sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
   description: Yup.string()
     .required('Notes is required.')
     .max(2000, 'Source Notes require max 2000 characters.')
 })
 
-const handleSubmit = (values, {props, setSubmitting}) => {
+const handleSubmit = (values, { props, setSubmitting }) => {
   props.createBusiness(values)
   setSubmitting(false)
 }

@@ -2,7 +2,17 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Table, Icon, Button, Input, Grid, Statistic, Dimmer, Loader, Header } from 'semantic-ui-react'
+import {
+  Table,
+  Icon,
+  Button,
+  Input,
+  Grid,
+  Statistic,
+  Dimmer,
+  Loader,
+  Header
+} from 'semantic-ui-react'
 
 import { getBusinesses } from '../../redux/ducks/business'
 
@@ -25,7 +35,7 @@ class BusinessListPage extends Component {
   }
 
   async componentWillReceiveProps (nextProps) {
-    if (nextProps.isCreated && (this.props.isCreated !== nextProps.isCreated)) {
+    if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
       await this._toggleModal({})
       this.props.getBusinesses()
     }
@@ -41,7 +51,7 @@ class BusinessListPage extends Component {
     this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
   }
 
-  _toggleModal = business => {
+  _toggleModal = (business) => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen,
       business
@@ -50,15 +60,10 @@ class BusinessListPage extends Component {
 
   render () {
     const {
-      isLoading,
-      history,
-      match,
-      businesses
+      isLoading, history, match, businesses
     } = this.props
 
-    const {
-      modalOpen
-    } = this.state
+    const { modalOpen } = this.state
 
     if (isLoading) {
       return (
@@ -70,16 +75,14 @@ class BusinessListPage extends Component {
 
     return (
       <Wrapper>
-        {
-          modalOpen ? (
-            <NewBusinessForm
-              modalOpen={modalOpen}
-              toggleModal={this._toggleModal}
-            />
-          ) : null
-        }
+        {modalOpen ? (
+          <NewBusinessForm
+            modalOpen={modalOpen}
+            toggleModal={this._toggleModal}
+          />
+        ) : null}
         <GridBusinessStage>
-          <Statistic.Group size='mini' color='blue' widths={6}>
+          <Statistic.Group size="mini" color="blue" widths={6}>
             <Statistic>
               <Statistic.Value>10</Statistic.Value>
               <Statistic.Label>Potential Listing</Statistic.Label>
@@ -106,28 +109,32 @@ class BusinessListPage extends Component {
             </Statistic>
           </Statistic.Group>
         </GridBusinessStage>
-        <Grid padded='horizontally'>
+        <Grid padded="horizontally">
           <Grid.Row>
-            <Grid.Column floated='left' textAlign='center' width={5}>
+            <Grid.Column floated="left" textAlign="center" width={5}>
               <Input
                 fluid
-                icon='search'
+                icon="search"
                 loading={this.state.isLoading}
-                placeholder='Find businesses...'
+                placeholder="Find businesses..."
                 onChange={this._onSearch}
                 value={this.state.inputSearch}
               />
             </Grid.Column>
-            <Grid.Column floated='right' width={3}>
-              <Button onClick={this._toggleModal} color='facebook' floated='right'>
-                <Icon name='add' />
+            <Grid.Column floated="right" width={3}>
+              <Button
+                onClick={this._toggleModal}
+                color="facebook"
+                floated="right"
+              >
+                <Icon name="add" />
                 New Business
               </Button>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Header>FOR SALE</Header>
-            <Table color='blue' celled inverted selectable>
+            <Table color="blue" celled inverted selectable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Business ID</Table.HeaderCell>
@@ -138,27 +145,23 @@ class BusinessListPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {
-                  businesses.map(business => {
-                    return (
-                      <Table.Row
-                        active
-                        key={business.id}
-                        onClick={() =>
-                          history.push(
-                            `${match.path}/${business.id}`
-                          )
-                        }
-                      >
-                        <Table.Cell>{`BS${business.id}`}</Table.Cell>
-                        <Table.Cell>{business.businessName}</Table.Cell>
-                        <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
-                        <Table.Cell>{''}</Table.Cell>
-                        <Table.Cell>{''}</Table.Cell>
-                      </Table.Row>
-                    )
-                  })
-                }
+                {businesses.map((business) => (
+                  <Table.Row
+                    active
+                    key={business.id}
+                    onClick={() =>
+                      history.push(`${match.path}/${business.id}`)
+                    }
+                  >
+                    <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                    <Table.Cell>{business.businessName}</Table.Cell>
+                    <Table.Cell>{`${business.firstNameV} ${
+                      business.lastNameV
+                    }`}</Table.Cell>
+                    <Table.Cell>{''}</Table.Cell>
+                    <Table.Cell>{''}</Table.Cell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
           </Grid.Row>
@@ -177,16 +180,12 @@ BusinessListPage.propTypes = {
   match: PropTypes.object
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusinesses }, dispatch)
-}
+const mapDispatchToProps = (dispatch) => bindActionCreators({ getBusinesses }, dispatch)
 
-const mapStateToProps = state => {
-  return {
-    isCreated: state.business.create.isCreated,
-    isLoading: state.business.getAll.isLoading,
-    businesses: state.business.getAll.array
-  }
-}
+const mapStateToProps = (state) => ({
+  isCreated: state.business.create.isCreated,
+  isLoading: state.business.getAll.isLoading,
+  businesses: state.business.getAll.array
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessListPage)
