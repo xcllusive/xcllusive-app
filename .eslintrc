@@ -1,12 +1,14 @@
 {
+  "plugins": ["standard"],
+  "extends": ["standard", "plugin:react/recommended", "prettier/react", "prettier/standard"],
+  "parser": "babel-eslint",
   "rules": {
-    "no-console": 0,
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
+    "no-console": "off",
     "no-underscore-dangle": 0,
-    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
-    "no-use-before-define": ["error", { "variables": false }],
-    "no-multi-str": 0,
     "quotes": ["error", "single"],
-    "eqeqeq": ["error"]
+    "eqeqeq": ["error"],
+    "semi": ["error", "never"]
   },
   "env": {
     "es6": true,
@@ -17,11 +19,5 @@
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
     }
-  },
-  "parser": "babel-eslint",
-  "extends": [
-    "standard",
-    "standard-react"
-  ],
-  "plugins": ["react"]
+  }
 }
