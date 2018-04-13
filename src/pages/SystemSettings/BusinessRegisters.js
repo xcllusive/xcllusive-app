@@ -70,24 +70,6 @@ class BusinessRegisters extends Component {
   render () {
     return (
       <Wrapper>
-        {this.state.modalOpen ? (
-          <NewBusinessRegisterForm
-            modalOpen={this.state.modalOpen}
-            toggleModal={this._toggleModal}
-            editBusinessRegister={this.state.editBusinessRegister}
-            registerType={this.state.registerType}
-          />
-        ) : null}
-        {this.state.modalConfirmDeleteOpen ? (
-          <ModalConfirmDelete
-            modalOpen={this.state.modalConfirmDeleteOpen}
-            toogleModalDelete={this._toggleModalConfirmDelete}
-            options={{
-              title: 'Delete Business Register',
-              text: 'Are you sure you want to delete business register?'
-            }}
-          />
-        ) : null}
         <Grid padded="horizontally">
           <Grid.Row columns={1}>
             <Grid.Column floated="right" width={2}>
@@ -419,26 +401,24 @@ BusinessRegisters.propTypes = {
   getBusinessRegister: PropTypes.func
 }
 
-const mapStateToProps = state => {
-  return {
-    isLoading: state.business.get.isLoading,
-    stageOptions: state.businessRegister.get.stage.array,
-    sourceOptions: state.businessRegister.get.source.array,
-    ratingOptions: state.businessRegister.get.rating.array,
-    productOptions: state.businessRegister.get.product.array,
-    industryOptions: state.businessRegister.get.industry.array,
-    typeOptions: state.businessRegister.get.type.array,
-    ownersTimeOptions: state.businessRegister.get.ownersTime.array,
-    createBusinessRegister: state.businessRegister.create.isCreated,
-    updateBusinessRegister: state.businessRegister.update.isUpdated,
-    deleteBusinessRegister: state.businessRegister.delete.isDeleted,
-    stageNotSignedOptions: state.business.get.stageNotSignedOptions,
-    stageNotWantOptions: state.business.get.stageNotWantOptions
-  }
-};
+const mapStateToProps = state => ({
+  isLoading: state.business.get.isLoading,
+  stageOptions: state.businessRegister.get.stage.array,
+  sourceOptions: state.businessRegister.get.source.array,
+  ratingOptions: state.businessRegister.get.rating.array,
+  productOptions: state.businessRegister.get.product.array,
+  industryOptions: state.businessRegister.get.industry.array,
+  typeOptions: state.businessRegister.get.type.array,
+  ownersTimeOptions: state.businessRegister.get.ownersTime.array,
+  createBusinessRegister: state.businessRegister.create.isCreated,
+  updateBusinessRegister: state.businessRegister.update.isUpdated,
+  deleteBusinessRegister: state.businessRegister.delete.isDeleted,
+  stageNotSignedOptions: state.business.get.stageNotSignedOptions,
+  stageNotWantOptions: state.business.get.stageNotWantOptions
+})
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
     {
       getBusinessRegister,
       removeBusinessRegister,
@@ -446,6 +426,5 @@ const mapDispatchToProps = dispatch => {
     },
     dispatch
   )
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)

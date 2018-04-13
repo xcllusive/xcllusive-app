@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Label, Button } from 'semantic-ui-react'
+import { Modal, Form, Label, Button, Icon } from 'semantic-ui-react'
 import Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
@@ -29,145 +29,58 @@ class FormNewBusinessRegister extends PureComponent {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  }
+  };
 
   render () {
-    const {
-      values,
-      touched,
-      errors,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      isValid,
-      createLoading,
-      updateLoading,
-      businessRegister,
-      businessRegisterType
-    } = this.props
-<<<<<<< HEAD:src/components/forms/NewBusinessRegisterForm.js
-    const { businessRegister } = this.state
+    const { values, touched, errors, handleChange, handleBlur, handleSubmit, isValid, createLoading, updateLoading, businessRegister } = this.props
+
     return (
-      <Modal dimmer="blurring" open={modalOpen}>
+      <Modal open dimmer="blurring">
         <Modal.Header align="center">
-          {this.props.editBusinessRegister &&
-          this.props.editBusinessRegister.value
-            ? 'Edit Business Register'
-            : 'New Business Register'}
+          {this.props.editBusinessRegister && this.props.editBusinessRegister.value ? 'Edit Business Register' : 'New Business Register'}
         </Modal.Header>
-=======
-    const {
-      typesBusinessRegisters
-    } = this.state
-    return (
-      <Modal open >
-        <Modal.Header align='center'>{businessRegister ? 'Edit Business Register' : 'New Business Register' }</Modal.Header>
->>>>>>> 5123be2a5e83aa7c22613664a6f89675f1950419:src/components/forms/FormNewBusinessRegister.js
         <Modal.Content>
           <Form>
             <Form.Group>
               <Form.Field width={4}>
                 <Form.Select
                   required
-<<<<<<< HEAD:src/components/forms/NewBusinessRegisterForm.js
                   label="Business Register"
                   name="businessRegister"
                   options={businessRegister}
                   autoComplete="businessRegister"
                   value={values.businessRegister}
                   onChange={this._handleSelectChange}
-                  disabled={
-                    this.props.editBusinessRegister &&
-                    this.props.editBusinessRegister.value !== false
-                  }
-=======
-                  label='Business Register'
-                  name='businessRegister'
-                  options={typesBusinessRegisters}
-                  autoComplete='businessRegister'
-                  value={values.businessRegister}
-                  onChange={this._handleSelectChange}
-                  disabled={businessRegisterType !== undefined}
->>>>>>> 5123be2a5e83aa7c22613664a6f89675f1950419:src/components/forms/FormNewBusinessRegister.js
+                  disabled={this.props.editBusinessRegister && this.props.editBusinessRegister.value !== false}
                 />
-                {errors.businessRegister &&
-                  touched.businessRegister && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessRegister}
-                  />
-                )}
+                {errors.businessRegister && touched.businessRegister && <Label basic color="red" pointing content={errors.businessRegister} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Field width={16}>
-                <Form.Input
-                  required
-                  label="Label"
-                  name="label"
-                  autoComplete="label"
-                  value={values.label}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.label &&
-                  touched.label && (
-                  <Label basic color="red" pointing content={errors.label} />
-                )}
+                <Form.Input required label="Label" name="label" autoComplete="label" value={values.label} onChange={handleChange} onBlur={handleBlur} />
+                {errors.label && touched.label && <Label basic color="red" pointing content={errors.label} />}
               </Form.Field>
             </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-<<<<<<< HEAD:src/components/forms/NewBusinessRegisterForm.js
-            color="blue"
-            disabled={createLoading || updateLoading || !isValid}
-            loading={createLoading || updateLoading}
-            onClick={handleSubmit}
-          >
+          <Button color="blue" disabled={createLoading || updateLoading || !isValid} loading={createLoading || updateLoading} onClick={handleSubmit}>
             <Icon name="save" />
-            {this.props.editBusinessRegister &&
-            this.props.editBusinessRegister.value
-              ? 'Edit Register'
-              : 'Create Register'}
+            {this.props.editBusinessRegister && this.props.editBusinessRegister.value ? 'Edit Register' : 'Create Register'}
           </Button>
-          <Button color="red" onClick={toggleModal}>
+          <Button color="red" onClick={closeModal()}>
             <Icon name="cancel" />
             Cancel
           </Button>
-=======
-            negative
-            icon='cancel'
-            content='Cancel'
-            labelPosition='right'
-            onClick={this.props.closeModal}
-          />
-          <Button
-            color='blue'
-            icon='save'
-            content={(businessRegister && businessRegister.value) ? 'Edit Register' : 'Create Register'}
-            labelPosition='right'
-            disabled={createLoading || updateLoading || !isValid}
-            loading={createLoading || updateLoading}
-            onClick={handleSubmit}
-          />
->>>>>>> 5123be2a5e83aa7c22613664a6f89675f1950419:src/components/forms/FormNewBusinessRegister.js
         </Modal.Actions>
       </Modal>
     )
   }
 }
 
-<<<<<<< HEAD:src/components/forms/NewBusinessRegisterForm.js
-NewBusinessRegisterForm.propTypes = {
-  values: PropTypes.object.isRequired,
-=======
 FormNewBusinessRegister.propTypes = {
   values: PropTypes.object,
->>>>>>> 5123be2a5e83aa7c22613664a6f89675f1950419:src/components/forms/FormNewBusinessRegister.js
   touched: PropTypes.object,
   errors: PropTypes.object,
   handleChange: PropTypes.func,
@@ -179,27 +92,15 @@ FormNewBusinessRegister.propTypes = {
   createLoading: PropTypes.bool,
   businessRegister: PropTypes.object,
   businessRegisterType: PropTypes.number,
-  updateLoading: PropTypes.bool
+  updateLoading: PropTypes.bool,
+  editBusinessRegister: PropTypes.object
 }
 
-<<<<<<< HEAD:src/components/forms/NewBusinessRegisterForm.js
-const mapPropsToValues = (props) => {
-  if (props && props.editBusinessRegister) {
-=======
-const mapPropsToValues = ({businessRegister, businessRegisterType}) => {
-  if (businessRegister) {
->>>>>>> 5123be2a5e83aa7c22613664a6f89675f1950419:src/components/forms/FormNewBusinessRegister.js
-    return {
-      businessRegister: businessRegisterType,
-      label: businessRegister.text,
-      id: businessRegister.value
-    }
-  }
-  return {
-    businessRegister: '',
-    label: ''
-  }
-}
+const mapPropsToValues = props => ({
+  businessRegister: props.editBusinessRegister ? props.editBusinessRegister : '',
+  label: props.businessRegister.text ? props.businessRegister.text : '',
+  id: props.businessRegister.value ? props.businessRegister.value : null
+})
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
@@ -217,7 +118,6 @@ const handleSubmit = (values, { props, setSubmitting }) => {
   }
 }
 
-<<<<<<< HEAD:src/components/forms/NewBusinessRegisterForm.js
 const mapStateToProps = state => ({
   createLoading: state.business.createBusinessRegister.isLoading,
   updateLoading: state.business.updateBusinessRegister.isLoading
@@ -232,24 +132,6 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(withFormik({
-  validationSchema,
-  mapPropsToValues,
-  handleSubmit
-})(NewBusinessRegisterForm))
-=======
-const mapStateToProps = state => {
-  return {
-    createLoading: state.businessRegister.create.isLoading,
-    updateLoading: state.businessRegister.update.isLoading
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    createBusinessRegister, updateBusinessRegister, closeModal }, dispatch)
-}
-
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     validationSchema,
@@ -257,4 +139,3 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     handleSubmit
   })(FormNewBusinessRegister)
 )
->>>>>>> 5123be2a5e83aa7c22613664a6f89675f1950419:src/components/forms/FormNewBusinessRegister.js

@@ -322,7 +322,7 @@ export const businessLoading = (value, type) => ({
   payload: value
 })
 
-export const createBusiness = business => async (dispatch) => {
+export const createBusiness = business => async dispatch => {
   dispatch({
     type: Types.CREATE_BUSINESS_LOADING,
     payload: true
@@ -340,7 +340,7 @@ export const createBusiness = business => async (dispatch) => {
   }
 }
 
-export const getBusiness = id => async (dispatch) => {
+export const getBusiness = id => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESS_LOADING,
     payload: true
@@ -360,13 +360,12 @@ export const getBusiness = id => async (dispatch) => {
   }
 }
 
-export const cleanBusiness = () => (dispatch) => {
+export const cleanBusiness = () => dispatch =>
   dispatch({
     type: Types.CLEAN_BUSINESS
   })
-}
 
-export const getBusinesses = (search = false) => async (dispatch) => {
+export const getBusinesses = (search = false) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_LOADING,
     payload: true
@@ -386,7 +385,7 @@ export const getBusinesses = (search = false) => async (dispatch) => {
   }
 }
 
-export const updateBusiness = business => async (dispatch) => {
+export const updateBusiness = business => async dispatch => {
   dispatch({
     type: Types.UPDATE_BUSINESS_LOADING,
     payload: true
@@ -413,7 +412,7 @@ export const reassignBusiness = reassignBusiness => async dispatch => {
     payload: true
   })
   try {
-    const response = await reassignBusinessAPI(object)
+    const response = await reassignBusinessAPI(reassignBusiness)
     dispatch({
       type: Types.CREATE_REASSIGN_BUSINESS_SUCCESS
     })
@@ -426,8 +425,11 @@ export const reassignBusiness = reassignBusiness => async dispatch => {
     toast.error(error)
   }
 }
-
+export const updateStageLost = stageLost => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_STAGE_LOST_LOADING,
     payload: true
+  })
   try {
     const response = await updateStageLostAPI(stageLost)
     dispatch({
@@ -437,6 +439,26 @@ export const reassignBusiness = reassignBusiness => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_STAGE_LOST_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_STAGE_SALES_MEMO_LOADING,
+    payload: true
+  })
+  try {
+    const response = await updateStageSalesMemoAPI(stageSalesMemo)
+    dispatch({
+      type: Types.UPDATE_STAGE_SALES_MEMO_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_STAGE_SALES_MEMO_FAILURE,
       payload: error
     })
     toast.error(error)
