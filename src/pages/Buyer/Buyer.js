@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
+import { getBusinesses } from '../../redux/ducks/business'
+
+import NewBusinessForm from '../../components/forms/NewBusinessForm'
+
 import Wrapper from '../../components/content/Wrapper'
 
-const arrayForSale = [
+/* const arrayForSale = [
   {
     businessID: 'BS2000',
     businessName: 'New Business',
@@ -42,7 +48,7 @@ const arrayForSale = [
     makeNewScore: ' ',
     record: 'Score Overdue: Locked'
   }
-]
+] */
 
 const arrayunderOffer = [
   {
@@ -108,12 +114,38 @@ const arrayIMWaitingApproval = [
 ]
 
 class BuyerPage extends Component {
-  componentWillMount () {
-    console.log('buyer')
+  constructor (props) {
+    super(props)
+    this.state = {
+      modalOpen: false
+    }
   }
+
+  async componentWillMount () {
+    await this.props.getBusinesses()
+  }
+
+  _toggleModal = () => {
+    this.setState(prevState => ({
+      modalOpen: !prevState.modalOpen
+    }))
+  }
+
   render () {
+    const {
+      match, businesses
+    } = this.props
+
+    const { modalOpen } = this.state
+
     return (
       <Wrapper>
+        {modalOpen ? (
+          <NewBusinessForm
+            modalOpen={modalOpen}
+            toggleModal={this._toggleModal}
+          />
+        ) : null}
         <Grid padded>
           <Grid.Row>
             <Grid.Column width={4}>
@@ -130,12 +162,6 @@ class BuyerPage extends Component {
                 placeholder="Find businesses..."
               />
             </Grid.Column>
-            <Grid.Column width={2} floated="right">
-              <Button color="facebook" onClick={() => {}}>
-                <Icon name="add" />
-                New Buyer
-              </Button>
-            </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <h2>
@@ -143,7 +169,7 @@ class BuyerPage extends Component {
                 <div align="left"> Businesses For Sale </div>
               </b>
             </h2>
-            <Table color="blue" celled inverted selectable size="small">
+            <Table color="blue" celled inverted size="small">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Business ID</Table.HeaderCell>
@@ -160,34 +186,36 @@ class BuyerPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {arrayForSale.map(forSale => (
+                {businesses.map((business) => (
                   <Table.Row
                     active
-                    key={forSale.businessID}
-                    onClick={() =>
-                      this.props.history.push(
-                        `${this.props.match.path}/${forSale.businessID}`
-                      )
-                    }
+                    key={business.id}
                   >
-                    <Table.Cell>{forSale.businessID}</Table.Cell>
-                    <Table.Cell>{forSale.businessName}</Table.Cell>
-                    <Table.Cell>{forSale.followUpTask}</Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                    <Table.Cell
+                      selectable
+                      onClick={() =>
+                        history.push(`${match.path}/${business.id}`)
+                      }
+                    >{business.businessName}</Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell
+                      onClick={() => this._toggleModal()}
+                    >
                       <Button size="small" color="instagram">
                         <Icon name="mail" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell>{forSale.dayOnTheMarket}</Table.Cell>
-                    <Table.Cell>{forSale.daysSinceGenerated}</Table.Cell>
-                    <Table.Cell>{forSale.lastScore}</Table.Cell>
-                    <Table.Cell>{forSale.sent}</Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
                     <Table.Cell>
                       <Button size="small" color="instagram">
                         <Icon name="star" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell>{forSale.record}</Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
                     <Table.Cell>
                       <Button size="small" color="instagram">
                         <Icon name="file pdf outline" />
@@ -349,9 +377,19 @@ class BuyerPage extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => bindActionCreators({ getBusinesses }, dispatch)
+
 BuyerPage.propTypes = {
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  getBusinesses: PropTypes.func,
+  businesses: PropTypes.array
 }
 
-export default BuyerPage
+const mapStateToProps = (state) => ({
+  isCreated: state.business.create.isCreated,
+  isLoading: state.business.getAll.isLoading,
+  businesses: state.business.getAll.array
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(BuyerPage)
