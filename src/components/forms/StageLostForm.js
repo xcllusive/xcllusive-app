@@ -3,35 +3,23 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { updateStageLost } from '../../redux/ducks/business'
-import {
-  Modal,
-  Form,
-  Label,
-  Icon,
-  Button,
-  Radio,
-  Divider
-} from 'semantic-ui-react'
 import Yup from 'yup'
-import 'react-dates/initialize'
-import { SingleDatePicker } from 'react-dates'
-import 'react-dates/lib/css/_datepicker.css'
+import moment from 'moment'
+import { Modal, Form, Label, Icon, Button, Radio, Divider } from 'semantic-ui-react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+
+import { updateStageLost } from '../../redux/ducks/business'
 
 class StageLostForm extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      date: null,
-      focused: false
-    }
-  }
-  _setStateDate = date => {
-    this.setState({ date })
-  }
+  _handleDateChange = date => {
+    this.props.setFieldValue('date', date)
+  };
+
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  }
+  };
+
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
 
@@ -41,10 +29,7 @@ class StageLostForm extends Component {
         this.props.setFieldValue('recoveryStageNotWant', false)
       }
     }
-    if (
-      name === 'saleNotesLostWant' &&
-      this.props.values['saleNotesLostWant']
-    ) {
+    if (name === 'saleNotesLostWant' && this.props.values['saleNotesLostWant']) {
       this.props.setFieldValue('recoveryStageNotWant', '')
       if (this.props.values['recoveryStageNotSigned']) {
         this.props.setFieldValue('recoveryStageNotSigned', false)
@@ -56,7 +41,7 @@ class StageLostForm extends Component {
     if (name === 'followUpLog' && !this.props.values[name]) {
       this.props.setFieldValue('text', '')
     }
-  }
+  };
   render () {
     const {
       values,
@@ -75,15 +60,11 @@ class StageLostForm extends Component {
     } = this.props
     return (
       <Modal dimmer={'blurring'} open={modalOpen}>
-        <Modal.Header align="center">
-          Change the business stage to `Lost`
-        </Modal.Header>
+        <Modal.Header align="center">Change the business stage to `Lost`</Modal.Header>
         <Modal.Content>
           <Form>
             <h5>
-              IMPORTANT: Once you have marked this business as `Lost` you can
-              change it back to a potential listing by searching for it and
-              changing the stage manually.
+              IMPORTANT: Once you have marked this business as `Lost` you can change it back to a potential listing by searching for it and changing the stage manually.
             </h5>
             <Form.Group>
               <Form.Field width={10}>
@@ -96,15 +77,7 @@ class StageLostForm extends Component {
                   value={values.businessRating}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessRating &&
-                  touched.businessRating && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessRating}
-                  />
-                )}
+                {errors.businessRating && touched.businessRating && <Label basic color="red" pointing content={errors.businessRating} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -118,15 +91,7 @@ class StageLostForm extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.afterSalesNotes &&
-                  touched.afterSalesNotes && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.afterSalesNotes}
-                  />
-                )}
+                {errors.afterSalesNotes && touched.afterSalesNotes && <Label basic color="red" pointing content={errors.afterSalesNotes} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -139,37 +104,13 @@ class StageLostForm extends Component {
             </Form.Group>
             <Form.Group>
               <label>Did you meet with this vendor? </label>
-              <Form.Field
-                control={Radio}
-                label="Yes"
-                name="saleNotesLostMeeting"
-                onChange={this._handleChangeCheckBox}
-                checked={values.saleNotesLostMeeting}
-              />
-              <Form.Field
-                control={Radio}
-                label="No"
-                name="saleNotesLostMeeting"
-                onChange={this._handleChangeCheckBox}
-                checked={!values.saleNotesLostMeeting}
-              />
+              <Form.Field control={Radio} label="Yes" name="saleNotesLostMeeting" onChange={this._handleChangeCheckBox} checked={values.saleNotesLostMeeting} />
+              <Form.Field control={Radio} label="No" name="saleNotesLostMeeting" onChange={this._handleChangeCheckBox} checked={!values.saleNotesLostMeeting} />
             </Form.Group>
             <Form.Group>
               <label>Did we want this business?</label>
-              <Form.Field
-                control={Radio}
-                label="Yes"
-                name="saleNotesLostWant"
-                onChange={this._handleChangeCheckBox}
-                checked={values.saleNotesLostWant}
-              />
-              <Form.Field
-                control={Radio}
-                label="No"
-                name="saleNotesLostWant"
-                onChange={this._handleChangeCheckBox}
-                checked={!values.saleNotesLostWant}
-              />
+              <Form.Field control={Radio} label="Yes" name="saleNotesLostWant" onChange={this._handleChangeCheckBox} checked={values.saleNotesLostWant} />
+              <Form.Field control={Radio} label="No" name="saleNotesLostWant" onChange={this._handleChangeCheckBox} checked={!values.saleNotesLostWant} />
             </Form.Group>
             <Form.Group>
               {this.props.values.saleNotesLostWant ? (
@@ -183,15 +124,7 @@ class StageLostForm extends Component {
                     value={values.recoveryStageNotSigned}
                     onChange={this._handleSelectChange}
                   />
-                  {errors.recoveryStageNotSigned &&
-                    touched.recoveryStageNotSigned && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.recoveryStageNotSigned}
-                    />
-                  )}
+                  {errors.recoveryStageNotSigned && touched.recoveryStageNotSigned && <Label basic color="red" pointing content={errors.recoveryStageNotSigned} />}
                 </Form.Field>
               ) : (
                 <Form.Field width={10}>
@@ -204,64 +137,28 @@ class StageLostForm extends Component {
                     value={values.recoveryStageNotWant}
                     onChange={this._handleSelectChange}
                   />
-                  {errors.recoveryStageNotWant &&
-                    touched.recoveryStageNotWant && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.recoveryStageNotWant}
-                    />
-                  )}
+                  {errors.recoveryStageNotWant && touched.recoveryStageNotWant && <Label basic color="red" pointing content={errors.recoveryStageNotWant} />}
                 </Form.Field>
               )}
             </Form.Group>
             <Divider horizontal>(Optional) Set Follow up date</Divider>
             <Form.Group>
-              <Form.Checkbox
-                label="Make a Follow up log."
-                name="followUpLog"
-                onChange={this._handleChangeCheckBox}
-                checked={values.followUpLog}
-              />
+              <Form.Checkbox label="Make a Follow up log." name="followUpLog" onChange={this._handleChangeCheckBox} checked={values.followUpLog} />
               {this.props.values.followUpLog ? (
                 <Form.Field>
-                  <SingleDatePicker
-                    displayFormat="DD/MM/YYYY"
-                    date={this.state.date} // momentPropTypes.momentObj or null
-                    onDateChange={this._setStateDate} // PropTypes.func.isRequired
-                    focused={this.state.focused} // PropTypes.bool
-                    onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
-                  />
+                  <DatePicker selected={values.date} onChange={this._handleDateChange} popperPlacement="top-end" />
                 </Form.Field>
               ) : (
                 <Form.Field>
-                  <SingleDatePicker date={null} disabled />
+                  <DatePicker selected={values.date} onChange={this._handleDateChange} disabled />
                 </Form.Field>
               )}
             </Form.Group>
             <Form.Group>
               {this.props.values.followUpLog ? (
                 <Form.Field width={10}>
-                  <Form.TextArea
-                    label=""
-                    name="text"
-                    autoComplete="text"
-                    value={values.text}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.text &&
-                    touched.text && (
-                    <Label basic color="red" pointing content={errors.text} />
-                  )}
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
+                  <Form.TextArea label="" name="text" autoComplete="text" value={values.text} onChange={handleChange} onBlur={handleBlur} />
+                  {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
                 </Form.Field>
               ) : (
                 <Form.Field width={10}>
@@ -272,12 +169,7 @@ class StageLostForm extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            color="blue"
-            disabled={updateLoading || !isValid}
-            loading={updateLoading}
-            onClick={handleSubmit}
-          >
+          <Button color="blue" disabled={updateLoading || !isValid} loading={updateLoading} onClick={handleSubmit}>
             <Icon name="save" />
             Save and Return
           </Button>
@@ -318,7 +210,7 @@ StageLostForm.propTypes = {
   stageNotWantOptions: PropTypes.array
 }
 
-const mapPropsToValues = props => {
+function mapPropsToValues (props) {
   if (props.business) {
     const { ratingId, saleNotesLostMeeting } = props.business
 
@@ -329,6 +221,7 @@ const mapPropsToValues = props => {
     business.saleNotesLostMeeting = business.saleNotesLostMeeting === '1'
   }
   return {
+    date: moment(),
     businessRating: '',
     saleNotesLostMeeting: false,
     pendingDone: true,
@@ -338,22 +231,16 @@ const mapPropsToValues = props => {
   }
 }
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateStageLost(values).then(setSubmitting(false))
-}
+const handleSubmit = (values, { props, setSubmitting }) => props.updateStageLost(values).then(setSubmitting(false))
 
-const mapStateToProps = state => {
-  return {
-    ratingOptions: state.business.get.ratingOptions,
-    updateLoading: state.business.updateStageLost.isLoading,
-    stageNotSignedOptions: state.business.get.stageNotSignedOptions,
-    stageNotWantOptions: state.business.get.stageNotWantOptions
-  }
-}
+const mapStateToProps = state => ({
+  ratingOptions: state.business.get.ratingOptions,
+  updateLoading: state.business.updateStageLost.isLoading,
+  stageNotSignedOptions: state.business.get.stageNotSignedOptions,
+  stageNotWantOptions: state.business.get.stageNotWantOptions
+})
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateStageLost }, dispatch)
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ updateStageLost }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
