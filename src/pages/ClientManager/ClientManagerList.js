@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
+import NewBuyerForm from '../../components/forms/NewBuyerForm'
+
 import Wrapper from '../../components/content/Wrapper'
 
 const array = [
@@ -51,19 +53,29 @@ class ClientManagerList extends Component {
     }
   }
 
-  _toggleModal (value) {
-    this.setState({
-      modalOpen: value
-    })
+  _toggleModal = () => {
+    this.setState(prevState => ({
+      modalOpen: !prevState.modalOpen
+    }))
   }
 
   render () {
+    const { modalOpen } = this.state
+
     return (
       <Wrapper>
+        {modalOpen ? (
+          <NewBuyerForm
+            modalOpen={modalOpen}
+            toggleModal={this._toggleModal}
+          />
+        ) : null}
         <Grid padded='horizontally'>
           <Grid.Row columns={2}>
             <Grid.Column floated='left' width={2}>
-              <Button onClick={() => this._toggleModal(true)} color='facebook'>
+              <Button
+                onClick={() => this._toggleModal()}
+                color='facebook'>
                 <Icon name='add' />
                   New Buyer
               </Button>
