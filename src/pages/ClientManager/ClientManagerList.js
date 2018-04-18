@@ -3,8 +3,14 @@ import PropTypes from 'prop-types'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import NewBuyerForm from '../../components/forms/NewBuyerForm'
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
+
+import { TypesModal, openModal } from '../../redux/ducks/modal'
+import enquiryBusiness from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -16,6 +22,24 @@ class ClientManagerList extends Component {
       modalOpenBusiness: false
     }
   }
+
+  _toggleModalConfirm = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM_DELETE, {
+      options: {
+        title: 'Enquiry Business',
+        text: 'Are you sure you want to enquiry this business?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this._enquiryBusiness() //  buyerID, businessID
+        }
+      }
+    })
+  };
+
+  _enquiryBusiness = () => {
+    this.props.enquiryBusiness()
+  };
 
   _toggleModal = modal => {
     this.setState(prevState => ({
@@ -156,15 +180,15 @@ class ClientManagerList extends Component {
               </Grid.Column>
               <br />
               <Grid.Column floated="left" width={2}>
-                <Button size="small" color="primary">
+                <Button size="small" color="blue">
                   <Icon name="mail" />
                   CA Received
                 </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="blue">
                   <Icon name="send" />
                   Send CA
                 </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="blue">
                   <Icon name="send" />
                   Send IM
                 </Button>
@@ -228,10 +252,18 @@ class ClientManagerList extends Component {
                     <Table.HeaderCell>Notes</Table.HeaderCell>
                     <Table.Cell>bla bla bla</Table.Cell>
                   </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Stage</Table.HeaderCell>
+                    <Table.Cell>bla bla bla</Table.Cell>
+                  </Table.Row>
                 </Table.Body>
               </Table>
               <Grid.Column floated="left" width={2}>
-                <Button size="small" color="grey">
+                <Button
+                  size="small"
+                  color="grey"
+                  onClick={() => this._toggleModalConfirm()}
+                >
                   <Icon name="write" />
                   Enquiry Business
                 </Button>
@@ -239,13 +271,17 @@ class ClientManagerList extends Component {
               <br />
               <br />
               <Grid.Column floated="left" width={2}>
-                <Button size="small" color="primary">
+                <Button size="small" color="blue">
                   <Icon name="mail" />
                   Request Owners Approval
                 </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="blue">
                   <Icon name="send" />
                   Send Enquiry to Owner
+                </Button>
+                <Button size="small" color="blue">
+                  <Icon name="mail" />
+                  Email Buyer
                 </Button>
                 <Button size="small" color="green">
                   <Icon name="backward" />
@@ -258,7 +294,7 @@ class ClientManagerList extends Component {
         <br />
         <br />
         <Grid.Column floated="left" width={2}>
-          <Button size="small" color="primary">
+          <Button size="small" color="blue">
             <Icon name="talk" />
             Show Log
           </Button>
@@ -293,7 +329,20 @@ class ClientManagerList extends Component {
 
 ClientManagerList.propTypes = {
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  openModal: PropTypes.func,
+  enquiryBusiness: PropTypes.func
 }
 
-export default ClientManagerList
+const mapStateToProps = state => ({})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      openModal,
+      enquiryBusiness
+    },
+    dispatch
+  )
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClientManagerList)
