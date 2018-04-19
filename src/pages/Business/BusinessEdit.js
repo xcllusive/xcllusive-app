@@ -2,7 +2,19 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Header, Segment, Statistic, Grid, Form, Table, Button, Icon, Tab, Dimmer, Loader } from 'semantic-ui-react'
+import {
+  Header,
+  Segment,
+  Statistic,
+  Grid,
+  Form,
+  Table,
+  Button,
+  Icon,
+  Tab,
+  Dimmer,
+  Loader
+} from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
@@ -48,32 +60,32 @@ const array = [
 ]
 
 class BusinessEditPage extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleChange = (e, { value }) => this.setState({ value })
   }
 
-  componentWillReceiveProps(nextprops) {
+  componentWillReceiveProps (nextprops) {
     if (nextprops.error && this.props.error !== nextprops.error) {
       this.props.history.goBack()
     }
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.getBusiness(this.props.match.params.id)
   }
 
-  shouldComponentUpdate(nextprops) {
+  shouldComponentUpdate (nextprops) {
     if (this.props.isLoading === nextprops.isLoading) return false
 
     return true
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.cleanBusiness()
   }
 
-  render() {
+  render () {
     if (this.props.isLoading) {
       return (
         <Dimmer inverted active={this.props.isLoading}>
@@ -86,11 +98,15 @@ class BusinessEditPage extends Component {
       <Wrapper>
         <Statistic.Group size="mini" widths={7}>
           <Statistic color="orange">
-            <Statistic.Value>{this.props.business.businessName}</Statistic.Value>
+            <Statistic.Value>
+              {this.props.business.businessName}
+            </Statistic.Value>
             <Statistic.Label>{this.props.business.id}</Statistic.Label>
           </Statistic>
           <Statistic color="blue">
-            <Statistic.Value>{this.props.business.currentPrice}</Statistic.Value>
+            <Statistic.Value>
+              {this.props.business.currentPrice}
+            </Statistic.Value>
             <Statistic.Label>Price</Statistic.Label>
           </Statistic>
           <Statistic color="blue">
@@ -163,7 +179,17 @@ class BusinessEditPage extends Component {
                 <Table.Body>
                   {array.map(item => {
                     return (
-                      <Table.Row active key={item.logID} onClick={() => this.props.history.push(`${this.props.match.path}/${item.businessID}/${item.logID}`)}>
+                      <Table.Row
+                        active
+                        key={item.logID}
+                        onClick={() =>
+                          this.props.history.push(
+                            `${this.props.match.path}/${item.businessID}/${
+                              item.logID
+                            }`
+                          )
+                        }
+                      >
                         <Table.Cell>{item.logID}</Table.Cell>
                         <Table.Cell>{item.dataLog}</Table.Cell>
                         <Table.Cell>{item.logText}</Table.Cell>
@@ -177,10 +203,26 @@ class BusinessEditPage extends Component {
           </Grid.Row>
           <Form>
             <Form.Group inline>
-              <Form.Input label="Created By" placeholder="Zoran Sarabaca" readOnly />
-              <Form.Input label="Creation Date" placeholder="08/12/2017" readOnly />
-              <Form.Input label="Modified By" placeholder="Cayo Bayestorff" readOnly />
-              <Form.Input label="Modified Date" placeholder="09/12/2017" readOnly />
+              <Form.Input
+                label="Created By"
+                placeholder="Zoran Sarabaca"
+                readOnly
+              />
+              <Form.Input
+                label="Creation Date"
+                placeholder="08/12/2017"
+                readOnly
+              />
+              <Form.Input
+                label="Modified By"
+                placeholder="Cayo Bayestorff"
+                readOnly
+              />
+              <Form.Input
+                label="Modified Date"
+                placeholder="09/12/2017"
+                readOnly
+              />
             </Form.Group>
           </Form>
         </Grid>
