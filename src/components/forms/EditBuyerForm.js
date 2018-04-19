@@ -6,10 +6,10 @@ import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 import Yup from 'yup'
 
-import { createBuyer } from '../../redux/ducks/buyer'
+import { updateBuyer } from '../../redux/ducks/buyer'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 
-class NewBuyerForm extends Component {
+class EditBuyerForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -23,7 +23,6 @@ class NewBuyerForm extends Component {
       ]
     }
   }
-
   componentWillMount () {
     this.props.getBusinessRegister(1)
   }
@@ -52,7 +51,7 @@ class NewBuyerForm extends Component {
 
     return (
       <Modal dimmer={'blurring'} open={modalOpen}>
-        <Modal.Header align="center">New Buyer</Modal.Header>
+        <Modal.Header align="center">Edit Buyer</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group widths="equal">
@@ -96,8 +95,6 @@ class NewBuyerForm extends Component {
                   />
                 )}
               </Form.Field>
-            </Form.Group>
-            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
                   required
@@ -111,6 +108,27 @@ class NewBuyerForm extends Component {
                 {errors.email &&
                   touched.email && (
                   <Label basic color="red" pointing content={errors.email} />
+                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  label="Email (optional)"
+                  name="emailOptional"
+                  autoComplete="emailOptional"
+                  value={values.emailOptional}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.emailOptional &&
+                  touched.emailOptional && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.emailOptional}
+                  />
                 )}
               </Form.Field>
               <Form.Field>
@@ -268,7 +286,7 @@ class NewBuyerForm extends Component {
             onClick={handleSubmit}
           >
             <Icon name="save" />
-            Create Buyer
+            Update Buyer
           </Button>
           <Button color="red" onClick={toggleModal}>
             <Icon name="cancel" />
@@ -280,7 +298,7 @@ class NewBuyerForm extends Component {
   }
 }
 
-NewBuyerForm.propTypes = {
+EditBuyerForm.propTypes = {
   toggleModal: PropTypes.func,
   modalOpen: PropTypes.bool,
   values: PropTypes.object,
@@ -330,7 +348,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) =>
-  props.createBuyer(values).then(setSubmitting(false))
+  props.updateBuyer(values).then(setSubmitting(false))
 
 const mapStateToProps = state => ({
   isLoading: state.buyer.update.isLoading,
@@ -339,12 +357,12 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ createBuyer, getBusinessRegister }, dispatch)
+  bindActionCreators({ updateBuyer, getBusinessRegister }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
     validationSchema,
     handleSubmit
-  })(NewBuyerForm)
+  })(EditBuyerForm)
 )

@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux'
 
 import NewBuyerForm from '../../components/forms/NewBuyerForm'
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
+import EditBuyerForm from '../../components/forms/EditBuyerForm'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import enquiryBusiness from '../../redux/ducks/clientManager'
@@ -19,7 +20,8 @@ class ClientManagerList extends Component {
     super(props)
     this.state = {
       modalOpenBuyer: false,
-      modalOpenBusiness: false
+      modalOpenBusiness: false,
+      modalOpenEditBuyer: false
     }
   }
 
@@ -48,7 +50,11 @@ class ClientManagerList extends Component {
   };
 
   render () {
-    const { modalOpenBuyer, modalOpenBusiness } = this.state
+    const {
+      modalOpenBuyer,
+      modalOpenBusiness,
+      modalOpenEditBuyer
+    } = this.state
 
     return (
       <Wrapper>
@@ -64,9 +70,29 @@ class ClientManagerList extends Component {
             toggleModal={() => this._toggleModal('modalOpenBusiness')}
           />
         ) : null}
+        {modalOpenEditBuyer ? (
+          <EditBuyerForm
+            modalOpen={modalOpenEditBuyer}
+            toggleModal={() => this._toggleModal('modalOpenEditBuyer')}
+          />
+        ) : null}
         <Grid padded="horizontally">
-          <Grid.Row columns={2}>
-            <Grid.Column floated="left" width={2}>
+          <Grid.Row columns={4}>
+            <Grid.Column floated="left" width={4}>
+              <h3>
+                <b>
+                  <div align="left"> Buyer </div>
+                </b>
+              </h3>
+              <Input
+                fluid
+                action={{ icon: 'search' }}
+                placeholder="Find buyers..."
+              />
+            </Grid.Column>
+            <Grid.Column floated="right">
+              <br />
+              <br />
               <Button
                 size="small"
                 onClick={() => this._toggleModal('modalOpenBuyer')}
@@ -76,7 +102,21 @@ class ClientManagerList extends Component {
                 New Buyer
               </Button>
             </Grid.Column>
-            <Grid.Column floated="left" width={2}>
+            <Grid.Column floated="left" width={4}>
+              <h3>
+                <b>
+                  <div align="left"> Business </div>
+                </b>
+              </h3>
+              <Input
+                fluid
+                action={{ icon: 'search' }}
+                placeholder="Find businesses..."
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <br />
+              <br />
               <Button
                 size="small"
                 onClick={() => this._toggleModal('modalOpenBusiness')}
@@ -85,32 +125,6 @@ class ClientManagerList extends Component {
                 <Icon name="add" />
                 New Business
               </Button>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column floated="left" width={5}>
-              <h4>
-                <b>
-                  <div align="left"> Buyer </div>
-                </b>
-              </h4>
-              <Input
-                fluid
-                action={{ icon: 'search' }}
-                placeholder="Find buyers..."
-              />
-            </Grid.Column>
-            <Grid.Column floated="left" width={5}>
-              <h4>
-                <b>
-                  <div align="left"> Business </div>
-                </b>
-              </h4>
-              <Input
-                fluid
-                action={{ icon: 'search' }}
-                placeholder="Find businesses..."
-              />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
@@ -142,7 +156,13 @@ class ClientManagerList extends Component {
                 <Table.Body>
                   <Table.Row>
                     <Table.HeaderCell>BuyerID</Table.HeaderCell>
-                    <Table.Cell>B0001</Table.Cell>
+                    <Table.Cell
+                      onClick={() => this._toggleModal('modalOpenEditBuyer')}
+                      selectable
+                    >
+                      <Icon link name="search" />
+                      B0001
+                    </Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.HeaderCell color="red">Name</Table.HeaderCell>
