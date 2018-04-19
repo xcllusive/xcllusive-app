@@ -3,140 +3,210 @@ import PropTypes from 'prop-types'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import NewBuyerForm from '../../components/forms/NewBuyerForm'
+import NewBusinessForm from '../../components/forms/NewBusinessForm'
+
+import { TypesModal, openModal } from '../../redux/ducks/modal'
+import enquiryBusiness from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
-
-const array = [
-  {
-    businessID: 'BS2000',
-    businessName: 'New Business',
-    contactName: 'John Johnson',
-    logText: 'testing',
-    followUpDate: '01/01/2018'
-  },
-  {
-    businessID: 'BS2001',
-    businessName: 'Business 1',
-    contactName: 'Peter Park',
-    logText: 'business spider man',
-    followUpDate: '01/01/2019'
-  },
-  {
-    businessID: 'BS2002',
-    businessName: 'Business 2',
-    contactName: 'Zoran Sarabaca',
-    logText: 'Zorans business',
-    followUpDate: '01/01/2017'
-  },
-  {
-    businessID: 'BS2003',
-    businessName: 'Business 3',
-    contactName: 'Steve Jobs',
-    logText: 'Apple',
-    followUpDate: '01/12/2018'
-  },
-  {
-    businessID: 'BS2004',
-    businessName: 'Business 4',
-    contactName: 'FileMaker',
-    logText: 'Filemaker server 12',
-    followUpDate: '01/02/2018'
-  }
-]
 
 class ClientManagerList extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpen: false
+      modalOpenBuyer: false,
+      modalOpenBusiness: false
     }
   }
 
-  _toggleModal = () => {
+  _toggleModalConfirm = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM_DELETE, {
+      options: {
+        title: 'Enquiry Business',
+        text: 'Are you sure you want to enquiry this business?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this._enquiryBusiness() //  buyerID, businessID
+        }
+      }
+    })
+  };
+
+  _enquiryBusiness = () => {
+    this.props.enquiryBusiness()
+  };
+
+  _toggleModal = modal => {
     this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen
+      [modal]: !prevState[modal]
     }))
-  }
+  };
 
   render () {
-    const { modalOpen } = this.state
+    const { modalOpenBuyer, modalOpenBusiness } = this.state
 
     return (
       <Wrapper>
-        {modalOpen ? (
+        {modalOpenBuyer ? (
           <NewBuyerForm
-            modalOpen={modalOpen}
-            toggleModal={this._toggleModal}
+            modalOpen={modalOpenBuyer}
+            toggleModal={() => this._toggleModal('modalOpenBuyer')}
           />
         ) : null}
-        <Grid padded='horizontally'>
+        {modalOpenBusiness ? (
+          <NewBusinessForm
+            modalOpen={modalOpenBusiness}
+            toggleModal={() => this._toggleModal('modalOpenBusiness')}
+          />
+        ) : null}
+        <Grid padded="horizontally">
           <Grid.Row columns={2}>
-            <Grid.Column floated='left' width={2}>
+            <Grid.Column floated="left" width={2}>
               <Button
-                onClick={() => this._toggleModal()}
-                color='facebook'>
-                <Icon name='add' />
-                  New Buyer
+                size="small"
+                onClick={() => this._toggleModal('modalOpenBuyer')}
+                color="facebook"
+              >
+                <Icon name="add" />
+                New Buyer
               </Button>
             </Grid.Column>
-            <Grid.Column floated='left' width={2}>
-              <Button onClick={() => this._toggleModal(true)} color='facebook'>
-                <Icon name='add' />
-                  New Business
+            <Grid.Column floated="left" width={2}>
+              <Button
+                size="small"
+                onClick={() => this._toggleModal('modalOpenBusiness')}
+                color="facebook"
+              >
+                <Icon name="add" />
+                New Business
               </Button>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
-            <Grid.Column floated='left' width={5}>
-              <h3><b><div align='left'> Buyer </div></b></h3>
+            <Grid.Column floated="left" width={5}>
+              <h4>
+                <b>
+                  <div align="left"> Buyer </div>
+                </b>
+              </h4>
               <Input
                 fluid
                 action={{ icon: 'search' }}
-                placeholder='Find buyers...'
+                placeholder="Find buyers..."
               />
             </Grid.Column>
-            <Grid.Column floated='left' width={5}>
-              <h3><b><div align='left'> Business </div></b></h3>
+            <Grid.Column floated="left" width={5}>
+              <h4>
+                <b>
+                  <div align="left"> Business </div>
+                </b>
+              </h4>
               <Input
                 fluid
                 action={{ icon: 'search' }}
-                placeholder='Find businesses...'
+                placeholder="Find businesses..."
               />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table
+                size="small"
+                compact
+                color="blue"
+                celled
+                inverted
+                selectable
+              >
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Buyer ID</Table.HeaderCell>
                     <Table.HeaderCell>Name</Table.HeaderCell>
                     <Table.HeaderCell>Phone</Table.HeaderCell>
                     <Table.HeaderCell>Email</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
-                    return (
-                      <Table.Row
-                        active
-                        key={item.buyerID}
-                        onClick={() => this.props.history.push(
-                          `${this.props.match.path}/${item.buyerID}`
-                        )}>
-                        <Table.Cell>{item.buyerID}</Table.Cell>
-                        <Table.Cell>{item.buyerName}</Table.Cell>
-                        <Table.Cell>{item.phone}</Table.Cell>
-                        <Table.Cell>{item.email}</Table.Cell>
-                      </Table.Row>
-                    )
-                  })}
+                  <Table.Row>
+                    <Table.Cell />
+                    <Table.Cell />
+                    <Table.Cell />
+                  </Table.Row>
                 </Table.Body>
               </Table>
+              <Table size="small" basic="very" compact>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.HeaderCell>BuyerID</Table.HeaderCell>
+                    <Table.Cell>B0001</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell color="red">Name</Table.HeaderCell>
+                    <Table.Cell>Cayo Test</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Address</Table.HeaderCell>
+                    <Table.Cell>
+                      Middle Boat Harbour, The Esplanade Lakes Entrance VIC 3909
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Phone</Table.HeaderCell>
+                    <Table.Cell>296-16-79</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Email</Table.HeaderCell>
+                    <Table.Cell>test@test.com.au</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>CA sent</Table.HeaderCell>
+                    <Table.Cell>Yes</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>CA returned</Table.HeaderCell>
+                    <Table.Cell>No</Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+              <Grid.Column floated="left" width={2}>
+                <Button size="small" color="grey">
+                  <Icon name="folder open outline" />
+                  Open CA
+                </Button>
+              </Grid.Column>
+              <br />
+              <Grid.Column floated="left" width={2}>
+                <Button size="small" color="blue">
+                  <Icon name="mail" />
+                  CA Received
+                </Button>
+                <Button size="small" color="blue">
+                  <Icon name="send" />
+                  Send CA
+                </Button>
+                <Button size="small" color="blue">
+                  <Icon name="send" />
+                  Send IM
+                </Button>
+                <Button size="small" color="green">
+                  <Icon name="backward" />
+                  Back to Search
+                </Button>
+              </Grid.Column>
             </Grid.Column>
             <Grid.Column>
-              <Table color='blue' celled inverted selectable>
+              <Table
+                size="small"
+                compact
+                color="blue"
+                celled
+                inverted
+                selectable
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -146,26 +216,112 @@ class ClientManagerList extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
-                    return (
-                      <Table.Row
-                        active
-                        key={item.businessID}
-                        onClick={() => this.props.history.push(
-                          `${this.props.match.path}/${item.businessID}`
-                        )}>
-                        <Table.Cell>{item.businessID}</Table.Cell>
-                        <Table.Cell>{item.businessName}</Table.Cell>
-                        <Table.Cell>{item.price}</Table.Cell>
-                        <Table.Cell>{item.notes}</Table.Cell>
-                      </Table.Row>
-                    )
-                  })}
+                  <Table.Row>
+                    <Table.Cell />
+                    <Table.Cell />
+                    <Table.Cell />
+                    <Table.Cell />
+                  </Table.Row>
                 </Table.Body>
               </Table>
+              <Table size="small" basic="very" compact>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.HeaderCell>BusinessID</Table.HeaderCell>
+                    <Table.Cell>BS0001</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell color="red">Name</Table.HeaderCell>
+                    <Table.Cell>Ferrymans Seafood Cafe</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Address</Table.HeaderCell>
+                    <Table.Cell>
+                      Middle Boat Harbour, The Esplanade Lakes Entrance VIC 3909
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Industry</Table.HeaderCell>
+                    <Table.Cell>Restaurant</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Price</Table.HeaderCell>
+                    <Table.Cell>$1000000.00</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Notes</Table.HeaderCell>
+                    <Table.Cell>bla bla bla</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell>Stage</Table.HeaderCell>
+                    <Table.Cell>bla bla bla</Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+              <Grid.Column floated="left" width={2}>
+                <Button
+                  size="small"
+                  color="grey"
+                  onClick={() => this._toggleModalConfirm()}
+                >
+                  <Icon name="write" />
+                  Enquiry Business
+                </Button>
+              </Grid.Column>
+              <br />
+              <br />
+              <Grid.Column floated="left" width={2}>
+                <Button size="small" color="blue">
+                  <Icon name="mail" />
+                  Request Owners Approval
+                </Button>
+                <Button size="small" color="blue">
+                  <Icon name="send" />
+                  Send Enquiry to Owner
+                </Button>
+                <Button size="small" color="blue">
+                  <Icon name="mail" />
+                  Email Buyer
+                </Button>
+                <Button size="small" color="green">
+                  <Icon name="backward" />
+                  Back to Search
+                </Button>
+              </Grid.Column>
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <br />
+        <br />
+        <Grid.Column floated="left" width={2}>
+          <Button size="small" color="blue">
+            <Icon name="talk" />
+            Show Log
+          </Button>
+          <Button size="small" color="green">
+            <Icon name="edit" />
+            Edit Log
+          </Button>
+        </Grid.Column>
+        <br />
+        <Grid.Column>
+          <Table size="small" compact color="blue" celled inverted selectable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Phone</Table.HeaderCell>
+                <Table.HeaderCell>Email</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </Grid.Column>
       </Wrapper>
     )
   }
@@ -173,7 +329,20 @@ class ClientManagerList extends Component {
 
 ClientManagerList.propTypes = {
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  openModal: PropTypes.func,
+  enquiryBusiness: PropTypes.func
 }
 
-export default ClientManagerList
+const mapStateToProps = state => ({})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      openModal,
+      enquiryBusiness
+    },
+    dispatch
+  )
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClientManagerList)

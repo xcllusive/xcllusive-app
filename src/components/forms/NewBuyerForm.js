@@ -6,17 +6,17 @@ import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 import Yup from 'yup'
 
-import { createBusiness } from '../../redux/ducks/business'
+import { createBuyer } from '../../redux/ducks/buyer'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 
-class NewBusinessForm extends Component {
+class NewBuyerForm extends Component {
   componentWillMount () {
     this.props.getBusinessRegister(1)
   }
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  }
+  };
 
   render () {
     const {
@@ -95,12 +95,7 @@ class NewBusinessForm extends Component {
                 />
                 {errors.email &&
                   touched.email && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.email}
-                  />
+                  <Label basic color="red" pointing content={errors.email} />
                 )}
               </Form.Field>
               <Form.Field>
@@ -133,12 +128,7 @@ class NewBusinessForm extends Component {
                 />
                 {errors.suburb &&
                   touched.suburb && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.suburb}
-                  />
+                  <Label basic color="red" pointing content={errors.suburb} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -154,12 +144,7 @@ class NewBusinessForm extends Component {
                 />
                 {errors.state &&
                   touched.state && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.state}
-                  />
+                  <Label basic color="red" pointing content={errors.state} />
                 )}
               </Form.Field>
               <Form.Field>
@@ -285,7 +270,7 @@ class NewBusinessForm extends Component {
   }
 }
 
-NewBusinessForm.propTypes = {
+NewBuyerForm.propTypes = {
   toggleModal: PropTypes.func,
   modalOpen: PropTypes.bool,
   values: PropTypes.object,
@@ -304,62 +289,41 @@ NewBusinessForm.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  businessName: '',
   firstName: '',
-  lastName: '',
-  vendorPhone1: '',
-  vendorPhone2: '',
-  vendorPhone3: '',
-  vendorEmail: '',
-  businessSource: '',
-  sourceNotes: '',
-  description: ''
+  surname: '',
+  email: '',
+  businessSource: ''
 })
 
 const validationSchema = Yup.object().shape({
-  businessName: Yup.string()
-    .required('Business name is required.')
-    .max(120, 'Business name require max 120 characters.'),
   firstName: Yup.string()
     .required('First name is required.')
     .max(40, 'First name require max 40 characters.'),
-  lastName: Yup.string()
+  surname: Yup.string()
     .required('Last name is required.')
     .max(40, 'Last name require max 40 characters.'),
-  vendorPhone1: Yup.string().max(15, 'Telephone 1 require max 15 characters.'),
-  vendorPhone2: Yup.string().max(15, 'Telephone 2 require max 15 characters.'),
-  vendorPhone3: Yup.string().max(15, 'Telephone 3 require max 15 characters.'),
-  vendorEmail: Yup.string()
+  email: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  businessSource: Yup.number().required('Source is required.'),
-  sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
-  description: Yup.string()
-    .required('Notes is required.')
-    .max(2000, 'Source Notes require max 2000 characters.')
+  businessSource: Yup.number().required('Source is required.')
 })
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.createBusiness(values)
-  setSubmitting(false)
-}
+const handleSubmit = (values, { props, setSubmitting }) =>
+  props.createBuyer(values).then(setSubmitting(false))
 
-const mapStateToProps = state => {
-  return {
-    isLoading: state.business.create.isLoading,
-    sourceOptions: state.businessRegister.get.source.array,
-    dropDownLoading: state.businessRegister.get.source.isLoading
-  }
-}
+const mapStateToProps = state => ({
+  isLoading: state.buyer.create.isLoading,
+  sourceOptions: state.businessRegister.get.source.array,
+  dropDownLoading: state.businessRegister.get.source.isLoading
+})
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ createBusiness, getBusinessRegister }, dispatch)
-}
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ createBuyer, getBusinessRegister }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
     validationSchema,
     handleSubmit
-  })(NewBusinessForm)
+  })(NewBuyerForm)
 )
