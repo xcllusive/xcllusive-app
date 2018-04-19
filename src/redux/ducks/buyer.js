@@ -1,4 +1,4 @@
-import { create } from '../../services/api/buyer'
+import { create, update } from '../../services/api/buyer'
 
 // Action Types
 
@@ -14,6 +14,11 @@ const initialState = {
   create: {
     isLoading: false,
     isCreated: false,
+    error: null
+  },
+  update: {
+    isLoading: false,
+    isUpdated: false,
     error: null
   }
 }
@@ -49,6 +54,35 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.UPDATE_BUYER_LOADING:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUYER_SUCCESS:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isCreated: true,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUYER_FAILURE:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -73,6 +107,24 @@ export const createBuyer = buyer => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.CREATE_BUYER_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const updateBuyer = buyer => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    await update(buyer)
+    dispatch({
+      type: Types.UPDATE_BUYER_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_BUYER_FAILURE,
       payload: error
     })
   }

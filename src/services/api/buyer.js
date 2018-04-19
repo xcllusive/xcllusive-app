@@ -6,3 +6,10 @@ export const create = buyer =>
     url: '/buyer',
     data: buyer
   })
+
+export const update = buyer => console.log('updated buyer')
+/* request({
+    method: 'put',
+    url: '/buyer',
+    data: buyer
+  }) */
