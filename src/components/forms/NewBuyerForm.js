@@ -292,7 +292,14 @@ const mapPropsToValues = () => ({
   firstName: '',
   surname: '',
   email: '',
-  businessSource: ''
+  businessSource: '',
+  streetName: '',
+  suburb: '',
+  state: '',
+  postCode: '',
+  telephone1: '',
+  priceFrom: '',
+  priceTo: ''
 })
 
 const validationSchema = Yup.object().shape({
@@ -305,7 +312,11 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  businessSource: Yup.number().required('Source is required.')
+  businessSource: Yup.number().required('Source is required.'),
+  postCode: Yup.number().typeError('You must type only number here!'),
+  telephone1: Yup.number().typeError('You must type only number here!'),
+  priceFrom: Yup.number().typeError('You must type only number here!'),
+  priceTo: Yup.number().typeError('You must type only number here!')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) =>
