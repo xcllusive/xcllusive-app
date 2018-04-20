@@ -102,7 +102,7 @@ export const userLogout = () => ({
   type: Types.AUTH_LOGOUT
 })
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (email, password) => async dispatch => {
   dispatch(loginLoading(true))
   try {
     const response = await loginApi(email, password)
@@ -114,7 +114,7 @@ export const login = (email, password) => async (dispatch) => {
   }
 }
 
-export const loginWithToken = () => async (dispatch) => {
+export const loginWithToken = () => async dispatch => {
   try {
     const response = await loginWithTokenApi()
     dispatch(loginSuccess(response.user))
@@ -125,7 +125,7 @@ export const loginWithToken = () => async (dispatch) => {
   }
 }
 
-export const logout = () => (dispatch) => {
+export const logout = () => dispatch => {
   window.localStorage.removeItem('xcllusiveJWT')
   setAuthorizationHeader()
   dispatch(userLogout())
