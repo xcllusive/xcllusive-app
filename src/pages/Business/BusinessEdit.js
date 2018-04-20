@@ -96,47 +96,52 @@ class BusinessEditPage extends Component {
 
     return (
       <Wrapper>
-        <Statistic.Group size='mini' widths={7}>
-          <Statistic color='orange'>
-            <Statistic.Value>{this.props.business.businessName}</Statistic.Value>
+        <Statistic.Group size="mini" widths={7}>
+          <Statistic color="orange">
+            <Statistic.Value>
+              {this.props.business.businessName}
+            </Statistic.Value>
             <Statistic.Label>{this.props.business.id}</Statistic.Label>
           </Statistic>
-          <Statistic color='blue'>
-            <Statistic.Value>{this.props.business.currentPrice}</Statistic.Value>
+          <Statistic color="blue">
+            <Statistic.Value>
+              {this.props.business.currentPrice}
+            </Statistic.Value>
             <Statistic.Label>Price</Statistic.Label>
           </Statistic>
-          <Statistic color='blue'>
+          <Statistic color="blue">
             <Statistic.Value>{this.props.business.productId}</Statistic.Value>
             <Statistic.Label>Type of Business Sale</Statistic.Label>
           </Statistic>
-          <Statistic color='blue'>
+          <Statistic color="blue">
             <Statistic.Value>100</Statistic.Value>
             <Statistic.Label>Enquiries</Statistic.Label>
           </Statistic>
-          <Statistic color='blue'>
+          <Statistic color="blue">
             <Statistic.Value>10</Statistic.Value>
             <Statistic.Label>Days on the market</Statistic.Label>
           </Statistic>
-          <Statistic color='blue'>
+          <Statistic color="blue">
             <Statistic.Value>5</Statistic.Value>
             <Statistic.Label>Last Feedback Score</Statistic.Label>
           </Statistic>
-          <Statistic color='green'>
+          <Statistic color="green">
             <Statistic.Value>{this.props.business.stageId}</Statistic.Value>
           </Statistic>
         </Statistic.Group>
 
-        <Tab menu={{ secondary: true, pointing: true }}
+        <Tab
+          menu={{ secondary: true, pointing: true }}
           panes={[
             {
               menuItem: 'Business Detail',
               render: () => (
-                <Tab.Pane className='BusinessDetail' attached={false}>
-                  <Segment size='mini' inverted color='blue'>
-                    <Header as='h3' textAlign='left'>
+                <Tab.Pane className="BusinessDetail" attached={false}>
+                  <Segment size="mini" inverted color="blue">
+                    <Header as="h3" textAlign="left">
                       Business Detail
                     </Header>
-                    <Header as='h6' floated='right'>
+                    <Header as="h6" floated="right">
                       Enquiry Date: 06/12/2017
                     </Header>
                   </Segment>
@@ -155,14 +160,14 @@ class BusinessEditPage extends Component {
           ]}
         />
 
-        <Grid celled divided='vertically'>
+        <Grid celled divided="vertically">
           <Grid.Row columns={1}>
             <Grid.Column>
-              <Button floated='left' color='facebook'>
-                <Icon name='commenting' />
+              <Button floated="left" color="facebook">
+                <Icon name="commenting" />
                 New Communication
               </Button>
-              <Table size={'small'} color='blue' celled inverted selectable>
+              <Table size={'small'} color="blue" celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>LogID</Table.HeaderCell>
@@ -199,23 +204,23 @@ class BusinessEditPage extends Component {
           <Form>
             <Form.Group inline>
               <Form.Input
-                label='Created By'
-                placeholder='Zoran Sarabaca'
+                label="Created By"
+                placeholder="Zoran Sarabaca"
                 readOnly
               />
               <Form.Input
-                label='Creation Date'
-                placeholder='08/12/2017'
+                label="Creation Date"
+                placeholder="08/12/2017"
                 readOnly
               />
               <Form.Input
-                label='Modified By'
-                placeholder='Cayo Bayestorff'
+                label="Modified By"
+                placeholder="Cayo Bayestorff"
                 readOnly
               />
               <Form.Input
-                label='Modified Date'
-                placeholder='09/12/2017'
+                label="Modified Date"
+                placeholder="09/12/2017"
                 readOnly
               />
             </Form.Group>
