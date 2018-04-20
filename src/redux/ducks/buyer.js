@@ -1,11 +1,14 @@
-import { create, update } from '../../services/api/buyer'
+import { create, update, list } from '../../services/api/buyer'
 
 // Action Types
 
 export const Types = {
   CREATE_BUYER_LOADING: 'CREATE_BUYER_LOADING',
   CREATE_BUYER_SUCCESS: 'CREATE_BUYER_SUCCESS',
-  CREATE_BUYER_FAILURE: 'CREATE_BUYER_FAILURE'
+  CREATE_BUYER_FAILURE: 'CREATE_BUYER_FAILURE',
+  LIST_BUYER_LOADING: 'LIST_BUYER_LOADING',
+  LIST_BUYER_SUCCESS: 'LIST_BUYER_SUCCESS',
+  LIST_BUYER_FAILURE: 'LIST_BUYER_FAILURE'
 }
 
 // Reducer
@@ -19,6 +22,11 @@ const initialState = {
   update: {
     isLoading: false,
     isUpdated: false,
+    error: null
+  },
+  list: {
+    array: [],
+    isLoading: false,
     error: null
   }
 }
@@ -69,7 +77,7 @@ export default function reducer (state = initialState, action) {
         update: {
           ...state.update,
           isLoading: false,
-          isCreated: true,
+          isUpdated: true,
           error: null
         }
       }
@@ -80,6 +88,34 @@ export default function reducer (state = initialState, action) {
           ...state.update,
           isLoading: false,
           isUpdated: false,
+          error: action.payload
+        }
+      }
+    case Types.LIST_BUYER_LOADING:
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.LIST_BUYER_SUCCESS:
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.LIST_BUYER_FAILURE:
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          isLoading: false,
           error: action.payload
         }
       }
@@ -125,6 +161,25 @@ export const updateBuyer = buyer => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_BUYER_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const listBuyer = () => async dispatch => {
+  dispatch({
+    type: Types.LIST_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const buyers = await list()
+    dispatch({
+      type: Types.LIST_BUYER_SUCCESS,
+      payload: buyers.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.LIST_BUYER_FAILURE,
       payload: error
     })
   }

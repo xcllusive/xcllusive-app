@@ -11,6 +11,7 @@ import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import EditBuyerForm from '../../components/forms/EditBuyerForm'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { listBuyer } from '../../redux/ducks/buyer'
 import enquiryBusiness from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -21,9 +22,22 @@ class ClientManagerList extends Component {
     this.state = {
       modalOpenBuyer: false,
       modalOpenBusiness: false,
-      modalOpenEditBuyer: false
+      modalOpenEditBuyer: false,
+      buyer: {}
     }
   }
+
+  componentDidMount () {
+    this.props.listBuyer()
+  }
+
+  _renderBuyer = buyer => {
+    this.setState({ buyer })
+  };
+
+  _zeroBuyer = buyer => {
+    this.setState({ buyer })
+  };
 
   _toggleModalConfirm = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM_DELETE, {
@@ -43,9 +57,10 @@ class ClientManagerList extends Component {
     this.props.enquiryBusiness()
   };
 
-  _toggleModal = modal => {
+  _toggleModal = (modal, buyer) => {
     this.setState(prevState => ({
-      [modal]: !prevState[modal]
+      [modal]: !prevState[modal],
+      buyer: buyer
     }))
   };
 
@@ -55,7 +70,7 @@ class ClientManagerList extends Component {
       modalOpenBusiness,
       modalOpenEditBuyer
     } = this.state
-
+    const { listBuyerList } = this.props
     return (
       <Wrapper>
         {modalOpenBuyer ? (
@@ -74,6 +89,7 @@ class ClientManagerList extends Component {
           <EditBuyerForm
             modalOpen={modalOpenEditBuyer}
             toggleModal={() => this._toggleModal('modalOpenEditBuyer')}
+            buyer={this.state.buyer}
           />
         ) : null}
         <Grid padded="horizontally">
@@ -145,53 +161,68 @@ class ClientManagerList extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  <Table.Row>
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-              <Table size="small" basic="very" compact>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.HeaderCell>BuyerID</Table.HeaderCell>
-                    <Table.Cell
-                      onClick={() => this._toggleModal('modalOpenEditBuyer')}
-                      selectable
+                  {listBuyerList.map(buyer => (
+                    <Table.Row
+                      active
+                      key={buyer.id}
+                      onClick={() => this._renderBuyer(buyer)}
                     >
-                      <Icon link name="search" />
-                      B0001
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell color="red">Name</Table.HeaderCell>
-                    <Table.Cell>Cayo Test</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Address</Table.HeaderCell>
-                    <Table.Cell>
-                      Middle Boat Harbour, The Esplanade Lakes Entrance VIC 3909
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Phone</Table.HeaderCell>
-                    <Table.Cell>296-16-79</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Email</Table.HeaderCell>
-                    <Table.Cell>test@test.com.au</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>CA sent</Table.HeaderCell>
-                    <Table.Cell>Yes</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>CA returned</Table.HeaderCell>
-                    <Table.Cell>No</Table.Cell>
-                  </Table.Row>
+                      <Table.Cell>{buyer.firstName}</Table.Cell>
+                      <Table.Cell>{buyer.telephone1}</Table.Cell>
+                      <Table.Cell>{buyer.email}</Table.Cell>
+                    </Table.Row>
+                  ))}
                 </Table.Body>
               </Table>
+              {this.state.buyer ? (
+                <Table size="small" basic="very" compact>
+                  <Table.Body>
+                    <Table.Row>
+                      <Table.HeaderCell>BuyerID</Table.HeaderCell>
+                      <Table.Cell
+                        onClick={() =>
+                          this._toggleModal(
+                            'modalOpenEditBuyer',
+                            this.state.buyer
+                          )
+                        }
+                        selectable
+                      >
+                        <Icon link name="search" />
+                        B0001
+                      </Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.HeaderCell color="red">Name</Table.HeaderCell>
+                      <Table.Cell>{this.state.buyer.firstName}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.HeaderCell>Address</Table.HeaderCell>
+                      <Table.Cell>{this.state.buyer.streetName}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.HeaderCell>Phone</Table.HeaderCell>
+                      <Table.Cell>{this.state.buyer.telephone1}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.HeaderCell>Email</Table.HeaderCell>
+                      <Table.Cell>{this.state.buyer.email}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.HeaderCell>CA sent</Table.HeaderCell>
+                      <Table.Cell>
+                        {this.state.buyer.caSent ? 'Yes' : 'No'}
+                      </Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.HeaderCell>CA returned</Table.HeaderCell>
+                      <Table.Cell>
+                        {this.state.buyer.caReceived ? 'Yes' : 'No'}
+                      </Table.Cell>
+                    </Table.Row>
+                  </Table.Body>
+                </Table>
+              ) : null}
               <Grid.Column floated="left" width={2}>
                 <Button size="small" color="grey">
                   <Icon name="folder open outline" />
@@ -212,7 +243,11 @@ class ClientManagerList extends Component {
                   <Icon name="send" />
                   Send IM
                 </Button>
-                <Button size="small" color="green">
+                <Button
+                  size="small"
+                  color="green"
+                  onClick={() => this._renderBuyer(0)}
+                >
                   <Icon name="backward" />
                   Back to Search
                 </Button>
@@ -334,11 +369,13 @@ class ClientManagerList extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              <Table.Row>
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-              </Table.Row>
+              {listBuyerList.map(buyer => (
+                <Table.Row active key={buyer.id}>
+                  <Table.Cell>{buyer.firstName}</Table.Cell>
+                  <Table.Cell>{buyer.telephone1}</Table.Cell>
+                  <Table.Cell>{buyer.email}</Table.Cell>
+                </Table.Row>
+              ))}
             </Table.Body>
           </Table>
         </Grid.Column>
@@ -351,16 +388,22 @@ ClientManagerList.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   openModal: PropTypes.func,
-  enquiryBusiness: PropTypes.func
+  enquiryBusiness: PropTypes.func,
+  listBuyerList: PropTypes.array,
+  listBuyer: PropTypes.func
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  isLoadingBuyerList: state.buyer.list.isLoading,
+  listBuyerList: state.buyer.list.array
+})
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       openModal,
-      enquiryBusiness
+      enquiryBusiness,
+      listBuyer
     },
     dispatch
   )
