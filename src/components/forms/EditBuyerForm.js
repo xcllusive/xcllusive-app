@@ -48,7 +48,6 @@ class EditBuyerForm extends Component {
       sourceOptions,
       dropDownLoading
     } = this.props
-
     return (
       <Modal dimmer={'blurring'} open={modalOpen}>
         <Modal.Header align="center">Edit Buyer</Modal.Header>
@@ -61,7 +60,7 @@ class EditBuyerForm extends Component {
                   label="First name"
                   name="firstName"
                   autoComplete="firstName"
-                  value={values.firstName}
+                  value={this.props.buyer.firstName}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -313,10 +312,39 @@ EditBuyerForm.propTypes = {
   setFieldValue: PropTypes.func,
   sourceOptions: PropTypes.array,
   getBusinessRegister: PropTypes.func,
-  dropDownLoading: PropTypes.bool
+  dropDownLoading: PropTypes.bool,
+  buyer: PropTypes.object
 }
 
 const mapPropsToValues = () => ({
+  /* if (props && props.buyer.id) {
+    return {
+      firstName: props.buyer.firstName,
+      surname: props.buyer.surname,
+      email: props.buyer.email,
+      businessSource: props.buyer.businessSource,
+      streetName: props.buyer.streetName,
+      suburb: props.buyer.suburb,
+      state: props.buyer.state,
+      postCode: props.buyer.postCode,
+      telephone1: props.buyer.telephone1,
+      priceFrom: props.buyer.priceFrom,
+      priceTo: props.buyer.priceTo
+    }
+  }
+  return {
+    firstName: '',
+    surname: '',
+    email: '',
+    businessSource: '',
+    streetName: '',
+    suburb: '',
+    state: '',
+    postCode: '',
+    telephone1: '',
+    priceFrom: '',
+    priceTo: ''
+  } */
   firstName: '',
   surname: '',
   email: '',

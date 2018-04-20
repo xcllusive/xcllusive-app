@@ -13,3 +13,9 @@ export const update = buyer => console.log('updated buyer')
     url: '/buyer',
     data: buyer
   }) */
+
+export const list = () =>
+  request({
+    method: 'get',
+    url: '/buyer'
+  })
