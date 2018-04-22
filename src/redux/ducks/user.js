@@ -1,8 +1,4 @@
-import {
-  getAll,
-  create,
-  update
-} from '../../services/api/user'
+import { getAll, create, update } from '../../services/api/user'
 import { toast } from 'react-toastify'
 
 // Action Types
@@ -13,6 +9,7 @@ export const Types = {
   GET_USER_FAILURE: 'GET_USER_FAILURE',
   CREATE_USER_LOADING: 'CREATE_USER_LOADING',
   CREATE_USER_SUCCESS: 'CREATE_USER_SUCCESS',
+  CREATE_USER_FAILURE: 'CREATE_USER_FAILURE',
   UPDATE_USER_LOADING: 'UPDATE_USER_LOADING',
   UPDATE_USER_SUCCESS: 'UPDATE_USER_SUCCESS',
   UPDATE_USER_FAILURE: 'UPDATE_USER_FAILURE'
@@ -138,27 +135,19 @@ export const userLoading = (value, type) => {
   }
 }
 
-const userResponse = array => {
-  return {
-    type: Types.GET_USER_SUCCESS,
-    payload: array
-  }
-}
-
-const userError = value => {
-  return {
-    type: Types.GET_USER_FAILURE,
-    payload: value
-  }
-}
-
 export const createUser = user => async dispatch => {
   dispatch(userLoading(true, 'CREATE_USER_LOADING'))
   try {
     await create(user)
-    dispatch({type: Types.CREATE_USER_SUCCESS})
+    dispatch({ type: Types.CREATE_USER_SUCCESS })
+    toast.success('User created with success')
   } catch (error) {
-    dispatch(userError(error))
+    console.log(error)
+    dispatch({
+      type: Types.CREATE_USER_FAILURE,
+      payload: error.message
+    })
+    toast.error(error.message)
   }
 }
 
@@ -169,7 +158,7 @@ export const updateUser = user => async dispatch => {
   })
   try {
     await update(user)
-    dispatch({type: Types.UPDATE_USER_SUCCESS})
+    dispatch({ type: Types.UPDATE_USER_SUCCESS })
     toast.success('User updated with success')
   } catch (error) {
     dispatch({
@@ -184,8 +173,14 @@ export const getUsers = (options = false, search = false) => async dispatch => {
   dispatch(userLoading(true, 'GET_USER_LOADING'))
   try {
     const users = await getAll(options, search)
-    dispatch(userResponse(users))
+    dispatch({
+      type: Types.GET_USER_SUCCESS,
+      payload: users
+    })
   } catch (error) {
-    dispatch(userError(error))
+    dispatch({
+      type: Types.GET_USER_FAILURE,
+      payload: error
+    })
   }
 }

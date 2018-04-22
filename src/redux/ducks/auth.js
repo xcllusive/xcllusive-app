@@ -110,7 +110,7 @@ export const login = (email, password) => async dispatch => {
     setAuthorizationHeader(response.accessToken)
     dispatch(loginSuccess(response.user))
   } catch (error) {
-    dispatch(loginError(error))
+    dispatch(loginError(error.message))
   }
 }
 

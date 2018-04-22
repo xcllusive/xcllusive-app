@@ -15,11 +15,11 @@ const request = async options => {
       // console.error('Data:', error.response.data)
       // console.error('Headers:', error.response.headers)
 
-      return Promise.reject(error.response.data.error)
+      return Promise.reject(error.response.data)
     }
 
     // console.error('Error Message:', error.message)
-    return Promise.reject(error.message)
+    return Promise.reject(error)
   }
 
   try {
