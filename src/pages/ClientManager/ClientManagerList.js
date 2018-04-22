@@ -32,7 +32,8 @@ class ClientManagerList extends Component {
       modalOpenBusiness: false,
       modalOpenEditBuyer: false,
       buyer: null,
-      buyerListItem: null
+      buyerListItem: null,
+      inputSearch: ''
     }
   }
 
@@ -60,6 +61,16 @@ class ClientManagerList extends Component {
 
   _enquiryBusiness = () => {
     this.props.enquiryBusiness()
+  }
+
+  _onSearch = (e, { value }) => {
+    if (this.timer) clearTimeout(this.timer)
+
+    this.setState({
+      inputSearch: value
+    })
+
+    this.timer = setTimeout(() => this.props.listBuyer(value), 1000)
   }
 
   _toggleModal = (modal, buyer) => {
@@ -103,8 +114,11 @@ class ClientManagerList extends Component {
               </h3>
               <Input
                 fluid
-                action={{ icon: 'search' }}
+                icon="search"
+                loading={isLoadingBuyerList}
                 placeholder="Find buyers..."
+                onChange={this._onSearch}
+                value={this.state.inputSearch}
               />
             </Grid.Column>
             <Grid.Column floated="right">

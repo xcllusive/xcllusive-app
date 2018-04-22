@@ -166,13 +166,13 @@ export const updateBuyer = buyer => async dispatch => {
   }
 }
 
-export const listBuyer = () => async dispatch => {
+export const listBuyer = (search = false) => async dispatch => {
   dispatch({
     type: Types.LIST_BUYER_LOADING,
     payload: true
   })
   try {
-    const buyers = await list()
+    const buyers = await list(search)
     dispatch({
       type: Types.LIST_BUYER_SUCCESS,
       payload: buyers.data

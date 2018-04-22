@@ -14,8 +14,12 @@ export const update = buyer => console.log('updated buyer')
     data: buyer
   }) */
 
-export const list = () =>
-  request({
+export const list = search => {
+  return request({
     method: 'get',
-    url: '/buyer'
+    url: '/buyer',
+    params: {
+      search: search && search.length > 0 ? search : ''
+    }
   })
+}
