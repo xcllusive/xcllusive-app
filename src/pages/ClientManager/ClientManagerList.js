@@ -20,6 +20,7 @@ import EditBuyerForm from '../../components/forms/EditBuyerForm'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyers } from '../../redux/ducks/buyer'
+import { getBusinesses } from '../../redux/ducks/business'
 import enquiryBusiness from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -32,6 +33,7 @@ class ClientManagerList extends Component {
       modalOpenBusiness: false,
       modalOpenEditBuyer: false,
       buyer: null,
+      business: null,
       buyerListItem: null,
       inputSearch: ''
     }
@@ -49,14 +51,20 @@ class ClientManagerList extends Component {
 
   componentDidMount () {
     this.props.getBuyers()
+    this.props.getBusinesses()
   }
 
   componentWillMount () {
     this.props.getBuyers()
+    this.props.getBusinesses()
   }
 
   _renderBuyer = buyer => {
     this.setState({ buyer })
+  }
+
+  _renderBusiness = business => {
+    this.setState({ business })
   }
 
   _toggleModalConfirm = () => {
@@ -83,8 +91,8 @@ class ClientManagerList extends Component {
     this.setState({
       inputSearch: value
     })
-
     this.timer = setTimeout(() => this.props.getBuyers(value), 1000)
+    this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
   }
 
   _toggleModal = (modal, buyer) => {
@@ -96,7 +104,13 @@ class ClientManagerList extends Component {
 
   render () {
     const { modalOpenBuyer, modalOpenBusiness, modalOpenEditBuyer } = this.state
-    const { listBuyerList, isLoadingBuyerList } = this.props
+    const {
+      listBuyerList,
+      listBusinessList,
+      isLoadingBuyerList,
+      isLoadingBusinessList,
+      match
+    } = this.props
     return (
       <Wrapper>
         {modalOpenBuyer ? (
@@ -155,8 +169,11 @@ class ClientManagerList extends Component {
               </h3>
               <Input
                 fluid
-                action={{ icon: 'search' }}
+                icon="search"
+                loading={isLoadingBusinessList}
                 placeholder="Find businesses..."
+                onChange={this._onSearch}
+                value={this.state.inputSearch}
               />
             </Grid.Column>
             <Grid.Column>
@@ -298,95 +315,133 @@ class ClientManagerList extends Component {
               ) : null}
             </Grid.Column>
             <Grid.Column>
-              <Table
-                size="small"
-                compact
-                color="blue"
-                celled
-                inverted
-                selectable
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Name</Table.HeaderCell>
-                    <Table.HeaderCell>Price</Table.HeaderCell>
-                    <Table.HeaderCell>Notes</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-              <Table size="small" basic="very" compact>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.HeaderCell>BusinessID</Table.HeaderCell>
-                    <Table.Cell>BS0001</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell color="red">Name</Table.HeaderCell>
-                    <Table.Cell>Ferrymans Seafood Cafe</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Address</Table.HeaderCell>
-                    <Table.Cell>
-                      Middle Boat Harbour, The Esplanade Lakes Entrance VIC 3909
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Industry</Table.HeaderCell>
-                    <Table.Cell>Restaurant</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Price</Table.HeaderCell>
-                    <Table.Cell>$1000000.00</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Notes</Table.HeaderCell>
-                    <Table.Cell>bla bla bla</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Stage</Table.HeaderCell>
-                    <Table.Cell>bla bla bla</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-              <Grid.Column floated="left" width={2}>
-                <Button
-                  size="small"
-                  color="grey"
-                  onClick={() => this._toggleModalConfirm()}
-                >
-                  <Icon name="write" />
-                  Enquiry Business
-                </Button>
-              </Grid.Column>
-              <br />
-              <br />
-              <Grid.Column floated="left" width={2}>
-                <Button size="small" color="blue">
-                  <Icon name="mail" />
-                  Request Owners Approval
-                </Button>
-                <Button size="small" color="blue">
-                  <Icon name="send" />
-                  Send Enquiry to Owner
-                </Button>
-                <Button size="small" color="blue">
-                  <Icon name="mail" />
-                  Email Buyer
-                </Button>
-                <Button size="small" color="green">
-                  <Icon name="backward" />
-                  Back to Search
-                </Button>
-              </Grid.Column>
+              {!this.state.business ? (
+                <Dimmer.Dimmable dimmed>
+                  <Dimmer inverted active={isLoadingBusinessList}>
+                    <Loader>Loading</Loader>
+                  </Dimmer>
+                  <Table
+                    size="small"
+                    compact
+                    color="blue"
+                    celled
+                    inverted
+                    selectable
+                  >
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>ID</Table.HeaderCell>
+                        <Table.HeaderCell>Name</Table.HeaderCell>
+                        <Table.HeaderCell>Price</Table.HeaderCell>
+                        <Table.HeaderCell>Notes</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      {listBusinessList.map(business => (
+                        <Table.Row
+                          active
+                          key={business.id}
+                          onClick={() => this._renderBusiness(business)}
+                        >
+                          <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                          <Table.Cell>{business.businessName}</Table.Cell>
+                          <Table.Cell />
+                          <Table.Cell />
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table>
+                </Dimmer.Dimmable>
+              ) : null}
+              {this.state.business ? (
+                <Fragment>
+                  <Table size="small" basic="very" compact>
+                    <Table.Body>
+                      <Table.Row>
+                        <Table.HeaderCell>BusinessID</Table.HeaderCell>
+                        <Table.Cell
+                          onClick={() =>
+                            history.push(
+                              `${match.path}/${this.state.business.id}`
+                            )
+                          }
+                          selectable
+                        >
+                          <Icon link name="search" />
+                          {`BS${this.state.business.id}`}
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.HeaderCell color="red">Name</Table.HeaderCell>
+                        <Table.Cell>
+                          {this.state.business.businessName}
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.HeaderCell>Address</Table.HeaderCell>
+                        <Table.Cell>
+                          {this.state.business.address1} {','}{' '}
+                          {this.state.business.suburb}{' '}
+                          {this.state.business.state}{' '}
+                          {this.state.business.postCode}
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.HeaderCell>Industry</Table.HeaderCell>
+                        <Table.Cell>
+                          {this.state.business.industryId}
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.HeaderCell>Price</Table.HeaderCell>
+                        <Table.Cell>
+                          {this.state.business.listedPrice}
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.HeaderCell>Notes</Table.HeaderCell>
+                        <Table.Cell>
+                          {this.state.business.description}
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.HeaderCell>Stage</Table.HeaderCell>
+                        <Table.Cell>{this.state.business.stageId}</Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                  </Table>
+                  <Grid.Column floated="left" width={2}>
+                    <Button
+                      size="small"
+                      color="grey"
+                      onClick={() => this._toggleModalConfirm()}
+                    >
+                      <Icon name="write" />
+                      Enquiry Business
+                    </Button>
+                    <Button size="small" color="blue">
+                      <Icon name="mail" />
+                      Request Owners Approval
+                    </Button>
+                    <Button size="small" color="blue">
+                      <Icon name="send" />
+                      Send Enquiry to Owner
+                    </Button>
+                    <Button size="small" color="blue">
+                      <Icon name="mail" />
+                      Email Buyer
+                    </Button>
+                    <Button
+                      size="small"
+                      color="green"
+                      onClick={() => this._renderBusiness(null)}
+                    >
+                      <Icon name="backward" />
+                      Back to Search
+                    </Button>
+                  </Grid.Column>
+                </Fragment>
+              ) : null}
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -434,14 +489,19 @@ ClientManagerList.propTypes = {
   openModal: PropTypes.func,
   enquiryBusiness: PropTypes.func,
   listBuyerList: PropTypes.array,
+  listBusinessList: PropTypes.array,
   getBuyers: PropTypes.func,
   isLoadingBuyerList: PropTypes.bool,
-  buyerUpdated: PropTypes.bool
+  isLoadingBusinessList: PropTypes.bool,
+  buyerUpdated: PropTypes.bool,
+  getBusinesses: PropTypes.func
 }
 
 const mapStateToProps = state => ({
   isLoadingBuyerList: state.buyer.list.isLoading,
+  isLoadingBusinessList: state.business.getAll.isLoading,
   listBuyerList: state.buyer.list.array,
+  listBusinessList: state.business.getAll.array,
   buyerUpdated: state.buyer.update.isUpdated
 })
 
@@ -450,7 +510,8 @@ const mapDispatchToProps = dispatch =>
     {
       openModal,
       enquiryBusiness,
-      getBuyers
+      getBuyers,
+      getBusinesses
     },
     dispatch
   )
