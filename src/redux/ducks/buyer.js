@@ -169,7 +169,7 @@ export const updateBuyer = buyer => async dispatch => {
   }
 }
 
-export const getBuyer = (search = false) => async dispatch => {
+export const getBuyers = (search = false) => async dispatch => {
   dispatch({
     type: Types.LIST_BUYER_LOADING,
     payload: true

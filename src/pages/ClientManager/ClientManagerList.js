@@ -19,7 +19,7 @@ import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import EditBuyerForm from '../../components/forms/EditBuyerForm'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
-import { getBuyer } from '../../redux/ducks/buyer'
+import { getBuyers } from '../../redux/ducks/buyer'
 import enquiryBusiness from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -38,7 +38,7 @@ class ClientManagerList extends Component {
   }
 
   componentDidMount () {
-    this.props.getBuyer()
+    this.props.getBuyers()
   }
 
   _renderBuyer = buyer => {
@@ -70,7 +70,7 @@ class ClientManagerList extends Component {
       inputSearch: value
     })
 
-    this.timer = setTimeout(() => this.props.getBuyer(value), 1000)
+    this.timer = setTimeout(() => this.props.getBuyers(value), 1000)
   }
 
   _toggleModal = (modal, buyer) => {
@@ -411,7 +411,7 @@ ClientManagerList.propTypes = {
   openModal: PropTypes.func,
   enquiryBusiness: PropTypes.func,
   listBuyerList: PropTypes.array,
-  getBuyer: PropTypes.func,
+  getBuyers: PropTypes.func,
   isLoadingBuyerList: PropTypes.bool
 }
 
@@ -425,7 +425,7 @@ const mapDispatchToProps = dispatch =>
     {
       openModal,
       enquiryBusiness,
-      getBuyer
+      getBuyers
     },
     dispatch
   )
