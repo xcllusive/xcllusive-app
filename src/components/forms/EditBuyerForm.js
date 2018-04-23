@@ -219,20 +219,20 @@ class EditBuyerForm extends Component {
                   required
                   label="Source"
                   options={sourceOptions}
-                  name="businessSource"
-                  autoComplete="businessSource"
+                  name="buyerSource"
+                  autoComplete="buyerSource"
                   loading={dropDownLoading}
                   disabled={dropDownLoading}
-                  value={values.businessSource}
+                  value={values.buyerSource}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessSource &&
-                  touched.businessSource && (
+                {errors.buyerSource &&
+                  touched.buyerSource && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.businessSource}
+                    content={errors.buyerSource}
                   />
                 )}
               </Form.Field>
@@ -320,16 +320,17 @@ const mapPropsToValues = props => {
   return {
     id: props.buyer ? props.buyer.id : '',
     firstName: props.buyer ? props.buyer.firstName : '',
-    surname: '',
-    email: '',
-    businessSource: '',
-    streetName: '',
-    suburb: '',
-    state: '',
-    postCode: '',
-    telephone1: '',
-    priceFrom: '',
-    priceTo: ''
+    surname: props.buyer ? props.buyer.surname : '',
+    email: props.buyer ? props.buyer.email : '',
+    buyerSource: props.buyer ? props.buyer.buyerSource : '',
+    streetName: props.buyer ? props.buyer.streetName : '',
+    suburb: props.buyer ? props.buyer.suburb : '',
+    state: props.buyer ? props.buyer.state : '',
+    postCode: props.buyer ? props.buyer.postCode : '',
+    telephone1: props.buyer ? props.buyer.telephone1 : '',
+    priceFrom: props.buyer ? props.buyer.priceFrom : '',
+    priceTo: props.buyer ? props.buyer.priceTo : '',
+    emailOptional: props.buyer ? props.buyer.emailOptional : ''
   }
 }
 
@@ -343,11 +344,12 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  businessSource: Yup.number().required('Source is required.'),
+  buyerSource: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.number().typeError('You must type only number here!'),
   priceFrom: Yup.number().typeError('You must type only number here!'),
-  priceTo: Yup.number().typeError('You must type only number here!')
+  priceTo: Yup.number().typeError('You must type only number here!'),
+  emailOptional: Yup.string().email('Invalid email address.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) =>

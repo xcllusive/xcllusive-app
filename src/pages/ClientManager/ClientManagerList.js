@@ -37,7 +37,21 @@ class ClientManagerList extends Component {
     }
   }
 
+  async componentWillReceiveProps (nextProps) {
+    if (
+      this.props.buyerUpdated !== nextProps.buyerUpdated &&
+      nextProps.buyerUpdated
+    ) {
+      await this._toggleModal({})
+      this.props.getBuyers()
+    }
+  }
+
   componentDidMount () {
+    this.props.getBuyers()
+  }
+
+  componentWillMount () {
     this.props.getBuyers()
   }
 
@@ -187,7 +201,9 @@ class ClientManagerList extends Component {
                           key={buyer.id}
                           onClick={() => this._renderBuyer(buyer)}
                         >
-                          <Table.Cell>{buyer.firstName}</Table.Cell>
+                          <Table.Cell>
+                            {buyer.firstName} {buyer.surname}
+                          </Table.Cell>
                           <Table.Cell>{buyer.telephone1}</Table.Cell>
                           <Table.Cell>{buyer.email}</Table.Cell>
                         </Table.Row>
@@ -217,11 +233,18 @@ class ClientManagerList extends Component {
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell color="red">Name</Table.HeaderCell>
-                        <Table.Cell>{this.state.buyer.firstName}</Table.Cell>
+                        <Table.Cell>
+                          {this.state.buyer.firstName}{' '}
+                          {this.state.buyer.surname}
+                        </Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Address</Table.HeaderCell>
-                        <Table.Cell>{this.state.buyer.streetName}</Table.Cell>
+                        <Table.Cell>
+                          {this.state.buyer.streetName},{' '}
+                          {this.state.buyer.suburb} {this.state.buyer.state}{' '}
+                          {this.state.buyer.postCode}
+                        </Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Phone</Table.HeaderCell>
@@ -412,12 +435,14 @@ ClientManagerList.propTypes = {
   enquiryBusiness: PropTypes.func,
   listBuyerList: PropTypes.array,
   getBuyers: PropTypes.func,
-  isLoadingBuyerList: PropTypes.bool
+  isLoadingBuyerList: PropTypes.bool,
+  buyerUpdated: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   isLoadingBuyerList: state.buyer.list.isLoading,
-  listBuyerList: state.buyer.list.array
+  listBuyerList: state.buyer.list.array,
+  buyerUpdated: state.buyer.update.isUpdated
 })
 
 const mapDispatchToProps = dispatch =>
