@@ -7,12 +7,13 @@ export const create = buyer =>
     data: buyer
   })
 
-export const update = buyer => console.log('updated buyer')
-/* request({
+export const update = buyer => {
+  return request({
     method: 'put',
-    url: '/buyer',
+    url: `/buyer/${buyer.id}`,
     data: buyer
-  }) */
+  })
+}
 
 export const list = search => {
   return request({

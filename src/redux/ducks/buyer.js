@@ -8,7 +8,10 @@ export const Types = {
   CREATE_BUYER_FAILURE: 'CREATE_BUYER_FAILURE',
   LIST_BUYER_LOADING: 'LIST_BUYER_LOADING',
   LIST_BUYER_SUCCESS: 'LIST_BUYER_SUCCESS',
-  LIST_BUYER_FAILURE: 'LIST_BUYER_FAILURE'
+  LIST_BUYER_FAILURE: 'LIST_BUYER_FAILURE',
+  UPDATE_BUYER_LOADING: 'UPDATE_BUYER_LOADING',
+  UPDATE_BUYER_SUCCESS: 'UPDATE_BUYER_SUCCESS',
+  UPDATE_BUYER_FAILURE: 'UPDATE_BUYER_FAILURE'
 }
 
 // Reducer
@@ -166,7 +169,7 @@ export const updateBuyer = buyer => async dispatch => {
   }
 }
 
-export const listBuyer = (search = false) => async dispatch => {
+export const getBuyer = (search = false) => async dispatch => {
   dispatch({
     type: Types.LIST_BUYER_LOADING,
     payload: true

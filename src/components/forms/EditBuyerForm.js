@@ -29,7 +29,7 @@ class EditBuyerForm extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  };
+  }
 
   render () {
     const { state } = this.state
@@ -60,7 +60,7 @@ class EditBuyerForm extends Component {
                   label="First name"
                   name="firstName"
                   autoComplete="firstName"
-                  value={this.props.buyer.firstName}
+                  value={values.firstName}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -316,24 +316,10 @@ EditBuyerForm.propTypes = {
   buyer: PropTypes.object
 }
 
-const mapPropsToValues = () => ({
-  /* if (props && props.buyer.id) {
-    return {
-      firstName: props.buyer.firstName,
-      surname: props.buyer.surname,
-      email: props.buyer.email,
-      businessSource: props.buyer.businessSource,
-      streetName: props.buyer.streetName,
-      suburb: props.buyer.suburb,
-      state: props.buyer.state,
-      postCode: props.buyer.postCode,
-      telephone1: props.buyer.telephone1,
-      priceFrom: props.buyer.priceFrom,
-      priceTo: props.buyer.priceTo
-    }
-  }
+const mapPropsToValues = props => {
   return {
-    firstName: '',
+    id: props.buyer ? props.buyer.id : '',
+    firstName: props.buyer ? props.buyer.firstName : '',
     surname: '',
     email: '',
     businessSource: '',
@@ -344,19 +330,8 @@ const mapPropsToValues = () => ({
     telephone1: '',
     priceFrom: '',
     priceTo: ''
-  } */
-  firstName: '',
-  surname: '',
-  email: '',
-  businessSource: '',
-  streetName: '',
-  suburb: '',
-  state: '',
-  postCode: '',
-  telephone1: '',
-  priceFrom: '',
-  priceTo: ''
-})
+  }
+}
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
