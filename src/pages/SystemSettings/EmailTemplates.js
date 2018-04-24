@@ -5,8 +5,19 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Form, Label } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 class EmailTemplates extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { text: '' } // You can also pass a Quill Delta here
+  }
+
+  _handleChange = value => {
+    this.setState({ text: value })
+  }
+
   render () {
     const { values, touched, errors, handleChange, handleBlur } = this.props
     return (
@@ -99,6 +110,7 @@ class EmailTemplates extends Component {
               checked={values.enableAtachment}
             />
           </Form.Group>
+          <ReactQuill value={this.state.text} onChange={this._handleChange} />
         </Form>
       </Wrapper>
     )
