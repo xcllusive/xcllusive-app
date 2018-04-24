@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label } from 'semantic-ui-react'
+import { Form, Label, Message, Icon } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -11,7 +11,37 @@ import 'react-quill/dist/quill.snow.css'
 class EmailTemplates extends Component {
   constructor (props) {
     super(props)
-    this.state = { text: '' } // You can also pass a Quill Delta here
+    this.state = {
+      text: '',
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+          [
+            { list: 'ordered' },
+            { list: 'bullet' },
+            { indent: '-1' },
+            { indent: '+1' }
+          ],
+          ['link', 'image'],
+          ['clean']
+        ]
+      },
+
+      formats: [
+        'header',
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'blockquote',
+        'list',
+        'bullet',
+        'indent',
+        'link',
+        'image'
+      ]
+    }
   }
 
   _handleChange = value => {
@@ -24,7 +54,7 @@ class EmailTemplates extends Component {
       <Wrapper>
         <Form>
           <Form.Group>
-            <Form.Field>
+            <Form.Field width={6}>
               <Form.Select
                 required
                 label="Templates"
@@ -41,7 +71,7 @@ class EmailTemplates extends Component {
             </Form.Field>
           </Form.Group>
           <Form.Group>
-            <Form.Field>
+            <Form.Field width={6}>
               <Form.Input
                 required
                 label="Description"
@@ -61,9 +91,7 @@ class EmailTemplates extends Component {
                 />
               )}
             </Form.Field>
-          </Form.Group>
-          <Form.Group>
-            <Form.Field>
+            <Form.Field width={6}>
               <Form.Input
                 required
                 label="Subject"
@@ -80,7 +108,7 @@ class EmailTemplates extends Component {
             </Form.Field>
           </Form.Group>
           <Form.Group>
-            <Form.Field>
+            <Form.Field width={6}>
               <Form.Input
                 type="file"
                 required
@@ -101,8 +129,6 @@ class EmailTemplates extends Component {
                 />
               )}
             </Form.Field>
-          </Form.Group>
-          <Form.Group>
             <Form.Checkbox
               label="Enable Atachment"
               name="enableAtachment"
@@ -110,7 +136,41 @@ class EmailTemplates extends Component {
               checked={values.enableAtachment}
             />
           </Form.Group>
-          <ReactQuill value={this.state.text} onChange={this._handleChange} />
+          <Message info size="tiny">
+            <Message.Header>
+              Replace in the body`s email with tag names by what you need to
+              use. Ex: Hi ((buyerName)).
+            </Message.Header>
+          </Message>
+          <Label color="teal" tag>
+            ((buyerName))
+          </Label>
+          <Label color="grey" tag>
+            ((businessName))
+          </Label>
+          <Label color="teal" tag>
+            ((businessID))
+          </Label>
+          <Label color="grey" tag>
+            ((buyerID))
+          </Label>
+          <Label color="teal" tag>
+            ((telephone))
+          </Label>
+          <Label color="grey" tag>
+            ((email))
+          </Label>
+          <ReactQuill
+            value={this.state.text}
+            onChange={this._handleChange}
+            style={{ height: '50vh' }}
+            modules={this.state.modules}
+            formats={this.state.formats}
+          />
+          <Form.Button floated="right" type="submit" color="red">
+            <Icon name="save" />
+            Save
+          </Form.Button>
         </Form>
       </Wrapper>
     )
