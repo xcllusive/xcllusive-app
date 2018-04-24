@@ -503,9 +503,9 @@ ClientManagerList.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  isLoadingBuyerList: state.buyer.list.isLoading,
+  isLoadingBuyerList: state.buyer.getAll.isLoading,
   isLoadingBusinessList: state.business.getAll.isLoading,
-  listBuyerList: state.buyer.list.array,
+  listBuyerList: state.buyer.getAll.array,
   listBusinessList: state.business.getAll.array,
   isUpdatedBuyer: state.buyer.update.isUpdated,
   buyerUpdated: state.buyer.update.buyer

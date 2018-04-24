@@ -15,7 +15,7 @@ export const update = buyer => {
   })
 }
 
-export const list = search => {
+export const getAll = search => {
   return request({
     method: 'get',
     url: '/buyer',

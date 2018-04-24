@@ -1,4 +1,4 @@
-import { create, update, list } from '../../services/api/buyer'
+import { create, update, getAll } from '../../services/api/buyer'
 
 // Action Types
 
@@ -6,9 +6,9 @@ export const Types = {
   CREATE_BUYER_LOADING: 'CREATE_BUYER_LOADING',
   CREATE_BUYER_SUCCESS: 'CREATE_BUYER_SUCCESS',
   CREATE_BUYER_FAILURE: 'CREATE_BUYER_FAILURE',
-  LIST_BUYER_LOADING: 'LIST_BUYER_LOADING',
-  LIST_BUYER_SUCCESS: 'LIST_BUYER_SUCCESS',
-  LIST_BUYER_FAILURE: 'LIST_BUYER_FAILURE',
+  GET_BUYERS_LOADING: 'GET_BUYERS_LOADING',
+  GET_BUYERS_SUCCESS: 'GET_BUYERS_SUCCESS',
+  GET_BUYERS_FAILURE: 'GET_BUYERS_FAILURE',
   UPDATE_BUYER_LOADING: 'UPDATE_BUYER_LOADING',
   UPDATE_BUYER_SUCCESS: 'UPDATE_BUYER_SUCCESS',
   UPDATE_BUYER_FAILURE: 'UPDATE_BUYER_FAILURE'
@@ -28,7 +28,7 @@ const initialState = {
     error: null,
     buyer: {}
   },
-  list: {
+  getAll: {
     array: [],
     isLoading: false,
     error: null
@@ -97,30 +97,30 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.LIST_BUYER_LOADING:
+    case Types.GET_BUYERS_LOADING:
       return {
         ...state,
-        list: {
-          ...state.list,
+        getAll: {
+          ...state.getAll,
           isLoading: action.payload,
           error: null
         }
       }
-    case Types.LIST_BUYER_SUCCESS:
+    case Types.GET_BUYERS_SUCCESS:
       return {
         ...state,
-        list: {
-          ...state.list,
+        getAll: {
+          ...state.getAll,
           isLoading: false,
           array: action.payload,
           error: null
         }
       }
-    case Types.LIST_BUYER_FAILURE:
+    case Types.GET_BUYERS_FAILURE:
       return {
         ...state,
-        list: {
-          ...state.list,
+        getAll: {
+          ...state.getAll,
           isLoading: false,
           error: action.payload
         }
@@ -175,18 +175,18 @@ export const updateBuyer = buyer => async dispatch => {
 
 export const getBuyers = (search = false) => async dispatch => {
   dispatch({
-    type: Types.LIST_BUYER_LOADING,
+    type: Types.GET_BUYERS_LOADING,
     payload: true
   })
   try {
-    const buyers = await list(search)
+    const buyers = await getAll(search)
     dispatch({
-      type: Types.LIST_BUYER_SUCCESS,
+      type: Types.GET_BUYERS_SUCCESS,
       payload: buyers.data
     })
   } catch (error) {
     dispatch({
-      type: Types.LIST_BUYER_FAILURE,
+      type: Types.GET_BUYERS_FAILURE,
       payload: error
     })
   }
