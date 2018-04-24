@@ -219,20 +219,20 @@ class EditBuyerForm extends Component {
                   required
                   label="Source"
                   options={sourceOptions}
-                  name="buyerSource"
-                  autoComplete="buyerSource"
+                  name="source_id"
+                  autoComplete="source_id"
                   loading={dropDownLoading}
                   disabled={dropDownLoading}
-                  value={values.buyerSource}
+                  value={values.source_id}
                   onChange={this._handleSelectChange}
                 />
-                {errors.buyerSource &&
-                  touched.buyerSource && (
+                {errors.source_id &&
+                  touched.source_id && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.buyerSource}
+                    content={errors.source_id}
                   />
                 )}
               </Form.Field>
@@ -322,7 +322,7 @@ const mapPropsToValues = props => {
     firstName: props.buyer ? props.buyer.firstName : '',
     surname: props.buyer ? props.buyer.surname : '',
     email: props.buyer ? props.buyer.email : '',
-    buyerSource: props.buyer ? props.buyer.buyerSource : '',
+    source_id: props.buyer ? props.buyer.source_id : '',
     streetName: props.buyer ? props.buyer.streetName : '',
     suburb: props.buyer ? props.buyer.suburb : '',
     state: props.buyer ? props.buyer.state : '',
@@ -330,7 +330,8 @@ const mapPropsToValues = props => {
     telephone1: props.buyer ? props.buyer.telephone1 : '',
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
-    emailOptional: props.buyer ? props.buyer.emailOptional : ''
+    emailOptional:
+      props.buyer && props.buyer.emailOptional ? props.buyer.emailOptional : ''
   }
 }
 
@@ -344,7 +345,7 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  buyerSource: Yup.number().required('Source is required.'),
+  source_id: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.number().typeError('You must type only number here!'),
   priceFrom: Yup.number().typeError('You must type only number here!'),

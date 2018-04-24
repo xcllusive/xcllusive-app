@@ -34,27 +34,24 @@ class ClientManagerList extends Component {
       modalOpenEditBuyer: false,
       buyer: null,
       business: null,
-      buyerListItem: null,
-      inputSearch: ''
+      inputSearchBuyer: '',
+      inputSearchBusiness: ''
     }
   }
 
   async componentWillReceiveProps (nextProps) {
     if (
-      this.props.buyerUpdated !== nextProps.buyerUpdated &&
-      nextProps.buyerUpdated
+      this.props.isUpdatedBuyer !== nextProps.isUpdatedBuyer &&
+      nextProps.isUpdatedBuyer
     ) {
-      await this._toggleModal({})
-      this.props.getBuyers()
+      await this._toggleModal('modalOpenEditBuyer')
+      this.setState({
+        buyer: nextProps.buyerUpdated
+      })
     }
   }
 
   componentDidMount () {
-    this.props.getBuyers()
-    this.props.getBusinesses()
-  }
-
-  componentWillMount () {
     this.props.getBuyers()
     this.props.getBusinesses()
   }
@@ -85,13 +82,23 @@ class ClientManagerList extends Component {
     this.props.enquiryBusiness()
   }
 
-  _onSearch = (e, { value }) => {
+  _onSearchBuyer = (e, { value }) => {
     if (this.timer) clearTimeout(this.timer)
 
     this.setState({
-      inputSearch: value
+      inputSearchBuyer: value,
+      buyer: null
     })
     this.timer = setTimeout(() => this.props.getBuyers(value), 1000)
+  }
+
+  _onSearchBusiness = (e, { value }) => {
+    if (this.timer) clearTimeout(this.timer)
+
+    this.setState({
+      inputSearchBusiness: value,
+      business: null
+    })
     this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
   }
 
@@ -109,7 +116,7 @@ class ClientManagerList extends Component {
       listBusinessList,
       isLoadingBuyerList,
       isLoadingBusinessList,
-      match
+      history
     } = this.props
     return (
       <Wrapper>
@@ -145,8 +152,8 @@ class ClientManagerList extends Component {
                 icon="search"
                 loading={isLoadingBuyerList}
                 placeholder="Find buyers..."
-                onChange={this._onSearch}
-                value={this.state.inputSearch}
+                onChange={this._onSearchBuyer}
+                value={this.state.inputSearchBuyer}
               />
             </Grid.Column>
             <Grid.Column floated="right">
@@ -172,8 +179,8 @@ class ClientManagerList extends Component {
                 icon="search"
                 loading={isLoadingBusinessList}
                 placeholder="Find businesses..."
-                onChange={this._onSearch}
-                value={this.state.inputSearch}
+                onChange={this._onSearchBusiness}
+                value={this.state.inputSearchBusiness}
               />
             </Grid.Column>
             <Grid.Column>
@@ -361,9 +368,7 @@ class ClientManagerList extends Component {
                         <Table.HeaderCell>BusinessID</Table.HeaderCell>
                         <Table.Cell
                           onClick={() =>
-                            history.push(
-                              `${match.path}/${this.state.business.id}`
-                            )
+                            history.push(`business/${this.state.business.id}`)
                           }
                           selectable
                         >
@@ -462,19 +467,19 @@ class ClientManagerList extends Component {
           <Table size="small" compact color="blue" celled inverted selectable>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Phone</Table.HeaderCell>
-                <Table.HeaderCell>Email</Table.HeaderCell>
+                <Table.HeaderCell>ID</Table.HeaderCell>
+                <Table.HeaderCell>Business</Table.HeaderCell>
+                <Table.HeaderCell>Log</Table.HeaderCell>
+                <Table.HeaderCell>Date</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {listBuyerList.map(buyer => (
-                <Table.Row active key={buyer.id}>
-                  <Table.Cell>{buyer.firstName}</Table.Cell>
-                  <Table.Cell>{buyer.telephone1}</Table.Cell>
-                  <Table.Cell>{buyer.email}</Table.Cell>
-                </Table.Row>
-              ))}
+              <Table.Row>
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+              </Table.Row>
             </Table.Body>
           </Table>
         </Grid.Column>
@@ -485,7 +490,6 @@ class ClientManagerList extends Component {
 
 ClientManagerList.propTypes = {
   history: PropTypes.object,
-  match: PropTypes.object,
   openModal: PropTypes.func,
   enquiryBusiness: PropTypes.func,
   listBuyerList: PropTypes.array,
@@ -493,8 +497,9 @@ ClientManagerList.propTypes = {
   getBuyers: PropTypes.func,
   isLoadingBuyerList: PropTypes.bool,
   isLoadingBusinessList: PropTypes.bool,
-  buyerUpdated: PropTypes.bool,
-  getBusinesses: PropTypes.func
+  isUpdatedBuyer: PropTypes.bool,
+  getBusinesses: PropTypes.func,
+  buyerUpdated: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -502,7 +507,8 @@ const mapStateToProps = state => ({
   isLoadingBusinessList: state.business.getAll.isLoading,
   listBuyerList: state.buyer.list.array,
   listBusinessList: state.business.getAll.array,
-  buyerUpdated: state.buyer.update.isUpdated
+  isUpdatedBuyer: state.buyer.update.isUpdated,
+  buyerUpdated: state.buyer.update.buyer
 })
 
 const mapDispatchToProps = dispatch =>

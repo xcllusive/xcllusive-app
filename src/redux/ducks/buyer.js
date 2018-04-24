@@ -25,7 +25,8 @@ const initialState = {
   update: {
     isLoading: false,
     isUpdated: false,
-    error: null
+    error: null,
+    buyer: {}
   },
   list: {
     array: [],
@@ -71,6 +72,7 @@ export default function reducer (state = initialState, action) {
         update: {
           ...state.update,
           isLoading: action.payload,
+          isUpdated: false,
           error: null
         }
       }
@@ -81,7 +83,8 @@ export default function reducer (state = initialState, action) {
           ...state.update,
           isLoading: false,
           isUpdated: true,
-          error: null
+          error: null,
+          buyer: action.payload
         }
       }
     case Types.UPDATE_BUYER_FAILURE:
@@ -159,7 +162,8 @@ export const updateBuyer = buyer => async dispatch => {
   try {
     await update(buyer)
     dispatch({
-      type: Types.UPDATE_BUYER_SUCCESS
+      type: Types.UPDATE_BUYER_SUCCESS,
+      payload: buyer
     })
   } catch (error) {
     dispatch({

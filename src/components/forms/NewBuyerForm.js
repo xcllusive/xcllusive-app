@@ -30,7 +30,7 @@ class NewBuyerForm extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  };
+  }
 
   render () {
     const { state } = this.state
@@ -202,20 +202,20 @@ class NewBuyerForm extends Component {
                   required
                   label="Source"
                   options={sourceOptions}
-                  name="businessSource"
-                  autoComplete="businessSource"
+                  name="sourceId"
+                  autoComplete="sourceId"
                   loading={dropDownLoading}
                   disabled={dropDownLoading}
-                  value={values.businessSource}
+                  value={values.sourceId}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessSource &&
-                  touched.businessSource && (
+                {errors.sourceId &&
+                  touched.sourceId && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.businessSource}
+                    content={errors.sourceId}
                   />
                 )}
               </Form.Field>
@@ -302,7 +302,7 @@ const mapPropsToValues = () => ({
   firstName: '',
   surname: '',
   email: '',
-  businessSource: '',
+  sourceId: '',
   streetName: '',
   suburb: '',
   state: '',
@@ -322,7 +322,7 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  businessSource: Yup.number().required('Source is required.'),
+  sourceId: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.number().typeError('You must type only number here!'),
   priceFrom: Yup.number().typeError('You must type only number here!'),
