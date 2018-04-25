@@ -6,10 +6,11 @@ export const get = id => {
   })
 }
 
-export const getAll = search => {
+export const getAll = (search, typeId) => {
   const params = {}
 
   if (search && search.length > 0) params.search = search
+  if (typeId && typeId > 0) params.typeId = typeId
   return request({
     url: '/business/',
     params
@@ -43,7 +44,7 @@ export const reassignBusiness = options => {
 export const getBusinessRegister = id => {
   return request({
     url: '/business-register',
-    params: {businessRegister: id}
+    params: { businessRegister: id }
   })
 }
 

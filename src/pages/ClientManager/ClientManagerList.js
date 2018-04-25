@@ -53,7 +53,7 @@ class ClientManagerList extends Component {
 
   componentDidMount () {
     this.props.getBuyers()
-    this.props.getBusinesses()
+    this.props.getBusinesses(false, 1)
   }
 
   _renderBuyer = buyer => {

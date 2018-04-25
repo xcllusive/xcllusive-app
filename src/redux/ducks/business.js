@@ -365,13 +365,16 @@ export const cleanBusiness = () => dispatch =>
     type: Types.CLEAN_BUSINESS
   })
 
-export const getBusinesses = (search = false) => async dispatch => {
+export const getBusinesses = (
+  search = false,
+  typeId = false
+) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_LOADING,
     payload: true
   })
   try {
-    const businesses = await getAll(search)
+    const businesses = await getAll(search, typeId)
     dispatch({
       type: Types.GET_BUSINESSES_SUCCESS,
       payload: businesses
