@@ -99,7 +99,7 @@ class ClientManagerList extends Component {
       inputSearchBusiness: value,
       business: null
     })
-    this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
+    this.timer = setTimeout(() => this.props.getBusinesses(value, 1), 1000)
   }
 
   _toggleModal = (modal, buyer) => {
@@ -352,8 +352,8 @@ class ClientManagerList extends Component {
                         >
                           <Table.Cell>{`BS${business.id}`}</Table.Cell>
                           <Table.Cell>{business.businessName}</Table.Cell>
-                          <Table.Cell />
-                          <Table.Cell />
+                          <Table.Cell>{business.listedPrice}</Table.Cell>
+                          <Table.Cell>{business.description}</Table.Cell>
                         </Table.Row>
                       ))}
                     </Table.Body>

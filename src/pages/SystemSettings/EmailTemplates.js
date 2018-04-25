@@ -160,13 +160,15 @@ class EmailTemplates extends Component {
           <Label color="grey" tag>
             ((email))
           </Label>
-          <ReactQuill
-            value={this.state.text}
-            onChange={this._handleChange}
-            style={{ height: '50vh' }}
-            modules={this.state.modules}
-            formats={this.state.formats}
-          />
+          <Form.Field>
+            <ReactQuill
+              value={this.state.text}
+              onChange={this._handleChange}
+              style={{ height: '50vh' }}
+              modules={this.state.modules}
+              formats={this.state.formats}
+            />
+          </Form.Field>
           <Form.Button floated="right" type="submit" color="red">
             <Icon name="save" />
             Save
