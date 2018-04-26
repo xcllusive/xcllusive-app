@@ -6,9 +6,15 @@ import { closeModal } from '../../redux/ducks/modal'
 
 const ModalUploadFile = ({
   onConfirm,
+<<<<<<< HEAD
   closeModal,
   options,
   handleFileUpload
+=======
+  handleFileUpload,
+  closeModal,
+  options
+>>>>>>> 74dfdcdddda83405102f310495da2c014795d911
 }) => {
   const handleConfirm = isConfirmed => {
     closeModal()
@@ -22,13 +28,26 @@ const ModalUploadFile = ({
         <input type="file" onChange={handleFileUpload} />
       </Modal.Content>
       <Modal.Actions>
+<<<<<<< HEAD
         <Button negative content="No" onClick={() => handleConfirm(false)} />
+=======
+        <Button
+          negative
+          content="Cancel"
+          onClick={() => handleConfirm(false)}
+        />
+>>>>>>> 74dfdcdddda83405102f310495da2c014795d911
         <Button
           positive
           icon="checkmark"
           labelPosition="right"
+<<<<<<< HEAD
           content="Yes"
           onClick={() => handleConfirm(options)}
+=======
+          content="Upload"
+          onClick={() => handleConfirm(true)}
+>>>>>>> 74dfdcdddda83405102f310495da2c014795d911
         />
       </Modal.Actions>
     </Modal>
@@ -41,7 +60,11 @@ ModalUploadFile.propTypes = {
   options: PropTypes.shape({
     title: PropTypes.string.isRequired
   }).isRequired,
+<<<<<<< HEAD
   handleFileUpload: PropTypes.func
+=======
+  handleFileUpload: PropTypes.func.isRequired
+>>>>>>> 74dfdcdddda83405102f310495da2c014795d911
 }
 
 export default connect(null, { closeModal })(ModalUploadFile)
