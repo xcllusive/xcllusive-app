@@ -8,6 +8,7 @@ import business from './ducks/business'
 import businessRegister from './ducks/businessRegister'
 import buyer from './ducks/buyer'
 import clientManager from './ducks/clientManager'
+import buyerLog from './ducks/buyerLog'
 
 export default combineReducers({
   modal,
@@ -17,5 +18,6 @@ export default combineReducers({
   businessRegister,
   buyer,
   clientManager,
+  buyerLog,
   router: routerReducer
 })
