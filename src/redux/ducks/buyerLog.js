@@ -40,7 +40,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_LOG_FAILURE:
+    case Types.GET_BUYER_LOG_FAILURE:
       return {
         ...state,
         get: {
@@ -73,7 +73,7 @@ export const getLog = id => async dispatch => {
     })
   } catch (error) {
     dispatch({
-      type: Types.GET_LOG_FAILURE,
+      type: Types.GET_BUYER_LOG_FAILURE,
       payload: error
     })
     toast.error(error)
