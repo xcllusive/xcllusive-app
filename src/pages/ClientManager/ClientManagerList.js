@@ -21,6 +21,7 @@ import EditBuyerForm from '../../components/forms/EditBuyerForm'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyers } from '../../redux/ducks/buyer'
 import { getBusinesses } from '../../redux/ducks/business'
+import { getLog } from '../../redux/ducks/buyerLog'
 import enquiryBusiness from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -54,6 +55,7 @@ class ClientManagerList extends Component {
   componentDidMount () {
     this.props.getBuyers()
     this.props.getBusinesses(false, 1)
+    //  this.props.getLog()
   }
 
   _renderBuyer = buyer => {
@@ -109,6 +111,27 @@ class ClientManagerList extends Component {
     }))
   }
 
+  _openTest = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_UPLOAD_FILE, {
+      options: {
+        title: 'Upload CA'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          console.log(this.state)
+          // this.props.actions.uploadRequest({
+          //   file: this.state.file,
+          //   name: 'Awesome Cat Pic'
+          // })
+        }
+      },
+      handleFileUpload: e => {
+        const file = e.target.files[0]
+        this.setState({ file })
+      }
+    })
+  }
+
   render () {
     const { modalOpenBuyer, modalOpenBusiness, modalOpenEditBuyer } = this.state
     const {
@@ -116,7 +139,9 @@ class ClientManagerList extends Component {
       listBusinessList,
       isLoadingBuyerList,
       isLoadingBusinessList,
-      history
+      history,
+      isLoadingBuyerLog,
+      listBuyerLogList
     } = this.props
     return (
       <Wrapper>
@@ -297,15 +322,27 @@ class ClientManagerList extends Component {
                       <Icon name="folder open outline" />
                       Open CA
                     </Button>
-                    <Button size="small" color="blue">
+                    <Button
+                      size="small"
+                      color="blue"
+                      onClick={() => this._openTest()}
+                    >
                       <Icon name="mail" />
                       CA Received
                     </Button>
-                    <Button size="small" color="blue">
+                    <Button
+                      size="small"
+                      color="blue"
+                      disabled={!this.state.business}
+                    >
                       <Icon name="send" />
                       Send CA
                     </Button>
-                    <Button size="small" color="blue">
+                    <Button
+                      size="small"
+                      color="blue"
+                      disabled={!this.state.business}
+                    >
                       <Icon name="send" />
                       Send IM
                     </Button>
@@ -453,35 +490,58 @@ class ClientManagerList extends Component {
         <br />
         <br />
         <Grid.Column floated="left" width={2}>
-          <Button size="small" color="blue">
-            <Icon name="talk" />
-            Show Log
-          </Button>
-          <Button size="small" color="green">
-            <Icon name="edit" />
-            Edit Log
-          </Button>
+          {this.state.buyer ? (
+            <Fragment>
+              <Button size="small" color="blue">
+                <Icon name="talk" />
+                Show Log
+              </Button>
+              <Button size="small" color="green">
+                <Icon name="edit" />
+                Edit Log
+              </Button>
+            </Fragment>
+          ) : null}
         </Grid.Column>
-        <br />
         <Grid.Column>
-          <Table size="small" compact color="blue" celled inverted selectable>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>ID</Table.HeaderCell>
-                <Table.HeaderCell>Business</Table.HeaderCell>
-                <Table.HeaderCell>Log</Table.HeaderCell>
-                <Table.HeaderCell>Date</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              <Table.Row>
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-              </Table.Row>
-            </Table.Body>
-          </Table>
+          {this.state.buyer ? (
+            <Fragment>
+              <Dimmer inverted active={isLoadingBuyerLog}>
+                <Loader>Loading</Loader>
+              </Dimmer>
+              <Table
+                size="small"
+                compact
+                color="blue"
+                celled
+                inverted
+                selectable
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Business</Table.HeaderCell>
+                    <Table.HeaderCell>Log</Table.HeaderCell>
+                    <Table.HeaderCell>Date</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {listBuyerLogList.map(buyerLog => (
+                    <Table.Row
+                      active
+                      key={buyerLog.buyerID}
+                      onClick={() => this._renderBusiness(buyerLog.businessID)}
+                    >
+                      <Table.Cell>{`BS${buyerLog.buyerID}`}</Table.Cell>
+                      <Table.Cell>{buyerLog.businessID}</Table.Cell>
+                      <Table.Cell>{buyerLog.text}</Table.Cell>
+                      <Table.Cell>{buyerLog.followUp}</Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Fragment>
+          ) : null}
         </Grid.Column>
       </Wrapper>
     )
@@ -499,7 +559,10 @@ ClientManagerList.propTypes = {
   isLoadingBusinessList: PropTypes.bool,
   isUpdatedBuyer: PropTypes.bool,
   getBusinesses: PropTypes.func,
-  buyerUpdated: PropTypes.object
+  buyerUpdated: PropTypes.object,
+  isLoadingBuyerLog: PropTypes.bool,
+  getLog: PropTypes.func,
+  listBuyerLogList: PropTypes.array
 }
 
 const mapStateToProps = state => ({
@@ -508,7 +571,9 @@ const mapStateToProps = state => ({
   listBuyerList: state.buyer.getAll.array,
   listBusinessList: state.business.getAll.array,
   isUpdatedBuyer: state.buyer.update.isUpdated,
-  buyerUpdated: state.buyer.update.buyer
+  buyerUpdated: state.buyer.update.buyer,
+  isLoadingBuyerLog: state.buyerLog.get.isLoading,
+  listBuyerLogList: state.buyerLog.get.array
 })
 
 const mapDispatchToProps = dispatch =>
@@ -517,7 +582,8 @@ const mapDispatchToProps = dispatch =>
       openModal,
       enquiryBusiness,
       getBuyers,
-      getBusinesses
+      getBusinesses,
+      getLog
     },
     dispatch
   )
