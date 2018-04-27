@@ -22,7 +22,7 @@ import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyers } from '../../redux/ducks/buyer'
 import { getBusinesses } from '../../redux/ducks/business'
 import { getLog } from '../../redux/ducks/buyerLog'
-import enquiryBusiness from '../../redux/ducks/clientManager'
+import { enquiryBusiness, sendCa } from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -75,6 +75,26 @@ class ClientManagerList extends Component {
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           this._enquiryBusiness() //  buyerID, businessID
+        }
+      }
+    })
+  }
+
+  _sendCA = () => {
+    this.props.sendCa(this.state.buyer.id, this.state.business.id)
+  }
+
+  _toggleModalSendCA = caSent => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Send CA',
+        text: caSent
+          ? 'CA already sent. Do you want to send again?'
+          : 'Are you sure you want to send the CA?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this._sendCA() //  buyerID, businessID
         }
       }
     })
@@ -334,6 +354,9 @@ class ClientManagerList extends Component {
                       size="small"
                       color="blue"
                       disabled={!this.state.business}
+                      onClick={() =>
+                        this._toggleModalSendCA(this.state.buyer.caSent)
+                      }
                     >
                       <Icon name="send" />
                       Send CA
@@ -562,7 +585,8 @@ ClientManagerList.propTypes = {
   buyerUpdated: PropTypes.object,
   isLoadingBuyerLog: PropTypes.bool,
   getLog: PropTypes.func,
-  listBuyerLogList: PropTypes.array
+  listBuyerLogList: PropTypes.array,
+  sendCa: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -583,7 +607,8 @@ const mapDispatchToProps = dispatch =>
       enquiryBusiness,
       getBuyers,
       getBusinesses,
-      getLog
+      getLog,
+      sendCa
     },
     dispatch
   )
