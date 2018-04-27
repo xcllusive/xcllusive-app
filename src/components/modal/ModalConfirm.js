@@ -4,29 +4,33 @@ import { Modal, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 
-const ModalConfirmDelete = ({ onConfirm, closeModal, options }) => {
+const ModalConfirm = ({ onConfirm, closeModal, options }) => {
   const handleConfirm = isConfirmed => {
     closeModal()
     onConfirm(isConfirmed)
   }
 
   return (
-    <Modal open size='tiny' onClose={() => handleConfirm(false)}>
-      <Modal.Header>
-        { options.title }
-      </Modal.Header>
+    <Modal open size="tiny" onClose={() => handleConfirm(false)}>
+      <Modal.Header>{options.title}</Modal.Header>
       <Modal.Content>
-        <p>{ options.text }</p>
+        <p>{options.text}</p>
       </Modal.Content>
       <Modal.Actions>
-        <Button negative content='No' onClick={() => handleConfirm(false)} />
-        <Button positive icon='checkmark' labelPosition='right' content='Yes' onClick={() => handleConfirm(options)} />
+        <Button negative content="No" onClick={() => handleConfirm(false)} />
+        <Button
+          positive
+          icon="checkmark"
+          labelPosition="right"
+          content="Yes"
+          onClick={() => handleConfirm(options)}
+        />
       </Modal.Actions>
     </Modal>
   )
 }
 
-ModalConfirmDelete.propTypes = {
+ModalConfirm.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   options: PropTypes.shape({
@@ -35,4 +39,4 @@ ModalConfirmDelete.propTypes = {
   }).isRequired
 }
 
-export default connect(null, { closeModal })(ModalConfirmDelete)
+export default connect(null, { closeModal })(ModalConfirm)

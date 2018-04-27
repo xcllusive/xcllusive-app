@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Message, Icon } from 'semantic-ui-react'
+import { Form, Label, Message, Icon, Grid } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -142,37 +142,47 @@ class EmailTemplates extends Component {
               use. Ex: Hi ((buyerName)).
             </Message.Header>
           </Message>
-          <Label color="teal" tag>
-            ((buyerName))
-          </Label>
-          <Label color="grey" tag>
-            ((businessName))
-          </Label>
-          <Label color="teal" tag>
-            ((businessID))
-          </Label>
-          <Label color="grey" tag>
-            ((buyerID))
-          </Label>
-          <Label color="teal" tag>
-            ((telephone))
-          </Label>
-          <Label color="grey" tag>
-            ((email))
-          </Label>
-          <Form.Field>
-            <ReactQuill
-              value={this.state.text}
-              onChange={this._handleChange}
-              style={{ height: '50vh' }}
-              modules={this.state.modules}
-              formats={this.state.formats}
-            />
-          </Form.Field>
-          <Form.Button floated="right" type="submit" color="red">
-            <Icon name="save" />
-            Save
-          </Form.Button>
+          <Form.Group>
+            <Label color="teal" tag>
+              ((buyerName))
+            </Label>
+            <Label color="grey" tag>
+              ((businessName))
+            </Label>
+            <Label color="teal" tag>
+              ((businessID))
+            </Label>
+            <Label color="grey" tag>
+              ((buyerID))
+            </Label>
+            <Label color="teal" tag>
+              ((telephone))
+            </Label>
+            <Label color="grey" tag>
+              ((email))
+            </Label>
+          </Form.Group>
+          <Grid padded="horizontally">
+            <Grid.Row columns={1}>
+              <Grid.Column floated="left" width={14}>
+                <Form.Field>
+                  <ReactQuill
+                    value={this.state.text}
+                    onChange={this._handleChange}
+                    style={{ height: '50vh' }}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
+                  />
+                </Form.Field>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <Grid.Column>
+            <Form.Button floated="right" type="submit" color="red">
+              <Icon name="save" />
+              Save
+            </Form.Button>
+          </Grid.Column>
         </Form>
       </Wrapper>
     )

@@ -67,7 +67,7 @@ class ClientManagerList extends Component {
   }
 
   _toggleModalConfirm = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM_DELETE, {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Enquiry Business',
         text: 'Are you sure you want to enquiry this business?'
