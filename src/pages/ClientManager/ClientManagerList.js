@@ -80,11 +80,11 @@ class ClientManagerList extends Component {
     })
   }
 
-  _sendCA = () => {
+  _sendCa = () => {
     this.props.sendCa(this.state.buyer.id, this.state.business.id)
   }
 
-  _toggleModalSendCA = caSent => {
+  _toggleModalSendCa = caSent => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Send CA',
@@ -94,7 +94,25 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._sendCA() //  buyerID, businessID
+          this._sendCa()
+        }
+      }
+    })
+  }
+
+  _sendIm = () => {
+    // this.props.sendIM(this.state.buyer.id, this.state.business.id)
+  }
+
+  _toggleModalSendIm = caSent => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Send CA',
+        text: 'Are you sure you want to send the IM?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this._sendIm()
         }
       }
     })
@@ -161,7 +179,8 @@ class ClientManagerList extends Component {
       isLoadingBusinessList,
       history,
       isLoadingBuyerLog,
-      listBuyerLogList
+      listBuyerLogList,
+      isLoadingSendCa
     } = this.props
     return (
       <Wrapper>
@@ -353,9 +372,10 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="blue"
-                      disabled={!this.state.business}
+                      disabled={!this.state.business || isLoadingSendCa}
+                      loading={isLoadingSendCa}
                       onClick={() =>
-                        this._toggleModalSendCA(this.state.buyer.caSent)
+                        this._toggleModalSendCa(this.state.buyer.caSent)
                       }
                     >
                       <Icon name="send" />
@@ -364,6 +384,7 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="blue"
+                      onClick={() => this._toggleModalSendIm()}
                       disabled={!this.state.business}
                     >
                       <Icon name="send" />
@@ -586,7 +607,8 @@ ClientManagerList.propTypes = {
   isLoadingBuyerLog: PropTypes.bool,
   getLog: PropTypes.func,
   listBuyerLogList: PropTypes.array,
-  sendCa: PropTypes.func
+  sendCa: PropTypes.func,
+  isLoadingSendCa: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
@@ -597,7 +619,8 @@ const mapStateToProps = state => ({
   isUpdatedBuyer: state.buyer.update.isUpdated,
   buyerUpdated: state.buyer.update.buyer,
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
-  listBuyerLogList: state.buyerLog.get.array
+  listBuyerLogList: state.buyerLog.get.array,
+  isLoadingSendCa: state.clientManager.sentCa.isLoading
 })
 
 const mapDispatchToProps = dispatch =>

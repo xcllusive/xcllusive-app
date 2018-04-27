@@ -128,3 +128,24 @@ export const sendCa = (buyerId, businessId) => async dispatch => {
     toast.error(error)
   }
 }
+
+// NEEDS TO FINISH
+export const sendIm = (buyerId, businessId) => async dispatch => {
+  dispatch({
+    type: Types.SEND_CA_LOADING,
+    payload: true
+  })
+  try {
+    const response = await send(buyerId, businessId)
+    dispatch({
+      type: Types.SEND_CA_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_CA_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
