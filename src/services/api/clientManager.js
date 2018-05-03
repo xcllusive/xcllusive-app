@@ -1,6 +1,14 @@
 import request from './'
 
-export const enquiry = buyer => console.log('enquiry')
+export const enquiryBusiness = (buyerId, businessId) =>
+  request({
+    method: 'post',
+    url: '/buyer/enquiry-business',
+    data: {
+      buyerId,
+      businessId
+    }
+  })
 
 export const sendCa = (buyerId, businessId) =>
   request({
@@ -35,3 +43,23 @@ export const caReceived = (caFile, buyerId, businessId) => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const emailBuyer = (buyerId, businessId) =>
+  request({
+    method: 'post',
+    url: '/buyer/email-buyer',
+    data: {
+      buyerId,
+      businessId
+    }
+  })
+
+export const requestOwnersApproval = (buyerId, businessId) =>
+  request({
+    method: 'post',
+    url: '/buyer/requestOwners-approval',
+    data: {
+      buyerId,
+      businessId
+    }
+  })

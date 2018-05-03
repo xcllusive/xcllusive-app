@@ -26,7 +26,9 @@ import {
   enquiryBusiness,
   sendCa,
   sendIm,
-  caReceived
+  caReceived,
+  emailBuyer,
+  requestOwnersApproval
 } from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -71,7 +73,25 @@ class ClientManagerList extends Component {
     this.setState({ business })
   }
 
-  _toggleModalConfirm = () => {
+  _toggleModalEmailBuyer = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Email Buyer',
+        text: 'Are you sure you want to send an email to buyer?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this._emailBuyer()
+        }
+      }
+    })
+  }
+
+  _emailBuyer = () => {
+    this.props.emailBuyer(this.state.buyer.id, this.state.business.id)
+  }
+
+  _toggleModalEnquiryBusiness = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Enquiry Business',
@@ -79,7 +99,28 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._enquiryBusiness() //  buyerID, businessID
+          this._enquiryBusiness()
+        }
+      }
+    })
+  }
+
+  _requestOwnersApproval = () => {
+    this.props.requestOwnersApproval(
+      this.state.buyer.id,
+      this.state.business.id
+    )
+  }
+
+  _toggleModalRequestOwnersApproval = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Request Owners Approval',
+        text: 'Are you sure you want request owners for approval?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this._requestOwnersApproval()
         }
       }
     })
@@ -124,7 +165,7 @@ class ClientManagerList extends Component {
   }
 
   _enquiryBusiness = () => {
-    this.props.enquiryBusiness()
+    this.props.enquiryBusiness(this.state.buyer.id, this.state.business.id)
   }
 
   _onSearchBuyer = (e, { value }) => {
@@ -207,7 +248,9 @@ class ClientManagerList extends Component {
   }
 
   _openFile = url => {
-    window.open(url, '_blank')
+    if (url) {
+      window.open(url, '_blank')
+    }
   }
 
   render () {
@@ -222,7 +265,10 @@ class ClientManagerList extends Component {
       listBuyerLogList,
       isLoadingSendCa,
       isLoadingSendIm,
-      isLoadingCaReceived
+      isLoadingCaReceived,
+      isLoadingEmailBuyer,
+      isLoadingEnquiryBusiness,
+      isLoadingRequestOwnersApproval
     } = this.props
     return (
       <Wrapper>
@@ -557,20 +603,43 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="grey"
-                      onClick={() => this._toggleModalConfirm()}
+                      onClick={() => this._toggleModalEnquiryBusiness()}
+                      disabled={!this.state.buyer || isLoadingEnquiryBusiness}
+                      loading={isLoadingEnquiryBusiness}
                     >
                       <Icon name="write" />
                       Enquiry Business
                     </Button>
-                    <Button size="small" color="blue">
+                    <Button
+                      size="small"
+                      color="blue"
+                      onClick={() => this._toggleModalRequestOwnersApproval()}
+                      disabled={
+                        !this.state.buyer ||
+                        isLoadingRequestOwnersApproval ||
+                        (!this.state.buyer.caReceived &&
+                          !this.state.business.notifyOwner)
+                      }
+                      loading={isLoadingRequestOwnersApproval}
+                    >
                       <Icon name="mail" />
                       Request Owners Approval
                     </Button>
-                    <Button size="small" color="blue">
+                    <Button
+                      size="small"
+                      color="blue"
+                      disabled={!this.state.buyer}
+                    >
                       <Icon name="send" />
                       Send Enquiry to Owner
                     </Button>
-                    <Button size="small" color="blue">
+                    <Button
+                      size="small"
+                      color="blue"
+                      disabled={!this.state.buyer || isLoadingEmailBuyer}
+                      onClick={() => this._toggleModalEmailBuyer()}
+                      loading={isLoadingEmailBuyer}
+                    >
                       <Icon name="mail" />
                       Email Buyer
                     </Button>
@@ -652,6 +721,7 @@ class ClientManagerList extends Component {
 ClientManagerList.propTypes = {
   history: PropTypes.object,
   openModal: PropTypes.func,
+  isLoadingEnquiryBusiness: PropTypes.bool,
   enquiryBusiness: PropTypes.func,
   listBuyerList: PropTypes.array,
   listBusinessList: PropTypes.array,
@@ -669,7 +739,11 @@ ClientManagerList.propTypes = {
   isLoadingSendIm: PropTypes.bool,
   sendIm: PropTypes.func,
   isLoadingCaReceived: PropTypes.bool,
-  caReceived: PropTypes.func
+  caReceived: PropTypes.func,
+  isLoadingEmailBuyer: PropTypes.bool,
+  emailBuyer: PropTypes.func,
+  isLoadingRequestOwnersApproval: PropTypes.bool,
+  requestOwnersApproval: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -683,7 +757,11 @@ const mapStateToProps = state => ({
   listBuyerLogList: state.buyerLog.get.array,
   isLoadingSendCa: state.clientManager.sentCa.isLoading,
   isLoadingSendIm: state.clientManager.sentIm.isLoading,
-  isLoadingCaReceived: state.clientManager.caReceived.isLoading
+  isLoadingCaReceived: state.clientManager.caReceived.isLoading,
+  isLoadingEmailBuyer: state.clientManager.emailBuyer.isLoading,
+  isLoadingEnquiryBusiness: state.clientManager.enquired.isLoading,
+  isLoadingRequestOwnersApproval:
+    state.clientManager.requestOwnersApproval.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -696,7 +774,9 @@ const mapDispatchToProps = dispatch =>
       getLog,
       sendCa,
       sendIm,
-      caReceived
+      caReceived,
+      emailBuyer,
+      requestOwnersApproval
     },
     dispatch
   )

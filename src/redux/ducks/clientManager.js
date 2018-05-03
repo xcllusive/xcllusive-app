@@ -1,10 +1,12 @@
 import { toast } from 'react-toastify'
 
 import {
-  enquiry,
+  enquiryBusiness as enquiryBusinessAPI,
   sendCa as sendCaAPI,
   sendIm as sendImAPI,
-  caReceived as caReceivedAPI
+  caReceived as caReceivedAPI,
+  emailBuyer as emailBuyerAPI,
+  requestOwnersApproval as requestOwnersApprovalAPI
 } from '../../services/api/clientManager'
 
 export const Types = {
@@ -19,7 +21,13 @@ export const Types = {
   SEND_IM_FAILURE: 'SEND_IM_FAILURE',
   CA_RECEIVED_LOADING: 'CA_RECEIVED_LOADING',
   CA_RECEIVED_SUCCESS: 'CA_RECEIVED_SUCCESS',
-  CA_RECEIVED_FAILURE: 'CA_RECEIVED_FAILURE'
+  CA_RECEIVED_FAILURE: 'CA_RECEIVED_FAILURE',
+  EMAIL_BUYER_LOADING: 'EMAIL_BUYER_LOADING',
+  EMAIL_BUYER_SUCCESS: 'EMAIL_BUYER_SUCCESS',
+  EMAIL_BUYER_FAILURE: 'EMAIL_BUYER_FAILURE',
+  REQUEST_OWNERS_APPROVAL_LOADING: 'REQUEST_OWNERS_APPROVAL_LOADING',
+  REQUEST_OWNERS_APPROVAL_SUCCESS: 'REQUEST_OWNERS_APPROVAL_SUCCESS',
+  REQUEST_OWNERS_APPROVAL_FAILURE: 'REQUEST_OWNERS_APPROVAL_FAILURE'
 }
 
 // Reducer
@@ -43,6 +51,16 @@ const initialState = {
   caReceived: {
     isLoading: false,
     isReceived: false,
+    error: null
+  },
+  emailBuyer: {
+    isLoading: false,
+    isSent: false,
+    error: null
+  },
+  requestOwnersApproval: {
+    isLoading: false,
+    isSent: false,
     error: null
   }
 }
@@ -161,6 +179,62 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.EMAIL_BUYER_LOADING:
+      return {
+        ...state,
+        emailBuyer: {
+          ...state.emailBuyer,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.EMAIL_BUYER_SUCCESS:
+      return {
+        ...state,
+        emailBuyer: {
+          ...state.emailBuyer,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.EMAIL_BUYER_FAILURE:
+      return {
+        ...state,
+        emailBuyer: {
+          ...state.emailBuyer,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.REQUEST_OWNERS_APPROVAL_LOADING:
+      return {
+        ...state,
+        requestOwnersApproval: {
+          ...state.requestOwnersApproval,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.REQUEST_OWNERS_APPROVAL_SUCCESS:
+      return {
+        ...state,
+        requestOwnersApproval: {
+          ...state.requestOwnersApproval,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.REQUEST_OWNERS_APPROVAL_FAILURE:
+      return {
+        ...state,
+        requestOwnersApproval: {
+          ...state.requestOwnersApproval,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -172,7 +246,7 @@ export const enquiryBusiness = enquiryBusiness => async dispatch => {
     payload: true
   })
   try {
-    const response = await enquiry(enquiryBusiness)
+    const response = await enquiryBusinessAPI(enquiryBusiness)
     dispatch({
       type: Types.ENQUIRY_BUSINESS_SUCCESS
     })
@@ -240,6 +314,49 @@ export const caReceived = (caFile, buyerId, businessId) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.CA_RECEIVED_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const emailBuyer = (buyerId, businessId) => async dispatch => {
+  dispatch({
+    type: Types.EMAIL_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await emailBuyerAPI(buyerId, businessId)
+    dispatch({
+      type: Types.EMAIL_BUYER_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.EMAIL_BUYER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const requestOwnersApproval = (
+  buyerId,
+  businessId
+) => async dispatch => {
+  dispatch({
+    type: Types.REQUEST_OWNERS_APPROVAL_LOADING,
+    payload: true
+  })
+  try {
+    const response = await requestOwnersApprovalAPI(buyerId, businessId)
+    dispatch({
+      type: Types.REQUEST_OWNERS_APPROVAL_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.REQUEST_OWNERS_APPROVAL_FAILURE,
       payload: error
     })
     toast.error(error)
