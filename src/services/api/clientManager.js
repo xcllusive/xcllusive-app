@@ -3,7 +3,7 @@ import request from './'
 export const enquiryBusiness = (buyerId, businessId) =>
   request({
     method: 'post',
-    url: '/buyer/enquiry-business',
+    url: '/business/enquiry-business',
     data: {
       buyerId,
       businessId
@@ -47,7 +47,7 @@ export const caReceived = (caFile, buyerId, businessId) => {
 export const emailBuyer = (buyerId, businessId) =>
   request({
     method: 'post',
-    url: '/buyer/email-buyer',
+    url: '/business/email-to-buyer',
     data: {
       buyerId,
       businessId
@@ -57,7 +57,7 @@ export const emailBuyer = (buyerId, businessId) =>
 export const requestOwnersApproval = (buyerId, businessId) =>
   request({
     method: 'post',
-    url: '/buyer/requestOwners-approval',
+    url: '/business/requestOwners-approval',
     data: {
       buyerId,
       businessId
