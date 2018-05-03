@@ -22,7 +22,12 @@ import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyers } from '../../redux/ducks/buyer'
 import { getBusinesses } from '../../redux/ducks/business'
 import { getLog } from '../../redux/ducks/buyerLog'
-import { enquiryBusiness, sendCa } from '../../redux/ducks/clientManager'
+import {
+  enquiryBusiness,
+  sendCa,
+  sendIm,
+  caReceived
+} from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -101,13 +106,13 @@ class ClientManagerList extends Component {
   }
 
   _sendIm = () => {
-    // this.props.sendIM(this.state.buyer.id, this.state.business.id)
+    this.props.sendIm(this.state.buyer.id, this.state.business.id)
   }
 
   _toggleModalSendIm = caSent => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
-        title: 'Send CA',
+        title: 'Send IM',
         text: 'Are you sure you want to send the IM?'
       },
       onConfirm: isConfirmed => {
@@ -149,25 +154,60 @@ class ClientManagerList extends Component {
     }))
   }
 
-  _openTest = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_UPLOAD_FILE, {
-      options: {
-        title: 'Upload CA'
-      },
-      onConfirm: isConfirmed => {
-        if (isConfirmed) {
-          console.log(this.state)
-          // this.props.actions.uploadRequest({
-          //   file: this.state.file,
-          //   name: 'Awesome Cat Pic'
-          // })
+  _caReceived = () => {
+    this.props.caReceived(
+      this.state.file,
+      this.state.buyer.id,
+      this.state.business.id
+    )
+  }
+
+  _toggleModalCaReceived = () => {
+    if (this.state.buyer && this.state.buyer.caReceived) {
+      this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+        options: {
+          title: 'CA Received',
+          text: 'CA already received. Do you want to upload again?'
+        },
+        onConfirm: isConfirmed => {
+          if (isConfirmed) {
+            this.props.openModal(TypesModal.MODAL_TYPE_UPLOAD_FILE, {
+              options: {
+                title: 'Upload CA'
+              },
+              onConfirm: isConfirmed => {
+                if (isConfirmed) {
+                  this._caReceived()
+                }
+              },
+              handleFileUpload: e => {
+                const file = e.target.files[0]
+                this.setState({ file })
+              }
+            })
+          }
         }
-      },
-      handleFileUpload: e => {
-        const file = e.target.files[0]
-        this.setState({ file })
-      }
-    })
+      })
+    } else {
+      this.props.openModal(TypesModal.MODAL_TYPE_UPLOAD_FILE, {
+        options: {
+          title: 'Upload CA'
+        },
+        onConfirm: isConfirmed => {
+          if (isConfirmed) {
+            this._caReceived()
+          }
+        },
+        handleFileUpload: e => {
+          const file = e.target.files[0]
+          this.setState({ file })
+        }
+      })
+    }
+  }
+
+  _openFile = url => {
+    window.open(url, '_blank')
   }
 
   render () {
@@ -180,7 +220,9 @@ class ClientManagerList extends Component {
       history,
       isLoadingBuyerLog,
       listBuyerLogList,
-      isLoadingSendCa
+      isLoadingSendCa,
+      isLoadingSendIm,
+      isLoadingCaReceived
     } = this.props
     return (
       <Wrapper>
@@ -357,14 +399,22 @@ class ClientManagerList extends Component {
                     </Table.Body>
                   </Table>
                   <Grid.Column floated="left" width={2}>
-                    <Button size="small" color="grey">
+                    <Button
+                      size="small"
+                      color="grey"
+                      onClick={() =>
+                        this._openFile(this.state.buyer.attachmentUrl)
+                      }
+                    >
                       <Icon name="folder open outline" />
                       Open CA
                     </Button>
                     <Button
                       size="small"
                       color="blue"
-                      onClick={() => this._openTest()}
+                      onClick={() => this._toggleModalCaReceived()}
+                      disabled={!this.state.business || isLoadingCaReceived}
+                      loading={isLoadingCaReceived}
                     >
                       <Icon name="mail" />
                       CA Received
@@ -385,7 +435,14 @@ class ClientManagerList extends Component {
                       size="small"
                       color="blue"
                       onClick={() => this._toggleModalSendIm()}
-                      disabled={!this.state.business}
+                      disabled={
+                        !this.state.buyer.caReceived ||
+                        !this.state.business ||
+                        !this.state.business.notifyOwner ||
+                        this.state.business.stage === 'Under Offer' ||
+                        this.state.business.category === 'SA'
+                      }
+                      loading={isLoadingSendIm}
                     >
                       <Icon name="send" />
                       Send IM
@@ -608,7 +665,11 @@ ClientManagerList.propTypes = {
   getLog: PropTypes.func,
   listBuyerLogList: PropTypes.array,
   sendCa: PropTypes.func,
-  isLoadingSendCa: PropTypes.bool
+  isLoadingSendCa: PropTypes.bool,
+  isLoadingSendIm: PropTypes.bool,
+  sendIm: PropTypes.func,
+  isLoadingCaReceived: PropTypes.bool,
+  caReceived: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -620,7 +681,9 @@ const mapStateToProps = state => ({
   buyerUpdated: state.buyer.update.buyer,
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
   listBuyerLogList: state.buyerLog.get.array,
-  isLoadingSendCa: state.clientManager.sentCa.isLoading
+  isLoadingSendCa: state.clientManager.sentCa.isLoading,
+  isLoadingSendIm: state.clientManager.sentIm.isLoading,
+  isLoadingCaReceived: state.clientManager.caReceived.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -631,7 +694,9 @@ const mapDispatchToProps = dispatch =>
       getBuyers,
       getBusinesses,
       getLog,
-      sendCa
+      sendCa,
+      sendIm,
+      caReceived
     },
     dispatch
   )

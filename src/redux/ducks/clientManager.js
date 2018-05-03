@@ -1,6 +1,11 @@
 import { toast } from 'react-toastify'
 
-import { enquiry, send } from '../../services/api/clientManager'
+import {
+  enquiry,
+  sendCa as sendCaAPI,
+  sendIm as sendImAPI,
+  caReceived as caReceivedAPI
+} from '../../services/api/clientManager'
 
 export const Types = {
   ENQUIRY_BUSINESS_LOADING: 'ENQUIRY_BUSINESS_LOADING',
@@ -8,7 +13,13 @@ export const Types = {
   ENQUIRY_BUSINESS_FAILURE: 'ENQUIRY_BUSINESS_FAILURE',
   SEND_CA_LOADING: 'SEND_CA_LOADING',
   SEND_CA_SUCCESS: 'SEND_CA_SUCCESS',
-  SEND_CA_FAILURE: 'SEND_CA_FAILURE'
+  SEND_CA_FAILURE: 'SEND_CA_FAILURE',
+  SEND_IM_LOADING: 'SEND_IM_LOADING',
+  SEND_IM_SUCCESS: 'SEND_IM_SUCCESS',
+  SEND_IM_FAILURE: 'SEND_IM_FAILURE',
+  CA_RECEIVED_LOADING: 'CA_RECEIVED_LOADING',
+  CA_RECEIVED_SUCCESS: 'CA_RECEIVED_SUCCESS',
+  CA_RECEIVED_FAILURE: 'CA_RECEIVED_FAILURE'
 }
 
 // Reducer
@@ -22,6 +33,16 @@ const initialState = {
   sentCa: {
     isLoading: false,
     isSent: false,
+    error: null
+  },
+  sentIm: {
+    isLoading: false,
+    isSent: false,
+    error: null
+  },
+  caReceived: {
+    isLoading: false,
+    isReceived: false,
     error: null
   }
 }
@@ -84,6 +105,62 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SEND_IM_LOADING:
+      return {
+        ...state,
+        sentIm: {
+          ...state.sentIm,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_IM_SUCCESS:
+      return {
+        ...state,
+        sentIm: {
+          ...state.sentIm,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_IM_FAILURE:
+      return {
+        ...state,
+        sentIm: {
+          ...state.sentIm,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.CA_RECEIVED_LOADING:
+      return {
+        ...state,
+        caReceived: {
+          ...state.caReceived,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.CA_RECEIVED_SUCCESS:
+      return {
+        ...state,
+        caReceived: {
+          ...state.caReceived,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.CA_RECEIVED_FAILURE:
+      return {
+        ...state,
+        caReceived: {
+          ...state.caReceived,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -115,7 +192,7 @@ export const sendCa = (buyerId, businessId) => async dispatch => {
     payload: true
   })
   try {
-    const response = await send(buyerId, businessId)
+    const response = await sendCaAPI(buyerId, businessId)
     dispatch({
       type: Types.SEND_CA_SUCCESS
     })
@@ -129,21 +206,40 @@ export const sendCa = (buyerId, businessId) => async dispatch => {
   }
 }
 
-// NEEDS TO FINISH
 export const sendIm = (buyerId, businessId) => async dispatch => {
   dispatch({
-    type: Types.SEND_CA_LOADING,
+    type: Types.SEND_IM_LOADING,
     payload: true
   })
   try {
-    const response = await send(buyerId, businessId)
+    const response = await sendImAPI(buyerId, businessId)
     dispatch({
-      type: Types.SEND_CA_SUCCESS
+      type: Types.SEND_IM_SUCCESS
     })
     toast.success(response.message)
   } catch (error) {
     dispatch({
-      type: Types.SEND_CA_FAILURE,
+      type: Types.SEND_IM_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const caReceived = (caFile, buyerId, businessId) => async dispatch => {
+  dispatch({
+    type: Types.CA_RECEIVED_LOADING,
+    payload: true
+  })
+  try {
+    const response = await caReceivedAPI(caFile, buyerId, businessId)
+    dispatch({
+      type: Types.CA_RECEIVED_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.CA_RECEIVED_FAILURE,
       payload: error
     })
     toast.error(error)
