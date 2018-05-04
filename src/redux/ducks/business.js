@@ -367,14 +367,14 @@ export const cleanBusiness = () => dispatch =>
 
 export const getBusinesses = (
   search = false,
-  typeId = false
+  stageId = false
 ) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_LOADING,
     payload: true
   })
   try {
-    const businesses = await getAll(search, typeId)
+    const businesses = await getAll(search, stageId)
     dispatch({
       type: Types.GET_BUSINESSES_SUCCESS,
       payload: businesses

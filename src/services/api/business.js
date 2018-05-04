@@ -6,11 +6,11 @@ export const get = id => {
   })
 }
 
-export const getAll = (search, typeId) => {
+export const getAll = (search, stageId) => {
   const params = {}
 
   if (search && search.length > 0) params.search = search
-  if (typeId && typeId > 0) params.typeId = typeId
+  if (stageId && stageId > 0) params.stageId = stageId
   return request({
     url: '/business/',
     params

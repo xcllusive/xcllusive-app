@@ -6,7 +6,8 @@ import {
   sendIm as sendImAPI,
   caReceived as caReceivedAPI,
   emailBuyer as emailBuyerAPI,
-  requestOwnersApproval as requestOwnersApprovalAPI
+  requestOwnersApproval as requestOwnersApprovalAPI,
+  sendEnquiryToOwner as sendEnquiryToOwnerAPI
 } from '../../services/api/clientManager'
 
 export const Types = {
@@ -27,7 +28,10 @@ export const Types = {
   EMAIL_BUYER_FAILURE: 'EMAIL_BUYER_FAILURE',
   REQUEST_OWNERS_APPROVAL_LOADING: 'REQUEST_OWNERS_APPROVAL_LOADING',
   REQUEST_OWNERS_APPROVAL_SUCCESS: 'REQUEST_OWNERS_APPROVAL_SUCCESS',
-  REQUEST_OWNERS_APPROVAL_FAILURE: 'REQUEST_OWNERS_APPROVAL_FAILURE'
+  REQUEST_OWNERS_APPROVAL_FAILURE: 'REQUEST_OWNERS_APPROVAL_FAILURE',
+  SEND_ENQUIRY_ONWER_LOADING: 'SEND_ENQUIRY_ONWER_LOADING',
+  SEND_ENQUIRY_ONWER_SUCCESS: 'SEND_ENQUIRY_ONWER_SUCCESS',
+  SEND_ENQUIRY_ONWER_FAILURE: 'SEND_ENQUIRY_ONWER_FAILURE'
 }
 
 // Reducer
@@ -59,6 +63,11 @@ const initialState = {
     error: null
   },
   requestOwnersApproval: {
+    isLoading: false,
+    isSent: false,
+    error: null
+  },
+  sendEnquiryToOwner: {
     isLoading: false,
     isSent: false,
     error: null
@@ -235,6 +244,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SEND_ENQUIRY_ONWER_LOADING:
+      return {
+        ...state,
+        sendEnquiryToOwner: {
+          ...state.sendEnquiryToOwner,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_ENQUIRY_ONWER_SUCCESS:
+      return {
+        ...state,
+        sendEnquiryToOwner: {
+          ...state.sendEnquiryToOwner,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_ENQUIRY_ONWER_FAILURE:
+      return {
+        ...state,
+        sendEnquiryToOwner: {
+          ...state.sendEnquiryToOwner,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -357,6 +394,26 @@ export const requestOwnersApproval = (
   } catch (error) {
     dispatch({
       type: Types.REQUEST_OWNERS_APPROVAL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const sendEnquiryToOwner = (buyerId, businessId) => async dispatch => {
+  dispatch({
+    type: Types.SEND_ENQUIRY_ONWER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await sendEnquiryToOwnerAPI(buyerId, businessId)
+    dispatch({
+      type: Types.SEND_ENQUIRY_ONWER_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_ENQUIRY_ONWER_FAILURE,
       payload: error
     })
     toast.error(error)

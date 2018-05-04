@@ -28,7 +28,8 @@ import {
   sendIm,
   caReceived,
   emailBuyer,
-  requestOwnersApproval
+  requestOwnersApproval,
+  sendEnquiryToOwner
 } from '../../redux/ducks/clientManager'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -73,6 +74,23 @@ class ClientManagerList extends Component {
     this.setState({ business })
   }
 
+  _toggleModalSendEnquiryToOwner = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Send Enquiry to Owner',
+        text: 'Are you sure you want to send the enquiry to owner?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.sendEnquiryToOwner(
+            this.state.buyer.id,
+            this.state.business.id
+          )
+        }
+      }
+    })
+  }
+
   _toggleModalEmailBuyer = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
@@ -91,7 +109,7 @@ class ClientManagerList extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Enquiry Business',
-        text: 'Are you sure you want to enquiry this business?'
+        text: 'Do you want to enquiry this business for the selected buyer?'
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
@@ -251,7 +269,8 @@ class ClientManagerList extends Component {
       isLoadingCaReceived,
       isLoadingEmailBuyer,
       isLoadingEnquiryBusiness,
-      isLoadingRequestOwnersApproval
+      isLoadingRequestOwnersApproval,
+      isLoadingSendEnquiryToOwner
     } = this.props
     return (
       <Wrapper>
@@ -468,8 +487,8 @@ class ClientManagerList extends Component {
                         !this.state.buyer.caReceived ||
                         !this.state.business ||
                         !this.state.business.notifyOwner ||
-                        this.state.business.stage === 'Under Offer' ||
-                        this.state.business.category === 'SA'
+                        this.state.business.stageId === 5 || // Under Offer
+                        this.state.business.productId === 2 // Seller Assist
                       }
                       loading={isLoadingSendIm}
                     >
@@ -580,6 +599,12 @@ class ClientManagerList extends Component {
                         <Table.HeaderCell>Stage</Table.HeaderCell>
                         <Table.Cell>{this.state.business.stageId}</Table.Cell>
                       </Table.Row>
+                      {this.state.business.productId === 2 ? (
+                        <Table.Row>
+                          <Table.HeaderCell>Product</Table.HeaderCell>
+                          <Table.Cell>Seller Assist</Table.Cell>
+                        </Table.Row>
+                      ) : null}
                     </Table.Body>
                   </Table>
                   <Grid.Column floated="left" width={2}>
@@ -611,7 +636,15 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="blue"
-                      disabled={!this.state.buyer}
+                      // disabled={
+                      //   !this.state.buyer ||
+                      //   isLoadingSendEnquiryToOwner ||
+                      //   !this.state.buyer.caReceived ||
+                      //   !this.state.business.notifyOwner ||
+                      //   this.state.business.productId !== 2
+                      // }
+                      loading={isLoadingSendEnquiryToOwner}
+                      onClick={() => this._toggleModalSendEnquiryToOwner()}
                     >
                       <Icon name="send" />
                       Send Enquiry to Owner
@@ -619,7 +652,11 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="blue"
-                      disabled={!this.state.buyer || isLoadingEmailBuyer}
+                      disabled={
+                        !this.state.buyer ||
+                        isLoadingEmailBuyer ||
+                        this.state.business.stageId !== 5
+                      }
                       onClick={() => this._toggleModalEmailBuyer()}
                       loading={isLoadingEmailBuyer}
                     >
@@ -726,7 +763,9 @@ ClientManagerList.propTypes = {
   isLoadingEmailBuyer: PropTypes.bool,
   emailBuyer: PropTypes.func,
   isLoadingRequestOwnersApproval: PropTypes.bool,
-  requestOwnersApproval: PropTypes.func
+  requestOwnersApproval: PropTypes.func,
+  isLoadingSendEnquiryToOwner: PropTypes.bool,
+  sendEnquiryToOwner: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -744,7 +783,8 @@ const mapStateToProps = state => ({
   isLoadingEmailBuyer: state.clientManager.emailBuyer.isLoading,
   isLoadingEnquiryBusiness: state.clientManager.enquired.isLoading,
   isLoadingRequestOwnersApproval:
-    state.clientManager.requestOwnersApproval.isLoading
+    state.clientManager.requestOwnersApproval.isLoading,
+  isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -759,7 +799,8 @@ const mapDispatchToProps = dispatch =>
       sendIm,
       caReceived,
       emailBuyer,
-      requestOwnersApproval
+      requestOwnersApproval,
+      sendEnquiryToOwner
     },
     dispatch
   )

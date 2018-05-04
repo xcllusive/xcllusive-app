@@ -63,3 +63,13 @@ export const requestOwnersApproval = (buyerId, businessId) =>
       businessId
     }
   })
+
+export const sendEnquiryToOwner = (buyerId, businessId) =>
+  request({
+    method: 'post',
+    url: '/business/send-enquiry-owner',
+    data: {
+      buyerId,
+      businessId
+    }
+  })
