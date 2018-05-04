@@ -240,13 +240,13 @@ export default function reducer (state = initialState, action) {
   }
 }
 
-export const enquiryBusiness = enquiryBusiness => async dispatch => {
+export const enquiryBusiness = (buyerId, businessId) => async dispatch => {
   dispatch({
     type: Types.ENQUIRY_BUSINESS_LOADING,
     payload: true
   })
   try {
-    const response = await enquiryBusinessAPI(enquiryBusiness)
+    const response = await enquiryBusinessAPI(buyerId, businessId)
     dispatch({
       type: Types.ENQUIRY_BUSINESS_SUCCESS
     })

@@ -81,14 +81,10 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._emailBuyer()
+          this.props.emailBuyer(this.state.buyer.id, this.state.business.id)
         }
       }
     })
-  }
-
-  _emailBuyer = () => {
-    this.props.emailBuyer(this.state.buyer.id, this.state.business.id)
   }
 
   _toggleModalEnquiryBusiness = () => {
@@ -99,17 +95,13 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._enquiryBusiness()
+          this.props.enquiryBusiness(
+            this.state.buyer.id,
+            this.state.business.id
+          )
         }
       }
     })
-  }
-
-  _requestOwnersApproval = () => {
-    this.props.requestOwnersApproval(
-      this.state.buyer.id,
-      this.state.business.id
-    )
   }
 
   _toggleModalRequestOwnersApproval = () => {
@@ -120,14 +112,13 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._requestOwnersApproval()
+          this.props.requestOwnersApproval(
+            this.state.buyer.id,
+            this.state.business.id
+          )
         }
       }
     })
-  }
-
-  _sendCa = () => {
-    this.props.sendCa(this.state.buyer.id, this.state.business.id)
   }
 
   _toggleModalSendCa = caSent => {
@@ -140,14 +131,10 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._sendCa()
+          this.props.sendCa(this.state.buyer.id, this.state.business.id)
         }
       }
     })
-  }
-
-  _sendIm = () => {
-    this.props.sendIm(this.state.buyer.id, this.state.business.id)
   }
 
   _toggleModalSendIm = caSent => {
@@ -158,14 +145,10 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._sendIm()
+          this.props.sendIm(this.state.buyer.id, this.state.business.id)
         }
       }
     })
-  }
-
-  _enquiryBusiness = () => {
-    this.props.enquiryBusiness(this.state.buyer.id, this.state.business.id)
   }
 
   _onSearchBuyer = (e, { value }) => {
@@ -195,14 +178,6 @@ class ClientManagerList extends Component {
     }))
   }
 
-  _caReceived = () => {
-    this.props.caReceived(
-      this.state.file,
-      this.state.buyer.id,
-      this.state.business.id
-    )
-  }
-
   _toggleModalCaReceived = () => {
     if (this.state.buyer && this.state.buyer.caReceived) {
       this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
@@ -218,7 +193,11 @@ class ClientManagerList extends Component {
               },
               onConfirm: isConfirmed => {
                 if (isConfirmed) {
-                  this._caReceived()
+                  this.props.caReceived(
+                    this.state.file,
+                    this.state.buyer.id,
+                    this.state.business.id
+                  )
                 }
               },
               handleFileUpload: e => {
@@ -236,7 +215,11 @@ class ClientManagerList extends Component {
         },
         onConfirm: isConfirmed => {
           if (isConfirmed) {
-            this._caReceived()
+            this.props.caReceived(
+              this.state.file,
+              this.state.buyer.id,
+              this.state.business.id
+            )
           }
         },
         handleFileUpload: e => {
