@@ -8,6 +8,8 @@ import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
+import getEmailTemplates from '../../redux/ducks/emailTemplates'
+
 class EmailTemplates extends Component {
   constructor (props) {
     super(props)
@@ -48,8 +50,19 @@ class EmailTemplates extends Component {
     this.setState({ text: value })
   }
 
+  componentDidMount () {
+    this.props.getEmailTemplates()
+  }
+
   render () {
-    const { values, touched, errors, handleChange, handleBlur } = this.props
+    const {
+      values,
+      touched,
+      errors,
+      handleChange,
+      handleBlur,
+      listEmailTemplates
+    } = this.props
     return (
       <Wrapper>
         <Form>
@@ -58,7 +71,7 @@ class EmailTemplates extends Component {
               <Form.Select
                 required
                 label="Templates"
-                options={'test'}
+                options={listEmailTemplates}
                 name="title"
                 autoComplete="title"
                 value={values.title}
@@ -197,16 +210,26 @@ EmailTemplates.propTypes = {
   handleBlur: PropTypes.func,
   handleSubmit: PropTypes.func,
   isValid: PropTypes.bool,
-  isSubmitting: PropTypes.bool
+  isSubmitting: PropTypes.bool,
+  getEmailTemplates: PropTypes.func,
+  listEmailTemplates: PropTypes.array
 }
 
 const mapPropsToValues = props => {}
 
 const handleSubmit = (values, { props, setSubmitting }) => {}
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  listEmailTemplates: state.emailTemplates.getAll.array
+})
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getEmailTemplates
+    },
+    dispatch
+  )
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
