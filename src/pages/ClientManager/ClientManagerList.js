@@ -43,6 +43,7 @@ class ClientManagerList extends Component {
       modalOpenEditBuyer: false,
       buyer: null,
       business: null,
+      buyerLog: null,
       inputSearchBuyer: '',
       inputSearchBusiness: ''
     }
@@ -62,7 +63,7 @@ class ClientManagerList extends Component {
 
   componentDidMount () {
     this.props.getBuyers()
-    this.props.getBusinesses(false, 1)
+    this.props.getBusinesses(false, 5)
     //  this.props.getLog()
   }
 
@@ -72,6 +73,11 @@ class ClientManagerList extends Component {
 
   _renderBusiness = business => {
     this.setState({ business })
+  }
+
+  _renderBuyerLog = buyerLog => {
+    this.props.getLog(this.state.buyer.id)
+    this.setState({ buyerLog })
   }
 
   _toggleModalSendEnquiryToOwner = () => {
@@ -298,7 +304,7 @@ class ClientManagerList extends Component {
             <Grid.Column floated="left" width={4}>
               <h3>
                 <b>
-                  <div align="left"> Buyer </div>
+                  <div align="left"> Buyer</div>
                 </b>
               </h3>
               <Input
@@ -636,13 +642,13 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="blue"
-                      // disabled={
-                      //   !this.state.buyer ||
-                      //   isLoadingSendEnquiryToOwner ||
-                      //   !this.state.buyer.caReceived ||
-                      //   !this.state.business.notifyOwner ||
-                      //   this.state.business.productId !== 2
-                      // }
+                      disabled={
+                        !this.state.buyer ||
+                        isLoadingSendEnquiryToOwner ||
+                        !this.state.buyer.caReceived ||
+                        !this.state.business.notifyOwner ||
+                        this.state.business.productId !== 2
+                      }
                       loading={isLoadingSendEnquiryToOwner}
                       onClick={() => this._toggleModalSendEnquiryToOwner()}
                     >
@@ -682,7 +688,11 @@ class ClientManagerList extends Component {
         <Grid.Column floated="left" width={2}>
           {this.state.buyer ? (
             <Fragment>
-              <Button size="small" color="blue">
+              <Button
+                size="small"
+                color="blue"
+                onClick={() => this._renderBuyerLog(this.state.buyer)}
+              >
                 <Icon name="talk" />
                 Show Log
               </Button>

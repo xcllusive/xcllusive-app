@@ -1,5 +1,8 @@
-//  import request from './'
+import request from './'
 
-export const get = id => {
-  console.log('buyerLog')
-}
+export const get = id =>
+  request({
+    method: 'get',
+    url: '/buyer/log',
+    data: id
+  })
