@@ -729,11 +729,11 @@ class ClientManagerList extends Component {
                   {listBuyerLogList.map(buyerLog => (
                     <Table.Row
                       active
-                      key={buyerLog.buyerID}
-                      onClick={() => this._renderBusiness(buyerLog.businessID)}
+                      key={buyerLog.id}
+                      onClick={() => this._renderBusiness(buyerLog.id)}
                     >
-                      <Table.Cell>{`BS${buyerLog.buyerID}`}</Table.Cell>
-                      <Table.Cell>{buyerLog.businessID}</Table.Cell>
+                      <Table.Cell>{`B${buyerLog.id}`}</Table.Cell>
+                      <Table.Cell>{`BS${buyerLog.business_id}`}</Table.Cell>
                       <Table.Cell>{buyerLog.text}</Table.Cell>
                       <Table.Cell>{buyerLog.followUp}</Table.Cell>
                     </Table.Row>
