@@ -1,8 +1,8 @@
 import request from './'
 
-export const get = id =>
+export const get = buyerId =>
   request({
     method: 'get',
     url: '/buyer/log',
-    data: id
+    params: { buyerId }
   })
