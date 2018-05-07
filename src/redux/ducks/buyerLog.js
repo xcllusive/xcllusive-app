@@ -6,7 +6,8 @@ import { toast } from 'react-toastify'
 export const Types = {
   GET_BUYER_LOG_LOADING: 'GET_BUYER_LOG_LOADING',
   GET_BUYER_LOG_SUCCESS: 'GET_BUYER_LOG_SUCCESS',
-  GET_BUYER_LOG_FAILURE: 'GET_BUYER_LOG_FAILURE'
+  GET_BUYER_LOG_FAILURE: 'GET_BUYER_LOG_FAILURE',
+  CLEAR_BUYER_LOG: 'CLEAR_BUYER_LOG'
 }
 
 // Reducer
@@ -49,6 +50,8 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_BUYER_LOG:
+      return initialState
     default:
       return state
   }
@@ -71,7 +74,6 @@ export const getLog = id => async dispatch => {
       type: Types.GET_BUYER_LOG_SUCCESS,
       payload: log.data
     })
-    toast.success(log.message)
   } catch (error) {
     dispatch({
       type: Types.GET_BUYER_LOG_FAILURE,
@@ -79,4 +81,10 @@ export const getLog = id => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const clearBuyerLog = () => dispatch => {
+  dispatch({
+    type: Types.CLEAR_BUYER_LOG
+  })
 }

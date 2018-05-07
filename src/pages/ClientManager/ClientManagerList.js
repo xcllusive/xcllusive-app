@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 import {
   Table,
@@ -20,8 +21,8 @@ import EditBuyerForm from '../../components/forms/EditBuyerForm'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyers } from '../../redux/ducks/buyer'
-import { getBusinesses } from '../../redux/ducks/business'
-import { getLog } from '../../redux/ducks/buyerLog'
+import { getBusinesses, getBusiness } from '../../redux/ducks/business'
+import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
 import {
   enquiryBusiness,
   sendCa,
@@ -59,6 +60,13 @@ class ClientManagerList extends Component {
         buyer: nextProps.buyerUpdated
       })
     }
+
+    if (
+      this.props.businessObject !== nextProps.businessObject &&
+      nextProps.businessObject
+    ) {
+      this._renderBusiness(nextProps.businessObject)
+    }
   }
 
   componentDidMount () {
@@ -67,12 +75,21 @@ class ClientManagerList extends Component {
     //  this.props.getLog()
   }
 
+  _backToSearch = () => {
+    this._renderBuyer(null)
+    this.props.clearBuyerLog()
+  }
+
   _renderBuyer = buyer => {
     this.setState({ buyer })
   }
 
   _renderBusiness = business => {
     this.setState({ business })
+  }
+
+  _getBusinessObject = id => {
+    this.props.getBusiness(id)
   }
 
   _renderBuyerLog = buyerLog => {
@@ -504,7 +521,7 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="green"
-                      onClick={() => this._renderBuyer(null)}
+                      onClick={() => this._backToSearch()}
                     >
                       <Icon name="backward" />
                       Back to Search
@@ -552,7 +569,7 @@ class ClientManagerList extends Component {
                   </Table>
                 </Dimmer.Dimmable>
               ) : null}
-              {this.state.business ? (
+              {this.state.business && this.state.business.id ? (
                 <Fragment>
                   <Table size="small" basic="very" compact>
                     <Table.Body>
@@ -705,7 +722,7 @@ class ClientManagerList extends Component {
         </Grid.Column>
         <Grid.Column>
           {this.state.buyer ? (
-            <Fragment>
+            <Dimmer.Dimmable dimmed>
               <Dimmer inverted active={isLoadingBuyerLog}>
                 <Loader>Loading</Loader>
               </Dimmer>
@@ -730,17 +747,21 @@ class ClientManagerList extends Component {
                     <Table.Row
                       active
                       key={buyerLog.id}
-                      onClick={() => this._renderBusiness(buyerLog.id)}
+                      onClick={() =>
+                        this._getBusinessObject(buyerLog.business_id)
+                      }
                     >
-                      <Table.Cell>{`B${buyerLog.id}`}</Table.Cell>
                       <Table.Cell>{`BS${buyerLog.business_id}`}</Table.Cell>
+                      <Table.Cell>{buyerLog.Business.businessName}</Table.Cell>
                       <Table.Cell>{buyerLog.text}</Table.Cell>
-                      <Table.Cell>{buyerLog.followUp}</Table.Cell>
+                      <Table.Cell>
+                        {moment(buyerLog.followUp).format('DD-MM-YYYY - HH:mm')}
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
               </Table>
-            </Fragment>
+            </Dimmer.Dimmable>
           ) : null}
         </Grid.Column>
       </Wrapper>
@@ -775,7 +796,10 @@ ClientManagerList.propTypes = {
   isLoadingRequestOwnersApproval: PropTypes.bool,
   requestOwnersApproval: PropTypes.func,
   isLoadingSendEnquiryToOwner: PropTypes.bool,
-  sendEnquiryToOwner: PropTypes.func
+  sendEnquiryToOwner: PropTypes.func,
+  businessObject: PropTypes.object,
+  getBusiness: PropTypes.func,
+  clearBuyerLog: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -794,7 +818,8 @@ const mapStateToProps = state => ({
   isLoadingEnquiryBusiness: state.clientManager.enquired.isLoading,
   isLoadingRequestOwnersApproval:
     state.clientManager.requestOwnersApproval.isLoading,
-  isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading
+  isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading,
+  businessObject: state.business.get.object
 })
 
 const mapDispatchToProps = dispatch =>
@@ -810,7 +835,9 @@ const mapDispatchToProps = dispatch =>
       caReceived,
       emailBuyer,
       requestOwnersApproval,
-      sendEnquiryToOwner
+      sendEnquiryToOwner,
+      getBusiness,
+      clearBuyerLog
     },
     dispatch
   )
