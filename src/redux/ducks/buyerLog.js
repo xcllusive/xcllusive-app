@@ -69,8 +69,9 @@ export const getLog = id => async dispatch => {
     const log = await get(id)
     dispatch({
       type: Types.GET_BUYER_LOG_SUCCESS,
-      payload: log
+      payload: log.data
     })
+    toast.success(log.message)
   } catch (error) {
     dispatch({
       type: Types.GET_BUYER_LOG_FAILURE,

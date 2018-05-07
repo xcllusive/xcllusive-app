@@ -3,6 +3,5 @@ import request from './'
 export const get = buyerId =>
   request({
     method: 'get',
-    url: '/buyer/log',
-    params: { buyerId }
+    url: `/buyer/log/${buyerId}`
   })
