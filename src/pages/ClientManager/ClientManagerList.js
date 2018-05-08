@@ -71,7 +71,7 @@ class ClientManagerList extends Component {
 
   componentDidMount () {
     this.props.getBuyers()
-    this.props.getBusinesses(false, 5)
+    this.props.getBusinesses(false, [4, 5])
     //  this.props.getLog()
   }
 
@@ -209,7 +209,7 @@ class ClientManagerList extends Component {
       inputSearchBusiness: value,
       business: null
     })
-    this.timer = setTimeout(() => this.props.getBusinesses(value, 5), 1000)
+    this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5]), 1000)
   }
 
   _toggleModal = (modal, buyer) => {
