@@ -1,5 +1,5 @@
-import { getAll } from '../../services/api/emailTemplates'
 import { toast } from 'react-toastify'
+import { getAll } from '../../services/api/emailTemplates'
 
 // Action Types
 

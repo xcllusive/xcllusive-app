@@ -209,7 +209,7 @@ class ClientManagerList extends Component {
       inputSearchBusiness: value,
       business: null
     })
-    this.timer = setTimeout(() => this.props.getBusinesses(value, 1), 1000)
+    this.timer = setTimeout(() => this.props.getBusinesses(value, 5), 1000)
   }
 
   _toggleModal = (modal, buyer) => {

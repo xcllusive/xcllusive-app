@@ -8,7 +8,8 @@ import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
-import getEmailTemplates from '../../redux/ducks/emailTemplates'
+import { getEmailTemplates } from '../../redux/ducks/emailTemplates'
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class EmailTemplates extends Component {
   constructor (props) {
@@ -50,7 +51,7 @@ class EmailTemplates extends Component {
     this.setState({ text: value })
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.getEmailTemplates()
   }
 
@@ -71,7 +72,7 @@ class EmailTemplates extends Component {
               <Form.Select
                 required
                 label="Templates"
-                options={listEmailTemplates}
+                options={mapArrayToValuesForDropdown(listEmailTemplates)}
                 name="title"
                 autoComplete="title"
                 value={values.title}
