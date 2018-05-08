@@ -60,6 +60,15 @@ class ClientManagerList extends Component {
         buyer: nextProps.buyerUpdated
       })
     }
+    if (
+      this.props.isCreatedBusiness !== nextProps.isCreatedBusiness &&
+      nextProps.isCreatedBusiness
+    ) {
+      await this._toggleModal('modalOpenBusiness')
+      this.setState({
+        buyer: nextProps.isCreatedBusiness
+      })
+    }
 
     if (
       this.props.businessObject !== nextProps.businessObject &&
@@ -780,6 +789,7 @@ ClientManagerList.propTypes = {
   isLoadingBuyerList: PropTypes.bool,
   isLoadingBusinessList: PropTypes.bool,
   isUpdatedBuyer: PropTypes.bool,
+  isCreatedBusiness: PropTypes.bool,
   getBusinesses: PropTypes.func,
   buyerUpdated: PropTypes.object,
   isLoadingBuyerLog: PropTypes.bool,
@@ -808,6 +818,7 @@ const mapStateToProps = state => ({
   listBuyerList: state.buyer.getAll.array,
   listBusinessList: state.business.getAll.array,
   isUpdatedBuyer: state.buyer.update.isUpdated,
+  isCreatedBusiness: state.business.create.isCreated,
   buyerUpdated: state.buyer.update.buyer,
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
   listBuyerLogList: state.buyerLog.get.array,
