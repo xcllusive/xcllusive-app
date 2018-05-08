@@ -8,7 +8,11 @@ import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
-import { getEmailTemplates } from '../../redux/ducks/emailTemplates'
+import {
+  getEmailTemplates,
+  getEmailTemplate,
+  updateTemplates
+} from '../../redux/ducks/emailTemplates'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class EmailTemplates extends Component {
@@ -47,12 +51,16 @@ class EmailTemplates extends Component {
     }
   }
 
-  _handleChange = value => {
-    this.setState({ text: value })
-  }
-
   componentWillMount () {
     this.props.getEmailTemplates()
+  }
+
+  _handleChangeBody = value => {
+    this.props.setFieldValue('body', value)
+  }
+
+  _handleSelectChange = (e, { value }) => {
+    this.props.getEmailTemplate(value)
   }
 
   render () {
@@ -62,7 +70,11 @@ class EmailTemplates extends Component {
       errors,
       handleChange,
       handleBlur,
-      listEmailTemplates
+      listEmailTemplates,
+      objectEmailTemplate,
+      isLoadingUpdate,
+      isSubmitting,
+      handleSubmit
     } = this.props
     return (
       <Wrapper>
@@ -70,7 +82,6 @@ class EmailTemplates extends Component {
           <Form.Group>
             <Form.Field width={6}>
               <Form.Select
-                required
                 label="Templates"
                 options={mapArrayToValuesForDropdown(listEmailTemplates)}
                 name="title"
@@ -84,119 +95,133 @@ class EmailTemplates extends Component {
               )}
             </Form.Field>
           </Form.Group>
-          <Form.Group>
-            <Form.Field width={6}>
-              <Form.Input
-                required
-                label="Description"
-                name="description"
-                autoComplete="description"
-                value={values.description}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.description &&
-                touched.description && (
-                <Label
-                  basic
-                  color="red"
-                  pointing
-                  content={errors.description}
-                />
-              )}
-            </Form.Field>
-            <Form.Field width={6}>
-              <Form.Input
-                required
-                label="Subject"
-                name="subject"
-                autoComplete="subject"
-                value={values.subject}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.subject &&
-                touched.subject && (
-                <Label basic color="red" pointing content={errors.subject} />
-              )}
-            </Form.Field>
-          </Form.Group>
-          <Form.Group>
-            <Form.Field width={6}>
-              <Form.Input
-                type="file"
-                required
-                label="Attachment"
-                name="attachment"
-                autoComplete="attachment"
-                value={values.attachment}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.attachment &&
-                touched.attachment && (
-                <Label
-                  basic
-                  color="red"
-                  pointing
-                  content={errors.attachment}
-                />
-              )}
-            </Form.Field>
-            <Form.Checkbox
-              label="Enable Atachment"
-              name="enableAtachment"
-              onChange={this._handleChangeCheckBox}
-              checked={values.enableAtachment}
-            />
-          </Form.Group>
-          <Message info size="tiny">
-            <Message.Header>
-              Replace in the body`s email with tag names by what you need to
-              use. Ex: Hi ((buyerName)).
-            </Message.Header>
-          </Message>
-          <Form.Group>
-            <Label color="teal" tag>
-              ((buyerName))
-            </Label>
-            <Label color="grey" tag>
-              ((businessName))
-            </Label>
-            <Label color="teal" tag>
-              ((businessID))
-            </Label>
-            <Label color="grey" tag>
-              ((buyerID))
-            </Label>
-            <Label color="teal" tag>
-              ((telephone))
-            </Label>
-            <Label color="grey" tag>
-              ((email))
-            </Label>
-          </Form.Group>
-          <Grid padded="horizontally">
-            <Grid.Row columns={1}>
-              <Grid.Column floated="left" width={14}>
-                <Form.Field>
-                  <ReactQuill
-                    value={this.state.text}
-                    onChange={this._handleChange}
-                    style={{ height: '50vh' }}
-                    modules={this.state.modules}
-                    formats={this.state.formats}
+          {objectEmailTemplate ? (
+            <div>
+              <Form.Group>
+                <Form.Field width={6}>
+                  <Form.Input
+                    label="Description"
+                    name="description"
+                    autoComplete="description"
+                    value={values.description}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+                  {errors.description &&
+                    touched.description && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      content={errors.description}
+                    />
+                  )}
                 </Form.Field>
+                <Form.Field width={6}>
+                  <Form.Input
+                    label="Subject"
+                    name="subject"
+                    autoComplete="subject"
+                    value={values.subject}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.subject &&
+                    touched.subject && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      content={errors.subject}
+                    />
+                  )}
+                </Form.Field>
+              </Form.Group>
+              <Form.Group>
+                {/* <Form.Field width={6}>
+                  <Form.Input
+                    type="file"
+                    required
+                    label="Attachment"
+                    name="attachment"
+                    autoComplete="attachment"
+                    value={values.attachment}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.attachment &&
+                    touched.attachment && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      content={errors.attachment}
+                    />
+                  )}
+                </Form.Field> */}
+                <Form.Checkbox
+                  label="Enable Atachment"
+                  name="enableAtachment"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.enableAtachment}
+                />
+              </Form.Group>
+              <Message info size="tiny">
+                <Message.Header>
+                  Replace in the body`s email with tag names by what you need to
+                  use. Ex: Hi ((buyerName)).
+                </Message.Header>
+              </Message>
+              <Form.Group>
+                <Label color="teal" tag>
+                  ((buyerName))
+                </Label>
+                <Label color="grey" tag>
+                  ((businessName))
+                </Label>
+                <Label color="teal" tag>
+                  ((businessID))
+                </Label>
+                <Label color="grey" tag>
+                  ((buyerID))
+                </Label>
+                <Label color="teal" tag>
+                  ((telephone))
+                </Label>
+                <Label color="grey" tag>
+                  ((email))
+                </Label>
+              </Form.Group>
+              <Grid padded="horizontally">
+                <Grid.Row columns={1}>
+                  <Grid.Column floated="left" width={14}>
+                    <Form.Field>
+                      <ReactQuill
+                        value={values.body}
+                        onChange={this._handleChangeBody}
+                        style={{ height: '50vh' }}
+                        modules={this.state.modules}
+                        formats={this.state.formats}
+                      />
+                    </Form.Field>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              <Grid.Column>
+                <Form.Button
+                  floated="right"
+                  type="submit"
+                  color="red"
+                  disabled={isSubmitting}
+                  loading={isLoadingUpdate}
+                  onClick={handleSubmit}
+                >
+                  <Icon name="save" />
+                  Save
+                </Form.Button>
               </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Grid.Column>
-            <Form.Button floated="right" type="submit" color="red">
-              <Icon name="save" />
-              Save
-            </Form.Button>
-          </Grid.Column>
+            </div>
+          ) : null}
         </Form>
       </Wrapper>
     )
@@ -213,21 +238,48 @@ EmailTemplates.propTypes = {
   isValid: PropTypes.bool,
   isSubmitting: PropTypes.bool,
   getEmailTemplates: PropTypes.func,
-  listEmailTemplates: PropTypes.array
+  listEmailTemplates: PropTypes.array,
+  getEmailTemplate: PropTypes.func,
+  objectEmailTemplate: PropTypes.object,
+  setFieldValue: PropTypes.func,
+  isLoadingUpdate: PropTypes.bool
 }
 
-const mapPropsToValues = props => {}
+const mapPropsToValues = props => {
+  if (props && props.objectEmailTemplate) {
+    return {
+      description: props.objectEmailTemplate.description,
+      body: props.objectEmailTemplate.body,
+      subject: props.objectEmailTemplate.subject,
+      attachmentPath: props.objectEmailTemplate.attachmentPath,
+      enableAttachment: props.objectEmailTemplate.enableAttachment
+    }
+  }
+  return {
+    description: '',
+    body: '',
+    subject: '',
+    attachmentPath: '',
+    enableAttachment: ''
+  }
+}
 
-const handleSubmit = (values, { props, setSubmitting }) => {}
+const handleSubmit = (values, { props, setSubmitting }) => {
+  props.updateTemplates(values).then(setSubmitting(false))
+}
 
 const mapStateToProps = state => ({
-  listEmailTemplates: state.emailTemplates.getAll.array
+  listEmailTemplates: state.emailTemplates.getAll.array,
+  objectEmailTemplate: state.emailTemplates.get.object,
+  isLoadingUpdate: state.emailTemplates.update.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getEmailTemplates
+      getEmailTemplates,
+      getEmailTemplate,
+      updateTemplates
     },
     dispatch
   )
@@ -235,6 +287,7 @@ const mapDispatchToProps = dispatch =>
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
-    handleSubmit
+    handleSubmit,
+    enableReinitialize: true
   })(EmailTemplates)
 )

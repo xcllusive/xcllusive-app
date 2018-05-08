@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { getAll, update } from '../../services/api/emailTemplates'
+import { getAll, get, update } from '../../services/api/emailTemplates'
 
 // Action Types
 
@@ -7,6 +7,9 @@ export const Types = {
   GET_EMAIL_TEMPLATES_LOADING: 'GET_EMAIL_TEMPLATES_LOADING',
   GET_EMAIL_TEMPLATES_SUCCESS: 'GET_EMAIL_TEMPLATES_SUCCESS',
   GET_EMAIL_TEMPLATES_FAILURE: 'GET_EMAIL_TEMPLATES_FAILURE',
+  GET_EMAIL_TEMPLATE_LOADING: 'GET_EMAIL_TEMPLATE_LOADING',
+  GET_EMAIL_TEMPLATE_SUCCESS: 'GET_EMAIL_TEMPLATE_SUCCESS',
+  GET_EMAIL_TEMPLATE_FAILURE: 'GET_EMAIL_TEMPLATE_FAILURE',
   UPDATE_EMAIL_TEMPLATES_LOADING: 'UPDATE_EMAIL_TEMPLATES_LOADING',
   UPDATE_EMAIL_TEMPLATES_SUCCESS: 'UPDATE_EMAIL_TEMPLATES_SUCCESS',
   UPDATE_EMAIL_TEMPLATES_FAILURE: 'UPDATE_EMAIL_TEMPLATES_FAILURE'
@@ -17,6 +20,11 @@ export const Types = {
 const initialState = {
   getAll: {
     array: [],
+    isLoading: false,
+    error: null
+  },
+  get: {
+    object: null,
     isLoading: false,
     error: null
   },
@@ -54,6 +62,35 @@ export default function reducer (state = initialState, action) {
         ...state,
         getAll: {
           ...state.getAll,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_LOADING:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: action.payload,
+          object: null,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_SUCCESS:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_FAILURE:
+      return {
+        ...state,
+        get: {
+          ...state.get,
           isLoading: false,
           error: action.payload
         }
@@ -114,6 +151,26 @@ export const getEmailTemplates = () => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_EMAIL_TEMPLATES_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getEmailTemplate = id => async dispatch => {
+  dispatch({
+    type: Types.GET_EMAIL_TEMPLATE_LOADING,
+    payload: true
+  })
+  try {
+    const emailTemplate = await get(id)
+    dispatch({
+      type: Types.GET_EMAIL_TEMPLATE_SUCCESS,
+      payload: emailTemplate.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_EMAIL_TEMPLATE_FAILURE,
       payload: error
     })
     toast.error(error)

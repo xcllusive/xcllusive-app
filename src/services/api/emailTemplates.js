@@ -6,6 +6,12 @@ export const getAll = () =>
     url: '/email-template'
   })
 
+export const get = id =>
+  request({
+    method: 'get',
+    url: `/email-template/${id}`
+  })
+
 export const update = templates =>
   request({
     method: 'put',
