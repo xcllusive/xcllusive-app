@@ -10,7 +10,13 @@ export const getAll = (search, stageId) => {
   const params = {}
 
   if (search && search.length > 0) params.search = search
-  if (stageId && stageId > 0) params.stageId = stageId
+  if (stageId && stageId.length > 0) {
+    params.stageId = JSON.stringify(stageId)
+  }
+  if (stageId && stageId > 0) {
+    params.stageId = stageId
+  }
+
   return request({
     url: '/business/',
     params
