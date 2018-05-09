@@ -12,7 +12,8 @@ export const Types = {
   GET_EMAIL_TEMPLATE_FAILURE: 'GET_EMAIL_TEMPLATE_FAILURE',
   UPDATE_EMAIL_TEMPLATES_LOADING: 'UPDATE_EMAIL_TEMPLATES_LOADING',
   UPDATE_EMAIL_TEMPLATES_SUCCESS: 'UPDATE_EMAIL_TEMPLATES_SUCCESS',
-  UPDATE_EMAIL_TEMPLATES_FAILURE: 'UPDATE_EMAIL_TEMPLATES_FAILURE'
+  UPDATE_EMAIL_TEMPLATES_FAILURE: 'UPDATE_EMAIL_TEMPLATES_FAILURE',
+  CLEAR_EMAIL_TEMPLATES: 'CLEAR_EMAIL_TEMPLATES'
 }
 
 // Reducer
@@ -125,6 +126,8 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_EMAIL_TEMPLATES:
+      return initialState
     default:
       return state
   }
@@ -195,4 +198,10 @@ export const updateTemplates = template => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const clearEmailTemplates = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_EMAIL_TEMPLATES
+  })
 }

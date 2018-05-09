@@ -11,7 +11,8 @@ import 'react-quill/dist/quill.snow.css'
 import {
   getEmailTemplates,
   getEmailTemplate,
-  updateTemplates
+  updateTemplates,
+  clearEmailTemplates
 } from '../../redux/ducks/emailTemplates'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
@@ -53,6 +54,7 @@ class EmailTemplates extends Component {
 
   componentWillMount () {
     this.props.getEmailTemplates()
+    this.props.clearEmailTemplates()
   }
 
   _handleChangeBody = value => {
@@ -66,6 +68,10 @@ class EmailTemplates extends Component {
   _handleFileUpload = e => {
     const file = e.target.files[0]
     this.props.setFieldValue('attachment', file)
+  }
+
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
   }
 
   render () {
@@ -88,6 +94,7 @@ class EmailTemplates extends Component {
             <Form.Field width={6}>
               <Form.Select
                 label="Templates"
+                placeholder="Please select one template bellow..."
                 options={mapArrayToValuesForDropdown(listEmailTemplates)}
                 name="title"
                 autoComplete="title"
@@ -99,11 +106,26 @@ class EmailTemplates extends Component {
                 <Label basic color="red" pointing content={errors.title} />
               )}
             </Form.Field>
+            {objectEmailTemplate ? (
+              <Form.Field width={6}>
+                <Form.Button
+                  floated="right"
+                  type="submit"
+                  color="red"
+                  disabled={isSubmitting}
+                  loading={isLoadingUpdate}
+                  onClick={handleSubmit}
+                >
+                  <Icon name="save" />
+                  Save
+                </Form.Button>
+              </Form.Field>
+            ) : null}
           </Form.Group>
           {objectEmailTemplate ? (
             <div>
               <Form.Group>
-                <Form.Field width={6}>
+                <Form.Field width={4}>
                   <Form.Input
                     label="Description"
                     name="description"
@@ -122,7 +144,7 @@ class EmailTemplates extends Component {
                     />
                   )}
                 </Form.Field>
-                <Form.Field width={6}>
+                <Form.Field width={4}>
                   <Form.Input
                     label="Subject"
                     name="subject"
@@ -141,9 +163,7 @@ class EmailTemplates extends Component {
                     />
                   )}
                 </Form.Field>
-              </Form.Group>
-              <Form.Group>
-                <Form.Field width={6}>
+                <Form.Field width={4}>
                   <Form.Input
                     type="file"
                     label="Attachment"
@@ -210,19 +230,6 @@ class EmailTemplates extends Component {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
-              <Grid.Column>
-                <Form.Button
-                  floated="right"
-                  type="submit"
-                  color="red"
-                  disabled={isSubmitting}
-                  loading={isLoadingUpdate}
-                  onClick={handleSubmit}
-                >
-                  <Icon name="save" />
-                  Save
-                </Form.Button>
-              </Grid.Column>
             </div>
           ) : null}
         </Form>
@@ -245,7 +252,8 @@ EmailTemplates.propTypes = {
   getEmailTemplate: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isLoadingUpdate: PropTypes.bool
+  isLoadingUpdate: PropTypes.bool,
+  clearEmailTemplates: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -264,7 +272,7 @@ const mapPropsToValues = props => {
     body: '',
     subject: '',
     attachmentPath: '',
-    enableAttachment: '',
+    enableAttachment: false,
     id: ''
   }
 }
@@ -284,7 +292,8 @@ const mapDispatchToProps = dispatch =>
     {
       getEmailTemplates,
       getEmailTemplate,
-      updateTemplates
+      updateTemplates,
+      clearEmailTemplates
     },
     dispatch
   )

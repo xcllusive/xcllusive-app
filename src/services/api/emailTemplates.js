@@ -30,6 +30,9 @@ export const update = template => {
   if (template.body) {
     data.append('body', template.body)
   }
+  if (template.enableAttachment) {
+    data.append('enableAttachment', template.enableAttachment)
+  }
 
   return request({
     method: 'put',
