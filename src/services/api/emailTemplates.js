@@ -12,24 +12,29 @@ export const get = id =>
     url: `/email-template/${id}`
   })
 
-export const update = templates => {
+export const update = template => {
   const data = new FormData()
-  data.append(
-    'attachment',
-    templates.attachment !== '' ? templates.attachment : null
-  )
-  data.append('title', templates.title !== '' ? templates.title : null)
-  data.append(
-    'description',
-    templates.description !== '' ? templates.description : null
-  )
-  data.append('subject', templates.subject !== '' ? templates.subject : null)
-  data.append('body', templates.body !== '' ? templates.body : null)
 
-  request({
+  if (template.attachment) {
+    data.append('attachment', template.attachment)
+  }
+  if (template.title) {
+    data.append('title', template.title)
+  }
+  if (template.description) {
+    data.append('description', template.description)
+  }
+  if (template.subject) {
+    data.append('subject', template.subject)
+  }
+  if (template.body) {
+    data.append('body', template.body)
+  }
+
+  return request({
     method: 'put',
-    url: `/email-template/${templates.id}`,
-    data: { templates },
+    url: `/email-template/${template.id}`,
+    data,
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }

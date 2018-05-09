@@ -112,8 +112,7 @@ export default function reducer (state = initialState, action) {
           ...state.update,
           isLoading: false,
           isUpdated: true,
-          error: null,
-          templates: action.payload
+          error: null
         }
       }
     case Types.UPDATE_EMAIL_TEMPLATES_FAILURE:
@@ -177,17 +176,18 @@ export const getEmailTemplate = id => async dispatch => {
   }
 }
 
-export const updateTemplates = templates => async dispatch => {
+export const updateTemplates = template => async dispatch => {
   dispatch({
     type: Types.UPDATE_EMAIL_TEMPLATES_LOADING,
     payload: true
   })
   try {
-    await update(templates)
+    const response = await update(template)
+    console.log(response)
     dispatch({
-      type: Types.UPDATE_EMAIL_TEMPLATES_SUCCESS,
-      payload: templates
+      type: Types.UPDATE_EMAIL_TEMPLATES_SUCCESS
     })
+    toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.UPDATE_EMAIL_TEMPLATES_FAILURE,
