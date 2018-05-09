@@ -63,6 +63,11 @@ class EmailTemplates extends Component {
     this.props.getEmailTemplate(value)
   }
 
+  _handleFileUpload = e => {
+    const file = e.target.files[0]
+    this.props.setFieldValue('attachment', file)
+  }
+
   render () {
     const {
       values,
@@ -138,15 +143,13 @@ class EmailTemplates extends Component {
                 </Form.Field>
               </Form.Group>
               <Form.Group>
-                {/* <Form.Field width={6}>
+                <Form.Field width={6}>
                   <Form.Input
                     type="file"
-                    required
                     label="Attachment"
                     name="attachment"
                     autoComplete="attachment"
-                    value={values.attachment}
-                    onChange={handleChange}
+                    onChange={this._handleFileUpload}
                     onBlur={handleBlur}
                   />
                   {errors.attachment &&
@@ -158,12 +161,12 @@ class EmailTemplates extends Component {
                       content={errors.attachment}
                     />
                   )}
-                </Form.Field> */}
+                </Form.Field>
                 <Form.Checkbox
-                  label="Enable Atachment"
-                  name="enableAtachment"
+                  label="Enable Attachment"
+                  name="enableAttachment"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.enableAtachment}
+                  checked={values.enableAttachment}
                 />
               </Form.Group>
               <Message info size="tiny">
@@ -252,7 +255,8 @@ const mapPropsToValues = props => {
       body: props.objectEmailTemplate.body,
       subject: props.objectEmailTemplate.subject,
       attachmentPath: props.objectEmailTemplate.attachmentPath,
-      enableAttachment: props.objectEmailTemplate.enableAttachment
+      enableAttachment: props.objectEmailTemplate.enableAttachment,
+      id: props.objectEmailTemplate.id
     }
   }
   return {
@@ -260,7 +264,8 @@ const mapPropsToValues = props => {
     body: '',
     subject: '',
     attachmentPath: '',
-    enableAttachment: ''
+    enableAttachment: '',
+    id: ''
   }
 }
 

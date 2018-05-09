@@ -166,7 +166,7 @@ export default function reducer (state = initialState, action) {
         caReceived: {
           ...state.caReceived,
           isLoading: action.payload,
-          isSent: false,
+          isReceived: false,
           error: null
         }
       }
@@ -176,7 +176,7 @@ export default function reducer (state = initialState, action) {
         caReceived: {
           ...state.caReceived,
           isLoading: false,
-          isSent: true
+          isReceived: true
         }
       }
     case Types.CA_RECEIVED_FAILURE:
