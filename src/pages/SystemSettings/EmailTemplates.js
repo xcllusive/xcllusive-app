@@ -3,7 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Message, Icon, Grid, Segment } from 'semantic-ui-react'
+import {
+  Form,
+  Label,
+  Message,
+  Icon,
+  Grid,
+  Segment,
+  Dimmer,
+  Loader
+} from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -86,9 +95,9 @@ class EmailTemplates extends Component {
       isLoadingUpdate,
       isSubmitting,
       handleSubmit,
-      isValid
+      isValid,
+      isLoadingTemplate
     } = this.props
-    console.log(objectEmailTemplate)
     return (
       <Wrapper>
         <Form>
@@ -108,6 +117,9 @@ class EmailTemplates extends Component {
                 <Label basic color="red" pointing content={errors.title} />
               )}
             </Form.Field>
+            <Dimmer inverted active={isLoadingTemplate}>
+              <Loader inverted />
+            </Dimmer>
             {objectEmailTemplate ? (
               <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
                 <Form.Button
@@ -257,7 +269,8 @@ EmailTemplates.propTypes = {
   objectEmailTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
-  clearEmailTemplates: PropTypes.func
+  clearEmailTemplates: PropTypes.func,
+  isLoadingTemplate: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -288,6 +301,7 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 const mapStateToProps = state => ({
   listEmailTemplates: state.emailTemplates.getAll.array,
   objectEmailTemplate: state.emailTemplates.get.object,
+  isLoadingTemplate: state.emailTemplates.get.isLoading,
   isLoadingUpdate: state.emailTemplates.update.isLoading
 })
 
