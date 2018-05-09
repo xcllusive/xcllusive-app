@@ -774,7 +774,7 @@ class ClientManagerList extends Component {
                       <Table.Cell>{buyerLog.Business.businessName}</Table.Cell>
                       <Table.Cell>{buyerLog.text}</Table.Cell>
                       <Table.Cell>
-                        {moment(buyerLog.followUp).format('DD-MM-YYYY - HH:mm')}
+                        {moment(buyerLog.followUp).format('DD/MM/YYYY - HH:mm')}
                       </Table.Cell>
                     </Table.Row>
                   ))}
