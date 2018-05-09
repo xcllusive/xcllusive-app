@@ -61,10 +61,18 @@ class EmailTemplates extends Component {
     }
   }
 
+  // componentDidMount () {
+  //   this.attachQuillRefs()
+  // }
+
   componentWillMount () {
     this.props.getEmailTemplates()
     this.props.clearEmailTemplates()
   }
+
+  // componentDidUpdate () {
+  //   this.attachQuillRefs()
+  // }
 
   _handleChangeBody = value => {
     this.props.setFieldValue('body', value)
@@ -81,6 +89,22 @@ class EmailTemplates extends Component {
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
+  }
+
+  _handleClick () {
+    var range = this.quillRef.getSelection()
+    let position = range ? range.index : 0
+    this.quillRef.insertText(position, 'Hello, World! ')
+    this.reactQuillRef.getEditor().insertEmbed(0, 'variable', 'variable name')
+  }
+
+  attachQuillRefs () {
+    // // Ensure React-Quill reference is available:
+    // if (typeof this.reactQuillRef.getEditor !== 'function') return
+    // // Skip if Quill reference is defined:
+    // if (this.quillRef != null) return
+    // const quillRef = this.reactQuillRef.getEditor()
+    // if (quillRef != null) this.quillRef = quillRef
   }
 
   render () {
@@ -235,7 +259,11 @@ class EmailTemplates extends Component {
                 <Grid.Row columns={1}>
                   <Grid.Column floated="left" width={16}>
                     <Form.Field>
+                      <button onClick={this._handleClick}>Insert Text</button>
                       <ReactQuill
+                        ref={el => {
+                          this.reactQuillRef = el
+                        }}
                         value={values.body}
                         onChange={this._handleChangeBody}
                         style={{ height: '50vh' }}
