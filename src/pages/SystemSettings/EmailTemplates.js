@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Message, Icon, Grid } from 'semantic-ui-react'
+import { Form, Label, Message, Icon, Grid, Segment } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -85,12 +85,14 @@ class EmailTemplates extends Component {
       objectEmailTemplate,
       isLoadingUpdate,
       isSubmitting,
-      handleSubmit
+      handleSubmit,
+      isValid
     } = this.props
+    console.log(objectEmailTemplate)
     return (
       <Wrapper>
         <Form>
-          <Form.Group>
+          <Form.Group widths={16}>
             <Form.Field width={6}>
               <Form.Select
                 label="Templates"
@@ -107,12 +109,12 @@ class EmailTemplates extends Component {
               )}
             </Form.Field>
             {objectEmailTemplate ? (
-              <Form.Field width={6}>
+              <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
                 <Form.Button
                   floated="right"
                   type="submit"
                   color="red"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !isValid}
                   loading={isLoadingUpdate}
                   onClick={handleSubmit}
                 >
@@ -124,8 +126,8 @@ class EmailTemplates extends Component {
           </Form.Group>
           {objectEmailTemplate ? (
             <div>
-              <Form.Group>
-                <Form.Field width={4}>
+              <Form.Group widths="equal">
+                <Form.Field>
                   <Form.Input
                     label="Description"
                     name="description"
@@ -144,7 +146,7 @@ class EmailTemplates extends Component {
                     />
                   )}
                 </Form.Field>
-                <Form.Field width={4}>
+                <Form.Field>
                   <Form.Input
                     label="Subject"
                     name="subject"
@@ -163,7 +165,7 @@ class EmailTemplates extends Component {
                     />
                   )}
                 </Form.Field>
-                <Form.Field width={4}>
+                <Form.Field>
                   <Form.Input
                     type="file"
                     label="Attachment"
@@ -182,42 +184,44 @@ class EmailTemplates extends Component {
                     />
                   )}
                 </Form.Field>
-                <Form.Checkbox
-                  label="Enable Attachment"
-                  name="enableAttachment"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.enableAttachment}
-                />
+                <Form.Field style={{ alignSelf: 'center' }}>
+                  <Form.Checkbox
+                    label="Enable Attachment"
+                    name="enableAttachment"
+                    onChange={this._handleChangeCheckBox}
+                    checked={values.enableAttachment}
+                  />
+                </Form.Field>
               </Form.Group>
-              <Message info size="tiny">
-                <Message.Header>
-                  Replace in the body`s email with tag names by what you need to
-                  use. Ex: Hi ((buyerName)).
-                </Message.Header>
-              </Message>
-              <Form.Group>
-                <Label color="teal" tag>
-                  ((buyerName))
-                </Label>
-                <Label color="grey" tag>
-                  ((businessName))
-                </Label>
-                <Label color="teal" tag>
-                  ((businessID))
-                </Label>
-                <Label color="grey" tag>
-                  ((buyerID))
-                </Label>
-                <Label color="teal" tag>
-                  ((telephone))
-                </Label>
-                <Label color="grey" tag>
-                  ((email))
-                </Label>
-              </Form.Group>
+
+              {objectEmailTemplate.handlebars &&
+              objectEmailTemplate.handlebars.length > 0 ? (
+                  <Fragment>
+                    <Message info size="tiny">
+                      <Message.Header>
+                      Replace in the body`s email with tag names by what you
+                      need to use. Ex: Hi ((buyerName)).
+                      </Message.Header>
+                    </Message>
+                    <Segment>
+                      <Label.Group color="teal">
+                        {objectEmailTemplate.handlebars.map((item, key) => {
+                          return (
+                            <Label horizontal key={key}>
+                              {'{{'}
+                              {item}
+                              {'}}'}
+                            </Label>
+                          )
+                        })}
+                      </Label.Group>
+                    </Segment>
+                  </Fragment>
+                ) : null}
+
               <Grid padded="horizontally">
                 <Grid.Row columns={1}>
-                  <Grid.Column floated="left" width={14}>
+                  <Grid.Column floated="left" width={16}>
                     <Form.Field>
                       <ReactQuill
                         value={values.body}
