@@ -12,7 +12,8 @@ import {
   Segment,
   Dimmer,
   Loader,
-  Header
+  Header,
+  Button
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
@@ -110,6 +111,12 @@ class EmailTemplates extends Component {
     this.quillRef.insertText(position, ` {{${word}}} `)
   }
 
+  _openFile = url => {
+    if (url) {
+      window.open(url, '_blank')
+    }
+  }
+
   render () {
     const {
       values,
@@ -169,8 +176,8 @@ class EmailTemplates extends Component {
                 <Header as="h2">Please, select one template!</Header>
               )}
             </Dimmer>
-            <Form.Group widths="equal">
-              <Form.Field>
+            <Form.Group>
+              <Form.Field width={4}>
                 <Form.Input
                   label="Description"
                   name="description"
@@ -189,7 +196,7 @@ class EmailTemplates extends Component {
                   />
                 )}
               </Form.Field>
-              <Form.Field>
+              <Form.Field width={4}>
                 <Form.Input
                   label="Subject"
                   name="subject"
@@ -234,6 +241,23 @@ class EmailTemplates extends Component {
                   onChange={this._handleChangeCheckBox}
                   checked={values.enableAttachment}
                 />
+              </Form.Field>
+              <Form.Field
+                style={{ alignItems: 'flex-start', alignSelf: 'center' }}
+              >
+                <Button
+                  size="tiny"
+                  color="grey"
+                  disabled={
+                    objectEmailTemplate && !objectEmailTemplate.attachmentPath
+                  }
+                  onClick={() =>
+                    this._openFile(objectEmailTemplate.attachmentPath)
+                  }
+                >
+                  <Icon name="folder open outline" />
+                  Open Attachment
+                </Button>
               </Form.Field>
             </Form.Group>
 
