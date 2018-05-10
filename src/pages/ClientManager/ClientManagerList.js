@@ -495,6 +495,7 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="grey"
+                      disabled={!this.state.buyer.attachmentUrl}
                       onClick={() =>
                         this._openFile(this.state.buyer.attachmentUrl)
                       }
