@@ -71,7 +71,11 @@ class BuyerDetails extends Component {
                     width={16}
                     label="Street"
                     readOnly
-                    value={this.props.buyer.streetName}
+                    value={
+                      this.props.buyer.streetName
+                        ? this.props.buyer.streetName
+                        : ''
+                    }
                   />
                 </Form.Group>
                 <Form.Group>
@@ -79,19 +83,25 @@ class BuyerDetails extends Component {
                     width={8}
                     label="Suburb"
                     readOnly
-                    value={this.props.buyer.suburb}
+                    value={
+                      this.props.buyer.suburb ? this.props.buyer.suburb : ''
+                    }
                   />
                   <Form.Input
                     width={4}
                     label="State"
                     readOnly
-                    value={this.props.buyer.state}
+                    value={
+                      this.props.buyer.state ? this.props.buyer.state : null
+                    }
                   />
                   <Form.Input
                     width={4}
                     label="Post Code"
                     readOnly
-                    value={this.props.buyer.postCode}
+                    value={
+                      this.props.buyer.postCode ? this.props.buyer.postCode : ''
+                    }
                   />
                 </Form.Group>
                 <Form.Group>
@@ -99,7 +109,11 @@ class BuyerDetails extends Component {
                     width={16}
                     label="Telephone"
                     readOnly
-                    value={this.props.buyer.telephone1}
+                    value={
+                      this.props.buyer.telephone1
+                        ? this.props.buyer.telephone1
+                        : ''
+                    }
                   />
                 </Form.Group>
                 <Form.Group>
@@ -113,7 +127,9 @@ class BuyerDetails extends Component {
                     width={8}
                     label="Price To"
                     readOnly
-                    value={this.props.buyer.priceTo}
+                    value={
+                      this.props.buyer.priceTo ? this.props.buyer.priceTo : ''
+                    }
                   />
                 </Form.Group>
                 <Form.Group>
@@ -121,7 +137,7 @@ class BuyerDetails extends Component {
                     width={16}
                     label="Notes"
                     readOnly
-                    value={this.props.buyer.buyerNotes}
+                    // value={this.props.buyer.buyerNotes}
                   />
                 </Form.Group>
               </Grid.Column>
