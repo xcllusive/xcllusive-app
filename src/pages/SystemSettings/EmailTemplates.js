@@ -11,7 +11,8 @@ import {
   Grid,
   Segment,
   Dimmer,
-  Loader
+  Loader,
+  Header
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
@@ -59,20 +60,22 @@ class EmailTemplates extends Component {
         'image'
       ]
     }
+    this.quillRef = null
+    this.reactQuillRef = null
   }
-
-  // componentDidMount () {
-  //   this.attachQuillRefs()
-  // }
 
   componentWillMount () {
     this.props.getEmailTemplates()
     this.props.clearEmailTemplates()
   }
 
-  // componentDidUpdate () {
-  //   this.attachQuillRefs()
-  // }
+  componentDidMount () {
+    this.attachQuillRefs()
+  }
+
+  componentDidUpdate () {
+    this.attachQuillRefs()
+  }
 
   _handleChangeBody = value => {
     this.props.setFieldValue('body', value)
@@ -91,20 +94,20 @@ class EmailTemplates extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _handleClick () {
-    var range = this.quillRef.getSelection()
-    let position = range ? range.index : 0
-    this.quillRef.insertText(position, 'Hello, World! ')
-    this.reactQuillRef.getEditor().insertEmbed(0, 'variable', 'variable name')
+  attachQuillRefs = () => {
+    // Ensure React-Quill reference is available:
+    if (typeof this.reactQuillRef.getEditor !== 'function') return
+    // Skip if Quill reference is defined:
+    if (this.quillRef != null) return
+
+    const quillRef = this.reactQuillRef.getEditor()
+    if (quillRef != null) this.quillRef = quillRef
   }
 
-  attachQuillRefs () {
-    // // Ensure React-Quill reference is available:
-    // if (typeof this.reactQuillRef.getEditor !== 'function') return
-    // // Skip if Quill reference is defined:
-    // if (this.quillRef != null) return
-    // const quillRef = this.reactQuillRef.getEditor()
-    // if (quillRef != null) this.quillRef = quillRef
+  insertTextQuill = word => {
+    const range = this.quillRef.selection.savedRange
+    const position = range ? range.index : 0
+    this.quillRef.insertText(position, ` {{${word}}} `)
   }
 
   render () {
@@ -128,6 +131,7 @@ class EmailTemplates extends Component {
           <Form.Group widths={16}>
             <Form.Field width={6}>
               <Form.Select
+                style={{ zIndex: 9999 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
                 options={mapArrayToValuesForDropdown(listEmailTemplates)}
@@ -141,9 +145,6 @@ class EmailTemplates extends Component {
                 <Label basic color="red" pointing content={errors.title} />
               )}
             </Form.Field>
-            <Dimmer inverted active={isLoadingTemplate}>
-              <Loader inverted />
-            </Dimmer>
             {objectEmailTemplate ? (
               <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
                 <Form.Button
@@ -160,122 +161,133 @@ class EmailTemplates extends Component {
               </Form.Field>
             ) : null}
           </Form.Group>
-          {objectEmailTemplate ? (
-            <div>
-              <Form.Group widths="equal">
-                <Form.Field>
-                  <Form.Input
-                    label="Description"
-                    name="description"
-                    autoComplete="description"
-                    value={values.description}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+          <Dimmer.Dimmable dimmed={!objectEmailTemplate || isLoadingTemplate}>
+            <Dimmer inverted active={!objectEmailTemplate || isLoadingTemplate}>
+              {isLoadingTemplate ? (
+                <Loader inverted />
+              ) : (
+                <Header as="h2">Please, select one template!</Header>
+              )}
+            </Dimmer>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  label="Description"
+                  name="description"
+                  autoComplete="description"
+                  value={values.description}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.description &&
+                  touched.description && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.description}
                   />
-                  {errors.description &&
-                    touched.description && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.description}
-                    />
-                  )}
-                </Form.Field>
-                <Form.Field>
-                  <Form.Input
-                    label="Subject"
-                    name="subject"
-                    autoComplete="subject"
-                    value={values.subject}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label="Subject"
+                  name="subject"
+                  autoComplete="subject"
+                  value={values.subject}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.subject &&
+                  touched.subject && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.subject}
                   />
-                  {errors.subject &&
-                    touched.subject && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.subject}
-                    />
-                  )}
-                </Form.Field>
-                <Form.Field>
-                  <Form.Input
-                    type="file"
-                    label="Attachment"
-                    name="attachment"
-                    autoComplete="attachment"
-                    onChange={this._handleFileUpload}
-                    onBlur={handleBlur}
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  type="file"
+                  label="Attachment"
+                  name="attachment"
+                  autoComplete="attachment"
+                  onChange={this._handleFileUpload}
+                  onBlur={handleBlur}
+                />
+                {errors.attachment &&
+                  touched.attachment && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.attachment}
                   />
-                  {errors.attachment &&
-                    touched.attachment && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.attachment}
-                    />
-                  )}
-                </Form.Field>
-                <Form.Field style={{ alignSelf: 'center' }}>
-                  <Form.Checkbox
-                    label="Enable Attachment"
-                    name="enableAttachment"
-                    onChange={this._handleChangeCheckBox}
-                    checked={values.enableAttachment}
-                  />
-                </Form.Field>
-              </Form.Group>
+                )}
+              </Form.Field>
+              <Form.Field style={{ alignSelf: 'center' }}>
+                <Form.Checkbox
+                  label="Enable Attachment"
+                  name="enableAttachment"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.enableAttachment}
+                />
+              </Form.Field>
+            </Form.Group>
 
-              {objectEmailTemplate.handlebars &&
-              objectEmailTemplate.handlebars.length > 0 ? (
-                  <Fragment>
-                    <Message info size="tiny">
-                      <Message.Header>
-                      Replace in the body`s email with tag names by what you
-                      need to use. Ex: Hi ((buyerName)).
-                      </Message.Header>
-                    </Message>
-                    <Segment>
-                      <Label.Group color="teal">
-                        {objectEmailTemplate.handlebars.map((item, key) => {
-                          return (
-                            <Label horizontal key={key}>
-                              {'{{'}
-                              {item}
-                              {'}}'}
-                            </Label>
-                          )
-                        })}
-                      </Label.Group>
-                    </Segment>
-                  </Fragment>
-                ) : null}
+            {objectEmailTemplate &&
+            objectEmailTemplate.handlebars &&
+            objectEmailTemplate.handlebars.length > 0 ? (
+                <Fragment>
+                  <Message info size="tiny">
+                    <Message.Header>
+                    Replace in the body`s email with tag names by what you need
+                    to use. Ex: Hi ((buyerName)).
+                    </Message.Header>
+                  </Message>
+                  <Segment>
+                    <Label.Group color="teal">
+                      {objectEmailTemplate &&
+                      objectEmailTemplate.handlebars.map((item, key) => {
+                        return (
+                          <Label
+                            horizontal
+                            key={key}
+                            onClick={() => this.insertTextQuill(item)}
+                          >
+                            {'{{'}
+                            {item}
+                            {'}}'}
+                          </Label>
+                        )
+                      })}
+                    </Label.Group>
+                  </Segment>
+                </Fragment>
+              ) : null}
 
-              <Grid padded="horizontally">
-                <Grid.Row columns={1}>
-                  <Grid.Column floated="left" width={16}>
-                    <Form.Field>
-                      <button onClick={this._handleClick}>Insert Text</button>
-                      <ReactQuill
-                        ref={el => {
-                          this.reactQuillRef = el
-                        }}
-                        value={values.body}
-                        onChange={this._handleChangeBody}
-                        style={{ height: '50vh' }}
-                        modules={this.state.modules}
-                        formats={this.state.formats}
-                      />
-                    </Form.Field>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </div>
-          ) : null}
+            <Grid padded="horizontally">
+              <Grid.Row columns={1}>
+                <Grid.Column floated="left" width={16}>
+                  <Form.Field>
+                    <ReactQuill
+                      ref={el => {
+                        this.reactQuillRef = el
+                      }}
+                      value={values.body}
+                      onChange={this._handleChangeBody}
+                      style={{ height: '50vh' }}
+                      modules={this.state.modules}
+                      formats={this.state.formats}
+                    />
+                  </Form.Field>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Dimmer.Dimmable>
+          {/* ) : null} */}
         </Form>
       </Wrapper>
     )
