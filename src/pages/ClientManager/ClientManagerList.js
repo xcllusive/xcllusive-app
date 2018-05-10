@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import _ from 'lodash'
 
 import {
   Table,
@@ -82,8 +83,10 @@ class ClientManagerList extends Component {
 
     if (
       this.props.businessObject !== nextProps.businessObject &&
-      nextProps.businessObject
+      nextProps.businessObject &&
+      !_.isEmpty(nextProps.businessObject)
     ) {
+      console.log(nextProps.businessObject)
       this._renderBusiness(nextProps.businessObject)
     }
   }
