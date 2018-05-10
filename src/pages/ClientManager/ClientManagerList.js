@@ -732,7 +732,11 @@ class ClientManagerList extends Component {
                 <Icon name="talk" />
                 Show Log
               </Button>
-              <Button size="small" color="green">
+              <Button
+                size="small"
+                color="green"
+                onClick={() => history.push(`buyer/${this.state.buyer.id}`)}
+              >
                 <Icon name="edit" />
                 Edit Log
               </Button>

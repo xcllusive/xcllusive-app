@@ -24,3 +24,9 @@ export const getAll = search => {
     }
   })
 }
+
+export const get = id => {
+  return request({
+    url: `/buyer/${id}`
+  })
+}

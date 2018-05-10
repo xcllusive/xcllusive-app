@@ -1,4 +1,4 @@
-import { create, update, getAll } from '../../services/api/buyer'
+import { create, update, getAll, get } from '../../services/api/buyer'
 
 // Action Types
 
@@ -11,7 +11,10 @@ export const Types = {
   GET_BUYERS_FAILURE: 'GET_BUYERS_FAILURE',
   UPDATE_BUYER_LOADING: 'UPDATE_BUYER_LOADING',
   UPDATE_BUYER_SUCCESS: 'UPDATE_BUYER_SUCCESS',
-  UPDATE_BUYER_FAILURE: 'UPDATE_BUYER_FAILURE'
+  UPDATE_BUYER_FAILURE: 'UPDATE_BUYER_FAILURE',
+  GET_BUYER_LOADING: 'GET_BUYER_LOADING',
+  GET_BUYER_SUCCESS: 'GET_BUYER_SUCCESS',
+  GET_BUYER_FAILURE: 'GET_BUYER_FAILURE'
 }
 
 // Reducer
@@ -31,6 +34,11 @@ const initialState = {
   getAll: {
     array: [],
     isLoading: false,
+    error: null
+  },
+  get: {
+    isLoading: true,
+    object: {},
     error: null
   }
 }
@@ -125,6 +133,35 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUYER_LOADING:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          object: {},
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYER_SUCCESS:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYER_FAILURE:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -187,6 +224,25 @@ export const getBuyers = (search = false) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_BUYERS_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const getBuyer = id => async dispatch => {
+  dispatch({
+    type: Types.GET_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const buyer = await get(id)
+    dispatch({
+      type: Types.GET_BUYER_SUCCESS,
+      payload: buyer.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUYER_FAILURE,
       payload: error
     })
   }

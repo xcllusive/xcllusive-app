@@ -13,6 +13,8 @@ import ListPage from './Business/BusinessList'
 import EditPage from './Business/BusinessEdit'
 import LogPage from './Business/BusinessLog'
 import BuyerPage from './Buyer/Buyer'
+import BuyerDetails from './Buyer/BuyerDetails'
+
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
 
@@ -103,6 +105,7 @@ const Layout = ({ match, logout, menu }) => (
       <Route exact component={EditPage} path={`${match.path}business/:id`} />
       <Route component={LogPage} path={`${match.path}business/:id/:logID`} />
       <Route exact component={BuyerPage} path={`${match.path}buyer`} />
+      <Route exact component={BuyerDetails} path={`${match.path}buyer/:id`} />
       <Route
         render={() => <span>presale</span>}
         path={`${match.path}presale`}
