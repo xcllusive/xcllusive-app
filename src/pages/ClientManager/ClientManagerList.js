@@ -642,7 +642,9 @@ class ClientManagerList extends Component {
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Stage</Table.HeaderCell>
-                        <Table.Cell>{this.state.business.stageId}</Table.Cell>
+                        <Table.Cell>
+                          {this.state.business.BusinessStage.label}
+                        </Table.Cell>
                       </Table.Row>
                       {this.state.business.productId === 2 ? (
                         <Table.Row>
