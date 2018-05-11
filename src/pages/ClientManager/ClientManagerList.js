@@ -58,7 +58,7 @@ class ClientManagerList extends Component {
     ) {
       await this._toggleModal('modalOpenEditBuyer')
       this.setState({
-        buyer: nextProps.isUpdatedBuyer
+        buyer: nextProps.buyerUpdated
       })
     }
     if (
@@ -66,9 +66,8 @@ class ClientManagerList extends Component {
       nextProps.isCreatedBuyer
     ) {
       await this._toggleModal('modalOpenBuyer')
-      this.setState({
-        buyer: nextProps.isCreatedBuyer
-      })
+      this.props.getBuyers()
+      this._backToSearch()
     }
 
     if (
@@ -827,7 +826,8 @@ ClientManagerList.propTypes = {
   sendEnquiryToOwner: PropTypes.func,
   businessObject: PropTypes.object,
   getBusiness: PropTypes.func,
-  clearBuyerLog: PropTypes.func
+  clearBuyerLog: PropTypes.func,
+  buyerUpdated: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -836,6 +836,7 @@ const mapStateToProps = state => ({
   listBuyerList: state.buyer.getAll.array,
   listBusinessList: state.business.getAll.array,
   isUpdatedBuyer: state.buyer.update.isUpdated,
+  buyerUpdated: state.buyer.update.buyer,
   isCreatedBusiness: state.business.create.isCreated,
   isCreatedBuyer: state.buyer.create.isCreated,
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
