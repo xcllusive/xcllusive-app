@@ -137,7 +137,7 @@ class BuyerDetails extends Component {
                           width={16}
                           label="Notes"
                           readOnly
-                          placeholder="Nothing notes found..."
+                          placeholder="there is no notes..."
                           value={this.props.buyer.buyerNotes}
                         />
                       </Form.Group>
