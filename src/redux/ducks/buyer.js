@@ -38,7 +38,7 @@ const initialState = {
   },
   get: {
     isLoading: true,
-    object: {},
+    object: null,
     error: null
   }
 }
@@ -138,7 +138,6 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          object: {},
           isLoading: action.payload,
           error: null
         }
