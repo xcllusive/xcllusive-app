@@ -20,9 +20,11 @@ import ClientManagerList from './ClientManager/ClientManagerList'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
-    <Menu pointing stackable secondary attached="top" color="blue">
+    <Menu inverted attached color="blue">
       <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
-        <Header as="h2">Xcllusive</Header>
+        <Header inverted as="h2">
+          Xcllusive
+        </Header>
       </Menu.Item>
       {menu.map(item => {
         if (item === 'BUYER_MENU') {
