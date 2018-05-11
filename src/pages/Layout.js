@@ -20,9 +20,9 @@ import ClientManagerList from './ClientManager/ClientManagerList'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
-    <Menu inverted attached color="blue">
+    <Menu inverted attached color="blue" size="small">
       <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
-        <Header inverted as="h2">
+        <Header inverted as="h4">
           Xcllusive
         </Header>
       </Menu.Item>

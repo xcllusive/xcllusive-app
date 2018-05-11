@@ -11,7 +11,16 @@ import { theme } from './styles'
 
 import setAuthorizationHeader from './utils/setAuthorizationHeader'
 
-moment.locale('en-au')
+moment.locale('en-au', {
+  longDateFormat: {
+    LT: 'HH:mm',
+    LTS: 'HH:mm:ss',
+    L: 'DD/MM/YYYY',
+    LL: 'D MMMM YYYY',
+    LLL: 'D MMMM YYYY HH:mm',
+    LLLL: 'dddd D MMMM YYYY HH:mm'
+  }
+})
 
 class App extends Component {
   componentWillMount () {
