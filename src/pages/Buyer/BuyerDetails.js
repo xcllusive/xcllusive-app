@@ -38,115 +38,6 @@ class BuyerDetails extends Component {
           <Grid celled="internally" divided>
             <Grid.Row>
               <Grid.Column width={5}>
-<<<<<<< HEAD
-                <Form.Group>
-                  <Form.Input
-                    width={8}
-                    label="First Name"
-                    readOnly
-                    value={this.props.buyer.firstName}
-                  />
-                  <Form.Input
-                    width={8}
-                    label="Last Name"
-                    readOnly
-                    value={this.props.buyer.surname}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Input
-                    width={16}
-                    label="Email"
-                    readOnly
-                    icon={
-                      <Icon
-                        name="mail"
-                        inverted
-                        circular
-                        link
-                        onClick={() =>
-                          window.open(`mailto:${this.props.buyer.email}`)
-                        }
-                      />
-                    }
-                    value={this.props.buyer.email}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Input
-                    width={16}
-                    label="Street"
-                    readOnly
-                    value={
-                      this.props.buyer.streetName
-                        ? this.props.buyer.streetName
-                        : ''
-                    }
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Input
-                    width={8}
-                    label="Suburb"
-                    readOnly
-                    value={
-                      this.props.buyer.suburb ? this.props.buyer.suburb : ''
-                    }
-                  />
-                  <Form.Input
-                    width={4}
-                    label="State"
-                    readOnly
-                    value={
-                      this.props.buyer.state ? this.props.buyer.state : null
-                    }
-                  />
-                  <Form.Input
-                    width={4}
-                    label="Post Code"
-                    readOnly
-                    value={
-                      this.props.buyer.postCode ? this.props.buyer.postCode : ''
-                    }
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Input
-                    width={16}
-                    label="Telephone"
-                    readOnly
-                    value={
-                      this.props.buyer.telephone1
-                        ? this.props.buyer.telephone1
-                        : ''
-                    }
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Input
-                    width={8}
-                    label="Source"
-                    readOnly
-                    value={this.props.buyer.buyerSource}
-                  />
-                  <Form.Input
-                    width={8}
-                    label="Price To"
-                    readOnly
-                    value={
-                      this.props.buyer.priceTo ? this.props.buyer.priceTo : ''
-                    }
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.TextArea
-                    width={16}
-                    label="Notes"
-                    readOnly
-                    // value={this.props.buyer.buyerNotes}
-                  />
-                </Form.Group>
-=======
                 <Dimmer.Dimmable
                   dimmed={isLoadingBuyer}
                   style={{ height: '80vh' }}
@@ -251,7 +142,6 @@ class BuyerDetails extends Component {
                     </Fragment>
                   ) : null}
                 </Dimmer.Dimmable>
->>>>>>> ab7b5f079b0841038551496aebeb67d6264522ac
               </Grid.Column>
               <Grid.Column width={11}>
                 <Header>Attached Business Log</Header>
