@@ -6,7 +6,6 @@ import moment from 'moment'
 
 import {
   Form,
-  Segment,
   Header,
   Table,
   Grid,
@@ -28,16 +27,18 @@ class BuyerDetails extends Component {
 
   render () {
     const { listBuyerLogList, isLoadingBuyer } = this.props
-    console.log(isLoadingBuyer)
     return (
       <Wrapper>
         <Form>
-          <Segment size="mini" inverted color="green">
+          {/* <Segment size="mini" inverted color="green">
             <Header as="h3">Buyer Details</Header>
-          </Segment>
+          </Segment> */}
           <Grid celled="internally" divided>
             <Grid.Row>
               <Grid.Column width={5}>
+                {this.props.buyer ? (
+                  <Header as="h3" content="Buyer Details" />
+                ) : null}
                 <Dimmer.Dimmable
                   dimmed={isLoadingBuyer}
                   style={{ height: '80vh' }}
@@ -136,6 +137,7 @@ class BuyerDetails extends Component {
                           width={16}
                           label="Notes"
                           readOnly
+                          placeholder="Nothing notes found..."
                           value={this.props.buyer.buyerNotes}
                         />
                       </Form.Group>
