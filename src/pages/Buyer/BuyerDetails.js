@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { withFormik } from 'formik'
 
 import {
   Form,
@@ -13,11 +14,16 @@ import {
   Grid,
   Icon,
   Dimmer,
-  Loader
+  Loader,
+  Segment
 } from 'semantic-ui-react'
 
 import { getBuyer } from '../../redux/ducks/buyer'
-import { getLog } from '../../redux/ducks/buyerLog'
+import {
+  getLog,
+  createBuyerLog,
+  updateBuyerLog
+} from '../../redux/ducks/buyerLog'
 import { getBusiness } from '../../redux/ducks/business'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -43,13 +49,23 @@ class BuyerDetails extends Component {
     this.props.setFieldValue('date', date)
   }
 
+  _createBuyerLog = () => {
+    this.props.createBuyerLog(this.props.buyer.id, this.props.business.id)
+  }
+
   render () {
-    const { listBuyerLogList, isLoadingBuyer, business } = this.props
+    const {
+      listBuyerLogList,
+      isLoadingBuyer,
+      business,
+      isLoadingCreate,
+      isLoadingUpdate,
+      handleSubmit,
+      isSubmitting,
+      isValid
+    } = this.props
     return (
       <Wrapper>
-        {/* <Segment size="mini" inverted color="green">
-            <Header as="h3">Buyer Details</Header>
-          </Segment> */}
         <Grid celled="internally" divided>
           <Grid.Row>
             <Grid.Column width={5}>
@@ -191,35 +207,79 @@ class BuyerDetails extends Component {
                 </Table.Body>
               </Table>
               {business.businessName && this.state.buyerLog ? (
-                <Fragment>
-                  <Header textAlign="center" color="blue">
-                    {business.businessName}
-                  </Header>
-                  <Form>
-                    <Form.Group>
-                      <Form.Field width={8}>
-                        <Form.TextArea
-                          required
-                          label="Communication text"
-                          name="text"
-                          autoComplete="text"
-                          value={this.state.buyerLog.text}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <h5>Follow Up Date</h5>
-                        <Form.Field>
-                          <DatePicker
-                            selected={moment(this.state.buyerLog.followUp)}
-                            onChange={this._handleDateChange}
-                            popperPlacement="top-end"
-                            form
-                          />
-                        </Form.Field>
-                      </Form.Field>
-                    </Form.Group>
-                  </Form>
-                </Fragment>
+                <Grid celled="internally" divided>
+                  <Grid.Row>
+                    <Grid.Column width={8}>
+                      <Fragment>
+                        <Segment size="mini" inverted color="blue">
+                          <Header inverted textAlign="center">
+                            {business.businessName}
+                          </Header>
+                        </Segment>
+                        <Form>
+                          <Form.Group>
+                            <Form.Field width={11}>
+                              <h5>Follow Up Date</h5>
+                              <DatePicker
+                                selected={moment(this.state.buyerLog.followUp)}
+                                onChange={this._handleDateChange}
+                                popperPlacement="top-end"
+                                form
+                              />
+                            </Form.Field>
+                            <Form.Field
+                              width={5}
+                              style={{ alignSelf: 'flex-end' }}
+                            >
+                              <Form.Button
+                                floated="right"
+                                size="small"
+                                color="twitter"
+                                style={{ alignSelf: 'flex-end' }}
+                                loading={isLoadingCreate}
+                                disabled={isLoadingCreate}
+                                onClick={() => this._createBuyerLog()}
+                              >
+                                <Icon name="commenting" />
+                                New Log
+                              </Form.Button>
+                            </Form.Field>
+                          </Form.Group>
+                          <Form.Group>
+                            <Form.Field width={12}>
+                              <Form.TextArea
+                                required
+                                label="Communication text"
+                                name="text"
+                                autoComplete="text"
+                                value={this.state.buyerLog.text}
+                              />
+                            </Form.Field>
+                            <Form.Field
+                              width={4}
+                              style={{ alignSelf: 'flex-end' }}
+                            >
+                              <Form.Button
+                                floated="right"
+                                type="submit"
+                                color="red"
+                                disabled={isSubmitting || !isValid}
+                                loading={isLoadingUpdate}
+                                onClick={handleSubmit}
+                              >
+                                <Icon name="save" />
+                                Save
+                              </Form.Button>
+                            </Form.Field>
+                          </Form.Group>
+                        </Form>
+                      </Fragment>
+                    </Grid.Column>
+                    <Grid.Column width={8}>
+                      <h5>Other Business</h5>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
               ) : null}
             </Grid.Column>
           </Grid.Row>
@@ -229,8 +289,15 @@ class BuyerDetails extends Component {
   }
 }
 
+const handleSubmit = (values, { props, setSubmitting }) => {
+  props.updateBuyerLog(values).then(setSubmitting(false))
+}
+
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBuyer, getLog, getBusiness }, dispatch)
+  bindActionCreators(
+    { getBuyer, getLog, getBusiness, createBuyerLog, updateBuyerLog },
+    dispatch
+  )
 
 BuyerDetails.propTypes = {
   getBuyer: PropTypes.func,
@@ -241,14 +308,31 @@ BuyerDetails.propTypes = {
   isLoadingBuyer: PropTypes.bool,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  createBuyerLog: PropTypes.func,
+  isLoadingCreate: PropTypes.bool,
+  updateBuyerLog: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  isLoadingUpdate: PropTypes.bool,
+  isSubmitting: PropTypes.bool,
+  isValid: PropTypes.bool
 }
+
+const mapPropsToValues = props => {}
 
 const mapStateToProps = state => ({
   buyer: state.buyer.get.object,
   isLoadingBuyer: state.buyer.get.isLoading,
   listBuyerLogList: state.buyerLog.get.array,
-  business: state.business.get.object
+  business: state.business.get.object,
+  isLoadingCreate: state.buyerLog.create.isLoading,
+  isLoadingUpdate: state.buyerLog.update.isLoading
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuyerDetails)
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withFormik({
+    mapPropsToValues,
+    handleSubmit,
+    enableReinitialize: true
+  })(BuyerDetails)
+)

@@ -5,3 +5,18 @@ export const get = buyerId =>
     method: 'get',
     url: `/buyer/log/${buyerId}`
   })
+
+export const create = (buyerId, businessId) => console.log('testando...')
+// request({
+//   method: 'post',
+//   url: '/buyer',
+//   data: buyerId,
+//   businessId
+// })
+
+export const update = buyerLog => console.log('testando...')
+//   request({
+//     method: 'put',
+//     url: `/buyer/${buyerLog.id}`,
+//     data: buyerLog
+//   })
