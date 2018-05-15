@@ -276,7 +276,33 @@ class BuyerDetails extends Component {
                       </Fragment>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                      <h5>Other Business</h5>
+                      <Segment size="mini" inverted color="grey">
+                        <Header inverted textAlign="center">
+                          <h5>Other Businesses</h5>
+                        </Header>
+                      </Segment>
+                      <Table
+                        color="blue"
+                        celled
+                        inverted
+                        selectable
+                        size="small"
+                      >
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell>Business Name</Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {listBuyerLogList.map(buyerLog => (
+                            <Table.Row active key={buyerLog.id}>
+                              <Table.Cell>
+                                {buyerLog.Business.businessName}
+                              </Table.Cell>
+                            </Table.Row>
+                          ))}
+                        </Table.Body>
+                      </Table>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>

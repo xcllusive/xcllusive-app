@@ -85,7 +85,6 @@ class ClientManagerList extends Component {
       nextProps.businessObject &&
       !_.isEmpty(nextProps.businessObject)
     ) {
-      console.log(nextProps.businessObject)
       this._renderBusiness(nextProps.businessObject)
     }
   }
@@ -103,6 +102,7 @@ class ClientManagerList extends Component {
 
   _renderBuyer = buyer => {
     this.setState({ buyer })
+    this.props.clearBuyerLog()
   }
 
   _renderBusiness = business => {
@@ -640,12 +640,14 @@ class ClientManagerList extends Component {
                           {this.state.business.description}
                         </Table.Cell>
                       </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Stage</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.business.BusinessStage.label}
-                        </Table.Cell>
-                      </Table.Row>
+                      {this.state.business.BusinessStage ? (
+                        <Table.Row>
+                          <Table.HeaderCell>Stage</Table.HeaderCell>
+                          <Table.Cell>
+                            {this.state.business.BusinessStage.label}
+                          </Table.Cell>
+                        </Table.Row>
+                      ) : null}
                       {this.state.business.productId === 2 ? (
                         <Table.Row>
                           <Table.HeaderCell>Product</Table.HeaderCell>
