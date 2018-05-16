@@ -22,7 +22,8 @@ import { getBuyer } from '../../redux/ducks/buyer'
 import {
   getLog,
   createBuyerLog,
-  updateBuyerLog
+  updateBuyerLog,
+  getBusinessBuyerLog
 } from '../../redux/ducks/buyerLog'
 import { getBusiness } from '../../redux/ducks/business'
 
@@ -43,6 +44,8 @@ class BuyerDetails extends Component {
   _getBusinessObject = buyerLog => {
     this.props.getBusiness(buyerLog.business_id)
     this.setState({ buyerLog })
+    console.log('ole ', this.props.buyer.id, buyerLog.business_id)
+    this.props.getBusinessBuyerLog(this.props.buyer.id, buyerLog.business_id)
   }
 
   _handleDateChange = date => {
@@ -62,8 +65,10 @@ class BuyerDetails extends Component {
       isLoadingUpdate,
       handleSubmit,
       isSubmitting,
-      isValid
+      isValid,
+      listBusinessBuyerLogList
     } = this.props
+    console.log('test', listBusinessBuyerLogList)
     return (
       <Wrapper>
         <Grid celled="internally" divided>
@@ -310,6 +315,38 @@ class BuyerDetails extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        {listBusinessBuyerLogList ? (
+          <Table color="blue" celled inverted selectable size="small">
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Business Name</Table.HeaderCell>
+                <Table.HeaderCell>Log</Table.HeaderCell>
+                <Table.HeaderCell>Date</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {listBusinessBuyerLogList.map(businessBuyerLog => (
+                <Table.Row
+                  active
+                  key={businessBuyerLog.id}
+                  // onClick={() => this._getBusinessObject(businessBuyerLog)}
+                >
+                  <Table.Cell>
+                    {businessBuyerLog.Business.businessName}
+                  </Table.Cell>
+                  <Table.Cell>{businessBuyerLog.text}</Table.Cell>
+                  <Table.Cell>
+                    {moment(businessBuyerLog.followUp).format(
+                      'DD/MM/YYYY - HH:mm'
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>{businessBuyerLog.followUpStatus}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        ) : null}
       </Wrapper>
     )
   }
@@ -321,7 +358,14 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { getBuyer, getLog, getBusiness, createBuyerLog, updateBuyerLog },
+    {
+      getBuyer,
+      getLog,
+      getBusiness,
+      createBuyerLog,
+      updateBuyerLog,
+      getBusinessBuyerLog
+    },
     dispatch
   )
 
@@ -341,7 +385,9 @@ BuyerDetails.propTypes = {
   handleSubmit: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
   isSubmitting: PropTypes.bool,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  listBusinessBuyerLogList: PropTypes.array,
+  getBusinessBuyerLog: PropTypes.func
 }
 
 const mapPropsToValues = props => {}
@@ -352,7 +398,8 @@ const mapStateToProps = state => ({
   listBuyerLogList: state.buyerLog.get.array,
   business: state.business.get.object,
   isLoadingCreate: state.buyerLog.create.isLoading,
-  isLoadingUpdate: state.buyerLog.update.isLoading
+  isLoadingUpdate: state.buyerLog.update.isLoading,
+  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(

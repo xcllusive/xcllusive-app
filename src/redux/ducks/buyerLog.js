@@ -1,4 +1,4 @@
-import { get, create, update } from '../../services/api/buyerLog'
+import { get, create, update, getBusBuyLog } from '../../services/api/buyerLog'
 import { toast } from 'react-toastify'
 
 // Action Types
@@ -13,7 +13,10 @@ export const Types = {
   CREATE_BUYER_LOG_FAILURE: 'CREATE_BUYER_LOG_FAILURE',
   UPDATE_BUYER_LOG_LOADING: 'UPDATE_BUYER_LOG_LOADING',
   UPDATE_BUYER_LOG_SUCCESS: 'UPDATE_BUYER_LOG_SUCCESS',
-  UPDATE_BUYER_LOG_FAILURE: 'UPDATE_BUYER_LOG_FAILURE'
+  UPDATE_BUYER_LOG_FAILURE: 'UPDATE_BUYER_LOG_FAILURE',
+  GET_BUS_BUY_LOG_LOADING: 'GET_BUS_BUY_LOG_LOADING',
+  GET_BUS_BUY_LOG_SUCCESS: 'GET_BUS_BUY_LOG_SUCCESS',
+  GET_BUS_BUY_LOG_FAILURE: 'GET_BUS_BUY_LOG_FAILURE'
 }
 
 // Reducer
@@ -34,6 +37,11 @@ const initialState = {
     isUpdated: false,
     error: null,
     buyerLog: {}
+  },
+  getBusBuyLog: {
+    array: [],
+    isLoading: false,
+    error: null
   }
 }
 
@@ -129,6 +137,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUS_BUY_LOG_LOADING:
+      return {
+        ...state,
+        getBusBuyLog: {
+          ...state.getBusBuyLog,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUS_BUY_LOG_SUCCESS:
+      return {
+        ...state,
+        getBusBuyLog: {
+          ...state.getBusBuyLog,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUS_BUY_LOG_FAILURE:
+      return {
+        ...state,
+        getBusBuyLog: {
+          ...state.getBusBuyLog,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -200,5 +236,25 @@ export const updateBuyerLog = buyerLog => async dispatch => {
       type: Types.UPDATE_BUYER_LOG_FAILURE,
       payload: error
     })
+  }
+}
+
+export const getBusinessBuyerLog = (buyerId, businessId) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUS_BUY_LOG_LOADING,
+    payload: true
+  })
+  try {
+    const log = await getBusBuyLog(buyerId, businessId)
+    dispatch({
+      type: Types.GET_BUS_BUY_LOG_SUCCESS,
+      payload: log.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUS_BUY_LOG_FAILURE,
+      payload: error
+    })
+    toast.error(error)
   }
 }
