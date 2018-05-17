@@ -31,7 +31,7 @@ import { getBusiness } from '../../redux/ducks/business'
 
 import Wrapper from '../../components/content/Wrapper'
 
-class BuyerDetails extends Component {
+class BuyerDetailsCM extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -80,7 +80,7 @@ class BuyerDetails extends Component {
           <Grid.Row>
             <Grid.Column width={5}>
               {this.props.buyer ? (
-                <Header as="h3" content="Buyer Details" />
+                <Header as="h3" content="Buyer Details Client Manager" />
               ) : null}
               <Dimmer.Dimmable
                 dimmed={isLoadingBuyer}
@@ -398,7 +398,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-BuyerDetails.propTypes = {
+BuyerDetailsCM.propTypes = {
   getBuyer: PropTypes.func,
   match: PropTypes.object,
   buyer: PropTypes.object,
@@ -437,5 +437,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     mapPropsToValues,
     handleSubmit,
     enableReinitialize: true
-  })(BuyerDetails)
+  })(BuyerDetailsCM)
 )
