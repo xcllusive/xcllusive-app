@@ -16,7 +16,8 @@ import {
   Dimmer,
   Loader,
   Segment,
-  Button
+  Button,
+  Statistic
 } from 'semantic-ui-react'
 
 import { getBuyer } from '../../redux/ducks/buyer'
@@ -28,6 +29,8 @@ import {
   clearBuyerLog
 } from '../../redux/ducks/buyerLog'
 import { getBusiness } from '../../redux/ducks/business'
+
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -41,6 +44,9 @@ class BuyerDetails extends Component {
   componentWillMount () {
     this.props.getBuyer(this.props.match.params.id)
     this.props.getLog(this.props.match.params.id)
+
+    // this.props.getBusiness(2)
+    // this.props.getBusinessBuyerLog(this.props.buyer.id, 2)
   }
 
   _getBusinessObject = buyerLog => {
@@ -57,9 +63,18 @@ class BuyerDetails extends Component {
     this.props.createBuyerLog(this.props.buyer.id, this.props.business.id)
   }
 
-  _backToSearch = business => {
-    // this.props.clearBuyerLog()
-    // this.props.getBusiness(null)
+  _toggleModalEmailTemplates = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_TEMPLATES, {
+      options: {
+        title: 'Email to Buyer',
+        text: 'Are you sure you want to send an email to buyer?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          console.log('worked!')
+        }
+      }
+    })
   }
 
   render () {
@@ -76,11 +91,145 @@ class BuyerDetails extends Component {
     } = this.props
     return (
       <Wrapper>
+        {this.props.buyer ? (
+          <Fragment>
+            <Statistic.Group widths={6} size="mini">
+              <Statistic color="orange">
+                <Statistic.Value>{this.props.buyer.firstName}</Statistic.Value>
+                <Statistic.Label>Name</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>{this.props.buyer.email}</Statistic.Value>
+                <Statistic.Label>Email</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>{this.props.buyer.telephone1}</Statistic.Value>
+                <Statistic.Label>Phone 1</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>{this.props.buyer.telephone1}</Statistic.Value>
+                <Statistic.Label>Phone 2</Statistic.Label>
+              </Statistic>
+            </Statistic.Group>
+          </Fragment>
+        ) : null}
+        {business.businessName && this.state.buyerLog ? (
+          <Fragment>
+            <Segment size="mini" inverted color="grey">
+              <Header inverted textAlign="center" size="huge">
+                {business.businessName}
+              </Header>
+            </Segment>
+            <Grid celled="internally" divided>
+              <Grid.Row>
+                <Grid.Column width={5}>
+                  <Form>
+                    <Form.Group>
+                      <Form.Field width={11}>
+                        <h5>Follow Up Date</h5>
+                        <DatePicker
+                          selected={moment(this.state.buyerLog.followUp)}
+                          onChange={this._handleDateChange}
+                          popperPlacement="top-end"
+                          form
+                        />
+                      </Form.Field>
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Field width={16}>
+                        <Form.TextArea
+                          required
+                          label="Communication text"
+                          name="text"
+                          autoComplete="text"
+                          value={this.state.buyerLog.text}
+                        />
+                      </Form.Field>
+                    </Form.Group>
+                  </Form>
+                </Grid.Column>
+                <Grid.Column width={11}>
+                  <Table color="blue" celled inverted selectable size="small">
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>Log</Table.HeaderCell>
+                        <Table.HeaderCell>Date</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      {listBusinessBuyerLogList.map(businessBuyerLog => (
+                        <Table.Row
+                          active
+                          key={businessBuyerLog.id}
+                          // onClick={() => this._getBusinessObject(businessBuyerLog)}
+                        >
+                          <Table.Cell>{businessBuyerLog.text}</Table.Cell>
+                          <Table.Cell>
+                            {moment(businessBuyerLog.followUp).format(
+                              'DD/MM/YYYY - HH:mm'
+                            )}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {businessBuyerLog.followUpStatus}
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+            <Grid celled="internally" divided>
+              <Grid.Row>
+                <Grid.Column>
+                  <Button
+                    color="twitter"
+                    loading={isLoadingCreate}
+                    disabled={isLoadingCreate}
+                    onClick={() => this._createBuyerLog()}
+                  >
+                    <Icon name="commenting" />
+                    New Log
+                  </Button>
+                  <Button
+                    type="submit"
+                    color="red"
+                    disabled={isSubmitting || !isValid}
+                    loading={isLoadingUpdate}
+                    onClick={handleSubmit}
+                  >
+                    <Icon name="save" />
+                    Save
+                  </Button>
+                  <Button
+                    color="yellow"
+                    // disabled={isSubmitting || !isValid}
+                    // loading={isLoadingUpdate}
+                    onClick={() => this._toggleModalEmailTemplates()}
+                  >
+                    <Icon name="mail" />
+                    Send Email
+                  </Button>
+                  <Button
+                    color="green"
+                    // disabled={isSubmitting || !isValid}
+                    // loading={isLoadingUpdate}
+                    // onClick={handleSubmit}
+                  >
+                    <Icon name="backward" />
+                    Return to list
+                  </Button>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Fragment>
+        ) : null}
         <Grid celled="internally" divided>
           <Grid.Row>
-            <Grid.Column width={5}>
+            <Grid.Column width={4}>
               {this.props.buyer ? (
-                <Header as="h3" content="Buyer Details" />
+                <Header as="h4" content="Brokers Notes" />
               ) : null}
               <Dimmer.Dimmable
                 dimmed={isLoadingBuyer}
@@ -93,92 +242,8 @@ class BuyerDetails extends Component {
                 {this.props.buyer ? (
                   <Form>
                     <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="First Name"
-                        readOnly
-                        value={this.props.buyer.firstName}
-                      />
-                      <Form.Input
-                        width={8}
-                        label="Last Name"
-                        readOnly
-                        value={this.props.buyer.surname}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Email"
-                        readOnly
-                        icon={
-                          <Icon
-                            name="mail"
-                            inverted
-                            circular
-                            link
-                            onClick={() =>
-                              window.open(`mailto:${this.props.buyer.email}`)
-                            }
-                          />
-                        }
-                        value={this.props.buyer.email}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Street"
-                        readOnly
-                        value={this.props.buyer.streetName}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="Suburb"
-                        readOnly
-                        value={this.props.buyer.suburb}
-                      />
-                      <Form.Input
-                        width={4}
-                        label="State"
-                        readOnly
-                        value={this.props.buyer.state}
-                      />
-                      <Form.Input
-                        width={4}
-                        label="Post Code"
-                        readOnly
-                        value={this.props.buyer.postCode}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Telephone"
-                        readOnly
-                        value={this.props.buyer.telephone1}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="Source"
-                        readOnly
-                        value={this.props.buyer.BusinessSource.label}
-                      />
-                      <Form.Input
-                        width={8}
-                        label="Price To"
-                        readOnly
-                        value={this.props.buyer.priceTo}
-                      />
-                    </Form.Group>
-                    <Form.Group>
                       <Form.TextArea
                         width={16}
-                        label="Notes"
                         readOnly
                         placeholder="there is no notes..."
                         value={this.props.buyer.buyerNotes}
@@ -188,7 +253,27 @@ class BuyerDetails extends Component {
                 ) : null}
               </Dimmer.Dimmable>
             </Grid.Column>
-            <Grid.Column width={11}>
+            <Grid.Column width={4}>
+              <Table color="blue" celled inverted selectable size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Previous Businesses</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {listBuyerLogList.map(buyerLog => (
+                    <Table.Row
+                      active
+                      key={buyerLog.id}
+                      onClick={() => this._getBusinessObject(buyerLog)}
+                    >
+                      <Table.Cell>{buyerLog.Business.businessName}</Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Grid.Column>
+            <Grid.Column width={8}>
               {listBuyerLogList ? (
                 <Fragment>
                   <Header>Attached Business Log</Header>
@@ -224,154 +309,6 @@ class BuyerDetails extends Component {
                   </Table>
                 </Fragment>
               ) : null}
-              {business.businessName && this.state.buyerLog ? (
-                <Fragment>
-                  <Header>{business.businessName}</Header>
-                  <Table color="blue" celled inverted selectable size="small">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Log</Table.HeaderCell>
-                        <Table.HeaderCell>Date</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {listBusinessBuyerLogList.map(businessBuyerLog => (
-                        <Table.Row
-                          active
-                          key={businessBuyerLog.id}
-                          // onClick={() => this._getBusinessObject(businessBuyerLog)}
-                        >
-                          <Table.Cell>{businessBuyerLog.text}</Table.Cell>
-                          <Table.Cell>
-                            {moment(businessBuyerLog.followUp).format(
-                              'DD/MM/YYYY - HH:mm'
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {businessBuyerLog.followUpStatus}
-                          </Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
-                </Fragment>
-              ) : null}
-              {business.businessName && this.state.buyerLog ? (
-                <Button
-                  size="small"
-                  color="green"
-                  onClick={() => this._backToSearch(null)}
-                >
-                  <Icon name="backward" />
-                  Back to Attached Logs
-                </Button>
-              ) : null}
-              {business.businessName && this.state.buyerLog ? (
-                <Grid celled="internally" divided>
-                  <Grid.Row>
-                    <Grid.Column width={8}>
-                      <Fragment>
-                        <Segment size="mini" inverted color="blue">
-                          <Header inverted textAlign="center">
-                            {business.businessName}
-                          </Header>
-                        </Segment>
-                        <Form>
-                          <Form.Group>
-                            <Form.Field width={11}>
-                              <h5>Follow Up Date</h5>
-                              <DatePicker
-                                selected={moment(this.state.buyerLog.followUp)}
-                                onChange={this._handleDateChange}
-                                popperPlacement="top-end"
-                                form
-                              />
-                            </Form.Field>
-                            <Form.Field
-                              width={5}
-                              style={{ alignSelf: 'flex-end' }}
-                            >
-                              <Form.Button
-                                floated="right"
-                                size="small"
-                                color="twitter"
-                                style={{ alignSelf: 'flex-end' }}
-                                loading={isLoadingCreate}
-                                disabled={isLoadingCreate}
-                                onClick={() => this._createBuyerLog()}
-                              >
-                                <Icon name="commenting" />
-                                New Log
-                              </Form.Button>
-                            </Form.Field>
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.Field width={12}>
-                              <Form.TextArea
-                                required
-                                label="Communication text"
-                                name="text"
-                                autoComplete="text"
-                                value={this.state.buyerLog.text}
-                              />
-                            </Form.Field>
-                            <Form.Field
-                              width={4}
-                              style={{ alignSelf: 'flex-end' }}
-                            >
-                              <Form.Button
-                                floated="right"
-                                type="submit"
-                                color="red"
-                                disabled={isSubmitting || !isValid}
-                                loading={isLoadingUpdate}
-                                onClick={handleSubmit}
-                              >
-                                <Icon name="save" />
-                                Save
-                              </Form.Button>
-                            </Form.Field>
-                          </Form.Group>
-                        </Form>
-                      </Fragment>
-                    </Grid.Column>
-                    <Grid.Column width={8}>
-                      <Segment size="mini" inverted color="grey">
-                        <Header inverted textAlign="center">
-                          <h5>Other Businesses</h5>
-                        </Header>
-                      </Segment>
-                      <Table
-                        color="blue"
-                        celled
-                        inverted
-                        selectable
-                        size="small"
-                      >
-                        <Table.Header>
-                          <Table.Row>
-                            <Table.HeaderCell>Business Name</Table.HeaderCell>
-                          </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                          {listBuyerLogList.map(buyerLog => (
-                            <Table.Row
-                              active
-                              key={buyerLog.id}
-                              onClick={() => this._getBusinessObject(buyerLog)}
-                            >
-                              <Table.Cell>
-                                {buyerLog.Business.businessName}
-                              </Table.Cell>
-                            </Table.Row>
-                          ))}
-                        </Table.Body>
-                      </Table>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              ) : null}
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -393,7 +330,8 @@ const mapDispatchToProps = dispatch =>
       createBuyerLog,
       updateBuyerLog,
       getBusinessBuyerLog,
-      clearBuyerLog
+      clearBuyerLog,
+      openModal
     },
     dispatch
   )
@@ -417,7 +355,8 @@ BuyerDetails.propTypes = {
   isValid: PropTypes.bool,
   listBusinessBuyerLogList: PropTypes.array,
   getBusinessBuyerLog: PropTypes.func,
-  clearBuyerLog: PropTypes.func
+  clearBuyerLog: PropTypes.func,
+  openModal: PropTypes.func
 }
 
 const mapPropsToValues = props => {}
