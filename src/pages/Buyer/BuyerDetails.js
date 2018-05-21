@@ -93,10 +93,10 @@ class BuyerDetails extends Component {
       <Wrapper>
         {this.props.buyer ? (
           <Fragment>
-            <Statistic.Group widths={6} size="mini">
+            <Statistic.Group widths={4} size="mini">
               <Statistic color="orange">
                 <Statistic.Value>{this.props.buyer.firstName}</Statistic.Value>
-                <Statistic.Label>Name</Statistic.Label>
+                <Statistic.Label>Buyer</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
                 <Statistic.Value>{this.props.buyer.email}</Statistic.Value>
@@ -111,12 +111,21 @@ class BuyerDetails extends Component {
                 <Statistic.Label>Phone 2</Statistic.Label>
               </Statistic>
             </Statistic.Group>
+            <Statistic.Group widths={1} size="mini">
+              <Statistic color="blue">
+                <Statistic.Value>
+                  {this.props.buyer.streetName}, {this.props.buyer.suburb}{' '}
+                  {this.props.buyer.postCode} {this.props.buyer.state}
+                </Statistic.Value>
+                <Statistic.Label>Address</Statistic.Label>
+              </Statistic>
+            </Statistic.Group>
           </Fragment>
         ) : null}
         {business.businessName && this.state.buyerLog ? (
           <Fragment>
             <Segment size="mini" inverted color="grey">
-              <Header inverted textAlign="center" size="huge">
+              <Header inverted textAlign="center" size="large">
                 {business.businessName}
               </Header>
             </Segment>
@@ -205,7 +214,7 @@ class BuyerDetails extends Component {
                   <Button
                     color="yellow"
                     // disabled={isSubmitting || !isValid}
-                    // loading={isLoadingUpdate}
+                    // loading={}
                     onClick={() => this._toggleModalEmailTemplates()}
                   >
                     <Icon name="mail" />

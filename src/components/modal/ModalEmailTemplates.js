@@ -1,22 +1,28 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Button, Form, Label } from 'semantic-ui-react'
+import { Modal, Button, Form, Segment } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
-import { withFormik } from 'formik'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 import {
   getEmailTemplates,
-  getEmailTemplate
+  getEmailTemplate,
+  clearEmailTemplates
 } from '../../redux/ducks/emailTemplates'
 
 class ModalEmailTemplates extends Component {
-  // const ModalEmailTemplates = ({ onConfirm, closeModal, options }) => {
+  constructor () {
+    super()
+
+    this.state = {}
+  }
+
   componentWillMount () {
     this.props.getEmailTemplates()
+    this.props.clearEmailTemplates()
   }
 
   _handleSelectChange = (e, { value }) => {
@@ -29,9 +35,15 @@ class ModalEmailTemplates extends Component {
   }
 
   render () {
-    const { listEmailTemplates, values, touched, errors, options } = this.props
+    const {
+      listEmailTemplates,
+      options,
+      objectEmailTemplate,
+      isLoadingEmailTemplates,
+      isLoadingEmailTemplate
+    } = this.props
     return (
-      <Modal open size="tiny" onClose={this._handleConfirm(false)}>
+      <Modal open size="tiny" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
           <Form>
@@ -44,29 +56,35 @@ class ModalEmailTemplates extends Component {
                   options={mapArrayToValuesForDropdown(listEmailTemplates)}
                   name="title"
                   autoComplete="title"
-                  value={values.title}
                   onChange={this._handleSelectChange}
+                  loading={isLoadingEmailTemplates}
                 />
-                {errors.title &&
-                  touched.title && (
-                  <Label basic color="red" pointing content={errors.title} />
-                )}
+                {listEmailTemplates.title}
               </Form.Field>
             </Form.Group>
+            {objectEmailTemplate ? (
+              <Segment loading={isLoadingEmailTemplate}>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: objectEmailTemplate.body
+                  }}
+                />
+              </Segment>
+            ) : null}
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
             negative
             content="Cancel"
-            onClick={this._handleConfirm(false)}
+            onClick={() => this._handleConfirm(false)}
           />
           <Button
             positive
             icon="checkmark"
             labelPosition="right"
             content="Confirm"
-            onClick={this._handleConfirm(options)}
+            onClick={() => this._handleConfirm(options)}
           />
         </Modal.Actions>
       </Modal>
@@ -84,13 +102,17 @@ ModalEmailTemplates.propTypes = {
   listEmailTemplates: PropTypes.array,
   getEmailTemplates: PropTypes.func,
   getEmailTemplate: PropTypes.func,
-  values: PropTypes.object,
-  touched: PropTypes.object,
-  errors: PropTypes.object
+  objectEmailTemplate: PropTypes.object,
+  clearEmailTemplates: PropTypes.func,
+  isLoadingEmailTemplates: PropTypes.bool,
+  isLoadingEmailTemplate: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-  listEmailTemplates: state.emailTemplates.getAll.array
+  listEmailTemplates: state.emailTemplates.getAll.array,
+  isLoadingEmailTemplates: state.emailTemplates.getAll.isLoading,
+  objectEmailTemplate: state.emailTemplates.get.object,
+  isLoadingEmailTemplate: state.emailTemplates.get.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -98,13 +120,10 @@ const mapDispatchToProps = dispatch =>
     {
       getEmailTemplates,
       getEmailTemplate,
-      closeModal
+      closeModal,
+      clearEmailTemplates
     },
     dispatch
   )
 
-const mapPropsToValues = props => {}
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withFormik({ mapPropsToValues })(ModalEmailTemplates)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(ModalEmailTemplates)
