@@ -34,6 +34,8 @@ import {
   sendEnquiryToOwner
 } from '../../redux/ducks/clientManager'
 
+import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
+
 import Wrapper from '../../components/content/Wrapper'
 
 class ClientManagerList extends Component {
@@ -167,6 +169,7 @@ class ClientManagerList extends Component {
   }
 
   _toggleModalRequestOwnersApproval = () => {
+    this.props.getEmailTemplate(6)
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Request Owners Approval',
@@ -174,10 +177,14 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.requestOwnersApproval(
-            this.state.buyer.id,
-            this.state.business.id
-          )
+          if (this.props.objectEmailTemplate) {
+            window.location.href =
+              `mailto:${this.state.buyer.email}` +
+              '?subject=' +
+              `${this.props.objectEmailTemplate.subject}` +
+              '&body=' +
+              `${this.props.objectEmailTemplate.body}`
+          }
         }
       }
     })
@@ -834,7 +841,9 @@ ClientManagerList.propTypes = {
   businessObject: PropTypes.object,
   getBusiness: PropTypes.func,
   clearBuyerLog: PropTypes.func,
-  buyerUpdated: PropTypes.object
+  buyerUpdated: PropTypes.object,
+  getEmailTemplate: PropTypes.func,
+  objectEmailTemplate: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -856,7 +865,8 @@ const mapStateToProps = state => ({
   isLoadingRequestOwnersApproval:
     state.clientManager.requestOwnersApproval.isLoading,
   isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading,
-  businessObject: state.business.get.object
+  businessObject: state.business.get.object,
+  objectEmailTemplate: state.emailTemplates.get.object
 })
 
 const mapDispatchToProps = dispatch =>
@@ -874,7 +884,8 @@ const mapDispatchToProps = dispatch =>
       requestOwnersApproval,
       sendEnquiryToOwner,
       getBusiness,
-      clearBuyerLog
+      clearBuyerLog,
+      getEmailTemplate
     },
     dispatch
   )
