@@ -87,7 +87,8 @@ class BuyerDetails extends Component {
       handleSubmit,
       isSubmitting,
       isValid,
-      listBusinessBuyerLogList
+      listBusinessBuyerLogList,
+      history
     } = this.props
     return (
       <Wrapper>
@@ -224,7 +225,10 @@ class BuyerDetails extends Component {
                     color="green"
                     // disabled={isSubmitting || !isValid}
                     // loading={isLoadingUpdate}
-                    // onClick={handleSubmit}
+                    onClick={() =>
+                      // history.push(`clientManager/${this.state.buyer.id}`)
+                      history.push(`buyer/${this.state.buyerLog.id}`)
+                    }
                   >
                     <Icon name="backward" />
                     Return to list
@@ -365,7 +369,8 @@ BuyerDetails.propTypes = {
   listBusinessBuyerLogList: PropTypes.array,
   getBusinessBuyerLog: PropTypes.func,
   clearBuyerLog: PropTypes.func,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => {}
