@@ -191,7 +191,7 @@ class BuyerDetailsCM extends Component {
             <Grid.Column width={11}>
               {listBuyerLogList ? (
                 <Fragment>
-                  <Header>Attached Business Log</Header>
+                  <Header>Attached Business Log TEST</Header>
                   <Table color="blue" celled inverted selectable size="small">
                     <Table.Header>
                       <Table.Row>

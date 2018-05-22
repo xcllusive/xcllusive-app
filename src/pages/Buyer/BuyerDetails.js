@@ -190,14 +190,15 @@ class BuyerDetails extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <Grid celled="internally" divided>
+            <Grid celled="internally" divided centered>
               <Grid.Row>
-                <Grid.Column>
+                <Grid.Column width={7}>
                   <Button
                     color="twitter"
                     loading={isLoadingCreate}
                     disabled={isLoadingCreate}
                     onClick={() => this._createBuyerLog()}
+                    size="small"
                   >
                     <Icon name="commenting" />
                     New Log
@@ -208,6 +209,7 @@ class BuyerDetails extends Component {
                     disabled={isSubmitting || !isValid}
                     loading={isLoadingUpdate}
                     onClick={handleSubmit}
+                    size="small"
                   >
                     <Icon name="save" />
                     Save
@@ -217,6 +219,7 @@ class BuyerDetails extends Component {
                     // disabled={isSubmitting || !isValid}
                     // loading={}
                     onClick={() => this._toggleModalEmailTemplates()}
+                    size="small"
                   >
                     <Icon name="mail" />
                     Send Email
@@ -229,6 +232,7 @@ class BuyerDetails extends Component {
                       // history.push(`clientManager/${this.state.buyer.id}`)
                       history.push(`buyer/${this.state.buyerLog.id}`)
                     }
+                    size="small"
                   >
                     <Icon name="backward" />
                     Return to list
@@ -257,7 +261,6 @@ class BuyerDetails extends Component {
                     <Form.Group>
                       <Form.TextArea
                         width={16}
-                        readOnly
                         placeholder="there is no notes..."
                         value={this.props.buyer.buyerNotes}
                       />

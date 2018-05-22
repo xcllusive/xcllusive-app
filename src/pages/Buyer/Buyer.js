@@ -132,9 +132,7 @@ class BuyerPage extends Component {
   }
 
   render () {
-    const {
-      match, businesses
-    } = this.props
+    const { history, businesses } = this.props
 
     const { modalOpen } = this.state
 
@@ -186,22 +184,17 @@ class BuyerPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {businesses.map((business) => (
-                  <Table.Row
-                    active
-                    key={business.id}
-                  >
+                {businesses.map(business => (
+                  <Table.Row active key={business.id}>
                     <Table.Cell>{`BS${business.id}`}</Table.Cell>
                     <Table.Cell
                       selectable
-                      onClick={() =>
-                        history.push(`${match.path}/${business.id}`)
-                      }
-                    >{business.businessName}</Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
-                    <Table.Cell
-                      onClick={() => this._toggleModal()}
+                      onClick={() => history.push(`buyer/BS/${business.id}`)}
                     >
+                      {business.businessName}
+                    </Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell onClick={() => this._toggleModal()}>
                       <Button size="small" color="instagram">
                         <Icon name="mail" />
                       </Button>
@@ -377,7 +370,8 @@ class BuyerPage extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ getBusinesses }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getBusinesses }, dispatch)
 
 BuyerPage.propTypes = {
   history: PropTypes.object,
@@ -386,7 +380,7 @@ BuyerPage.propTypes = {
   businesses: PropTypes.array
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,
   isLoading: state.business.getAll.isLoading,
   businesses: state.business.getAll.array
