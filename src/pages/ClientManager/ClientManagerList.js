@@ -751,7 +751,7 @@ class ClientManagerList extends Component {
                 color="green"
                 onClick={() =>
                   // history.push(`clientManager/${this.state.buyer.id}`)
-                  history.push(`buyer/${this.state.buyer.id}`)
+                  history.push(`/clientManager/buyer/${this.state.buyer.id}`)
                 }
               >
                 <Icon name="edit" />

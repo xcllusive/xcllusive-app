@@ -13,7 +13,7 @@ import ListPage from './Business/BusinessList'
 import EditPage from './Business/BusinessEdit'
 import LogPage from './Business/BusinessLog'
 import BuyerPage from './Buyer/Buyer'
-//  import BuyerDetailsCM from './ClientManager/BuyerDetailsCM'
+import BuyerDetailsCM from './ClientManager/BuyerDetailsCM'
 import BuyerList from './Buyer/BuyerList'
 import BuyerDetails from './Buyer/BuyerDetails'
 
@@ -109,11 +109,11 @@ const Layout = ({ match, logout, menu }) => (
       <Route exact component={EditPage} path={`${match.path}business/:id`} />
       <Route component={LogPage} path={`${match.path}business/:id/:logID`} />
       <Route exact component={BuyerPage} path={`${match.path}buyer`} />
-      {/* <Route
+      <Route
         exact
         component={BuyerDetailsCM}
-        path={`${match.path}clientManager/:id`}
-      /> */}
+        path={`${match.path}clientManager/buyer/:id`}
+      />
       <Route
         exact
         component={BuyerDetails}

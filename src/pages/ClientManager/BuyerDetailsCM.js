@@ -80,7 +80,7 @@ class BuyerDetailsCM extends Component {
           <Grid.Row>
             <Grid.Column width={5}>
               {this.props.buyer ? (
-                <Header as="h3" content="Buyer Details Client Manager" />
+                <Header as="h3" content="Buyer Details" />
               ) : null}
               <Dimmer.Dimmable
                 dimmed={isLoadingBuyer}
@@ -191,7 +191,7 @@ class BuyerDetailsCM extends Component {
             <Grid.Column width={11}>
               {listBuyerLogList ? (
                 <Fragment>
-                  <Header>Attached Business Log TEST</Header>
+                  <Header>Attached Business Log</Header>
                   <Table color="blue" celled inverted selectable size="small">
                     <Table.Header>
                       <Table.Row>
