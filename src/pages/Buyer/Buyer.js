@@ -167,7 +167,7 @@ class BuyerPage extends Component {
                 <div align="left"> Businesses For Sale </div>
               </b>
             </h2>
-            <Table color="blue" celled inverted size="small">
+            <Table color="blue" celled inverted size="small" compact>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Business ID</Table.HeaderCell>

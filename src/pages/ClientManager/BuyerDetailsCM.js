@@ -22,7 +22,6 @@ import {
 import { getBuyer } from '../../redux/ducks/buyer'
 import {
   getLog,
-  createBuyerLog,
   updateBuyerLog,
   getBusinessBuyerLog,
   clearBuyerLog
@@ -49,31 +48,37 @@ class BuyerDetailsCM extends Component {
     this.props.getBusinessBuyerLog(this.props.buyer.id, buyerLog.business_id)
   }
 
+  _getBusinessObject2 = buyerLog => {
+    this.setState({ buyerLog })
+  }
+
   _handleDateChange = date => {
     this.props.setFieldValue('date', date)
   }
 
-  _createBuyerLog = () => {
-    this.props.createBuyerLog(this.props.buyer.id, this.props.business.id)
-  }
-
   _backToSearch = business => {
     // this.props.clearBuyerLog()
-    // this.props.getBusiness(null)
+    // this.props.getBusiness(0)
+  }
+
+  _selectLog = buyerLog => {
+    this.setState({ buyerLog })
   }
 
   render () {
     const {
       listBuyerLogList,
       isLoadingBuyer,
-      isLoadingCreate,
       business,
       isLoadingUpdate,
       handleSubmit,
       isSubmitting,
       isValid,
-      listBusinessBuyerLogList
+      listBusinessBuyerLogList,
+      isLoadingBusBuyLog,
+      isLoadingBuyerLog
     } = this.props
+    const { buyerLog } = this.state
     return (
       <Wrapper>
         <Grid celled="internally" divided>
@@ -189,189 +194,233 @@ class BuyerDetailsCM extends Component {
               </Dimmer.Dimmable>
             </Grid.Column>
             <Grid.Column width={11}>
-              {listBuyerLogList ? (
-                <Fragment>
-                  <Header>Attached Business Log</Header>
-                  <Table color="blue" celled inverted selectable size="small">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Business Name</Table.HeaderCell>
-                        <Table.HeaderCell>Log</Table.HeaderCell>
-                        <Table.HeaderCell>Date</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {listBuyerLogList.map(buyerLog => (
-                        <Table.Row
-                          active
-                          key={buyerLog.id}
-                          onClick={() => this._getBusinessObject(buyerLog)}
-                        >
-                          <Table.Cell>
-                            {buyerLog.Business.businessName}
-                          </Table.Cell>
-                          <Table.Cell>{buyerLog.text}</Table.Cell>
-                          <Table.Cell>
-                            {moment(buyerLog.followUp).format(
-                              'DD/MM/YYYY - HH:mm'
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>{buyerLog.followUpStatus}</Table.Cell>
+              <Dimmer.Dimmable
+                dimmed={isLoadingBuyerLog}
+                style={{ height: '80vh' }}
+              >
+                <Dimmer inverted active={isLoadingBuyerLog}>
+                  <Loader>Loading</Loader>
+                </Dimmer>
+                {listBuyerLogList ? (
+                  // business.businessName == null &&
+                  // buyerLog == null
+                  <Fragment>
+                    <Header>Attached Business Log</Header>
+                    <Table
+                      color="blue"
+                      celled
+                      inverted
+                      selectable
+                      size="small"
+                      compact
+                    >
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell>Business Name</Table.HeaderCell>
+                          <Table.HeaderCell>Log</Table.HeaderCell>
+                          <Table.HeaderCell>Date</Table.HeaderCell>
+                          <Table.HeaderCell>Status</Table.HeaderCell>
                         </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
-                </Fragment>
-              ) : null}
-              {business.businessName && this.state.buyerLog ? (
-                <Fragment>
-                  <Header>{business.businessName}</Header>
-                  <Table color="blue" celled inverted selectable size="small">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Log</Table.HeaderCell>
-                        <Table.HeaderCell>Date</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {listBusinessBuyerLogList.map(businessBuyerLog => (
-                        <Table.Row
-                          active
-                          key={businessBuyerLog.id}
-                          // onClick={() => this._getBusinessObject(businessBuyerLog)}
-                        >
-                          <Table.Cell>{businessBuyerLog.text}</Table.Cell>
-                          <Table.Cell>
-                            {moment(businessBuyerLog.followUp).format(
-                              'DD/MM/YYYY - HH:mm'
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {businessBuyerLog.followUpStatus}
-                          </Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
-                </Fragment>
-              ) : null}
-              {business.businessName && this.state.buyerLog ? (
-                <Button
-                  size="small"
-                  color="green"
-                  onClick={() => this._backToSearch(null)}
-                >
-                  <Icon name="backward" />
-                  Back to Attached Logs
-                </Button>
-              ) : null}
-              {business.businessName && this.state.buyerLog ? (
-                <Grid celled="internally" divided>
-                  <Grid.Row>
-                    <Grid.Column width={8}>
-                      <Fragment>
-                        <Segment size="mini" inverted color="blue">
-                          <Header inverted textAlign="center">
-                            {business.businessName}
-                          </Header>
-                        </Segment>
-                        <Form>
-                          <Form.Group>
-                            <Form.Field width={11}>
-                              <h5>Follow Up Date</h5>
-                              <DatePicker
-                                selected={moment(this.state.buyerLog.followUp)}
-                                onChange={this._handleDateChange}
-                                popperPlacement="top-end"
-                                form
-                              />
-                            </Form.Field>
-                            <Form.Field
-                              width={5}
-                              style={{ alignSelf: 'flex-end' }}
-                            >
-                              <Form.Button
-                                floated="right"
-                                size="small"
-                                color="twitter"
-                                style={{ alignSelf: 'flex-end' }}
-                                loading={isLoadingCreate}
-                                disabled={isLoadingCreate}
-                                onClick={() => this._createBuyerLog()}
-                              >
-                                <Icon name="commenting" />
-                                New Log
-                              </Form.Button>
-                            </Form.Field>
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.Field width={12}>
-                              <Form.TextArea
-                                required
-                                label="Communication text"
-                                name="text"
-                                autoComplete="text"
-                                value={this.state.buyerLog.text}
-                              />
-                            </Form.Field>
-                            <Form.Field
-                              width={4}
-                              style={{ alignSelf: 'flex-end' }}
-                            >
-                              <Form.Button
-                                floated="right"
-                                type="submit"
-                                color="red"
-                                disabled={isSubmitting || !isValid}
-                                loading={isLoadingUpdate}
-                                onClick={handleSubmit}
-                              >
-                                <Icon name="save" />
-                                Save
-                              </Form.Button>
-                            </Form.Field>
-                          </Form.Group>
-                        </Form>
-                      </Fragment>
-                    </Grid.Column>
-                    <Grid.Column width={8}>
-                      <Segment size="mini" inverted color="grey">
-                        <Header inverted textAlign="center">
-                          <h5>Other Businesses</h5>
-                        </Header>
-                      </Segment>
-                      <Table
-                        color="blue"
-                        celled
-                        inverted
-                        selectable
-                        size="small"
-                      >
-                        <Table.Header>
-                          <Table.Row>
-                            <Table.HeaderCell>Business Name</Table.HeaderCell>
+                      </Table.Header>
+                      <Table.Body>
+                        {listBuyerLogList.map(buyerLogList => (
+                          <Table.Row
+                            active
+                            key={buyerLogList.id}
+                            onClick={() =>
+                              this._getBusinessObject(buyerLogList)
+                            }
+                          >
+                            <Table.Cell>
+                              {buyerLogList.Business.businessName}
+                            </Table.Cell>
+                            <Table.Cell>{buyerLogList.text}</Table.Cell>
+                            <Table.Cell>
+                              {moment(buyerLogList.followUp).format(
+                                'DD/MM/YYYY - HH:mm'
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {buyerLogList.followUpStatus}
+                            </Table.Cell>
                           </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                          {listBuyerLogList.map(buyerLog => (
-                            <Table.Row
-                              active
-                              key={buyerLog.id}
-                              onClick={() => this._getBusinessObject(buyerLog)}
-                            >
-                              <Table.Cell>
-                                {buyerLog.Business.businessName}
-                              </Table.Cell>
-                            </Table.Row>
-                          ))}
-                        </Table.Body>
-                      </Table>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              ) : null}
+                        ))}
+                      </Table.Body>
+                    </Table>
+                  </Fragment>
+                ) : null}
+              </Dimmer.Dimmable>
+              <Dimmer.Dimmable
+                dimmed={isLoadingBusBuyLog}
+                style={{ height: '80vh' }}
+              >
+                <Dimmer inverted active={isLoadingBusBuyLog}>
+                  <Loader>Loading</Loader>
+                </Dimmer>
+                {business.businessName && buyerLog ? (
+                  <Fragment>
+                    <Segment size="mini" inverted color="grey">
+                      <Header inverted textAlign="center">
+                        {business.businessName}
+                      </Header>
+                    </Segment>
+                    <Table
+                      color="blue"
+                      celled
+                      inverted
+                      selectable
+                      size="small"
+                      compact
+                    >
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell>Log</Table.HeaderCell>
+                          <Table.HeaderCell>Date</Table.HeaderCell>
+                          <Table.HeaderCell>Status</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {listBusinessBuyerLogList.map(businessBuyerLog => (
+                          <Table.Row
+                            active
+                            key={businessBuyerLog.id}
+                            onClick={() =>
+                              this._getBusinessObject2(businessBuyerLog)
+                            }
+                          >
+                            <Table.Cell>{businessBuyerLog.text}</Table.Cell>
+                            <Table.Cell>
+                              {moment(businessBuyerLog.followUp).format(
+                                'DD/MM/YYYY - HH:mm'
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {businessBuyerLog.followUpStatus}
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table>
+                    <Grid celled="internally" divided>
+                      <Grid.Row>
+                        <Grid.Column width={8}>
+                          <Fragment>
+                            <Form>
+                              <Form.Group>
+                                <Form.Field width={11}>
+                                  <h5>Follow Up Date</h5>
+                                  <DatePicker
+                                    selected={moment(buyerLog.followUp)}
+                                    onChange={this._handleDateChange}
+                                    popperPlacement="top-end"
+                                    form
+                                  />
+                                </Form.Field>
+                                <Form.Field
+                                  width={5}
+                                  style={{ alignSelf: 'flex-end' }}
+                                >
+                                  <Form.Button
+                                    floated="right"
+                                    size="small"
+                                    color="twitter"
+                                    style={{ alignSelf: 'flex-end' }}
+                                    onClick={() =>
+                                      this._selectLog({
+                                        followUp: moment().add(1, 'day'),
+                                        text: ''
+                                      })
+                                    }
+                                  >
+                                    <Icon name="commenting" />
+                                    New Log
+                                  </Form.Button>
+                                </Form.Field>
+                              </Form.Group>
+                              <Form.Group>
+                                <Form.Field width={12}>
+                                  <Form.TextArea
+                                    required
+                                    label="Communication text"
+                                    name="text"
+                                    autoComplete="text"
+                                    value={buyerLog.text}
+                                    onChange={(e, data) => {
+                                      this.setState({
+                                        buyerLog: {
+                                          ...buyerLog,
+                                          text: data.value
+                                        }
+                                      })
+                                    }}
+                                  />
+                                </Form.Field>
+                                <Form.Field
+                                  width={4}
+                                  style={{ alignSelf: 'flex-end' }}
+                                >
+                                  <Form.Button
+                                    floated="right"
+                                    type="submit"
+                                    color="red"
+                                    disabled={isSubmitting || !isValid}
+                                    loading={isLoadingUpdate}
+                                    onClick={handleSubmit}
+                                  >
+                                    <Icon name="save" />
+                                    Save
+                                  </Form.Button>
+                                </Form.Field>
+                              </Form.Group>
+                            </Form>
+                          </Fragment>
+                        </Grid.Column>
+                        <Grid.Column width={8}>
+                          <Table
+                            color="blue"
+                            celled
+                            inverted
+                            selectable
+                            size="small"
+                            compact
+                          >
+                            <Table.Header>
+                              <Table.Row>
+                                <Table.HeaderCell>
+                                  Other Business
+                                </Table.HeaderCell>
+                              </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                              {listBuyerLogList.map(buyerLog => (
+                                <Table.Row
+                                  active
+                                  key={buyerLog.id}
+                                  onClick={() =>
+                                    this._getBusinessObject(buyerLog)
+                                  }
+                                >
+                                  <Table.Cell>
+                                    {buyerLog.Business.businessName}
+                                  </Table.Cell>
+                                </Table.Row>
+                              ))}
+                            </Table.Body>
+                          </Table>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Button
+                        size="small"
+                        color="green"
+                        onClick={() => this._backToSearch(null)}
+                      >
+                        <Icon name="backward" />
+                        Back to Attached Logs
+                      </Button>
+                    </Grid>
+                  </Fragment>
+                ) : null}
+              </Dimmer.Dimmable>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -390,7 +439,6 @@ const mapDispatchToProps = dispatch =>
       getBuyer,
       getLog,
       getBusiness,
-      createBuyerLog,
       updateBuyerLog,
       getBusinessBuyerLog,
       clearBuyerLog
@@ -408,8 +456,6 @@ BuyerDetailsCM.propTypes = {
   getBusiness: PropTypes.func,
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
-  createBuyerLog: PropTypes.func,
-  isLoadingCreate: PropTypes.bool,
   updateBuyerLog: PropTypes.func,
   handleSubmit: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
@@ -417,7 +463,9 @@ BuyerDetailsCM.propTypes = {
   isValid: PropTypes.bool,
   listBusinessBuyerLogList: PropTypes.array,
   getBusinessBuyerLog: PropTypes.func,
-  clearBuyerLog: PropTypes.func
+  clearBuyerLog: PropTypes.func,
+  isLoadingBusBuyLog: PropTypes.bool,
+  isLoadingBuyerLog: PropTypes.bool
 }
 
 const mapPropsToValues = props => {}
@@ -426,10 +474,11 @@ const mapStateToProps = state => ({
   buyer: state.buyer.get.object,
   isLoadingBuyer: state.buyer.get.isLoading,
   listBuyerLogList: state.buyerLog.get.array,
+  isLoadingBuyerLog: state.buyerLog.get.isLoading,
   business: state.business.get.object,
-  isLoadingCreate: state.buyerLog.create.isLoading,
   isLoadingUpdate: state.buyerLog.update.isLoading,
-  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array
+  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,
+  isLoadingBusBuyLog: state.buyerLog.getBusBuyLog.isLoading
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(
