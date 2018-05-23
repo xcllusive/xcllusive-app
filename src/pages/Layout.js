@@ -114,8 +114,16 @@ const Layout = ({ match, logout, menu }) => (
         component={BuyerDetailsCM}
         path={`${match.path}clientManager/:id`}
       /> */}
-      <Route exact component={BuyerDetails} path={`${match.path}buyer/:id`} />
-      <Route exact component={BuyerList} path={`${match.path}buyer/BS/:id`} />
+      <Route
+        exact
+        component={BuyerDetails}
+        path={`${match.path}buyer/:idBuyer/business/:idBusiness`}
+      />
+      <Route
+        exact
+        component={BuyerList}
+        path={`${match.path}buyer/business/:id`}
+      />
       <Route
         render={() => <span>presale</span>}
         path={`${match.path}presale`}

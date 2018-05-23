@@ -6,7 +6,8 @@ import {
   update,
   reassignBusiness as reassignBusinessAPI,
   updateStageSalesMemo as updateStageSalesMemoAPI,
-  updateStageLost as updateStageLostAPI
+  updateStageLost as updateStageLostAPI,
+  getBuyersFromBusiness as getBuyersFromBusinessAPI
 } from '../../services/api/business'
 
 // Action Types
@@ -33,7 +34,10 @@ export const Types = {
   UPDATE_STAGE_SALES_MEMO_FAILURE: 'UPDATE_STAGE_SALES_MEMO_FAILURE',
   UPDATE_STAGE_LOST_LOADING: 'UPDATE_STAGE_LOST_LOADING',
   UPDATE_STAGE_LOST_SUCCESS: 'UPDATE_STAGE_LOST_SUCCESS',
-  UPDATE_STAGE_LOST_FAILURE: 'UPDATE_STAGE_LOST_FAILURE'
+  UPDATE_STAGE_LOST_FAILURE: 'UPDATE_STAGE_LOST_FAILURE',
+  GET_BUYERS_FROM_BUSINESS_LOADING: 'GET_BUYERS_FROM_BUSINESS_LOADING',
+  GET_BUYERS_FROM_BUSINESS_SUCCESS: 'GET_BUYERS_FROM_BUSINESS_SUCCESS',
+  GET_BUYERS_FROM_BUSINESS_FAILURE: 'GET_BUYERS_FROM_BUSINESS_FAILURE'
 }
 
 // Reducer
@@ -81,6 +85,11 @@ const initialState = {
   updateStageLost: {
     isLoading: false,
     isUpdated: false,
+    error: null
+  },
+  getBuyersFromBusiness: {
+    isLoading: true,
+    array: [],
     error: null
   }
 }
@@ -311,6 +320,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUYERS_FROM_BUSINESS_LOADING:
+      return {
+        ...state,
+        getBuyersFromBusiness: {
+          ...state.getBuyersFromBusiness,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYERS_FROM_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        getBuyersFromBusiness: {
+          ...state.getBuyersFromBusiness,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYERS_FROM_BUSINESS_FAILURE:
+      return {
+        ...state,
+        getBuyersFromBusiness: {
+          ...state.getBuyersFromBusiness,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -462,6 +499,26 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_STAGE_SALES_MEMO_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getBuyersFromBusiness = businessId => async dispatch => {
+  dispatch({
+    type: Types.GET_BUYERS_FROM_BUSINESS_LOADING,
+    payload: true
+  })
+  try {
+    const buyers = await getBuyersFromBusinessAPI(businessId)
+    dispatch({
+      type: Types.GET_BUYERS_FROM_BUSINESS_SUCCESS,
+      payload: buyers.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUYERS_FROM_BUSINESS_FAILURE,
       payload: error
     })
     toast.error(error)

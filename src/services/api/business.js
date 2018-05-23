@@ -61,3 +61,9 @@ export const updateStageSalesMemo = () => {
 export const updateStageLost = () => {
   console.log('updateStageLost')
 }
+
+export const getBuyersFromBusiness = businessId => {
+  return request({
+    url: `/business/${businessId}/buyer`
+  })
+}

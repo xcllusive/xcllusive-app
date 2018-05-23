@@ -189,7 +189,9 @@ class BuyerPage extends Component {
                     <Table.Cell>{`BS${business.id}`}</Table.Cell>
                     <Table.Cell
                       selectable
-                      onClick={() => history.push(`buyer/BS/${business.id}`)}
+                      onClick={() =>
+                        history.push(`buyer/business/${business.id}`)
+                      }
                     >
                       {business.businessName}
                     </Table.Cell>

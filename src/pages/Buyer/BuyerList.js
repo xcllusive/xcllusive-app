@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Table, Grid } from 'semantic-ui-react'
 
+import { getBuyersFromBusiness } from '../../redux/ducks/business'
+
 import Wrapper from '../../components/content/Wrapper'
 
 class BuyerListPage extends Component {
@@ -12,8 +14,12 @@ class BuyerListPage extends Component {
     this.state = {}
   }
 
+  componentDidMount () {
+    this.props.getBuyersFromBusiness(this.props.match.params.id)
+  }
+
   render () {
-    const { history } = this.props
+    const { listBuyersList, history } = this.props
 
     return (
       <Wrapper>
@@ -24,14 +30,25 @@ class BuyerListPage extends Component {
                 <Table.Row>
                   <Table.HeaderCell>Buyer</Table.HeaderCell>
                   <Table.HeaderCell>Notes</Table.HeaderCell>
-                  <Table.HeaderCell>Follow Up</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                <Table.Row active onClick={() => history.push('buyer/5')}>
-                  <Table.Cell>{}</Table.Cell>
-                  <Table.Cell />
-                </Table.Row>
+                {listBuyersList.map(buyersList => (
+                  <Table.Row
+                    active
+                    key={buyersList.Buyer.id}
+                    onClick={() =>
+                      history.push(
+                        `/buyer/${buyersList.Buyer.id}/business/${
+                          this.props.match.params.id
+                        }`
+                      )
+                    }
+                  >
+                    <Table.Cell>{buyersList.Buyer.firstName}</Table.Cell>
+                    <Table.Cell>{buyersList.Buyer.buyerNotes}</Table.Cell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
           </Grid.Row>
@@ -42,11 +59,17 @@ class BuyerListPage extends Component {
 }
 
 BuyerListPage.propTypes = {
+  getBuyersFromBusiness: PropTypes.func,
+  match: PropTypes.object,
+  listBuyersList: PropTypes.array,
   history: PropTypes.object
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getBuyersFromBusiness }, dispatch)
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  listBuyersList: state.business.getBuyersFromBusiness.array
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(BuyerListPage)
