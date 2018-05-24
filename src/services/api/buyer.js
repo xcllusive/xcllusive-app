@@ -30,3 +30,9 @@ export const get = id => {
     url: `/buyer/${id}`
   })
 }
+
+export const getBusinessesFromBuyer = id => {
+  return request({
+    url: `/buyer/${id}/business`
+  })
+}

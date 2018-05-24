@@ -20,13 +20,14 @@ import {
   Statistic
 } from 'semantic-ui-react'
 
-import { getBuyer } from '../../redux/ducks/buyer'
+import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
 import {
   getLog,
   updateBuyerLog,
   getBusinessBuyerLog,
   clearBuyerLog
 } from '../../redux/ducks/buyerLog'
+
 import { getBusiness } from '../../redux/ducks/business'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
@@ -62,7 +63,8 @@ class BuyerDetails extends Component {
         { key: '2', text: 'Industry Buyer', value: 'Industry Buyer' },
         { key: '3', text: 'Investal', value: 'Investal' },
         { key: '4', text: 'Investment Company', value: 'Investment Company' }
-      ]
+      ],
+      buyerDetails: null
     }
   }
 
@@ -74,6 +76,7 @@ class BuyerDetails extends Component {
       this.props.match.params.idBuyer,
       this.props.match.params.idBusiness
     )
+    this.props.getBusinessesFromBuyer(this.props.match.params.idBuyer)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -106,7 +109,6 @@ class BuyerDetails extends Component {
 
   render () {
     const {
-      listBuyerLogList,
       isLoadingBuyer,
       business,
       isLoadingUpdate,
@@ -115,7 +117,8 @@ class BuyerDetails extends Component {
       isValid,
       listBusinessBuyerLogList,
       history,
-      buyer
+      buyer,
+      listBusinessesFromBuyer
     } = this.props
 
     const { priceOptions, buyerType, buyerLog } = this.state
@@ -307,6 +310,7 @@ class BuyerDetails extends Component {
                           onChange={(e, data) => {
                             this.setState({
                               buyer: {
+                                ...buyer,
                                 buyerNotes: data.value
                               }
                             })
@@ -326,9 +330,11 @@ class BuyerDetails extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {listBuyerLogList.map(buyerLog => (
-                    <Table.Row active key={buyerLog.id}>
-                      <Table.Cell>{buyerLog.Business.businessName}</Table.Cell>
+                  {listBusinessesFromBuyer.map(businessesFromBuyer => (
+                    <Table.Row active key={businessesFromBuyer.business_id}>
+                      <Table.Cell>
+                        {businessesFromBuyer.Business.businessName}
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -411,7 +417,8 @@ const mapDispatchToProps = dispatch =>
       updateBuyerLog,
       getBusinessBuyerLog,
       clearBuyerLog,
-      openModal
+      openModal,
+      getBusinessesFromBuyer
     },
     dispatch
   )
@@ -420,7 +427,6 @@ BuyerDetails.propTypes = {
   getBuyer: PropTypes.func,
   match: PropTypes.object,
   buyer: PropTypes.object,
-  listBuyerLogList: PropTypes.array,
   getLog: PropTypes.func,
   isLoadingBuyer: PropTypes.bool,
   getBusiness: PropTypes.func,
@@ -435,7 +441,9 @@ BuyerDetails.propTypes = {
   getBusinessBuyerLog: PropTypes.func,
   clearBuyerLog: PropTypes.func,
   openModal: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
+  getBusinessesFromBuyer: PropTypes.func,
+  listBusinessesFromBuyer: PropTypes.array
 }
 
 const mapPropsToValues = props => {}
@@ -446,7 +454,8 @@ const mapStateToProps = state => ({
   listBuyerLogList: state.buyerLog.get.array,
   business: state.business.get.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
-  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array
+  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,
+  listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(

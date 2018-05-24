@@ -27,7 +27,12 @@ class BuyerListPage extends Component {
           <Dimmer inverted active={isLoadingBusiness}>
             <Loader>Loading</Loader>
           </Dimmer>
-          <Header as="h2" content={business.businessName} />
+          <Header
+            as="h2"
+            content={`${business.businessName} / (${
+              listBuyersList.length
+            } records)`}
+          />
           <Grid padded="horizontally">
             <Grid.Row>
               <Table

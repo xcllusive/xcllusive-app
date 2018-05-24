@@ -53,6 +53,20 @@ class ClientManagerList extends Component {
     }
   }
 
+  _convertHtmlToRightText = html => {
+    let htmlConverted = html.replace(/<style([\s\S]*?)<\/style>/gi, '')
+    htmlConverted = htmlConverted.replace(/<script([\s\S]*?)<\/script>/gi, '')
+    htmlConverted = htmlConverted.replace(/<\/div>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<\/li>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<li>/gi, '  *  ')
+    htmlConverted = htmlConverted.replace(/<\/ul>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<\/p>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<br\s*[\\/]?>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<[^>]+>/gi, '')
+
+    return encodeURIComponent(htmlConverted)
+  }
+
   async componentWillReceiveProps (nextProps) {
     if (
       this.props.isUpdatedBuyer !== nextProps.isUpdatedBuyer &&
@@ -178,12 +192,11 @@ class ClientManagerList extends Component {
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           if (this.props.objectEmailTemplate) {
-            window.location.href =
-              `mailto:${this.state.buyer.email}` +
-              '?subject=' +
-              `${this.props.objectEmailTemplate.subject}` +
-              '&body=' +
-              `${this.props.objectEmailTemplate.body}`
+            window.location.href = `mailto:${this.state.buyer.email} ?subject=${
+              this.props.objectEmailTemplate.subject
+            } &body=${this._convertHtmlToRightText(
+              this.props.objectEmailTemplate.body
+            )}`
           }
         }
       }
