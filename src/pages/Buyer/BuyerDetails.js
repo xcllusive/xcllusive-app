@@ -22,7 +22,6 @@ import {
 
 import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
 import {
-  getLog,
   updateBuyerLog,
   getBusinessBuyerLog,
   clearBuyerLog
@@ -32,6 +31,8 @@ import { getBusiness } from '../../redux/ducks/business'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 
+import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
+
 import Wrapper from '../../components/content/Wrapper'
 
 class BuyerDetails extends Component {
@@ -39,24 +40,7 @@ class BuyerDetails extends Component {
     super(props)
     this.state = {
       buyerLog: null,
-      priceOptions: [
-        { key: '0', text: 'Any', value: 'Any' },
-        { key: '1', text: '100k', value: '100.000' },
-        { key: '2', text: '200k', value: '200.000' },
-        { key: '3', text: '300k', value: '300.000' },
-        { key: '4', text: '400k', value: '400.000' },
-        { key: '5', text: '500k', value: '500.000' },
-        { key: '6', text: '600k', value: '600.000' },
-        { key: '7', text: '700k', value: '700.000' },
-        { key: '8', text: '800k', value: '800.000' },
-        { key: '9', text: '900k', value: '900.000' },
-        { key: '10', text: '1M', value: '1,000.000' },
-        { key: '11', text: '1.5M', value: '1,500.000' },
-        { key: '12', text: '2M', value: '2,000.000' },
-        { key: '13', text: '2.5M', value: '2,500.000' },
-        { key: '14', text: '3M', value: '3,000.000' },
-        { key: '15', text: '3M +', value: '3M+' }
-      ],
+      priceOptions: OptionsPriceSelectBuyer,
       buyerType: [
         { key: '0', text: 'General', value: 'General' },
         { key: '1', text: 'Private Buyer', value: 'Private Buyer' },
@@ -70,7 +54,6 @@ class BuyerDetails extends Component {
 
   componentDidMount () {
     this.props.getBuyer(this.props.match.params.idBuyer)
-    this.props.getLog(this.props.match.params.idBuyer)
     this.props.getBusiness(this.props.match.params.idBusiness)
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
@@ -80,17 +63,24 @@ class BuyerDetails extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listBusinessBuyerLogList.length) {
+    if (
+      this.props.listBusinessBuyerLogList.length !==
+        nextProps.listBusinessBuyerLogList.length &&
+      nextProps.listBusinessBuyerLogList.length
+    ) {
       this._selectLog(nextProps.listBusinessBuyerLogList[0])
     }
   }
 
   _selectLog = buyerLog => {
-    this.setState({ buyerLog })
+    const { id, followUp, text } = buyerLog
+    this.props.setFieldValue('buyerLog_id', id)
+    this.props.setFieldValue('buyerLog_followUp', followUp)
+    this.props.setFieldValue('buyerLog_text', text)
   }
 
   _handleDateChange = date => {
-    this.props.setFieldValue('date', date)
+    this.props.setFieldValue('buyerLog_followUp', date)
   }
 
   _toggleModalEmailTemplates = () => {
@@ -107,6 +97,10 @@ class BuyerDetails extends Component {
     })
   }
 
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+  }
+
   render () {
     const {
       isLoadingBuyer,
@@ -118,10 +112,12 @@ class BuyerDetails extends Component {
       listBusinessBuyerLogList,
       history,
       buyer,
-      listBusinessesFromBuyer
+      listBusinessesFromBuyer,
+      handleChange,
+      values
     } = this.props
 
-    const { priceOptions, buyerType, buyerLog } = this.state
+    const { priceOptions, buyerType } = this.state
     return (
       <Wrapper>
         {buyer ? (
@@ -164,13 +160,13 @@ class BuyerDetails extends Component {
           <Grid celled="internally" divided>
             <Grid.Row>
               <Grid.Column width={5}>
-                {buyerLog ? (
+                {values.buyerLog_id ? (
                   <Form>
                     <Form.Group>
                       <Form.Field width={11}>
                         <h5>Follow Up Date</h5>
                         <DatePicker
-                          selected={moment(buyerLog.followUp)}
+                          selected={moment(values.buyerLog_followUp)}
                           onChange={this._handleDateChange}
                           popperPlacement="top-end"
                           form
@@ -184,15 +180,8 @@ class BuyerDetails extends Component {
                           label="Communication text"
                           name="text"
                           autoComplete="text"
-                          value={buyerLog.text}
-                          onChange={(e, data) => {
-                            this.setState({
-                              buyerLog: {
-                                ...buyerLog,
-                                text: data.value
-                              }
-                            })
-                          }}
+                          value={values.buyerLog_text}
+                          onChange={handleChange}
                         />
                       </Form.Field>
                     </Form.Group>
@@ -240,11 +229,12 @@ class BuyerDetails extends Component {
           </Grid>
           <Grid celled="internally" divided centered>
             <Grid.Row>
-              <Grid.Column width={7}>
+              <Grid.Column width={16} textAlign="center">
                 <Button
                   color="twitter"
                   onClick={() =>
                     this._selectLog({
+                      id: 1,
                       followUp: moment().add(1, 'day'),
                       text: ''
                     })
@@ -290,31 +280,25 @@ class BuyerDetails extends Component {
         <Grid celled="internally" divided>
           <Grid.Row>
             <Grid.Column width={4}>
-              <Dimmer.Dimmable
-                dimmed={isLoadingBuyer}
-                style={{ height: '80vh' }}
-              >
+              <Dimmer.Dimmable dimmed={isLoadingBuyer}>
                 <Dimmer inverted active={isLoadingBuyer}>
                   <Loader>Loading</Loader>
                 </Dimmer>
                 {buyer ? (
                   <Fragment>
-                    <Header as="h4" content="Brokers Notes" />
+                    <Header
+                      style={{ margin: 0 }}
+                      as="h4"
+                      content="Brokers Notes"
+                    />
                     <Form>
                       <Form.Group>
                         <Form.TextArea
                           width={16}
                           // placeholder="there is no notes..."
                           name="buyerNotes"
-                          value={buyer.buyerNotes}
-                          onChange={(e, data) => {
-                            this.setState({
-                              buyer: {
-                                ...buyer,
-                                buyerNotes: data.value
-                              }
-                            })
-                          }}
+                          value={values.buyerNotes}
+                          onChange={handleChange}
                         />
                       </Form.Group>
                     </Form>
@@ -346,9 +330,10 @@ class BuyerDetails extends Component {
                   <Form.Field width={16}>
                     <Form.TextArea
                       label="Buyer Background Info"
-                      name="text"
-                      autoComplete="text"
-                      //  value={this.state.buyerLog.text}
+                      name="backgroundInfo"
+                      autoComplete="backgroundInfo"
+                      value={values.backgroundInfo}
+                      onChange={handleChange}
                     />
                   </Form.Field>
                 </Form.Group>
@@ -367,21 +352,20 @@ class BuyerDetails extends Component {
                       options={buyerType}
                       name="buyerType"
                       autoComplete="buyerType"
-                      // value={values.businessSource}
-                      // onChange={buyerType}
+                      value={values.buyerType}
+                      onChange={this._handleSelectChange}
                     />
                   </Form.Field>
                 </Form.Group>
                 <Form.Group>
                   <Form.Field>
                     <Form.Select
-                      required
                       label="Price From"
                       options={priceOptions}
                       name="priceOptions"
                       autoComplete="priceOptions"
-                      // value={values.businessSource}
-                      // onChange={priceOptions}
+                      value={values.priceOptions}
+                      onChange={this._handleSelectChange}
                     />
                   </Form.Field>
                   <Form.Field>
@@ -412,7 +396,6 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getBuyer,
-      getLog,
       getBusiness,
       updateBuyerLog,
       getBusinessBuyerLog,
@@ -427,7 +410,6 @@ BuyerDetails.propTypes = {
   getBuyer: PropTypes.func,
   match: PropTypes.object,
   buyer: PropTypes.object,
-  getLog: PropTypes.func,
   isLoadingBuyer: PropTypes.bool,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
@@ -443,15 +425,27 @@ BuyerDetails.propTypes = {
   openModal: PropTypes.func,
   history: PropTypes.object,
   getBusinessesFromBuyer: PropTypes.func,
-  listBusinessesFromBuyer: PropTypes.array
+  listBusinessesFromBuyer: PropTypes.array,
+  handleChange: PropTypes.func,
+  values: PropTypes.object
 }
 
-const mapPropsToValues = props => {}
+const mapPropsToValues = props => {
+  return {
+    buyerNotes: props.buyer ? props.buyer.buyerNotes : '',
+    backgroundInfo: props.buyer ? props.buyer.backgroundInfo : '',
+    buyerType: props.buyer ? props.buyer.buyerType : '',
+    priceFrom: props.buyer ? props.buyer.priceFrom : '',
+    priceTo: props.buyer ? props.buyer.priceTo : '',
+    buyerLog_id: '',
+    buyerLog_followUp: '',
+    buyerLog_text: ''
+  }
+}
 
 const mapStateToProps = state => ({
   buyer: state.buyer.get.object,
   isLoadingBuyer: state.buyer.get.isLoading,
-  listBuyerLogList: state.buyerLog.get.array,
   business: state.business.get.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
   listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,

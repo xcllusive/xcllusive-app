@@ -19,7 +19,7 @@ import {
   Button
 } from 'semantic-ui-react'
 
-import { getBuyer } from '../../redux/ducks/buyer'
+import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
 import {
   getLog,
   updateBuyerLog,
@@ -42,10 +42,15 @@ class BuyerDetailsCM extends Component {
     this.props.getLog(this.props.match.params.id)
   }
 
+  componentWillUnmount () {
+    this.setState({ buyerLog: null })
+  }
+
   _getBusinessObject = buyerLog => {
     this.props.getBusiness(buyerLog.business_id)
     this.setState({ buyerLog })
     this.props.getBusinessBuyerLog(this.props.buyer.id, buyerLog.business_id)
+    this.props.getBusinessesFromBuyer(this.props.buyer.id)
   }
 
   _getBusinessObject2 = buyerLog => {
@@ -57,8 +62,7 @@ class BuyerDetailsCM extends Component {
   }
 
   _backToSearch = business => {
-    // this.props.clearBuyerLog()
-    // this.props.getBusiness(0)
+    this.setState({ buyerLog: null })
   }
 
   _selectLog = buyerLog => {
@@ -76,7 +80,8 @@ class BuyerDetailsCM extends Component {
       isValid,
       listBusinessBuyerLogList,
       isLoadingBusBuyLog,
-      isLoadingBuyerLog
+      isLoadingBuyerLog,
+      listBusinessesFromBuyer
     } = this.props
     const { buyerLog } = this.state
     return (
@@ -194,18 +199,13 @@ class BuyerDetailsCM extends Component {
               </Dimmer.Dimmable>
             </Grid.Column>
             <Grid.Column width={11}>
-              <Dimmer.Dimmable
-                dimmed={isLoadingBuyerLog}
-                style={{ height: '80vh' }}
-              >
+              <Dimmer.Dimmable dimmed={isLoadingBuyerLog}>
                 <Dimmer inverted active={isLoadingBuyerLog}>
                   <Loader>Loading</Loader>
                 </Dimmer>
-                {listBuyerLogList ? (
-                  // business.businessName == null &&
-                  // buyerLog == null
+                <Header style={{ margin: 0 }}>Attached Business Log</Header>
+                {!buyerLog ? (
                   <Fragment>
-                    <Header>Attached Business Log</Header>
                     <Table
                       color="blue"
                       celled
@@ -252,7 +252,7 @@ class BuyerDetailsCM extends Component {
               </Dimmer.Dimmable>
               <Dimmer.Dimmable
                 dimmed={isLoadingBusBuyLog}
-                style={{ height: '80vh' }}
+                style={isLoadingBusBuyLog ? { height: '80vh' } : null}
               >
                 <Dimmer inverted active={isLoadingBusBuyLog}>
                   <Loader>Loading</Loader>
@@ -373,6 +373,14 @@ class BuyerDetailsCM extends Component {
                                 </Form.Field>
                               </Form.Group>
                             </Form>
+                            <Button
+                              size="small"
+                              color="green"
+                              onClick={() => this._backToSearch(null)}
+                            >
+                              <Icon name="backward" />
+                              Back to Attached Logs
+                            </Button>
                           </Fragment>
                         </Grid.Column>
                         <Grid.Column width={8}>
@@ -387,36 +395,30 @@ class BuyerDetailsCM extends Component {
                             <Table.Header>
                               <Table.Row>
                                 <Table.HeaderCell>
-                                  Other Business
+                                  Previous Business
                                 </Table.HeaderCell>
                               </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                              {listBuyerLogList.map(buyerLog => (
-                                <Table.Row
-                                  active
-                                  key={buyerLog.id}
-                                  onClick={() =>
-                                    this._getBusinessObject(buyerLog)
-                                  }
-                                >
-                                  <Table.Cell>
-                                    {buyerLog.Business.businessName}
-                                  </Table.Cell>
-                                </Table.Row>
-                              ))}
+                              {listBusinessesFromBuyer.map(
+                                businessFromBuyer => (
+                                  <Table.Row
+                                    active
+                                    key={businessFromBuyer.business_id}
+                                    onClick={() =>
+                                      this._getBusinessObject(businessFromBuyer)
+                                    }
+                                  >
+                                    <Table.Cell>
+                                      {businessFromBuyer.Business.businessName}
+                                    </Table.Cell>
+                                  </Table.Row>
+                                )
+                              )}
                             </Table.Body>
                           </Table>
                         </Grid.Column>
                       </Grid.Row>
-                      <Button
-                        size="small"
-                        color="green"
-                        onClick={() => this._backToSearch(null)}
-                      >
-                        <Icon name="backward" />
-                        Back to Attached Logs
-                      </Button>
                     </Grid>
                   </Fragment>
                 ) : null}
@@ -441,7 +443,8 @@ const mapDispatchToProps = dispatch =>
       getBusiness,
       updateBuyerLog,
       getBusinessBuyerLog,
-      clearBuyerLog
+      clearBuyerLog,
+      getBusinessesFromBuyer
     },
     dispatch
   )
@@ -465,7 +468,9 @@ BuyerDetailsCM.propTypes = {
   getBusinessBuyerLog: PropTypes.func,
   clearBuyerLog: PropTypes.func,
   isLoadingBusBuyLog: PropTypes.bool,
-  isLoadingBuyerLog: PropTypes.bool
+  isLoadingBuyerLog: PropTypes.bool,
+  getBusinessesFromBuyer: PropTypes.func,
+  listBusinessesFromBuyer: PropTypes.array
 }
 
 const mapPropsToValues = props => {}
@@ -478,7 +483,8 @@ const mapStateToProps = state => ({
   business: state.business.get.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
   listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,
-  isLoadingBusBuyLog: state.buyerLog.getBusBuyLog.isLoading
+  isLoadingBusBuyLog: state.buyerLog.getBusBuyLog.isLoading,
+  listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(
