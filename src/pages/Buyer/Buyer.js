@@ -121,8 +121,8 @@ class BuyerPage extends Component {
     }
   }
 
-  async componentWillMount () {
-    await this.props.getBusinesses()
+  componentWillMount () {
+    this.props.getBusinesses(false, [4, 5])
   }
 
   _toggleModal = () => {
