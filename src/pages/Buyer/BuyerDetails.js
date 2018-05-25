@@ -88,11 +88,6 @@ class BuyerDetails extends Component {
       options: {
         title: 'Email to Buyer',
         text: 'Are you sure you want to send an email to buyer?'
-      },
-      onConfirm: isConfirmed => {
-        if (isConfirmed) {
-          console.log('worked!')
-        }
       }
     })
   }

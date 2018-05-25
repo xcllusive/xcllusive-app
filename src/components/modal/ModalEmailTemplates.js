@@ -15,6 +15,7 @@ import {
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
+import Yup from 'yup'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
@@ -23,6 +24,8 @@ import {
   getEmailTemplate,
   clearEmailTemplates
 } from '../../redux/ducks/emailTemplates'
+
+import { sendEmailBuyerBrokersEmail } from '../../redux/ducks/buyer'
 
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -79,6 +82,10 @@ class ModalEmailTemplates extends Component {
   }
 
   _handleChangeBody = value => {
+    if (value === '<p><br></p>') {
+      this.props.setFieldValue('body', '')
+      return
+    }
     this.props.setFieldValue('body', value)
   }
 
@@ -87,8 +94,16 @@ class ModalEmailTemplates extends Component {
   }
 
   _handleConfirm = isConfirmed => {
-    this.props.closeModal()
-    this.props.onConfirm(isConfirmed)
+    if (!isConfirmed) {
+      this.props.closeModal()
+      return
+    }
+    const sendEmail = this.props.objectEmailTemplate
+    sendEmail.body = this.props.values.body
+    sendEmail.subject = this.props.values.subject
+
+    console.log(sendEmail)
+    // this.props.sendEmailBuyerBrokersEmail(sendEmail)
   }
 
   _attachQuillRefs = () => {
@@ -123,8 +138,10 @@ class ModalEmailTemplates extends Component {
       handleBlur,
       handleChange,
       touched,
-      errors
+      errors,
+      isValid
     } = this.props
+    console.log(isValid)
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -159,6 +176,7 @@ class ModalEmailTemplates extends Component {
               <Form.Group>
                 <Form.Field width={16}>
                   <Form.Input
+                    required
                     label="Subject"
                     name="subject"
                     autoComplete="subject"
@@ -213,8 +231,8 @@ class ModalEmailTemplates extends Component {
                   <Grid.Column floated="left" width={16}>
                     <Form.Field>
                       <ReactQuill
+                        required
                         ref={el => {
-                          console.log(el)
                           this.reactQuillRef = el
                         }}
                         value={values.body}
@@ -240,8 +258,9 @@ class ModalEmailTemplates extends Component {
             positive
             icon="checkmark"
             labelPosition="right"
-            content="Confirm"
-            onClick={() => this._handleConfirm(options)}
+            content="Send Email"
+            disabled={!isValid}
+            onClick={this._handleConfirm}
           />
         </Modal.Actions>
       </Modal>
@@ -250,7 +269,6 @@ class ModalEmailTemplates extends Component {
 }
 
 ModalEmailTemplates.propTypes = {
-  onConfirm: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   options: PropTypes.shape({
     title: PropTypes.string.isRequired,
@@ -268,7 +286,9 @@ ModalEmailTemplates.propTypes = {
   handleBlur: PropTypes.func,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  isValid: PropTypes.bool,
+  sendEmailBuyerBrokersEmail: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -280,9 +300,15 @@ const mapStateToProps = state => ({
 
 const mapPropsToValues = props => {
   return {
-    body: props.objectEmailTemplate ? props.objectEmailTemplate.body : ''
+    body: props.objectEmailTemplate ? props.objectEmailTemplate.body : '',
+    subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : ''
   }
 }
+
+const validationSchema = Yup.object().shape({
+  subject: Yup.string().required('Subject must be required'),
+  body: Yup.string().required('Body must be required')
+})
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
@@ -290,7 +316,8 @@ const mapDispatchToProps = dispatch =>
       getEmailTemplates,
       getEmailTemplate,
       closeModal,
-      clearEmailTemplates
+      clearEmailTemplates,
+      sendEmailBuyerBrokersEmail
     },
     dispatch
   )
@@ -298,6 +325,7 @@ const mapDispatchToProps = dispatch =>
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
+    validationSchema,
     enableReinitialize: true
   })(ModalEmailTemplates)
 )

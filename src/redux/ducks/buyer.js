@@ -1,9 +1,12 @@
+import { toast } from 'react-toastify'
+
 import {
   create,
   update,
   getAll,
   get,
-  getBusinessesFromBuyer as getBusinessesFromBuyerAPI
+  getBusinessesFromBuyer as getBusinessesFromBuyerAPI,
+  sendEmailBuyerBrokersEmail as sendEmailBuyerBrokersEmailAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -53,6 +56,11 @@ const initialState = {
   getBusinessesFromBuyer: {
     isLoading: true,
     array: [],
+    error: null
+  },
+  sendEmailBuyerBrokersEmail: {
+    isLoading: false,
+    isSent: false,
     error: null
   }
 }
@@ -203,6 +211,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_LOADING:
+      return {
+        ...state,
+        sendEmailBuyerBrokersEmail: {
+          ...state.sendEmailBuyerBrokersEmail,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS:
+      return {
+        ...state,
+        sendEmailBuyerBrokersEmail: {
+          ...state.sendEmailBuyerBrokersEmail,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE:
+      return {
+        ...state,
+        sendEmailBuyerBrokersEmail: {
+          ...state.sendEmailBuyerBrokersEmail,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -305,5 +341,28 @@ export const getBusinessesFromBuyer = (search = false) => async dispatch => {
       type: Types.GET_BUSINESSES_FROM_BUYER_FAILURE,
       payload: error
     })
+  }
+}
+
+export const sendEmailBuyerBrokersEmail = (
+  buyerId,
+  businessId
+) => async dispatch => {
+  dispatch({
+    type: Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_LOADING,
+    payload: true
+  })
+  try {
+    const response = await sendEmailBuyerBrokersEmailAPI(buyerId, businessId)
+    dispatch({
+      type: Types.SSEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
   }
 }

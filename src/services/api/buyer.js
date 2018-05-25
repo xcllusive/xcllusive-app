@@ -36,3 +36,9 @@ export const getBusinessesFromBuyer = id => {
     url: `/buyer/${id}/business`
   })
 }
+
+export const sendEmailBuyerBrokersEmail = id => {
+  return request({
+    url: `/buyer/${id}/business`
+  })
+}

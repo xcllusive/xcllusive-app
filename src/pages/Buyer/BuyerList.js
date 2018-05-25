@@ -2,7 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Table, Grid, Header, Dimmer, Loader } from 'semantic-ui-react'
+import {
+  Table,
+  Grid,
+  Header,
+  Dimmer,
+  Loader,
+  Button,
+  Icon
+} from 'semantic-ui-react'
 
 import { getBuyersFromBusiness, getBusiness } from '../../redux/ducks/business'
 
@@ -33,6 +41,15 @@ class BuyerListPage extends Component {
               listBuyersList.length
             } records)`}
           />
+          <Button
+            color="green"
+            onClick={() => history.push('/buyer')}
+            size="small"
+            floated="right"
+          >
+            <Icon name="backward" />
+            Return to Business
+          </Button>
           <Grid padded="horizontally">
             <Grid.Row>
               <Table
