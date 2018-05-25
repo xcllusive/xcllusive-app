@@ -9,6 +9,8 @@ import Yup from 'yup'
 import { updateBuyer } from '../../redux/ducks/buyer'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 
+import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
+
 class EditBuyerForm extends Component {
   constructor (props) {
     super(props)
@@ -20,7 +22,8 @@ class EditBuyerForm extends Component {
         { key: 4, text: 'TAS', value: 'TAS' },
         { key: 5, text: 'VIC', value: 'VIC' },
         { key: 6, text: 'WA', value: 'WA' }
-      ]
+      ],
+      priceOptions: OptionsPriceSelectBuyer
     }
   }
   componentWillMount () {
@@ -32,7 +35,7 @@ class EditBuyerForm extends Component {
   }
 
   render () {
-    const { state } = this.state
+    const { state, priceOptions } = this.state
     const {
       modalOpen,
       toggleModal,
@@ -237,42 +240,24 @@ class EditBuyerForm extends Component {
                 )}
               </Form.Field>
               <Form.Field>
-                <Form.Input
+                <Form.Select
                   label="Price From"
+                  options={priceOptions}
                   name="priceFrom"
                   autoComplete="priceFrom"
                   value={values.priceFrom}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={this._handleSelectChange}
                 />
-                {errors.priceFrom &&
-                  touched.priceFrom && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.priceFrom}
-                  />
-                )}
               </Form.Field>
               <Form.Field>
-                <Form.Input
+                <Form.Select
                   label="Price To"
+                  options={priceOptions}
                   name="priceTo"
                   autoComplete="priceTo"
                   value={values.priceTo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={this._handleSelectChange}
                 />
-                {errors.priceTo &&
-                  touched.priceTo && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.priceTo}
-                  />
-                )}
               </Form.Field>
             </Form.Group>
           </Form>
