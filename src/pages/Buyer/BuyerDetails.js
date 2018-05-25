@@ -118,33 +118,48 @@ class BuyerDetails extends Component {
       <Wrapper>
         {buyer ? (
           <Fragment>
-            <Statistic.Group widths={7} size="mini">
-              <Statistic color="orange">
-                <Statistic.Value>{buyer.firstName}</Statistic.Value>
-                <Statistic.Label>Buyer</Statistic.Label>
-              </Statistic>
-              <Statistic color="blue">
-                <Statistic.Value>{buyer.email}</Statistic.Value>
-                <Statistic.Label>Email</Statistic.Label>
-              </Statistic>
-              <Statistic color="blue">
-                <Statistic.Value>{buyer.telephone1}</Statistic.Value>
-                <Statistic.Label>Phone 1</Statistic.Label>
-              </Statistic>
-              <Statistic color="blue">
-                <Statistic.Value>{buyer.telephone1}</Statistic.Value>
-                <Statistic.Label>Phone 2</Statistic.Label>
-              </Statistic>
-            </Statistic.Group>
-            <Statistic.Group widths={1} size="mini">
-              <Statistic color="blue">
-                <Statistic.Value>
-                  {buyer.streetName}, {buyer.suburb} {buyer.postCode}{' '}
-                  {buyer.state}
-                </Statistic.Value>
-                <Statistic.Label>Address</Statistic.Label>
-              </Statistic>
-            </Statistic.Group>
+            <Grid style={{ marginTop: 0 }}>
+              <Grid.Row style={{ padding: 0 }}>
+                <Grid.Column width={7}>
+                  <Statistic.Group horizontal widths={7} size="mini">
+                    <Statistic color="orange">
+                      <Statistic.Label>Buyer:</Statistic.Label>
+                      <Statistic.Value>
+                        {'     '}
+                        {buyer.firstName} {buyer.surname}
+                      </Statistic.Value>
+                    </Statistic>
+                    <Statistic color="blue">
+                      <Statistic.Label>Email:</Statistic.Label>
+                      <Statistic.Value>{buyer.email}</Statistic.Value>
+                    </Statistic>
+                  </Statistic.Group>
+                </Grid.Column>
+                <Grid.Column width={4}>
+                  <Statistic.Group horizontal widths={7} size="mini">
+                    <Statistic color="blue">
+                      <Statistic.Label>Phone 1:</Statistic.Label>
+                      <Statistic.Value> {buyer.telephone1}</Statistic.Value>
+                    </Statistic>
+                    <Statistic color="blue">
+                      <Statistic.Label>Phone 2:</Statistic.Label>
+                      <Statistic.Value>{buyer.telephone1}</Statistic.Value>
+                    </Statistic>
+                  </Statistic.Group>
+                </Grid.Column>
+                <Grid.Column width={5}>
+                  <Statistic.Group widths={1} size="mini">
+                    <Statistic color="blue">
+                      <Statistic.Label>Address:</Statistic.Label>
+                      <Statistic.Value>
+                        {buyer.streetName}, {buyer.suburb} {buyer.postCode}{' '}
+                        {buyer.state}
+                      </Statistic.Value>
+                    </Statistic>
+                  </Statistic.Group>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Fragment>
         ) : null}
         <Fragment>
