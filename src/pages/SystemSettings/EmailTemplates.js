@@ -71,11 +71,11 @@ class EmailTemplates extends Component {
   }
 
   componentDidMount () {
-    this.attachQuillRefs()
+    this._attachQuillRefs()
   }
 
   componentDidUpdate () {
-    this.attachQuillRefs()
+    this._attachQuillRefs()
   }
 
   _handleChangeBody = value => {
@@ -95,14 +95,19 @@ class EmailTemplates extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  attachQuillRefs = () => {
+  _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (typeof this.reactQuillRef.getEditor !== 'function') return
+    if (
+      !this.reactQuillRef ||
+      typeof this.reactQuillRef.getEditor !== 'function'
+    ) {
+      return false
+    }
     // Skip if Quill reference is defined:
-    if (this.quillRef != null) return
+    if (this.quillRef !== null) return false
 
     const quillRef = this.reactQuillRef.getEditor()
-    if (quillRef != null) this.quillRef = quillRef
+    if (quillRef !== null) this.quillRef = quillRef
   }
 
   insertTextQuill = word => {

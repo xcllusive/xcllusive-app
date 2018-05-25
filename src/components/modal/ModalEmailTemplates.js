@@ -62,14 +62,15 @@ class ModalEmailTemplates extends Component {
         'image'
       ]
     }
+    this.quillRef = null
   }
 
   componentDidMount () {
-    this.attachQuillRefs()
+    this._attachQuillRefs()
   }
 
   componentDidUpdate () {
-    this.attachQuillRefs()
+    this._attachQuillRefs()
   }
 
   componentWillMount () {
@@ -90,14 +91,19 @@ class ModalEmailTemplates extends Component {
     this.props.onConfirm(isConfirmed)
   }
 
-  attachQuillRefs = () => {
+  _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (typeof this.reactQuillRef.getEditor !== 'function') return
+    if (
+      !this.reactQuillRef ||
+      typeof this.reactQuillRef.getEditor !== 'function'
+    ) {
+      return false
+    }
     // Skip if Quill reference is defined:
-    if (this.quillRef != null) return
+    if (this.quillRef !== null) return false
 
     const quillRef = this.reactQuillRef.getEditor()
-    if (quillRef != null) this.quillRef = quillRef
+    if (quillRef !== null) this.quillRef = quillRef
   }
 
   insertTextQuill = word => {
@@ -208,6 +214,7 @@ class ModalEmailTemplates extends Component {
                     <Form.Field>
                       <ReactQuill
                         ref={el => {
+                          console.log(el)
                           this.reactQuillRef = el
                         }}
                         value={values.body}
