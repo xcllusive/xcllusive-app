@@ -16,6 +16,7 @@ import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 import Yup from 'yup'
+import _ from 'lodash'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
@@ -77,7 +78,7 @@ class ModalEmailTemplates extends Component {
   }
 
   componentWillMount () {
-    this.props.getEmailTemplates([1])
+    this.props.getEmailTemplates(1)
     this.props.clearEmailTemplates()
   }
 
@@ -138,10 +139,8 @@ class ModalEmailTemplates extends Component {
       handleBlur,
       handleChange,
       touched,
-      errors,
-      isValid
+      errors
     } = this.props
-    console.log(isValid)
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -259,7 +258,7 @@ class ModalEmailTemplates extends Component {
             icon="checkmark"
             labelPosition="right"
             content="Send Email"
-            disabled={!isValid}
+            disabled={!_.isEmpty(errors)}
             onClick={this._handleConfirm}
           />
         </Modal.Actions>
@@ -287,7 +286,6 @@ ModalEmailTemplates.propTypes = {
   touched: PropTypes.object,
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isValid: PropTypes.bool,
   sendEmailBuyerBrokersEmail: PropTypes.func
 }
 
@@ -306,8 +304,8 @@ const mapPropsToValues = props => {
 }
 
 const validationSchema = Yup.object().shape({
-  subject: Yup.string().required('Subject must be required'),
-  body: Yup.string().required('Body must be required')
+  subject: Yup.string().required('Subject must be required')
+  // body: Yup.string().required('Body must be required')
 })
 
 const mapDispatchToProps = dispatch =>

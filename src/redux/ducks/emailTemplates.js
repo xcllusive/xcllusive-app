@@ -139,13 +139,13 @@ export const emailTemplateLoading = (value, type) => ({
   payload: value
 })
 
-export const getEmailTemplates = () => async dispatch => {
+export const getEmailTemplates = (brokersEmail = false) => async dispatch => {
   dispatch({
     type: Types.GET_EMAIL_TEMPLATES_LOADING,
     payload: true
   })
   try {
-    const emailTemplate = await getAll()
+    const emailTemplate = await getAll(brokersEmail)
     dispatch({
       type: Types.GET_EMAIL_TEMPLATES_SUCCESS,
       payload: emailTemplate.data
