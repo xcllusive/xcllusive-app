@@ -362,9 +362,9 @@ class BuyerDetails extends Component {
                     <Form.Select
                       label="Price From"
                       options={priceOptions}
-                      name="priceOptions"
-                      autoComplete="priceOptions"
-                      value={values.priceOptions}
+                      name="priceFrom"
+                      autoComplete="priceFrom"
+                      value={values.priceFrom}
                       onChange={this._handleSelectChange}
                     />
                   </Form.Field>
@@ -372,10 +372,10 @@ class BuyerDetails extends Component {
                     <Form.Select
                       label="Price To"
                       options={priceOptions}
-                      name="priceOptions"
-                      autoComplete="priceOptions"
-                      // value={values.businessSource}
-                      // onChange={priceOptions}
+                      name="priceTo"
+                      autoComplete="priceTo"
+                      value={values.priceTo}
+                      onChange={this._handleSelectChange}
                     />
                   </Form.Field>
                 </Form.Group>

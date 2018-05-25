@@ -8,11 +8,13 @@ import Yup from 'yup'
 
 import { createBuyer } from '../../redux/ducks/buyer'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
+import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 
 class NewBuyerForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      priceOptions: OptionsPriceSelectBuyer,
       state: [
         { key: 1, text: 'NSW', value: 'NSW' },
         { key: 2, text: 'QLD', value: 'QLD' },
@@ -33,7 +35,7 @@ class NewBuyerForm extends Component {
   }
 
   render () {
-    const { state } = this.state
+    const { state, priceOptions } = this.state
     const {
       modalOpen,
       toggleModal,
@@ -220,42 +222,24 @@ class NewBuyerForm extends Component {
                 )}
               </Form.Field>
               <Form.Field>
-                <Form.Input
+                <Form.Select
                   label="Price From"
+                  options={priceOptions}
                   name="priceFrom"
                   autoComplete="priceFrom"
                   value={values.priceFrom}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={this._handleSelectChange}
                 />
-                {errors.priceFrom &&
-                  touched.priceFrom && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.priceFrom}
-                  />
-                )}
               </Form.Field>
               <Form.Field>
-                <Form.Input
+                <Form.Select
                   label="Price To"
+                  options={priceOptions}
                   name="priceTo"
                   autoComplete="priceTo"
                   value={values.priceTo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={this._handleSelectChange}
                 />
-                {errors.priceTo &&
-                  touched.priceTo && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.priceTo}
-                  />
-                )}
               </Form.Field>
             </Form.Group>
           </Form>

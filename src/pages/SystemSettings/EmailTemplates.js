@@ -177,7 +177,7 @@ class EmailTemplates extends Component {
               )}
             </Dimmer>
             <Form.Group>
-              <Form.Field width={4}>
+              {/* <Form.Field width={4}>
                 <Form.Input
                   label="Description"
                   name="description"
@@ -195,7 +195,7 @@ class EmailTemplates extends Component {
                     content={errors.description}
                   />
                 )}
-              </Form.Field>
+              </Form.Field> */}
               <Form.Field width={4}>
                 <Form.Input
                   label="Subject"
@@ -214,6 +214,14 @@ class EmailTemplates extends Component {
                     content={errors.subject}
                   />
                 )}
+              </Form.Field>
+              <Form.Field style={{ alignSelf: 'center' }}>
+                <Form.Checkbox
+                  label="Brokers Email"
+                  name="brokersEmail"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.brokersEmail}
+                />
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -345,7 +353,8 @@ const mapPropsToValues = props => {
       subject: props.objectEmailTemplate.subject,
       attachmentPath: props.objectEmailTemplate.attachmentPath,
       enableAttachment: props.objectEmailTemplate.enableAttachment,
-      id: props.objectEmailTemplate.id
+      id: props.objectEmailTemplate.id,
+      brokersEmail: props.objectEmailTemplate.brokersEmail
     }
   }
   return {
@@ -354,7 +363,8 @@ const mapPropsToValues = props => {
     subject: '',
     attachmentPath: '',
     enableAttachment: false,
-    id: ''
+    id: '',
+    brokersEmail: ''
   }
 }
 
