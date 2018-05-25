@@ -51,7 +51,7 @@ class BusinessListPage extends Component {
     this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
   }
 
-  _toggleModal = (business) => {
+  _toggleModal = business => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen,
       business
@@ -59,9 +59,7 @@ class BusinessListPage extends Component {
   }
 
   render () {
-    const {
-      isLoading, history, match, businesses
-    } = this.props
+    const { isLoading, history, match, businesses } = this.props
 
     const { modalOpen } = this.state
 
@@ -134,7 +132,7 @@ class BusinessListPage extends Component {
           </Grid.Row>
           <Grid.Row>
             <Header>FOR SALE</Header>
-            <Table color="blue" celled inverted selectable>
+            <Table color="blue" celled inverted selectable compact size="small">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Business ID</Table.HeaderCell>
@@ -145,13 +143,11 @@ class BusinessListPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {businesses.map((business) => (
+                {businesses.map(business => (
                   <Table.Row
                     active
                     key={business.id}
-                    onClick={() =>
-                      history.push(`${match.path}/${business.id}`)
-                    }
+                    onClick={() => history.push(`${match.path}/${business.id}`)}
                   >
                     <Table.Cell>{`BS${business.id}`}</Table.Cell>
                     <Table.Cell>{business.businessName}</Table.Cell>
@@ -180,9 +176,10 @@ BusinessListPage.propTypes = {
   match: PropTypes.object
 }
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ getBusinesses }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getBusinesses }, dispatch)
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,
   isLoading: state.business.getAll.isLoading,
   businesses: state.business.getAll.array

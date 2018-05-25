@@ -102,9 +102,8 @@ class ModalEmailTemplates extends Component {
     const sendEmail = this.props.objectEmailTemplate
     sendEmail.body = this.props.values.body
     sendEmail.subject = this.props.values.subject
-
-    console.log(sendEmail)
-    // this.props.sendEmailBuyerBrokersEmail(sendEmail)
+    sendEmail.buyerId = this.props.buyerId
+    this.props.sendEmailBuyerBrokersEmail(sendEmail)
   }
 
   _attachQuillRefs = () => {
@@ -286,7 +285,8 @@ ModalEmailTemplates.propTypes = {
   touched: PropTypes.object,
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
-  sendEmailBuyerBrokersEmail: PropTypes.func
+  sendEmailBuyerBrokersEmail: PropTypes.func,
+  buyerId: PropTypes.number
 }
 
 const mapStateToProps = state => ({
