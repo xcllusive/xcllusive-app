@@ -285,7 +285,7 @@ class BuyerDetails extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column width={4}>
-              <Table color="blue" celled inverted size="small" compact>
+              <Table celled selectable compact striped size="small">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Previous Businesses</Table.HeaderCell>
@@ -293,7 +293,7 @@ class BuyerDetails extends Component {
                 </Table.Header>
                 <Table.Body>
                   {listBusinessesFromBuyer.map(businessesFromBuyer => (
-                    <Table.Row active key={businessesFromBuyer.business_id}>
+                    <Table.Row key={businessesFromBuyer.business_id}>
                       <Table.Cell>
                         {businessesFromBuyer.Business.businessName}
                       </Table.Cell>

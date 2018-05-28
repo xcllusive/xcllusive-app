@@ -333,8 +333,6 @@ const validationSchema = Yup.object().shape({
   source_id: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.number().typeError('You must type only number here!'),
-  priceFrom: Yup.number().typeError('You must type only number here!'),
-  priceTo: Yup.number().typeError('You must type only number here!'),
   emailOptional: Yup.string().email('Invalid email address.')
 })
 

@@ -79,7 +79,9 @@ class BuyerListPage extends Component {
                         )
                       }
                     >
-                      <Table.Cell>{buyersList.Buyer.firstName}</Table.Cell>
+                      <Table.Cell>
+                        {buyersList.Buyer.firstName} {buyersList.Buyer.surname}
+                      </Table.Cell>
                       <Table.Cell>{buyersList.Buyer.buyerNotes}</Table.Cell>
                     </Table.Row>
                   ))}
