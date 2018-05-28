@@ -167,8 +167,8 @@ class EditBuyerForm extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths="equal">
-              <Form.Field>
+            <Form.Group>
+              <Form.Field width={4}>
                 <Form.Select
                   label="State"
                   name="state"
@@ -177,7 +177,7 @@ class EditBuyerForm extends Component {
                   onChange={this._handleSelectChange}
                 />
               </Form.Field>
-              <Form.Field>
+              <Form.Field width={4}>
                 <Form.Input
                   label="Post Code"
                   name="postCode"
@@ -196,7 +196,7 @@ class EditBuyerForm extends Component {
                   />
                 )}
               </Form.Field>
-              <Form.Field>
+              <Form.Field width={4}>
                 <Form.Input
                   label="Telephone"
                   name="telephone1"
@@ -212,6 +212,25 @@ class EditBuyerForm extends Component {
                     color="red"
                     pointing
                     content={errors.telephone1}
+                  />
+                )}
+              </Form.Field>
+              <Form.Field width={4}>
+                <Form.Input
+                  label="Telephone 2"
+                  name="telephone2"
+                  autoComplete="telephone2"
+                  value={values.telephone2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.telephone2 &&
+                  touched.telephone2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.telephone2}
                   />
                 )}
               </Form.Field>
@@ -313,6 +332,7 @@ const mapPropsToValues = props => {
     state: props.buyer ? props.buyer.state : '',
     postCode: props.buyer ? props.buyer.postCode : '',
     telephone1: props.buyer ? props.buyer.telephone1 : '',
+    telephone2: props.buyer.telephone2 ? props.buyer.telephone2 : '',
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
     emailOptional:
@@ -333,6 +353,7 @@ const validationSchema = Yup.object().shape({
   source_id: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.number().typeError('You must type only number here!'),
+  telephone2: Yup.number().typeError('You must type only number here!'),
   emailOptional: Yup.string().email('Invalid email address.')
 })
 
