@@ -6,12 +6,20 @@ export const get = buyerId =>
     url: `/buyer/log/${buyerId}`
   })
 
-export const update = buyerLog => console.log('testando...')
-//   request({
-//     method: 'put',
-//     url: `/buyer/${buyerLog.id}`,
-//     data: buyerLog
-//   })
+export const create = newLog => {
+  return request({
+    method: 'post',
+    url: '/buyer/log',
+    data: newLog
+  })
+}
+
+export const update = buyerLog =>
+  request({
+    method: 'put',
+    url: `/buyer/log/${buyerLog.buyerLog_id}`,
+    data: buyerLog
+  })
 
 export const getBusBuyLog = (buyerId, businessId) =>
   request({

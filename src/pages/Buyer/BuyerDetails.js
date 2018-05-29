@@ -20,8 +20,13 @@ import {
   Statistic
 } from 'semantic-ui-react'
 
-import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
 import {
+  getBuyer,
+  getBusinessesFromBuyer,
+  updateBuyer
+} from '../../redux/ducks/buyer'
+import {
+  createNewLog,
   updateBuyerLog,
   getBusinessBuyerLog,
   clearBuyerLog
@@ -48,7 +53,8 @@ class BuyerDetails extends Component {
         { key: '3', text: 'Investal', value: 'Investal' },
         { key: '4', text: 'Investment Company', value: 'Investment Company' }
       ],
-      buyerDetails: null
+      buyerDetails: null,
+      newLog: false
     }
   }
 
@@ -66,14 +72,18 @@ class BuyerDetails extends Component {
     if (
       this.props.listBusinessBuyerLogList.length !==
         nextProps.listBusinessBuyerLogList.length &&
-      nextProps.listBusinessBuyerLogList.length
+      nextProps.listBusinessBuyerLogList.length > 0
     ) {
       this._selectLog(nextProps.listBusinessBuyerLogList[0])
     }
   }
 
   _selectLog = buyerLog => {
-    const { id, followUp, text } = buyerLog
+    const { newLog, id, followUp, text } = buyerLog
+
+    if (newLog) this.props.setFieldValue('newLog', true)
+    else this.props.setFieldValue('newLog', false)
+
     this.props.setFieldValue('buyerLog_id', id)
     this.props.setFieldValue('buyerLog_followUp', followUp)
     this.props.setFieldValue('buyerLog_text', text)
@@ -97,12 +107,34 @@ class BuyerDetails extends Component {
     this.props.setFieldValue(name, value)
   }
 
+  _handleSubmit = () => {
+    const updateBuyer = {
+      ...this.props.values,
+      id: this.props.match.params.idBuyer
+    }
+    if (this.props.values.newLog) {
+      const newLog = {
+        ...this.props.values,
+        buyer_id: this.props.match.params.idBuyer,
+        business_id: this.props.match.params.idBusiness
+      }
+      this.props.createNewLog(newLog)
+      this.props.updateBuyer(updateBuyer)
+    } else {
+      this.props.updateBuyer(updateBuyer)
+      this.props.updateBuyerLog(this.props.values)
+    }
+    this.props.getBusinessBuyerLog(
+      this.props.match.params.idBuyer,
+      this.props.match.params.idBusiness
+    )
+  }
+
   render () {
     const {
       isLoadingBuyer,
       business,
       isLoadingUpdate,
-      handleSubmit,
       isSubmitting,
       isValid,
       listBusinessBuyerLogList,
@@ -175,6 +207,7 @@ class BuyerDetails extends Component {
                   color="twitter"
                   onClick={() =>
                     this._selectLog({
+                      newLog: true,
                       id: 1,
                       followUp: moment().add(1, 'day'),
                       text: ''
@@ -190,7 +223,7 @@ class BuyerDetails extends Component {
                   color="red"
                   disabled={isSubmitting || !isValid}
                   loading={isLoadingUpdate}
-                  onClick={handleSubmit}
+                  onClick={() => this._handleSubmit(values)}
                   size="small"
                 >
                   <Icon name="save" />
@@ -239,8 +272,8 @@ class BuyerDetails extends Component {
                           <Form.TextArea
                             required
                             label="Communication text"
-                            name="text"
-                            autoComplete="text"
+                            name="buyerLog_text"
+                            autoComplete="buyerLog_text"
                             value={values.buyerLog_text}
                             onChange={handleChange}
                           />
@@ -397,20 +430,18 @@ class BuyerDetails extends Component {
   }
 }
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBuyerLog(values).then(setSubmitting(false))
-}
-
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getBuyer,
       getBusiness,
-      updateBuyerLog,
       getBusinessBuyerLog,
       clearBuyerLog,
       openModal,
-      getBusinessesFromBuyer
+      getBusinessesFromBuyer,
+      updateBuyer,
+      updateBuyerLog,
+      createNewLog
     },
     dispatch
   )
@@ -423,7 +454,7 @@ BuyerDetails.propTypes = {
   getBusiness: PropTypes.func,
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
-  updateBuyerLog: PropTypes.func,
+  updateBuyerDetails: PropTypes.func,
   handleSubmit: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
   isSubmitting: PropTypes.bool,
@@ -436,7 +467,10 @@ BuyerDetails.propTypes = {
   getBusinessesFromBuyer: PropTypes.func,
   listBusinessesFromBuyer: PropTypes.array,
   handleChange: PropTypes.func,
-  values: PropTypes.object
+  values: PropTypes.object,
+  updateBuyer: PropTypes.func,
+  createNewLog: PropTypes.func,
+  updateBuyerLog: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -448,7 +482,8 @@ const mapPropsToValues = props => {
     priceTo: props.buyer ? props.buyer.priceTo : '',
     buyerLog_id: '',
     buyerLog_followUp: '',
-    buyerLog_text: ''
+    buyerLog_text: '',
+    newLog: false
   }
 }
 
@@ -464,7 +499,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
-    handleSubmit,
     enableReinitialize: true
   })(BuyerDetails)
 )

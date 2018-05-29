@@ -344,18 +344,15 @@ export const getBusinessesFromBuyer = (search = false) => async dispatch => {
   }
 }
 
-export const sendEmailBuyerBrokersEmail = (
-  buyerId,
-  businessId
-) => async dispatch => {
+export const sendEmailBuyerBrokersEmail = sendEmail => async dispatch => {
   dispatch({
     type: Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_LOADING,
     payload: true
   })
   try {
-    const response = await sendEmailBuyerBrokersEmailAPI(buyerId, businessId)
+    const response = await sendEmailBuyerBrokersEmailAPI(sendEmail)
     dispatch({
-      type: Types.SSEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS
+      type: Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS
     })
     toast.success(response.message)
   } catch (error) {

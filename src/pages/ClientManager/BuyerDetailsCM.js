@@ -22,7 +22,7 @@ import {
 import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
 import {
   getLog,
-  updateBuyerLog,
+  // updateBuyerDetails,
   getBusinessBuyerLog,
   clearBuyerLog
 } from '../../redux/ducks/buyerLog'
@@ -432,7 +432,7 @@ class BuyerDetailsCM extends Component {
 }
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBuyerLog(values).then(setSubmitting(false))
+  // props.updateBuyerDetails(values).then(setSubmitting(false))
 }
 
 const mapDispatchToProps = dispatch =>
@@ -441,7 +441,7 @@ const mapDispatchToProps = dispatch =>
       getBuyer,
       getLog,
       getBusiness,
-      updateBuyerLog,
+      // updateBuyerDetails,
       getBusinessBuyerLog,
       clearBuyerLog,
       getBusinessesFromBuyer
@@ -459,7 +459,7 @@ BuyerDetailsCM.propTypes = {
   getBusiness: PropTypes.func,
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
-  updateBuyerLog: PropTypes.func,
+  // updateBuyerDetails: PropTypes.func,
   handleSubmit: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
   isSubmitting: PropTypes.bool,

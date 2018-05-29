@@ -1,4 +1,4 @@
-import { get, update, getBusBuyLog } from '../../services/api/buyerLog'
+import { get, create, update, getBusBuyLog } from '../../services/api/buyerLog'
 import { toast } from 'react-toastify'
 
 // Action Types
@@ -8,6 +8,9 @@ export const Types = {
   GET_BUYER_LOG_SUCCESS: 'GET_BUYER_LOG_SUCCESS',
   GET_BUYER_LOG_FAILURE: 'GET_BUYER_LOG_FAILURE',
   CLEAR_BUYER_LOG: 'CLEAR_BUYER_LOG',
+  CREATE_NEW_LOG_LOADING: 'CREATE_NEW_LOG_LOADING',
+  CREATE_NEW_LOG_SUCCESS: 'CREATE_NEW_LOG_SUCCESS',
+  CREATE_NEW_LOG_FAILURE: 'CREATE_NEW_LOG_FAILURE',
   UPDATE_BUYER_LOG_LOADING: 'UPDATE_BUYER_LOG_LOADING',
   UPDATE_BUYER_LOG_SUCCESS: 'UPDATE_BUYER_LOG_SUCCESS',
   UPDATE_BUYER_LOG_FAILURE: 'UPDATE_BUYER_LOG_FAILURE',
@@ -22,6 +25,11 @@ const initialState = {
   get: {
     array: [],
     isLoading: false,
+    error: null
+  },
+  create: {
+    isLoading: false,
+    isCreated: false,
     error: null
   },
   update: {
@@ -69,7 +77,7 @@ export default function reducer (state = initialState, action) {
       }
     case Types.CLEAR_BUYER_LOG:
       return initialState
-    case Types.CREATE_BUYER_LOG_LOADING:
+    case Types.CREATE_NEW_LOG_LOADING:
       return {
         ...state,
         create: {
@@ -78,7 +86,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.CREATE_BUYER_LOG_SUCCESS:
+    case Types.CREATE_NEW_LOG_SUCCESS:
       return {
         ...state,
         create: {
@@ -88,7 +96,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.CREATE_BUYER_LOG_FAILURE:
+    case Types.CREATE_NEW_LOG_FAILURE:
       return {
         ...state,
         create: {
@@ -192,6 +200,25 @@ export const clearBuyerLog = () => dispatch => {
   dispatch({
     type: Types.CLEAR_BUYER_LOG
   })
+}
+
+export const createNewLog = newLog => async dispatch => {
+  dispatch({
+    type: Types.CREATE_NEW_LOG_LOADING,
+    payload: true
+  })
+  try {
+    const response = await create(newLog)
+    dispatch({
+      type: Types.CREATE_NEW_LOG_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_NEW_LOG_FAILURE,
+      payload: error
+    })
+  }
 }
 
 export const updateBuyerLog = buyerLog => async dispatch => {
