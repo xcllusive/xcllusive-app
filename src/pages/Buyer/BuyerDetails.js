@@ -325,8 +325,9 @@ class BuyerDetails extends Component {
                   </Table.Body>
                 </Table>
                 <Pagination
+                  prevItem={null}
+                  nextItem={null}
                   size="mini"
-                  showPreviousAndNextNav={false}
                   onPageChange={this._handlePaginationChange}
                   defaultActivePage={activePageBusinessBuyerLogList}
                   totalPages={pagesBusinessBuyerLogList}

@@ -340,7 +340,6 @@ class BuyerDetailsCM extends Component {
                               <Form.Group>
                                 <Form.Field width={12}>
                                   <Form.TextArea
-                                    required
                                     label="Communication text"
                                     name="text"
                                     autoComplete="text"
