@@ -82,6 +82,12 @@ class ModalEmailTemplates extends Component {
     this.props.clearEmailTemplates()
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props.isSentEmail !== nextProps.isSentEmail) {
+      this.props.closeModal()
+    }
+  }
+
   _handleChangeBody = value => {
     if (value === '<p><br></p>') {
       this.props.setFieldValue('body', '')
@@ -102,7 +108,7 @@ class ModalEmailTemplates extends Component {
     const sendEmail = this.props.objectEmailTemplate
     sendEmail.body = this.props.values.body
     sendEmail.subject = this.props.values.subject
-    sendEmail.buyerId = this.props.buyerId
+    sendEmail.buyerId = parseInt(this.props.buyerId)
     this.props.sendEmailBuyerBrokersEmail(sendEmail)
   }
 
@@ -138,7 +144,8 @@ class ModalEmailTemplates extends Component {
       handleBlur,
       handleChange,
       touched,
-      errors
+      errors,
+      isLoadingSentEmail
     } = this.props
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
@@ -254,9 +261,10 @@ class ModalEmailTemplates extends Component {
           />
           <Button
             positive
-            icon="checkmark"
+            icon="mail"
             labelPosition="right"
             content="Send Email"
+            loading={isLoadingSentEmail}
             disabled={!_.isEmpty(errors)}
             onClick={this._handleConfirm}
           />
@@ -286,14 +294,18 @@ ModalEmailTemplates.propTypes = {
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
   sendEmailBuyerBrokersEmail: PropTypes.func,
-  buyerId: PropTypes.number
+  buyerId: PropTypes.string,
+  isLoadingSentEmail: PropTypes.bool,
+  isSentEmail: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   listEmailTemplates: state.emailTemplates.getAll.array,
   isLoadingEmailTemplates: state.emailTemplates.getAll.isLoading,
   objectEmailTemplate: state.emailTemplates.get.object,
-  isLoadingEmailTemplate: state.emailTemplates.get.isLoading
+  isLoadingEmailTemplate: state.emailTemplates.get.isLoading,
+  isLoadingSentEmail: state.buyer.sendEmailBuyerBrokersEmail.isLoading,
+  isSentEmail: state.buyer.sendEmailBuyerBrokersEmail.isSent
 })
 
 const mapPropsToValues = props => {

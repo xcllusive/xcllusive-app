@@ -39,6 +39,8 @@ export const getBusinessesFromBuyer = id => {
 
 export const sendEmailBuyerBrokersEmail = sendEmail => {
   return request({
-    url: `/buyer/${sendEmail}/business`
+    method: 'post',
+    url: '/email-template/send-email',
+    data: sendEmail
   })
 }
