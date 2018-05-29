@@ -21,9 +21,11 @@ export const update = buyerLog =>
     data: buyerLog
   })
 
-export const getBusBuyLog = (buyerId, businessId) =>
-  request({
+export const getBusBuyLog = (buyerId, businessId, limit, page) => {
+  if (!page) page = null
+  return request({
     method: 'get',
     url: `/buyer/log/from-business/${buyerId}`,
-    params: { businessId }
+    params: { businessId, limit, page }
   })
+}

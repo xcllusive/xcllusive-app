@@ -41,7 +41,9 @@ const initialState = {
   getBusBuyLog: {
     array: [],
     isLoading: false,
-    error: null
+    error: null,
+    pages: 0,
+    activePage: 1
   }
 }
 
@@ -152,7 +154,8 @@ export default function reducer (state = initialState, action) {
         getBusBuyLog: {
           ...state.getBusBuyLog,
           isLoading: false,
-          array: action.payload,
+          array: action.payload.data.rows,
+          pages: action.payload.itemCount,
           error: null
         }
       }
@@ -240,16 +243,21 @@ export const updateBuyerLog = buyerLog => async dispatch => {
   }
 }
 
-export const getBusinessBuyerLog = (buyerId, businessId) => async dispatch => {
+export const getBusinessBuyerLog = (
+  buyerId,
+  businessId,
+  limit = 10,
+  page = false
+) => async dispatch => {
   dispatch({
     type: Types.GET_BUS_BUY_LOG_LOADING,
     payload: true
   })
   try {
-    const log = await getBusBuyLog(buyerId, businessId)
+    const log = await getBusBuyLog(buyerId, businessId, limit, page)
     dispatch({
       type: Types.GET_BUS_BUY_LOG_SUCCESS,
-      payload: log.data
+      payload: log
     })
   } catch (error) {
     dispatch({

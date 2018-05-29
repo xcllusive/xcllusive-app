@@ -17,7 +17,8 @@ import {
   Loader,
   Segment,
   Button,
-  Statistic
+  Statistic,
+  Pagination
 } from 'semantic-ui-react'
 
 import {
@@ -63,7 +64,8 @@ class BuyerDetails extends Component {
     this.props.getBusiness(this.props.match.params.idBusiness)
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
-      this.props.match.params.idBusiness
+      this.props.match.params.idBusiness,
+      5
     )
     this.props.getBusinessesFromBuyer(this.props.match.params.idBuyer)
   }
@@ -107,6 +109,15 @@ class BuyerDetails extends Component {
     this.props.setFieldValue(name, value)
   }
 
+  _handlePaginationChange = (e, { activePage }) => {
+    this.props.getBusinessBuyerLog(
+      this.props.match.params.idBuyer,
+      this.props.match.params.idBusiness,
+      5,
+      activePage
+    )
+  }
+
   _handleSubmit = () => {
     const updateBuyer = {
       ...this.props.values,
@@ -142,7 +153,9 @@ class BuyerDetails extends Component {
       buyer,
       listBusinessesFromBuyer,
       handleChange,
-      values
+      values,
+      pagesBusinessBuyerLogList,
+      activePageBusinessBuyerLogList
     } = this.props
 
     const { priceOptions, buyerType } = this.state
@@ -311,6 +324,13 @@ class BuyerDetails extends Component {
                     ))}
                   </Table.Body>
                 </Table>
+                <Pagination
+                  size="mini"
+                  showPreviousAndNextNav={false}
+                  onPageChange={this._handlePaginationChange}
+                  defaultActivePage={activePageBusinessBuyerLogList}
+                  totalPages={pagesBusinessBuyerLogList}
+                />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -470,7 +490,9 @@ BuyerDetails.propTypes = {
   values: PropTypes.object,
   updateBuyer: PropTypes.func,
   createNewLog: PropTypes.func,
-  updateBuyerLog: PropTypes.func
+  updateBuyerLog: PropTypes.func,
+  pagesBusinessBuyerLogList: PropTypes.number,
+  activePageBusinessBuyerLogList: PropTypes.number
 }
 
 const mapPropsToValues = props => {
@@ -493,6 +515,8 @@ const mapStateToProps = state => ({
   business: state.business.get.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
   listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,
+  pagesBusinessBuyerLogList: state.buyerLog.getBusBuyLog.pages,
+  activePageBusinessBuyerLogList: state.buyerLog.getBusBuyLog.activePage,
   listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array
 })
 
