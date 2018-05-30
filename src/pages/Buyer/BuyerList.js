@@ -35,22 +35,30 @@ class BuyerListPage extends Component {
           <Dimmer inverted active={isLoadingBusiness}>
             <Loader>Loading</Loader>
           </Dimmer>
-          <Header
-            as="h2"
-            content={`${business.businessName} / (${
-              listBuyersList.length
-            } records)`}
-          />
-          <Button
-            color="green"
-            onClick={() => history.push('/buyer')}
-            size="small"
-            floated="right"
-          >
-            <Icon name="backward" />
-            Return to Business
-          </Button>
-          <Grid padded="horizontally">
+          <Grid style={{ marginTop: 0 }}>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Header
+                  as="h2"
+                  content={`${business.businessName} / (${
+                    listBuyersList.length
+                  } records)`}
+                />
+              </Grid.Column>
+              <Grid.Column>
+                <Button
+                  color="green"
+                  onClick={() => history.push('/buyer')}
+                  size="small"
+                  floated="right"
+                >
+                  <Icon name="backward" />
+                  Return to Business
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <Grid padded="horizontally" style={{ marginTop: 0 }}>
             <Grid.Row>
               <Table
                 color="blue"
