@@ -73,11 +73,14 @@ class BuyerDetails extends Component {
   componentWillReceiveProps (nextProps) {
     if (
       this.props.listBusinessBuyerLogList.length !==
-        nextProps.listBusinessBuyerLogList.length &&
-      nextProps.listBusinessBuyerLogList.length > 0
+      nextProps.listBusinessBuyerLogList.length
     ) {
       this._selectLog(nextProps.listBusinessBuyerLogList[0])
     }
+  }
+
+  componentWillUnmount () {
+    this.props.clearBuyerLog()
   }
 
   _selectLog = buyerLog => {
