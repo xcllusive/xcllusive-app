@@ -1,10 +1,10 @@
 import request from './'
 
-export const getAll = business => {
+export const getAllFromBusiness = businessId => {
   return request({
     url: '/business-log',
     params: {
-      business
+      businessId
     }
   })
 }

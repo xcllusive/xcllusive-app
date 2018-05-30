@@ -107,7 +107,11 @@ const Layout = ({ match, logout, menu }) => (
       />
       <Route exact component={ListPage} path={`${match.path}business`} />
       <Route exact component={EditPage} path={`${match.path}business/:id`} />
-      <Route component={LogPage} path={`${match.path}business/:id/:logID`} />
+      <Route
+        exact
+        component={LogPage}
+        path={`${match.path}business/:id/log/:logID`}
+      />
       <Route exact component={BuyerPage} path={`${match.path}buyer`} />
       <Route
         exact

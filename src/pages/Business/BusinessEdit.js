@@ -15,49 +15,13 @@ import {
   Dimmer,
   Loader
 } from 'semantic-ui-react'
+import moment from 'moment'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
-
-const array = [
-  {
-    businessID: 'BS2000',
-    logID: '0001',
-    dataLog: '01/12/2017',
-    logText: 'Send IM to Buyer B001',
-    FollowUpStatus: 'Pending'
-  },
-  {
-    businessID: 'BS2000',
-    logID: '0002',
-    dataLog: '02/12/2017',
-    logText: 'Send IM to Buyer B111',
-    FollowUpStatus: 'Done'
-  },
-  {
-    businessID: 'BS2000',
-    logID: '0003',
-    dataLog: '03/12/2017',
-    logText: 'Send IM to Buyer B1234',
-    FollowUpStatus: 'Pending'
-  },
-  {
-    businessID: 'BS2000',
-    logID: '0004',
-    dataLog: '04/12/2017',
-    logText: 'Send IM to Buyer B1010',
-    FollowUpStatus: 'Done'
-  },
-  {
-    businessID: 'BS2000',
-    logID: '0005',
-    dataLog: '05/12/2017',
-    logText: 'Send IM to Buyer B4321',
-    FollowUpStatus: 'Done'
-  }
-]
+import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 
 class BusinessEditPage extends Component {
   constructor (props) {
@@ -72,7 +36,9 @@ class BusinessEditPage extends Component {
   }
 
   componentWillMount () {
-    this.props.getBusiness(this.props.match.params.id)
+    const { id } = this.props.match.params
+    this.props.getBusiness(id)
+    this.props.getLogFromBusiness(id)
   }
 
   shouldComponentUpdate (nextprops) {
@@ -86,7 +52,9 @@ class BusinessEditPage extends Component {
   }
 
   render () {
-    if (this.props.isLoading) {
+    const { arrayLogsFromBusiness, isLoading, business } = this.props
+
+    if (isLoading) {
       return (
         <Dimmer inverted active={this.props.isLoading}>
           <Loader inverted />
@@ -96,104 +64,120 @@ class BusinessEditPage extends Component {
 
     return (
       <Wrapper>
-        <Statistic.Group size="mini" widths={7}>
-          <Statistic color="orange">
-            <Statistic.Value>
-              {this.props.business.businessName}
-            </Statistic.Value>
-            <Statistic.Label>{this.props.business.id}</Statistic.Label>
-          </Statistic>
-          <Statistic color="blue">
-            <Statistic.Value>
-              {this.props.business.currentPrice}
-            </Statistic.Value>
-            <Statistic.Label>Price</Statistic.Label>
-          </Statistic>
-          <Statistic color="blue">
-            <Statistic.Value>{this.props.business.productId}</Statistic.Value>
-            <Statistic.Label>Type of Business Sale</Statistic.Label>
-          </Statistic>
-          <Statistic color="blue">
-            <Statistic.Value>100</Statistic.Value>
-            <Statistic.Label>Enquiries</Statistic.Label>
-          </Statistic>
-          <Statistic color="blue">
-            <Statistic.Value>10</Statistic.Value>
-            <Statistic.Label>Days on the market</Statistic.Label>
-          </Statistic>
-          <Statistic color="blue">
-            <Statistic.Value>5</Statistic.Value>
-            <Statistic.Label>Last Feedback Score</Statistic.Label>
-          </Statistic>
-          <Statistic color="green">
-            <Statistic.Value>{this.props.business.stageId}</Statistic.Value>
-          </Statistic>
-        </Statistic.Group>
+        <Grid>
+          <Grid.Row
+            style={{
+              justifyContent: 'center',
+              marginTop: '25px',
+              marginBottom: 0,
+              paddingBottom: 0
+            }}
+          >
+            <Statistic.Group size="mini" widths={16}>
+              <Statistic color="orange">
+                <Statistic.Value>{this.props.business.id}</Statistic.Value>
+                <Statistic.Label>Id</Statistic.Label>
+              </Statistic>
+              <Statistic color="orange">
+                <Statistic.Value>
+                  {this.props.business.businessName}
+                </Statistic.Value>
+                <Statistic.Label>Business Name</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>123131</Statistic.Value>
+                <Statistic.Label>Price</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>123123123</Statistic.Value>
+                <Statistic.Label>Type of Business Sale</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>100</Statistic.Value>
+                <Statistic.Label>Enquiries</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>10</Statistic.Value>
+                <Statistic.Label>Days on the market</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>5</Statistic.Value>
+                <Statistic.Label>Last Feedback Score</Statistic.Label>
+              </Statistic>
+              <Statistic color="green">
+                <Statistic.Value>{this.props.business.stageId}</Statistic.Value>
+                <Statistic.Label>Stage</Statistic.Label>
+              </Statistic>
+            </Statistic.Group>
+          </Grid.Row>
+          <Grid.Row style={{ paddingTop: 0 }}>
+            <Tab
+              style={{ width: '100%', padding: '0 15px' }}
+              menu={{ secondary: true, pointing: true }}
+              panes={[
+                {
+                  menuItem: 'Business Detail',
+                  render: () => (
+                    <Tab.Pane className="BusinessDetail" attached={false}>
+                      <Segment size="mini" inverted color="blue">
+                        <Header as="h3" textAlign="left">
+                          Business Detail
+                        </Header>
+                        <Header as="h6" floated="right">
+                          Enquiry Date: 06/12/2017
+                        </Header>
+                      </Segment>
+                      <EditBusinessDetailForm business={business} />
+                    </Tab.Pane>
+                  )
+                },
+                {
+                  menuItem: 'Pricing/Information',
+                  render: () => (
+                    <Tab.Pane attached={false}>
+                      <EditBusinessPriceForm business={business} />
+                    </Tab.Pane>
+                  )
+                }
+              ]}
+            />
+          </Grid.Row>
 
-        <Tab
-          menu={{ secondary: true, pointing: true }}
-          panes={[
-            {
-              menuItem: 'Business Detail',
-              render: () => (
-                <Tab.Pane className="BusinessDetail" attached={false}>
-                  <Segment size="mini" inverted color="blue">
-                    <Header as="h3" textAlign="left">
-                      Business Detail
-                    </Header>
-                    <Header as="h6" floated="right">
-                      Enquiry Date: 06/12/2017
-                    </Header>
-                  </Segment>
-                  <EditBusinessDetailForm business={this.props.business} />
-                </Tab.Pane>
-              )
-            },
-            {
-              menuItem: 'Pricing/Information',
-              render: () => (
-                <Tab.Pane attached={false}>
-                  <EditBusinessPriceForm business={this.props.business} />
-                </Tab.Pane>
-              )
-            }
-          ]}
-        />
-
-        <Grid celled divided="vertically">
-          <Grid.Row columns={1}>
+          <Grid.Row style={{ justifyContent: 'flex-end', padding: '0 15px' }}>
+            <Button color="facebook">
+              <Icon name="commenting" />
+              New Communication
+            </Button>
+          </Grid.Row>
+          <Grid.Row>
             <Grid.Column>
-              <Button floated="left" color="facebook">
-                <Icon name="commenting" />
-                New Communication
-              </Button>
               <Table size={'small'} color="blue" celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>LogID</Table.HeaderCell>
-                    <Table.HeaderCell>Data</Table.HeaderCell>
                     <Table.HeaderCell>Log</Table.HeaderCell>
+                    <Table.HeaderCell>Date</Table.HeaderCell>
                     <Table.HeaderCell>Follow Up Status</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {array.map(item => {
+                  {arrayLogsFromBusiness.map(item => {
                     return (
                       <Table.Row
                         active
-                        key={item.logID}
+                        key={item.id}
                         onClick={() =>
                           this.props.history.push(
-                            `${this.props.match.path}/${item.businessID}/${
-                              item.logID
-                            }`
+                            `${this.props.match.url}/log/${item.id}`
                           )
                         }
                       >
-                        <Table.Cell>{item.logID}</Table.Cell>
-                        <Table.Cell>{item.dataLog}</Table.Cell>
-                        <Table.Cell>{item.logText}</Table.Cell>
-                        <Table.Cell>{item.FollowUpStatus}</Table.Cell>
+                        <Table.Cell>{item.id}</Table.Cell>
+                        <Table.Cell>{item.text}</Table.Cell>
+                        <Table.Cell>
+                          {moment(item.followUp).format('DD/MM/YYYY - HH:mm')}
+                        </Table.Cell>
+                        <Table.Cell>{item.status}</Table.Cell>
                       </Table.Row>
                     )
                   })}
@@ -201,30 +185,40 @@ class BusinessEditPage extends Component {
               </Table>
             </Grid.Column>
           </Grid.Row>
-          <Form>
-            <Form.Group inline>
-              <Form.Input
-                label="Created By"
-                placeholder="Zoran Sarabaca"
-                readOnly
-              />
-              <Form.Input
-                label="Creation Date"
-                placeholder="08/12/2017"
-                readOnly
-              />
-              <Form.Input
-                label="Modified By"
-                placeholder="Cayo Bayestorff"
-                readOnly
-              />
-              <Form.Input
-                label="Modified Date"
-                placeholder="09/12/2017"
-                readOnly
-              />
-            </Form.Group>
-          </Form>
+          <Grid.Row style={{ justifyContent: 'center' }}>
+            <Form>
+              <Form.Group inline>
+                <Form.Input
+                  label="Created By"
+                  placeholder={`${business.CreatedBy.firstName} ${
+                    business.CreatedBy.lastName
+                  }`}
+                  readOnly
+                />
+                <Form.Input
+                  label="Creation Date"
+                  placeholder={moment(
+                    this.props.business.dateTimeCreated
+                  ).format('DD/MM/YYYY - HH:mm')}
+                  readOnly
+                />
+                <Form.Input
+                  label="Modified By"
+                  placeholder={`${business.ModifiedBy.firstName} ${
+                    business.ModifiedBy.lastName
+                  }`}
+                  readOnly
+                />
+                <Form.Input
+                  label="Modified Date"
+                  placeholder={moment(
+                    this.props.business.dateTimeModified
+                  ).format('DD/MM/YYYY - HH:mm')}
+                  readOnly
+                />
+              </Form.Group>
+            </Form>
+          </Grid.Row>
         </Grid>
       </Wrapper>
     )
@@ -238,18 +232,24 @@ BusinessEditPage.propTypes = {
   cleanBusiness: PropTypes.func,
   business: PropTypes.object,
   error: PropTypes.string,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  arrayLogsFromBusiness: PropTypes.array,
+  getLogFromBusiness: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, cleanBusiness }, dispatch)
+  return bindActionCreators(
+    { getBusiness, cleanBusiness, getLogFromBusiness },
+    dispatch
+  )
 }
 
 const mapStateToProps = state => {
   return {
     isLoading: state.business.get.isLoading,
     business: state.business.get.object,
-    error: state.business.get.error
+    error: state.business.get.error,
+    arrayLogsFromBusiness: state.businessLog.get.array
   }
 }
 

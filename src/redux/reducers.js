@@ -5,6 +5,7 @@ import modal from './ducks/modal'
 import auth from './ducks/auth'
 import user from './ducks/user'
 import business from './ducks/business'
+import businessLog from './ducks/businessLog'
 import businessRegister from './ducks/businessRegister'
 import buyer from './ducks/buyer'
 import clientManager from './ducks/clientManager'
@@ -16,6 +17,7 @@ export default combineReducers({
   auth,
   user,
   business,
+  businessLog,
   businessRegister,
   buyer,
   clientManager,

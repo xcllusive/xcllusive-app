@@ -17,14 +17,14 @@ const EditBusinessPriceForm = ({
   isLoadingUpdate
 }) => (
   <Form size="tiny" onSubmit={handleSubmit}>
-    <Grid celled="internally" divided>
+    <Grid divided>
       <Grid.Row columns={2}>
         <Grid.Column>
-          <Segment clearing textAlign="center">
+          <Segment clearing textAlign="center" color="blue">
             <Header as="h2" floated="left">
               Business Pricing
             </Header>
-            <Header as="h2" floated="right">
+            <Header as="h5" floated="right">
               (For Sale)
             </Header>
           </Segment>
@@ -92,11 +92,11 @@ const EditBusinessPriceForm = ({
           </Form.Group>
         </Grid.Column>
         <Grid.Column>
-          <Segment clearing textAlign="center">
+          <Segment clearing textAlign="center" color="blue">
             <Header as="h2" floated="left">
               Sales Information
             </Header>
-            <Header as="h6" floated="right">
+            <Header as="h5" floated="right">
               (Deposit and Sold)
             </Header>
           </Segment>
@@ -168,7 +168,9 @@ const EditBusinessPriceForm = ({
           </Form.Group>
         </Grid.Column>
       </Grid.Row>
-      <Grid.Column floated="right" width={3}>
+      <Grid.Row
+        style={{ justifyContent: 'flex-end', padding: '0 15px 15px 0' }}
+      >
         <Form.Button
           floated="right"
           type="submit"
@@ -180,7 +182,7 @@ const EditBusinessPriceForm = ({
           <Icon name="save" />
           Save
         </Form.Button>
-      </Grid.Column>
+      </Grid.Row>
     </Grid>
   </Form>
 )
@@ -199,21 +201,45 @@ const mapPropsToValues = props => {
   if (props.business) {
     return {
       ...props.business,
-      listedPrice: props.business.listedPrice,
-      currentPrice: props.business.currentPrice,
-      engagementFee: props.business.engagementFee,
-      commissionPerc: props.business.commissionPerc,
-      minimumCharge: props.business.minimumCharge,
-      appraisalHigh: props.business.appraisalHigh,
-      appraisalLow: props.business.appraisalLow,
-      depositeTaken: props.business.depositeTaken,
-      depositeTakenDate: props.business.depositeTakenDate,
-      commissionSold: props.business.commissionSold,
-      settlementDate: props.business.settlementDate,
-      soldPrice: props.business.soldPrice,
-      attachedPurchaser: props.business.attachedPurchaser,
-      searchNote: props.business.searchNote,
+      listedPrice: props.business.listedPrice ? props.business.listedPrice : '',
+      currentPrice: props.business.currentPrice
+        ? props.business.currentPrice
+        : '',
+      engagementFee: props.business.engagementFee
+        ? props.business.engagementFee
+        : '',
+      commissionPerc: props.business.commissionPerc
+        ? props.business.commissionPerc
+        : '',
+      minimumCharge: props.business.minimumCharge
+        ? props.business.minimumCharge
+        : '',
+      appraisalHigh: props.business.appraisalHigh
+        ? props.business.appraisalHigh
+        : '',
+      appraisalLow: props.business.appraisalLow
+        ? props.business.appraisalLow
+        : '',
+      depositeTaken: props.business.depositeTaken
+        ? props.business.depositeTaken
+        : '',
+      depositeTakenDate: props.business.depositeTakenDate
+        ? props.business.depositeTakenDate
+        : '',
+      commissionSold: props.business.commissionSold
+        ? props.business.commissionSold
+        : '',
+      settlementDate: props.business.settlementDate
+        ? props.business.settlementDate
+        : '',
+      soldPrice: props.business.soldPrice ? props.business.soldPrice : '',
+      attachedPurchaser: props.business.attachedPurchaser
+        ? props.business.attachedPurchaser
+        : '',
+      searchNote: props.business.searchNote ? props.business.searchNote : '',
       afterSalesNotes: props.business.afterSalesNotes
+        ? props.business.afterSalesNotes
+        : ''
     }
   }
   return {
