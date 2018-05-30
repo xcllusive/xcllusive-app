@@ -168,14 +168,17 @@ class BuyerDetails extends Component {
                 <Grid.Column width={7}>
                   <Statistic.Group horizontal widths={7} size="mini">
                     <Statistic color="orange">
-                      <Statistic.Label>Buyer:</Statistic.Label>
+                      <Statistic.Label style={{ padding: 5 }}>
+                        Buyer:
+                      </Statistic.Label>
                       <Statistic.Value>
-                        {'     '}
                         {buyer.firstName} {buyer.surname}
                       </Statistic.Value>
                     </Statistic>
                     <Statistic color="blue">
-                      <Statistic.Label>Email:</Statistic.Label>
+                      <Statistic.Label style={{ padding: 5 }}>
+                        Email:
+                      </Statistic.Label>
                       <Statistic.Value>{buyer.email}</Statistic.Value>
                     </Statistic>
                   </Statistic.Group>
@@ -183,19 +186,25 @@ class BuyerDetails extends Component {
                 <Grid.Column width={4}>
                   <Statistic.Group horizontal widths={7} size="mini">
                     <Statistic color="blue">
-                      <Statistic.Label>Phone 1:</Statistic.Label>
+                      <Statistic.Label style={{ padding: 5 }}>
+                        Phone 1:
+                      </Statistic.Label>
                       <Statistic.Value> {buyer.telephone1}</Statistic.Value>
                     </Statistic>
                     <Statistic color="blue">
-                      <Statistic.Label>Phone 2:</Statistic.Label>
-                      <Statistic.Value>{buyer.telephone1}</Statistic.Value>
+                      <Statistic.Label style={{ padding: 5 }}>
+                        Phone 2:
+                      </Statistic.Label>
+                      <Statistic.Value>{buyer.telephone2}</Statistic.Value>
                     </Statistic>
                   </Statistic.Group>
                 </Grid.Column>
                 <Grid.Column width={5}>
                   <Statistic.Group widths={1} size="mini">
                     <Statistic color="blue">
-                      <Statistic.Label>Address:</Statistic.Label>
+                      <Statistic.Label style={{ padding: 5 }}>
+                        Address:
+                      </Statistic.Label>
                       <Statistic.Value>
                         {buyer.streetName}, {buyer.suburb} {buyer.postCode}{' '}
                         {buyer.state}
