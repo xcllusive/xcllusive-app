@@ -112,6 +112,7 @@ const Layout = ({ match, logout, menu }) => (
         component={LogPage}
         path={`${match.path}business/:id/log/:logID`}
       />
+      <Route exact component={LogPage} path={`${match.path}business/:id/log`} />
       <Route exact component={BuyerPage} path={`${match.path}buyer`} />
       <Route
         exact
