@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Modal,
@@ -7,16 +7,12 @@ import {
   Grid,
   Dimmer,
   Loader,
-  Segment,
   Label,
-  Message,
   Header
 } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
-import Yup from 'yup'
-import _ from 'lodash'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
@@ -100,16 +96,34 @@ class ModalEmailTemplates extends Component {
     this.props.getEmailTemplate(value)
   }
 
+  _convertHtmlToRightText = html => {
+    let htmlConverted = html.replace(/<style([\s\S]*?)<\/style>/gi, '')
+    htmlConverted = htmlConverted.replace(/<script([\s\S]*?)<\/script>/gi, '')
+    htmlConverted = htmlConverted.replace(/<\/div>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<\/li>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<li>/gi, '  *  ')
+    htmlConverted = htmlConverted.replace(/<\/ul>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<\/p>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<br\s*[\\/]?>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<[^>]+>/gi, '')
+
+    return encodeURIComponent(htmlConverted)
+  }
+
   _handleConfirm = isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       return
     }
-    const sendEmail = this.props.objectEmailTemplate
-    sendEmail.body = this.props.values.body
-    sendEmail.subject = this.props.values.subject
-    sendEmail.buyerId = parseInt(this.props.buyerId)
-    this.props.sendEmailBuyerBrokersEmail(sendEmail)
+    // const sendEmail = this.props.objectEmailTemplate
+    // sendEmail.body = this.props.values.body
+    // sendEmail.subject = this.props.values.subject
+    // sendEmail.buyerId = parseInt(this.props.buyerId)
+    // this.props.sendEmailBuyerBrokersEmail(sendEmail)
+    window.location.href = `mailto:${this.props.email} ?subject=${
+      this.props.values.subject
+    } &body=${this._convertHtmlToRightText(this.props.values.body)}`
+    this.props.closeModal()
   }
 
   _attachQuillRefs = () => {
@@ -127,12 +141,6 @@ class ModalEmailTemplates extends Component {
     if (quillRef !== null) this.quillRef = quillRef
   }
 
-  insertTextQuill = word => {
-    const range = this.quillRef.selection.savedRange
-    const position = range ? range.index : 0
-    this.quillRef.insertText(position, ` {{${word}}} `)
-  }
-
   render () {
     const {
       listEmailTemplates,
@@ -145,7 +153,8 @@ class ModalEmailTemplates extends Component {
       handleChange,
       touched,
       errors,
-      isLoadingSentEmail
+      isLoadingSentEmail,
+      isLoadingEmailTemplate
     } = this.props
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
@@ -181,7 +190,7 @@ class ModalEmailTemplates extends Component {
               <Form.Group>
                 <Form.Field width={16}>
                   <Form.Input
-                    required
+                    readOnly
                     label="Subject"
                     name="subject"
                     autoComplete="subject"
@@ -200,43 +209,12 @@ class ModalEmailTemplates extends Component {
                   )}
                 </Form.Field>
               </Form.Group>
-              {objectEmailTemplate &&
-              objectEmailTemplate.handlebars &&
-              objectEmailTemplate.handlebars.length > 0 ? (
-                  <Fragment>
-                    <Message info size="tiny">
-                      <Message.Header>
-                      Replace in the body`s email with tag names by what you
-                      need to use. Ex: Hi ((buyerName)).
-                      </Message.Header>
-                    </Message>
-                    <Segment>
-                      <Label.Group color="teal">
-                        {objectEmailTemplate &&
-                        objectEmailTemplate.handlebars.map((item, key) => {
-                          return (
-                            <Label
-                              horizontal
-                              key={key}
-                              onClick={() => this.insertTextQuill(item)}
-                            >
-                              {'{{'}
-                              {item}
-                              {'}}'}
-                            </Label>
-                          )
-                        })}
-                      </Label.Group>
-                    </Segment>
-                  </Fragment>
-                ) : null}
-
               <Grid padded="horizontally">
                 <Grid.Row columns={1}>
                   <Grid.Column floated="left" width={16}>
                     <Form.Field>
                       <ReactQuill
-                        required
+                        readOnly
                         ref={el => {
                           this.reactQuillRef = el
                         }}
@@ -263,9 +241,9 @@ class ModalEmailTemplates extends Component {
             positive
             icon="mail"
             labelPosition="right"
-            content="Send Email"
+            content="Confirm"
             loading={isLoadingSentEmail}
-            disabled={!_.isEmpty(errors)}
+            disabled={!objectEmailTemplate || isLoadingEmailTemplate}
             onClick={this._handleConfirm}
           />
         </Modal.Actions>
@@ -295,8 +273,10 @@ ModalEmailTemplates.propTypes = {
   setFieldValue: PropTypes.func,
   sendEmailBuyerBrokersEmail: PropTypes.func,
   buyerId: PropTypes.string,
+  email: PropTypes.string,
   isLoadingSentEmail: PropTypes.bool,
-  isSentEmail: PropTypes.bool
+  isSentEmail: PropTypes.bool,
+  isLoadingEmailTemplate: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
@@ -315,11 +295,6 @@ const mapPropsToValues = props => {
   }
 }
 
-const validationSchema = Yup.object().shape({
-  subject: Yup.string().required('Subject must be required')
-  // body: Yup.string().required('Body must be required')
-})
-
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
@@ -335,7 +310,6 @@ const mapDispatchToProps = dispatch =>
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
-    validationSchema,
     enableReinitialize: true
   })(ModalEmailTemplates)
 )

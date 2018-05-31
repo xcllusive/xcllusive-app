@@ -104,7 +104,8 @@ class BuyerDetails extends Component {
         title: 'Email to Buyer',
         text: 'Are you sure you want to send an email to buyer?'
       },
-      buyerId: this.props.match.params.idBuyer
+      buyerId: this.props.match.params.idBuyer,
+      email: this.props.buyer.email
     })
   }
 
@@ -158,7 +159,9 @@ class BuyerDetails extends Component {
       handleChange,
       values,
       pagesBusinessBuyerLogList,
-      activePageBusinessBuyerLogList
+      activePageBusinessBuyerLogList,
+      isLoadingPreviousBusiness,
+      isLoadingLogTable
     } = this.props
 
     const { priceOptions, buyerType } = this.state
@@ -171,18 +174,22 @@ class BuyerDetails extends Component {
                 <Grid.Column width={7}>
                   <Statistic.Group horizontal widths={7} size="mini">
                     <Statistic color="orange">
-                      <Statistic.Label style={{ padding: 5 }}>
-                        Buyer:
-                      </Statistic.Label>
                       <Statistic.Value>
                         {buyer.firstName} {buyer.surname}
                       </Statistic.Value>
                     </Statistic>
                     <Statistic color="blue">
-                      <Statistic.Label style={{ padding: 5 }}>
-                        Email:
-                      </Statistic.Label>
-                      <Statistic.Value>{buyer.email}</Statistic.Value>
+                      <Statistic.Value>
+                        {buyer.email}
+                        <Icon
+                          style={{ padding: 5 }}
+                          link
+                          name="mail"
+                          onClick={() =>
+                            (window.location.href = `mailto:${buyer.email}`)
+                          }
+                        />
+                      </Statistic.Value>
                     </Statistic>
                   </Statistic.Group>
                 </Grid.Column>
@@ -279,71 +286,80 @@ class BuyerDetails extends Component {
             <Grid.Row style={{ padding: 0 }}>
               <Grid.Column width={5}>
                 <Segment>
-                  {values.buyerLog_id ? (
-                    <Form>
-                      <Form.Group>
-                        <Form.Field width={11}>
-                          <h5>Follow Up Date</h5>
-                          <DatePicker
-                            selected={moment(values.buyerLog_followUp)}
-                            onChange={this._handleDateChange}
-                            popperPlacement="top-end"
-                            form
-                          />
-                        </Form.Field>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Field width={16}>
-                          <Form.TextArea
-                            required
-                            label="Communication text"
-                            name="buyerLog_text"
-                            autoComplete="buyerLog_text"
-                            value={values.buyerLog_text}
-                            onChange={handleChange}
-                          />
-                        </Form.Field>
-                      </Form.Group>
-                    </Form>
-                  ) : null}
+                  <Dimmer.Dimmable dimmed={isLoadingLogTable}>
+                    <Dimmer inverted active={isLoadingLogTable}>
+                      <Loader>Loading</Loader>
+                    </Dimmer>
+                    {values.buyerLog_id ? (
+                      <Form>
+                        <Form.Group>
+                          <Form.Field width={16}>
+                            <Form.TextArea
+                              label="Communication text"
+                              name="buyerLog_text"
+                              autoComplete="buyerLog_text"
+                              value={values.buyerLog_text}
+                              onChange={handleChange}
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.Field width={11}>
+                            <h5>Follow Up Date</h5>
+                            <DatePicker
+                              selected={moment(values.buyerLog_followUp)}
+                              onChange={this._handleDateChange}
+                              popperPlacement="top-end"
+                              form
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                      </Form>
+                    ) : null}
+                  </Dimmer.Dimmable>
                 </Segment>
               </Grid.Column>
               <Grid.Column width={11}>
-                <Table celled selectable compact striped size="small">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Log</Table.HeaderCell>
-                      <Table.HeaderCell>Date</Table.HeaderCell>
-                      <Table.HeaderCell>Status</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {listBusinessBuyerLogList.map(businessBuyerLog => (
-                      <Table.Row
-                        key={businessBuyerLog.id}
-                        onClick={() => this._selectLog(businessBuyerLog)}
-                      >
-                        <Table.Cell>{businessBuyerLog.text}</Table.Cell>
-                        <Table.Cell>
-                          {moment(businessBuyerLog.followUp).format(
-                            'DD/MM/YYYY - HH:mm'
-                          )}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {businessBuyerLog.followUpStatus}
-                        </Table.Cell>
+                <Dimmer.Dimmable dimmed={isLoadingLogTable}>
+                  <Dimmer inverted active={isLoadingLogTable}>
+                    <Loader>Loading</Loader>
+                  </Dimmer>
+                  <Table celled selectable compact striped size="small">
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>Log</Table.HeaderCell>
+                        <Table.HeaderCell>Date</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
                       </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table>
-                <Pagination
-                  prevItem={null}
-                  nextItem={null}
-                  size="mini"
-                  onPageChange={this._handlePaginationChange}
-                  defaultActivePage={activePageBusinessBuyerLogList}
-                  totalPages={pagesBusinessBuyerLogList}
-                />
+                    </Table.Header>
+                    <Table.Body>
+                      {listBusinessBuyerLogList.map(businessBuyerLog => (
+                        <Table.Row
+                          key={businessBuyerLog.id}
+                          onClick={() => this._selectLog(businessBuyerLog)}
+                        >
+                          <Table.Cell>{businessBuyerLog.text}</Table.Cell>
+                          <Table.Cell>
+                            {moment(businessBuyerLog.followUp).format(
+                              'DD/MM/YYYY - HH:mm'
+                            )}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {businessBuyerLog.followUpStatus}
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table>
+                  <Pagination
+                    prevItem={null}
+                    nextItem={null}
+                    size="mini"
+                    onPageChange={this._handlePaginationChange}
+                    defaultActivePage={activePageBusinessBuyerLogList}
+                    totalPages={pagesBusinessBuyerLogList}
+                  />
+                </Dimmer.Dimmable>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -351,25 +367,30 @@ class BuyerDetails extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column width={4}>
-              <Table celled selectable compact striped size="small">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Previous Businesses</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {listBusinessesFromBuyer.map(businessesFromBuyer => (
-                    <Table.Row key={businessesFromBuyer.business_id}>
-                      <Table.Cell>
-                        {businessesFromBuyer.Business.businessName}
-                      </Table.Cell>
+              <Dimmer.Dimmable dimmed={isLoadingPreviousBusiness}>
+                <Dimmer inverted active={isLoadingPreviousBusiness}>
+                  <Loader>Loading</Loader>
+                </Dimmer>
+                <Table celled selectable compact striped size="small">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Previous Businesses</Table.HeaderCell>
                     </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
+                  </Table.Header>
+                  <Table.Body>
+                    {listBusinessesFromBuyer.map(businessesFromBuyer => (
+                      <Table.Row key={businessesFromBuyer.business_id}>
+                        <Table.Cell>
+                          {businessesFromBuyer.Business.businessName}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              </Dimmer.Dimmable>
             </Grid.Column>
             <Grid.Column width={4}>
-              <Segment>
+              <Segment style={{ height: '100%' }}>
                 <Dimmer.Dimmable dimmed={isLoadingBuyer}>
                   <Dimmer inverted active={isLoadingBuyer}>
                     <Loader>Loading</Loader>
@@ -399,61 +420,66 @@ class BuyerDetails extends Component {
             </Grid.Column>
             <Grid.Column width={8}>
               <Segment>
-                <Form>
-                  <Form.Group>
-                    <Form.Field width={16}>
-                      <Form.TextArea
-                        label="Buyer Background Info"
-                        name="backgroundInfo"
-                        autoComplete="backgroundInfo"
-                        value={values.backgroundInfo}
-                        onChange={handleChange}
-                      />
-                    </Form.Field>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Field width={16}>
-                      <Form.TextArea
-                        label="Business Type"
-                        name="type"
-                        autoComplete="type"
-                        //  value={this.state.buyerLog.text}
-                      />
-                    </Form.Field>
-                    <Form.Field>
-                      <Form.Select
-                        label="Buyer Type"
-                        options={buyerType}
-                        name="buyerType"
-                        autoComplete="buyerType"
-                        value={values.buyerType}
-                        onChange={this._handleSelectChange}
-                      />
-                    </Form.Field>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Field>
-                      <Form.Select
-                        label="Price From"
-                        options={priceOptions}
-                        name="priceFrom"
-                        autoComplete="priceFrom"
-                        value={values.priceFrom}
-                        onChange={this._handleSelectChange}
-                      />
-                    </Form.Field>
-                    <Form.Field>
-                      <Form.Select
-                        label="Price To"
-                        options={priceOptions}
-                        name="priceTo"
-                        autoComplete="priceTo"
-                        value={values.priceTo}
-                        onChange={this._handleSelectChange}
-                      />
-                    </Form.Field>
-                  </Form.Group>
-                </Form>
+                <Dimmer.Dimmable dimmed={isLoadingBuyer}>
+                  <Dimmer inverted active={isLoadingBuyer}>
+                    <Loader>Loading</Loader>
+                  </Dimmer>
+                  <Form>
+                    <Form.Group>
+                      <Form.Field width={16}>
+                        <Form.TextArea
+                          label="Buyer Profile"
+                          name="profile"
+                          autoComplete="profile"
+                          value={values.profile}
+                          onChange={handleChange}
+                        />
+                      </Form.Field>
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Field width={16}>
+                        <Form.TextArea
+                          label="Business Type"
+                          name="type"
+                          autoComplete="type"
+                          //  value={this.state.buyerLog.text}
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <Form.Select
+                          label="Buyer Type"
+                          options={buyerType}
+                          name="buyerType"
+                          autoComplete="buyerType"
+                          value={values.buyerType}
+                          onChange={this._handleSelectChange}
+                        />
+                      </Form.Field>
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Field>
+                        <Form.Select
+                          label="Price From"
+                          options={priceOptions}
+                          name="priceFrom"
+                          autoComplete="priceFrom"
+                          value={values.priceFrom}
+                          onChange={this._handleSelectChange}
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <Form.Select
+                          label="Price To"
+                          options={priceOptions}
+                          name="priceTo"
+                          autoComplete="priceTo"
+                          value={values.priceTo}
+                          onChange={this._handleSelectChange}
+                        />
+                      </Form.Field>
+                    </Form.Group>
+                  </Form>
+                </Dimmer.Dimmable>
               </Segment>
             </Grid.Column>
           </Grid.Row>
@@ -505,13 +531,15 @@ BuyerDetails.propTypes = {
   createNewLog: PropTypes.func,
   updateBuyerLog: PropTypes.func,
   pagesBusinessBuyerLogList: PropTypes.number,
-  activePageBusinessBuyerLogList: PropTypes.number
+  activePageBusinessBuyerLogList: PropTypes.number,
+  isLoadingPreviousBusiness: PropTypes.bool,
+  isLoadingLogTable: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
   return {
     buyerNotes: props.buyer ? props.buyer.buyerNotes : '',
-    backgroundInfo: props.buyer ? props.buyer.backgroundInfo : '',
+    profile: props.buyer ? props.buyer.profile : '',
     buyerType: props.buyer ? props.buyer.buyerType : '',
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
@@ -528,9 +556,11 @@ const mapStateToProps = state => ({
   business: state.business.get.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
   listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,
+  isLoadingLogTable: state.buyerLog.getBusBuyLog.isLoading,
   pagesBusinessBuyerLogList: state.buyerLog.getBusBuyLog.pages,
   activePageBusinessBuyerLogList: state.buyerLog.getBusBuyLog.activePage,
-  listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array
+  listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array,
+  isLoadingPreviousBusiness: state.buyer.getBusinessesFromBuyer.isLoading
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(
