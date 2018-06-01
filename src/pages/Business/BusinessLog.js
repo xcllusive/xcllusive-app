@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
-/* import 'react-dates/initialize'
-import { SingleDatePicker } from 'react-dates'
-import 'react-dates/lib/css/_datepicker.css' */
+import moment from 'moment'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import { getBusiness } from '../../redux/ducks/business'
 
@@ -73,60 +73,56 @@ class BusinessLogPage extends Component {
     this.props.getBusiness(this.props.match.params.id)
   }
   render () {
-    const {
-      values,
-      handleChange,
-      handleBlur,
-      errors,
-      touched
-    } = this.props
+    const { values, handleChange, handleBlur, errors, touched } = this.props
     //  console.log('caayo', this.props.business)
     return (
       <Wrapper>
         <div>
-          <Statistic.Group size='mini' widths={5}>
-            <Statistic color='orange'>
+          <Statistic.Group size="mini" widths={5}>
+            <Statistic color="orange">
               <Statistic.Value>Business Name</Statistic.Value>
               <Statistic.Label>Business ID</Statistic.Label>
             </Statistic>
-            <Statistic color='blue'>
+            <Statistic color="blue">
               <Statistic.Value>Peter Park</Statistic.Value>
               <Statistic.Label>Name</Statistic.Label>
             </Statistic>
-            <Statistic color='blue'>
+            <Statistic color="blue">
               <Statistic.Value>
                 <Icon
                   link
-                  name='mail'
-                  onClick={() => window.open(`mailto:${values.vendorEmail}`, '_blank')}
+                  name="mail"
+                  onClick={() =>
+                    (window.location.href = `mailto:${values.vendorEmail}`)
+                  }
                 />
                 {values.vendorEmail}
               </Statistic.Value>
               <Statistic.Label>Email</Statistic.Label>
             </Statistic>
-            <Statistic color='blue'>
+            <Statistic color="blue">
               <Statistic.Value>0468 123 321</Statistic.Value>
               <Statistic.Label>Telephone</Statistic.Label>
             </Statistic>
-            <Statistic color='blue'>
+            <Statistic color="blue">
               <Statistic.Value>01/12/2017 03:10:01</Statistic.Value>
               <Statistic.Label>Creation Time</Statistic.Label>
             </Statistic>
           </Statistic.Group>
-          <Segment size='small' inverted color='blue'>
+          <Segment size="small" inverted color="blue">
             <h4>Business Log Detail</h4>
           </Segment>
           <Grid centered>
-            <Grid.Column textAlign='center' width={5}>
+            <Grid.Column textAlign="center" width={5}>
               <Input
                 fluid
                 action={{ icon: 'search' }}
-                placeholder='Find logs...'
+                placeholder="Find logs..."
               />
             </Grid.Column>
           </Grid>
           <Label size={'big'}>Log History</Label>
-          <Table color='blue' celled inverted selectable>
+          <Table color="blue" celled inverted selectable compact size="small">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Log ID</Table.HeaderCell>
@@ -160,47 +156,48 @@ class BusinessLogPage extends Component {
           </Table>
           <Form>
             <Form.Group>
-              <Form.Field width={5}>
+              <Form.Field width={3}>
+                <h5>Follow Up Date</h5>
+                <DatePicker
+                  selected={moment(values.buyerLog_followUp)}
+                  onChange={this._handleDateChange}
+                  popperPlacement="top-end"
+                  form
+                />
+              </Form.Field>
+              <Form.Field width={13}>
                 <Form.TextArea
                   required
-                  label='Communication text'
-                  name='text'
-                  autoComplete='text'
+                  label="Communication text"
+                  name="text"
+                  autoComplete="text"
                   value={values.text}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.text && touched.text && <Label basic color='red' pointing content={errors.text} />}
-              </Form.Field>
-              <Form.Field>
-                <h5>Follow Up Date</h5>
-                {/* <SingleDatePicker
-                  displayFormat='DD/MM/YYYY'
-                  date={this.state.date} // momentPropTypes.momentObj or null
-                  onDateChange={this._setStateDate} // PropTypes.func.isRequired
-                  focused={this.state.focused} // PropTypes.bool
-                  onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
-                />
-                {errors.date && touched.date && <Label basic color='red' pointing content={errors.date} />} */}
+                {errors.text &&
+                  touched.text && (
+                  <Label basic color="red" pointing content={errors.text} />
+                )}
               </Form.Field>
             </Form.Group>
-            <Grid textAlign='center'>
+            <Grid textAlign="center">
               <Grid.Column>
-                <Form.Group widths='equal'>
-                  <Button color='blue'>
-                    <Icon name='commenting' />
+                <Form.Group widths="equal">
+                  <Button color="blue">
+                    <Icon name="commenting" />
                     New Communication
                   </Button>
-                  <Button color='linkedin'>
-                    <Icon name='commenting' />
+                  <Button color="linkedin">
+                    <Icon name="commenting" />
                     Finalise Communication
                   </Button>
-                  <Button color='vk'>
-                    <Icon name='commenting' />
+                  <Button color="vk">
+                    <Icon name="commenting" />
                     Save and Retun to Business
                   </Button>
-                  <Button color='facebook'>
-                    <Icon name='commenting' />
+                  <Button color="facebook">
+                    <Icon name="commenting" />
                     Save and Retun to Main Menu
                   </Button>
                 </Form.Group>
@@ -210,23 +207,23 @@ class BusinessLogPage extends Component {
           <Form>
             <Form.Group inline>
               <Form.Input
-                label='Created By'
-                placeholder='Zoran Sarabaca'
+                label="Created By"
+                placeholder="Zoran Sarabaca"
                 readOnly
               />
               <Form.Input
-                label='Creation Date'
-                placeholder='08/12/2017'
+                label="Creation Date"
+                placeholder="08/12/2017"
                 readOnly
               />
               <Form.Input
-                label='Modified By'
-                placeholder='Cayo Bayestorff'
+                label="Modified By"
+                placeholder="Cayo Bayestorff"
                 readOnly
               />
               <Form.Input
-                label='Modified Date'
-                placeholder='09/12/2017'
+                label="Modified Date"
+                placeholder="09/12/2017"
                 readOnly
               />
             </Form.Group>
@@ -238,8 +235,7 @@ class BusinessLogPage extends Component {
 }
 
 const validationSchema = Yup.object().shape({
-  text: Yup.string()
-    .required('Communication Text is required.')
+  text: Yup.string().required('Communication Text is required.')
   /* date: Yup.string()
     .required('Follow up Date is required.') */
 })
@@ -262,22 +258,22 @@ const mapPropsToValues = () => {
   }
 }
 
-const handleSubmit = () => {
-}
+const handleSubmit = () => {}
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     business: state.business.get.object
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({getBusiness}, dispatch)
+  return bindActionCreators({ getBusiness }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
     handleSubmit,
-    validationSchema})(BusinessLogPage)
+    validationSchema
+  })(BusinessLogPage)
 )
