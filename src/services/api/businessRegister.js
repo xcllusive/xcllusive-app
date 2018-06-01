@@ -1,10 +1,10 @@
 import request from './'
 
-export const get = businessRegister => {
+export const get = (businessRegisterType, limit = null, page = null) => {
   return request({
     method: 'get',
-    url: `/business-register/${businessRegister}`
-
+    url: `/business-register/${businessRegisterType}`,
+    params: { limit, page }
   })
 }
 

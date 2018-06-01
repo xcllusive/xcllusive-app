@@ -2,7 +2,7 @@ export const mapArrayToValuesForDropdown = array => {
   if (array.length > 0) {
     return array.map((item, index) => ({
       key: index,
-      text: item.title,
+      text: item.label,
       value: item.id
     }))
   }
