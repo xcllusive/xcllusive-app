@@ -44,9 +44,12 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
+    if (this.props.objectLogBusiness.length) {
+      this._selectLog(this.props.objectLogBusiness[0])
+    }
   }
 
   componentWillUnmount () {
