@@ -1,6 +1,11 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { get, create, update, remove } from '../../services/api/businessRegister'
+import {
+  get,
+  create,
+  update,
+  remove
+} from '../../services/api/businessRegister'
 
 // Action Types
 
@@ -27,7 +32,9 @@ const TypesBusinessRegister = {
   4: 'industry',
   5: 'type',
   6: 'ownersTime',
-  7: 'stage'
+  7: 'stage',
+  8: 'stageNotSigned',
+  9: 'stageNotWant'
 }
 
 // Reducer
@@ -37,37 +44,58 @@ const initialState = {
     source: {
       isLoading: true,
       array: [],
-      error: null
+      error: null,
+      pages: 0,
+      activePage: 1
     },
     rating: {
       isLoading: true,
       array: [],
-      error: null
+      error: null,
+      pages: 0,
+      activePage: 1
     },
     product: {
       isLoading: true,
       array: [],
-      error: null
+      error: null,
+      pages: 0,
+      activePage: 1
     },
     industry: {
       isLoading: true,
       array: [],
-      error: null
+      error: null,
+      pages: 0,
+      activePage: 1
     },
     type: {
       isLoading: true,
       array: [],
-      error: null
-    },
-    ownersTime: {
-      isLoading: true,
-      array: [],
-      error: null
+      error: null,
+      pages: 0,
+      activePage: 1
     },
     stage: {
       isLoading: true,
       array: [],
-      error: null
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
+    stageNotSigned: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
+    stageNotWant: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
     }
   },
   create: {
@@ -109,7 +137,8 @@ export default function reducer (state = initialState, action) {
           [action.typeBusinessRegister]: {
             ...state.get[action.typeBusinessRegister],
             isLoading: false,
-            array: action.payload,
+            array: action.payload.data.rows,
+            pages: action.payload.itemCount,
             error: null
           }
         }
@@ -221,15 +250,19 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getBusinessRegister = id => async (dispatch) => {
+export const getBusinessRegister = (
+  businessRegisterType,
+  limit = 5,
+  page = null
+) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESS_REGISTER_LOADING
   })
   try {
-    const businessRegister = await get(id)
+    const businessRegister = await get(businessRegisterType, limit, page)
     dispatch({
       type: Types.GET_BUSINESS_REGISTER_SUCCESS,
-      typeBusinessRegister: TypesBusinessRegister[id],
+      typeBusinessRegister: TypesBusinessRegister[businessRegisterType],
       payload: businessRegister
     })
   } catch (error) {
@@ -249,6 +282,9 @@ export const createBusinessRegister = businessRegister => async dispatch => {
     const response = await create(businessRegister)
     dispatch({
       type: Types.CREATE_BUSINESS_REGISTER_SUCCESS
+    })
+    dispatch({
+      type: ModalTypes.MODAL_CLOSE
     })
     toast.success(response.message)
   } catch (error) {

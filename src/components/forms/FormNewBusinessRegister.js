@@ -7,7 +7,10 @@ import { Modal, Form, Label, Button, Icon } from 'semantic-ui-react'
 import Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
-import { createBusinessRegister, updateBusinessRegister } from '../../redux/ducks/businessRegister'
+import {
+  createBusinessRegister,
+  updateBusinessRegister
+} from '../../redux/ducks/businessRegister'
 
 class FormNewBusinessRegister extends PureComponent {
   constructor (props) {
@@ -29,15 +32,29 @@ class FormNewBusinessRegister extends PureComponent {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  };
+  }
 
   render () {
-    const { values, touched, errors, handleChange, handleBlur, handleSubmit, isValid, createLoading, updateLoading, businessRegister } = this.props
+    const {
+      values,
+      touched,
+      errors,
+      handleChange,
+      handleBlur,
+      handleSubmit,
+      isValid,
+      createLoading,
+      updateLoading,
+      businessRegister
+    } = this.props
 
     return (
       <Modal open dimmer="blurring">
         <Modal.Header align="center">
-          {this.props.editBusinessRegister && this.props.editBusinessRegister.value ? 'Edit Business Register' : 'New Business Register'}
+          {this.props.editBusinessRegister &&
+          this.props.editBusinessRegister.value
+            ? 'Edit Business Register'
+            : 'New Business Register'}
         </Modal.Header>
         <Modal.Content>
           <Form>
@@ -51,23 +68,53 @@ class FormNewBusinessRegister extends PureComponent {
                   autoComplete="businessRegister"
                   value={values.businessRegister}
                   onChange={this._handleSelectChange}
-                  disabled={this.props.editBusinessRegister && this.props.editBusinessRegister.value !== false}
+                  disabled={
+                    this.props.editBusinessRegister &&
+                    this.props.editBusinessRegister.value !== false
+                  }
                 />
-                {errors.businessRegister && touched.businessRegister && <Label basic color="red" pointing content={errors.businessRegister} />}
+                {errors.businessRegister &&
+                  touched.businessRegister && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.businessRegister}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Field width={16}>
-                <Form.Input required label="Label" name="label" autoComplete="label" value={values.label} onChange={handleChange} onBlur={handleBlur} />
-                {errors.label && touched.label && <Label basic color="red" pointing content={errors.label} />}
+                <Form.Input
+                  required
+                  label="Label"
+                  name="label"
+                  autoComplete="label"
+                  value={values.label}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.label &&
+                  touched.label && (
+                  <Label basic color="red" pointing content={errors.label} />
+                )}
               </Form.Field>
             </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button color="blue" disabled={createLoading || updateLoading || !isValid} loading={createLoading || updateLoading} onClick={handleSubmit}>
+          <Button
+            color="blue"
+            disabled={createLoading || updateLoading || !isValid}
+            loading={createLoading || updateLoading}
+            onClick={handleSubmit}
+          >
             <Icon name="save" />
-            {this.props.editBusinessRegister && this.props.editBusinessRegister.value ? 'Edit Register' : 'Create Register'}
+            {this.props.editBusinessRegister &&
+            this.props.editBusinessRegister.value
+              ? 'Edit Register'
+              : 'Create Register'}
           </Button>
           <Button color="red" onClick={closeModal()}>
             <Icon name="cancel" />
@@ -97,7 +144,9 @@ FormNewBusinessRegister.propTypes = {
 }
 
 const mapPropsToValues = props => ({
-  businessRegister: props.editBusinessRegister ? props.editBusinessRegister : '',
+  businessRegister: props.editBusinessRegister
+    ? props.editBusinessRegister
+    : '',
   label: props.businessRegister.text ? props.businessRegister.text : '',
   id: props.businessRegister.value ? props.businessRegister.value : null
 })

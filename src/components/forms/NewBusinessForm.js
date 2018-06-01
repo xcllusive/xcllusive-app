@@ -9,6 +9,8 @@ import Yup from 'yup'
 import { createBusiness } from '../../redux/ducks/business'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
+
 class NewBusinessForm extends Component {
   componentWillMount () {
     this.props.getBusinessRegister(1)
@@ -186,7 +188,7 @@ class NewBusinessForm extends Component {
                 <Form.Select
                   required
                   label="Source"
-                  options={sourceOptions}
+                  options={mapArrayToValuesForDropdown(sourceOptions)}
                   name="businessSource"
                   autoComplete="businessSource"
                   loading={dropDownLoading}
