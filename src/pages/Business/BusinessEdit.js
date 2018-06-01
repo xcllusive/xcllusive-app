@@ -165,20 +165,20 @@ class BusinessEditPage extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {arrayLogsFromBusiness.map(item => {
+                  {arrayLogsFromBusiness.map(logBusiness => {
                     return (
                       <Table.Row
                         active
-                        key={item.id}
+                        key={logBusiness.id}
                         onClick={() =>
                           this.props.history.push(`${this.props.match.url}/log`)
                         }
                       >
-                        <Table.Cell>{item.text}</Table.Cell>
+                        <Table.Cell>{logBusiness.text}</Table.Cell>
                         <Table.Cell>
-                          {moment(item.followUp).format('DD/MM/YYYY')}
+                          {moment(logBusiness.followUp).format('DD/MM/YYYY')}
                         </Table.Cell>
-                        <Table.Cell>{item.status}</Table.Cell>
+                        <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
                       </Table.Row>
                     )
                   })}
