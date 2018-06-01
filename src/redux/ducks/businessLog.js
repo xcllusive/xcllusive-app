@@ -6,7 +6,8 @@ import { toast } from 'react-toastify'
 export const Types = {
   GET_BUSINESS_LOG_LOADING: 'GET_BUSINESS_LOG_LOADING',
   GET_BUSINESS_LOG_SUCCESS: 'GET_BUSINESS_LOG_SUCCESS',
-  GET_BUSSINES_LOG_FAILURE: 'GET_BUSSINES_LOG_FAILURE'
+  GET_BUSSINES_LOG_FAILURE: 'GET_BUSSINES_LOG_FAILURE',
+  CLEAR_BUSINESS_LOG: 'CLEAR_BUSINESS_LOG'
 }
 
 // Reducer
@@ -47,6 +48,8 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_BUSINESS_LOG:
+      return initialState
     default:
       return state
   }
@@ -71,4 +74,10 @@ export const getLogFromBusiness = businessId => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const clearBusinessLog = () => dispatch => {
+  dispatch({
+    type: Types.CLEAR_BUSINESS_LOG
+  })
 }

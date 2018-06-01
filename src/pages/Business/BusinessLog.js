@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { getBusiness } from '../../redux/ducks/business'
-import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+import {
+  getLogFromBusiness,
+  clearBusinessLog
+} from '../../redux/ducks/businessLog'
 
 import {
   Statistic,
@@ -29,13 +31,28 @@ class BusinessLogPage extends Component {
     super(props)
     this.state = {
       date: null,
-      focused: false
+      focused: false,
+      newLog: false
     }
   }
+
+  componentWillReceiveProps (nextProps) {
+    if (
+      this.props.objectLogBusiness.length !== nextProps.objectLogBusiness.length
+    ) {
+      this._selectLog(nextProps.objectLogBusiness[0])
+    }
+  }
+
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
   }
+
+  componentWillUnmount () {
+    this.props.clearBusinessLog()
+  }
+
   _selectLog = businessLog => {
     const { newLog, id, followUp, text } = businessLog
 
@@ -51,7 +68,6 @@ class BusinessLogPage extends Component {
     const {
       values,
       handleChange,
-      handleBlur,
       errors,
       touched,
       objectLogBusiness,
@@ -138,7 +154,7 @@ class BusinessLogPage extends Component {
               <Form.Field width={3}>
                 <h5>Follow Up Date</h5>
                 <DatePicker
-                  selected={moment(values.buyerLog_followUp)}
+                  selected={moment(values.businessLog_followUp)}
                   onChange={this._handleDateChange}
                   popperPlacement="top-end"
                   form
@@ -146,13 +162,11 @@ class BusinessLogPage extends Component {
               </Form.Field>
               <Form.Field width={13}>
                 <Form.TextArea
-                  required
                   label="Communication text"
-                  name="text"
-                  autoComplete="text"
-                  value={values.text}
+                  name="businessLog_text"
+                  autoComplete="businessLog_text"
+                  value={values.businessLog_text}
                   onChange={handleChange}
-                  onBlur={handleBlur}
                 />
                 {errors.text &&
                   touched.text && (
@@ -213,12 +227,6 @@ class BusinessLogPage extends Component {
   }
 }
 
-const validationSchema = Yup.object().shape({
-  text: Yup.string().required('Communication Text is required.')
-  /* date: Yup.string()
-    .required('Follow up Date is required.') */
-})
-
 BusinessLogPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
@@ -231,7 +239,8 @@ BusinessLogPage.propTypes = {
   getLogFromBusiness: PropTypes.func,
   objectLogBusiness: PropTypes.array,
   business: PropTypes.object,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  clearBusinessLog: PropTypes.func
 }
 
 const mapPropsToValues = () => {
@@ -254,13 +263,15 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, getLogFromBusiness }, dispatch)
+  return bindActionCreators(
+    { getBusiness, getLogFromBusiness, clearBusinessLog },
+    dispatch
+  )
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
-    handleSubmit,
-    validationSchema
+    handleSubmit
   })(BusinessLogPage)
 )
