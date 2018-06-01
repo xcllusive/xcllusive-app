@@ -159,10 +159,9 @@ class BusinessEditPage extends Component {
               <Table size={'small'} color="blue" celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>LogID</Table.HeaderCell>
                     <Table.HeaderCell>Log</Table.HeaderCell>
-                    <Table.HeaderCell>Date</Table.HeaderCell>
-                    <Table.HeaderCell>Follow Up Status</Table.HeaderCell>
+                    <Table.HeaderCell>Follow Up</Table.HeaderCell>
+                    <Table.HeaderCell>Status</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -172,15 +171,12 @@ class BusinessEditPage extends Component {
                         active
                         key={item.id}
                         onClick={() =>
-                          this.props.history.push(
-                            `${this.props.match.url}/log/${item.id}`
-                          )
+                          this.props.history.push(`${this.props.match.url}/log`)
                         }
                       >
-                        <Table.Cell>{item.id}</Table.Cell>
                         <Table.Cell>{item.text}</Table.Cell>
                         <Table.Cell>
-                          {moment(item.followUp).format('DD/MM/YYYY - HH:mm')}
+                          {moment(item.followUp).format('DD/MM/YYYY')}
                         </Table.Cell>
                         <Table.Cell>{item.status}</Table.Cell>
                       </Table.Row>

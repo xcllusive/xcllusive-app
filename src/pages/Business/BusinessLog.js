@@ -36,6 +36,17 @@ class BusinessLogPage extends Component {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
   }
+  _selectLog = businessLog => {
+    const { newLog, id, followUp, text } = businessLog
+
+    if (newLog) this.props.setFieldValue('newLog', true)
+    else this.props.setFieldValue('newLog', false)
+
+    this.props.setFieldValue('businessLog_id', id)
+    this.props.setFieldValue('businessLog_followUp', followUp)
+    this.props.setFieldValue('businessLog_text', text)
+  }
+
   render () {
     const {
       values,
@@ -66,12 +77,11 @@ class BusinessLogPage extends Component {
                   link
                   name="mail"
                   onClick={() =>
-                    (window.location.href = `mailto:${values.vendorEmail}`)
+                    (window.location.href = `mailto:${business.vendorEmail}`)
                   }
                 />
-                {values.vendorEmail}
               </Statistic.Value>
-              <Statistic.Label>Email</Statistic.Label>
+              <Statistic.Label>{business.vendorEmail}</Statistic.Label>
             </Statistic>
             <Statistic color="blue">
               <Statistic.Value>{business.vendorPhone1}</Statistic.Value>
@@ -103,7 +113,11 @@ class BusinessLogPage extends Component {
             <Table.Body>
               {objectLogBusiness.map(logBusiness => {
                 return (
-                  <Table.Row active key={logBusiness.id}>
+                  <Table.Row
+                    active
+                    key={logBusiness.id}
+                    onClick={() => this._selectLog(logBusiness)}
+                  >
                     <Table.Cell>
                       {moment(logBusiness.dateTimeCreated).format(
                         'DD/MM/YYYY - HH:mm'
@@ -216,12 +230,17 @@ BusinessLogPage.propTypes = {
   getBusiness: PropTypes.func,
   getLogFromBusiness: PropTypes.func,
   objectLogBusiness: PropTypes.array,
-  business: PropTypes.object
+  business: PropTypes.object,
+  setFieldValue: PropTypes.func
 }
 
 const mapPropsToValues = () => {
   return {
-    textLog: ''
+    textLog: '',
+    businessLog_id: '',
+    businessLog_followUp: '',
+    businessLog_text: '',
+    newLog: false
   }
 }
 
