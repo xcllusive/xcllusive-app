@@ -1,13 +1,14 @@
 import request from './'
 
-export const getAll = brokersEmail =>
-  request({
+export const getAll = brokersEmail => {
+  return request({
     method: 'get',
     url: '/email-template',
     params: {
-      brokersEmail: brokersEmail
+      brokersEmail
     }
   })
+}
 
 export const get = id =>
   request({

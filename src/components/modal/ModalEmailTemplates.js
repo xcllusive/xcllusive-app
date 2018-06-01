@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 
-import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
+import { mapArrayToValuesForDropdownEmailTemplate } from '../../utils/sharedFunctionArray'
 
 import {
   getEmailTemplates,
@@ -74,7 +74,7 @@ class ModalEmailTemplates extends Component {
   }
 
   componentWillMount () {
-    this.props.getEmailTemplates(1)
+    this.props.getEmailTemplates(true)
     this.props.clearEmailTemplates()
   }
 
@@ -167,7 +167,9 @@ class ModalEmailTemplates extends Component {
                   style={{ zIndex: 9999 }}
                   label="Templates"
                   placeholder="Please select one template bellow..."
-                  options={mapArrayToValuesForDropdown(listEmailTemplates)}
+                  options={mapArrayToValuesForDropdownEmailTemplate(
+                    listEmailTemplates
+                  )}
                   name="title"
                   autoComplete="title"
                   onChange={this._handleSelectChange}

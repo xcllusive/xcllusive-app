@@ -25,7 +25,7 @@ import {
   updateTemplates,
   clearEmailTemplates
 } from '../../redux/ducks/emailTemplates'
-import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
+import { mapArrayToValuesForDropdownEmailTemplate } from '../../utils/sharedFunctionArray'
 
 class EmailTemplates extends Component {
   constructor (props) {
@@ -146,7 +146,9 @@ class EmailTemplates extends Component {
                 style={{ zIndex: 9999 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
-                options={mapArrayToValuesForDropdown(listEmailTemplates)}
+                options={mapArrayToValuesForDropdownEmailTemplate(
+                  listEmailTemplates
+                )}
                 name="title"
                 autoComplete="title"
                 value={values.title}
@@ -225,7 +227,7 @@ class EmailTemplates extends Component {
                   label="Brokers Email"
                   name="brokersEmail"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.brokersEmail}
+                  checked={values.brokersEmail === 1}
                 />
               </Form.Field>
               <Form.Field>
@@ -307,7 +309,11 @@ class EmailTemplates extends Component {
 
             <Grid padded="horizontally">
               <Grid.Row columns={1}>
-                <Grid.Column floated="left" width={16}>
+                <Grid.Column
+                  floated="left"
+                  width={16}
+                  style={{ paddingLeft: 0, paddingRight: 0 }}
+                >
                   <Form.Field>
                     <ReactQuill
                       ref={el => {
@@ -324,7 +330,6 @@ class EmailTemplates extends Component {
               </Grid.Row>
             </Grid>
           </Dimmer.Dimmable>
-          {/* ) : null} */}
         </Form>
       </Wrapper>
     )
