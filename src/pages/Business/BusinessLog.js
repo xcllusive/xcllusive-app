@@ -10,6 +10,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { getBusiness } from '../../redux/ducks/business'
+import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 
 import {
   Statistic,
@@ -23,44 +24,6 @@ import {
   Icon
 } from 'semantic-ui-react'
 
-const array = [
-  {
-    logID: '0001',
-    dateLog: '01/01/2018',
-    textLog: 'Appraisal Production Commenced',
-    followUpDate: '01/01/2018',
-    status: 'Pending'
-  },
-  {
-    logID: '0002',
-    dateLog: '01/01/2018',
-    textLog: 'New Enquiry',
-    followUpDate: '01/05/2018',
-    status: 'Pending'
-  },
-  {
-    logID: '0003',
-    dateLog: '01/01/2018',
-    textLog: 'New Enquiry',
-    followUpDate: '01/01/2019',
-    status: 'Done'
-  },
-  {
-    logID: '0004',
-    dateLog: '01/01/2018',
-    textLog: 'New Enquiry',
-    followUpDate: '01/07/2018',
-    status: 'Done'
-  },
-  {
-    logID: '0005',
-    dateLog: '01/01/2018',
-    textLog: 'Appraisal Production Commenced',
-    followUpDate: '10/02/2018',
-    status: 'Pending'
-  }
-]
-
 class BusinessLogPage extends Component {
   constructor (props) {
     super(props)
@@ -69,23 +32,33 @@ class BusinessLogPage extends Component {
       focused: false
     }
   }
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
+    this.props.getLogFromBusiness(this.props.match.params.id)
   }
   render () {
-    const { values, handleChange, handleBlur, errors, touched } = this.props
-    //  console.log('caayo', this.props.business)
+    const {
+      values,
+      handleChange,
+      handleBlur,
+      errors,
+      touched,
+      objectLogBusiness,
+      business
+    } = this.props
     return (
       <Wrapper>
         <div>
-          <Statistic.Group size="mini" widths={5}>
+          <Statistic.Group size="mini" widths={4}>
             <Statistic color="orange">
-              <Statistic.Value>Business Name</Statistic.Value>
-              <Statistic.Label>Business ID</Statistic.Label>
+              <Statistic.Value>{business.businessName}</Statistic.Value>
+              <Statistic.Label>{this.props.match.params.id}</Statistic.Label>
             </Statistic>
             <Statistic color="blue">
-              <Statistic.Value>Peter Park</Statistic.Value>
-              <Statistic.Label>Name</Statistic.Label>
+              <Statistic.Value>
+                {business.firstNameV} {business.lastNameV}
+              </Statistic.Value>
+              <Statistic.Label>Vendor</Statistic.Label>
             </Statistic>
             <Statistic color="blue">
               <Statistic.Value>
@@ -101,12 +74,8 @@ class BusinessLogPage extends Component {
               <Statistic.Label>Email</Statistic.Label>
             </Statistic>
             <Statistic color="blue">
-              <Statistic.Value>0468 123 321</Statistic.Value>
+              <Statistic.Value>{business.vendorPhone1}</Statistic.Value>
               <Statistic.Label>Telephone</Statistic.Label>
-            </Statistic>
-            <Statistic color="blue">
-              <Statistic.Value>01/12/2017 03:10:01</Statistic.Value>
-              <Statistic.Label>Creation Time</Statistic.Label>
             </Statistic>
           </Statistic.Group>
           <Segment size="small" inverted color="blue">
@@ -125,30 +94,26 @@ class BusinessLogPage extends Component {
           <Table color="blue" celled inverted selectable compact size="small">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Log ID</Table.HeaderCell>
-                <Table.HeaderCell>Date</Table.HeaderCell>
+                <Table.HeaderCell>Date Created</Table.HeaderCell>
                 <Table.HeaderCell>Text</Table.HeaderCell>
                 <Table.HeaderCell>Follow Up date</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {array.map(item => {
+              {objectLogBusiness.map(logBusiness => {
                 return (
-                  <Table.Row
-                    active
-                    key={item.logID}
-                    onClick={() =>
-                      this.props.history.push(
-                        `${this.props.match.path}/${item.logID}`
-                      )
-                    }
-                  >
-                    <Table.Cell>{item.logID}</Table.Cell>
-                    <Table.Cell>{item.dateLog}</Table.Cell>
-                    <Table.Cell>{item.textLog}</Table.Cell>
-                    <Table.Cell>{item.followUpDate}</Table.Cell>
-                    <Table.Cell>{item.status}</Table.Cell>
+                  <Table.Row active key={logBusiness.id}>
+                    <Table.Cell>
+                      {moment(logBusiness.dateTimeCreated).format(
+                        'DD/MM/YYYY - HH:mm'
+                      )}
+                    </Table.Cell>
+                    <Table.Cell>{logBusiness.text}</Table.Cell>
+                    <Table.Cell>
+                      {moment(logBusiness.followUp).format('DD/MM/YYYY')}
+                    </Table.Cell>
+                    <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
                   </Table.Row>
                 )
               })}
@@ -248,8 +213,10 @@ BusinessLogPage.propTypes = {
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  getBusiness: PropTypes.func
-  //  business: PropTypes.object
+  getBusiness: PropTypes.func,
+  getLogFromBusiness: PropTypes.func,
+  objectLogBusiness: PropTypes.array,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = () => {
@@ -262,12 +229,13 @@ const handleSubmit = () => {}
 
 const mapStateToProps = state => {
   return {
-    business: state.business.get.object
+    business: state.business.get.object,
+    objectLogBusiness: state.businessLog.get.array
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness }, dispatch)
+  return bindActionCreators({ getBusiness, getLogFromBusiness }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
