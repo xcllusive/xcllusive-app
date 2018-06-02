@@ -33,7 +33,8 @@ class BusinessLogPage extends Component {
       date: null,
       focused: false,
       newLog: false,
-      inputSearch: ''
+      inputSearch: '',
+      businessLog: null
     }
   }
 
@@ -74,8 +75,17 @@ class BusinessLogPage extends Component {
   _selectLog = businessLog => {
     const { newLog, id, followUp, text } = businessLog
 
-    if (newLog) this.props.setFieldValue('newLog', true)
-    else this.props.setFieldValue('newLog', false)
+    if (newLog) {
+      this.props.setFieldValue('newLog', true)
+      this.setState({
+        businessLog: null
+      })
+    } else {
+      this.props.setFieldValue('newLog', false)
+      this.setState({
+        businessLog
+      })
+    }
 
     this.props.setFieldValue('businessLog_id', id)
     this.props.setFieldValue('businessLog_followUp', followUp)
@@ -223,30 +233,40 @@ class BusinessLogPage extends Component {
               </Grid.Column>
             </Grid>
           </Form>
-          <Form>
-            <Form.Group inline>
-              <Form.Input
-                label="Created By"
-                placeholder="Zoran Sarabaca"
-                readOnly
-              />
-              <Form.Input
-                label="Creation Date"
-                placeholder="08/12/2017"
-                readOnly
-              />
-              <Form.Input
-                label="Modified By"
-                placeholder="Cayo Bayestorff"
-                readOnly
-              />
-              <Form.Input
-                label="Modified Date"
-                placeholder="09/12/2017"
-                readOnly
-              />
-            </Form.Group>
-          </Form>
+          {this.state.businessLog ? (
+            <Form>
+              <Form.Group inline>
+                <Form.Input
+                  label="Created By"
+                  placeholder={`${this.state.businessLog.CreatedBy.firstName} ${
+                    this.state.businessLog.CreatedBy.lastName
+                  }`}
+                  readOnly
+                />
+                <Form.Input
+                  label="Creation Date"
+                  placeholder={moment(
+                    this.state.businessLog.dateTimeCreated
+                  ).format('DD/MM/YYYY - HH:mm')}
+                  readOnly
+                />
+                <Form.Input
+                  label="Modified By"
+                  placeholder={`${
+                    this.state.businessLog.ModifiedBy.firstName
+                  } ${this.state.businessLog.ModifiedBy.lastName}`}
+                  readOnly
+                />
+                <Form.Input
+                  label="Modified Date"
+                  placeholder={moment(
+                    this.state.businessLog.dateTimeModified
+                  ).format('DD/MM/YYYY - HH:mm')}
+                  readOnly
+                />
+              </Form.Group>
+            </Form>
+          ) : null}
         </div>
       </Wrapper>
     )
