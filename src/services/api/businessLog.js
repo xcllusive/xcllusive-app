@@ -8,3 +8,12 @@ export const getAllFromBusiness = businessId => {
     }
   })
 }
+
+export const updateStatus = businessLog => {
+  console.log('test update status')
+  // return request({
+  // method: 'put'
+  // url: `/business/${business.id}`,
+  //  data: business
+  // })
+}

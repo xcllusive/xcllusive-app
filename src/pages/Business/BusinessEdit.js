@@ -120,12 +120,23 @@ class BusinessEditPage extends Component {
                   render: () => (
                     <Tab.Pane className="BusinessDetail" attached={false}>
                       <Segment size="mini" inverted color="blue">
-                        <Header as="h3" textAlign="left">
-                          Business Detail
-                        </Header>
-                        <Header as="h6" floated="right">
-                          Enquiry Date: 06/12/2017
-                        </Header>
+                        <Grid>
+                          <Grid.Row columns={2}>
+                            <Grid.Column>
+                              <Header as="h3" textAlign="left" inverted>
+                                Business Detail
+                              </Header>
+                            </Grid.Column>
+                            <Grid.Column>
+                              <Header as="h4" floated="right" inverted>
+                                Enquiry Date:{' '}
+                                {moment(business.dateTimeCreated).format(
+                                  'DD/MM/YYYY'
+                                )}
+                              </Header>
+                            </Grid.Column>
+                          </Grid.Row>
+                        </Grid>
                       </Segment>
                       <EditBusinessDetailForm business={business} />
                     </Tab.Pane>

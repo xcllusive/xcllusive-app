@@ -11,7 +11,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { getBusiness } from '../../redux/ducks/business'
 import {
   getLogFromBusiness,
-  clearBusinessLog
+  clearBusinessLog,
+  updateFollowUpStatus
 } from '../../redux/ducks/businessLog'
 
 import {
@@ -38,17 +39,17 @@ class BusinessLogPage extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (
-      this.props.objectLogBusiness.length !== nextProps.objectLogBusiness.length
+      this.props.listLogBusiness.length !== nextProps.listLogBusiness.length
     ) {
-      this._selectLog(nextProps.objectLogBusiness[0])
+      this._selectLog(nextProps.listLogBusiness[0])
     }
   }
 
   componentWillMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
-    if (this.props.objectLogBusiness.length) {
-      this._selectLog(this.props.objectLogBusiness[0])
+    if (this.props.listLogBusiness.length) {
+      this._selectLog(this.props.listLogBusiness[0])
     }
   }
 
@@ -73,8 +74,10 @@ class BusinessLogPage extends Component {
       handleChange,
       errors,
       touched,
-      objectLogBusiness,
-      business
+      listLogBusiness,
+      business,
+      loadingUpdateStatus,
+      history
     } = this.props
     return (
       <Wrapper>
@@ -130,7 +133,7 @@ class BusinessLogPage extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {objectLogBusiness.map(logBusiness => {
+              {listLogBusiness.map(logBusiness => {
                 return (
                   <Table.Row
                     active
@@ -177,53 +180,79 @@ class BusinessLogPage extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            <Grid textAlign="center">
-              <Grid.Column>
-                <Form.Group widths="equal">
-                  <Button color="blue">
-                    <Icon name="commenting" />
-                    New Communication
-                  </Button>
-                  <Button color="linkedin">
-                    <Icon name="commenting" />
-                    Finalise Communication
-                  </Button>
-                  <Button color="vk">
-                    <Icon name="commenting" />
-                    Save and Retun to Business
-                  </Button>
-                  <Button color="facebook">
-                    <Icon name="commenting" />
-                    Save and Retun to Main Menu
-                  </Button>
-                </Form.Group>
-              </Grid.Column>
+            <Grid>
+              <Grid.Row style={{ justifyContent: 'center' }}>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Button
+                      color="blue"
+                      size="small"
+                      onClick={() =>
+                        this._selectLog({
+                          newLog: true,
+                          id: 1,
+                          followUp: moment().add(1, 'day'),
+                          text: ''
+                        })
+                      }
+                    >
+                      <Icon name="commenting" />
+                      New Communication
+                    </Button>
+                    <Button color="yellow">
+                      <Icon name="save" />
+                      Save Communication
+                    </Button>
+                    <Button
+                      color="red"
+                      loading={loadingUpdateStatus}
+                      onClick={() => this.props.updateFollowUpStatus()}
+                    >
+                      <Icon name="save" />
+                      Finalise Communication
+                    </Button>
+                    <Button
+                      color="green"
+                      onClick={() =>
+                        history.push(`/business/${this.props.match.params.id}`)
+                      }
+                    >
+                      <Icon name="backward" />
+                      Return to Business
+                    </Button>
+                  </Form.Group>
+                </Form>
+              </Grid.Row>
             </Grid>
           </Form>
-          <Form>
-            <Form.Group inline>
-              <Form.Input
-                label="Created By"
-                placeholder="Zoran Sarabaca"
-                readOnly
-              />
-              <Form.Input
-                label="Creation Date"
-                placeholder="08/12/2017"
-                readOnly
-              />
-              <Form.Input
-                label="Modified By"
-                placeholder="Cayo Bayestorff"
-                readOnly
-              />
-              <Form.Input
-                label="Modified Date"
-                placeholder="09/12/2017"
-                readOnly
-              />
-            </Form.Group>
-          </Form>
+          <Grid>
+            <Grid.Row style={{ justifyContent: 'center' }}>
+              <Form>
+                <Form.Group inline>
+                  <Form.Input
+                    label="Created By"
+                    placeholder="Zoran Sarabaca"
+                    readOnly
+                  />
+                  <Form.Input
+                    label="Creation Date"
+                    placeholder="08/12/2017"
+                    readOnly
+                  />
+                  <Form.Input
+                    label="Modified By"
+                    placeholder="Cayo Bayestorff"
+                    readOnly
+                  />
+                  <Form.Input
+                    label="Modified Date"
+                    placeholder="09/12/2017"
+                    readOnly
+                  />
+                </Form.Group>
+              </Form>
+            </Grid.Row>
+          </Grid>
         </div>
       </Wrapper>
     )
@@ -240,10 +269,12 @@ BusinessLogPage.propTypes = {
   touched: PropTypes.object,
   getBusiness: PropTypes.func,
   getLogFromBusiness: PropTypes.func,
-  objectLogBusiness: PropTypes.array,
+  listLogBusiness: PropTypes.array,
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
-  clearBusinessLog: PropTypes.func
+  clearBusinessLog: PropTypes.func,
+  updateFollowUpStatus: PropTypes.func,
+  loadingUpdateStatus: PropTypes.bool
 }
 
 const mapPropsToValues = () => {
@@ -261,13 +292,14 @@ const handleSubmit = () => {}
 const mapStateToProps = state => {
   return {
     business: state.business.get.object,
-    objectLogBusiness: state.businessLog.get.array
+    listLogBusiness: state.businessLog.get.array,
+    loadingUpdateStatus: state.businessLog.updateStatus.isLoading
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { getBusiness, getLogFromBusiness, clearBusinessLog },
+    { getBusiness, getLogFromBusiness, clearBusinessLog, updateFollowUpStatus },
     dispatch
   )
 }
