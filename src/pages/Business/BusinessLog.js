@@ -32,28 +32,43 @@ class BusinessLogPage extends Component {
     this.state = {
       date: null,
       focused: false,
-      newLog: false
+      newLog: false,
+      inputSearch: ''
     }
   }
 
   componentWillReceiveProps (nextProps) {
     if (
-      this.props.objectLogBusiness.length !== nextProps.objectLogBusiness.length
+      nextProps.arrayLogBusiness.length &&
+      this.props.arrayLogBusiness.length !== nextProps.arrayLogBusiness.length
     ) {
-      this._selectLog(nextProps.objectLogBusiness[0])
+      this._selectLog(nextProps.arrayLogBusiness[0])
     }
   }
 
   componentWillMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
-    if (this.props.objectLogBusiness.length) {
-      this._selectLog(this.props.objectLogBusiness[0])
+    if (this.props.arrayLogBusiness.length) {
+      this._selectLog(this.props.arrayLogBusiness[0])
     }
   }
 
   componentWillUnmount () {
     this.props.clearBusinessLog()
+  }
+
+  _onSearch = (e, { value }) => {
+    this.setState({
+      inputSearch: value
+    })
+  }
+
+  _handleSearch = () => {
+    this.props.getLogFromBusiness(
+      this.props.match.params.id,
+      this.state.inputSearch
+    )
   }
 
   _selectLog = businessLog => {
@@ -73,8 +88,9 @@ class BusinessLogPage extends Component {
       handleChange,
       errors,
       touched,
-      objectLogBusiness,
-      business
+      arrayLogBusiness,
+      business,
+      isLoadingarrayLogBusiness
     } = this.props
     return (
       <Wrapper>
@@ -114,8 +130,15 @@ class BusinessLogPage extends Component {
             <Grid.Column textAlign="center" width={5}>
               <Input
                 fluid
-                action={{ icon: 'search' }}
+                action={{
+                  icon: 'search',
+                  onClick: this._handleSearch
+                }}
                 placeholder="Find logs..."
+                iconPosition="left"
+                loading={isLoadingarrayLogBusiness}
+                onChange={this._onSearch}
+                value={this.state.inputSearch}
               />
             </Grid.Column>
           </Grid>
@@ -130,7 +153,7 @@ class BusinessLogPage extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {objectLogBusiness.map(logBusiness => {
+              {arrayLogBusiness.map(logBusiness => {
                 return (
                   <Table.Row
                     active
@@ -240,10 +263,11 @@ BusinessLogPage.propTypes = {
   touched: PropTypes.object,
   getBusiness: PropTypes.func,
   getLogFromBusiness: PropTypes.func,
-  objectLogBusiness: PropTypes.array,
+  arrayLogBusiness: PropTypes.array,
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
-  clearBusinessLog: PropTypes.func
+  clearBusinessLog: PropTypes.func,
+  isLoadingarrayLogBusiness: PropTypes.bool
 }
 
 const mapPropsToValues = () => {
@@ -261,7 +285,8 @@ const handleSubmit = () => {}
 const mapStateToProps = state => {
   return {
     business: state.business.get.object,
-    objectLogBusiness: state.businessLog.get.array
+    arrayLogBusiness: state.businessLog.get.array,
+    isLoadingarrayLogBusiness: state.businessLog.get.isLoading
   }
 }
 
