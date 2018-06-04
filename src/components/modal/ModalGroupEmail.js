@@ -112,7 +112,6 @@ class ModalGroupEmail extends Component {
                   <Header inverted>Dear ‹‹buyer`s name››</Header>
                 </Segment>
                 <Form.TextArea
-                  required
                   name="body"
                   autoComplete="body"
                   value={values.body}

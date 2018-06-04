@@ -20,15 +20,9 @@ import {
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 
-class BusinessRegisters extends Component {
+class BuyerRegisters extends Component {
   componentDidMount () {
-    this.props.getBusinessRegister(1)
-    this.props.getBusinessRegister(2)
-    this.props.getBusinessRegister(3)
-    this.props.getBusinessRegister(4)
     this.props.getBusinessRegister(5)
-    this.props.getBusinessRegister(6)
-    this.props.getBusinessRegister(7)
   }
 
   _toggleModalConfirm = (id, registerType) => {
@@ -146,7 +140,7 @@ class BusinessRegisters extends Component {
   }
 }
 
-BusinessRegisters.propTypes = {
+BuyerRegisters.propTypes = {
   removeBusinessRegister: PropTypes.func,
   sourceOptions: PropTypes.object,
   stageOptions: PropTypes.object,
@@ -185,4 +179,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)
+export default connect(mapStateToProps, mapDispatchToProps)(BuyerRegisters)
