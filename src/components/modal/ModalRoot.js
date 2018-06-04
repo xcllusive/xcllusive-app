@@ -7,13 +7,15 @@ import ModalConfirm from './ModalConfirm'
 import ModalNewBusinessRegister from './ModalNewBusinessRegister'
 import ModalUploadFile from './ModalUploadFile'
 import ModalEmailTemplates from './ModalEmailTemplates'
+import ModalGroupEmail from './ModalGroupEmail'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
   [TypesModal.MODAL_TYPE_NEW_BUSSINES_REGISTER]: ModalNewBusinessRegister,
   [TypesModal.MODAL_TYPE_EDIT_BUSSINES_REGISTER]: ModalNewBusinessRegister,
   [TypesModal.MODAL_TYPE_UPLOAD_FILE]: ModalUploadFile,
-  [TypesModal.MODAL_TYPE_EMAIL_TEMPLATES]: ModalEmailTemplates
+  [TypesModal.MODAL_TYPE_EMAIL_TEMPLATES]: ModalEmailTemplates,
+  [TypesModal.MODAL_TYPE_GROUP_EMAIL]: ModalGroupEmail
 }
 
 const ModalRoot = ({ type, props }) => {
