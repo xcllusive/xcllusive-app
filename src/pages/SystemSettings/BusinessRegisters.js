@@ -76,7 +76,7 @@ class BusinessRegisters extends Component {
         <Grid padded="horizontally">
           <Grid.Row columns={1}>
             <Grid.Column floated="right" width={2}>
-              <Button onClick={this._newBusiness} color="facebook">
+              <Button onClick={this._newBusiness} color="facebook" size="small">
                 <Icon name="add" />
                 New Register
               </Button>
