@@ -58,7 +58,7 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.UPDATE_BUYER_LOADING:
+    case Types.UPDATE_SYSTEM_SETTINGS_LOADING:
       return {
         ...state,
         update: {
@@ -68,7 +68,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.UPDATE_BUYER_SUCCESS:
+    case Types.UPDATE_SYSTEM_SETTINGS_SUCCESS:
       return {
         ...state,
         update: {
@@ -76,10 +76,10 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           isUpdated: true,
           error: null,
-          buyer: action.payload
+          systemSettings: action.payload
         }
       }
-    case Types.UPDATE_BUYER_FAILURE:
+    case Types.UPDATE_SYSTEM_SETTINGS_FAILURE:
       return {
         ...state,
         update: {
