@@ -23,7 +23,7 @@ class ModalNewBuyerRegister extends Component {
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated) {
-      this.props.getBuyerRegister(this.props.values.buyerRegisterType)
+      this.props.getBuyerRegister(this.props.values.buyerRegister)
     }
   }
 
@@ -58,20 +58,20 @@ class ModalNewBuyerRegister extends Component {
                 <Form.Select
                   required
                   label="Buyer Register"
-                  name="buyerRegisterType"
+                  name="buyerRegister"
                   options={typesBuyerRegisters}
-                  autoComplete="buyerRegisterType"
-                  value={values.buyerRegisterType}
+                  autoComplete="buyerRegister"
+                  value={values.buyerRegister}
                   onChange={this._handleSelectChange}
                   disabled={this.props.buyerRegister !== undefined}
                 />
-                {errors.buyerRegisterType &&
-                  touched.buyerRegisterType && (
+                {errors.buyerRegister &&
+                  touched.buyerRegister && (
                   <Label
                     basic
                     pointing
                     color="red"
-                    content={errors.buyerRegisterType}
+                    content={errors.buyerRegister}
                   />
                 )}
               </Form.Field>
@@ -127,8 +127,8 @@ ModalNewBuyerRegister.propTypes = {
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
-  buyerRegister: PropTypes.object,
-  buyerRegisterType: PropTypes.number,
+  objectBuyerRegister: PropTypes.object,
+  buyerRegister: PropTypes.number,
   updateLoading: PropTypes.bool,
   isCreated: PropTypes.bool,
   isUpdated: PropTypes.bool,
@@ -136,9 +136,9 @@ ModalNewBuyerRegister.propTypes = {
 }
 
 const mapPropsToValues = props => ({
-  buyerRegisterType: props.buyerRegisterType ? props.buyerRegisterType : '',
-  label: props.buyerRegister ? props.buyerRegister.label : '',
-  id: props.buyerRegister ? props.buyerRegister.id : null
+  buyerRegister: props.buyerRegister ? props.buyerRegister : '',
+  label: props.objectBuyerRegister ? props.objectBuyerRegister.label : '',
+  id: props.objectBuyerRegister ? props.objectBuyerRegister.id : null
 })
 
 const validationSchema = Yup.object().shape({
@@ -146,7 +146,7 @@ const validationSchema = Yup.object().shape({
     .required('Label is required.')
     .min(2, 'Label required minimum 2 characters.')
     .max(200, 'Label require max 200 characters.'),
-  buyerRegisterType: Yup.number().required('Buyer Register is required.')
+  buyerRegister: Yup.number().required('Buyer Register is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

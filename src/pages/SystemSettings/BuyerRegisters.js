@@ -25,32 +25,32 @@ class BuyerRegisters extends Component {
     this.props.getBuyerRegister(1)
   }
 
-  _toggleModalConfirm = (id, registerType) => {
+  _toggleModalConfirm = (id, buyerRegister) => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Delete Buyer Register',
         text: 'Are you sure you want to delete buyer register?',
         id,
-        registerType
+        buyerRegister
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._removeBuyerRegister(isConfirmed.id, isConfirmed.registerType)
+          this._removeBuyerRegister(isConfirmed.id, isConfirmed.buyerRegister)
         }
       }
     })
   }
 
-  _removeBuyerRegister = async (id, registerType) => {
-    await this.props.removeBuyerRegister({ id, registerType })
-    this.props.getBuyerRegister(registerType)
+  _removeBuyerRegister = async (id, buyerRegister) => {
+    await this.props.removeBuyerRegister({ id, buyerRegister })
+    this.props.getBuyerRegister(buyerRegister)
   }
 
-  _editBuyer = (buyerRegister, buyerRegisterType) => {
+  _editBuyer = (objectBuyerRegister, buyerRegister) => {
     this.props.openModal(TypesModal.MODAL_TYPE_EDIT_BUYER_REGISTER, {
       title: 'Edit Buyer Register',
-      buyerRegister,
-      buyerRegisterType
+      objectBuyerRegister,
+      buyerRegister
     })
   }
 
@@ -113,7 +113,7 @@ class BuyerRegisters extends Component {
                             name="trash"
                             color="red"
                             onClick={() =>
-                              this._toggleModalConfirm(typeOptions.value, 1)
+                              this._toggleModalConfirm(typeOptions.id, 1)
                             }
                           />
                         </Table.Cell>

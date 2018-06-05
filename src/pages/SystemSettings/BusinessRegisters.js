@@ -53,7 +53,7 @@ class BusinessRegisters extends Component {
   }
 
   _editBusiness = (businessRegister, businessRegisterType) => {
-    this.props.openModal(TypesModal.MODAL_TYPE_EDIT_BUSSINES_REGISTER, {
+    this.props.openModal(TypesModal.MODAL_TYPE_EDIT_BUSINESS_REGISTER, {
       title: 'Edit Business Register',
       businessRegister,
       businessRegisterType
@@ -61,7 +61,7 @@ class BusinessRegisters extends Component {
   }
 
   _newBusiness = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSSINES_REGISTER, {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS_REGISTER, {
       title: 'New Business Register'
     })
   }

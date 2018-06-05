@@ -7,6 +7,7 @@ import user from './ducks/user'
 import business from './ducks/business'
 import businessLog from './ducks/businessLog'
 import businessRegister from './ducks/businessRegister'
+import buyerRegister from './ducks/buyerRegister'
 import buyer from './ducks/buyer'
 import clientManager from './ducks/clientManager'
 import buyerLog from './ducks/buyerLog'
@@ -19,6 +20,7 @@ export default combineReducers({
   business,
   businessLog,
   businessRegister,
+  buyerRegister,
   buyer,
   clientManager,
   buyerLog,

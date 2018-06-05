@@ -1,10 +1,10 @@
 import request from './'
 
-export const get = (buyerRegisterType, limit = null, page = null) => {
+export const list = (buyerRegister, limit = null, page = null) => {
   return request({
     method: 'get',
-    url: `/buyer-register/${buyerRegisterType}`,
-    params: { limit, page }
+    url: '/buyer-register',
+    params: { buyerRegister, limit, page }
   })
 }
 
@@ -19,7 +19,7 @@ export const create = buyerRegister => {
 export const update = buyerRegister => {
   return request({
     method: 'put',
-    url: `/business-register/${buyerRegister.id}`,
+    url: `/buyer-register/${buyerRegister.id}`,
     data: buyerRegister
   })
 }

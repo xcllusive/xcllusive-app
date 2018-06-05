@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 export const Types = {
   GET_BUSINESS_LOG_LOADING: 'GET_BUSINESS_LOG_LOADING',
   GET_BUSINESS_LOG_SUCCESS: 'GET_BUSINESS_LOG_SUCCESS',
-  GET_BUSSINES_LOG_FAILURE: 'GET_BUSSINES_LOG_FAILURE',
+  GET_BUSINESS_LOG_FAILURE: 'GET_BUSINESS_LOG_FAILURE',
   CLEAR_BUSINESS_LOG: 'CLEAR_BUSINESS_LOG',
   UPDATE_BUSINESS_FOLLOW_UP_STATUS_LOADING:
     'UPDATE_BUSINESS_FOLLOW_UP_STATUS_LOADING',
@@ -53,7 +53,7 @@ export default function reducer (state = initialState, action) {
           array: action.payload
         }
       }
-    case Types.GET_BUSSINES_LOG_FAILURE:
+    case Types.GET_BUSINESS_LOG_FAILURE:
       return {
         ...state,
         get: {
@@ -115,7 +115,7 @@ export const getLogFromBusiness = (
     })
   } catch (error) {
     dispatch({
-      type: Types.GET_BUSSINES_LOG_FAILURE,
+      type: Types.GET_BUSINESS_LOG_FAILURE,
       payload: error
     })
     toast.error(error)

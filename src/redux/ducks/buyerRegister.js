@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { get, create, update, remove } from '../../services/api/buyerRegister'
+import { list, create, update, remove } from '../../services/api/buyerRegister'
 
 // Action Types
 
@@ -204,7 +204,7 @@ export const getBuyerRegister = (
     type: Types.GET_BUYER_REGISTER_LOADING
   })
   try {
-    const buyerRegister = await get(buyerRegisterType, limit, page)
+    const buyerRegister = await list(buyerRegisterType, limit, page)
     dispatch({
       type: Types.GET_BUYER_REGISTER_SUCCESS,
       typeBuyerRegister: TypesBuyerRegister[buyerRegisterType],

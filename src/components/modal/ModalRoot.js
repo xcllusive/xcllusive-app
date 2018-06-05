@@ -12,8 +12,8 @@ import ModalGroupEmail from './ModalGroupEmail'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
-  [TypesModal.MODAL_TYPE_NEW_BUSSINES_REGISTER]: ModalNewBusinessRegister,
-  [TypesModal.MODAL_TYPE_EDIT_BUSSINES_REGISTER]: ModalNewBusinessRegister,
+  [TypesModal.MODAL_TYPE_NEW_BUSINESS_REGISTER]: ModalNewBusinessRegister,
+  [TypesModal.MODAL_TYPE_EDIT_BUSINESS_REGISTER]: ModalNewBusinessRegister,
   [TypesModal.MODAL_TYPE_NEW_BUYER_REGISTER]: ModalNewBuyerRegister,
   [TypesModal.MODAL_TYPE_EDIT_BUYER_REGISTER]: ModalNewBuyerRegister,
   [TypesModal.MODAL_TYPE_UPLOAD_FILE]: ModalUploadFile,

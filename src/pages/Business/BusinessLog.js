@@ -28,7 +28,7 @@ import {
 } from 'semantic-ui-react'
 
 class BusinessLogPage extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       date: null,
@@ -39,7 +39,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (
       nextProps.arrayLogBusiness.length &&
       this.props.arrayLogBusiness.length !== nextProps.arrayLogBusiness.length
@@ -48,7 +48,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
     if (this.props.arrayLogBusiness.length) {
@@ -56,7 +56,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.clearBusinessLog()
   }
 
@@ -93,7 +93,7 @@ class BusinessLogPage extends Component {
     this.props.setFieldValue('businessLog_text', text)
   }
 
-  render() {
+  render () {
     const {
       values,
       handleChange,
@@ -209,8 +209,8 @@ class BusinessLogPage extends Component {
                 />
                 {errors.text &&
                   touched.text && (
-                    <Label basic color="red" pointing content={errors.text} />
-                  )}
+                  <Label basic color="red" pointing content={errors.text} />
+                )}
               </Form.Field>
             </Form.Group>
             <Grid>
