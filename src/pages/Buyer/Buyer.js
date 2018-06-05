@@ -5,10 +5,9 @@ import { connect } from 'react-redux'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBusinesses } from '../../redux/ducks/business'
-
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
-
 import Wrapper from '../../components/content/Wrapper'
 
 /* const arrayForSale = [
@@ -131,6 +130,17 @@ class BuyerPage extends Component {
     }))
   }
 
+  _toggleModalGroupEmail = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_GROUP_EMAIL, {
+      options: {
+        title: 'Prepare Group Email'
+        // text: 'Are you sure you want to send an email to buyer?'
+      }
+      // buyerId: this.props.match.params.idBuyer,
+      // email: this.props.buyer.email
+    })
+  }
+
   render () {
     const { history, businesses } = this.props
 
@@ -196,8 +206,12 @@ class BuyerPage extends Component {
                       {business.businessName}
                     </Table.Cell>
                     <Table.Cell>{}</Table.Cell>
-                    <Table.Cell onClick={() => this._toggleModal()}>
-                      <Button size="small" color="instagram">
+                    <Table.Cell>
+                      <Button
+                        size="small"
+                        color="instagram"
+                        onClick={() => this._toggleModalGroupEmail()}
+                      >
                         <Icon name="mail" />
                       </Button>
                     </Table.Cell>
@@ -373,13 +387,14 @@ class BuyerPage extends Component {
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusinesses }, dispatch)
+  bindActionCreators({ getBusinesses, openModal }, dispatch)
 
 BuyerPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   getBusinesses: PropTypes.func,
-  businesses: PropTypes.array
+  businesses: PropTypes.array,
+  openModal: PropTypes.func
 }
 
 const mapStateToProps = state => ({

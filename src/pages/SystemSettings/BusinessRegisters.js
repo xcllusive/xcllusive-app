@@ -76,7 +76,7 @@ class BusinessRegisters extends Component {
         <Grid padded="horizontally">
           <Grid.Row columns={1}>
             <Grid.Column floated="right" width={2}>
-              <Button onClick={this._newBusiness} color="facebook">
+              <Button onClick={this._newBusiness} color="facebook" size="small">
                 <Icon name="add" />
                 New Register
               </Button>
@@ -88,7 +88,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Business Source
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -138,7 +145,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Business Rating
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -188,7 +202,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Business Product
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -242,7 +263,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Business Industry
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -293,7 +321,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Business Type
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -342,7 +377,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Business Stage
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -394,7 +436,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Stage Not Signed
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -448,7 +497,14 @@ class BusinessRegisters extends Component {
               <Header as="h5" attached="top">
                 Stage Not Want
               </Header>
-              <Table celled inverted selectable color="blue" size="small">
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>

@@ -10,3 +10,12 @@ export const getAllFromBusiness = (businessId, search) => {
     params
   })
 }
+
+export const updateStatus = businessLog => {
+  console.log('test update status')
+  // return request({
+  // method: 'put'
+  // url: `/business/${business.id}`,
+  //  data: business
+  // })
+}

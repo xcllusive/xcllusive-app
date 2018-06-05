@@ -285,8 +285,11 @@ class BuyerDetails extends Component {
           <Grid style={{ marginTop: 0 }}>
             <Grid.Row style={{ padding: 0 }}>
               <Grid.Column width={5}>
-                <Segment>
-                  <Dimmer.Dimmable dimmed={isLoadingLogTable}>
+                <Segment style={{ height: '226px' }}>
+                  <Dimmer.Dimmable
+                    dimmed={isLoadingLogTable}
+                    style={{ height: '100%' }}
+                  >
                     <Dimmer inverted active={isLoadingLogTable}>
                       <Loader>Loading</Loader>
                     </Dimmer>
@@ -391,7 +394,10 @@ class BuyerDetails extends Component {
             </Grid.Column>
             <Grid.Column width={4}>
               <Segment style={{ height: '100%' }}>
-                <Dimmer.Dimmable dimmed={isLoadingBuyer}>
+                <Dimmer.Dimmable
+                  dimmed={isLoadingBuyer}
+                  style={{ height: '100%' }}
+                >
                   <Dimmer inverted active={isLoadingBuyer}>
                     <Loader>Loading</Loader>
                   </Dimmer>
@@ -402,11 +408,12 @@ class BuyerDetails extends Component {
                         as="h4"
                         content="Brokers Notes"
                       />
-                      <Form>
-                        <Form.Group>
+                      <Form style={{ height: '100%' }}>
+                        <Form.Group style={{ height: '100%' }}>
                           <Form.TextArea
+                            style={{ height: '90%' }}
+                            rows={0}
                             width={16}
-                            // placeholder="there is no notes..."
                             name="buyerNotes"
                             value={values.buyerNotes}
                             onChange={handleChange}

@@ -227,7 +227,7 @@ class EmailTemplates extends Component {
                   label="Brokers Email"
                   name="brokersEmail"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.brokersEmail === 1}
+                  checked={values.brokersEmail === true}
                 />
               </Form.Field>
               <Form.Field>

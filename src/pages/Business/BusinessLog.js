@@ -11,7 +11,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { getBusiness } from '../../redux/ducks/business'
 import {
   getLogFromBusiness,
-  clearBusinessLog
+  clearBusinessLog,
+  updateFollowUpStatus
 } from '../../redux/ducks/businessLog'
 
 import {
@@ -27,7 +28,7 @@ import {
 } from 'semantic-ui-react'
 
 class BusinessLogPage extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       date: null,
@@ -38,7 +39,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (
       nextProps.arrayLogBusiness.length &&
       this.props.arrayLogBusiness.length !== nextProps.arrayLogBusiness.length
@@ -47,7 +48,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillMount () {
+  componentWillMount() {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
     if (this.props.arrayLogBusiness.length) {
@@ -55,7 +56,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.clearBusinessLog()
   }
 
@@ -92,7 +93,7 @@ class BusinessLogPage extends Component {
     this.props.setFieldValue('businessLog_text', text)
   }
 
-  render () {
+  render() {
     const {
       values,
       handleChange,
@@ -100,7 +101,9 @@ class BusinessLogPage extends Component {
       touched,
       arrayLogBusiness,
       business,
-      isLoadingarrayLogBusiness
+      isLoadingarrayLogBusiness,
+      loadingUpdateStatus,
+      history
     } = this.props
     return (
       <Wrapper>
@@ -206,31 +209,53 @@ class BusinessLogPage extends Component {
                 />
                 {errors.text &&
                   touched.text && (
-                  <Label basic color="red" pointing content={errors.text} />
-                )}
+                    <Label basic color="red" pointing content={errors.text} />
+                  )}
               </Form.Field>
             </Form.Group>
-            <Grid textAlign="center">
-              <Grid.Column>
-                <Form.Group widths="equal">
-                  <Button color="blue">
-                    <Icon name="commenting" />
-                    New Communication
-                  </Button>
-                  <Button color="linkedin">
-                    <Icon name="commenting" />
-                    Finalise Communication
-                  </Button>
-                  <Button color="vk">
-                    <Icon name="commenting" />
-                    Save and Retun to Business
-                  </Button>
-                  <Button color="facebook">
-                    <Icon name="commenting" />
-                    Save and Retun to Main Menu
-                  </Button>
-                </Form.Group>
-              </Grid.Column>
+            <Grid>
+              <Grid.Row style={{ justifyContent: 'center' }}>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Button
+                      color="blue"
+                      size="small"
+                      onClick={() =>
+                        this._selectLog({
+                          newLog: true,
+                          id: 1,
+                          followUp: moment().add(1, 'day'),
+                          text: ''
+                        })
+                      }
+                    >
+                      <Icon name="commenting" />
+                      New Communication
+                    </Button>
+                    <Button color="yellow">
+                      <Icon name="save" />
+                      Save Communication
+                    </Button>
+                    <Button
+                      color="red"
+                      loading={loadingUpdateStatus}
+                      onClick={() => this.props.updateFollowUpStatus()}
+                    >
+                      <Icon name="save" />
+                      Finalise Communication
+                    </Button>
+                    <Button
+                      color="green"
+                      onClick={() =>
+                        history.push(`/business/${this.props.match.params.id}`)
+                      }
+                    >
+                      <Icon name="backward" />
+                      Return to Business
+                    </Button>
+                  </Form.Group>
+                </Form>
+              </Grid.Row>
             </Grid>
           </Form>
           {this.state.businessLog ? (
@@ -287,7 +312,9 @@ BusinessLogPage.propTypes = {
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
   clearBusinessLog: PropTypes.func,
-  isLoadingarrayLogBusiness: PropTypes.bool
+  isLoadingarrayLogBusiness: PropTypes.bool,
+  updateFollowUpStatus: PropTypes.func,
+  loadingUpdateStatus: PropTypes.bool
 }
 
 const mapPropsToValues = () => {
@@ -306,13 +333,14 @@ const mapStateToProps = state => {
   return {
     business: state.business.get.object,
     arrayLogBusiness: state.businessLog.get.array,
-    isLoadingarrayLogBusiness: state.businessLog.get.isLoading
+    isLoadingarrayLogBusiness: state.businessLog.get.isLoading,
+    loadingUpdateStatus: state.businessLog.updateStatus.isLoading
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { getBusiness, getLogFromBusiness, clearBusinessLog },
+    { getBusiness, getLogFromBusiness, clearBusinessLog, updateFollowUpStatus },
     dispatch
   )
 }
