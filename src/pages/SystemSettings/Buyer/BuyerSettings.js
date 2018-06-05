@@ -5,7 +5,8 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import {
   Form,
-  Label
+  Label,
+  Icon
 } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -26,24 +27,37 @@ class EmailTemplates extends Component {
     const {
       values,
       touched,
-      errors
-      // handleChange,
+      errors,
+      handleChange,
       // handleBlur,
-      // isSubmitting,
+      isSubmitting,
       // handleSubmit,
-      // isValid
+      isValid
     } = this.props
     return (
       <Wrapper>
         <Form>
           <Form.Group widths={16}>
+            <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
+              <Form.Button
+                floated="right"
+                type="submit"
+                color="red"
+                disabled={isSubmitting || !isValid}
+                // loading={isLoadingUpdate}
+                onClick={handleSubmit}
+              >
+                <Icon name="save" />
+                  Save
+              </Form.Button>
+            </Form.Field>
             <Form.Field width={6}>
-              <Form.Select
-                label="Templates"
+              <Form.Input
+                label="Email"
                 name="title"
                 autoComplete="title"
                 value={values.title}
-                onChange={this._handleSelectChange}
+                onChange={handleChange}
               />
               {errors.title &&
                 touched.title && (

@@ -36,7 +36,8 @@ class ModalGroupEmail extends Component {
 
   componentDidUpdate () {}
 
-  componentWillMount () {}
+  componentWillMount () {
+  }
 
   componentWillReceiveProps () {}
 
@@ -90,7 +91,11 @@ class ModalGroupEmail extends Component {
                         </Table.Cell>
                         <Table.Cell>{groupEmail.firstName} {groupEmail.lastName}</Table.Cell>
                         <Table.Cell>{groupEmail.email}</Table.Cell>
-                        <Table.Cell>Red</Table.Cell>
+                        <Table.Cell>
+                          <Label color={groupEmail.isPending ? 'red' : 'green'}>
+                            {groupEmail.isPending ? 'Pending' : 'Done'}
+                          </Label>
+                        </Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>
