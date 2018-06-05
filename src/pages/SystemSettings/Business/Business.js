@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { Tab } from 'semantic-ui-react'
-import BuyerRegisters from './BuyerRegisters'
+import BusinessRegisters from './BusinessRegisters'
 
-class SystemSettingsPage extends Component {
+class BusinessPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
       panes: [
         {
-          menuItem: 'Buyer Registers',
-          render: () => <BuyerRegisters />
+          menuItem: 'Business Registers',
+          render: () => <BusinessRegisters />
         }
       ]
     }
@@ -28,4 +28,4 @@ class SystemSettingsPage extends Component {
   }
 }
 
-export default SystemSettingsPage
+export default BusinessPage

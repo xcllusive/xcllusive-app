@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Tab } from 'semantic-ui-react'
 
 import UserList from './UserList'
-import BusinessSettings from './BusinessSettings'
-import BuyerSettings from './BuyerSettings'
+import Business from './Business/Business'
+import Buyer from './Buyer/Buyer'
 import EmailTemplates from './EmailTemplates'
 
 class SystemSettingsPage extends Component {
@@ -17,11 +17,11 @@ class SystemSettingsPage extends Component {
         },
         {
           menuItem: 'Buyer',
-          render: () => <BuyerSettings />
+          render: () => <Buyer />
         },
         {
           menuItem: 'Business',
-          render: () => <BusinessSettings />
+          render: () => <Business />
         },
         {
           menuItem: 'Email Templates',

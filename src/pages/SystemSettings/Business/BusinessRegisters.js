@@ -16,9 +16,9 @@ import {
 import {
   getBusinessRegister,
   removeBusinessRegister
-} from '../../redux/ducks/businessRegister'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
-import Wrapper from '../../components/content/Wrapper'
+} from '../../../redux/ducks/businessRegister'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
+import Wrapper from '../../../components/content/Wrapper'
 
 class BusinessRegisters extends Component {
   componentDidMount () {

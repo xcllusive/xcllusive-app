@@ -16,9 +16,9 @@ import {
 import {
   getBuyerRegister,
   removeBuyerRegister
-} from '../../redux/ducks/buyerRegister'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
-import Wrapper from '../../components/content/Wrapper'
+} from '../../../redux/ducks/buyerRegister'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
+import Wrapper from '../../../components/content/Wrapper'
 
 class BuyerRegisters extends Component {
   componentDidMount () {
