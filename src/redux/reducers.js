@@ -12,6 +12,7 @@ import buyer from './ducks/buyer'
 import clientManager from './ducks/clientManager'
 import buyerLog from './ducks/buyerLog'
 import emailTemplates from './ducks/emailTemplates'
+import systemSettings from './ducks/systemSettings'
 
 export default combineReducers({
   modal,
@@ -25,5 +26,6 @@ export default combineReducers({
   clientManager,
   buyerLog,
   emailTemplates,
+  systemSettings,
   router: routerReducer
 })

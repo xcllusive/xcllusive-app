@@ -9,6 +9,8 @@ import {
   Icon
 } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
+import Yup from 'yup'
+import { getSystemSettings, updateSystemSettings } from '../../../redux/ducks/systemSettings'
 
 class EmailTemplates extends Component {
   constructor (props) {
@@ -21,6 +23,7 @@ class EmailTemplates extends Component {
   }
 
   componentDidMount () {
+    this.props.getSystemSettings(1)
   }
 
   render () {
@@ -29,16 +32,16 @@ class EmailTemplates extends Component {
       touched,
       errors,
       handleChange,
-      // handleBlur,
+      handleBlur,
       isSubmitting,
-      // handleSubmit,
+      handleSubmit,
       isValid
     } = this.props
     return (
       <Wrapper>
         <Form>
-          <Form.Group widths={16}>
-            <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
+          <Form.Group>
+            <Form.Field width={16} style={{ alignSelf: 'flex-end' }}>
               <Form.Button
                 floated="right"
                 type="submit"
@@ -51,17 +54,20 @@ class EmailTemplates extends Component {
                   Save
               </Form.Button>
             </Form.Field>
+          </Form.Group>
+          <Form.Group>
             <Form.Field width={6}>
               <Form.Input
                 label="Email"
-                name="title"
-                autoComplete="title"
-                value={values.title}
+                name="emailOffice"
+                autoComplete="emailOffice"
+                value={values.emailOffice}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
-              {errors.title &&
-                touched.title && (
-                <Label basic color="red" pointing content={errors.title} />
+              {errors.emailOffice &&
+                touched.emailOffice && (
+                <Label basic color="red" pointing content={errors.emailOffice} />
               )}
             </Form.Field>
 
@@ -81,13 +87,25 @@ EmailTemplates.propTypes = {
   handleBlur: PropTypes.func,
   handleSubmit: PropTypes.func,
   isValid: PropTypes.bool,
-  isSubmitting: PropTypes.bool
+  isSubmitting: PropTypes.bool,
+  getSystemSettings: PropTypes.func,
+  updateSystemSettings: PropTypes.func
 }
 
+const validationSchema = Yup.object().shape({
+  emailOffice: Yup.string()
+    .email('Invalid email address.')
+    .required('Email is required.')
+})
+
 const mapPropsToValues = props => {
+  return {
+    emailOffice: ''
+  }
 }
 
 const handleSubmit = (values, { props, setSubmitting }) => {
+  props.updateSystemSettings(values).then(setSubmitting(false))
 }
 
 const mapStateToProps = state => ({
@@ -96,6 +114,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      getSystemSettings,
+      updateSystemSettings
     },
     dispatch
   )
@@ -104,6 +124,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
     handleSubmit,
-    enableReinitialize: true
+    enableReinitialize: true,
+    validationSchema
   })(EmailTemplates)
 )
