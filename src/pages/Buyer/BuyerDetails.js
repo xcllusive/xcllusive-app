@@ -7,6 +7,8 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
 
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
+
 import {
   Form,
   Header,
@@ -32,12 +34,12 @@ import {
   getBusinessBuyerLog,
   clearBuyerLog
 } from '../../redux/ducks/buyerLog'
-
 import { getBusiness } from '../../redux/ducks/business'
-
 import { TypesModal, openModal } from '../../redux/ducks/modal'
-
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
+import {
+  getBuyerRegister
+} from '../../redux/ducks/buyerRegister'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -47,15 +49,16 @@ class BuyerDetails extends Component {
     this.state = {
       buyerLog: null,
       priceOptions: OptionsPriceSelectBuyer,
-      buyerType: [
-        { key: '0', text: 'General', value: 'General' },
-        { key: '1', text: 'Private Buyer', value: 'Private Buyer' },
-        { key: '2', text: 'Industry Buyer', value: 'Industry Buyer' },
-        { key: '3', text: 'Investal', value: 'Investal' },
-        { key: '4', text: 'Investment Company', value: 'Investment Company' }
-      ],
+      // buyerType: [
+      //   { key: '0', text: 'General', value: 'General' },
+      //   { key: '1', text: 'Private Buyer', value: 'Private Buyer' },
+      //   { key: '2', text: 'Industry Buyer', value: 'Industry Buyer' },
+      //   { key: '3', text: 'Investal', value: 'Investal' },
+      //   { key: '4', text: 'Investment Company', value: 'Investment Company' }
+      // ],
       buyerDetails: null,
-      newLog: false
+      newLog: false,
+      activePage: null
     }
   }
 
@@ -68,6 +71,7 @@ class BuyerDetails extends Component {
       5
     )
     this.props.getBusinessesFromBuyer(this.props.match.params.idBuyer)
+    this.props.getBuyerRegister(1)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -114,6 +118,7 @@ class BuyerDetails extends Component {
   }
 
   _handlePaginationChange = (e, { activePage }) => {
+    this.setState({activePage})
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
       this.props.match.params.idBusiness,
@@ -141,7 +146,9 @@ class BuyerDetails extends Component {
     }
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
-      this.props.match.params.idBusiness
+      this.props.match.params.idBusiness,
+      5,
+      this.state.activePage
     )
   }
 
@@ -161,10 +168,11 @@ class BuyerDetails extends Component {
       pagesBusinessBuyerLogList,
       activePageBusinessBuyerLogList,
       isLoadingPreviousBusiness,
-      isLoadingLogTable
+      isLoadingLogTable,
+      typeOptions
     } = this.props
 
-    const { priceOptions, buyerType } = this.state
+    const { priceOptions } = this.state
     return (
       <Wrapper>
         {buyer ? (
@@ -455,10 +463,10 @@ class BuyerDetails extends Component {
                       <Form.Field>
                         <Form.Select
                           label="Buyer Type"
-                          options={buyerType}
-                          name="buyerType"
-                          autoComplete="buyerType"
-                          value={values.buyerType}
+                          options={mapArrayToValuesForDropdown(typeOptions)}
+                          name="typeId"
+                          autoComplete="typeId"
+                          value={values.typeId}
                           onChange={this._handleSelectChange}
                         />
                       </Form.Field>
@@ -507,7 +515,8 @@ const mapDispatchToProps = dispatch =>
       getBusinessesFromBuyer,
       updateBuyer,
       updateBuyerLog,
-      createNewLog
+      createNewLog,
+      getBuyerRegister
     },
     dispatch
   )
@@ -540,14 +549,16 @@ BuyerDetails.propTypes = {
   pagesBusinessBuyerLogList: PropTypes.number,
   activePageBusinessBuyerLogList: PropTypes.number,
   isLoadingPreviousBusiness: PropTypes.bool,
-  isLoadingLogTable: PropTypes.bool
+  isLoadingLogTable: PropTypes.bool,
+  getBuyerRegister: PropTypes.func,
+  typeOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
   return {
     buyerNotes: props.buyer ? props.buyer.buyerNotes : '',
     profile: props.buyer ? props.buyer.profile : '',
-    buyerType: props.buyer ? props.buyer.buyerType : '',
+    typeId: props.buyer ? props.buyer.typeId : '',
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
     buyerLog_id: '',
@@ -567,7 +578,8 @@ const mapStateToProps = state => ({
   pagesBusinessBuyerLogList: state.buyerLog.getBusBuyLog.pages,
   activePageBusinessBuyerLogList: state.buyerLog.getBusBuyLog.activePage,
   listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array,
-  isLoadingPreviousBusiness: state.buyer.getBusinessesFromBuyer.isLoading
+  isLoadingPreviousBusiness: state.buyer.getBusinessesFromBuyer.isLoading,
+  typeOptions: state.buyerRegister.get.type.array
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(

@@ -28,13 +28,6 @@ const TypesBuyerRegister = {
 
 const initialState = {
   get: {
-    source: {
-      isLoading: true,
-      array: [],
-      error: null,
-      pages: 0,
-      activePage: 1
-    },
     type: {
       isLoading: true,
       array: [],
