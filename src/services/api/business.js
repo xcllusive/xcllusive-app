@@ -67,3 +67,9 @@ export const getBuyersFromBusiness = businessId => {
     url: `/business/${businessId}/buyer`
   })
 }
+
+export const getBuyersGroupEmail = businessId => {
+  return request({
+    url: `/business/${businessId}/group-email`
+  })
+}

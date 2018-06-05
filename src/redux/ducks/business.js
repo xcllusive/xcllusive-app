@@ -7,7 +7,8 @@ import {
   reassignBusiness as reassignBusinessAPI,
   updateStageSalesMemo as updateStageSalesMemoAPI,
   updateStageLost as updateStageLostAPI,
-  getBuyersFromBusiness as getBuyersFromBusinessAPI
+  getBuyersFromBusiness as getBuyersFromBusinessAPI,
+  getBuyersGroupEmail as getBuyersGroupEmailAPI
 } from '../../services/api/business'
 
 // Action Types
@@ -37,7 +38,10 @@ export const Types = {
   UPDATE_STAGE_LOST_FAILURE: 'UPDATE_STAGE_LOST_FAILURE',
   GET_BUYERS_FROM_BUSINESS_LOADING: 'GET_BUYERS_FROM_BUSINESS_LOADING',
   GET_BUYERS_FROM_BUSINESS_SUCCESS: 'GET_BUYERS_FROM_BUSINESS_SUCCESS',
-  GET_BUYERS_FROM_BUSINESS_FAILURE: 'GET_BUYERS_FROM_BUSINESS_FAILURE'
+  GET_BUYERS_FROM_BUSINESS_FAILURE: 'GET_BUYERS_FROM_BUSINESS_FAILURE',
+  GET_BUYERS_GROUP_EMAIL_LOADING: 'GET_BUYERS_GROUP_EMAIL_LOADING',
+  GET_BUYERS_GROUP_EMAIL_SUCCESS: 'GET_BUYERS_GROUP_EMAIL_SUCCESS',
+  GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE'
 }
 
 // Reducer
@@ -88,6 +92,11 @@ const initialState = {
     error: null
   },
   getBuyersFromBusiness: {
+    isLoading: true,
+    array: [],
+    error: null
+  },
+  getBuyersGroupEmail: {
     isLoading: true,
     array: [],
     error: null
@@ -348,6 +357,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUYERS_GROUP_EMAIL_LOADING:
+      return {
+        ...state,
+        getBuyersGroupEmail: {
+          ...state.getBuyersGroupEmail,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYERS_GROUP_EMAIL_SUCCESS:
+      return {
+        ...state,
+        getBuyersGroupEmail: {
+          ...state.getBuyersGroupEmail,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYERS_GROUP_EMAIL_FAILURE:
+      return {
+        ...state,
+        getBuyersGroupEmail: {
+          ...state.getBuyersGroupEmail,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -519,6 +556,26 @@ export const getBuyersFromBusiness = businessId => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_BUYERS_FROM_BUSINESS_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getBuyersGroupEmail = businessId => async dispatch => {
+  dispatch({
+    type: Types.GET_BUYERS_GROUP_EMAIL_LOADING,
+    payload: true
+  })
+  try {
+    const buyers = await getBuyersGroupEmailAPI(businessId)
+    dispatch({
+      type: Types.GET_BUYERS_GROUP_EMAIL_SUCCESS,
+      payload: buyers.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUYERS_GROUP_EMAIL_FAILURE,
       payload: error
     })
     toast.error(error)

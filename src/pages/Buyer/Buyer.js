@@ -130,12 +130,13 @@ class BuyerPage extends Component {
     }))
   }
 
-  _toggleModalGroupEmail = () => {
+  _toggleModalGroupEmail = (businessId) => {
     this.props.openModal(TypesModal.MODAL_TYPE_GROUP_EMAIL, {
       options: {
         title: 'Prepare Group Email'
         // text: 'Are you sure you want to send an email to buyer?'
-      }
+      },
+      businessId
       // buyerId: this.props.match.params.idBuyer,
       // email: this.props.buyer.email
     })
@@ -145,7 +146,6 @@ class BuyerPage extends Component {
     const { history, businesses } = this.props
 
     const { modalOpen } = this.state
-
     return (
       <Wrapper>
         {modalOpen ? (
@@ -210,7 +210,7 @@ class BuyerPage extends Component {
                       <Button
                         size="small"
                         color="instagram"
-                        onClick={() => this._toggleModalGroupEmail()}
+                        onClick={() => this._toggleModalGroupEmail(business.id)}
                       >
                         <Icon name="mail" />
                       </Button>

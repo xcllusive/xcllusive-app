@@ -11,13 +11,17 @@ import {
   Message,
   Radio,
   Table,
-  Checkbox
+  Checkbox,
+  Dimmer,
+  Loader
 } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import Yup from 'yup'
+
+import { getBuyersGroupEmail } from '../../redux/ducks/business'
 
 class ModalGroupEmail extends Component {
   constructor () {
@@ -26,7 +30,9 @@ class ModalGroupEmail extends Component {
     this.state = {}
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    this.props.getBuyersGroupEmail(this.props.businessId)
+  }
 
   componentDidUpdate () {}
 
@@ -61,7 +67,9 @@ class ModalGroupEmail extends Component {
       errors,
       isValid,
       handleChange,
-      handleBlur
+      handleBlur,
+      listGroupEmail,
+      isLoadingGroupEmail
     } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
@@ -69,18 +77,25 @@ class ModalGroupEmail extends Component {
         <Modal.Content>
           <Form>
             <Form.Group>
-              <Table celled compact definition>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell collapsing>
-                      <Checkbox />
-                    </Table.Cell>
-                    <Table.Cell>John Lilki</Table.Cell>
-                    <Table.Cell>jhlilk22@yahoo.com</Table.Cell>
-                    <Table.Cell>Red</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
+              <Dimmer.Dimmable dimmed={isLoadingGroupEmail}>
+                <Dimmer inverted active={isLoadingGroupEmail}>
+                  <Loader>Loading</Loader>
+                </Dimmer>
+                <Table celled compact definition>
+                  <Table.Body>
+                    {listGroupEmail.map((groupEmail, index) => (
+                      <Table.Row key={index}>
+                        <Table.Cell collapsing>
+                          <Checkbox />
+                        </Table.Cell>
+                        <Table.Cell>{groupEmail.firstName} {groupEmail.lastName}</Table.Cell>
+                        <Table.Cell>{groupEmail.email}</Table.Cell>
+                        <Table.Cell>Red</Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              </Dimmer.Dimmable>
             </Form.Group>
             <Form.Group>
               <Form.Field width={16}>
@@ -188,6 +203,12 @@ class ModalGroupEmail extends Component {
                 checked={!values.replyTo}
               />
             </Form.Group>
+            <Form.Group>
+              <b>
+                <p />
+                <label>Total email(s) to be generated: {listGroupEmail.length}</label>
+              </b>
+            </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -221,10 +242,17 @@ ModalGroupEmail.propTypes = {
   touched: PropTypes.object,
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  getBuyersGroupEmail: PropTypes.func,
+  businessId: PropTypes.number,
+  listGroupEmail: PropTypes.array,
+  isLoadingGroupEmail: PropTypes.bool
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  listGroupEmail: state.business.getBuyersGroupEmail.array,
+  isLoadingGroupEmail: state.business.getBuyersGroupEmail.isLoading
+})
 
 const mapPropsToValues = () => ({
   subject: '',
@@ -236,7 +264,8 @@ const mapPropsToValues = () => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      closeModal
+      closeModal,
+      getBuyersGroupEmail
     },
     dispatch
   )
