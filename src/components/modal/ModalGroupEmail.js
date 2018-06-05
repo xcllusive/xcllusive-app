@@ -26,8 +26,9 @@ import { getBuyersGroupEmail } from '../../redux/ducks/business'
 class ModalGroupEmail extends Component {
   constructor () {
     super()
-
-    this.state = {}
+    this.state = {
+      array: []
+    }
   }
 
   componentDidMount () {
@@ -39,7 +40,12 @@ class ModalGroupEmail extends Component {
   componentWillMount () {
   }
 
-  componentWillReceiveProps () {}
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.listGroupEmail.length && this.props.listGroupEmail !== nextProps.listGroupEmail) {
+      alert('TEST')
+      this.props.closeModal()
+    }
+  }
 
   _handleConfirm = isConfirmed => {
     if (!isConfirmed) {
@@ -58,6 +64,10 @@ class ModalGroupEmail extends Component {
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
+  }
+
+  _checkBoxArray = (groupEmail) => {
+    this.state.array.push(groupEmail)
   }
 
   render () {
@@ -87,7 +97,8 @@ class ModalGroupEmail extends Component {
                     {listGroupEmail.map((groupEmail, index) => (
                       <Table.Row key={index}>
                         <Table.Cell collapsing>
-                          <Checkbox />
+                          <Checkbox onChange={() => this._checkBoxArray(groupEmail)}>
+                          </Checkbox>
                         </Table.Cell>
                         <Table.Cell>{groupEmail.firstName} {groupEmail.lastName}</Table.Cell>
                         <Table.Cell>{groupEmail.email}</Table.Cell>
@@ -211,7 +222,7 @@ class ModalGroupEmail extends Component {
             <Form.Group>
               <b>
                 <p />
-                <label>Total email(s) to be generated: {listGroupEmail.length}</label>
+                <label>Total email(s) to be generated: {this.state.array.length}</label>
               </b>
             </Form.Group>
           </Form>
