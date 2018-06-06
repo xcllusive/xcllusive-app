@@ -46,10 +46,16 @@ export const sendEmailBuyerBrokersEmail = sendEmail => {
 }
 
 export const sendGroupEmail = (sendGroupEmail, array) => {
-  console.log('Send group email ', sendGroupEmail, array)
+  const data = new FormData()
+  data.append('attachment', sendGroupEmail.attachment)
+  data.append('subject', sendGroupEmail.subject)
+  data.append('body', sendGroupEmail.body)
+  data.append('to', JSON.stringify(array))
+
   return request({
-    // method: 'post',
-    // url: '/email-template/send-group-email',
-    // data: { sendGroupEmail, array }
+    method: 'post',
+    url: '/business/send-group-email',
+    data,
+    headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
