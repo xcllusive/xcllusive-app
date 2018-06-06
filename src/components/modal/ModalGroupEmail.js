@@ -22,6 +22,7 @@ import { withFormik } from 'formik'
 import Yup from 'yup'
 
 import { getBuyersGroupEmail } from '../../redux/ducks/business'
+import { sendGroupEmail } from '../../redux/ducks/buyer'
 
 class ModalGroupEmail extends Component {
   constructor () {
@@ -50,7 +51,10 @@ class ModalGroupEmail extends Component {
   _handleConfirm = isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
+      return
     }
+    console.log(this.props.values, this.state.array)
+    this.props.sendGroupEmail(this.props.values, this.state.array)
   }
 
   _removeFileUploaded = () => {
@@ -80,7 +84,8 @@ class ModalGroupEmail extends Component {
       handleChange,
       handleBlur,
       listGroupEmail,
-      isLoadingGroupEmail
+      isLoadingGroupEmail,
+      isLoadingSendEmail
     } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
@@ -239,6 +244,7 @@ class ModalGroupEmail extends Component {
             labelPosition="right"
             content="Send"
             onClick={this._handleConfirm}
+            loading={isLoadingSendEmail}
             disabled={!isValid}
           />
         </Modal.Actions>
@@ -262,12 +268,15 @@ ModalGroupEmail.propTypes = {
   getBuyersGroupEmail: PropTypes.func,
   businessId: PropTypes.number,
   listGroupEmail: PropTypes.array,
-  isLoadingGroupEmail: PropTypes.bool
+  isLoadingGroupEmail: PropTypes.bool,
+  sendGroupEmail: PropTypes.func,
+  isLoadingSendEmail: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   listGroupEmail: state.business.getBuyersGroupEmail.array,
-  isLoadingGroupEmail: state.business.getBuyersGroupEmail.isLoading
+  isLoadingGroupEmail: state.business.getBuyersGroupEmail.isLoading,
+  isLoadingSendEmail: state.buyer.sendGroupEmail.isLoading
 })
 
 const mapPropsToValues = () => ({
@@ -281,7 +290,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      getBuyersGroupEmail
+      getBuyersGroupEmail,
+      sendGroupEmail
     },
     dispatch
   )

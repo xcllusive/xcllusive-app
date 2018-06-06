@@ -16,7 +16,7 @@ import { getBuyersFromBusiness, getBusiness } from '../../redux/ducks/business'
 
 import Wrapper from '../../components/content/Wrapper'
 
-class BuyerListPage extends Component {
+class ScoreListPage extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -111,7 +111,7 @@ class BuyerListPage extends Component {
   }
 }
 
-BuyerListPage.propTypes = {
+ScoreListPage.propTypes = {
   getBuyersFromBusiness: PropTypes.func,
   match: PropTypes.object,
   listBuyersList: PropTypes.array,
@@ -130,4 +130,4 @@ const mapStateToProps = state => ({
   isLoadingBusiness: state.business.get.isLoading
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuyerListPage)
+export default connect(mapStateToProps, mapDispatchToProps)(ScoreListPage)

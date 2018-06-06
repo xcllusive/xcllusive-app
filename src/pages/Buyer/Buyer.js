@@ -220,7 +220,9 @@ class BuyerPage extends Component {
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>
-                      <Button size="small" color="instagram">
+                      <Button size="small" color="instagram" onClick={() =>
+                        history.push(`buyer/business/${business.id}/scoreList`)
+                      }>
                         <Icon name="star" />
                       </Button>
                     </Table.Cell>

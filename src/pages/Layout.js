@@ -16,7 +16,7 @@ import BuyerPage from './Buyer/Buyer'
 import BuyerDetailsCM from './ClientManager/BuyerDetailsCM'
 import BuyerList from './Buyer/BuyerList'
 import BuyerDetails from './Buyer/BuyerDetails'
-
+import ScoreList from './Buyer/ScoreList'
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
 
@@ -128,6 +128,11 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={BuyerList}
         path={`${match.path}buyer/business/:id`}
+      />
+      <Route
+        exact
+        component={ScoreList}
+        path={`${match.path}buyer/business/:id/scoreList`}
       />
       <Route
         render={() => <span>presale</span>}

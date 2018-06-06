@@ -45,10 +45,11 @@ export const sendEmailBuyerBrokersEmail = sendEmail => {
   })
 }
 
-export const sendGroupEmail = sendGroupEmail => {
+export const sendGroupEmail = (sendGroupEmail, array) => {
+  console.log('Send group email ', sendGroupEmail, array)
   return request({
-    method: 'post',
-    url: '/email-template/send-group-email',
-    data: sendGroupEmail
+    // method: 'post',
+    // url: '/email-template/send-group-email',
+    // data: { sendGroupEmail, array }
   })
 }
