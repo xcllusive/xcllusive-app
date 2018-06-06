@@ -44,3 +44,11 @@ export const sendEmailBuyerBrokersEmail = sendEmail => {
     data: sendEmail
   })
 }
+
+export const sendGroupEmail = sendGroupEmail => {
+  return request({
+    method: 'post',
+    url: '/email-template/send-group-email',
+    data: sendGroupEmail
+  })
+}

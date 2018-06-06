@@ -96,7 +96,6 @@ class EditBusinessDetailForm extends Component {
       productOptions,
       industryOptions,
       typeOptions,
-      ownersTimeOptions,
       stageOptions,
       usersStaff
     } = this.props
@@ -658,25 +657,6 @@ class EditBusinessDetailForm extends Component {
                       />
                     )}
                   </Form.Field>
-                  <Form.Field>
-                    <Form.Select
-                      label="Owner`s time"
-                      options={ownersTimeOptions}
-                      name="businessOwnersTime"
-                      autoComplete="businessOwnersTime"
-                      value={values.businessOwnersTime}
-                      onChange={this._handleSelectChange}
-                    />
-                    {errors.businessOwnersTime &&
-                      touched.businessOwnersTime && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessOwnersTime}
-                      />
-                    )}
-                  </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
                   <Form.Field>
@@ -735,7 +715,6 @@ EditBusinessDetailForm.propTypes = {
   ratingOptions: PropTypes.array,
   industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
-  ownersTimeOptions: PropTypes.array,
   stageOptions: PropTypes.array,
   reassignedBusiness: PropTypes.bool,
   getBusiness: PropTypes.func,
@@ -902,7 +881,6 @@ const mapStateToProps = state => {
     productOptions: state.business.get.productOptions,
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
-    ownersTimeOptions: state.business.get.ownersTimeOptions,
     stageOptions: state.business.get.stageOptions,
     reassignedBusiness: state.business.reassignBusiness.isReassigned,
     usersStaff: state.business.get.usersStaff,

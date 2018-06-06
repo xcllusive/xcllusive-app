@@ -42,7 +42,7 @@ class ModalGroupEmail extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.listGroupEmail.length && this.props.listGroupEmail !== nextProps.listGroupEmail) {
-      alert('TEST')
+      alert('This business has no buyers to send email!')
       this.props.closeModal()
     }
   }

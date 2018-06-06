@@ -6,7 +6,8 @@ import {
   getAll,
   get,
   getBusinessesFromBuyer as getBusinessesFromBuyerAPI,
-  sendEmailBuyerBrokersEmail as sendEmailBuyerBrokersEmailAPI
+  sendEmailBuyerBrokersEmail as sendEmailBuyerBrokersEmailAPI,
+  sendGroupEmail as sendGroupEmailAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -32,7 +33,10 @@ export const Types = {
   SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS:
     'SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS',
   SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE:
-    'SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE'
+    'SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE',
+  SEND_GROUP_EMAIL_LOADING: 'SEND_GROUP_EMAIL_LOADING',
+  SEND_GROUP_EMAIL_SUCCESS: 'SEND_GROUP_EMAIL_SUCCESS',
+  SEND_GROUP_EMAIL_FAILURE: 'SEND_GROUP_EMAIL_FAILURE'
 }
 
 // Reducer
@@ -65,6 +69,11 @@ const initialState = {
     error: null
   },
   sendEmailBuyerBrokersEmail: {
+    isLoading: false,
+    isSent: false,
+    error: null
+  },
+  sendGroupEmail: {
     isLoading: false,
     isSent: false,
     error: null
@@ -245,6 +254,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SEND_GROUP_EMAIL_LOADING:
+      return {
+        ...state,
+        sendGroupEmail: {
+          ...state.sendGroupEmail,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_GROUP_EMAIL_SUCCESS:
+      return {
+        ...state,
+        sendGroupEmail: {
+          ...state.sendGroupEmail,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_GROUP_EMAIL_FAILURE:
+      return {
+        ...state,
+        sendGroupEmail: {
+          ...state.sendGroupEmail,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -364,6 +401,26 @@ export const sendEmailBuyerBrokersEmail = sendEmail => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const sendGroupEmail = sendGroupEmail => async dispatch => {
+  dispatch({
+    type: Types.SEND_GROUP_EMAIL_LOADING,
+    payload: true
+  })
+  try {
+    const response = await sendGroupEmailAPI(sendGroupEmail)
+    dispatch({
+      type: Types.SEND_GROUP_EMAIL_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_GROUP_EMAIL_FAILURE,
       payload: error
     })
     toast.error(error)
