@@ -32,13 +32,8 @@ class ModalGroupEmail extends Component {
     }
   }
 
-  componentDidMount () {
-    this.props.getBuyersGroupEmail(this.props.businessId)
-  }
-
-  componentDidUpdate () {}
-
   componentWillMount () {
+    this.props.getBuyersGroupEmail(this.props.businessId)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -53,7 +48,6 @@ class ModalGroupEmail extends Component {
       this.props.closeModal()
       return
     }
-    console.log(this.props.values, this.state.array)
     this.props.sendGroupEmail(this.props.values, this.state.array)
   }
 
@@ -70,8 +64,21 @@ class ModalGroupEmail extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _checkBoxArray = (groupEmail) => {
-    this.state.array.push(groupEmail)
+  _checkBoxArray = (e, {values}) => {
+    const isChecked = this.state.array.filter(item => {
+      return item.id === values.id
+    })
+
+    if (!isChecked.length) {
+      const array = this.state.array
+      array.push(values)
+      this.setState({array})
+    } else {
+      const array = this.state.array.filter(item => {
+        return item.id !== values.id
+      })
+      this.setState({array})
+    }
   }
 
   render () {
@@ -87,6 +94,7 @@ class ModalGroupEmail extends Component {
       isLoadingGroupEmail,
       isLoadingSendEmail
     } = this.props
+
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -100,10 +108,13 @@ class ModalGroupEmail extends Component {
                 <Table celled compact definition>
                   <Table.Body>
                     {listGroupEmail.map((groupEmail, index) => (
+
                       <Table.Row key={index}>
                         <Table.Cell collapsing>
-                          <Checkbox onChange={() => this._checkBoxArray(groupEmail)}>
-                          </Checkbox>
+                          <Checkbox
+                            values={groupEmail}
+                            onChange={this._checkBoxArray}
+                          />
                         </Table.Cell>
                         <Table.Cell>{groupEmail.firstName} {groupEmail.lastName}</Table.Cell>
                         <Table.Cell>{groupEmail.email}</Table.Cell>
@@ -226,7 +237,6 @@ class ModalGroupEmail extends Component {
             </Form.Group>
             <Form.Group>
               <b>
-                <p />
                 <label>Total email(s) to be generated: {this.state.array.length}</label>
               </b>
             </Form.Group>
