@@ -17,6 +17,7 @@ import {
 import Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness } from '../../redux/ducks/business'
+import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import ReassignBusinessForm from './ReassignBusinessForm'
 import StageSalesMemoForm from './StageSalesMemoForm'
 import StageLostForm from './StageLostForm'
@@ -62,6 +63,10 @@ class EditBusinessDetailForm extends Component {
     ) {
       await this._toggleModal('modalOpenStageLost')
       this.props.getBusiness(nextProps.business.id)
+      this.props.getLogFromBusiness(nextProps.business.id)
+    }
+    if (this.props.values.stage !== nextProps.values.stage && nextProps.values.stage === 8) {
+      this._toggleModal('modalOpenStageLost')
     }
   }
 
@@ -374,13 +379,6 @@ class EditBusinessDetailForm extends Component {
                   >
                     <Icon name="file pdf outline" />
                     PDF
-                  </Form.Button>
-                  <Form.Button
-                    color="vk"
-                    onClick={() => this._toggleModal('modalOpenStageLost')}
-                  >
-                    <Icon name="file text" />
-                    Appraisal Mgt
                   </Form.Button>
                 </Form.Group>
               </Form>
@@ -721,7 +719,8 @@ EditBusinessDetailForm.propTypes = {
   business: PropTypes.object,
   usersStaff: PropTypes.array,
   updateStageSalesMemo: PropTypes.bool,
-  updateStageLost: PropTypes.bool
+  updateStageLost: PropTypes.bool,
+  getLogFromBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -752,7 +751,6 @@ const mapPropsToValues = props => {
       productId,
       industryId,
       typeId,
-      ownersTimeId,
       staffAccountName,
       stageId
     } = props.business
@@ -783,7 +781,6 @@ const mapPropsToValues = props => {
       businessProduct: productId,
       businessIndustry: industryId,
       businessType: typeId,
-      businessOwnersTime: ownersTimeId,
       staffAccountName,
       stage: stageId
     }
@@ -815,7 +812,6 @@ const mapPropsToValues = props => {
     businessProduct: '',
     businessIndustry: '',
     businessType: '',
-    businessOwnersTime: '',
     stage: ''
   }
 }
@@ -890,7 +886,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness, getBusiness }, dispatch)
+  return bindActionCreators({ updateBusiness, getBusiness, getLogFromBusiness }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(

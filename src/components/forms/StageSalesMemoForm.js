@@ -49,7 +49,6 @@ class StageSalesMemoForm extends Component {
       productOptions,
       industryOptions,
       typeOptions,
-      ownersTimeOptions,
       ratingOptions,
       usersStaff,
       updateLoading,
@@ -173,26 +172,6 @@ class StageSalesMemoForm extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <Form.Field width={5}>
-                <Form.Select
-                  required
-                  label="Owner`s time"
-                  options={ownersTimeOptions}
-                  name="businessOwnersTime"
-                  autoComplete="businessOwnersTime"
-                  value={values.businessOwnersTime}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.businessOwnersTime &&
-                  touched.businessOwnersTime && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessOwnersTime}
-                  />
-                )}
-              </Form.Field>
               <Form.Field width={5}>
                 <Form.Select
                   required
@@ -385,7 +364,6 @@ StageSalesMemoForm.propTypes = {
   productOptions: PropTypes.array,
   industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
-  ownersTimeOptions: PropTypes.array,
   ratingOptions: PropTypes.array,
   usersStaff: PropTypes.array,
   updateLoading: PropTypes.bool,
@@ -400,7 +378,6 @@ const mapPropsToValues = props => {
       data120DayGuarantee,
       typeId,
       industryId,
-      ownersTimeId,
       ratingId,
       staffAccountName
     } = props.business
@@ -410,7 +387,6 @@ const mapPropsToValues = props => {
       data120DayGuarantee,
       businessType: typeId,
       businessIndustry: industryId,
-      businessOwnersTime: ownersTimeId,
       businessRating: ratingId,
       staffAccountName,
       minimumCharge: '10000.00'
@@ -423,7 +399,6 @@ const mapPropsToValues = props => {
     data120DayGuarantee: false,
     businessType: '',
     businessIndustry: '',
-    businessOwnersTime: '',
     businessRating: '',
     pendingDone: true
   }
@@ -435,7 +410,6 @@ const validationSchema = Yup.object().shape({
   staffAccountName: Yup.string().required('This field is required.'),
   businessType: Yup.string().required('This field is required.'),
   businessIndustry: Yup.string().required('This field is required.'),
-  businessOwnersTime: Yup.string().required('This field is required.'),
   businessRating: Yup.string().required('This field is required.'),
   listedPrice: Yup.string().required('This field is required.'),
   engagementFee: Yup.string().required('This field is required.'),
@@ -454,7 +428,6 @@ const mapStateToProps = state => {
     productOptions: state.business.get.productOptions,
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
-    ownersTimeOptions: state.business.get.ownersTimeOptions,
     ratingOptions: state.business.get.ratingOptions,
     usersStaff: state.business.get.usersStaff,
     updateLoading: state.business.updateStageSalesMemo.isLoading

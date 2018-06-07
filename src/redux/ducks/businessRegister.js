@@ -31,7 +31,6 @@ const TypesBusinessRegister = {
   3: 'product',
   4: 'industry',
   5: 'type',
-  6: 'ownersTime',
   7: 'stage',
   8: 'stageNotSigned',
   9: 'stageNotWant'

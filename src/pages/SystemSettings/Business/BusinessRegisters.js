@@ -29,6 +29,8 @@ class BusinessRegisters extends Component {
     this.props.getBusinessRegister(5)
     this.props.getBusinessRegister(6)
     this.props.getBusinessRegister(7)
+    this.props.getBusinessRegister(8)
+    this.props.getBusinessRegister(9)
   }
 
   _toggleModalConfirm = (id, registerType) => {

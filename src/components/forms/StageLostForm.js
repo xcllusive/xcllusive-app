@@ -210,26 +210,17 @@ StageLostForm.propTypes = {
   stageNotWantOptions: PropTypes.array
 }
 
-function mapPropsToValues (props) {
-  if (props.business) {
-    const { ratingId, saleNotesLostMeeting } = props.business
-
-    const business = {
-      businessRating: ratingId,
-      saleNotesLostMeeting
-    }
-    business.saleNotesLostMeeting = business.saleNotesLostMeeting === '1'
-  }
-  return {
-    date: moment(),
-    businessRating: '',
-    saleNotesLostMeeting: false,
-    pendingDone: true,
-    saleNotesLostWant: false,
-    recoveryStageNotSigned: false,
-    followUpLog: false
-  }
-}
+const mapPropsToValues = (props) => ({
+  date: moment(),
+  businessRating: props.business.ratingId ? props.business.ratingId : '',
+  saleNotesLostMeeting: props.business.saleNotesLostMeeting === '1',
+  pendingDone: true,
+  saleNotesLostWant: false,
+  recoveryStageNotSigned: false,
+  followUpLog: false,
+  businessId: props.business.id ? props.business.id : '',
+  text: ''
+})
 
 const handleSubmit = (values, { props, setSubmitting }) => props.updateStageLost(values).then(setSubmitting(false))
 
