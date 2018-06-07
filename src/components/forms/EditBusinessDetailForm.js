@@ -847,8 +847,8 @@ const validationSchema = Yup.object().shape({
   businessURL: Yup.string().url(
     'You must type a valid URL (http://website.com.au).'
   ),
-  address1: Yup.string().max(11, 'Street require max 100 characters.'),
-  suburb: Yup.string().max(11, 'Suburb require max 100 characters.'),
+  address1: Yup.string().max(100, 'Street require max 100 characters.'),
+  suburb: Yup.string().max(100, 'Suburb require max 100 characters.'),
   postCode: Yup.string()
     .min(4, 'Post Code require min 4 integers.')
     .max(4, 'Post Code require max 4 integers.')
