@@ -17,6 +17,7 @@ import BuyerDetailsCM from './ClientManager/BuyerDetailsCM'
 import BuyerList from './Buyer/BuyerList'
 import BuyerDetails from './Buyer/BuyerDetails'
 import ScoreList from './Buyer/ScoreList'
+import MakeNewScore from './Buyer/MakeNewScore'
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
 
@@ -133,6 +134,11 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={ScoreList}
         path={`${match.path}buyer/business/:id/scoreList`}
+      />
+      <Route
+        exact
+        component={MakeNewScore}
+        path={`${match.path}buyer/business/:id/makeNewScore`}
       />
       <Route
         render={() => <span>presale</span>}

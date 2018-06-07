@@ -47,7 +47,7 @@ class ScoreListPage extends Component {
               <Grid.Column>
                 <Button
                   color="facebook"
-                  // onClick={() => history.push('/buyer')}
+                  onClick={() => history.push(`/buyer/business/${business.id}/makeNewScore`)}
                   size="small"
                   floated="right"
                 >
