@@ -30,6 +30,7 @@ class ModalGroupEmail extends Component {
     this.state = {
       array: []
     }
+    this.fileInput = null
   }
 
   componentWillMount () {
@@ -51,7 +52,7 @@ class ModalGroupEmail extends Component {
     this.props.sendGroupEmail(this.props.values, this.state.array)
   }
 
-  _removeFileUploaded = () => {
+  _removeFileUploaded = (e) => {
     this.props.setFieldValue('attachment', null)
   }
 
@@ -201,7 +202,7 @@ class ModalGroupEmail extends Component {
                 <Form.Button
                   floated="right"
                   color="yellow"
-                  onClick={() => this._removeFileUploaded()}
+                  onClick={(e) => this._removeFileUploaded(e)}
                 >
                   <Icon name="remove" />
                   Remove

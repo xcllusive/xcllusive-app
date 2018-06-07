@@ -38,27 +38,21 @@ class ScoreListPage extends Component {
           <Grid style={{ marginTop: 0 }}>
             <Grid.Row columns={2}>
               <Grid.Column>
-                {listBuyersList ? (
-                  <Header
-                    as="h2"
-                    content={`${business.businessName} / (${
-                      listBuyersList.length
-                    } records)`}
-                  />
-                ) : <Header
+                <Header
                   as="h2"
-                  content={'0 records'}
-                />}
+                  color="blue"
+                  content={`Sellability Score Log: ${business.businessName}`}
+                />
               </Grid.Column>
               <Grid.Column>
                 <Button
-                  color="green"
-                  onClick={() => history.push('/buyer')}
+                  color="facebook"
+                  // onClick={() => history.push('/buyer')}
                   size="small"
                   floated="right"
                 >
-                  <Icon name="backward" />
-                  Return to Business
+                  <Icon name="star" />
+                  Make New Score
                 </Button>
               </Grid.Column>
             </Grid.Row>
@@ -76,8 +70,12 @@ class ScoreListPage extends Component {
                 >
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell>Buyer</Table.HeaderCell>
-                      <Table.HeaderCell>Notes</Table.HeaderCell>
+                      <Table.HeaderCell>Created</Table.HeaderCell>
+                      <Table.HeaderCell>Title</Table.HeaderCell>
+                      <Table.HeaderCell>Score</Table.HeaderCell>
+                      <Table.HeaderCell>Sent</Table.HeaderCell>
+                      <Table.HeaderCell>Edit</Table.HeaderCell>
+                      <Table.HeaderCell>Delete</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
@@ -85,18 +83,28 @@ class ScoreListPage extends Component {
                       <Table.Row
                         active
                         key={buyersList.Buyer.id}
-                        onClick={() =>
-                          history.push(
-                            `/buyer/${buyersList.Buyer.id}/business/${
-                              this.props.match.params.id
-                            }`
-                          )
-                        }
                       >
                         <Table.Cell>
                           {buyersList.Buyer.firstName} {buyersList.Buyer.surname}
                         </Table.Cell>
                         <Table.Cell>{buyersList.Buyer.buyerNotes}</Table.Cell>
+                        <Table.Cell>{30}</Table.Cell>
+                        <Table.Cell>{'Yes'}</Table.Cell>
+                        <Table.Cell><Icon
+                          link
+                          name="edit"
+                          size="large"
+                          // onClick={() => this._editBusiness(sourceOptions, 1)}
+                        /></Table.Cell>
+                        <Table.Cell><Icon
+                          link
+                          name="trash"
+                          color="red"
+                          size="large"
+                          // onClick={() =>
+                          //   this._toggleModalConfirm(sourceOptions.value, 1)
+                          // }
+                        /></Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>
@@ -104,7 +112,19 @@ class ScoreListPage extends Component {
               </Grid.Row>
             </Grid>
           ) : null}
-
+          <Grid style={{ marginTop: 0 }}>
+            <Grid.Column>
+              <Button
+                color="green"
+                onClick={() => history.push('/buyer')}
+                size="small"
+                floated="left"
+              >
+                <Icon name="backward" />
+                  Return to Business
+              </Button>
+            </Grid.Column>
+          </Grid>
         </Dimmer.Dimmable>
       </Wrapper>
     )

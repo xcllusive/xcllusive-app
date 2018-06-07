@@ -215,46 +215,44 @@ class BusinessLogPage extends Component {
             </Form.Group>
             <Grid>
               <Grid.Row style={{ justifyContent: 'center' }}>
-                <Form>
-                  <Form.Group widths="equal">
-                    <Button
-                      color="blue"
-                      size="small"
-                      onClick={() =>
-                        this._selectLog({
-                          newLog: true,
-                          id: 1,
-                          followUp: moment().add(1, 'day'),
-                          text: ''
-                        })
-                      }
-                    >
-                      <Icon name="commenting" />
+                <Form.Group widths="equal">
+                  <Button
+                    color="blue"
+                    size="small"
+                    onClick={() =>
+                      this._selectLog({
+                        newLog: true,
+                        id: 1,
+                        followUp: moment().add(1, 'day'),
+                        text: ''
+                      })
+                    }
+                  >
+                    <Icon name="commenting" />
                       New Communication
-                    </Button>
-                    <Button color="yellow">
-                      <Icon name="save" />
+                  </Button>
+                  <Button color="yellow">
+                    <Icon name="save" />
                       Save Communication
-                    </Button>
-                    <Button
-                      color="red"
-                      loading={loadingUpdateStatus}
-                      onClick={() => this.props.updateFollowUpStatus()}
-                    >
-                      <Icon name="save" />
+                  </Button>
+                  <Button
+                    color="red"
+                    loading={loadingUpdateStatus}
+                    onClick={() => this.props.updateFollowUpStatus()}
+                  >
+                    <Icon name="save" />
                       Finalise Communication
-                    </Button>
-                    <Button
-                      color="green"
-                      onClick={() =>
-                        history.push(`/business/${this.props.match.params.id}`)
-                      }
-                    >
-                      <Icon name="backward" />
+                  </Button>
+                  <Button
+                    color="green"
+                    onClick={() =>
+                      history.push(`/business/${this.props.match.params.id}`)
+                    }
+                  >
+                    <Icon name="backward" />
                       Return to Business
-                    </Button>
-                  </Form.Group>
-                </Form>
+                  </Button>
+                </Form.Group>
               </Grid.Row>
             </Grid>
           </Form>
