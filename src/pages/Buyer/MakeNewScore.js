@@ -172,7 +172,7 @@ class MakeNewScorePage extends Component {
                           textAlign="left"
                           size="small"
                         >
-                          Percieved Price from Buyers
+                          Perceived Price from Buyers
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
@@ -331,7 +331,7 @@ class MakeNewScorePage extends Component {
                           textAlign="left"
                           size="small"
                         >
-                          Buyer Percieved Risk
+                          Buyer Perceived Risk
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
