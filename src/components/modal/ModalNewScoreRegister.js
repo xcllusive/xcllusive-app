@@ -10,7 +10,7 @@ import { closeModal } from '../../redux/ducks/modal'
 import {
   createScoreRegister,
   updateScoreRegister,
-  getScoreRegister
+  listScoreRegister
 } from '../../redux/ducks/scoreRegister'
 
 class ModalNewScoreRegister extends Component {
@@ -18,17 +18,25 @@ class ModalNewScoreRegister extends Component {
     super(props)
     this.state = {
       typesScoreRegisters: [
-        { key: 1, text: 'Perceived Price from Buyers', value: 1 },
-        { key: 2, text: 'Information / Transparency / Momentum', value: 2 },
-        { key: 3, text: 'Current Interest', value: 3 },
-        { key: 4, text: 'Buyer Perceived Risk', value: 4 }
+        {
+          key: 1,
+          text: 'Perceived Price from Buyers',
+          value: 'perceivedPrice'
+        },
+        {
+          key: 2,
+          text: 'Information / Transparency / Momentum',
+          value: 'infoTransMomen'
+        },
+        { key: 3, text: 'Current Interest', value: 'currentInterest' },
+        { key: 4, text: 'Buyer Perceived Risk', value: 'perceivedRisk' }
       ]
     }
   }
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated) {
-      this.props.getScoreRegister(this.props.values.scoreRegisterType)
+      this.props.listScoreRegister(this.props.values.type)
     }
   }
 
@@ -59,25 +67,20 @@ class ModalNewScoreRegister extends Component {
         <Modal.Content>
           <Form>
             <Form.Group>
-              <Form.Field width={4}>
+              <Form.Field width={8}>
                 <Form.Select
                   required
-                  label="Business Register"
-                  name="businessRegisterType"
+                  label="Score Register"
+                  name="type"
                   options={typesScoreRegisters}
-                  autoComplete="businessRegisterType"
-                  value={values.businessRegisterType}
+                  autoComplete="type"
+                  value={values.type}
                   onChange={this._handleSelectChange}
                   disabled={this.props.scoreRegister !== undefined}
                 />
-                {errors.scoreRegisterType &&
-                  touched.scoreRegisterType && (
-                  <Label
-                    basic
-                    pointing
-                    color="red"
-                    content={errors.scoreRegisterType}
-                  />
+                {errors.type &&
+                  touched.type && (
+                  <Label basic pointing color="red" content={errors.type} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -133,15 +136,15 @@ ModalNewScoreRegister.propTypes = {
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
   scoreRegister: PropTypes.object,
-  scoreRegisterType: PropTypes.number,
+  scoreRegisterType: PropTypes.string,
   updateLoading: PropTypes.bool,
   isCreated: PropTypes.bool,
   isUpdated: PropTypes.bool,
-  getScoreRegister: PropTypes.func
+  listScoreRegister: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
-  scoreRegisterType: props.scoreRegisterType ? props.scoreRegisterType : '',
+  type: props.scoreRegister ? props.scoreRegister.type : '',
   label: props.scoreRegister ? props.scoreRegister.label : '',
   id: props.scoreRegister ? props.scoreRegister.id : null
 })
@@ -151,11 +154,11 @@ const validationSchema = Yup.object().shape({
     .required('Label is required.')
     .min(2, 'Label required minimum 2 characters.')
     .max(200, 'Label require max 200 characters.'),
-  scoreRegisterType: Yup.number().required('Score Register is required.')
+  type: Yup.string().required('Score Register is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  if (props.businessRegister) {
+  if (props.scoreRegister) {
     props.updateScoreRegister(values)
   } else {
     props.createScoreRegister(values)
@@ -175,7 +178,7 @@ const mapDispatchToProps = dispatch =>
       closeModal,
       createScoreRegister,
       updateScoreRegister,
-      getScoreRegister
+      listScoreRegister
     },
     dispatch
   )

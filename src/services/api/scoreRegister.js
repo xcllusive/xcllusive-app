@@ -1,10 +1,10 @@
 import request from './'
 
-export const get = (scoreRegisterType, limit = null, page = null) => {
+export const list = (scoreRegister, limit = null, page = null) => {
   return request({
     method: 'get',
-    url: `/score-register/${scoreRegisterType}`,
-    params: { limit, page }
+    url: '/score-register',
+    params: { scoreRegister, limit, page }
   })
 }
 
@@ -24,10 +24,9 @@ export const update = scoreRegister => {
   })
 }
 
-export const remove = scoreRegister => {
+export const remove = id => {
   return request({
     method: 'delete',
-    url: `/score-register/${scoreRegister.id}`,
-    data: scoreRegister
+    url: `/score-register/${id}`
   })
 }

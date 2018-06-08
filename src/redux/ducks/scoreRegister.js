@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { get, create, update, remove } from '../../services/api/scoreRegister'
+import { list, create, update, remove } from '../../services/api/scoreRegister'
 
 // Action Types
 
@@ -18,13 +18,6 @@ export const Types = {
   REMOVE_SCORE_REGISTER_LOADING: 'REMOVE_SCORE_REGISTER_LOADING',
   REMOVE_SCORE_REGISTER_SUCCESS: 'REMOVE_SCORE_REGISTER_SUCCESS',
   REMOVE_SCORE_REGISTER_FAILURE: 'REMOVE_SCORE_REGISTER_FAILURE'
-}
-
-const TypesScoreRegister = {
-  1: 'Perceived Price from Buyers',
-  2: 'Information / Transparency / Momentum',
-  3: 'Current Interest',
-  4: 'Buyer Perceived Risk'
 }
 
 // Reducer
@@ -84,8 +77,8 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          [action.TypesScoreRegister]: {
-            ...state.get[action.TypesScoreRegister],
+          [action.scoreRegisterType]: {
+            ...state.get[action.scoreRegisterType],
             isLoading: true,
             error: null
           }
@@ -96,8 +89,8 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          [action.TypesScoreRegister]: {
-            ...state.get[action.TypesScoreRegister],
+          [action.scoreRegisterType]: {
+            ...state.get[action.scoreRegisterType],
             isLoading: false,
             array: action.payload.data.rows,
             pages: action.payload.itemCount,
@@ -110,8 +103,8 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          [action.TypesScoreRegister]: {
-            ...state.get[action.TypesScoreRegister],
+          [action.scoreRegisterType]: {
+            ...state.get[action.scoreRegisterType],
             isLoading: false,
             error: action.payload
           }
@@ -212,7 +205,7 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getScoreRegister = (
+export const listScoreRegister = (
   scoreRegisterType,
   limit = 5,
   page = null
@@ -221,10 +214,10 @@ export const getScoreRegister = (
     type: Types.GET_SCORE_REGISTER_LOADING
   })
   try {
-    const scoreRegister = await get(scoreRegisterType, limit, page)
+    const scoreRegister = await list(scoreRegisterType, limit, page)
     dispatch({
       type: Types.GET_SCORE_REGISTER_SUCCESS,
-      typeScoreRegister: TypesScoreRegister[scoreRegisterType],
+      scoreRegisterType,
       payload: scoreRegister
     })
   } catch (error) {

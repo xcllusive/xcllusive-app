@@ -130,7 +130,7 @@ class BuyerPage extends Component {
     }))
   }
 
-  _toggleModalGroupEmail = (businessId) => {
+  _toggleModalGroupEmail = businessId => {
     this.props.openModal(TypesModal.MODAL_TYPE_GROUP_EMAIL, {
       options: {
         title: 'Prepare Group Email'
@@ -220,9 +220,15 @@ class BuyerPage extends Component {
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>
-                      <Button size="small" color="instagram" onClick={() =>
-                        history.push(`buyer/business/${business.id}/scoreList`)
-                      }>
+                      <Button
+                        size="small"
+                        color="instagram"
+                        onClick={() =>
+                          history.push(
+                            `buyer/business/${business.id}/score-list`
+                          )
+                        }
+                      >
                         <Icon name="star" />
                       </Button>
                     </Table.Cell>
@@ -405,4 +411,7 @@ const mapStateToProps = state => ({
   businesses: state.business.getAll.array
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuyerPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BuyerPage)

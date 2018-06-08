@@ -47,7 +47,11 @@ class ScoreListPage extends Component {
               <Grid.Column>
                 <Button
                   color="facebook"
-                  onClick={() => history.push(`/buyer/business/${business.id}/makeNewScore`)}
+                  onClick={() =>
+                    history.push(
+                      `/buyer/business/${business.id}/make-new-score`
+                    )
+                  }
                   size="small"
                   floated="right"
                 >
@@ -80,31 +84,33 @@ class ScoreListPage extends Component {
                   </Table.Header>
                   <Table.Body>
                     {listBuyersList.map(buyersList => (
-                      <Table.Row
-                        active
-                        key={buyersList.Buyer.id}
-                      >
+                      <Table.Row active key={buyersList.Buyer.id}>
                         <Table.Cell>
-                          {buyersList.Buyer.firstName} {buyersList.Buyer.surname}
+                          {buyersList.Buyer.firstName}{' '}
+                          {buyersList.Buyer.surname}
                         </Table.Cell>
                         <Table.Cell>{buyersList.Buyer.buyerNotes}</Table.Cell>
                         <Table.Cell>{30}</Table.Cell>
                         <Table.Cell>{'Yes'}</Table.Cell>
-                        <Table.Cell><Icon
-                          link
-                          name="edit"
-                          size="large"
-                          // onClick={() => this._editBusiness(sourceOptions, 1)}
-                        /></Table.Cell>
-                        <Table.Cell><Icon
-                          link
-                          name="trash"
-                          color="red"
-                          size="large"
-                          // onClick={() =>
-                          //   this._toggleModalConfirm(sourceOptions.value, 1)
-                          // }
-                        /></Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            size="large"
+                            // onClick={() => this._editBusiness(sourceOptions, 1)}
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            size="large"
+                            // onClick={() =>
+                            //   this._toggleModalConfirm(sourceOptions.value, 1)
+                            // }
+                          />
+                        </Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>
@@ -121,7 +127,7 @@ class ScoreListPage extends Component {
                 floated="left"
               >
                 <Icon name="backward" />
-                  Return to Business
+                Return to Business
               </Button>
             </Grid.Column>
           </Grid>
@@ -150,4 +156,7 @@ const mapStateToProps = state => ({
   isLoadingBusiness: state.business.get.isLoading
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScoreListPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ScoreListPage)

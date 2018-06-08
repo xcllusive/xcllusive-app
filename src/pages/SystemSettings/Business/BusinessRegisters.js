@@ -27,7 +27,6 @@ class BusinessRegisters extends Component {
     this.props.getBusinessRegister(3)
     this.props.getBusinessRegister(4)
     this.props.getBusinessRegister(5)
-    this.props.getBusinessRegister(6)
     this.props.getBusinessRegister(7)
     this.props.getBusinessRegister(8)
     this.props.getBusinessRegister(9)
@@ -604,4 +603,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessRegisters)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BusinessRegisters)

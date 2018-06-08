@@ -133,12 +133,12 @@ const Layout = ({ match, logout, menu }) => (
       <Route
         exact
         component={ScoreList}
-        path={`${match.path}buyer/business/:id/scoreList`}
+        path={`${match.path}buyer/business/:id/score-list`}
       />
       <Route
         exact
         component={MakeNewScore}
-        path={`${match.path}buyer/business/:id/makeNewScore`}
+        path={`${match.path}buyer/business/:id/make-new-score`}
       />
       <Route
         render={() => <span>presale</span>}
@@ -171,4 +171,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({ logout }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Layout)
