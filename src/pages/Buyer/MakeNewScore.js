@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
 import {
   Grid,
@@ -20,6 +21,8 @@ import { getBusiness } from '../../redux/ducks/business'
 
 import Wrapper from '../../components/content/Wrapper'
 import CardScore from '../../components/content/CardScore'
+import { listScoreRegister } from '../../redux/ducks/scoreRegister'
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class MakeNewScorePage extends Component {
   constructor (props) {
@@ -29,10 +32,27 @@ class MakeNewScorePage extends Component {
 
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
+    this.props.listScoreRegister('perceivedPrice')
+    this.props.listScoreRegister('infoTransMomen')
+    this.props.listScoreRegister('currentInterest')
+    this.props.listScoreRegister('perceivedRisk')
+  }
+
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
   }
 
   render () {
-    const { history, business, isLoadingBusiness } = this.props
+    const {
+      history,
+      values,
+      business,
+      isLoadingBusiness,
+      perceivedPriceOptions,
+      infoTransMomenOptions,
+      currentInterestOptions,
+      perceivedRiskOptions
+    } = this.props
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -189,7 +209,16 @@ class MakeNewScorePage extends Component {
                   </Grid>
                   <Form size="tiny">
                     <Form.Group>
-                      <Form.Select width={16} />
+                      <Form.Select
+                        width={16}
+                        options={mapArrayToValuesForDropdown(
+                          perceivedPriceOptions
+                        )}
+                        name="perceivedPrice"
+                        autoComplete="perceivedPrice"
+                        value={values.perceivedPrice}
+                        onChange={this._handleSelectChange}
+                      />
                     </Form.Group>
                   </Form>
                   <Header
@@ -242,7 +271,16 @@ class MakeNewScorePage extends Component {
                   </Grid>
                   <Form size="tiny">
                     <Form.Group>
-                      <Form.Select width={16} />
+                      <Form.Select
+                        width={16}
+                        options={mapArrayToValuesForDropdown(
+                          infoTransMomenOptions
+                        )}
+                        name="infoTransMomen"
+                        autoComplete="infoTransMomen"
+                        value={values.infoTransMomen}
+                        onChange={this._handleSelectChange}
+                      />
                     </Form.Group>
                   </Form>
                   <Header
@@ -295,7 +333,16 @@ class MakeNewScorePage extends Component {
                   </Grid>
                   <Form size="tiny">
                     <Form.Group>
-                      <Form.Select width={16} />
+                      <Form.Select
+                        width={16}
+                        options={mapArrayToValuesForDropdown(
+                          currentInterestOptions
+                        )}
+                        name="currentInterest"
+                        autoComplete="currentInterest"
+                        value={values.currentInterest}
+                        onChange={this._handleSelectChange}
+                      />
                     </Form.Group>
                   </Form>
                   <Header
@@ -348,7 +395,16 @@ class MakeNewScorePage extends Component {
                   </Grid>
                   <Form size="tiny">
                     <Form.Group>
-                      <Form.Select width={16} />
+                      <Form.Select
+                        width={16}
+                        options={mapArrayToValuesForDropdown(
+                          perceivedRiskOptions
+                        )}
+                        name="perceivedRisk"
+                        autoComplete="perceivedRisk"
+                        value={values.perceivedRisk}
+                        onChange={this._handleSelectChange}
+                      />
                     </Form.Group>
                   </Form>
                   <Header
@@ -422,7 +478,7 @@ class MakeNewScorePage extends Component {
                           color="green"
                           onClick={() =>
                             history.push(
-                              `/buyer/business/${business.id}/ScoreList`
+                              `/buyer/business/${business.id}/score-list`
                             )
                           }
                           size="small"
@@ -458,20 +514,45 @@ class MakeNewScorePage extends Component {
 MakeNewScorePage.propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
+  values: PropTypes.object,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
-  isLoadingBusiness: PropTypes.bool
+  isLoadingBusiness: PropTypes.bool,
+  listScoreRegister: PropTypes.func,
+  perceivedPriceOptions: PropTypes.array,
+  infoTransMomenOptions: PropTypes.array,
+  currentInterestOptions: PropTypes.array,
+  perceivedRiskOptions: PropTypes.array,
+  setFieldValue: PropTypes.func
+}
+
+const mapPropsToValues = props => {
+  return {
+    perceivedPrice: '',
+    infoTransMomen: '',
+    currentInterest: '',
+    perceivedRisk: ''
+  }
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusiness }, dispatch)
+  bindActionCreators({ getBusiness, listScoreRegister }, dispatch)
 
 const mapStateToProps = state => ({
   business: state.business.get.object,
-  isLoadingBusiness: state.business.get.isLoading
+  isLoadingBusiness: state.business.get.isLoading,
+  perceivedPriceOptions: state.scoreRegister.get.perceivedPrice.array,
+  infoTransMomenOptions: state.scoreRegister.get.infoTransMomen.array,
+  currentInterestOptions: state.scoreRegister.get.currentInterest.array,
+  perceivedRiskOptions: state.scoreRegister.get.perceivedRisk.array
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MakeNewScorePage)
+)(
+  withFormik({
+    mapPropsToValues,
+    enableReinitialize: true
+  })(MakeNewScorePage)
+)
