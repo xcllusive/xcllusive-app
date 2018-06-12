@@ -38,7 +38,10 @@ class ModalGroupEmail extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!nextProps.listGroupEmail.length && this.props.listGroupEmail !== nextProps.listGroupEmail) {
+    if (
+      !nextProps.listGroupEmail.length &&
+      this.props.listGroupEmail !== nextProps.listGroupEmail
+    ) {
       alert('This business has no buyers to send email!')
       this.props.closeModal()
     }
@@ -52,7 +55,7 @@ class ModalGroupEmail extends Component {
     this.props.sendGroupEmail(this.props.values, this.state.array)
   }
 
-  _removeFileUploaded = (e) => {
+  _removeFileUploaded = e => {
     this.props.setFieldValue('attachment', null)
   }
 
@@ -65,7 +68,7 @@ class ModalGroupEmail extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _checkBoxArray = (e, {values}) => {
+  _checkBoxArray = (e, { values }) => {
     const isChecked = this.state.array.filter(item => {
       return item.id === values.id
     })
@@ -73,12 +76,12 @@ class ModalGroupEmail extends Component {
     if (!isChecked.length) {
       const array = this.state.array
       array.push(values)
-      this.setState({array})
+      this.setState({ array })
     } else {
       const array = this.state.array.filter(item => {
         return item.id !== values.id
       })
-      this.setState({array})
+      this.setState({ array })
     }
   }
 
@@ -95,7 +98,6 @@ class ModalGroupEmail extends Component {
       isLoadingGroupEmail,
       isLoadingSendEmail
     } = this.props
-
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -109,7 +111,6 @@ class ModalGroupEmail extends Component {
                 <Table celled compact definition>
                   <Table.Body>
                     {listGroupEmail.map((groupEmail, index) => (
-
                       <Table.Row key={index}>
                         <Table.Cell collapsing>
                           <Checkbox
@@ -117,7 +118,9 @@ class ModalGroupEmail extends Component {
                             onChange={this._checkBoxArray}
                           />
                         </Table.Cell>
-                        <Table.Cell>{groupEmail.firstName} {groupEmail.lastName}</Table.Cell>
+                        <Table.Cell>
+                          {groupEmail.firstName} {groupEmail.lastName}
+                        </Table.Cell>
                         <Table.Cell>{groupEmail.email}</Table.Cell>
                         <Table.Cell>
                           <Label color={groupEmail.isPending ? 'red' : 'green'}>
@@ -202,7 +205,7 @@ class ModalGroupEmail extends Component {
                 <Form.Button
                   floated="right"
                   color="yellow"
-                  onClick={(e) => this._removeFileUploaded(e)}
+                  onClick={e => this._removeFileUploaded(e)}
                 >
                   <Icon name="remove" />
                   Remove
@@ -238,7 +241,9 @@ class ModalGroupEmail extends Component {
             </Form.Group>
             <Form.Group>
               <b>
-                <label>Total email(s) to be generated: {this.state.array.length}</label>
+                <label>
+                  Total email(s) to be generated: {this.state.array.length}
+                </label>
               </b>
             </Form.Group>
           </Form>
@@ -312,7 +317,10 @@ const validationSchema = Yup.object().shape({
   body: Yup.string().required('Body is required.')
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     enableReinitialize: true,
