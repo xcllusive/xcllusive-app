@@ -25,7 +25,9 @@ const initialState = {
   get: {
     array: [],
     isLoading: false,
-    error: null
+    error: null,
+    pages: 0,
+    activePage: 1
   },
   create: {
     isLoading: false,
@@ -64,7 +66,8 @@ export default function reducer (state = initialState, action) {
         get: {
           ...state.get,
           isLoading: false,
-          array: action.payload,
+          array: action.payload.data.rows,
+          pages: action.payload.itemCount,
           error: null
         }
       }
@@ -179,16 +182,16 @@ export const logLoading = (value, type) => ({
   payload: value
 })
 
-export const getLog = id => async dispatch => {
+export const getLog = (id, limit = 10, page = null) => async dispatch => {
   dispatch({
     type: Types.GET_BUYER_LOG_LOADING,
     payload: true
   })
   try {
-    const log = await get(id)
+    const log = await get(id, limit, page)
     dispatch({
       type: Types.GET_BUYER_LOG_SUCCESS,
-      payload: log.data
+      payload: log
     })
   } catch (error) {
     dispatch({

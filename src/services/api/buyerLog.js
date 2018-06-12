@@ -1,9 +1,10 @@
 import request from './'
 
-export const get = buyerId =>
+export const get = (buyerId, limit, page) =>
   request({
     method: 'get',
-    url: `/buyer/log/${buyerId}`
+    url: `/buyer/log/${buyerId}`,
+    params: { limit, page }
   })
 
 export const create = newLog => {

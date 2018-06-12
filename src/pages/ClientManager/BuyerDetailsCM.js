@@ -6,6 +6,7 @@ import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
+import Yup from 'yup'
 
 import {
   Form,
@@ -16,13 +17,15 @@ import {
   Dimmer,
   Loader,
   Segment,
-  Button
+  Button,
+  Pagination
 } from 'semantic-ui-react'
 
 import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
 import {
   getLog,
   // updateBuyerDetails,
+  createNewLog,
   getBusinessBuyerLog,
   clearBuyerLog
 } from '../../redux/ducks/buyerLog'
@@ -43,30 +46,34 @@ class BuyerDetailsCM extends Component {
   }
 
   componentWillUnmount () {
-    this.setState({ buyerLog: null })
+    this._selectLog(null)
   }
 
   _getBusinessObject = buyerLog => {
     this.props.getBusiness(buyerLog.business_id)
-    this.setState({ buyerLog })
     this.props.getBusinessBuyerLog(this.props.buyer.id, buyerLog.business_id)
     this.props.getBusinessesFromBuyer(this.props.buyer.id)
-  }
-
-  _getBusinessObject2 = buyerLog => {
-    this.setState({ buyerLog })
+    this._selectLog(buyerLog)
   }
 
   _handleDateChange = date => {
-    this.props.setFieldValue('date', date)
+    this.props.setFieldValue('buyerLog_followUp', date)
   }
 
   _backToSearch = business => {
-    this.setState({ buyerLog: null })
+    this._selectLog(null)
   }
 
   _selectLog = buyerLog => {
     this.setState({ buyerLog })
+    this.props.setFieldValue('buyerLog_followUp', buyerLog ? buyerLog.followUp : '')
+    this.props.setFieldValue('buyerLog_text', buyerLog ? buyerLog.text : '')
+    this.props.setFieldValue('buyer_id', buyerLog && buyerLog.newLog ? buyerLog.buyer_id : null)
+    this.props.setFieldValue('business_id', buyerLog && buyerLog.newLog ? buyerLog.business_id : null)
+  }
+
+  _handlePaginationChange = (e, { activePage }) => {
+    this.props.getLog(this.props.match.params.id, 10, activePage)
   }
 
   render () {
@@ -81,8 +88,13 @@ class BuyerDetailsCM extends Component {
       listBusinessBuyerLogList,
       isLoadingBusBuyLog,
       isLoadingBuyerLog,
-      listBusinessesFromBuyer
+      listBusinessesFromBuyer,
+      values,
+      handleChange
     } = this.props
+
+    console.log(values)
+
     const { buyerLog } = this.state
     return (
       <Wrapper>
@@ -223,7 +235,7 @@ class BuyerDetailsCM extends Component {
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
-                        {listBuyerLogList.map(buyerLogList => (
+                        {listBuyerLogList.array.map(buyerLogList => (
                           <Table.Row
                             active
                             key={buyerLogList.id}
@@ -247,6 +259,16 @@ class BuyerDetailsCM extends Component {
                         ))}
                       </Table.Body>
                     </Table>
+                    <Pagination
+                      size="mini"
+                      onPageChange={(e, data) =>
+                        this._handlePaginationChange(e, data, 1)
+                      }
+                      defaultActivePage={this.props.listBuyerLogList.activePage}
+                      totalPages={this.props.listBuyerLogList.pages}
+                      firstItem={null}
+                      lastItem={null}
+                    />
                   </Fragment>
                 ) : null}
               </Dimmer.Dimmable>
@@ -285,7 +307,7 @@ class BuyerDetailsCM extends Component {
                             active
                             key={businessBuyerLog.id}
                             onClick={() =>
-                              this._getBusinessObject2(businessBuyerLog)
+                              this._selectLog(businessBuyerLog)
                             }
                           >
                             <Table.Cell>{businessBuyerLog.text}</Table.Cell>
@@ -310,7 +332,7 @@ class BuyerDetailsCM extends Component {
                                 <Form.Field width={11}>
                                   <h5>Follow Up Date</h5>
                                   <DatePicker
-                                    selected={moment(buyerLog.followUp)}
+                                    selected={moment(values.buyerLog_followUp)}
                                     onChange={this._handleDateChange}
                                     popperPlacement="top-end"
                                     form
@@ -328,7 +350,10 @@ class BuyerDetailsCM extends Component {
                                     onClick={() =>
                                       this._selectLog({
                                         followUp: moment().add(1, 'day'),
-                                        text: ''
+                                        text: '',
+                                        newLog: true,
+                                        business_id: this.props.buyer.id,
+                                        buyer_id: buyerLog.business_id
                                       })
                                     }
                                   >
@@ -340,18 +365,11 @@ class BuyerDetailsCM extends Component {
                               <Form.Group>
                                 <Form.Field width={12}>
                                   <Form.TextArea
-                                    label="Communication text"
-                                    name="text"
-                                    autoComplete="text"
-                                    value={buyerLog.text}
-                                    onChange={(e, data) => {
-                                      this.setState({
-                                        buyerLog: {
-                                          ...buyerLog,
-                                          text: data.value
-                                        }
-                                      })
-                                    }}
+                                    label="Communication buyerLog_text"
+                                    name="buyerLog_text"
+                                    autoComplete="buyerLog_text"
+                                    value={values.buyerLog_text}
+                                    onChange={handleChange}
                                   />
                                 </Form.Field>
                                 <Form.Field
@@ -362,7 +380,7 @@ class BuyerDetailsCM extends Component {
                                     floated="right"
                                     type="submit"
                                     color="red"
-                                    disabled={isSubmitting || !isValid}
+                                    disabled={isSubmitting || !isValid || !buyerLog.newLog}
                                     loading={isLoadingUpdate}
                                     onClick={handleSubmit}
                                   >
@@ -430,29 +448,11 @@ class BuyerDetailsCM extends Component {
   }
 }
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  // props.updateBuyerDetails(values).then(setSubmitting(false))
-}
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      getBuyer,
-      getLog,
-      getBusiness,
-      // updateBuyerDetails,
-      getBusinessBuyerLog,
-      clearBuyerLog,
-      getBusinessesFromBuyer
-    },
-    dispatch
-  )
-
 BuyerDetailsCM.propTypes = {
   getBuyer: PropTypes.func,
   match: PropTypes.object,
   buyer: PropTypes.object,
-  listBuyerLogList: PropTypes.array,
+  listBuyerLogList: PropTypes.object,
   getLog: PropTypes.func,
   isLoadingBuyer: PropTypes.bool,
   getBusiness: PropTypes.func,
@@ -469,15 +469,35 @@ BuyerDetailsCM.propTypes = {
   isLoadingBusBuyLog: PropTypes.bool,
   isLoadingBuyerLog: PropTypes.bool,
   getBusinessesFromBuyer: PropTypes.func,
-  listBusinessesFromBuyer: PropTypes.array
+  listBusinessesFromBuyer: PropTypes.array,
+  values: PropTypes.object,
+  handleChange: PropTypes.func,
+  createNewLog: PropTypes.func
 }
 
-const mapPropsToValues = props => {}
+const validationSchema = Yup.object().shape({
+  buyerLog_followUp: Yup.string()
+    .required('buyerLog_followUp is required.'),
+  buyerLog_text: Yup.string()
+    .required('First name is required.')
+})
+
+const handleSubmit = (values, { props, setSubmitting }) => {
+  console.log(values)
+  props.createNewLog(values).then(setSubmitting(false))
+}
+
+const mapPropsToValues = props => {
+  return {
+    buyerLog_followUp: '',
+    buyerLog_text: ''
+  }
+}
 
 const mapStateToProps = state => ({
   buyer: state.buyer.get.object,
   isLoadingBuyer: state.buyer.get.isLoading,
-  listBuyerLogList: state.buyerLog.get.array,
+  listBuyerLogList: state.buyerLog.get,
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
   business: state.business.get.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
@@ -486,9 +506,25 @@ const mapStateToProps = state => ({
   listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array
 })
 
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getBuyer,
+      getLog,
+      getBusiness,
+      createNewLog,
+      // updateBuyerDetails,
+      getBusinessBuyerLog,
+      clearBuyerLog,
+      getBusinessesFromBuyer
+    },
+    dispatch
+  )
+
 export default connect(mapStateToProps, mapDispatchToProps)(
   withFormik({
     mapPropsToValues,
+    validationSchema,
     handleSubmit,
     enableReinitialize: true
   })(BuyerDetailsCM)
