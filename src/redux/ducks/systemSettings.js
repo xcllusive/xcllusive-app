@@ -18,7 +18,7 @@ export const Types = {
 
 const initialState = {
   get: {
-    array: [],
+    object: {},
     isLoading: false,
     error: null
   },
@@ -46,7 +46,7 @@ export default function reducer (state = initialState, action) {
         get: {
           ...state.get,
           isLoading: false,
-          array: action.payload
+          object: action.payload
         }
       }
     case Types.GET_SYSTEM_SETTINGS_FAILURE:
@@ -96,13 +96,13 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getSystemSettings = id => async dispatch => {
+export const getSystemSettings = () => async dispatch => {
   dispatch({
     type: Types.GET_SYSTEM_SETTINGS_LOADING,
     payload: true
   })
   try {
-    const systemSettings = await get(id)
+    const systemSettings = await get()
     dispatch({
       type: Types.GET_SYSTEM_SETTINGS_SUCCESS,
       payload: systemSettings.data

@@ -99,8 +99,9 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapPropsToValues = props => {
+  console.log(props)
   return {
-    emailOffice: ''
+    emailOffice: props.emailOffice ? props.emailOffice : ''
   }
 }
 
@@ -109,6 +110,7 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 }
 
 const mapStateToProps = state => ({
+  emailOffice: state.systemSettings.get.object.emailOffice
 })
 
 const mapDispatchToProps = dispatch =>

@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
 
 import UserList from './UserList'
 import Business from './Business/Business'
 import Buyer from './Buyer/Buyer'
 import EmailTemplates from './EmailTemplates'
+
+import { getSystemSettings } from '../../redux/ducks/systemSettings'
 
 class SystemSettingsPage extends Component {
   constructor (props) {
@@ -31,6 +36,10 @@ class SystemSettingsPage extends Component {
     }
   }
 
+  componentWillMount () {
+    this.props.getSystemSettings()
+  }
+
   render () {
     return (
       <div>
@@ -44,4 +53,18 @@ class SystemSettingsPage extends Component {
   }
 }
 
-export default SystemSettingsPage
+SystemSettingsPage.propTypes = {
+  getSystemSettings: PropTypes.func
+}
+
+const mapStateToProps = state => ({})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getSystemSettings
+    },
+    dispatch
+  )
+
+export default connect(mapStateToProps, mapDispatchToProps)(SystemSettingsPage)

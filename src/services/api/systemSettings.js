@@ -1,17 +1,15 @@
 import request from './'
 
-export const get = id => {
-  console.log('get SystemSettings')
+export const get = () => {
   return request({
-  //   url: `/systemSettings/${id}`
+    url: '/system-settings'
   })
 }
 
 export const update = systemSettings => {
-  console.log('update SystemSettings')
   return request({
-    //  method: 'put',
-    //  url: `/systemSettings/${systemSettings.id}`
-    // data: buyer
+    method: 'put',
+    url: '/system-settings',
+    data: systemSettings
   })
 }
