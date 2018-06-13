@@ -72,8 +72,12 @@ class BuyerDetailsCM extends Component {
     this.props.setFieldValue('business_id', buyerLog && buyerLog.newLog ? buyerLog.business_id : null)
   }
 
-  _handlePaginationChange = (e, { activePage }) => {
+  _handlePaginationChangeLog = (e, { activePage }) => {
     this.props.getLog(this.props.match.params.id, 10, activePage)
+  }
+
+  _handlePaginationChangeBusBuyLog = (e, { activePage }) => {
+    this.props.getBusinessBuyerLog(this.props.buyer.id, this.state.buyerLog.business_id, 10, activePage)
   }
 
   render () {
@@ -262,10 +266,10 @@ class BuyerDetailsCM extends Component {
                     <Pagination
                       size="mini"
                       onPageChange={(e, data) =>
-                        this._handlePaginationChange(e, data, 1)
+                        this._handlePaginationChangeLog(e, data, 1)
                       }
-                      defaultActivePage={this.props.listBuyerLogList.activePage}
-                      totalPages={this.props.listBuyerLogList.pages}
+                      defaultActivePage={listBuyerLogList.activePage}
+                      totalPages={listBuyerLogList.pages}
                       firstItem={null}
                       lastItem={null}
                     />
@@ -302,7 +306,7 @@ class BuyerDetailsCM extends Component {
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
-                        {listBusinessBuyerLogList.map(businessBuyerLog => (
+                        {listBusinessBuyerLogList.array.map(businessBuyerLog => (
                           <Table.Row
                             active
                             key={businessBuyerLog.id}
@@ -323,6 +327,16 @@ class BuyerDetailsCM extends Component {
                         ))}
                       </Table.Body>
                     </Table>
+                    <Pagination
+                      size="mini"
+                      onPageChange={(e, data) =>
+                        this._handlePaginationChangeBusBuyLog(e, data, 1)
+                      }
+                      defaultActivePage={listBusinessBuyerLogList.activePage}
+                      totalPages={listBusinessBuyerLogList.pages}
+                      firstItem={null}
+                      lastItem={null}
+                    />
                     <Grid celled="internally" divided>
                       <Grid.Row>
                         <Grid.Column width={8}>
@@ -352,8 +366,8 @@ class BuyerDetailsCM extends Component {
                                         followUp: moment().add(1, 'day'),
                                         text: '',
                                         newLog: true,
-                                        business_id: this.props.buyer.id,
-                                        buyer_id: buyerLog.business_id
+                                        business_id: buyerLog.business_id,
+                                        buyer_id: this.props.buyer.id
                                       })
                                     }
                                   >
@@ -483,8 +497,9 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  console.log(values)
-  props.createNewLog(values).then(setSubmitting(false))
+  props.createNewLog(values)
+    .then(setSubmitting(false))
+    .then(props.getBusinessBuyerLog(values.buyer_id, values.business_id))
 }
 
 const mapPropsToValues = props => {
@@ -501,7 +516,7 @@ const mapStateToProps = state => ({
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
   business: state.business.get.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
-  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,
+  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog,
   isLoadingBusBuyLog: state.buyerLog.getBusBuyLog.isLoading,
   listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array
 })

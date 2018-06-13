@@ -121,7 +121,7 @@ class BusinessRegisters extends Component {
                             name="trash"
                             color="red"
                             onClick={() =>
-                              this._toggleModalConfirm(sourceOptions.value, 1)
+                              this._toggleModalConfirm(sourceOptions.id, 1)
                             }
                           />
                         </Table.Cell>
@@ -178,7 +178,7 @@ class BusinessRegisters extends Component {
                             name="trash"
                             color="red"
                             onClick={() =>
-                              this._toggleModalConfirm(ratingOptions.value, 2)
+                              this._toggleModalConfirm(ratingOptions.id, 2)
                             }
                           />
                         </Table.Cell>
@@ -237,7 +237,7 @@ class BusinessRegisters extends Component {
                             name="trash"
                             color="red"
                             onClick={() =>
-                              this._toggleModalConfirm(productOptions.value, 3)
+                              this._toggleModalConfirm(productOptions.id, 3)
                             }
                           />
                         </Table.Cell>
@@ -298,7 +298,7 @@ class BusinessRegisters extends Component {
                             name="trash"
                             color="red"
                             onClick={() =>
-                              this._toggleModalConfirm(industryOptions.value, 4)
+                              this._toggleModalConfirm(industryOptions.id, 4)
                             }
                           />
                         </Table.Cell>
@@ -354,7 +354,7 @@ class BusinessRegisters extends Component {
                             name="trash"
                             color="red"
                             onClick={() =>
-                              this._toggleModalConfirm(typeOptions.value, 5)
+                              this._toggleModalConfirm(typeOptions.id, 5)
                             }
                           />
                         </Table.Cell>
@@ -410,7 +410,7 @@ class BusinessRegisters extends Component {
                             name="trash"
                             color="red"
                             onClick={() =>
-                              this._toggleModalConfirm(stageOptions.value, 7)
+                              this._toggleModalConfirm(stageOptions.id, 7)
                             }
                           />
                         </Table.Cell>
@@ -472,7 +472,7 @@ class BusinessRegisters extends Component {
                             color="red"
                             onClick={() =>
                               this._toggleModalConfirm(
-                                stageNotSignedOptions.value,
+                                stageNotSignedOptions.id,
                                 8
                               )
                             }
@@ -534,7 +534,7 @@ class BusinessRegisters extends Component {
                               color="red"
                               onClick={() =>
                                 this._toggleModalConfirm(
-                                  stageNotWantOptions.value,
+                                  stageNotWantOptions.id,
                                   9
                                 )
                               }

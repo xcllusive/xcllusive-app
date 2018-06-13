@@ -24,10 +24,11 @@ export const update = businessRegister => {
   })
 }
 
-export const remove = businessRegister => {
+export const remove = businessRegisterType => {
+  console.log(businessRegisterType)
   return request({
     method: 'delete',
-    url: `/business-register/${businessRegister.id}`,
-    data: businessRegister
+    url: `/business-register/${businessRegisterType.id}`,
+    data: businessRegisterType
   })
 }
