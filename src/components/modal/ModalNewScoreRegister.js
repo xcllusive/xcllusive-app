@@ -88,7 +88,7 @@ class ModalNewScoreRegister extends Component {
               <Form.Field width={16}>
                 <Form.Input
                   required
-                  label="Label"
+                  label="Select Options"
                   name="label"
                   autoComplete="label"
                   value={values.label}
@@ -98,6 +98,45 @@ class ModalNewScoreRegister extends Component {
                 {errors.label &&
                   touched.label && (
                   <Label basic color="red" pointing content={errors.label} />
+                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field width={16}>
+                <Form.Input
+                  required
+                  label="Text for Report"
+                  name="textReport"
+                  autoComplete="textReport"
+                  value={values.textReport}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.textReport &&
+                  touched.textReport && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.textReport}
+                  />
+                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field width={4}>
+                <Form.Input
+                  required
+                  label="Weight"
+                  name="weight"
+                  autoComplete="weight"
+                  value={values.weight}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.weight &&
+                  touched.weight && (
+                  <Label basic color="red" pointing content={errors.weight} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -146,15 +185,22 @@ ModalNewScoreRegister.propTypes = {
 const mapPropsToValues = props => ({
   type: props.scoreRegister ? props.scoreRegister.type : '',
   label: props.scoreRegister ? props.scoreRegister.label : '',
-  id: props.scoreRegister ? props.scoreRegister.id : null
+  id: props.scoreRegister ? props.scoreRegister.id : null,
+  textReport: props.scoreRegister ? props.scoreRegister.textReport : '',
+  weight: props.scoreRegister ? props.scoreRegister.weight : null
 })
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
-    .min(2, 'Label required minimum 2 characters.')
+    .min(2, 'Label require minimum 2 characters.')
     .max(200, 'Label require max 200 characters.'),
-  type: Yup.string().required('Score Register is required.')
+  type: Yup.string().required('Score Register is required.'),
+  textReport: Yup.string().required('Text Report is required.'),
+  weight: Yup.number()
+    .required('Weight is required.')
+    .min(10, 'Weight require minimum 10')
+    .max(100, 'Weight require maximum 100')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

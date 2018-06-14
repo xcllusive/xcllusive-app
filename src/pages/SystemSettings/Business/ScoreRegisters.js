@@ -95,8 +95,9 @@ class ScoreRegisters extends Component {
               >
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Select Options</Table.HeaderCell>
+                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                    <Table.HeaderCell>Weight</Table.HeaderCell>
                     <Table.HeaderCell>Settings</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
@@ -104,9 +105,14 @@ class ScoreRegisters extends Component {
                   {this.props.perceivedPriceOptions.array.map(
                     perceivedPriceOptions => {
                       return (
-                        <Table.Row active key={perceivedPriceOptions.id}>
-                          <Table.Cell>{perceivedPriceOptions.id}</Table.Cell>
+                        <Table.Row active key={perceivedPriceOptions.weight}>
                           <Table.Cell>{perceivedPriceOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            {perceivedPriceOptions.textReport}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {perceivedPriceOptions.weight}
+                          </Table.Cell>
                           <Table.Cell>
                             <Icon
                               link
@@ -161,8 +167,9 @@ class ScoreRegisters extends Component {
               >
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Select Options</Table.HeaderCell>
+                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                    <Table.HeaderCell>Weight</Table.HeaderCell>
                     <Table.HeaderCell>Settings</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
@@ -170,9 +177,14 @@ class ScoreRegisters extends Component {
                   {this.props.infoTransMomenOptions.array.map(
                     infoTransMomenOptions => {
                       return (
-                        <Table.Row active key={infoTransMomenOptions.id}>
-                          <Table.Cell>{infoTransMomenOptions.id}</Table.Cell>
+                        <Table.Row active key={infoTransMomenOptions.weight}>
                           <Table.Cell>{infoTransMomenOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            {infoTransMomenOptions.textReport}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {infoTransMomenOptions.weight}
+                          </Table.Cell>
                           <Table.Cell>
                             <Icon
                               link
@@ -227,8 +239,9 @@ class ScoreRegisters extends Component {
               >
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Select Options</Table.HeaderCell>
+                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                    <Table.HeaderCell>Weight</Table.HeaderCell>
                     <Table.HeaderCell>Settings</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
@@ -236,10 +249,15 @@ class ScoreRegisters extends Component {
                   {this.props.currentInterestOptions.array.map(
                     currentInterestOptions => {
                       return (
-                        <Table.Row active key={currentInterestOptions.id}>
-                          <Table.Cell>{currentInterestOptions.id}</Table.Cell>
+                        <Table.Row active key={currentInterestOptions.weight}>
                           <Table.Cell>
                             {currentInterestOptions.label}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {currentInterestOptions.textReport}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {currentInterestOptions.weight}
                           </Table.Cell>
                           <Table.Cell>
                             <Icon
@@ -295,8 +313,9 @@ class ScoreRegisters extends Component {
               >
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Select Options</Table.HeaderCell>
+                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                    <Table.HeaderCell>Weight</Table.HeaderCell>
                     <Table.HeaderCell>Settings</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
@@ -304,9 +323,12 @@ class ScoreRegisters extends Component {
                   {this.props.perceivedRiskOptions.array.map(
                     perceivedRiskOptions => {
                       return (
-                        <Table.Row active key={perceivedRiskOptions.id}>
-                          <Table.Cell>{perceivedRiskOptions.id}</Table.Cell>
+                        <Table.Row active key={perceivedRiskOptions.weight}>
                           <Table.Cell>{perceivedRiskOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            {perceivedRiskOptions.textReport}
+                          </Table.Cell>
+                          <Table.Cell>{perceivedRiskOptions.weight}</Table.Cell>
                           <Table.Cell>
                             <Icon
                               link
