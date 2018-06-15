@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
+import _ from 'lodash'
 import {
   Grid,
   Header,
@@ -22,12 +23,20 @@ import { getBusiness } from '../../redux/ducks/business'
 import Wrapper from '../../components/content/Wrapper'
 import CardScore from '../../components/content/CardScore'
 import { listScoreRegister } from '../../redux/ducks/scoreRegister'
+import { calculateScore } from '../../redux/ducks/score'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class MakeNewScorePage extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      objectPrice: {},
+      objectMomentum: {},
+      objectInterest: {},
+      objectRisk: {},
+      points: false,
+      thisScore: null
+    }
   }
 
   componentDidMount () {
@@ -38,8 +47,77 @@ class MakeNewScorePage extends Component {
     this.props.listScoreRegister('perceivedRisk')
   }
 
+  _typeOption = name => {
+    if (name === 'perceivedPrice') {
+      return this.props.perceivedPriceOptions
+    }
+    if (name === 'infoTransMomen') {
+      return this.props.infoTransMomenOptions
+    }
+    if (name === 'currentInterest') {
+      return this.props.currentInterestOptions
+    }
+    if (name === 'perceivedRisk') {
+      return this.props.perceivedRiskOptions
+    }
+  }
+
+  _findItemArray = (name, id) => {
+    if (name === 'perceivedPrice') {
+      const object = _.find(this.props.perceivedPriceOptions, o => {
+        return o.id === id
+      })
+      this.setState({
+        objectPrice: object
+      })
+    }
+    if (name === 'infoTransMomen') {
+      const object = _.find(this.props.infoTransMomenOptions, o => {
+        return o.id === id
+      })
+      this.setState({
+        objectMomentum: object
+      })
+    }
+    if (name === 'currentInterest') {
+      const object = _.find(this.props.currentInterestOptions, o => {
+        return o.id === id
+      })
+      this.setState({
+        objectInterest: object
+      })
+    }
+    if (name === 'perceivedRisk') {
+      const object = _.find(this.props.perceivedRiskOptions, o => {
+        return o.id === id
+      })
+      this.setState({
+        objectRisk: object
+      })
+    }
+  }
+
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+    this._findItemArray(name, value)
+    this.setState({
+      points: false
+    })
+  }
+
+  _calculateScore = values => {
+    this.props.calculateScore(values)
+    this.setState({
+      points: true
+    })
+    this.setState({
+      thisScore:
+        (this.state.objectPrice.weight +
+          this.state.objectMomentum.weight +
+          this.state.objectInterest.weight +
+          this.state.objectRisk.weight) /
+        5
+    })
   }
 
   render () {
@@ -51,7 +129,11 @@ class MakeNewScorePage extends Component {
       perceivedPriceOptions,
       infoTransMomenOptions,
       currentInterestOptions,
-      perceivedRiskOptions
+      perceivedRiskOptions,
+      handleChange,
+      handleBlur,
+      errors,
+      touched
     } = this.props
     return (
       <Wrapper>
@@ -102,7 +184,9 @@ class MakeNewScorePage extends Component {
               <Grid.Column>
                 <Statistic.Group size="tiny" widths={4}>
                   <Statistic>
-                    <Statistic.Value>#</Statistic.Value>
+                    <Statistic.Value>
+                      {this.state.thisScore ? this.state.thisScore : '#'}
+                    </Statistic.Value>
                     <Statistic.Label>This Score</Statistic.Label>
                   </Statistic>
                   <Statistic>
@@ -152,11 +236,62 @@ class MakeNewScorePage extends Component {
                   <Form size="tiny">
                     <Form.Group>
                       <Label>Yours</Label>
-                      <Form.Input width={5} readOnly />
+                      <Form.Input
+                        width={5}
+                        readOnly
+                        name="yours"
+                        autoComplete="yours"
+                        value={values.yours}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.yours &&
+                        touched.yours && (
+                        <Label
+                          basic
+                          color="red"
+                          pointing
+                          content={errors.yours}
+                        />
+                      )}
                       <Label>Avg</Label>
-                      <Form.Input width={5} readOnly />
+                      <Form.Input
+                        width={5}
+                        readOnly
+                        name="avg"
+                        autoComplete="avg"
+                        value={values.avg}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.avg &&
+                        touched.avg && (
+                        <Label
+                          basic
+                          color="red"
+                          pointing
+                          content={errors.avg}
+                        />
+                      )}
                       <Label>Diff</Label>
-                      <Form.Input width={5} readOnly />
+                      <Form.Input
+                        width={5}
+                        readOnly
+                        name="diff"
+                        autoComplete="diff"
+                        value={values.diff}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.diff &&
+                        touched.diff && (
+                        <Label
+                          basic
+                          color="red"
+                          pointing
+                          content={errors.diff}
+                        />
+                      )}
                     </Form.Group>
                   </Form>
                   <Header
@@ -168,7 +303,22 @@ class MakeNewScorePage extends Component {
                     Notes for report : (Max 420 Characters)
                   </Header>
                   <Form>
-                    <Form.TextArea />
+                    <Form.TextArea
+                      name="notesEnquiries"
+                      autoComplete="notesEnquiries"
+                      value={values.notesEnquiries}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.notesEnquiries &&
+                      touched.notesEnquiries && (
+                      <Label
+                        basic
+                        color="red"
+                        pointing
+                        content={errors.notesEnquiries}
+                      />
+                    )}
                   </Form>
                 </Segment>
               </Grid.Column>
@@ -176,7 +326,7 @@ class MakeNewScorePage extends Component {
                 <CardScore
                   header="Enquiries In Last Four Weeks Generated Text:"
                   title="This business has received four or less enquiries than the average business has received over the past four weeks."
-                  subtitle="Needs Urgent Attention"
+                  icon={10}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -202,7 +352,9 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          60
+                          {this.state.points
+                            ? this.state.objectPrice.weight
+                            : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -230,15 +382,36 @@ class MakeNewScorePage extends Component {
                     Notes for report : (Max 420 Characters)
                   </Header>
                   <Form>
-                    <Form.TextArea />
+                    <Form.TextArea
+                      name="notesPrice"
+                      autoComplete="notesPrice"
+                      value={values.notesPrice}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.notesPrice &&
+                      touched.notesPrice && (
+                      <Label
+                        basic
+                        color="red"
+                        pointing
+                        content={errors.notesPrice}
+                      />
+                    )}
                   </Form>
                 </Segment>
               </Grid.Column>
               <Grid.Column>
                 <CardScore
-                  header="Enquiries In Last Four Weeks Generated Text:"
-                  title="This business has received four or less enquiries than the average business has received over the past four weeks."
-                  subtitle="Needs Urgent Attention"
+                  header="Percieved Price from Buyers Generated Text"
+                  title={
+                    this.state.objectPrice
+                      ? this.state.objectPrice.textReport
+                      : ' '
+                  }
+                  icon={
+                    this.state.objectPrice ? this.state.objectPrice.weight : 0
+                  }
                 />
               </Grid.Column>
             </Grid.Row>
@@ -264,7 +437,9 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          60
+                          {this.state.points
+                            ? this.state.objectMomentum.weight
+                            : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -292,15 +467,38 @@ class MakeNewScorePage extends Component {
                     Notes for report : (Max 420 Characters)
                   </Header>
                   <Form>
-                    <Form.TextArea />
+                    <Form.TextArea
+                      name="notesMomentum"
+                      autoComplete="notesMomentum"
+                      value={values.notesMomentum}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.notesMomentum &&
+                      touched.notesMomentum && (
+                      <Label
+                        basic
+                        color="red"
+                        pointing
+                        content={errors.notesMomentum}
+                      />
+                    )}
                   </Form>
                 </Segment>
               </Grid.Column>
               <Grid.Column>
                 <CardScore
-                  header="Enquiries In Last Four Weeks Generated Text:"
-                  title="This business has received four or less enquiries than the average business has received over the past four weeks."
-                  subtitle="Needs Urgent Attention"
+                  header="Information/Transparency/Momentum Generated Text:"
+                  title={
+                    this.state.objectMomentum
+                      ? this.state.objectMomentum.textReport
+                      : ' '
+                  }
+                  icon={
+                    this.state.objectMomentum
+                      ? this.state.objectMomentum.weight
+                      : 0
+                  }
                 />
               </Grid.Column>
             </Grid.Row>
@@ -326,7 +524,9 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          60
+                          {this.state.points
+                            ? this.state.objectInterest.weight
+                            : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -354,15 +554,38 @@ class MakeNewScorePage extends Component {
                     Notes for report : (Max 420 Characters)
                   </Header>
                   <Form>
-                    <Form.TextArea />
+                    <Form.TextArea
+                      name="notesInterest"
+                      autoComplete="notesInterest"
+                      value={values.notesInterest}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.notesInterest &&
+                      touched.notesInterest && (
+                      <Label
+                        basic
+                        color="red"
+                        pointing
+                        content={errors.notesInterest}
+                      />
+                    )}
                   </Form>
                 </Segment>
               </Grid.Column>
               <Grid.Column>
                 <CardScore
-                  header="Enquiries In Last Four Weeks Generated Text:"
-                  title="This business has received four or less enquiries than the average business has received over the past four weeks."
-                  subtitle="Needs Urgent Attention"
+                  header="Current Interest Generated Text:"
+                  title={
+                    this.state.objectInterest
+                      ? this.state.objectInterest.textReport
+                      : ' '
+                  }
+                  icon={
+                    this.state.objectInterest
+                      ? this.state.objectInterest.weight
+                      : 0
+                  }
                 />
               </Grid.Column>
             </Grid.Row>
@@ -388,7 +611,9 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          60
+                          {this.state.points
+                            ? this.state.objectRisk.weight
+                            : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -416,15 +641,36 @@ class MakeNewScorePage extends Component {
                     Notes for report : (Max 420 Characters)
                   </Header>
                   <Form>
-                    <Form.TextArea />
+                    <Form.TextArea
+                      name="notesRisk"
+                      autoComplete="notesRisk"
+                      value={values.notesRisk}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.notesRisk &&
+                      touched.notesRisk && (
+                      <Label
+                        basic
+                        color="red"
+                        pointing
+                        content={errors.notesRisk}
+                      />
+                    )}
                   </Form>
                 </Segment>
               </Grid.Column>
               <Grid.Column>
                 <CardScore
-                  header="Enquiries In Last Four Weeks Generated Text:"
-                  title="This business has received four or less enquiries than the average business has received over the past four weeks."
-                  subtitle="Needs Urgent Attention"
+                  header="Buyer Percieved Risk Generated Text:"
+                  title={
+                    this.state.objectRisk
+                      ? this.state.objectRisk.textReport
+                      : ' '
+                  }
+                  icon={
+                    this.state.objectRisk ? this.state.objectRisk.weight : 0
+                  }
                 />
               </Grid.Column>
             </Grid.Row>
@@ -452,7 +698,11 @@ class MakeNewScorePage extends Component {
                   <Grid style={{ marginTop: 0 }}>
                     <Grid.Row columns={2}>
                       <Grid.Column>
-                        <Button color="red" floated="right">
+                        <Button
+                          color="red"
+                          floated="right"
+                          onClick={() => this._calculateScore(values)}
+                        >
                           <Icon name="calculator" />
                           Calculate Your Score
                         </Button>
@@ -460,7 +710,11 @@ class MakeNewScorePage extends Component {
                       <Grid.Column>
                         <Statistic.Group size="tiny" widths={1}>
                           <Statistic floated="left">
-                            <Statistic.Value>#</Statistic.Value>
+                            <Statistic.Value>
+                              {this.state.thisScore
+                                ? this.state.thisScore
+                                : '#'}
+                            </Statistic.Value>
                             <Statistic.Label>This Score</Statistic.Label>
                           </Statistic>
                         </Statistic.Group>
@@ -523,7 +777,12 @@ MakeNewScorePage.propTypes = {
   infoTransMomenOptions: PropTypes.array,
   currentInterestOptions: PropTypes.array,
   perceivedRiskOptions: PropTypes.array,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  calculateScore: PropTypes.func,
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func,
+  errors: PropTypes.object,
+  touched: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -531,12 +790,23 @@ const mapPropsToValues = props => {
     perceivedPrice: '',
     infoTransMomen: '',
     currentInterest: '',
-    perceivedRisk: ''
+    perceivedRisk: '',
+    notesEnquiries: '',
+    notesPrice: '',
+    notesMomentum: '',
+    notesInterest: '',
+    notesRisk: '',
+    yours: '',
+    avg: '',
+    diff: ''
   }
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusiness, listScoreRegister }, dispatch)
+  bindActionCreators(
+    { getBusiness, listScoreRegister, calculateScore },
+    dispatch
+  )
 
 const mapStateToProps = state => ({
   business: state.business.get.object,
