@@ -105,6 +105,11 @@ module.exports = {
       // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
       // { parser: { requireEnsure: false } },
 
+      {
+        test: /(pdfkit|linebreak|fontkit|unicode|brotli|png-js).*\.js$/,
+        loader: 'transform-loader?brfs'
+      },
+
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {

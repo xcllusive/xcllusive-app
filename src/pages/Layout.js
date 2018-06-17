@@ -21,6 +21,8 @@ import MakeNewScore from './Buyer/MakeNewScore'
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
 
+import PdfScore from '../components/pdf/PdfScore'
+
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
     <Menu inverted attached color="blue" size="small">
@@ -103,7 +105,8 @@ const Layout = ({ match, logout, menu }) => (
     <Switch>
       <Route
         exact
-        render={() => <span>dashboard</span>}
+        // render={() => <span>dashboard</span>}
+        component={PdfScore}
         path={`${match.path}`}
       />
       <Route exact component={ListPage} path={`${match.path}business`} />
