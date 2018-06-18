@@ -193,9 +193,11 @@ class BusinessLogPage extends Component {
               <Form.Field width={3}>
                 <h5>Follow Up Date</h5>
                 <DatePicker
+                  style={{ left: '30px' }}
                   selected={moment(values.businessLog_followUp)}
                   onChange={this._handleDateChange}
                   popperPlacement="top-end"
+                  left="30px"
                   form
                 />
               </Form.Field>
@@ -229,11 +231,11 @@ class BusinessLogPage extends Component {
                     }
                   >
                     <Icon name="commenting" />
-                      New Communication
+                    New Communication
                   </Button>
                   <Button color="yellow">
                     <Icon name="save" />
-                      Save Communication
+                    Save Communication
                   </Button>
                   <Button
                     color="red"
@@ -241,7 +243,7 @@ class BusinessLogPage extends Component {
                     onClick={() => this.props.updateFollowUpStatus()}
                   >
                     <Icon name="save" />
-                      Finalise Communication
+                    Finalise Communication
                   </Button>
                   <Button
                     color="green"
@@ -250,7 +252,7 @@ class BusinessLogPage extends Component {
                     }
                   >
                     <Icon name="backward" />
-                      Return to Business
+                    Return to Business
                   </Button>
                 </Form.Group>
               </Grid.Row>
@@ -261,7 +263,13 @@ class BusinessLogPage extends Component {
               <Form.Group inline>
                 <Form.Input
                   label="Created By"
-                  placeholder={this.state.businessLog.CreatedBy ? `${this.state.businessLog.CreatedBy.firstName} ${this.state.businessLog.CreatedBy.lastName}` : ''}
+                  placeholder={
+                    this.state.businessLog.CreatedBy
+                      ? `${this.state.businessLog.CreatedBy.firstName} ${
+                        this.state.businessLog.CreatedBy.lastName
+                      }`
+                      : ''
+                  }
                   readOnly
                 />
                 <Form.Input
@@ -273,7 +281,13 @@ class BusinessLogPage extends Component {
                 />
                 <Form.Input
                   label="Modified By"
-                  placeholder={this.state.businessLog.ModifiedB ? `${this.state.businessLog.ModifiedBy.firstName} ${this.state.businessLog.ModifiedBy.lastName}` : ''}
+                  placeholder={
+                    this.state.businessLog.ModifiedB
+                      ? `${this.state.businessLog.ModifiedBy.firstName} ${
+                        this.state.businessLog.ModifiedBy.lastName
+                      }`
+                      : ''
+                  }
                   readOnly
                 />
                 <Form.Input
@@ -339,7 +353,10 @@ const mapDispatchToProps = dispatch => {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     handleSubmit

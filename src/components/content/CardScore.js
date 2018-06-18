@@ -5,15 +5,12 @@ import { Image, Card } from 'semantic-ui-react'
 class CardScore extends Component {
   constructor (props) {
     super(props)
-    this.state = { image: '' }
+    this.state = { image: '', subtitle: '' }
   }
 
-  componentWillReceiveProps () {
-    this._calculateIcon()
-  }
-
-  _calculateIcon = () => {
+  _calculateIcon () {
     if (this.props.icon < 30) {
+      console.log('1')
       const src = 'https://image.flaticon.com/icons/svg/25/25327.svg'
       const message = 'Needs urgent attention'
       this.setState({
@@ -22,6 +19,7 @@ class CardScore extends Component {
       })
     }
     if (this.props.icon >= 30 && this.props.icon <= 59) {
+      console.log('2')
       const src = 'https://image.flaticon.com/icons/svg/25/25693.svg'
       const message = 'Possible improvement'
       this.setState({
@@ -30,6 +28,7 @@ class CardScore extends Component {
       })
     }
     if (this.props.icon >= 60) {
+      console.log('3')
       const src = 'https://image.flaticon.com/icons/svg/25/25361.svg'
       const message = 'Satisfactory'
       this.setState({

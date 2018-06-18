@@ -47,19 +47,23 @@ class MakeNewScorePage extends Component {
     this.props.listScoreRegister('perceivedRisk')
   }
 
-  _typeOption = name => {
-    if (name === 'perceivedPrice') {
-      return this.props.perceivedPriceOptions
-    }
-    if (name === 'infoTransMomen') {
-      return this.props.infoTransMomenOptions
-    }
-    if (name === 'currentInterest') {
-      return this.props.currentInterestOptions
-    }
-    if (name === 'perceivedRisk') {
-      return this.props.perceivedRiskOptions
-    }
+  // _typeOption = name => {
+  //   if (name === 'perceivedPrice') {
+  //     return this.props.perceivedPriceOptions
+  //   }
+  //   if (name === 'infoTransMomen') {
+  //     return this.props.infoTransMomenOptions
+  //   }
+  //   if (name === 'currentInterest') {
+  //     return this.props.currentInterestOptions
+  //   }
+  //   if (name === 'perceivedRisk') {
+  //     return this.props.perceivedRiskOptions
+  //   }
+  // }
+
+  componentWillReceiveProps (nextProps) {
+    console.log(nextProps)
   }
 
   _findItemArray = (name, id) => {
@@ -100,6 +104,9 @@ class MakeNewScorePage extends Component {
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
     this._findItemArray(name, value)
+
+    console.log(this.state.objectPrice.weight)
+
     this.setState({
       points: false
     })
