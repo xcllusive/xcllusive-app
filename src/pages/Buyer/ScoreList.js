@@ -14,6 +14,7 @@ import {
 
 import { getBusiness } from '../../redux/ducks/business'
 import { listScore } from '../../redux/ducks/score'
+import moment from 'moment'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -24,13 +25,13 @@ class ScoreListPage extends Component {
   }
 
   componentDidMount () {
-    console.log(this.props.match.params)
     this.props.listScore(this.props.match.params.id)
     this.props.getBusiness(this.props.match.params.id)
   }
 
   render () {
     const { listScoreList, history, business, isLoadingBusiness } = this.props
+    console.log(listScoreList)
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -88,11 +89,15 @@ class ScoreListPage extends Component {
                     {listScoreList.map(listScore => (
                       <Table.Row active key={listScore.id}>
                         <Table.Cell>
-                          {listScore.firstName} {listScore.surname}
+                          {moment(listScore.dateTimeCreated).format(
+                            'DD/MM/YYYY - HH:mm'
+                          )}
                         </Table.Cell>
-                        <Table.Cell>{listScore.buyerNotes}</Table.Cell>
+                        <Table.Cell>Score {listScore.id}</Table.Cell>
                         <Table.Cell>{30}</Table.Cell>
-                        <Table.Cell>{'Yes'}</Table.Cell>
+                        <Table.Cell>
+                          {listScore.dateSent ? 'Yes' : 'No'}
+                        </Table.Cell>
                         <Table.Cell>
                           <Icon
                             link

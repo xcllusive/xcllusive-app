@@ -19,7 +19,9 @@ const initialState = {
   listScore: {
     array: [],
     isLoading: false,
-    error: null
+    error: null,
+    pages: 0,
+    activePage: 1
   },
   create: {
     isLoading: false,
@@ -45,8 +47,9 @@ export default function reducer (state = initialState, action) {
         listScore: {
           ...state.listScore,
           isLoading: false,
-          array: action.payload,
-          error: null
+          error: null,
+          array: action.payload.data.rows,
+          pages: action.payload.itemCount
         }
       }
     case Types.LIST_SCORE_FAILURE:
@@ -96,7 +99,6 @@ export default function reducer (state = initialState, action) {
 // Action Creators
 
 export const listScore = businessId => async dispatch => {
-  console.log(businessId)
   dispatch({
     type: Types.LIST_SCORE_LOADING,
     payload: true
@@ -105,7 +107,7 @@ export const listScore = businessId => async dispatch => {
     const listScore = await list(businessId)
     dispatch({
       type: Types.LIST_SCORE_SUCCESS,
-      payload: listScore.data
+      payload: listScore
     })
   } catch (error) {
     dispatch({

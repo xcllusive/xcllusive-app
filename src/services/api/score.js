@@ -9,7 +9,6 @@ export const calculate = calculateScore => {
 }
 
 export const list = businessId => {
-  console.log(businessId)
   return request({
     method: 'get',
     url: '/score',
