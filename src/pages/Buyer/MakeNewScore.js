@@ -25,6 +25,7 @@ import CardScore from '../../components/content/CardScore'
 import { listScoreRegister } from '../../redux/ducks/scoreRegister'
 import { calculateScore } from '../../redux/ducks/score'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 
 class MakeNewScorePage extends Component {
   constructor (props) {
@@ -46,25 +47,6 @@ class MakeNewScorePage extends Component {
     this.props.listScoreRegister('currentInterest')
     this.props.listScoreRegister('perceivedRisk')
     this.props.setFieldValue('business_id', this.props.match.params.id)
-  }
-
-  // _typeOption = name => {
-  //   if (name === 'perceivedPrice') {
-  //     return this.props.perceivedPriceOptions
-  //   }
-  //   if (name === 'infoTransMomen') {
-  //     return this.props.infoTransMomenOptions
-  //   }
-  //   if (name === 'currentInterest') {
-  //     return this.props.currentInterestOptions
-  //   }
-  //   if (name === 'perceivedRisk') {
-  //     return this.props.perceivedRiskOptions
-  //   }
-  // }
-
-  componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
   }
 
   _findItemArray = (name, id) => {
@@ -122,6 +104,20 @@ class MakeNewScorePage extends Component {
           this.state.objectInterest.weight +
           this.state.objectRisk.weight) /
         5
+    })
+  }
+
+  _toggleModalConfirm = values => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Create New Score',
+        text: 'Are you sure you want to create a new score?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this._calculateScore(values)
+        }
+      }
     })
   }
 
@@ -706,7 +702,7 @@ class MakeNewScorePage extends Component {
                         <Button
                           color="red"
                           floated="right"
-                          onClick={() => this._calculateScore(values)}
+                          onClick={() => this._toggleModalConfirm(values)}
                         >
                           <Icon name="calculator" />
                           Calculate Your Score
@@ -787,7 +783,8 @@ MakeNewScorePage.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
-  touched: PropTypes.object
+  touched: PropTypes.object,
+  openModal: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -809,7 +806,7 @@ const mapPropsToValues = props => {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { getBusiness, listScoreRegister, calculateScore },
+    { getBusiness, listScoreRegister, calculateScore, openModal },
     dispatch
   )
 
