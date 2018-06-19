@@ -50,7 +50,7 @@ class MakeNewScorePage extends Component {
   }
 
   _findItemArray = (name, id) => {
-    if (name === 'perceivedPrice') {
+    if (name === 'perceivedPrice_id') {
       const object = _.find(this.props.perceivedPriceOptions, o => {
         return o.id === id
       })
@@ -58,7 +58,7 @@ class MakeNewScorePage extends Component {
         objectPrice: object
       })
     }
-    if (name === 'infoTransMomen') {
+    if (name === 'infoTransMomen_id') {
       const object = _.find(this.props.infoTransMomenOptions, o => {
         return o.id === id
       })
@@ -66,7 +66,7 @@ class MakeNewScorePage extends Component {
         objectMomentum: object
       })
     }
-    if (name === 'currentInterest') {
+    if (name === 'currentInterest_id') {
       const object = _.find(this.props.currentInterestOptions, o => {
         return o.id === id
       })
@@ -74,7 +74,7 @@ class MakeNewScorePage extends Component {
         objectInterest: object
       })
     }
-    if (name === 'perceivedRisk') {
+    if (name === 'perceivedRisk_id') {
       const object = _.find(this.props.perceivedRiskOptions, o => {
         return o.id === id
       })
@@ -367,9 +367,9 @@ class MakeNewScorePage extends Component {
                         options={mapArrayToValuesForDropdown(
                           perceivedPriceOptions
                         )}
-                        name="perceivedPrice"
-                        autoComplete="perceivedPrice"
-                        value={values.perceivedPrice}
+                        name="perceivedPrice_id"
+                        autoComplete="perceivedPrice_id"
+                        value={values.perceivedPrice_id}
                         onChange={this._handleSelectChange}
                       />
                     </Form.Group>
@@ -452,9 +452,9 @@ class MakeNewScorePage extends Component {
                         options={mapArrayToValuesForDropdown(
                           infoTransMomenOptions
                         )}
-                        name="infoTransMomen"
-                        autoComplete="infoTransMomen"
-                        value={values.infoTransMomen}
+                        name="infoTransMomen_id"
+                        autoComplete="infoTransMomen_id"
+                        value={values.infoTransMomen_id}
                         onChange={this._handleSelectChange}
                       />
                     </Form.Group>
@@ -539,9 +539,9 @@ class MakeNewScorePage extends Component {
                         options={mapArrayToValuesForDropdown(
                           currentInterestOptions
                         )}
-                        name="currentInterest"
-                        autoComplete="currentInterest"
-                        value={values.currentInterest}
+                        name="currentInterest_id"
+                        autoComplete="currentInterest_id"
+                        value={values.currentInterest_id}
                         onChange={this._handleSelectChange}
                       />
                     </Form.Group>
@@ -626,9 +626,9 @@ class MakeNewScorePage extends Component {
                         options={mapArrayToValuesForDropdown(
                           perceivedRiskOptions
                         )}
-                        name="perceivedRisk"
-                        autoComplete="perceivedRisk"
-                        value={values.perceivedRisk}
+                        name="perceivedRisk_id"
+                        autoComplete="perceivedRisk_id"
+                        value={values.perceivedRisk_id}
                         onChange={this._handleSelectChange}
                       />
                     </Form.Group>
@@ -789,10 +789,10 @@ MakeNewScorePage.propTypes = {
 
 const mapPropsToValues = props => {
   return {
-    perceivedPrice: '',
-    infoTransMomen: '',
-    currentInterest: '',
-    perceivedRisk: '',
+    perceivedPrice_id: '',
+    infoTransMomen_id: '',
+    currentInterest_id: '',
+    perceivedRisk_id: '',
     notesEnquiries: '',
     notesPrice: '',
     notesMomentum: '',

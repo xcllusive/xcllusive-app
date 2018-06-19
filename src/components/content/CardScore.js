@@ -2,9 +2,7 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Image, Card } from 'semantic-ui-react'
 
-const IconType = props => {
-  const { icon } = props
-
+const IconType = ({ icon }) => {
   if (icon < 30) {
     return (
       <Fragment>
