@@ -1,18 +1,26 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { calculate } from '../../services/api/score'
+import { list, calculate } from '../../services/api/score'
 
 // Action Types
 
 export const Types = {
   CALCULATE_SCORE_LOADING: 'CALCULATE_SCORE_LOADING',
   CALCULATE_SCORE_SUCCESS: 'CALCULATE_SCORE_SUCCESS',
-  CALCULATE_SCORE_FAILURE: 'CALCULATE_SCORE_FAILURE'
+  CALCULATE_SCORE_FAILURE: 'CALCULATE_SCORE_FAILURE',
+  LIST_SCORE_LOADING: 'LIST_SCORE_LOADING',
+  LIST_SCORE_SUCCESS: 'LIST_SCORE_SUCCESS',
+  LIST_SCORE_FAILURE: 'LIST_SCORE_FAILURE'
 }
 
 // Reducer
 
 const initialState = {
+  listScore: {
+    array: [],
+    isLoading: false,
+    error: null
+  },
   create: {
     isLoading: false,
     isCalculated: false,
@@ -22,6 +30,34 @@ const initialState = {
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
+    case Types.LIST_SCORE_LOADING:
+      return {
+        ...state,
+        listScore: {
+          ...state.listScore,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.LIST_SCORE_SUCCESS:
+      return {
+        ...state,
+        listScore: {
+          ...state.listScore,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.LIST_SCORE_FAILURE:
+      return {
+        ...state,
+        listScore: {
+          ...state.listScore,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CALCULATE_SCORE_LOADING:
       return {
         ...state,
@@ -58,6 +94,27 @@ export default function reducer (state = initialState, action) {
 }
 
 // Action Creators
+
+export const listScore = businessId => async dispatch => {
+  console.log(businessId)
+  dispatch({
+    type: Types.LIST_SCORE_LOADING,
+    payload: true
+  })
+  try {
+    const listScore = await list(businessId)
+    dispatch({
+      type: Types.LIST_SCORE_SUCCESS,
+      payload: listScore.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.LIST_SCORE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
 
 export const calculateScore = calculateScore => async dispatch => {
   dispatch({

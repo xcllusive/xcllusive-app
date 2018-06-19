@@ -105,9 +105,6 @@ class MakeNewScorePage extends Component {
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
     this._findItemArray(name, value)
-
-    console.log(this.state.objectPrice.weight)
-
     this.setState({
       points: false
     })

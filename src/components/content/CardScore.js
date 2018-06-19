@@ -50,40 +50,6 @@ class CardScore extends Component {
     this.state = { image: '', subtitle: '' }
   }
 
-<<<<<<< HEAD
-=======
-  _calculateIcon () {
-    if (this.props.icon < 30) {
-      console.log('1')
-      const src = 'https://image.flaticon.com/icons/svg/25/25327.svg'
-      const message = 'Needs urgent attention'
-      this.setState({
-        image: src,
-        subtitle: message
-      })
-    }
-    if (this.props.icon >= 30 && this.props.icon <= 59) {
-      console.log('2')
-      const src = 'https://image.flaticon.com/icons/svg/25/25693.svg'
-      const message = 'Possible improvement'
-      this.setState({
-        image: src,
-        subtitle: message
-      })
-    }
-    if (this.props.icon >= 60) {
-      console.log('3')
-      const src = 'https://image.flaticon.com/icons/svg/25/25361.svg'
-      const message = 'Satisfactory'
-      this.setState({
-        image: src,
-        subtitle: message
-      })
-    }
-    return this.state.image
-  }
-
->>>>>>> 8e448663839563fff7e0d5c0feca1c35d408c7c3
   render () {
     return (
       <Card fluid style={{ height: '100%' }}>

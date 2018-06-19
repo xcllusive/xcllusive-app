@@ -12,7 +12,8 @@ import {
   Icon
 } from 'semantic-ui-react'
 
-import { getBuyersFromBusiness, getBusiness } from '../../redux/ducks/business'
+import { getBusiness } from '../../redux/ducks/business'
+import { listScore } from '../../redux/ducks/score'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -23,12 +24,13 @@ class ScoreListPage extends Component {
   }
 
   componentDidMount () {
-    this.props.getBuyersFromBusiness(this.props.match.params.id)
+    console.log(this.props.match.params)
+    this.props.listScore(this.props.match.params.id)
     this.props.getBusiness(this.props.match.params.id)
   }
 
   render () {
-    const { listBuyersList, history, business, isLoadingBusiness } = this.props
+    const { listScoreList, history, business, isLoadingBusiness } = this.props
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -61,7 +63,7 @@ class ScoreListPage extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          {listBuyersList ? (
+          {listScoreList ? (
             <Grid padded="horizontally" style={{ marginTop: 0 }}>
               <Grid.Row>
                 <Table
@@ -83,13 +85,12 @@ class ScoreListPage extends Component {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {listBuyersList.map(buyersList => (
-                      <Table.Row active key={buyersList.Buyer.id}>
+                    {listScoreList.map(listScore => (
+                      <Table.Row active key={listScore.id}>
                         <Table.Cell>
-                          {buyersList.Buyer.firstName}{' '}
-                          {buyersList.Buyer.surname}
+                          {listScore.firstName} {listScore.surname}
                         </Table.Cell>
-                        <Table.Cell>{buyersList.Buyer.buyerNotes}</Table.Cell>
+                        <Table.Cell>{listScore.buyerNotes}</Table.Cell>
                         <Table.Cell>{30}</Table.Cell>
                         <Table.Cell>{'Yes'}</Table.Cell>
                         <Table.Cell>
@@ -140,18 +141,19 @@ class ScoreListPage extends Component {
 ScoreListPage.propTypes = {
   getBuyersFromBusiness: PropTypes.func,
   match: PropTypes.object,
-  listBuyersList: PropTypes.array,
+  listScoreList: PropTypes.array,
   history: PropTypes.object,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
-  isLoadingBusiness: PropTypes.bool
+  isLoadingBusiness: PropTypes.bool,
+  listScore: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBuyersFromBusiness, getBusiness }, dispatch)
+  bindActionCreators({ getBusiness, listScore }, dispatch)
 
 const mapStateToProps = state => ({
-  listBuyersList: state.business.getBuyersFromBusiness.array,
+  listScoreList: state.score.listScore.array,
   business: state.business.get.object,
   isLoadingBusiness: state.business.get.isLoading
 })
