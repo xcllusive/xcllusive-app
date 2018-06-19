@@ -22,10 +22,10 @@ import Wrapper from '../../../components/content/Wrapper'
 
 class ScoreRegisters extends Component {
   componentDidMount () {
-    this.props.listScoreRegister('perceivedPrice')
-    this.props.listScoreRegister('infoTransMomen')
-    this.props.listScoreRegister('currentInterest')
-    this.props.listScoreRegister('perceivedRisk')
+    this.props.listScoreRegister('perceivedPrice', 5)
+    this.props.listScoreRegister('infoTransMomen', 5)
+    this.props.listScoreRegister('currentInterest', 5)
+    this.props.listScoreRegister('perceivedRisk', 5)
   }
 
   _toggleModalConfirm = (id, registerType) => {
@@ -64,6 +64,7 @@ class ScoreRegisters extends Component {
   }
 
   _handlePaginationChange = (e, { activePage }, scoreRegisterType) => {
+    console.log(scoreRegisterType, activePage)
     this.props.listScoreRegister(scoreRegisterType, 5, activePage)
   }
 
@@ -105,7 +106,7 @@ class ScoreRegisters extends Component {
                   {this.props.perceivedPriceOptions.array.map(
                     perceivedPriceOptions => {
                       return (
-                        <Table.Row active key={perceivedPriceOptions.weight}>
+                        <Table.Row active key={perceivedPriceOptions.id}>
                           <Table.Cell>{perceivedPriceOptions.label}</Table.Cell>
                           <Table.Cell>
                             {perceivedPriceOptions.textReport}
@@ -145,7 +146,7 @@ class ScoreRegisters extends Component {
               <Pagination
                 size="mini"
                 onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 1)
+                  this._handlePaginationChange(e, data, 'perceivedPrice')
                 }
                 defaultActivePage={this.props.perceivedPriceOptions.activePage}
                 totalPages={this.props.perceivedPriceOptions.pages}
@@ -177,7 +178,7 @@ class ScoreRegisters extends Component {
                   {this.props.infoTransMomenOptions.array.map(
                     infoTransMomenOptions => {
                       return (
-                        <Table.Row active key={infoTransMomenOptions.weight}>
+                        <Table.Row active key={infoTransMomenOptions.id}>
                           <Table.Cell>{infoTransMomenOptions.label}</Table.Cell>
                           <Table.Cell>
                             {infoTransMomenOptions.textReport}
@@ -217,7 +218,7 @@ class ScoreRegisters extends Component {
               <Pagination
                 size="mini"
                 onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 1)
+                  this._handlePaginationChange(e, data, 'infoTransMomen')
                 }
                 defaultActivePage={this.props.infoTransMomenOptions.activePage}
                 totalPages={this.props.infoTransMomenOptions.pages}
@@ -249,7 +250,7 @@ class ScoreRegisters extends Component {
                   {this.props.currentInterestOptions.array.map(
                     currentInterestOptions => {
                       return (
-                        <Table.Row active key={currentInterestOptions.weight}>
+                        <Table.Row active key={currentInterestOptions.id}>
                           <Table.Cell>
                             {currentInterestOptions.label}
                           </Table.Cell>
@@ -291,7 +292,7 @@ class ScoreRegisters extends Component {
               <Pagination
                 size="mini"
                 onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 1)
+                  this._handlePaginationChange(e, data, 'currentInterest')
                 }
                 defaultActivePage={this.props.currentInterestOptions.activePage}
                 totalPages={this.props.currentInterestOptions.pages}
@@ -323,7 +324,7 @@ class ScoreRegisters extends Component {
                   {this.props.perceivedRiskOptions.array.map(
                     perceivedRiskOptions => {
                       return (
-                        <Table.Row active key={perceivedRiskOptions.weight}>
+                        <Table.Row active key={perceivedRiskOptions.id}>
                           <Table.Cell>{perceivedRiskOptions.label}</Table.Cell>
                           <Table.Cell>
                             {perceivedRiskOptions.textReport}
@@ -361,7 +362,7 @@ class ScoreRegisters extends Component {
               <Pagination
                 size="mini"
                 onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 1)
+                  this._handlePaginationChange(e, data, 'perceivedRisk')
                 }
                 defaultActivePage={this.props.perceivedRiskOptions.activePage}
                 totalPages={this.props.perceivedRiskOptions.pages}

@@ -45,6 +45,7 @@ class MakeNewScorePage extends Component {
     this.props.listScoreRegister('infoTransMomen')
     this.props.listScoreRegister('currentInterest')
     this.props.listScoreRegister('perceivedRisk')
+    this.props.setFieldValue('business_id', this.props.match.params.id)
   }
 
   _typeOption = name => {

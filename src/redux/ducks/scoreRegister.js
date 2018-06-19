@@ -207,7 +207,7 @@ export default function reducer (state = initialState, action) {
 
 export const listScoreRegister = (
   scoreRegisterType,
-  limit = 5,
+  limit = null,
   page = null
 ) => async dispatch => {
   dispatch({
