@@ -31,7 +31,6 @@ class ScoreListPage extends Component {
 
   render () {
     const { listScoreList, history, business, isLoadingBusiness } = this.props
-    console.log(listScoreList)
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -103,7 +102,13 @@ class ScoreListPage extends Component {
                             link
                             name="edit"
                             size="large"
-                            // onClick={() => this._editBusiness(sourceOptions, 1)}
+                            onClick={() =>
+                              history.push(
+                                `/buyer/business/${
+                                  business.id
+                                }/make-new-score/${listScore.id}`
+                              )
+                            }
                           />
                         </Table.Cell>
                         <Table.Cell>

@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { list, calculate } from '../../services/api/score'
+import { list, calculate, get } from '../../services/api/score'
 
 // Action Types
 
@@ -10,7 +10,11 @@ export const Types = {
   CALCULATE_SCORE_FAILURE: 'CALCULATE_SCORE_FAILURE',
   LIST_SCORE_LOADING: 'LIST_SCORE_LOADING',
   LIST_SCORE_SUCCESS: 'LIST_SCORE_SUCCESS',
-  LIST_SCORE_FAILURE: 'LIST_SCORE_FAILURE'
+  LIST_SCORE_FAILURE: 'LIST_SCORE_FAILURE',
+  GET_SCORE_LOADING: 'GET_SCORE_LOADING',
+  GET_SCORE_SUCCESS: 'GET_SCORE_SUCCESS',
+  GET_SCORE_FAILURE: 'GET_SCORE_FAILURE',
+  CLEAR_SCORE: 'CLEAR_SCORE'
 }
 
 // Reducer
@@ -26,6 +30,11 @@ const initialState = {
   create: {
     isLoading: false,
     isCalculated: false,
+    error: null
+  },
+  get: {
+    object: null,
+    isLoading: false,
     error: null
   }
 }
@@ -91,6 +100,37 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_SCORE_LOADING:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: action.payload,
+          object: null,
+          error: null
+        }
+      }
+    case Types.GET_SCORE_SUCCESS:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_SCORE_FAILURE:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.CLEAR_SCORE:
+      return initialState
     default:
       return state
   }
@@ -118,6 +158,26 @@ export const listScore = businessId => async dispatch => {
   }
 }
 
+export const getScore = idScore => async dispatch => {
+  dispatch({
+    type: Types.GET_SCORE_LOADING,
+    payload: true
+  })
+  try {
+    const getScore = await get(idScore)
+    dispatch({
+      type: Types.GET_SCORE_SUCCESS,
+      payload: getScore.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_SCORE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
 export const calculateScore = calculateScore => async dispatch => {
   dispatch({
     type: Types.CALCULATE_SCORE_LOADING,
@@ -139,4 +199,10 @@ export const calculateScore = calculateScore => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const clearScore = () => dispatch => {
+  dispatch({
+    type: Types.CLEAR_SCORE
+  })
 }

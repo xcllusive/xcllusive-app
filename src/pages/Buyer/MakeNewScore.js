@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
+import Yup from 'yup'
 import {
   Grid,
   Header,
@@ -23,7 +24,7 @@ import { getBusiness } from '../../redux/ducks/business'
 import Wrapper from '../../components/content/Wrapper'
 import CardScore from '../../components/content/CardScore'
 import { listScoreRegister } from '../../redux/ducks/scoreRegister'
-import { calculateScore } from '../../redux/ducks/score'
+import { calculateScore, getScore, clearScore } from '../../redux/ducks/score'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 
@@ -41,13 +42,29 @@ class MakeNewScorePage extends Component {
   }
 
   componentDidMount () {
-    this.props.getBusiness(this.props.match.params.id)
+    this.props.getBusiness(this.props.match.params.idBusiness)
+    if (this.props.match.params.idScore) {
+      this.props.getScore(this.props.match.params.idScore)
+    }
     this.props.listScoreRegister('perceivedPrice')
     this.props.listScoreRegister('infoTransMomen')
     this.props.listScoreRegister('currentInterest')
     this.props.listScoreRegister('perceivedRisk')
-    this.props.setFieldValue('business_id', this.props.match.params.id)
+    this.props.setFieldValue('business_id', this.props.match.params.idBusiness)
   }
+
+  componentWillUnmount () {
+    this.props.clearScore()
+  }
+
+  // componentWillReceiveProps (nextProps) {
+  //   console.log(nextProps)
+  //   if (
+  //     nextProps.perceivedPriceOptions.id !== this.props.score.perceivedPrice.id
+  //   ) {
+  //     this._findItemArray()
+  //   }
+  // }
 
   _findItemArray = (name, id) => {
     if (name === 'perceivedPrice_id') {
@@ -121,6 +138,30 @@ class MakeNewScorePage extends Component {
     })
   }
 
+  _thisScore () {
+    if (this.props.score) {
+      return (
+        (this.props.score.perceivedPrice.weight +
+          this.props.score.infoTransMomen.weight +
+          this.props.score.currentInterest.weight +
+          this.props.score.perceivedRisk.weight) /
+        5
+      )
+    }
+  }
+
+  _dateSent () {
+    if (this.props.score) {
+      if (this.props.score.dateSent !== null) {
+        return this.props.score.dateSent
+      } else {
+        return '#'
+      }
+    } else {
+      return '#'
+    }
+  }
+
   render () {
     const {
       history,
@@ -134,7 +175,9 @@ class MakeNewScorePage extends Component {
       handleChange,
       handleBlur,
       errors,
-      touched
+      touched,
+      isValid,
+      score
     } = this.props
     return (
       <Wrapper>
@@ -186,7 +229,7 @@ class MakeNewScorePage extends Component {
                 <Statistic.Group size="tiny" widths={4}>
                   <Statistic>
                     <Statistic.Value>
-                      {this.state.thisScore ? this.state.thisScore : '#'}
+                      {this.props.score ? this._thisScore() : '#'}
                     </Statistic.Value>
                     <Statistic.Label>This Score</Statistic.Label>
                   </Statistic>
@@ -199,7 +242,7 @@ class MakeNewScorePage extends Component {
                     <Statistic.Label>Sent</Statistic.Label>
                   </Statistic>
                   <Statistic>
-                    <Statistic.Value>#</Statistic.Value>
+                    <Statistic.Value>{this._dateSent()}</Statistic.Value>
                     <Statistic.Label>Date Sent</Statistic.Label>
                   </Statistic>
                 </Statistic.Group>
@@ -406,12 +449,14 @@ class MakeNewScorePage extends Component {
                 <CardScore
                   header="Percieved Price from Buyers Generated Text"
                   title={
-                    this.state.objectPrice
-                      ? this.state.objectPrice.textReport
-                      : ' '
+                    score
+                      ? score.perceivedPrice.textReport
+                      : this.state.objectPrice.textReport
                   }
                   icon={
-                    this.state.objectPrice ? this.state.objectPrice.weight : 0
+                    score
+                      ? score.perceivedPrice.weight
+                      : this.state.objectPrice.weight
                   }
                 />
               </Grid.Column>
@@ -491,14 +536,14 @@ class MakeNewScorePage extends Component {
                 <CardScore
                   header="Information/Transparency/Momentum Generated Text:"
                   title={
-                    this.state.objectMomentum
-                      ? this.state.objectMomentum.textReport
-                      : ' '
+                    score
+                      ? score.infoTransMomen.textReport
+                      : this.state.objectMomentum.textReport
                   }
                   icon={
-                    this.state.objectMomentum
-                      ? this.state.objectMomentum.weight
-                      : 0
+                    score
+                      ? score.infoTransMomen.weight
+                      : this.state.objectMomentum.weight
                   }
                 />
               </Grid.Column>
@@ -578,14 +623,14 @@ class MakeNewScorePage extends Component {
                 <CardScore
                   header="Current Interest Generated Text:"
                   title={
-                    this.state.objectInterest
-                      ? this.state.objectInterest.textReport
-                      : ' '
+                    score
+                      ? score.currentInterest.textReport
+                      : this.state.objectInterest.textReport
                   }
                   icon={
-                    this.state.objectInterest
-                      ? this.state.objectInterest.weight
-                      : 0
+                    score
+                      ? score.currentInterest.weight
+                      : this.state.objectInterest.weight
                   }
                 />
               </Grid.Column>
@@ -665,12 +710,14 @@ class MakeNewScorePage extends Component {
                 <CardScore
                   header="Buyer Percieved Risk Generated Text:"
                   title={
-                    this.state.objectRisk
-                      ? this.state.objectRisk.textReport
-                      : ' '
+                    score
+                      ? score.perceivedRisk.textReport
+                      : this.state.objectRisk.textReport
                   }
                   icon={
-                    this.state.objectRisk ? this.state.objectRisk.weight : 0
+                    score
+                      ? score.perceivedRisk.weight
+                      : this.state.objectRisk.weight
                   }
                 />
               </Grid.Column>
@@ -703,6 +750,7 @@ class MakeNewScorePage extends Component {
                           color="red"
                           floated="right"
                           onClick={() => this._toggleModalConfirm(values)}
+                          disabled={!isValid}
                         >
                           <Icon name="calculator" />
                           Calculate Your Score
@@ -712,9 +760,7 @@ class MakeNewScorePage extends Component {
                         <Statistic.Group size="tiny" widths={1}>
                           <Statistic floated="left">
                             <Statistic.Value>
-                              {this.state.thisScore
-                                ? this.state.thisScore
-                                : '#'}
+                              {this.props.score ? this._thisScore() : '#'}
                             </Statistic.Value>
                             <Statistic.Label>This Score</Statistic.Label>
                           </Statistic>
@@ -784,29 +830,71 @@ MakeNewScorePage.propTypes = {
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  isValid: PropTypes.bool,
+  getScore: PropTypes.func,
+  score: PropTypes.object,
+  clearScore: PropTypes.func
 }
 
 const mapPropsToValues = props => {
   return {
-    perceivedPrice_id: '',
-    infoTransMomen_id: '',
-    currentInterest_id: '',
-    perceivedRisk_id: '',
-    notesEnquiries: '',
-    notesPrice: '',
-    notesMomentum: '',
-    notesInterest: '',
-    notesRisk: '',
-    yours: '',
-    avg: '',
-    diff: ''
+    yours: props.score ? props.score.yours : '',
+    avg: props.score ? props.score.avg : '',
+    diff: props.score ? props.score.diff : '',
+    notesEnquiries: props.score ? props.score.notesEnquiries : '',
+    perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
+    notesPrice: props.score ? props.score.notesPrice : '',
+    infoTransMomen_id: props.score ? props.score.infoTransMomen_id : '',
+    notesMomentum: props.score ? props.score.notesMomentum : '',
+    currentInterest_id: props.score ? props.score.currentInterest_id : '',
+    notesInterest: props.score ? props.score.notesInterest : '',
+    perceivedRisk_id: props.score ? props.score.perceivedRisk_id : '',
+    notesRisk: props.score ? props.score.notesRisk : ''
   }
 }
 
+const validationSchema = Yup.object().shape({
+  notesEnquiries: Yup.string().max(
+    420,
+    'This notes requires maximum of 420 characteres'
+  ),
+  perceivedPrice_id: Yup.string().required(
+    'Perceived Price from Buyers is required.'
+  ),
+  notesPrice: Yup.string().max(
+    420,
+    'This notes requires maximum of 420 characteres'
+  ),
+  infoTransMomen_id: Yup.string().required(
+    'Information / Transparency / Momentum is required.'
+  ),
+  notesMomentum: Yup.string().max(
+    420,
+    'This notes requires maximum of 420 characteres'
+  ),
+  currentInterest_id: Yup.string().required('Current Interest is required.'),
+  notesInterest: Yup.string().max(
+    420,
+    'This notes requires maximum of 420 characteres'
+  ),
+  perceivedRisk_id: Yup.string().required('Buyer Perceived Risk is required.'),
+  notesRisk: Yup.string().max(
+    420,
+    'This notes requires maximum of 420 characteres'
+  )
+})
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { getBusiness, listScoreRegister, calculateScore, openModal },
+    {
+      getBusiness,
+      listScoreRegister,
+      calculateScore,
+      openModal,
+      getScore,
+      clearScore
+    },
     dispatch
   )
 
@@ -816,7 +904,8 @@ const mapStateToProps = state => ({
   perceivedPriceOptions: state.scoreRegister.get.perceivedPrice.array,
   infoTransMomenOptions: state.scoreRegister.get.infoTransMomen.array,
   currentInterestOptions: state.scoreRegister.get.currentInterest.array,
-  perceivedRiskOptions: state.scoreRegister.get.perceivedRisk.array
+  perceivedRiskOptions: state.scoreRegister.get.perceivedRisk.array,
+  score: state.score.get.object
 })
 
 export default connect(
@@ -825,6 +914,7 @@ export default connect(
 )(
   withFormik({
     mapPropsToValues,
+    validationSchema,
     enableReinitialize: true
   })(MakeNewScorePage)
 )

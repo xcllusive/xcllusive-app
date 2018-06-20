@@ -141,7 +141,12 @@ const Layout = ({ match, logout, menu }) => (
       <Route
         exact
         component={MakeNewScore}
-        path={`${match.path}buyer/business/:id/make-new-score`}
+        path={`${match.path}buyer/business/:idBusiness/make-new-score`}
+      />
+      <Route
+        exact
+        component={MakeNewScore}
+        path={`${match.path}buyer/business/:idBusiness/make-new-score/:idScore`}
       />
       <Route
         render={() => <span>presale</span>}

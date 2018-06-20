@@ -15,3 +15,10 @@ export const list = businessId => {
     params: { businessId }
   })
 }
+
+export const get = scoreId => {
+  return request({
+    method: 'get',
+    url: `/score/${scoreId}`
+  })
+}
