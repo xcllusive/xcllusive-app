@@ -36,8 +36,8 @@ class MakeNewScorePage extends Component {
       objectMomentum: {},
       objectInterest: {},
       objectRisk: {},
-      points: false,
-      thisScore: null
+      thisScore: null,
+      perceivedPriceChange: false
     }
   }
 
@@ -57,14 +57,20 @@ class MakeNewScorePage extends Component {
     this.props.clearScore()
   }
 
-  // componentWillReceiveProps (nextProps) {
-  //   console.log(nextProps)
-  //   if (
-  //     nextProps.perceivedPriceOptions.id !== this.props.score.perceivedPrice.id
-  //   ) {
-  //     this._findItemArray()
-  //   }
-  // }
+  componentWillReceiveProps (nextProps) {
+    if (
+      this.props.score !== null &&
+      nextProps.values.perceivedPrice_id !== this.props.score.perceivedPrice.id
+    ) {
+      this._findItemArray(
+        'perceivedPrice_id',
+        nextProps.values.perceivedPrice_id
+      )
+      this.setState({
+        perceivedPriceChange: true
+      })
+    }
+  }
 
   _findItemArray = (name, id) => {
     if (name === 'perceivedPrice_id') {
@@ -104,16 +110,10 @@ class MakeNewScorePage extends Component {
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
     this._findItemArray(name, value)
-    this.setState({
-      points: false
-    })
   }
 
   _calculateScore = values => {
     this.props.calculateScore(values)
-    this.setState({
-      points: true
-    })
     this.setState({
       thisScore:
         (this.state.objectPrice.weight +
@@ -396,7 +396,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.points
+                          {this.state.objectPrice.weight
                             ? this.state.objectPrice.weight
                             : null}
                         </Header>
@@ -454,7 +454,7 @@ class MakeNewScorePage extends Component {
                       : this.state.objectPrice.textReport
                   }
                   icon={
-                    score
+                    score && !this.state.perceivedPriceChange
                       ? score.perceivedPrice.weight
                       : this.state.objectPrice.weight
                   }
@@ -483,7 +483,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.points
+                          {this.state.objectMomentum.weight
                             ? this.state.objectMomentum.weight
                             : null}
                         </Header>
@@ -570,7 +570,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.points
+                          {this.state.objectInterest.weight
                             ? this.state.objectInterest.weight
                             : null}
                         </Header>
@@ -657,7 +657,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.points
+                          {this.state.objectRisk.weight
                             ? this.state.objectRisk.weight
                             : null}
                         </Header>
