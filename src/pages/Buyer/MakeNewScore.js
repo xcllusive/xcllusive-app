@@ -24,7 +24,12 @@ import { getBusiness } from '../../redux/ducks/business'
 import Wrapper from '../../components/content/Wrapper'
 import CardScore from '../../components/content/CardScore'
 import { listScoreRegister } from '../../redux/ducks/scoreRegister'
-import { calculateScore, getScore, clearScore } from '../../redux/ducks/score'
+import {
+  calculateScore,
+  getScore,
+  clearScore,
+  updateScore
+} from '../../redux/ducks/score'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 
@@ -36,7 +41,6 @@ class MakeNewScorePage extends Component {
       objectMomentum: {},
       objectInterest: {},
       objectRisk: {},
-      thisScore: null,
       perceivedPriceChange: false,
       infoTransMomenChange: false,
       currentInterestChange: false,
@@ -149,30 +153,22 @@ class MakeNewScorePage extends Component {
     this._findItemArray(name, value)
   }
 
-  _calculateScore = values => {
-    this.props.calculateScore(values)
-    this.setState({
-      thisScore:
-        (this.state.objectPrice.weight +
-          this.state.objectMomentum.weight +
-          this.state.objectInterest.weight +
-          this.state.objectRisk.weight) /
-        5
-    })
-  }
-
   _toggleModalConfirm = values => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
-      options: {
-        title: 'Create New Score',
-        text: 'Are you sure you want to create a new score?'
-      },
-      onConfirm: isConfirmed => {
-        if (isConfirmed) {
-          this._calculateScore(values)
+    if (this.props.score) {
+      this.props.updateScore()
+    } else {
+      this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+        options: {
+          title: 'Create New Score',
+          text: 'Are you sure you want to create a new score?'
+        },
+        onConfirm: isConfirmed => {
+          if (isConfirmed) {
+            this.props.calculateScore(values)
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   _thisScore () {
@@ -883,7 +879,8 @@ MakeNewScorePage.propTypes = {
   isValid: PropTypes.bool,
   getScore: PropTypes.func,
   score: PropTypes.object,
-  clearScore: PropTypes.func
+  clearScore: PropTypes.func,
+  updateScore: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -942,7 +939,8 @@ const mapDispatchToProps = dispatch =>
       calculateScore,
       openModal,
       getScore,
-      clearScore
+      clearScore,
+      updateScore
     },
     dispatch
   )

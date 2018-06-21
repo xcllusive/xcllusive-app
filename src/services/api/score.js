@@ -22,3 +22,12 @@ export const get = scoreId => {
     url: `/score/${scoreId}`
   })
 }
+
+export const update = score => {
+  console.log('test')
+  // return request({
+  //   method: 'put',
+  //   url: `/score/${score.id}`,
+  //   data: score
+  // })
+}

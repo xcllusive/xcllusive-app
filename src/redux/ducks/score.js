@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { list, calculate, get } from '../../services/api/score'
+import { list, calculate, get, update } from '../../services/api/score'
 
 // Action Types
 
@@ -14,7 +14,10 @@ export const Types = {
   GET_SCORE_LOADING: 'GET_SCORE_LOADING',
   GET_SCORE_SUCCESS: 'GET_SCORE_SUCCESS',
   GET_SCORE_FAILURE: 'GET_SCORE_FAILURE',
-  CLEAR_SCORE: 'CLEAR_SCORE'
+  CLEAR_SCORE: 'CLEAR_SCORE',
+  UPDATE_SCORE_LOADING: 'UPDATE_SCORE_LOADING',
+  UPDATE_SCORE_SUCCESS: 'UPDATE_SCORE_SUCCESS',
+  UPDATE_SCORE_FAILURE: 'UPDATE_SCORE_FAILURE'
 }
 
 // Reducer
@@ -27,7 +30,7 @@ const initialState = {
     pages: 0,
     activePage: 1
   },
-  create: {
+  calculateScore: {
     isLoading: false,
     isCalculated: false,
     error: null
@@ -35,6 +38,11 @@ const initialState = {
   get: {
     object: null,
     isLoading: false,
+    error: null
+  },
+  update: {
+    isLoading: false,
+    isUpdated: false,
     error: null
   }
 }
@@ -205,4 +213,24 @@ export const clearScore = () => dispatch => {
   dispatch({
     type: Types.CLEAR_SCORE
   })
+}
+
+export const updateScore = updateScore => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_SCORE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await update(updateScore)
+    dispatch({
+      type: Types.UPDATE_SCORE_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_SCORE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
 }
