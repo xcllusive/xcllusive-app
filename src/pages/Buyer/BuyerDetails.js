@@ -32,14 +32,13 @@ import {
   createNewLog,
   updateBuyerLog,
   getBusinessBuyerLog,
-  clearBuyerLog
+  clearBuyerLog,
+  finaliseBuyerLog
 } from '../../redux/ducks/buyerLog'
 import { getBusiness } from '../../redux/ducks/business'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
-import {
-  getBuyerRegister
-} from '../../redux/ducks/buyerRegister'
+import { getBuyerRegister } from '../../redux/ducks/buyerRegister'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -118,7 +117,7 @@ class BuyerDetails extends Component {
   }
 
   _handlePaginationChange = (e, { activePage }) => {
-    this.setState({activePage})
+    this.setState({ activePage })
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
       this.props.match.params.idBusiness,
@@ -144,6 +143,19 @@ class BuyerDetails extends Component {
       this.props.updateBuyer(updateBuyer)
       this.props.updateBuyerLog(this.props.values)
     }
+    this.props.getBusinessBuyerLog(
+      this.props.match.params.idBuyer,
+      this.props.match.params.idBusiness,
+      5,
+      this.state.activePage
+    )
+  }
+
+  _finaliseLog = () => {
+    this.props.finaliseBuyerLog(
+      this.props.match.params.idBusiness,
+      this.props.match.params.idBuyer
+    )
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
       this.props.match.params.idBusiness,
@@ -268,6 +280,16 @@ class BuyerDetails extends Component {
                 >
                   <Icon name="save" />
                   Save
+                </Button>
+                <Button
+                  color="orange"
+                  // disabled={isSubmitting || !isValid}
+                  // loading={}
+                  onClick={() => this._finaliseLog()}
+                  size="small"
+                >
+                  <Icon name="mail" />
+                  Finalise Log
                 </Button>
                 <Button
                   color="yellow"
@@ -516,7 +538,8 @@ const mapDispatchToProps = dispatch =>
       updateBuyer,
       updateBuyerLog,
       createNewLog,
-      getBuyerRegister
+      getBuyerRegister,
+      finaliseBuyerLog
     },
     dispatch
   )
@@ -551,7 +574,8 @@ BuyerDetails.propTypes = {
   isLoadingPreviousBusiness: PropTypes.bool,
   isLoadingLogTable: PropTypes.bool,
   getBuyerRegister: PropTypes.func,
-  typeOptions: PropTypes.array
+  typeOptions: PropTypes.array,
+  finaliseBuyerLog: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -582,7 +606,10 @@ const mapStateToProps = state => ({
   typeOptions: state.buyerRegister.get.type.array
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     enableReinitialize: true

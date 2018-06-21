@@ -1,4 +1,10 @@
-import { get, create, update, getBusBuyLog } from '../../services/api/buyerLog'
+import {
+  get,
+  create,
+  update,
+  getBusBuyLog,
+  finaliseLog
+} from '../../services/api/buyerLog'
 import { toast } from 'react-toastify'
 
 // Action Types
@@ -16,7 +22,10 @@ export const Types = {
   UPDATE_BUYER_LOG_FAILURE: 'UPDATE_BUYER_LOG_FAILURE',
   GET_BUS_BUY_LOG_LOADING: 'GET_BUS_BUY_LOG_LOADING',
   GET_BUS_BUY_LOG_SUCCESS: 'GET_BUS_BUY_LOG_SUCCESS',
-  GET_BUS_BUY_LOG_FAILURE: 'GET_BUS_BUY_LOG_FAILURE'
+  GET_BUS_BUY_LOG_FAILURE: 'GET_BUS_BUY_LOG_FAILURE',
+  FINALISE_LOG_BUYER_LOADING: 'FINALISE_LOG_BUYER_LOADING',
+  FINALISE_LOG_BUYER_SUCCESS: 'FINALISE_LOG_BUYER_SUCCESS',
+  FINALISE_LOG_BUYER_FAILURE: 'FINALISE_LOG_BUYER_FAILURE'
 }
 
 // Reducer
@@ -46,6 +55,11 @@ const initialState = {
     error: null,
     pages: 0,
     activePage: 1
+  },
+  finaliseLog: {
+    isLoading: false,
+    isFinalised: false,
+    error: null
   }
 }
 
@@ -171,6 +185,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.FINALISE_LOG_BUYER_LOADING:
+      return {
+        ...state,
+        finaliseLog: {
+          ...state.finaliseLog,
+          isLoading: action.payload,
+          isFinalised: false,
+          error: null
+        }
+      }
+    case Types.FINALISE_LOG_BUYER_SUCCESS:
+      return {
+        ...state,
+        finaliseLog: {
+          ...state.finaliseLog,
+          isLoading: false,
+          isFinalised: true
+        }
+      }
+    case Types.FINALISE_LOG_BUYER_FAILURE:
+      return {
+        ...state,
+        finaliseLog: {
+          ...state.finaliseLog,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -265,6 +307,26 @@ export const getBusinessBuyerLog = (
   } catch (error) {
     dispatch({
       type: Types.GET_BUS_BUY_LOG_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const finaliseBuyerLog = (businessId, buyerId) => async dispatch => {
+  dispatch({
+    type: Types.FINALISE_LOG_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await finaliseLog(businessId, buyerId)
+    dispatch({
+      type: Types.FINALISE_LOG_BUYER_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.FINALISE_LOG_BUYER_FAILURE,
       payload: error
     })
     toast.error(error)
