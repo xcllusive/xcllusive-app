@@ -108,6 +108,12 @@ class ModalGroupEmail extends Component {
                 <Dimmer inverted active={isLoadingGroupEmail}>
                   <Loader>Loading</Loader>
                 </Dimmer>
+                <Form.Checkbox
+                  label="Mark All"
+                  name="markAll"
+                  values={listGroupEmail}
+                  onChange={this._checkBoxArray}
+                />
                 <Table celled compact definition>
                   <Table.Body>
                     {listGroupEmail.map((groupEmail, index) => (

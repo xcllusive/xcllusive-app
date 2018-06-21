@@ -37,7 +37,10 @@ class MakeNewScorePage extends Component {
       objectInterest: {},
       objectRisk: {},
       thisScore: null,
-      perceivedPriceChange: false
+      perceivedPriceChange: false,
+      infoTransMomenChange: false,
+      currentInterestChange: false,
+      perceivedRiskChange: false
     }
   }
 
@@ -68,6 +71,40 @@ class MakeNewScorePage extends Component {
       )
       this.setState({
         perceivedPriceChange: true
+      })
+    }
+    if (
+      this.props.score !== null &&
+      nextProps.values.infoTransMomen_id !== this.props.score.infoTransMomen.id
+    ) {
+      this._findItemArray(
+        'infoTransMomen_id',
+        nextProps.values.infoTransMomen_id
+      )
+      this.setState({
+        infoTransMomenChange: true
+      })
+    }
+    if (
+      this.props.score !== null &&
+      nextProps.values.currentInterest_id !==
+        this.props.score.currentInterest.id
+    ) {
+      this._findItemArray(
+        'currentInterest_id',
+        nextProps.values.currentInterest_id
+      )
+      this.setState({
+        currentInterestChange: true
+      })
+    }
+    if (
+      this.props.score !== null &&
+      nextProps.values.perceivedRisk_id !== this.props.score.perceivedRisk.id
+    ) {
+      this._findItemArray('perceivedRisk_id', nextProps.values.perceivedRisk_id)
+      this.setState({
+        perceivedRiskChange: true
       })
     }
   }
@@ -541,7 +578,7 @@ class MakeNewScorePage extends Component {
                       : this.state.objectMomentum.textReport
                   }
                   icon={
-                    score
+                    score && !this.state.infoTransMomenChange
                       ? score.infoTransMomen.weight
                       : this.state.objectMomentum.weight
                   }
@@ -628,7 +665,7 @@ class MakeNewScorePage extends Component {
                       : this.state.objectInterest.textReport
                   }
                   icon={
-                    score
+                    score && !this.state.currentInterestChange
                       ? score.currentInterest.weight
                       : this.state.objectInterest.weight
                   }
@@ -715,7 +752,7 @@ class MakeNewScorePage extends Component {
                       : this.state.objectRisk.textReport
                   }
                   icon={
-                    score
+                    score && !this.state.perceivedRiskChange
                       ? score.perceivedRisk.weight
                       : this.state.objectRisk.weight
                   }
@@ -744,9 +781,10 @@ class MakeNewScorePage extends Component {
               <Grid.Column>
                 <Segment>
                   <Grid style={{ marginTop: 0 }}>
-                    <Grid.Row columns={2}>
+                    <Grid.Row columns={3}>
                       <Grid.Column>
                         <Button
+                          icon
                           color="red"
                           floated="right"
                           onClick={() => this._toggleModalConfirm(values)}
@@ -765,6 +803,17 @@ class MakeNewScorePage extends Component {
                             <Statistic.Label>This Score</Statistic.Label>
                           </Statistic>
                         </Statistic.Group>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Button
+                          color="yellow"
+                          floated="right"
+                          // onClick={() => this._toggleModalConfirm(values)}
+                          disabled={!isValid}
+                        >
+                          <Icon name="send" />
+                          Send Score
+                        </Button>
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>

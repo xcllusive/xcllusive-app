@@ -29,7 +29,7 @@ class StageSalesMemoForm extends Component {
         value: item.firstName
       }))
     }
-    return [{ key: 1, text: 'Nenhum usuario encontrado', value: null }]
+    return [{ key: 1, text: 'None users found', value: null }]
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -257,68 +257,6 @@ class StageSalesMemoForm extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <Form.Field>
-                <Form.Input
-                  required
-                  label="Minimum Com $"
-                  name="minimumCharge"
-                  autoComplete="minimumCharge"
-                  value={values.minimumCharge}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.minimumCharge &&
-                  touched.minimumCharge && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.minimumCharge}
-                  />
-                )}
-              </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  required
-                  label="Appraisal High $"
-                  name="appraisalHigh"
-                  autoComplete="appraisalHigh"
-                  value={values.appraisalHigh}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.appraisalHigh &&
-                  touched.appraisalHigh && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.appraisalHigh}
-                  />
-                )}
-              </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  required
-                  label="Appraisal Low $"
-                  name="appraisalLow"
-                  autoComplete="appraisalLow"
-                  value={values.appraisalLow}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.appraisalLow &&
-                  touched.appraisalLow && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.appraisalLow}
-                  />
-                )}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
               <Form.Checkbox
                 label="Mark all `Pending` communications with this Vendor as `Done`"
                 name="pendingDone"
@@ -388,8 +326,7 @@ const mapPropsToValues = props => {
       businessType: typeId,
       businessIndustry: industryId,
       businessRating: ratingId,
-      staffAccountName,
-      minimumCharge: '10000.00'
+      staffAccountName
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     return _.mapValues(business, value => (value === null ? '' : value))
@@ -413,10 +350,7 @@ const validationSchema = Yup.object().shape({
   businessRating: Yup.string().required('This field is required.'),
   listedPrice: Yup.string().required('This field is required.'),
   engagementFee: Yup.string().required('This field is required.'),
-  commissionPerc: Yup.string().required('This field is required.'),
-  minimumCharge: Yup.string().required('This field is required.'),
-  appraisalHigh: Yup.string().required('This field is required.'),
-  appraisalLow: Yup.string().required('This field is required.')
+  commissionPerc: Yup.string().required('This field is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
@@ -438,7 +372,10 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({ updateStageSalesMemo }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     validationSchema,
     mapPropsToValues,
