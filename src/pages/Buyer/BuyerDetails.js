@@ -126,23 +126,25 @@ class BuyerDetails extends Component {
     )
   }
 
-  _handleSubmit = () => {
+  _handleSubmit = async () => {
     const updateBuyer = {
       ...this.props.values,
       id: this.props.match.params.idBuyer
     }
+
     if (this.props.values.newLog) {
       const newLog = {
         ...this.props.values,
         buyer_id: this.props.match.params.idBuyer,
         business_id: this.props.match.params.idBusiness
       }
-      this.props.createNewLog(newLog)
-      this.props.updateBuyer(updateBuyer)
+      await this.props.createNewLog(newLog)
+      await this.props.updateBuyer(updateBuyer)
     } else {
-      this.props.updateBuyer(updateBuyer)
-      this.props.updateBuyerLog(this.props.values)
+      await this.props.updateBuyer(updateBuyer)
+      await this.props.updateBuyerLog(this.props.values)
     }
+
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
       this.props.match.params.idBusiness,
@@ -582,7 +584,7 @@ const mapPropsToValues = props => {
   return {
     buyerNotes: props.buyer ? props.buyer.buyerNotes : '',
     profile: props.buyer ? props.buyer.profile : '',
-    typeId: props.buyer ? props.buyer.typeId : '',
+    typeId: props.buyer ? props.buyer.typeId : null,
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
     buyerLog_id: '',
