@@ -35,6 +35,8 @@ export const finaliseLog = (businessId, buyerId) => {
   return request({
     method: 'post',
     url: `/buyer/${buyerId}/log/finalise`,
-    data: businessId
+    data: {
+      idBusiness: businessId
+    }
   })
 }
