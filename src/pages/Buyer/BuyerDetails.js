@@ -258,6 +258,7 @@ class BuyerDetails extends Component {
             <Grid.Row>
               <Grid.Column width={16} textAlign="right">
                 <Button
+                  icon
                   color="twitter"
                   onClick={() =>
                     this._selectLog({
@@ -273,6 +274,7 @@ class BuyerDetails extends Component {
                   New Log
                 </Button>
                 <Button
+                  icon
                   type="submit"
                   color="red"
                   disabled={isSubmitting || !isValid}
@@ -284,16 +286,18 @@ class BuyerDetails extends Component {
                   Save
                 </Button>
                 <Button
+                  icon
                   color="orange"
                   // disabled={isSubmitting || !isValid}
                   // loading={}
                   onClick={() => this._finaliseLog()}
                   size="small"
                 >
-                  <Icon name="mail" />
+                  <Icon name="cut" />
                   Finalise Log
                 </Button>
                 <Button
+                  icon
                   color="yellow"
                   // disabled={isSubmitting || !isValid}
                   // loading={}
@@ -304,6 +308,7 @@ class BuyerDetails extends Component {
                   Send Email
                 </Button>
                 <Button
+                  icon
                   color="green"
                   onClick={() => history.push(`/buyer/business/${business.id}`)}
                   size="small"

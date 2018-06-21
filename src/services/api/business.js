@@ -58,7 +58,7 @@ export const updateStageSalesMemo = () => {
   console.log('updateStageSalesMemo')
 }
 
-export const updateStageLost = (stageLost) => {
+export const updateStageLost = stageLost => {
   return request({
     method: 'put',
     url: `/business/${stageLost.businessId}/stage-lost`,
@@ -66,9 +66,10 @@ export const updateStageLost = (stageLost) => {
   })
 }
 
-export const getBuyersFromBusiness = businessId => {
+export const getBuyersFromBusiness = (businessId, showAll) => {
   return request({
-    url: `/business/${businessId}/buyer`
+    url: `/business/${businessId}/buyer`,
+    params: showAll ? { showAll } : null
   })
 }
 

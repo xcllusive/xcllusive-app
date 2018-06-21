@@ -116,6 +116,7 @@ class BuyerPage extends Component {
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>
                       <Button
+                        icon
                         size="small"
                         color="instagram"
                         onClick={() => this._toggleModalGroupEmail(business.id)}
@@ -129,6 +130,7 @@ class BuyerPage extends Component {
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>
                       <Button
+                        icon
                         size="small"
                         color="instagram"
                         onClick={() =>
@@ -142,7 +144,7 @@ class BuyerPage extends Component {
                     </Table.Cell>
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>
-                      <Button size="small" color="instagram">
+                      <Button icon size="small" color="instagram">
                         <Icon name="file pdf outline" />
                         PDF
                       </Button>

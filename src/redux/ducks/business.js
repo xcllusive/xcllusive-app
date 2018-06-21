@@ -540,13 +540,16 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
   }
 }
 
-export const getBuyersFromBusiness = businessId => async dispatch => {
+export const getBuyersFromBusiness = (
+  businessId,
+  showAll = false
+) => async dispatch => {
   dispatch({
     type: Types.GET_BUYERS_FROM_BUSINESS_LOADING,
     payload: true
   })
   try {
-    const buyers = await getBuyersFromBusinessAPI(businessId)
+    const buyers = await getBuyersFromBusinessAPI(businessId, showAll)
     dispatch({
       type: Types.GET_BUYERS_FROM_BUSINESS_SUCCESS,
       payload: buyers.data

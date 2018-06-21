@@ -13,6 +13,7 @@ import {
 } from 'semantic-ui-react'
 
 import { getBuyersFromBusiness, getBusiness } from '../../redux/ducks/business'
+import moment from 'moment'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -29,6 +30,7 @@ class BuyerListPage extends Component {
 
   render () {
     const { listBuyersList, history, business, isLoadingBusiness } = this.props
+    console.log(listBuyersList)
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -45,10 +47,9 @@ class BuyerListPage extends Component {
                       listBuyersList.length
                     } records)`}
                   />
-                ) : <Header
-                  as="h2"
-                  content={'0 records'}
-                />}
+                ) : (
+                  <Header as="h2" content={'0 records'} />
+                )}
               </Grid.Column>
               <Grid.Column>
                 <Button
@@ -78,33 +79,61 @@ class BuyerListPage extends Component {
                     <Table.Row>
                       <Table.HeaderCell>Buyer</Table.HeaderCell>
                       <Table.HeaderCell>Notes</Table.HeaderCell>
+                      <Table.HeaderCell>Date Created</Table.HeaderCell>
+                      <Table.HeaderCell>Follow up Date</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
                     {listBuyersList.map(buyersList => (
                       <Table.Row
                         active
-                        key={buyersList.Buyer.id}
+                        key={buyersList.enquiry.Buyer.id}
                         onClick={() =>
                           history.push(
-                            `/buyer/${buyersList.Buyer.id}/business/${
+                            `/buyer/${buyersList.enquiry.Buyer.id}/business/${
                               this.props.match.params.id
                             }`
                           )
                         }
                       >
                         <Table.Cell>
-                          {buyersList.Buyer.firstName} {buyersList.Buyer.surname}
+                          {buyersList.enquiry.Buyer.firstName}{' '}
+                          {buyersList.enquiry.Buyer.surname}
                         </Table.Cell>
-                        <Table.Cell>{buyersList.Buyer.buyerNotes}</Table.Cell>
+                        <Table.Cell>
+                          {buyersList.enquiry.Buyer.buyerNotes}
+                        </Table.Cell>
+                        <Table.Cell>
+                          {moment(buyersList.lastLog.dateTimeCreated).format(
+                            'DD/MM/YYYY'
+                          )}
+                        </Table.Cell>
+                        <Table.Cell>
+                          {moment(buyersList.lastLog.followUp).format(
+                            'DD/MM/YYYY'
+                          )}
+                        </Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>
                 </Table>
               </Grid.Row>
+              <Button
+                color="facebook"
+                onClick={() =>
+                  this.props.getBuyersFromBusiness(
+                    this.props.match.params.id,
+                    true
+                  )
+                }
+                size="small"
+                floated="right"
+              >
+                <Icon name="backward" />
+                Show all
+              </Button>
             </Grid>
           ) : null}
-
         </Dimmer.Dimmable>
       </Wrapper>
     )
@@ -130,4 +159,7 @@ const mapStateToProps = state => ({
   isLoadingBusiness: state.business.get.isLoading
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuyerListPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BuyerListPage)
