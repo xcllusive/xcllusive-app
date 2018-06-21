@@ -102,6 +102,7 @@ class ScoreListPage extends Component {
                             link
                             name="edit"
                             size="large"
+                            disabled={listScore.dateSent}
                             onClick={() =>
                               history.push(
                                 `/buyer/business/${

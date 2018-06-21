@@ -104,14 +104,18 @@ class BuyerListPage extends Component {
                           {buyersList.enquiry.Buyer.buyerNotes}
                         </Table.Cell>
                         <Table.Cell>
-                          {moment(buyersList.lastLog.dateTimeCreated).format(
-                            'DD/MM/YYYY'
-                          )}
+                          {buyersList.lastLog
+                            ? moment(buyersList.lastLog.dateTimeCreated).format(
+                              'DD/MM/YYYY'
+                            )
+                            : ''}
                         </Table.Cell>
                         <Table.Cell>
-                          {moment(buyersList.lastLog.followUp).format(
-                            'DD/MM/YYYY'
-                          )}
+                          {buyersList.lastLog
+                            ? moment(buyersList.lastLog.followUp).format(
+                              'DD/MM/YYYY'
+                            )
+                            : ''}
                         </Table.Cell>
                       </Table.Row>
                     ))}
