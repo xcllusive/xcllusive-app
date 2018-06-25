@@ -29,7 +29,8 @@ class ModalNewScoreRegister extends Component {
           value: 'infoTransMomen'
         },
         { key: 3, text: 'Current Interest', value: 'currentInterest' },
-        { key: 4, text: 'Buyer Perceived Risk', value: 'perceivedRisk' }
+        { key: 4, text: 'Buyer Perceived Risk', value: 'perceivedRisk' },
+        { key: 5, text: 'Enquiries', value: 'enquiries' }
       ]
     }
   }
@@ -58,7 +59,6 @@ class ModalNewScoreRegister extends Component {
     } = this.props
 
     const { typesScoreRegisters } = this.state
-
     return (
       <Modal open dimmer="blurring">
         <Modal.Header align="center">
@@ -88,7 +88,11 @@ class ModalNewScoreRegister extends Component {
               <Form.Field width={16}>
                 <Form.Input
                   required
-                  label="Select Options"
+                  label={
+                    values.type && values.type === 'enquiries'
+                      ? 'Score'
+                      : 'Select Options'
+                  }
                   name="label"
                   autoComplete="label"
                   value={values.label}
@@ -185,15 +189,15 @@ ModalNewScoreRegister.propTypes = {
 const mapPropsToValues = props => ({
   type: props.scoreRegister ? props.scoreRegister.type : '',
   label: props.scoreRegister ? props.scoreRegister.label : '',
-  id: props.scoreRegister ? props.scoreRegister.id : null,
+  id: props.scoreRegister ? props.scoreRegister.id : '',
   textReport: props.scoreRegister ? props.scoreRegister.textReport : '',
-  weight: props.scoreRegister ? props.scoreRegister.weight : null
+  weight: props.scoreRegister ? props.scoreRegister.weight : ''
 })
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
-    .min(2, 'Label require minimum 2 characters.')
+    .min(1, 'Label require minimum 1 characters.')
     .max(200, 'Label require max 200 characters.'),
   type: Yup.string().required('Score Register is required.'),
   textReport: Yup.string().required('Text Report is required.'),

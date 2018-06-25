@@ -26,6 +26,7 @@ class ScoreRegisters extends Component {
     this.props.listScoreRegister('infoTransMomen', 5)
     this.props.listScoreRegister('currentInterest', 5)
     this.props.listScoreRegister('perceivedRisk', 5)
+    this.props.listScoreRegister('enquiries', 5)
   }
 
   _toggleModalConfirm = (id, registerType) => {
@@ -64,7 +65,6 @@ class ScoreRegisters extends Component {
   }
 
   _handlePaginationChange = (e, { activePage }, scoreRegisterType) => {
-    console.log(scoreRegisterType, activePage)
     this.props.listScoreRegister(scoreRegisterType, 5, activePage)
   }
 
@@ -82,6 +82,69 @@ class ScoreRegisters extends Component {
           </Grid.Row>
 
           <Grid.Row columns={2}>
+            <Grid.Column>
+              <Header as="h5" attached="top">
+                Enquiries
+              </Header>
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Score</Table.HeaderCell>
+                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                    <Table.HeaderCell>Weight</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.enquiriesOptions.array.map(enquiriesOptions => {
+                    return (
+                      <Table.Row active key={enquiriesOptions.id}>
+                        <Table.Cell>{enquiriesOptions.label}</Table.Cell>
+                        <Table.Cell>{enquiriesOptions.textReport}</Table.Cell>
+                        <Table.Cell>{enquiriesOptions.weight}</Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            onClick={() =>
+                              this._editScore(enquiriesOptions, 'enquiries')
+                            }
+                          />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() =>
+                              this._toggleModalConfirm(
+                                enquiriesOptions.id,
+                                'enquiries'
+                              )
+                            }
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) =>
+                  this._handlePaginationChange(e, data, 'enquiries')
+                }
+                defaultActivePage={this.props.enquiriesOptions.activePage}
+                totalPages={this.props.enquiriesOptions.pages}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Grid.Column>
             <Grid.Column>
               <Header as="h5" attached="top">
                 Perceived Price from Buyers
@@ -383,6 +446,7 @@ ScoreRegisters.propTypes = {
   infoTransMomenOptions: PropTypes.object,
   currentInterestOptions: PropTypes.object,
   perceivedRiskOptions: PropTypes.object,
+  enquiriesOptions: PropTypes.object,
   openModal: PropTypes.func,
   listScoreRegister: PropTypes.func
 }
@@ -393,6 +457,7 @@ const mapStateToProps = state => ({
   infoTransMomenOptions: state.scoreRegister.get.infoTransMomen,
   currentInterestOptions: state.scoreRegister.get.currentInterest,
   perceivedRiskOptions: state.scoreRegister.get.perceivedRisk,
+  enquiriesOptions: state.scoreRegister.get.enquiries,
   createScoreRegister: state.scoreRegister.create.isCreated,
   updateScoreRegister: state.scoreRegister.update.isUpdated,
   deleteScoreRegister: state.scoreRegister.delete.isDeleted

@@ -5,7 +5,6 @@ import { list, create, update, remove } from '../../services/api/scoreRegister'
 // Action Types
 
 export const Types = {
-  // BUSINESS_REGISTER_SOURCE: 'BUSINESS_REGISTER_SOURCE',
   GET_SCORE_REGISTER_LOADING: 'GET_SCORE_REGISTER_LOADING',
   GET_SCORE_REGISTER_SUCCESS: 'GET_SCORE_REGISTER_SUCCESS',
   GET_SCORE_REGISTER_FAILURE: 'GET_SCORE_REGISTER_FAILURE',
@@ -24,6 +23,13 @@ export const Types = {
 
 const initialState = {
   get: {
+    enquiries: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
     perceivedPrice: {
       isLoading: true,
       array: [],
