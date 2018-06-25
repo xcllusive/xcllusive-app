@@ -899,21 +899,60 @@ MakeNewScorePage.propTypes = {
 }
 
 const mapPropsToValues = props => {
-  return {
-    yours: props.enquiries ? props.enquiries.yours : '',
-    avg: props.enquiries ? props.enquiries.avg : '',
-    diff: props.enquiries ? props.enquiries.yours - props.enquiries.avg : '',
-    notesEnquiries: props.score ? props.score.notesEnquiries : '',
-    perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
-    notesPrice: props.score ? props.score.notesPrice : '',
-    infoTransMomen_id: props.score ? props.score.infoTransMomen_id : '',
-    notesMomentum: props.score ? props.score.notesMomentum : '',
-    currentInterest_id: props.score ? props.score.currentInterest_id : '',
-    notesInterest: props.score ? props.score.notesInterest : '',
-    perceivedRisk_id: props.score ? props.score.perceivedRisk_id : '',
-    notesRisk: props.score ? props.score.notesRisk : '',
-    total: props.score ? props.score.total : ''
+  if (props.score || props.enquiries) {
+    return {
+      yours: props.score ? props.score.yours : props.enquiries.yours,
+      avg: props.score ? props.score.avg : props.enquiries.avg,
+      diff: props.score
+        ? props.score.diff
+        : props.enquiries.yours - props.enquiries.avg,
+      notesEnquiries: props.score ? props.score.notesEnquiries : '',
+      perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
+      notesPrice: props.score ? props.score.notesPrice : '',
+      infoTransMomen_id: props.score ? props.score.infoTransMomen_id : '',
+      notesMomentum: props.score ? props.score.notesMomentum : '',
+      currentInterest_id: props.score ? props.score.currentInterest_id : '',
+      notesInterest: props.score ? props.score.notesInterest : '',
+      perceivedRisk_id: props.score ? props.score.perceivedRisk_id : '',
+      notesRisk: props.score ? props.score.notesRisk : '',
+      total: props.score ? props.score.total : ''
+    }
   }
+
+  return {
+    yours: '',
+    avg: '',
+    diff: '',
+    notesEnquiries: '',
+    perceivedPrice_id: '',
+    notesPrice: '',
+    infoTransMomen_id: '',
+    notesMomentum: '',
+    currentInterest_id: '',
+    notesInterest: '',
+    perceivedRisk_id: '',
+    notesRisk: '',
+    total: ''
+  }
+
+  // return {
+  //   // yours: props.enquiries ? props.enquiries.yours : '',
+  //   // avg: props.enquiries ? props.enquiries.avg : '',
+  //   // diff: props.enquiries ? props.enquiries.yours - props.enquiries.avg : '',
+  //   yours: props.score ? props.score.yours : '',
+  //   avg: props.score ? props.score.avg : '',
+  //   diff: props.score ? props.score.diff : '',
+  //   notesEnquiries: props.score ? props.score.notesEnquiries : '',
+  //   perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
+  //   notesPrice: props.score ? props.score.notesPrice : '',
+  //   infoTransMomen_id: props.score ? props.score.infoTransMomen_id : '',
+  //   notesMomentum: props.score ? props.score.notesMomentum : '',
+  //   currentInterest_id: props.score ? props.score.currentInterest_id : '',
+  //   notesInterest: props.score ? props.score.notesInterest : '',
+  //   perceivedRisk_id: props.score ? props.score.perceivedRisk_id : '',
+  //   notesRisk: props.score ? props.score.notesRisk : '',
+  //   total: props.score ? props.score.total : ''
+  // }
 }
 
 const validationSchema = Yup.object().shape({
