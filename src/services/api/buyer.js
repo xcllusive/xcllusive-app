@@ -59,3 +59,20 @@ export const sendGroupEmail = (sendGroupEmail, array) => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const getBuyerBusinesses = (search, stageId) => {
+  const params = {}
+
+  if (search && search.length > 0) params.search = search
+  if (stageId && stageId.length > 0) {
+    params.stageId = JSON.stringify(stageId)
+  }
+  if (stageId && stageId > 0) {
+    params.stageId = stageId
+  }
+
+  return request({
+    url: '/buyer/business/',
+    params
+  })
+}

@@ -28,7 +28,8 @@ import {
   calculateScore,
   getScore,
   clearScore,
-  updateScore
+  updateScore,
+  enquiriesLast4Weeks
 } from '../../redux/ducks/score'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
@@ -50,6 +51,7 @@ class MakeNewScorePage extends Component {
 
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.idBusiness)
+    this.props.enquiriesLast4Weeks(this.props.match.params.idBusiness)
     if (this.props.match.params.idScore) {
       this.props.getScore(this.props.match.params.idScore)
     }
@@ -880,14 +882,16 @@ MakeNewScorePage.propTypes = {
   getScore: PropTypes.func,
   score: PropTypes.object,
   clearScore: PropTypes.func,
-  updateScore: PropTypes.func
+  updateScore: PropTypes.func,
+  enquiriesLast4Weeks: PropTypes.func,
+  enquiries: PropTypes.object
 }
 
 const mapPropsToValues = props => {
   return {
-    yours: props.score ? props.score.yours : '',
-    avg: props.score ? props.score.avg : '',
-    diff: props.score ? props.score.diff : '',
+    yours: props.enquiries ? props.enquiries.yours : '',
+    avg: props.enquiries ? props.enquiries.avg : '',
+    diff: props.enquiries ? props.enquiries.yours - props.enquiries.avg : '',
     notesEnquiries: props.score ? props.score.notesEnquiries : '',
     perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
     notesPrice: props.score ? props.score.notesPrice : '',
@@ -940,7 +944,8 @@ const mapDispatchToProps = dispatch =>
       openModal,
       getScore,
       clearScore,
-      updateScore
+      updateScore,
+      enquiriesLast4Weeks
     },
     dispatch
   )
@@ -952,7 +957,8 @@ const mapStateToProps = state => ({
   infoTransMomenOptions: state.scoreRegister.get.infoTransMomen.array,
   currentInterestOptions: state.scoreRegister.get.currentInterest.array,
   perceivedRiskOptions: state.scoreRegister.get.perceivedRisk.array,
-  score: state.score.get.object
+  score: state.score.get.object,
+  enquiries: state.score.enquiries.object
 })
 
 export default connect(

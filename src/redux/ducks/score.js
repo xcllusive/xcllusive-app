@@ -1,6 +1,12 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { list, calculate, get, update } from '../../services/api/score'
+import {
+  list,
+  calculate,
+  get,
+  update,
+  enquiries
+} from '../../services/api/score'
 
 // Action Types
 
@@ -17,7 +23,10 @@ export const Types = {
   CLEAR_SCORE: 'CLEAR_SCORE',
   UPDATE_SCORE_LOADING: 'UPDATE_SCORE_LOADING',
   UPDATE_SCORE_SUCCESS: 'UPDATE_SCORE_SUCCESS',
-  UPDATE_SCORE_FAILURE: 'UPDATE_SCORE_FAILURE'
+  UPDATE_SCORE_FAILURE: 'UPDATE_SCORE_FAILURE',
+  ENQUIRIES_LAST_4_WEEKS_LOADING: 'ENQUIRIES_LAST_4_WEEKS_LOADING',
+  ENQUIRIES_LAST_4_WEEKS_SUCCESS: 'ENQUIRIES_LAST_4_WEEKS_SUCCESS',
+  ENQUIRIES_LAST_4_WEEKS_FAILURE: 'ENQUIRIES_LAST_4_WEEKS_FAILURE'
 }
 
 // Reducer
@@ -43,6 +52,11 @@ const initialState = {
   update: {
     isLoading: false,
     isUpdated: false,
+    error: null
+  },
+  enquiries: {
+    object: null,
+    isLoading: false,
     error: null
   }
 }
@@ -133,6 +147,35 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.ENQUIRIES_LAST_4_WEEKS_LOADING:
+      return {
+        ...state,
+        enquiries: {
+          ...state.enquiries,
+          isLoading: action.payload,
+          object: null,
+          error: null
+        }
+      }
+    case Types.ENQUIRIES_LAST_4_WEEKS_SUCCESS:
+      return {
+        ...state,
+        enquiries: {
+          ...state.enquiries,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.ENQUIRIES_LAST_4_WEEKS_FAILURE:
+      return {
+        ...state,
+        enquiries: {
+          ...state.enquiries,
           isLoading: false,
           error: action.payload
         }
@@ -229,6 +272,26 @@ export const updateScore = updateScore => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_SCORE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const enquiriesLast4Weeks = businessId => async dispatch => {
+  dispatch({
+    type: Types.ENQUIRIES_LAST_4_WEEKS_LOADING,
+    payload: true
+  })
+  try {
+    const enquiry = await enquiries(businessId)
+    dispatch({
+      type: Types.ENQUIRIES_LAST_4_WEEKS_SUCCESS,
+      payload: enquiry.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.ENQUIRIES_LAST_4_WEEKS_FAILURE,
       payload: error
     })
     toast.error(error)

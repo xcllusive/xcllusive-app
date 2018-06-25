@@ -31,3 +31,11 @@ export const update = score => {
   //   data: score
   // })
 }
+
+export const enquiries = business => {
+  return request({
+    method: 'get',
+    url: '/score/initial',
+    params: { business }
+  })
+}

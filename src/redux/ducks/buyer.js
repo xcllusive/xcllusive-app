@@ -7,7 +7,8 @@ import {
   get,
   getBusinessesFromBuyer as getBusinessesFromBuyerAPI,
   sendEmailBuyerBrokersEmail as sendEmailBuyerBrokersEmailAPI,
-  sendGroupEmail as sendGroupEmailAPI
+  sendGroupEmail as sendGroupEmailAPI,
+  getBuyerBusinesses as getBuyerBusinessesAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -36,7 +37,10 @@ export const Types = {
     'SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE',
   SEND_GROUP_EMAIL_LOADING: 'SEND_GROUP_EMAIL_LOADING',
   SEND_GROUP_EMAIL_SUCCESS: 'SEND_GROUP_EMAIL_SUCCESS',
-  SEND_GROUP_EMAIL_FAILURE: 'SEND_GROUP_EMAIL_FAILURE'
+  SEND_GROUP_EMAIL_FAILURE: 'SEND_GROUP_EMAIL_FAILURE',
+  GET_BUYER_BUSINESSES_LOADING: 'GET_BUYER_BUSINESSES_LOADING',
+  GET_BUYER_BUSINESSES_SUCCESS: 'GET_BUYER_BUSINESSES_SUCCESS',
+  GET_BUYER_BUSINESSES_FAILURE: 'GET_BUYER_BUSINESSES_FAILURE'
 }
 
 // Reducer
@@ -76,6 +80,11 @@ const initialState = {
   sendGroupEmail: {
     isLoading: false,
     isSent: false,
+    error: null
+  },
+  getBuyerBusinesses: {
+    isLoading: true,
+    array: [],
     error: null
   }
 }
@@ -282,6 +291,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUYER_BUSINESSES_LOADING:
+      return {
+        ...state,
+        getBuyerBusinesses: {
+          ...state.getBuyerBusinesses,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYER_BUSINESSES_SUCCESS:
+      return {
+        ...state,
+        getBuyerBusinesses: {
+          ...state.getBuyerBusinesses,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYER_BUSINESSES_FAILURE:
+      return {
+        ...state,
+        getBuyerBusinesses: {
+          ...state.getBuyerBusinesses,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -421,6 +458,29 @@ export const sendGroupEmail = (sendGroupEmail, array) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.SEND_GROUP_EMAIL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getBuyerBusinesses = (
+  search = false,
+  stageId = false
+) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUYER_BUSINESSES_LOADING,
+    payload: true
+  })
+  try {
+    const buyerBusiness = await getBuyerBusinessesAPI(search, stageId)
+    dispatch({
+      type: Types.GET_BUYER_BUSINESSES_SUCCESS,
+      payload: buyerBusiness
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUYER_BUSINESSES_FAILURE,
       payload: error
     })
     toast.error(error)

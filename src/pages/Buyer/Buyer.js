@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
-import { getBusinesses } from '../../redux/ducks/business'
+import { getBuyerBusinesses } from '../../redux/ducks/buyer'
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import Wrapper from '../../components/content/Wrapper'
 
@@ -29,7 +29,7 @@ class BuyerPage extends Component {
   }
 
   componentWillMount () {
-    this.props.getBusinesses(false, [4, 5])
+    this.props.getBuyerBusinesses(false, [4, 5])
   }
 
   _toggleModal = () => {
@@ -98,28 +98,29 @@ class BuyerPage extends Component {
                   <Table.HeaderCell>Sent</Table.HeaderCell>
                   <Table.HeaderCell>Make New Score</Table.HeaderCell>
                   <Table.HeaderCell>2 Record`s</Table.HeaderCell>
-                  <Table.HeaderCell>IM`s</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {businesses.map(business => (
-                  <Table.Row active key={business.id}>
-                    <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                {businesses.map(businesses => (
+                  <Table.Row active key={businesses.business.id}>
+                    <Table.Cell>{`BS${businesses.business.id}`}</Table.Cell>
                     <Table.Cell
                       selectable
                       onClick={() =>
-                        history.push(`buyer/business/${business.id}`)
+                        history.push(`buyer/business/${businesses.business.id}`)
                       }
                     >
-                      {business.businessName}
+                      {businesses.business.businessName}
                     </Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>{businesses.countFollowUpTask}</Table.Cell>
                     <Table.Cell>
                       <Button
                         icon
                         size="small"
                         color="instagram"
-                        onClick={() => this._toggleModalGroupEmail(business.id)}
+                        onClick={() =>
+                          this._toggleModalGroupEmail(businesses.business.id)
+                        }
                       >
                         <Icon name="mail" />
                       </Button>
@@ -135,7 +136,9 @@ class BuyerPage extends Component {
                         color="instagram"
                         onClick={() =>
                           history.push(
-                            `buyer/business/${business.id}/score-list`
+                            `buyer/business/${
+                              businesses.business.id
+                            }/score-list`
                           )
                         }
                       >
@@ -143,12 +146,6 @@ class BuyerPage extends Component {
                       </Button>
                     </Table.Cell>
                     <Table.Cell>{}</Table.Cell>
-                    <Table.Cell>
-                      <Button icon size="small" color="instagram">
-                        <Icon name="file pdf outline" />
-                        PDF
-                      </Button>
-                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -200,20 +197,18 @@ class BuyerPage extends Component {
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusinesses, openModal }, dispatch)
+  bindActionCreators({ getBuyerBusinesses, openModal }, dispatch)
 
 BuyerPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
-  getBusinesses: PropTypes.func,
+  getBuyerBusinesses: PropTypes.func,
   businesses: PropTypes.array,
   openModal: PropTypes.func
 }
 
 const mapStateToProps = state => ({
-  isCreated: state.business.create.isCreated,
-  isLoading: state.business.getAll.isLoading,
-  businesses: state.business.getAll.array
+  businesses: state.buyer.getBuyerBusinesses.array
 })
 
 export default connect(
