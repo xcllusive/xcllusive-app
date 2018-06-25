@@ -156,6 +156,7 @@ class MakeNewScorePage extends Component {
   }
 
   _toggleModalConfirm = values => {
+    values.total = this._calculateScore()
     if (this.props.score) {
       this.props.updateScore()
     } else {
@@ -171,6 +172,16 @@ class MakeNewScorePage extends Component {
         }
       })
     }
+  }
+
+  _calculateScore () {
+    return (
+      (this.state.objectPrice.weight +
+        this.state.objectMomentum.weight +
+        this.state.objectInterest.weight +
+        this.state.objectRisk.weight) /
+      5
+    )
   }
 
   _thisScore () {
@@ -264,7 +275,7 @@ class MakeNewScorePage extends Component {
                 <Statistic.Group size="tiny" widths={4}>
                   <Statistic>
                     <Statistic.Value>
-                      {this.props.score ? this._thisScore() : '#'}
+                      {this.props.score ? this.props.score.total : '#'}
                     </Statistic.Value>
                     <Statistic.Label>This Score</Statistic.Label>
                   </Statistic>
@@ -796,7 +807,7 @@ class MakeNewScorePage extends Component {
                         <Statistic.Group size="tiny" widths={1}>
                           <Statistic floated="left">
                             <Statistic.Value>
-                              {this.props.score ? this._thisScore() : '#'}
+                              {this.props.score ? this.props.score.total : '#'}
                             </Statistic.Value>
                             <Statistic.Label>This Score</Statistic.Label>
                           </Statistic>
@@ -900,7 +911,8 @@ const mapPropsToValues = props => {
     currentInterest_id: props.score ? props.score.currentInterest_id : '',
     notesInterest: props.score ? props.score.notesInterest : '',
     perceivedRisk_id: props.score ? props.score.perceivedRisk_id : '',
-    notesRisk: props.score ? props.score.notesRisk : ''
+    notesRisk: props.score ? props.score.notesRisk : '',
+    total: props.score ? props.score.total : ''
   }
 }
 

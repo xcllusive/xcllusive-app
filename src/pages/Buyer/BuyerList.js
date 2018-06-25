@@ -30,7 +30,6 @@ class BuyerListPage extends Component {
 
   render () {
     const { listBuyersList, history, business, isLoadingBusiness } = this.props
-    console.log(listBuyersList)
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -53,13 +52,18 @@ class BuyerListPage extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Button
-                  color="green"
-                  onClick={() => history.push('/buyer')}
+                  color="facebook"
+                  onClick={() =>
+                    this.props.getBuyersFromBusiness(
+                      this.props.match.params.id,
+                      true
+                    )
+                  }
                   size="small"
                   floated="right"
                 >
                   <Icon name="backward" />
-                  Return to Business
+                  Show all
                 </Button>
               </Grid.Column>
             </Grid.Row>
@@ -123,18 +127,13 @@ class BuyerListPage extends Component {
                 </Table>
               </Grid.Row>
               <Button
-                color="facebook"
-                onClick={() =>
-                  this.props.getBuyersFromBusiness(
-                    this.props.match.params.id,
-                    true
-                  )
-                }
+                color="green"
+                onClick={() => history.push('/buyer')}
                 size="small"
                 floated="right"
               >
                 <Icon name="backward" />
-                Show all
+                Return to Business
               </Button>
             </Grid>
           ) : null}

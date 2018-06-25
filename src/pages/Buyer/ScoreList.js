@@ -63,7 +63,7 @@ class ScoreListPage extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          {listScoreList ? (
+          {listScoreList.length > 0 ? (
             <Grid padded="horizontally" style={{ marginTop: 0 }}>
               <Grid.Row>
                 <Table
