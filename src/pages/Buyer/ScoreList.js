@@ -85,14 +85,14 @@ class ScoreListPage extends Component {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {listScoreList.map(listScore => (
+                    {listScoreList.map((listScore, key) => (
                       <Table.Row active key={listScore.id}>
                         <Table.Cell>
                           {moment(listScore.dateTimeCreated).format(
                             'DD/MM/YYYY - HH:mm'
                           )}
                         </Table.Cell>
-                        <Table.Cell>Score {listScore.id}</Table.Cell>
+                        <Table.Cell>Score {key + 1}</Table.Cell>
                         <Table.Cell>{30}</Table.Cell>
                         <Table.Cell>
                           {listScore.dateSent ? 'Yes' : 'No'}

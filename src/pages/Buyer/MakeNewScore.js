@@ -38,10 +38,11 @@ class MakeNewScorePage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      objectPrice: {},
-      objectMomentum: {},
-      objectInterest: {},
-      objectRisk: {},
+      objectPrice: null,
+      objectMomentum: null,
+      objectInterest: null,
+      objectRisk: null,
+      objectEnquiries: null,
       perceivedPriceChange: false,
       infoTransMomenChange: false,
       currentInterestChange: false,
@@ -114,19 +115,16 @@ class MakeNewScorePage extends Component {
         perceivedRiskChange: true
       })
     }
-    if (this.props.enquiries) {
+    if (this.props.enquiries !== nextProps.enquiries) {
       this._findItemEnquiries(nextProps.values.diff)
     }
   }
 
   _findItemEnquiries (diff) {
-    const objectEnquiries = _.find(this.props.enquiriesOptions, o => {
-      return o.label === diff
-    })
+    const objectEnquiries = _.find(this.props.enquiriesOptions, o => o.label === diff.toString())
     this.setState({
       objectEnquiries
     })
-    console.log(diff)
   }
 
   _findItemArray = (name, id) => {
@@ -321,7 +319,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          10
+                          {this.state.objectEnquiries ? this.state.objectEnquiries.weight : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -416,11 +414,15 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <CardScore
-                  header="Enquiries In Last Four Weeks Generated Text:"
-                  title="This business has received four or less enquiries than the average business has received over the past four weeks."
-                  icon={10}
-                />
+                {
+                  this.state.objectEnquiries ? (
+                    <CardScore
+                      header="Enquiries In Last Four Weeks Generated Text:"
+                      title={this.state.objectEnquiries.textReport}
+                      icon={this.state.objectEnquiries.weight}
+                    />
+                  ) : null
+                }
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -445,9 +447,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.objectPrice.weight
-                            ? this.state.objectPrice.weight
-                            : null}
+                          {this.state.objectPrice ? this.state.objectPrice.weight : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -495,19 +495,24 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <CardScore
-                  header="Percieved Price from Buyers Generated Text"
-                  title={
-                    score
-                      ? score.perceivedPrice.textReport
-                      : this.state.objectPrice.textReport
-                  }
-                  icon={
-                    score && !this.state.perceivedPriceChange
-                      ? score.perceivedPrice.weight
-                      : this.state.objectPrice.weight
-                  }
-                />
+                {
+                  this.state.objectPrice ? (
+                    <CardScore
+                      header="Percieved Price from Buyers Generated Text"
+                      title={
+                        score
+                          ? score.perceivedPrice.textReport
+                          : this.state.objectPrice.textReport
+                      }
+                      icon={
+                        score && !this.state.perceivedPriceChange
+                          ? score.perceivedPrice.weight
+                          : this.state.objectPrice.weight
+                      }
+                    />
+                  ) : null
+                }
+
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -532,9 +537,11 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.objectMomentum.weight
-                            ? this.state.objectMomentum.weight
-                            : null}
+                          {
+                            this.state.objectMomentum
+                              ? this.state.objectMomentum.weight
+                              : null
+                          }
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -582,19 +589,24 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <CardScore
-                  header="Information/Transparency/Momentum Generated Text:"
-                  title={
-                    score
-                      ? score.infoTransMomen.textReport
-                      : this.state.objectMomentum.textReport
-                  }
-                  icon={
-                    score && !this.state.infoTransMomenChange
-                      ? score.infoTransMomen.weight
-                      : this.state.objectMomentum.weight
-                  }
-                />
+                {
+                  this.state.objectMomentum ? (
+                    <CardScore
+                      header="Information/Transparency/Momentum Generated Text:"
+                      title={
+                        score
+                          ? score.infoTransMomen.textReport
+                          : this.state.objectMomentum.textReport
+                      }
+                      icon={
+                        score && !this.state.infoTransMomenChange
+                          ? score.infoTransMomen.weight
+                          : this.state.objectMomentum.weight
+                      }
+                    />
+                  ) : null
+                }
+
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -619,7 +631,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.objectInterest.weight
+                          {this.state.objectInterest
                             ? this.state.objectInterest.weight
                             : null}
                         </Header>
@@ -669,19 +681,24 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <CardScore
-                  header="Current Interest Generated Text:"
-                  title={
-                    score
-                      ? score.currentInterest.textReport
-                      : this.state.objectInterest.textReport
-                  }
-                  icon={
-                    score && !this.state.currentInterestChange
-                      ? score.currentInterest.weight
-                      : this.state.objectInterest.weight
-                  }
-                />
+                {
+                  this.state.objectInterest ? (
+                    <CardScore
+                      header="Current Interest Generated Text:"
+                      title={
+                        score
+                          ? score.currentInterest.textReport
+                          : this.state.objectInterest.textReport
+                      }
+                      icon={
+                        score && !this.state.currentInterestChange
+                          ? score.currentInterest.weight
+                          : this.state.objectInterest.weight
+                      }
+                    />
+                  ) : null
+                }
+
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -706,7 +723,7 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.objectRisk.weight
+                          {this.state.objectRisk
                             ? this.state.objectRisk.weight
                             : null}
                         </Header>
@@ -756,19 +773,23 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <CardScore
-                  header="Buyer Percieved Risk Generated Text:"
-                  title={
-                    score
-                      ? score.perceivedRisk.textReport
-                      : this.state.objectRisk.textReport
-                  }
-                  icon={
-                    score && !this.state.perceivedRiskChange
-                      ? score.perceivedRisk.weight
-                      : this.state.objectRisk.weight
-                  }
-                />
+                {
+                  this.state.objectRisk ? (
+                    <CardScore
+                      header="Buyer Percieved Risk Generated Text:"
+                      title={
+                        score
+                          ? score.perceivedRisk.textReport
+                          : this.state.objectRisk.textReport
+                      }
+                      icon={
+                        score && !this.state.perceivedRiskChange
+                          ? score.perceivedRisk.weight
+                          : this.state.objectRisk.weight
+                      }
+                    />
+                  ) : null
+                }
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>

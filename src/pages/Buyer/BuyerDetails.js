@@ -61,7 +61,7 @@ class BuyerDetails extends Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.getBuyer(this.props.match.params.idBuyer)
     this.props.getBusiness(this.props.match.params.idBusiness)
     this.props.getBusinessBuyerLog(
