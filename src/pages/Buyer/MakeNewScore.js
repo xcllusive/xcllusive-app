@@ -61,7 +61,6 @@ class MakeNewScorePage extends Component {
     this.props.listScoreRegister('currentInterest')
     this.props.listScoreRegister('perceivedRisk')
     this.props.listScoreRegister('enquiries')
-    this.props.setFieldValue('business_id', this.props.match.params.idBusiness)
   }
 
   componentWillUnmount () {
@@ -225,7 +224,7 @@ class MakeNewScorePage extends Component {
       isValid,
       score
     } = this.props
-    // console.log(this.state.objectEnquiries)
+
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -940,7 +939,8 @@ const mapPropsToValues = props => {
       perceivedRisk_id: props.score ? props.score.perceivedRisk_id : '',
       notesRisk: props.score ? props.score.notesRisk : '',
       notesEnquiries: props.score ? props.score.notesEnquiries : '',
-      total: props.score ? props.score.total : ''
+      total: props.score ? props.score.total : '',
+      business_id: props.score ? props.score.business_id : props.match.params.idBusiness
     }
   }
 
@@ -957,7 +957,8 @@ const mapPropsToValues = props => {
     notesInterest: '',
     perceivedRisk_id: '',
     notesRisk: '',
-    total: ''
+    total: '',
+    business_id: props.match.params.idBusiness
   }
 }
 
