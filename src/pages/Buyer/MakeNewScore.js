@@ -46,7 +46,8 @@ class MakeNewScorePage extends Component {
       perceivedPriceChange: false,
       infoTransMomenChange: false,
       currentInterestChange: false,
-      perceivedRiskChange: false
+      perceivedRiskChange: false,
+      score: '#'
     }
   }
 
@@ -68,6 +69,10 @@ class MakeNewScorePage extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (this.props.score && nextProps.score) {
+      this.setState({ score: nextProps.score })
+    }
+
     if (this.props.score && nextProps.values.perceivedPrice_id) {
       this._findItemArray(
         'perceivedPrice_id',
@@ -164,14 +169,15 @@ class MakeNewScorePage extends Component {
   }
 
   _calculateScore () {
-    return (
+    const score =
       (this.state.objectEnquiries.weight +
         this.state.objectPrice.weight +
         this.state.objectMomentum.weight +
         this.state.objectInterest.weight +
         this.state.objectRisk.weight) /
       5
-    )
+    this.setState({ score })
+    return score
   }
 
   _dateSent () {
@@ -253,9 +259,7 @@ class MakeNewScorePage extends Component {
               <Grid.Column>
                 <Statistic.Group size="tiny" widths={4}>
                   <Statistic>
-                    <Statistic.Value>
-                      {score ? score.total : '#'}
-                    </Statistic.Value>
+                    <Statistic.Value>{this.state.score}</Statistic.Value>
                     <Statistic.Label>This Score</Statistic.Label>
                   </Statistic>
                   <Statistic>

@@ -37,7 +37,7 @@ const IconType = ({ icon }) => {
         <Image
           style={{ width: '40px', marginTop: 20 }}
           size="mini"
-          src={'https://png.icons8.com/ios/40/21CE01/lol-filled.png'}
+          src={'https://png.icons8.com/android/40/21CE01/happy.png'}
         />
       </Fragment>
     )
