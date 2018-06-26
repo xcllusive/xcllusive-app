@@ -49,7 +49,7 @@ class MakeNewScorePage extends Component {
     }
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.getBusiness(this.props.match.params.idBusiness)
     this.props.enquiriesLast4Weeks(this.props.match.params.idBusiness)
     if (this.props.match.params.idScore) {
@@ -59,6 +59,7 @@ class MakeNewScorePage extends Component {
     this.props.listScoreRegister('infoTransMomen')
     this.props.listScoreRegister('currentInterest')
     this.props.listScoreRegister('perceivedRisk')
+    this.props.listScoreRegister('enquiries')
     this.props.setFieldValue('business_id', this.props.match.params.idBusiness)
   }
 
@@ -113,6 +114,19 @@ class MakeNewScorePage extends Component {
         perceivedRiskChange: true
       })
     }
+    if (this.props.enquiries) {
+      this._findItemEnquiries(nextProps.values.diff)
+    }
+  }
+
+  _findItemEnquiries (diff) {
+    const objectEnquiries = _.find(this.props.enquiriesOptions, o => {
+      return o.label === diff
+    })
+    this.setState({
+      objectEnquiries
+    })
+    console.log(diff)
   }
 
   _findItemArray = (name, id) => {
@@ -213,6 +227,7 @@ class MakeNewScorePage extends Component {
       isValid,
       score
     } = this.props
+    // console.log(this.state.objectEnquiries)
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -883,7 +898,8 @@ MakeNewScorePage.propTypes = {
   clearScore: PropTypes.func,
   updateScore: PropTypes.func,
   enquiriesLast4Weeks: PropTypes.func,
-  enquiries: PropTypes.object
+  enquiries: PropTypes.object,
+  enquiriesOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -922,25 +938,6 @@ const mapPropsToValues = props => {
     notesRisk: '',
     total: ''
   }
-
-  // return {
-  //   // yours: props.enquiries ? props.enquiries.yours : '',
-  //   // avg: props.enquiries ? props.enquiries.avg : '',
-  //   // diff: props.enquiries ? props.enquiries.yours - props.enquiries.avg : '',
-  //   yours: props.score ? props.score.yours : '',
-  //   avg: props.score ? props.score.avg : '',
-  //   diff: props.score ? props.score.diff : '',
-  //   notesEnquiries: props.score ? props.score.notesEnquiries : '',
-  //   perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
-  //   notesPrice: props.score ? props.score.notesPrice : '',
-  //   infoTransMomen_id: props.score ? props.score.infoTransMomen_id : '',
-  //   notesMomentum: props.score ? props.score.notesMomentum : '',
-  //   currentInterest_id: props.score ? props.score.currentInterest_id : '',
-  //   notesInterest: props.score ? props.score.notesInterest : '',
-  //   perceivedRisk_id: props.score ? props.score.perceivedRisk_id : '',
-  //   notesRisk: props.score ? props.score.notesRisk : '',
-  //   total: props.score ? props.score.total : ''
-  // }
 }
 
 const validationSchema = Yup.object().shape({
@@ -996,6 +993,7 @@ const mapStateToProps = state => ({
   infoTransMomenOptions: state.scoreRegister.get.infoTransMomen.array,
   currentInterestOptions: state.scoreRegister.get.currentInterest.array,
   perceivedRiskOptions: state.scoreRegister.get.perceivedRisk.array,
+  enquiriesOptions: state.scoreRegister.get.enquiries.array,
   score: state.score.get.object,
   enquiries: state.score.enquiries.object
 })
