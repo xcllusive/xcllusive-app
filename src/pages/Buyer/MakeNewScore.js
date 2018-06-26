@@ -817,7 +817,9 @@ class MakeNewScorePage extends Component {
                           disabled={!isValid}
                         >
                           <Icon name="calculator" />
-                          Calculate Your Score
+                          {this.props.score
+                            ? 'Recalculate Your Score'
+                            : 'Calculate Your Score'}
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
