@@ -68,51 +68,31 @@ class MakeNewScorePage extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (
-      this.props.score !== null &&
-      nextProps.values.perceivedPrice_id !== this.props.score.perceivedPrice.id
-    ) {
+    console.log('props', this.props)
+    console.log('nextprops', nextProps)
+    if (this.props.score && nextProps.values.perceivedPrice_id) {
       this._findItemArray(
         'perceivedPrice_id',
         nextProps.values.perceivedPrice_id
       )
-      this.setState({
-        perceivedPriceChange: true
-      })
     }
-    if (
-      this.props.score !== null &&
-      nextProps.values.infoTransMomen_id !== this.props.score.infoTransMomen.id
-    ) {
+    if (this.props.score && nextProps.values.infoTransMomen_id) {
       this._findItemArray(
         'infoTransMomen_id',
         nextProps.values.infoTransMomen_id
       )
-      this.setState({
-        infoTransMomenChange: true
-      })
     }
-    if (
-      this.props.score !== null &&
-      nextProps.values.currentInterest_id !==
-        this.props.score.currentInterest.id
-    ) {
+    if (this.props.score && nextProps.values.currentInterest_id) {
       this._findItemArray(
         'currentInterest_id',
         nextProps.values.currentInterest_id
       )
-      this.setState({
-        currentInterestChange: true
-      })
     }
-    if (
-      this.props.score !== null &&
-      nextProps.values.perceivedRisk_id !== this.props.score.perceivedRisk.id
-    ) {
-      this._findItemArray('perceivedRisk_id', nextProps.values.perceivedRisk_id)
-      this.setState({
-        perceivedRiskChange: true
-      })
+    if (this.props.score && nextProps.values.perceivedRisk_id) {
+      this._findItemArray(
+        'perceivedRisk_id',
+        nextProps.values.perceivedRisk_id
+      )
     }
     if (nextProps.enquiries) {
       this._findItemEnquiries(nextProps.values.diff)
