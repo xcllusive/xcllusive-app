@@ -254,7 +254,7 @@ class MakeNewScorePage extends Component {
                 <Statistic.Group size="tiny" widths={4}>
                   <Statistic>
                     <Statistic.Value>
-                      {this.props.score ? this.props.score.total : '#'}
+                      {score ? score.total : '#'}
                     </Statistic.Value>
                     <Statistic.Label>This Score</Statistic.Label>
                   </Statistic>
@@ -475,19 +475,11 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {this.state.objectPrice || score ? (
+                {this.state.objectPrice ? (
                   <CardScore
                     header="Percieved Price from Buyers Generated Text"
-                    title={
-                      score
-                        ? score.perceivedPrice.textReport
-                        : this.state.objectPrice.textReport
-                    }
-                    icon={
-                      score && !this.state.perceivedPriceChange
-                        ? score.perceivedPrice.weight
-                        : this.state.objectPrice.weight
-                    }
+                    title={this.state.objectPrice.textReport}
+                    icon={this.state.objectPrice.weight}
                   />
                 ) : null}
               </Grid.Column>
@@ -564,19 +556,11 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {this.state.objectMomentum || score ? (
+                {this.state.objectMomentum ? (
                   <CardScore
                     header="Information/Transparency/Momentum Generated Text:"
-                    title={
-                      score
-                        ? score.infoTransMomen.textReport
-                        : this.state.objectMomentum.textReport
-                    }
-                    icon={
-                      score && !this.state.infoTransMomenChange
-                        ? score.infoTransMomen.weight
-                        : this.state.objectMomentum.weight
-                    }
+                    title={this.state.objectMomentum.textReport}
+                    icon={this.state.objectMomentum.weight}
                   />
                 ) : null}
               </Grid.Column>
@@ -653,19 +637,11 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {this.state.objectInterest || score ? (
+                {this.state.objectInterest ? (
                   <CardScore
                     header="Current Interest Generated Text:"
-                    title={
-                      score
-                        ? score.currentInterest.textReport
-                        : this.state.objectInterest.textReport
-                    }
-                    icon={
-                      score && !this.state.currentInterestChange
-                        ? score.currentInterest.weight
-                        : this.state.objectInterest.weight
-                    }
+                    title={this.state.objectInterest.textReport}
+                    icon={this.state.objectInterest.weight}
                   />
                 ) : null}
               </Grid.Column>
@@ -742,19 +718,11 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {this.state.objectRisk || score ? (
+                {this.state.objectRisk ? (
                   <CardScore
                     header="Buyer Percieved Risk Generated Text:"
-                    title={
-                      score
-                        ? score.perceivedRisk.textReport
-                        : this.state.objectRisk.textReport
-                    }
-                    icon={
-                      score && !this.state.perceivedRiskChange
-                        ? score.perceivedRisk.weight
-                        : this.state.objectRisk.weight
-                    }
+                    title={this.state.objectRisk.textReport}
+                    icon={this.state.objectRisk.weight}
                   />
                 ) : null}
               </Grid.Column>
@@ -791,7 +759,7 @@ class MakeNewScorePage extends Component {
                           disabled={!isValid}
                         >
                           <Icon name="calculator" />
-                          {this.props.score
+                          {score
                             ? 'Recalculate Your Score'
                             : 'Calculate Your Score'}
                         </Button>
@@ -800,7 +768,7 @@ class MakeNewScorePage extends Component {
                         <Statistic.Group size="tiny" widths={1}>
                           <Statistic floated="left">
                             <Statistic.Value>
-                              {this.props.score ? this.props.score.total : '#'}
+                              {score ? score.total : '#'}
                             </Statistic.Value>
                             <Statistic.Label>This Score</Statistic.Label>
                           </Statistic>
