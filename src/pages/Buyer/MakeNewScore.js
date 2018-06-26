@@ -121,7 +121,10 @@ class MakeNewScorePage extends Component {
   }
 
   _findItemEnquiries (diff) {
-    const objectEnquiries = _.find(this.props.enquiriesOptions, o => o.label === diff.toString())
+    const objectEnquiries = _.find(
+      this.props.enquiriesOptions,
+      o => o.label === diff.toString()
+    )
     this.setState({
       objectEnquiries
     })
@@ -188,7 +191,8 @@ class MakeNewScorePage extends Component {
 
   _calculateScore () {
     return (
-      (this.state.objectPrice.weight +
+      (this.state.objectEnquiries.weight +
+        this.state.objectPrice.weight +
         this.state.objectMomentum.weight +
         this.state.objectInterest.weight +
         this.state.objectRisk.weight) /
@@ -319,7 +323,9 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.objectEnquiries ? this.state.objectEnquiries.weight : null}
+                          {this.state.objectEnquiries
+                            ? this.state.objectEnquiries.weight
+                            : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -414,15 +420,13 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {
-                  this.state.objectEnquiries ? (
-                    <CardScore
-                      header="Enquiries In Last Four Weeks Generated Text:"
-                      title={this.state.objectEnquiries.textReport}
-                      icon={this.state.objectEnquiries.weight}
-                    />
-                  ) : null
-                }
+                {this.state.objectEnquiries ? (
+                  <CardScore
+                    header="Enquiries In Last Four Weeks Generated Text:"
+                    title={this.state.objectEnquiries.textReport}
+                    icon={this.state.objectEnquiries.weight}
+                  />
+                ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -447,7 +451,9 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {this.state.objectPrice ? this.state.objectPrice.weight : null}
+                          {this.state.objectPrice
+                            ? this.state.objectPrice.weight
+                            : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -495,24 +501,21 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {
-                  this.state.objectPrice || score ? (
-                    <CardScore
-                      header="Percieved Price from Buyers Generated Text"
-                      title={
-                        score
-                          ? score.perceivedPrice.textReport
-                          : this.state.objectPrice.textReport
-                      }
-                      icon={
-                        score && !this.state.perceivedPriceChange
-                          ? score.perceivedPrice.weight
-                          : this.state.objectPrice.weight
-                      }
-                    />
-                  ) : null
-                }
-
+                {this.state.objectPrice || score ? (
+                  <CardScore
+                    header="Percieved Price from Buyers Generated Text"
+                    title={
+                      score
+                        ? score.perceivedPrice.textReport
+                        : this.state.objectPrice.textReport
+                    }
+                    icon={
+                      score && !this.state.perceivedPriceChange
+                        ? score.perceivedPrice.weight
+                        : this.state.objectPrice.weight
+                    }
+                  />
+                ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -537,11 +540,9 @@ class MakeNewScorePage extends Component {
                           textAlign="right"
                           size="small"
                         >
-                          {
-                            this.state.objectMomentum
-                              ? this.state.objectMomentum.weight
-                              : null
-                          }
+                          {this.state.objectMomentum
+                            ? this.state.objectMomentum.weight
+                            : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -589,24 +590,21 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {
-                  this.state.objectMomentum || score ? (
-                    <CardScore
-                      header="Information/Transparency/Momentum Generated Text:"
-                      title={
-                        score
-                          ? score.infoTransMomen.textReport
-                          : this.state.objectMomentum.textReport
-                      }
-                      icon={
-                        score && !this.state.infoTransMomenChange
-                          ? score.infoTransMomen.weight
-                          : this.state.objectMomentum.weight
-                      }
-                    />
-                  ) : null
-                }
-
+                {this.state.objectMomentum || score ? (
+                  <CardScore
+                    header="Information/Transparency/Momentum Generated Text:"
+                    title={
+                      score
+                        ? score.infoTransMomen.textReport
+                        : this.state.objectMomentum.textReport
+                    }
+                    icon={
+                      score && !this.state.infoTransMomenChange
+                        ? score.infoTransMomen.weight
+                        : this.state.objectMomentum.weight
+                    }
+                  />
+                ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -681,24 +679,21 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {
-                  this.state.objectInterest || score ? (
-                    <CardScore
-                      header="Current Interest Generated Text:"
-                      title={
-                        score
-                          ? score.currentInterest.textReport
-                          : this.state.objectInterest.textReport
-                      }
-                      icon={
-                        score && !this.state.currentInterestChange
-                          ? score.currentInterest.weight
-                          : this.state.objectInterest.weight
-                      }
-                    />
-                  ) : null
-                }
-
+                {this.state.objectInterest || score ? (
+                  <CardScore
+                    header="Current Interest Generated Text:"
+                    title={
+                      score
+                        ? score.currentInterest.textReport
+                        : this.state.objectInterest.textReport
+                    }
+                    icon={
+                      score && !this.state.currentInterestChange
+                        ? score.currentInterest.weight
+                        : this.state.objectInterest.weight
+                    }
+                  />
+                ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -773,23 +768,21 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {
-                  this.state.objectRisk || score ? (
-                    <CardScore
-                      header="Buyer Percieved Risk Generated Text:"
-                      title={
-                        score
-                          ? score.perceivedRisk.textReport
-                          : this.state.objectRisk.textReport
-                      }
-                      icon={
-                        score && !this.state.perceivedRiskChange
-                          ? score.perceivedRisk.weight
-                          : this.state.objectRisk.weight
-                      }
-                    />
-                  ) : null
-                }
+                {this.state.objectRisk || score ? (
+                  <CardScore
+                    header="Buyer Percieved Risk Generated Text:"
+                    title={
+                      score
+                        ? score.perceivedRisk.textReport
+                        : this.state.objectRisk.textReport
+                    }
+                    icon={
+                      score && !this.state.perceivedRiskChange
+                        ? score.perceivedRisk.weight
+                        : this.state.objectRisk.weight
+                    }
+                  />
+                ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
