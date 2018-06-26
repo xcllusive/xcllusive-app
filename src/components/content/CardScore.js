@@ -10,7 +10,8 @@ const IconType = ({ icon }) => {
         <Image
           style={{ width: '40px', marginTop: 20 }}
           size="mini"
-          src={'https://image.flaticon.com/icons/svg/25/25327.svg'}
+          // src={'https://image.flaticon.com/icons/svg/25/25327.svg'}
+          src={'https://png.icons8.com/android/40/FD210A/sad.png'}
         />
       </Fragment>
     )
@@ -22,7 +23,9 @@ const IconType = ({ icon }) => {
         <Image
           style={{ width: '40px', marginTop: 20 }}
           size="mini"
-          src={'https://image.flaticon.com/icons/svg/25/25693.svg'}
+          src={
+            'https://png.icons8.com/ios/40/FDF806/neutral-emoticon-filled.png'
+          }
         />
       </Fragment>
     )
@@ -34,7 +37,7 @@ const IconType = ({ icon }) => {
         <Image
           style={{ width: '40px', marginTop: 20 }}
           size="mini"
-          src={'https://image.flaticon.com/icons/svg/25/25361.svg'}
+          src={'https://png.icons8.com/ios/40/21CE01/lol-filled.png'}
         />
       </Fragment>
     )

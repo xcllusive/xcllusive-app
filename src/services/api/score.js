@@ -24,12 +24,11 @@ export const get = scoreId => {
 }
 
 export const update = score => {
-  console.log('test')
-  // return request({
-  //   method: 'put',
-  //   url: `/score/${score.id}`,
-  //   data: score
-  // })
+  return request({
+    method: 'put',
+    url: `/score/${score.scoreId}`,
+    data: score
+  })
 }
 
 export const enquiries = business => {

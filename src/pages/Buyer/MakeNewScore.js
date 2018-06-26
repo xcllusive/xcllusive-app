@@ -68,8 +68,6 @@ class MakeNewScorePage extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log('props', this.props)
-    console.log('nextprops', nextProps)
     if (this.props.score && nextProps.values.perceivedPrice_id) {
       this._findItemArray(
         'perceivedPrice_id',
@@ -89,10 +87,7 @@ class MakeNewScorePage extends Component {
       )
     }
     if (this.props.score && nextProps.values.perceivedRisk_id) {
-      this._findItemArray(
-        'perceivedRisk_id',
-        nextProps.values.perceivedRisk_id
-      )
+      this._findItemArray('perceivedRisk_id', nextProps.values.perceivedRisk_id)
     }
     if (nextProps.enquiries) {
       this._findItemEnquiries(nextProps.values.diff)
@@ -152,7 +147,7 @@ class MakeNewScorePage extends Component {
   _toggleModalConfirm = values => {
     values.total = this._calculateScore()
     if (this.props.score) {
-      this.props.updateScore()
+      this.props.updateScore(values)
     } else {
       this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
         options: {
@@ -915,7 +910,10 @@ const mapPropsToValues = props => {
       notesRisk: props.score ? props.score.notesRisk : '',
       notesEnquiries: props.score ? props.score.notesEnquiries : '',
       total: props.score ? props.score.total : '',
-      business_id: props.score ? props.score.business_id : props.match.params.idBusiness
+      business_id: props.score
+        ? props.score.business_id
+        : props.match.params.idBusiness,
+      scoreId: props.score ? props.score.id : ''
     }
   }
 
@@ -933,7 +931,8 @@ const mapPropsToValues = props => {
     perceivedRisk_id: '',
     notesRisk: '',
     total: '',
-    business_id: props.match.params.idBusiness
+    business_id: props.match.params.idBusiness,
+    scoreId: ''
   }
 }
 
