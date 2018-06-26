@@ -115,7 +115,7 @@ class MakeNewScorePage extends Component {
         perceivedRiskChange: true
       })
     }
-    if (this.props.enquiries !== nextProps.enquiries) {
+    if (nextProps.enquiries) {
       this._findItemEnquiries(nextProps.values.diff)
     }
   }
@@ -496,7 +496,7 @@ class MakeNewScorePage extends Component {
               </Grid.Column>
               <Grid.Column>
                 {
-                  this.state.objectPrice ? (
+                  this.state.objectPrice || score ? (
                     <CardScore
                       header="Percieved Price from Buyers Generated Text"
                       title={
@@ -590,7 +590,7 @@ class MakeNewScorePage extends Component {
               </Grid.Column>
               <Grid.Column>
                 {
-                  this.state.objectMomentum ? (
+                  this.state.objectMomentum || score ? (
                     <CardScore
                       header="Information/Transparency/Momentum Generated Text:"
                       title={
@@ -682,7 +682,7 @@ class MakeNewScorePage extends Component {
               </Grid.Column>
               <Grid.Column>
                 {
-                  this.state.objectInterest ? (
+                  this.state.objectInterest || score ? (
                     <CardScore
                       header="Current Interest Generated Text:"
                       title={
@@ -774,7 +774,7 @@ class MakeNewScorePage extends Component {
               </Grid.Column>
               <Grid.Column>
                 {
-                  this.state.objectRisk ? (
+                  this.state.objectRisk || score ? (
                     <CardScore
                       header="Buyer Percieved Risk Generated Text:"
                       title={
