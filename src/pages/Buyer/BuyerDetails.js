@@ -80,6 +80,11 @@ class BuyerDetails extends Component {
     ) {
       this._selectLog(nextProps.listBusinessBuyerLogList[0])
     }
+    if (!this.props.values && nextProps.values) {
+      this.setState({
+        lastObjValues: this.props.values
+      })
+    }
   }
 
   componentWillUnmount () {

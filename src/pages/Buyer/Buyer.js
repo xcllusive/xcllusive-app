@@ -118,7 +118,7 @@ class BuyerPage extends Component {
                       </Button>
                     </Table.Cell>
                     <Table.Cell>{}</Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>{moment(item.business.dateTimeCreated).fromNow()}</Table.Cell>
                     <Table.Cell>
                       {item.lastScore ? item.lastScore.total : '-'}
                     </Table.Cell>

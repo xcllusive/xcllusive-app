@@ -25,13 +25,13 @@ import { getBuyersGroupEmail } from '../../redux/ducks/business'
 import { sendGroupEmail } from '../../redux/ducks/buyer'
 
 class ModalGroupEmail extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
       array: [],
-      checkboxMarkAll: false
+      checkboxMarkAll: false,
+      fileUpload: true
     }
-    this.fileInput = null
   }
 
   componentWillMount () {
@@ -57,7 +57,10 @@ class ModalGroupEmail extends Component {
   }
 
   _removeFileUploaded = e => {
+    if (this.timer) clearTimeout(this.timer)
+    this.setState({fileUpload: false})
     this.props.setFieldValue('attachment', null)
+    this.timer = setTimeout(() => this.setState({fileUpload: true}), 10)
   }
 
   _handleFileUpload = e => {
@@ -198,13 +201,16 @@ class ModalGroupEmail extends Component {
             </Form.Group>
             <Form.Group>
               <Form.Field width={11}>
-                <Form.Input
-                  type="file"
-                  label="Attachment"
-                  name="attachment"
-                  autoComplete="attachment"
-                  onChange={this._handleFileUpload}
-                />
+                { this.state.fileUpload ? (
+                  <Form.Input
+                    type="file"
+                    label="Attachment"
+                    name="attachment"
+                    autoComplete="attachment"
+                    onChange={this._handleFileUpload}
+                  />
+                ) : null }
+
                 {errors.attachment &&
                   touched.attachment && (
                   <Label
