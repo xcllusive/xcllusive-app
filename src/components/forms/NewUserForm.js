@@ -4,14 +4,23 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Label, Checkbox, Icon, Button } from 'semantic-ui-react'
+import {
+  Modal,
+  Form,
+  Label,
+  Checkbox,
+  Icon,
+  Button,
+  Radio
+} from 'semantic-ui-react'
 import styled from 'styled-components'
 import Yup from 'yup'
 
 import { createUser, updateUser } from '../../redux/ducks/user'
 
 const CheckboxFormatted = styled.div`
-  padding-right: 1em`
+  padding-right: 1em;
+`
 
 class NewUserForm extends Component {
   constructor (props) {
@@ -24,10 +33,6 @@ class NewUserForm extends Component {
           { key: 3, text: 'Gosford Office', value: 'Gosford Office' },
           { key: 4, text: 'Cowra Office', value: 'Cowra Office' },
           { key: 5, text: 'Camberra Office', value: 'Camberra Office' }
-        ],
-        listingAgent: [
-          { key: 1, text: 'Yes', value: 1 },
-          { key: 2, text: 'No', value: 0 }
         ],
         userType: [
           { key: 1, text: 'Admin', value: 'Admin' },
@@ -59,26 +64,22 @@ class NewUserForm extends Component {
   }
 
   _canChangePassword = () => {
-    this.setState(prevState => ({
-      inputPasswordShow: !prevState.inputPasswordShow
-    }),
-    () => {
-      if (this.state.inputPasswordShow) {
-        this.props.setFieldValue('password', false)
-      } else {
-        this.props.setFieldValue('password', '')
+    this.setState(
+      prevState => ({
+        inputPasswordShow: !prevState.inputPasswordShow
+      }),
+      () => {
+        if (this.state.inputPasswordShow) {
+          this.props.setFieldValue('password', false)
+        } else {
+          this.props.setFieldValue('password', '')
+        }
       }
-    }
     )
   }
 
   render () {
-    const {
-      dataRegion,
-      listingAgent,
-      userType,
-      state
-    } = this.state.formOptions
+    const { dataRegion, userType, state } = this.state.formOptions
 
     const {
       values,
@@ -94,122 +95,174 @@ class NewUserForm extends Component {
       toggleModal
     } = this.props
     return (
-      <Modal
-        dimmer={'blurring'}
-        open={modalOpen}
-      >
-        <Modal.Header align='center'>{ (this.props.user && this.props.user.id) ? 'Edit User' : 'New User' }</Modal.Header>
+      <Modal dimmer={'blurring'} open={modalOpen}>
+        <Modal.Header align="center">
+          {this.props.user && this.props.user.id ? 'Edit User' : 'New User'}
+        </Modal.Header>
         <Modal.Content>
           <Form>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
                   required
-                  label='Email'
-                  name='email'
-                  autoComplete='email'
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.email && touched.email && <Label basic color='red' pointing content={errors.email} />}
+                {errors.email &&
+                  touched.email && (
+                  <Label basic color="red" pointing content={errors.email} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  action={(this.props.user && this.props.user.id !== '')}
-                  type='password'
-                  label='Password'
-                  name='password'
-                  autoComplete='password'
+                  action={this.props.user && this.props.user.id !== ''}
+                  type="password"
+                  label="Password"
+                  name="password"
+                  autoComplete="password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 >
-                  {
-                    this.props.user && this.props.user.id ? (
-                      <div>
-                        <input
-                          disabled={this.state.inputPasswordShow}
-                          type='password'
-                          name='password'
-                          autoComplete='password'
-                          value={values.password}
-                          onChange={handleChange}
-                          onBlur={handleBlur} />
-                        <Button onClick={this._canChangePassword} content='Change Password' />
-                      </div>
-                    ) : null
-                  }
+                  {this.props.user && this.props.user.id ? (
+                    <div>
+                      <input
+                        disabled={this.state.inputPasswordShow}
+                        type="password"
+                        name="password"
+                        autoComplete="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <Button
+                        onClick={this._canChangePassword}
+                        content="Change Password"
+                      />
+                    </div>
+                  ) : null}
                 </Form.Input>
-                { errors.password && touched.password && <Label basic color='red' pointing content={errors.password} /> }
+                {errors.password &&
+                  touched.password && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.password}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
                   required
-                  label='First Name'
-                  name='firstName'
-                  autoComplete='firstName'
+                  label="First Name"
+                  name="firstName"
+                  autoComplete="firstName"
                   value={values.firstName}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.firstName && touched.firstName && <Label basic color='red' pointing content={errors.firstName} />}
+                {errors.firstName &&
+                  touched.firstName && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.firstName}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
                   required
-                  label='Last Name'
-                  name='lastName'
-                  autoComplete='lastName'
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="lastName"
                   value={values.lastName}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.lastName && touched.lastName && <Label basic color='red' pointing content={errors.lastName} />}
+                {errors.lastName &&
+                  touched.lastName && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.lastName}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
-                  label='Home Phone'
-                  name='phoneHome'
-                  autoComplete='phoneHome'
+                  label="Home Phone"
+                  name="phoneHome"
+                  autoComplete="phoneHome"
                   value={values.phoneHome}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.phoneHome && touched.phoneHome && <Label basic color='red' pointing content={errors.phoneHome} />}
+                {errors.phoneHome &&
+                  touched.phoneHome && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.phoneHome}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Work Phone'
-                  name='phoneWork'
-                  autoComplete='phoneWork'
+                  label="Work Phone"
+                  name="phoneWork"
+                  autoComplete="phoneWork"
                   value={values.phoneWork}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.phoneWork && touched.phoneWork && <Label basic color='red' pointing content={errors.phoneWork} />}
+                {errors.phoneWork &&
+                  touched.phoneWork && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.phoneWork}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Mobile Phone'
-                  name='phoneMobile'
-                  autoComplete='phoneMobile'
+                  label="Mobile Phone"
+                  name="phoneMobile"
+                  autoComplete="phoneMobile"
                   value={values.phoneMobile}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.phoneMobile && touched.phoneMobile && <Label basic color='red' pointing content={errors.phoneMobile} />}
+                {errors.phoneMobile &&
+                  touched.phoneMobile && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.phoneMobile}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Select
-                  label='State'
-                  name='state'
+                  label="State"
+                  name="state"
                   options={state}
                   value={values.state}
                   onChange={this._handleSelectChange}
@@ -217,82 +270,152 @@ class NewUserForm extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Suburb'
-                  name='suburb'
-                  autoComplete='suburb'
+                  label="Suburb"
+                  name="suburb"
+                  autoComplete="suburb"
                   value={values.suburb}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.suburb && touched.suburb && <Label basic color='red' pointing content={errors.suburb} />}
+                {errors.suburb &&
+                  touched.suburb && (
+                  <Label basic color="red" pointing content={errors.suburb} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Street'
-                  name='street'
-                  autoComplete='street'
+                  label="Street"
+                  name="street"
+                  autoComplete="street"
                   value={values.street}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.street && touched.street && <Label basic color='red' pointing content={errors.street} />}
+                {errors.street &&
+                  touched.street && (
+                  <Label basic color="red" pointing content={errors.street} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  label='Post Code'
-                  name='postCode'
-                  autoComplete='postCode'
+                  label="Post Code"
+                  name="postCode"
+                  autoComplete="postCode"
                   value={values.postCode}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.postCode && touched.postCode && <Label basic color='red' pointing content={errors.postCode} />}
+                {errors.postCode &&
+                  touched.postCode && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.postCode}
+                  />
+                )}
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Select
                   required
-                  label='Office Region'
-                  name='dataRegion'
+                  label="Office Region"
+                  name="dataRegion"
                   options={dataRegion}
                   value={values.dataRegion}
                   onChange={this._handleSelectChange}
                 />
-                {errors.dataRegion && touched.dataRegion && <Label basic color='red' pointing content={errors.dataRegion} />}
+                {errors.dataRegion &&
+                  touched.dataRegion && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.dataRegion}
+                  />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Select
                   required
-                  label='Listing Agent'
-                  name='listingAgent'
-                  options={listingAgent}
-                  value={values.listingAgent}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.listingAgent && touched.listingAgent && <Label basic color='red' pointing content={errors.listingAgent} />}
-              </Form.Field>
-              <Form.Field>
-                <Form.Select
-                  required
-                  label='User Type'
-                  name='userType'
+                  label="User Type"
+                  name="userType"
                   options={userType}
                   value={values.userType}
                   onChange={this._handleSelectChange}
                 />
-                {errors.userType && touched.userType && <Label basic color='red' pointing content={errors.userType} />}
+                {errors.userType &&
+                  touched.userType && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.userType}
+                  />
+                )}
+              </Form.Field>
+              <Form.Field>
+                <label>Listing Agent</label>
+                <Form.Field
+                  control={Radio}
+                  label="Yes"
+                  name="listingAgent"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.listingAgent}
+                />
+                <Form.Field
+                  control={Radio}
+                  label="No"
+                  name="listingAgent"
+                  onChange={this._handleChangeCheckBox}
+                  checked={!values.listingAgent}
+                />
+                {/* <Form.Select
+                  required
+                  label="Listing Agent"
+                  name="listingAgent"
+                  options={listingAgent}
+                  value={values.listingAgent}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.listingAgent &&
+                  touched.listingAgent && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.listingAgent}
+                  />
+                )} */}
+              </Form.Field>
+              <Form.Field>
+                <label>Broker</label>
+                <Form.Field
+                  control={Radio}
+                  label="Yes"
+                  name="broker"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.broker}
+                />
+                <Form.Field
+                  control={Radio}
+                  label="No"
+                  name="broker"
+                  onChange={this._handleChangeCheckBox}
+                  checked={!values.broker}
+                />
               </Form.Field>
             </Form.Group>
-            <Form.Group widths='equal'>
+            <Form.Group widths="equal">
               <Form.Field width={9}>
                 <label>Menu Access:</label>
               </Form.Field>
               <Form.Field width={2}>
                 <Checkbox
                   as={CheckboxFormatted}
-                  label='Buyer'
-                  value='buyerMenu'
+                  label="Buyer"
+                  value="buyerMenu"
                   checked={values.buyerMenu}
                   onChange={this._handleChangeCheckBox}
                 />
@@ -300,8 +423,8 @@ class NewUserForm extends Component {
               <Form.Field width={2}>
                 <Checkbox
                   as={CheckboxFormatted}
-                  label='Business'
-                  value='businessMenu'
+                  label="Business"
+                  value="businessMenu"
                   checked={values.businessMenu}
                   onChange={this._handleChangeCheckBox}
                 />
@@ -309,8 +432,8 @@ class NewUserForm extends Component {
               <Form.Field width={11}>
                 <Checkbox
                   as={CheckboxFormatted}
-                  label='Pre Sale'
-                  value='preSaleMenu'
+                  label="Pre Sale"
+                  value="preSaleMenu"
                   checked={values.preSaleMenu === true}
                   onChange={this._handleChangeCheckBox}
                 />
@@ -318,8 +441,8 @@ class NewUserForm extends Component {
               <Form.Field width={10}>
                 <Checkbox
                   as={CheckboxFormatted}
-                  label='Resources'
-                  value='resourcesMenu'
+                  label="Resources"
+                  value="resourcesMenu"
                   checked={values.resourcesMenu === true}
                   onChange={this._handleChangeCheckBox}
                 />
@@ -327,8 +450,8 @@ class NewUserForm extends Component {
               <Form.Field width={14}>
                 <Checkbox
                   as={CheckboxFormatted}
-                  label='Client Manager'
-                  value='clientManagerMenu'
+                  label="Client Manager"
+                  value="clientManagerMenu"
                   checked={values.clientManagerMenu === true}
                   onChange={this._handleChangeCheckBox}
                 />
@@ -336,9 +459,9 @@ class NewUserForm extends Component {
               <Form.Field>
                 <Checkbox
                   as={CheckboxFormatted}
-                  name='systemSettingsMenu'
-                  label='System Settings'
-                  value='systemSettingsMenu'
+                  name="systemSettingsMenu"
+                  label="System Settings"
+                  value="systemSettingsMenu"
                   checked={values.systemSettingsMenu === true}
                   onChange={this._handleChangeCheckBox}
                 />
@@ -348,19 +471,18 @@ class NewUserForm extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button
-            color='blue'
+            color="blue"
             disabled={createLoading || updateLoading || !isValid}
             loading={createLoading || updateLoading}
             onClick={handleSubmit}
           >
-            <Icon name='save' />
-            { (this.props.user && this.props.user.id) ? 'Edit User' : 'Create User' }
+            <Icon name="save" />
+            {this.props.user && this.props.user.id
+              ? 'Edit User'
+              : 'Create User'}
           </Button>
-          <Button
-            color='red'
-            onClick={toggleModal}
-          >
-            <Icon name='cancel' />
+          <Button color="red" onClick={toggleModal}>
+            <Icon name="cancel" />
             Cancel
           </Button>
         </Modal.Actions>
@@ -405,6 +527,7 @@ const mapPropsToValues = props => {
       postCode: props.user.postCode,
       dataRegion: props.user.dataRegion,
       listingAgent: props.user.listingAgent,
+      broker: props.user.listingAgent,
       userType: props.user.userType,
       buyerMenu: _.includes(roles, 'BUYER_MENU'),
       businessMenu: _.includes(roles, 'BUSINESS_MENU'),
@@ -427,7 +550,8 @@ const mapPropsToValues = props => {
     street: '',
     postCode: '',
     dataRegion: '',
-    listingAgent: '',
+    listingAgent: false,
+    broker: false,
     userType: '',
     buyerMenu: false,
     businessMenu: false,
@@ -452,24 +576,15 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string()
     .required('Last Name is required.')
     .max(20, 'Last Name require max 20 characters.'),
-  phoneHome: Yup.string()
-    .max(20, 'Home Phone require max 20 characters.'),
-  phoneWork: Yup.string()
-    .max(20, 'Work Phone require max 20 characters.'),
-  phoneMobile: Yup.string()
-    .max(20, 'Mobile Phone require max 20 characters.'),
-  suburb: Yup.string()
-    .max(40, 'Suburb require max 40 charecters.'),
-  street: Yup.string()
-    .max(40, 'Street require max 40 charecters.'),
-  postCode: Yup.number()
-    .integer('Only numbers are permitted.'),
-  dataRegion: Yup.string()
-    .required('Office Region is required.'),
-  listingAgent: Yup.number()
-    .required('Listing Agent is required.'),
-  userType: Yup.string()
-    .required('User Type is required.')
+  phoneHome: Yup.string().max(20, 'Home Phone require max 20 characters.'),
+  phoneWork: Yup.string().max(20, 'Work Phone require max 20 characters.'),
+  phoneMobile: Yup.string().max(20, 'Mobile Phone require max 20 characters.'),
+  suburb: Yup.string().max(40, 'Suburb require max 40 charecters.'),
+  street: Yup.string().max(40, 'Street require max 40 charecters.'),
+  postCode: Yup.number().integer('Only numbers are permitted.'),
+  dataRegion: Yup.string().required('Office Region is required.'),
+  // listingAgent: Yup.number().required('Listing Agent is required.'),
+  userType: Yup.string().required('User Type is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
@@ -491,10 +606,14 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({ createUser, updateUser }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit
+    handleSubmit,
+    enableReinitialize: true
   })(NewUserForm)
 )
