@@ -46,7 +46,6 @@ class ScoreListPage extends Component {
 
   render () {
     const { listScoreList, history, business, isLoadingBusiness } = this.props
-    console.log(this.state)
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -114,11 +113,9 @@ class ScoreListPage extends Component {
                           {listScore.dateSent ? 'Yes' : 'No'}
                         </Table.Cell>
                         <Table.Cell>
-                          <Icon
-                            link
-                            name="edit"
-                            size="large"
-                            disabled={listScore.dateSent}
+                          <Button
+                            icon
+                            disabled={listScore.dateSent !== null}
                             onClick={() =>
                               history.push(
                                 `/buyer/business/${
@@ -126,19 +123,20 @@ class ScoreListPage extends Component {
                                 }/make-new-score/${listScore.id}`
                               )
                             }
-                          />
+                          >
+                            <Icon link name="edit" size="large" />
+                          </Button>
                         </Table.Cell>
                         <Table.Cell>
-                          <Icon
-                            link
-                            name="trash"
-                            color="red"
-                            size="large"
-                            disabled={!listScore.dateSent}
+                          <Button
+                            icon
+                            disabled={listScore.dateSent !== null}
                             onClick={() =>
                               this._toggleModalConfirmDelete(listScore.id)
                             }
-                          />
+                          >
+                            <Icon link color="red" size="large" name="trash" />
+                          </Button>
                         </Table.Cell>
                       </Table.Row>
                     ))}
