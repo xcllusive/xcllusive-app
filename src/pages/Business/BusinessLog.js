@@ -12,7 +12,8 @@ import { getBusiness } from '../../redux/ducks/business'
 import {
   getLogFromBusiness,
   clearBusinessLog,
-  updateFollowUpStatus
+  updateBusinessLog,
+  finaliseBusinessLog
 } from '../../redux/ducks/businessLog'
 
 import {
@@ -103,6 +104,7 @@ class BusinessLogPage extends Component {
       business,
       isLoadingarrayLogBusiness,
       loadingUpdateStatus,
+      loadingFinaliseStatus,
       history
     } = this.props
     return (
@@ -233,14 +235,18 @@ class BusinessLogPage extends Component {
                     <Icon name="commenting" />
                     New Communication
                   </Button>
-                  <Button color="yellow">
+                  <Button
+                    color="yellow"
+                    loading={loadingUpdateStatus}
+                    onClick={() => this.props.updateBusinessLog()}
+                  >
                     <Icon name="save" />
                     Save Communication
                   </Button>
                   <Button
                     color="red"
-                    loading={loadingUpdateStatus}
-                    onClick={() => this.props.updateFollowUpStatus()}
+                    loading={loadingFinaliseStatus}
+                    onClick={() => this.props.finaliseBusinessLog()}
                   >
                     <Icon name="save" />
                     Finalise Communication
@@ -321,8 +327,10 @@ BusinessLogPage.propTypes = {
   setFieldValue: PropTypes.func,
   clearBusinessLog: PropTypes.func,
   isLoadingarrayLogBusiness: PropTypes.bool,
-  updateFollowUpStatus: PropTypes.func,
-  loadingUpdateStatus: PropTypes.bool
+  updateBusinessLog: PropTypes.func,
+  loadingUpdateStatus: PropTypes.bool,
+  finaliseBusinessLog: PropTypes.func,
+  loadingFinaliseStatus: PropTypes.bool
 }
 
 const mapPropsToValues = () => {
@@ -342,13 +350,20 @@ const mapStateToProps = state => {
     business: state.business.get.object,
     arrayLogBusiness: state.businessLog.get.array,
     isLoadingarrayLogBusiness: state.businessLog.get.isLoading,
-    loadingUpdateStatus: state.businessLog.updateStatus.isLoading
+    loadingUpdateStatus: state.businessLog.updateLog.isLoading,
+    loadingFinaliseStatus: state.businessLog.finaliseLog.isLoading
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { getBusiness, getLogFromBusiness, clearBusinessLog, updateFollowUpStatus },
+    {
+      getBusiness,
+      getLogFromBusiness,
+      clearBusinessLog,
+      updateBusinessLog,
+      finaliseBusinessLog
+    },
     dispatch
   )
 }

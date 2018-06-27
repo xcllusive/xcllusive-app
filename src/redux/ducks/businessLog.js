@@ -1,6 +1,7 @@
 import {
   getAllFromBusiness,
-  updateStatus
+  update,
+  finalise
 } from '../../services/api/businessLog'
 import { toast } from 'react-toastify'
 
@@ -11,12 +12,12 @@ export const Types = {
   GET_BUSINESS_LOG_SUCCESS: 'GET_BUSINESS_LOG_SUCCESS',
   GET_BUSINESS_LOG_FAILURE: 'GET_BUSINESS_LOG_FAILURE',
   CLEAR_BUSINESS_LOG: 'CLEAR_BUSINESS_LOG',
-  UPDATE_BUSINESS_FOLLOW_UP_STATUS_LOADING:
-    'UPDATE_BUSINESS_FOLLOW_UP_STATUS_LOADING',
-  UPDATE_BUSINESS_FOLLOW_UP_STATUS_SUCCESS:
-    'UPDATE_BUSINESS_FOLLOW_UP_STATUS_SUCCESS',
-  UPDATE_BUSINESS_FOLLOW_UP_STATUS_FAILURE:
-    'UPDATE_BUSINESS_FOLLOW_UP_STATUS_FAILURE'
+  UPDATE_BUSINESS_LOG_LOADING: 'UPDATE_BUSINESS_LOG_LOADING',
+  UPDATE_BUSINESS_LOG_SUCCESS: 'UPDATE_BUSINESS_LOG_SUCCESS',
+  UPDATE_BUSINESS_LOG_FAILURE: 'UPDATE_BUSINESS_LOG_FAILURE',
+  FINALISE_BUSINESS_LOG_LOADING: 'FINALISE_BUSINESS_LOG_LOADING',
+  FINALISE_BUSINESS_LOG_SUCCESS: 'FINALISE_BUSINESS_LOG_SUCCESS',
+  FINALISE_BUSINESS_LOG_FAILURE: 'FINALISE_BUSINESS_LOG_FAILURE'
 }
 
 // Reducer
@@ -27,7 +28,12 @@ const initialState = {
     isLoading: false,
     error: null
   },
-  updateStatus: {
+  updateLog: {
+    isLoading: false,
+    isUpdated: false,
+    error: null
+  },
+  finaliseLog: {
     isLoading: false,
     isUpdated: false,
     error: null
@@ -64,30 +70,59 @@ export default function reducer (state = initialState, action) {
       }
     case Types.CLEAR_BUSINESS_LOG:
       return initialState
-    case Types.UPDATE_BUSINESS_FOLLOW_UP_STATUS_LOADING:
+    case Types.UPDATE_BUSINESS_LOG_LOADING:
       return {
         ...state,
-        updateStatus: {
-          ...state.updateStatus,
+        updateLog: {
+          ...state.updateLog,
           isLoading: action.payload,
           error: null
         }
       }
-    case Types.UPDATE_BUSINESS_FOLLOW_UP_STATUS_SUCCESS:
+    case Types.UPDATE_BUSINESS_LOG_SUCCESS:
       return {
         ...state,
-        updateStatus: {
+        updateLog: {
           ...state.updateStatus,
           isLoading: false,
           isUpdated: action.payload,
           error: null
         }
       }
-    case Types.UPDATE_BUSINESS_FOLLOW_UP_STATUS_FAILURE:
+    case Types.UPDATE_BUSINESS_LOG_FAILURE:
       return {
         ...state,
-        updateStatus: {
-          ...state.updateStatus,
+        updateLog: {
+          ...state.updateLog,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
+    case Types.FINALISE_BUSINESS_LOG_LOADING:
+      return {
+        ...state,
+        finaliseLog: {
+          ...state.finaliseLog,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.FINALISE_BUSINESS_LOG_SUCCESS:
+      return {
+        ...state,
+        finaliseLog: {
+          ...state.finaliseLog,
+          isLoading: false,
+          isUpdated: action.payload,
+          error: null
+        }
+      }
+    case Types.FINALISE_BUSINESS_LOG_FAILURE:
+      return {
+        ...state,
+        finaliseLog: {
+          ...state.finaliseLog,
           isLoading: false,
           isUpdated: false,
           error: action.payload
@@ -128,20 +163,40 @@ export const clearBusinessLog = () => dispatch => {
   })
 }
 
-export const updateFollowUpStatus = businessLog => async dispatch => {
+export const updateBusinessLog = businessLog => async dispatch => {
   dispatch({
-    type: Types.UPDATE_BUSINESS_FOLLOW_UP_STATUS_LOADING,
+    type: Types.UPDATE_BUSINESS_LOG_LOADING,
     payload: true
   })
   try {
-    const response = await updateStatus(businessLog)
+    const response = await update(businessLog)
     dispatch({
-      type: Types.UPDATE_BUSINESS_FOLLOW_UP_STATUS_SUCCESS
+      type: Types.UPDATE_BUSINESS_LOG_SUCCESS
     })
     toast.success(response.message)
   } catch (error) {
     dispatch({
-      type: Types.UPDATE_BUSINESS_FOLLOW_UP_STATUS_FAILURE,
+      type: Types.UPDATE_BUSINESS_LOG_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const finaliseBusinessLog = businessLog => async dispatch => {
+  dispatch({
+    type: Types.FINALISE_BUSINESS_LOG_LOADING,
+    payload: true
+  })
+  try {
+    const response = await finalise(businessLog)
+    dispatch({
+      type: Types.FINALISE_BUSINESS_LOG_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.FINALISE_BUSINESS_LOG_FAILURE,
       payload: error
     })
     toast.error(error)

@@ -11,8 +11,17 @@ export const getAllFromBusiness = (businessId, search) => {
   })
 }
 
-export const updateStatus = businessLog => {
-  console.log('test update status')
+export const update = businessLog => {
+  console.log('test update ')
+  // return request({
+  // method: 'put'
+  // url: `/business/${business.id}`,
+  //  data: business
+  // })
+}
+
+export const finalise = businessLog => {
+  console.log('test finalise ')
   // return request({
   // method: 'put'
   // url: `/business/${business.id}`,
