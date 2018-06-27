@@ -39,6 +39,8 @@ class ScoreListPage extends Component {
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           this.props.removeScore(idScore)
+          this.props.listScore(this.props.match.params.id)
+          this.props.getBusiness(this.props.match.params.id)
         }
       }
     })
@@ -108,14 +110,13 @@ class ScoreListPage extends Component {
                           )}
                         </Table.Cell>
                         <Table.Cell>Score {key + 1}</Table.Cell>
-                        <Table.Cell>{30}</Table.Cell>
+                        <Table.Cell>{listScore.total}</Table.Cell>
                         <Table.Cell>
                           {listScore.dateSent ? 'Yes' : 'No'}
                         </Table.Cell>
                         <Table.Cell>
                           <Button
                             icon
-                            disabled={listScore.dateSent !== null}
                             onClick={() =>
                               history.push(
                                 `/buyer/business/${
