@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
 
@@ -101,25 +102,25 @@ class BuyerPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {businesses.map(businesses => (
-                  <Table.Row active key={businesses.business.id}>
-                    <Table.Cell>{`BS${businesses.business.id}`}</Table.Cell>
+                {businesses.map(item => (
+                  <Table.Row active key={item.business.id}>
+                    <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
                     <Table.Cell
                       selectable
                       onClick={() =>
-                        history.push(`buyer/business/${businesses.business.id}`)
+                        history.push(`buyer/business/${item.business.id}`)
                       }
                     >
-                      {businesses.business.businessName}
+                      {item.business.businessName}
                     </Table.Cell>
-                    <Table.Cell>{businesses.countFollowUpTask}</Table.Cell>
+                    <Table.Cell>{item.countFollowUpTask}</Table.Cell>
                     <Table.Cell>
                       <Button
                         icon
                         size="small"
                         color="instagram"
                         onClick={() =>
-                          this._toggleModalGroupEmail(businesses.business.id)
+                          this._toggleModalGroupEmail(item.business.id)
                         }
                       >
                         <Icon name="mail" />
@@ -127,8 +128,14 @@ class BuyerPage extends Component {
                     </Table.Cell>
                     <Table.Cell>{}</Table.Cell>
                     <Table.Cell>{}</Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>
+                      {item.lastScore ? item.lastScore.total : '-'}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {item.lastScore && item.lastScore.dateSent
+                        ? moment(item.lastScore.dateSent).format('DD/MM/YYYY')
+                        : '-'}
+                    </Table.Cell>
                     <Table.Cell>
                       <Button
                         icon

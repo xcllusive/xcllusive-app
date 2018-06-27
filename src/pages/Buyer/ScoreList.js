@@ -13,8 +13,9 @@ import {
 } from 'semantic-ui-react'
 
 import { getBusiness } from '../../redux/ducks/business'
-import { listScore } from '../../redux/ducks/score'
+import { listScore, removeScore } from '../../redux/ducks/score'
 import moment from 'moment'
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 
 import Wrapper from '../../components/content/Wrapper'
 
@@ -29,8 +30,23 @@ class ScoreListPage extends Component {
     this.props.getBusiness(this.props.match.params.id)
   }
 
+  _toggleModalConfirmDelete = idScore => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Delete Score',
+        text: 'Are you sure you want to delete this score?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.removeScore(idScore)
+        }
+      }
+    })
+  }
+
   render () {
     const { listScoreList, history, business, isLoadingBusiness } = this.props
+    console.log(this.state)
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -118,9 +134,10 @@ class ScoreListPage extends Component {
                             name="trash"
                             color="red"
                             size="large"
-                            // onClick={() =>
-                            //   this._toggleModalConfirm(sourceOptions.value, 1)
-                            // }
+                            disabled={!listScore.dateSent}
+                            onClick={() =>
+                              this._toggleModalConfirmDelete(listScore.id)
+                            }
                           />
                         </Table.Cell>
                       </Table.Row>
@@ -157,11 +174,16 @@ ScoreListPage.propTypes = {
   getBusiness: PropTypes.func,
   business: PropTypes.object,
   isLoadingBusiness: PropTypes.bool,
-  listScore: PropTypes.func
+  listScore: PropTypes.func,
+  removeScore: PropTypes.func,
+  openModal: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusiness, listScore }, dispatch)
+  bindActionCreators(
+    { getBusiness, listScore, removeScore, openModal },
+    dispatch
+  )
 
 const mapStateToProps = state => ({
   listScoreList: state.score.listScore.array,

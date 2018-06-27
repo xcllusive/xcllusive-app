@@ -38,3 +38,10 @@ export const enquiries = business => {
     params: { business }
   })
 }
+
+export const remove = scoreId => {
+  return request({
+    method: 'delete',
+    url: `/score/${scoreId}`
+  })
+}

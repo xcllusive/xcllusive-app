@@ -1,18 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Image, Card } from 'semantic-ui-react'
+import { Card, Icon } from 'semantic-ui-react'
 
 const IconType = ({ icon }) => {
   if (icon < 30) {
     return (
       <Fragment>
         <Card.Meta style={{ marginTop: 10 }}>Needs urgent attention</Card.Meta>
-        <Image
-          style={{ width: '40px', marginTop: 20 }}
-          size="mini"
-          // src={'https://image.flaticon.com/icons/svg/25/25327.svg'}
-          src={'https://png.icons8.com/android/40/FD210A/sad.png'}
-        />
+        <Icon color="red" size="huge" name="frown" style={{ marginTop: 20 }} />
       </Fragment>
     )
   }
@@ -20,13 +15,7 @@ const IconType = ({ icon }) => {
     return (
       <Fragment>
         <Card.Meta style={{ marginTop: 10 }}>Possible improvement</Card.Meta>
-        <Image
-          style={{ width: '40px', marginTop: 20 }}
-          size="mini"
-          src={
-            'https://png.icons8.com/ios/40/FDF806/neutral-emoticon-filled.png'
-          }
-        />
+        <Icon color="yellow" size="huge" name="meh" style={{ marginTop: 20 }} />
       </Fragment>
     )
   }
@@ -34,10 +23,11 @@ const IconType = ({ icon }) => {
     return (
       <Fragment>
         <Card.Meta style={{ marginTop: 10 }}>Satisfactory</Card.Meta>
-        <Image
-          style={{ width: '40px', marginTop: 20 }}
-          size="mini"
-          src={'https://png.icons8.com/android/40/21CE01/happy.png'}
+        <Icon
+          color="green"
+          size="huge"
+          name="smile"
+          style={{ marginTop: 20 }}
         />
       </Fragment>
     )

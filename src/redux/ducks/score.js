@@ -5,7 +5,8 @@ import {
   calculate,
   get,
   update,
-  enquiries
+  enquiries,
+  remove
 } from '../../services/api/score'
 
 // Action Types
@@ -26,7 +27,10 @@ export const Types = {
   UPDATE_SCORE_FAILURE: 'UPDATE_SCORE_FAILURE',
   ENQUIRIES_LAST_4_WEEKS_LOADING: 'ENQUIRIES_LAST_4_WEEKS_LOADING',
   ENQUIRIES_LAST_4_WEEKS_SUCCESS: 'ENQUIRIES_LAST_4_WEEKS_SUCCESS',
-  ENQUIRIES_LAST_4_WEEKS_FAILURE: 'ENQUIRIES_LAST_4_WEEKS_FAILURE'
+  ENQUIRIES_LAST_4_WEEKS_FAILURE: 'ENQUIRIES_LAST_4_WEEKS_FAILURE',
+  REMOVE_SCORE_LOADING: 'REMOVE_SCORE_LOADING',
+  REMOVE_SCORE_SUCCESS: 'REMOVE_SCORE_SUCCESS',
+  REMOVE_SCORE_FAILURE: 'REMOVE_SCORE_FAILURE'
 }
 
 // Reducer
@@ -57,6 +61,11 @@ const initialState = {
   enquiries: {
     object: null,
     isLoading: false,
+    error: null
+  },
+  delete: {
+    isLoading: false,
+    isDeleted: false,
     error: null
   }
 }
@@ -180,6 +189,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.REMOVE_SCORE_LOADING:
+      return {
+        ...state,
+        delete: {
+          ...state.delete,
+          isLoading: action.payload,
+          isDeleted: false,
+          error: null
+        }
+      }
+    case Types.REMOVE_SCORE_SUCCESS:
+      return {
+        ...state,
+        delete: {
+          ...state.delete,
+          isLoading: false,
+          isDeleted: true
+        }
+      }
+    case Types.REMOVE_SCORE_FAILURE:
+      return {
+        ...state,
+        delete: {
+          ...state.delete,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_SCORE:
       return initialState
     default:
@@ -292,6 +329,26 @@ export const enquiriesLast4Weeks = businessId => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.ENQUIRIES_LAST_4_WEEKS_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const removeScore = score => async dispatch => {
+  dispatch({
+    type: Types.REMOVE_SCORE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await remove(score)
+    dispatch({
+      type: Types.REMOVE_SCORE_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.REMOVE_SCORE_FAILURE,
       payload: error
     })
     toast.error(error)
