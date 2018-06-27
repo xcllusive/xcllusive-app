@@ -68,7 +68,7 @@ class BuyerListPage extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          {listBuyersList ? (
+          {listBuyersList.length > 0 ? (
             <Grid padded="horizontally" style={{ marginTop: 0 }}>
               <Grid.Row>
                 <Table
@@ -126,17 +126,21 @@ class BuyerListPage extends Component {
                   </Table.Body>
                 </Table>
               </Grid.Row>
+            </Grid>
+          ) : null}
+          <Grid style={{ marginTop: 0 }}>
+            <Grid.Column>
               <Button
                 color="green"
                 onClick={() => history.push('/buyer')}
                 size="small"
-                floated="right"
+                floated="left"
               >
                 <Icon name="backward" />
                 Return to Business
               </Button>
-            </Grid>
-          ) : null}
+            </Grid.Column>
+          </Grid>
         </Dimmer.Dimmable>
       </Wrapper>
     )
