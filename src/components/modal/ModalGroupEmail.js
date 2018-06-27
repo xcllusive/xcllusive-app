@@ -28,7 +28,8 @@ class ModalGroupEmail extends Component {
   constructor () {
     super()
     this.state = {
-      array: []
+      array: [],
+      checkboxMarkAll: false
     }
     this.fileInput = null
   }
@@ -68,6 +69,11 @@ class ModalGroupEmail extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
+  _markAllcheckBoxArray = (e, { checked }) => {
+    this.setState(prevState => ({checkboxMarkAll: !prevState.checkboxMarkAll}))
+    return checked ? this.setState({array: this.props.listGroupEmail}) : this.setState({array: []})
+  }
+
   _checkBoxArray = (e, { values }) => {
     const isChecked = this.state.array.filter(item => {
       return item.id === values.id
@@ -98,6 +104,7 @@ class ModalGroupEmail extends Component {
       isLoadingGroupEmail,
       isLoadingSendEmail
     } = this.props
+
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -111,8 +118,8 @@ class ModalGroupEmail extends Component {
                 <Form.Checkbox
                   label="Mark All"
                   name="markAll"
-                  values={listGroupEmail}
-                  onChange={this._checkBoxArray}
+                  checked={this.state.checkboxMarkAll}
+                  onChange={this._markAllcheckBoxArray}
                 />
                 <Table celled compact definition>
                   <Table.Body>
@@ -120,6 +127,7 @@ class ModalGroupEmail extends Component {
                       <Table.Row key={index}>
                         <Table.Cell collapsing>
                           <Checkbox
+                            checked={this.state.array.some(item => item.id === groupEmail.id) }
                             values={groupEmail}
                             onChange={this._checkBoxArray}
                           />
