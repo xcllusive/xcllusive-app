@@ -11,16 +11,6 @@ import { getBuyerBusinesses } from '../../redux/ducks/buyer'
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import Wrapper from '../../components/content/Wrapper'
 
-const arrayunderOffer = [
-  {
-    businessID: 'BS2030',
-    businessName: 'New Business',
-    followUpTask: '9',
-    sendGroupEmail: ' ',
-    dayOnTheMarket: '10'
-  }
-]
-
 class BuyerPage extends Component {
   constructor (props) {
     super(props)
@@ -30,7 +20,8 @@ class BuyerPage extends Component {
   }
 
   componentWillMount () {
-    this.props.getBuyerBusinesses(false, [4, 5])
+    this.props.getBuyerBusinesses(false, 4)
+    this.props.getBuyerBusinesses(false, 5)
   }
 
   _toggleModal = () => {
@@ -52,7 +43,7 @@ class BuyerPage extends Component {
   }
 
   render () {
-    const { history, businesses } = this.props
+    const { history, businessesForSale, businessesUnderOffer } = this.props
 
     const { modalOpen } = this.state
     return (
@@ -102,7 +93,7 @@ class BuyerPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {businesses.map(item => (
+                {businessesForSale.map(item => (
                   <Table.Row active key={item.business.id}>
                     <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
                     <Table.Cell
@@ -143,9 +134,7 @@ class BuyerPage extends Component {
                         color="instagram"
                         onClick={() =>
                           history.push(
-                            `buyer/business/${
-                              item.business.id
-                            }/score-list`
+                            `buyer/business/${item.business.id}/score-list`
                           )
                         }
                       >
@@ -162,7 +151,7 @@ class BuyerPage extends Component {
                 <div align="left"> Businesses Under Offer </div>
               </b>
             </h2>
-            <Table color="blue" celled inverted selectable size="small">
+            <Table color="blue" celled inverted size="small" compact>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Business ID</Table.HeaderCell>
@@ -173,25 +162,31 @@ class BuyerPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {arrayunderOffer.map(underOffer => (
-                  <Table.Row
-                    active
-                    key={underOffer.businessID}
-                    onClick={() =>
-                      this.props.history.push(
-                        `${this.props.match.path}/${underOffer.businessID}`
-                      )
-                    }
-                  >
-                    <Table.Cell>{underOffer.businessID}</Table.Cell>
-                    <Table.Cell>{underOffer.businessName}</Table.Cell>
-                    <Table.Cell>{underOffer.followUpTask}</Table.Cell>
+                {businessesUnderOffer.map(item => (
+                  <Table.Row active key={item.business.id}>
+                    <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
+                    <Table.Cell
+                      selectable
+                      onClick={() =>
+                        history.push(`buyer/business/${item.business.id}`)
+                      }
+                    >
+                      {item.business.businessName}
+                    </Table.Cell>
+                    <Table.Cell>{item.countFollowUpTask}</Table.Cell>
                     <Table.Cell>
-                      <Button size="small" color="instagram">
+                      <Button
+                        icon
+                        size="small"
+                        color="instagram"
+                        onClick={() =>
+                          this._toggleModalGroupEmail(item.business.id)
+                        }
+                      >
                         <Icon name="mail" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell>{underOffer.dayOnTheMarket}</Table.Cell>
+                    <Table.Cell>{}</Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -210,12 +205,14 @@ BuyerPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   getBuyerBusinesses: PropTypes.func,
-  businesses: PropTypes.array,
+  businessesForSale: PropTypes.array,
+  businessesUnderOffer: PropTypes.array,
   openModal: PropTypes.func
 }
 
 const mapStateToProps = state => ({
-  businesses: state.buyer.getBuyerBusinesses.array
+  businessesForSale: state.buyer.getBuyerBusinessesForSale.array,
+  businessesUnderOffer: state.buyer.getBuyerBusinessesUnderOffer.array
 })
 
 export default connect(

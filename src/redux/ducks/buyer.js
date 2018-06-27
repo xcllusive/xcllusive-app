@@ -39,7 +39,10 @@ export const Types = {
   SEND_GROUP_EMAIL_SUCCESS: 'SEND_GROUP_EMAIL_SUCCESS',
   SEND_GROUP_EMAIL_FAILURE: 'SEND_GROUP_EMAIL_FAILURE',
   GET_BUYER_BUSINESSES_LOADING: 'GET_BUYER_BUSINESSES_LOADING',
-  GET_BUYER_BUSINESSES_SUCCESS: 'GET_BUYER_BUSINESSES_SUCCESS',
+  GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS:
+    'GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS',
+  GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS:
+    'GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS',
   GET_BUYER_BUSINESSES_FAILURE: 'GET_BUYER_BUSINESSES_FAILURE'
 }
 
@@ -82,7 +85,12 @@ const initialState = {
     isSent: false,
     error: null
   },
-  getBuyerBusinesses: {
+  getBuyerBusinessesForSale: {
+    isLoading: true,
+    array: [],
+    error: null
+  },
+  getBuyerBusinessesUnderOffer: {
     isLoading: true,
     array: [],
     error: null
@@ -300,11 +308,21 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_BUYER_BUSINESSES_SUCCESS:
+    case Types.GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS:
       return {
         ...state,
-        getBuyerBusinesses: {
-          ...state.getBuyerBusinesses,
+        getBuyerBusinessesForSale: {
+          ...state.getBuyerBusinessesForSale,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS:
+      return {
+        ...state,
+        getBuyerBusinessesUnderOffer: {
+          ...state.getBuyerBusinessesUnderOffer,
           isLoading: false,
           array: action.payload,
           error: null
@@ -473,11 +491,22 @@ export const getBuyerBusinesses = (
     payload: true
   })
   try {
-    const buyerBusiness = await getBuyerBusinessesAPI(search, stageId)
-    dispatch({
-      type: Types.GET_BUYER_BUSINESSES_SUCCESS,
-      payload: buyerBusiness
-    })
+    if (stageId === 4) {
+      /* For Sale */
+      const buyerBusiness = await getBuyerBusinessesAPI(search, stageId)
+      dispatch({
+        type: Types.GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS,
+        payload: buyerBusiness
+      })
+    }
+    if (stageId === 5) {
+      /* Under Offer */
+      const buyerBusiness = await getBuyerBusinessesAPI(search, stageId)
+      dispatch({
+        type: Types.GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS,
+        payload: buyerBusiness
+      })
+    }
   } catch (error) {
     dispatch({
       type: Types.GET_BUYER_BUSINESSES_FAILURE,
