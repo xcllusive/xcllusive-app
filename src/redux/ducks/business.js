@@ -148,7 +148,7 @@ export default function reducer (state = initialState, action) {
         getAll: {
           ...state.getAll,
           isLoading: false,
-          array: action.payload,
+          array: action.payload.data,
           error: null
         }
       }
@@ -439,14 +439,15 @@ export const cleanBusiness = () => dispatch =>
 
 export const getBusinesses = (
   search = false,
-  stageId = false
+  stageId = false,
+  filterLog = false
 ) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_LOADING,
     payload: true
   })
   try {
-    const businesses = await getAll(search, stageId)
+    const businesses = await getAll(search, stageId, filterLog)
     dispatch({
       type: Types.GET_BUSINESSES_SUCCESS,
       payload: businesses

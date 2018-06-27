@@ -26,18 +26,20 @@ class BusinessListPage extends Component {
     this.timer = null
     this.state = {
       modalOpen: false,
-      inputSearch: ''
+      inputSearch: '',
+      stageSelected: 4,
+      stageSelectedName: 'For Sale'
     }
   }
 
   async componentWillMount () {
-    await this.props.getBusinesses()
+    await this.props.getBusinesses(false, this.state.stageSelected, true)
   }
 
   async componentWillReceiveProps (nextProps) {
     if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
       await this._toggleModal({})
-      this.props.getBusinesses()
+      this.props.getBusinesses(false, this.state.stageSelected, true)
     }
   }
 
@@ -48,7 +50,7 @@ class BusinessListPage extends Component {
       inputSearch: value
     })
 
-    this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
+    this.timer = setTimeout(() => this.props.getBusinesses(value, this.state.stageSelected, true), 1000)
   }
 
   _toggleModal = business => {
@@ -56,6 +58,14 @@ class BusinessListPage extends Component {
       modalOpen: !prevState.modalOpen,
       business
     }))
+  }
+
+  _getBusinesses = (stage, name) => {
+    this.props.getBusinesses(false, stage, true)
+    this.setState({
+      stageSelected: stage,
+      stageSelectedName: name
+    })
   }
 
   render () {
@@ -81,27 +91,27 @@ class BusinessListPage extends Component {
         ) : null}
         <GridBusinessStage>
           <Statistic.Group size="mini" color="blue" widths={6}>
-            <Statistic>
+            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(1, 'Potential Listing')}>
               <Statistic.Value>10</Statistic.Value>
               <Statistic.Label>Potential Listing</Statistic.Label>
             </Statistic>
-            <Statistic>
+            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(2, 'Listing Negotiation')}>
               <Statistic.Value>20</Statistic.Value>
               <Statistic.Label>Listing Negotiation</Statistic.Label>
             </Statistic>
-            <Statistic>
+            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(3, 'Sales Memo')}>
               <Statistic.Value>30</Statistic.Value>
               <Statistic.Label>Sales Memo</Statistic.Label>
             </Statistic>
-            <Statistic>
+            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(4, 'For Sale')}>
               <Statistic.Value>40</Statistic.Value>
               <Statistic.Label>For Sale</Statistic.Label>
             </Statistic>
-            <Statistic>
+            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(6, 'Sold')}>
               <Statistic.Value>50</Statistic.Value>
               <Statistic.Label>Sold</Statistic.Label>
             </Statistic>
-            <Statistic>
+            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(7, 'Withdrawn')}>
               <Statistic.Value>60</Statistic.Value>
               <Statistic.Label>Withdrawn</Statistic.Label>
             </Statistic>
@@ -131,7 +141,7 @@ class BusinessListPage extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Header>FOR SALE</Header>
+            <Header>{this.state.stageSelectedName}</Header>
             <Table color="blue" celled inverted selectable compact size="small">
               <Table.Header>
                 <Table.Row>
