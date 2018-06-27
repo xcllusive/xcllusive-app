@@ -144,7 +144,7 @@ class BuyerPage extends Component {
                         onClick={() =>
                           history.push(
                             `buyer/business/${
-                              businesses.business.id
+                              item.business.id
                             }/score-list`
                           )
                         }
