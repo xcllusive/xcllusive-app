@@ -15,7 +15,8 @@ class BuyerPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpen: false
+      modalOpen: false,
+      lockedBusiness: false
     }
   }
 
@@ -34,12 +35,25 @@ class BuyerPage extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_GROUP_EMAIL, {
       options: {
         title: 'Prepare Group Email'
-        // text: 'Are you sure you want to send an email to buyer?'
       },
       businessId
-      // buyerId: this.props.match.params.idBuyer,
-      // email: this.props.buyer.email
     })
+  }
+
+  _locked (date) {
+    // date = moment(date).format('YYYYMMDD')
+    date = moment(date, 'YYYYMMDD')
+    date = date.diff(moment(Date.now()), 'day')
+    var daysLeft = 'Not Yet'
+    if (date <= -25 && date > -30) {
+      daysLeft = date + 30 + ' days left'
+    }
+    if (date <= -30) {
+      daysLeft = 'Score Overdue: Locked'
+      // this.setState({ lockedBusiness: true })
+    }
+
+    return daysLeft
   }
 
   render () {
@@ -89,7 +103,7 @@ class BuyerPage extends Component {
                   <Table.HeaderCell>Last Score</Table.HeaderCell>
                   <Table.HeaderCell>Sent</Table.HeaderCell>
                   <Table.HeaderCell>Make New Score</Table.HeaderCell>
-                  <Table.HeaderCell>2 Record`s</Table.HeaderCell>
+                  <Table.HeaderCell>Locked</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -98,6 +112,12 @@ class BuyerPage extends Component {
                     <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
                     <Table.Cell
                       selectable
+                      // onClick={
+                      //   !this.state.lockedBusiness
+                      //     ? () =>
+                      //       history.push(`buyer/business/${item.business.id}`)
+                      //     : null
+                      // }
                       onClick={() =>
                         history.push(`buyer/business/${item.business.id}`)
                       }
@@ -117,8 +137,14 @@ class BuyerPage extends Component {
                         <Icon name="mail" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
-                    <Table.Cell>{moment(item.business.dateTimeCreated).fromNow()}</Table.Cell>
+                    <Table.Cell>
+                      {moment(item.business.daysOnTheMarket).fromNow()}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {item.lastScore && item.lastScore.dateTimeCreated
+                        ? moment(item.lastScore.dateTimeCreated).fromNow()
+                        : '-'}
+                    </Table.Cell>
                     <Table.Cell>
                       {item.lastScore ? item.lastScore.total : '-'}
                     </Table.Cell>
@@ -141,7 +167,13 @@ class BuyerPage extends Component {
                         <Icon name="star" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>
+                      {item.lastScore &&
+                      item.lastScore.dateSent &&
+                      item.lastScore.dateTimeCreated
+                        ? this._locked(moment(item.lastScore.dateTimeCreated))
+                        : '-'}
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -186,7 +218,9 @@ class BuyerPage extends Component {
                         <Icon name="mail" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell>{}</Table.Cell>
+                    <Table.Cell>
+                      {moment(item.business.daysOnTheMarket).fromNow()}
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
