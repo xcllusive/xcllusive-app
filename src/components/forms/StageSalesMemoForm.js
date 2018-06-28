@@ -36,6 +36,11 @@ class StageSalesMemoForm extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
+  _cancel () {
+    this.props.toggleModal('modalOpenStageSalesMemo')
+    // this.props.cancel = true
+  }
+
   render () {
     const {
       values,
@@ -45,7 +50,6 @@ class StageSalesMemoForm extends Component {
       isSubmitting,
       isValid,
       modalOpen,
-      toggleModal,
       productOptions,
       industryOptions,
       typeOptions,
@@ -276,10 +280,7 @@ class StageSalesMemoForm extends Component {
             <Icon name="save" />
             Save and Return
           </Button>
-          <Button
-            color="red"
-            onClick={() => toggleModal('modalOpenStageSalesMemo')}
-          >
+          <Button color="red" onClick={() => this._cancel()}>
             <Icon name="cancel" />
             Cancel
           </Button>
