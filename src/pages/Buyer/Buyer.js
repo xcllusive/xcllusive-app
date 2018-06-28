@@ -40,15 +40,20 @@ class BuyerPage extends Component {
     })
   }
 
-  _locked (date) {
-    // date = moment(date).format('YYYYMMDD')
+  _diffDays (date) {
     date = moment(date, 'YYYYMMDD')
-    date = date.diff(moment(Date.now()), 'day')
+    return moment(Date.now()).diff(date, 'day')
+  }
+
+  _locked (date) {
+    date = moment(date, 'YYYYMMDD')
+    date = moment(Date.now()).diff(date, 'day')
     var daysLeft = 'Not Yet'
-    if (date <= -25 && date > -30) {
-      daysLeft = date + 30 + ' days left'
+    if (date >= 25 && date < 30) {
+      daysLeft = 30 - date + ' days left'
+      if (daysLeft === '1 days left') daysLeft = '1 day left'
     }
-    if (date <= -30) {
+    if (date >= 30) {
       daysLeft = 'Score Overdue: Locked'
       // this.setState({ lockedBusiness: true })
     }
@@ -138,11 +143,19 @@ class BuyerPage extends Component {
                       </Button>
                     </Table.Cell>
                     <Table.Cell>
-                      {moment(item.business.daysOnTheMarket).fromNow()}
+                      {this._diffDays(item.business.daysOnTheMarket)}
                     </Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell
+                      style={
+                        item.lastScore &&
+                        item.lastScore.dateTimeCreated &&
+                        this._diffDays(item.lastScore.dateTimeCreated >= 25)
+                          ? { color: 'red' }
+                          : { color: 'blue' }
+                      }
+                    >
                       {item.lastScore && item.lastScore.dateTimeCreated
-                        ? moment(item.lastScore.dateTimeCreated).fromNow()
+                        ? this._diffDays(item.lastScore.dateTimeCreated)
                         : '-'}
                     </Table.Cell>
                     <Table.Cell>
@@ -167,7 +180,7 @@ class BuyerPage extends Component {
                         <Icon name="star" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell style={{ color: 'red' }}>
                       {item.lastScore &&
                       item.lastScore.dateSent &&
                       item.lastScore.dateTimeCreated
@@ -219,7 +232,7 @@ class BuyerPage extends Component {
                       </Button>
                     </Table.Cell>
                     <Table.Cell>
-                      {moment(item.business.daysOnTheMarket).fromNow()}
+                      {this._diffDays(item.business.daysOnTheMarket)}
                     </Table.Cell>
                   </Table.Row>
                 ))}
