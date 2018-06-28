@@ -65,8 +65,17 @@ class EditBusinessDetailForm extends Component {
       this.props.getBusiness(nextProps.business.id)
       this.props.getLogFromBusiness(nextProps.business.id)
     }
-    if (this.props.values.stage !== nextProps.values.stage && nextProps.values.stage === 8) {
+    if (
+      this.props.values.stage !== nextProps.values.stage &&
+      nextProps.values.stage === 8
+    ) {
       this._toggleModal('modalOpenStageLost')
+    }
+    if (
+      this.props.values.stage !== nextProps.values.stage &&
+      nextProps.values.stage === 3
+    ) {
+      this._toggleModal('modalOpenStageSalesMemo')
     }
   }
 
@@ -664,6 +673,9 @@ class EditBusinessDetailForm extends Component {
                       name="stage"
                       autoComplete="stage"
                       value={values.stage}
+                      // disabled={
+                      //   values.stage === 3 || values.stage === 8
+                      // } /* Sales Memo and Lost */
                       onChange={this._handleSelectChange}
                     />
                     {errors.stage &&
@@ -855,16 +867,16 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  if (values.stage === 6) {
-    /* Sales Memorandum */
-    //  Open StageSalesMemo Modal
-    //  this._toggleModal('modalOpenStageSalesMemo')
-  }
-  if (values.stage === 7) {
-    /* Lost */
-    //  Open StageLost Modal
-    //  this._toggleModal('modalOpenStageLost')
-  }
+  // console.log('test', values.stage)
+  // if (values.stage === 3) {
+  //   /* Sales Memorandum */
+  //   this._toggleModal('modalOpenStageSalesMemo')
+  // }
+  // if (values.stage === 8) {
+  //   /* Lost */
+  //   //  Open StageLost Modal
+  //   this._toggleModal('modalOpenStageLost')
+  // }
   props.updateBusiness(values).then(setSubmitting(false))
 }
 
@@ -886,10 +898,16 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness, getBusiness, getLogFromBusiness }, dispatch)
+  return bindActionCreators(
+    { updateBusiness, getBusiness, getLogFromBusiness },
+    dispatch
+  )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     validationSchema,
