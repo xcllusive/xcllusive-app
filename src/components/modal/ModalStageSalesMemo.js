@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageSalesMemo } from '../../redux/ducks/business'
+import { closeModal } from '../../redux/ducks/modal'
 import {
   Modal,
   Form,
@@ -16,7 +17,7 @@ import {
 } from 'semantic-ui-react'
 import Yup from 'yup'
 
-class StageSalesMemoForm extends Component {
+class ModalStageSalesMemo extends Component {
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
@@ -36,9 +37,13 @@ class StageSalesMemoForm extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _cancel () {
-    this.props.toggleModal('modalOpenStageSalesMemo')
-    // this.props.cancel = true
+  _handleConfirm = isConfirmed => {
+    if (!isConfirmed) {
+      this.props.closeModal()
+      this.props.callBack(isConfirmed)
+      return
+    }
+    this.props.updateStageSalesMemo(this.props.values)
   }
 
   render () {
@@ -46,10 +51,7 @@ class StageSalesMemoForm extends Component {
       values,
       touched,
       errors,
-      handleSubmit,
-      isSubmitting,
       isValid,
-      modalOpen,
       productOptions,
       industryOptions,
       typeOptions,
@@ -57,13 +59,12 @@ class StageSalesMemoForm extends Component {
       usersStaff,
       updateLoading,
       handleChange,
-      handleBlur
+      handleBlur,
+      options
     } = this.props
     return (
-      <Modal dimmer={'blurring'} open={modalOpen}>
-        <Modal.Header align="center">
-          What to enter for `Sales Memorandum` Stage
-        </Modal.Header>
+      <Modal open size="small" onClose={() => this._handleConfirm(false)}>
+        <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
           <Form>
             <h5>
@@ -273,14 +274,14 @@ class StageSalesMemoForm extends Component {
         <Modal.Actions>
           <Button
             color="blue"
-            disabled={isSubmitting || !isValid}
+            disabled={!isValid}
             loading={updateLoading}
-            onClick={handleSubmit}
+            onClick={this._handleConfirm}
           >
             <Icon name="save" />
             Save and Return
           </Button>
-          <Button color="red" onClick={() => this._cancel()}>
+          <Button color="red" onClick={() => this._handleConfirm(false)}>
             <Icon name="cancel" />
             Cancel
           </Button>
@@ -290,11 +291,10 @@ class StageSalesMemoForm extends Component {
   }
 }
 
-StageSalesMemoForm.propTypes = {
+ModalStageSalesMemo.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   toggleModal: PropTypes.func,
   isSubmitting: PropTypes.bool,
@@ -307,7 +307,13 @@ StageSalesMemoForm.propTypes = {
   usersStaff: PropTypes.array,
   updateLoading: PropTypes.bool,
   handleChange: PropTypes.func,
-  handleBlur: PropTypes.func
+  handleBlur: PropTypes.func,
+  closeModal: PropTypes.func.isRequired,
+  options: PropTypes.shape({
+    title: PropTypes.string.isRequired
+  }).isRequired,
+  updateStageSalesMemo: PropTypes.func,
+  callBack: PropTypes.func.isRequired
 }
 
 const mapPropsToValues = props => {
@@ -354,10 +360,6 @@ const validationSchema = Yup.object().shape({
   commissionPerc: Yup.string().required('This field is required.')
 })
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateStageSalesMemo(values).then(setSubmitting(false))
-}
-
 const mapStateToProps = state => {
   return {
     productOptions: state.business.get.productOptions,
@@ -370,7 +372,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateStageSalesMemo }, dispatch)
+  return bindActionCreators({ updateStageSalesMemo, closeModal }, dispatch)
 }
 
 export default connect(
@@ -380,6 +382,6 @@ export default connect(
   withFormik({
     validationSchema,
     mapPropsToValues,
-    handleSubmit
-  })(StageSalesMemoForm)
+    enableReinitialize: true
+  })(ModalStageSalesMemo)
 )

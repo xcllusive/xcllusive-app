@@ -15,11 +15,11 @@ import {
   Button
 } from 'semantic-ui-react'
 import Yup from 'yup'
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import ReassignBusinessForm from './ReassignBusinessForm'
-import StageSalesMemoForm from './StageSalesMemoForm'
 import StageLostForm from './StageLostForm'
 
 class EditBusinessDetailForm extends Component {
@@ -75,7 +75,7 @@ class EditBusinessDetailForm extends Component {
       this.props.values.stage !== nextProps.values.stage &&
       nextProps.values.stage === 3
     ) {
-      this._toggleModal('modalOpenStageSalesMemo')
+      this._openModalStageSalesMemo()
     }
   }
 
@@ -91,6 +91,24 @@ class EditBusinessDetailForm extends Component {
     this.setState(prevState => ({
       [modal]: !prevState[modal]
     }))
+  }
+
+  _openModalStageSalesMemo = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_STAGE_SALES_MEMO, {
+      options: {
+        title: 'What to enter for `Sales Memorandum` Stage'
+      },
+      callBack: isConfirmed => {
+        if (!isConfirmed) {
+          this.props.setFieldValue('stage', this.props.business.stageId)
+        }
+      },
+      business: this.props.business
+    })
+  }
+
+  _isUserPreSale = () => {
+    return _.includes(this.props.userRoles, 'PRESALE_MENU')
   }
 
   render () {
@@ -113,12 +131,7 @@ class EditBusinessDetailForm extends Component {
       stageOptions,
       usersStaff
     } = this.props
-    const {
-      state,
-      modalOpenReassignBusiness,
-      modalOpenStageSalesMemo,
-      modalOpenStageLost
-    } = this.state
+    const { state, modalOpenReassignBusiness, modalOpenStageLost } = this.state
     return (
       <Wrapper>
         <Dimmer inverted active={isLoadingGet}>
@@ -130,13 +143,6 @@ class EditBusinessDetailForm extends Component {
             toggleModal={() => this._toggleModal('modalOpenReassignBusiness')}
             businessId={values.id}
             listingAgent={values.listingAgent}
-          />
-        ) : null}
-        {modalOpenStageSalesMemo ? (
-          <StageSalesMemoForm
-            modalOpen={modalOpenStageSalesMemo}
-            toggleModal={() => this._toggleModal('modalOpenStageSalesMemo')}
-            business={this.props.business}
           />
         ) : null}
         {modalOpenStageLost ? (
@@ -673,9 +679,9 @@ class EditBusinessDetailForm extends Component {
                       name="stage"
                       autoComplete="stage"
                       value={values.stage}
-                      // disabled={
-                      //   values.stage === 3 || values.stage === 8
-                      // } /* Sales Memo and Lost */
+                      disabled={
+                        !this._isUserPreSale() && values.stage === 3 // || values.stage === 8
+                      } /* Sales Memo and Lost */
                       onChange={this._handleSelectChange}
                     />
                     {errors.stage &&
@@ -732,7 +738,9 @@ EditBusinessDetailForm.propTypes = {
   usersStaff: PropTypes.array,
   updateStageSalesMemo: PropTypes.bool,
   updateStageLost: PropTypes.bool,
-  getLogFromBusiness: PropTypes.func
+  getLogFromBusiness: PropTypes.func,
+  openModal: PropTypes.func,
+  userRoles: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -867,16 +875,6 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  // console.log('test', values.stage)
-  // if (values.stage === 3) {
-  //   /* Sales Memorandum */
-  //   this._toggleModal('modalOpenStageSalesMemo')
-  // }
-  // if (values.stage === 8) {
-  //   /* Lost */
-  //   //  Open StageLost Modal
-  //   this._toggleModal('modalOpenStageLost')
-  // }
   props.updateBusiness(values).then(setSubmitting(false))
 }
 
@@ -893,13 +891,14 @@ const mapStateToProps = state => {
     reassignedBusiness: state.business.reassignBusiness.isReassigned,
     usersStaff: state.business.get.usersStaff,
     updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated,
-    updateStageLost: state.business.updateStageLost.isUpdated
+    updateStageLost: state.business.updateStageLost.isUpdated,
+    userRoles: state.auth.user.roles
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { updateBusiness, getBusiness, getLogFromBusiness },
+    { updateBusiness, getBusiness, getLogFromBusiness, openModal },
     dispatch
   )
 }

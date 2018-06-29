@@ -10,6 +10,7 @@ import ModalNewScoreRegister from './ModalNewScoreRegister'
 import ModalUploadFile from './ModalUploadFile'
 import ModalEmailTemplates from './ModalEmailTemplates'
 import ModalGroupEmail from './ModalGroupEmail'
+import ModalStageSalesMemo from './ModalStageSalesMemo'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -21,7 +22,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_EDIT_SCORE_REGISTER]: ModalNewScoreRegister,
   [TypesModal.MODAL_TYPE_UPLOAD_FILE]: ModalUploadFile,
   [TypesModal.MODAL_TYPE_EMAIL_TEMPLATES]: ModalEmailTemplates,
-  [TypesModal.MODAL_TYPE_GROUP_EMAIL]: ModalGroupEmail
+  [TypesModal.MODAL_TYPE_GROUP_EMAIL]: ModalGroupEmail,
+  [TypesModal.MODAL_TYPE_STAGE_SALES_MEMO]: ModalStageSalesMemo
 }
 
 const ModalRoot = ({ type, props }) => {
