@@ -129,7 +129,7 @@ class EditBusinessDetailForm extends Component {
       industryOptions,
       typeOptions,
       stageOptions,
-      usersStaff
+      usersBroker
     } = this.props
     const { state, modalOpenReassignBusiness, modalOpenStageLost } = this.state
     return (
@@ -613,20 +613,20 @@ class EditBusinessDetailForm extends Component {
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
-                      label="Agent"
-                      options={usersStaff}
-                      name="staffAccountName"
-                      autoComplete="staffAccountName"
-                      value={values.staffAccountName}
+                      label="Broker"
+                      options={usersBroker}
+                      name="brokerAccountName"
+                      autoComplete="brokerAccountName"
+                      value={values.brokerAccountName}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.staffAccountName &&
-                      touched.staffAccountName && (
+                    {errors.brokerAccountName &&
+                      touched.brokerAccountName && (
                       <Label
                         basic
                         color="red"
                         pointing
-                        content={errors.staffAccountName}
+                        content={errors.brokerAccountName}
                       />
                     )}
                   </Form.Field>
@@ -735,7 +735,7 @@ EditBusinessDetailForm.propTypes = {
   reassignedBusiness: PropTypes.bool,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
-  usersStaff: PropTypes.array,
+  usersBroker: PropTypes.array,
   updateStageSalesMemo: PropTypes.bool,
   updateStageLost: PropTypes.bool,
   getLogFromBusiness: PropTypes.func,
@@ -771,7 +771,7 @@ const mapPropsToValues = props => {
       productId,
       industryId,
       typeId,
-      staffAccountName,
+      brokerAccountName,
       stageId
     } = props.business
 
@@ -801,7 +801,7 @@ const mapPropsToValues = props => {
       businessProduct: productId,
       businessIndustry: industryId,
       businessType: typeId,
-      staffAccountName,
+      brokerAccountName,
       stage: stageId
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
@@ -889,7 +889,7 @@ const mapStateToProps = state => {
     typeOptions: state.business.get.typeOptions,
     stageOptions: state.business.get.stageOptions,
     reassignedBusiness: state.business.reassignBusiness.isReassigned,
-    usersStaff: state.business.get.usersStaff,
+    usersBroker: state.business.get.usersBroker,
     updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated,
     updateStageLost: state.business.updateStageLost.isUpdated,
     userRoles: state.auth.user.roles

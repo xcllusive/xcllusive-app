@@ -184,7 +184,7 @@ export default function reducer (state = initialState, action) {
           productOptions: action.payload.productList,
           industryOptions: action.payload.industryList,
           typeOptions: action.payload.typeList,
-          usersStaff: action.payload.usersStaff,
+          usersBroker: action.payload.usersBroker,
           stageNotSignedOptions: action.payload.stageNotSignedList,
           stageNotWantOptions: action.payload.stageNotWantList,
           error: null

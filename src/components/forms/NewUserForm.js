@@ -36,7 +36,7 @@ class NewUserForm extends Component {
         ],
         userType: [
           { key: 1, text: 'Admin', value: 'Admin' },
-          { key: 2, text: 'Staff', value: 'Staff' },
+          { key: 2, text: 'Broker', value: 'Broker' },
           { key: 3, text: 'Introducer', value: 'Introducer' }
         ],
         state: [
@@ -388,23 +388,6 @@ class NewUserForm extends Component {
                     content={errors.listingAgent}
                   />
                 )} */}
-              </Form.Field>
-              <Form.Field>
-                <label>Broker</label>
-                <Form.Field
-                  control={Radio}
-                  label="Yes"
-                  name="broker"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.broker}
-                />
-                <Form.Field
-                  control={Radio}
-                  label="No"
-                  name="broker"
-                  onChange={this._handleChangeCheckBox}
-                  checked={!values.broker}
-                />
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">

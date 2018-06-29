@@ -56,7 +56,7 @@ class ModalStageSalesMemo extends Component {
       industryOptions,
       typeOptions,
       ratingOptions,
-      usersStaff,
+      usersBroker,
       updateLoading,
       handleChange,
       handleBlur,
@@ -96,19 +96,19 @@ class ModalStageSalesMemo extends Component {
                 <Form.Select
                   required
                   label="Agent"
-                  options={usersStaff}
-                  name="staffAccountName"
-                  autoComplete="staffAccountName"
-                  value={values.staffAccountName}
+                  options={usersBroker}
+                  name="brokerAccountName"
+                  autoComplete="brokerAccountName"
+                  value={values.brokerAccountName}
                   onChange={this._handleSelectChange}
                 />
-                {errors.staffAccountName &&
-                  touched.staffAccountName && (
+                {errors.brokerAccountName &&
+                  touched.brokerAccountName && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.staffAccountName}
+                    content={errors.brokerAccountName}
                   />
                 )}
               </Form.Field>
@@ -304,7 +304,7 @@ ModalStageSalesMemo.propTypes = {
   industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
   ratingOptions: PropTypes.array,
-  usersStaff: PropTypes.array,
+  usersBroker: PropTypes.array,
   updateLoading: PropTypes.bool,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -324,7 +324,7 @@ const mapPropsToValues = props => {
       typeId,
       industryId,
       ratingId,
-      staffAccountName
+      brokerAccountName
     } = props.business
 
     const business = {
@@ -333,7 +333,7 @@ const mapPropsToValues = props => {
       businessType: typeId,
       businessIndustry: industryId,
       businessRating: ratingId,
-      staffAccountName
+      brokerAccountName
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     return _.mapValues(business, value => (value === null ? '' : value))
@@ -351,7 +351,7 @@ const mapPropsToValues = props => {
 const validationSchema = Yup.object().shape({
   businessProduct: Yup.string().required('This field is required.'),
   data120DayGuarantee: Yup.string().required('This field is required.'),
-  staffAccountName: Yup.string().required('This field is required.'),
+  brokerAccountName: Yup.string().required('This field is required.'),
   businessType: Yup.string().required('This field is required.'),
   businessIndustry: Yup.string().required('This field is required.'),
   businessRating: Yup.string().required('This field is required.'),
@@ -366,7 +366,7 @@ const mapStateToProps = state => {
     industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
     ratingOptions: state.business.get.ratingOptions,
-    usersStaff: state.business.get.usersStaff,
+    usersBroker: state.business.get.usersBroker,
     updateLoading: state.business.updateStageSalesMemo.isLoading
   }
 }
