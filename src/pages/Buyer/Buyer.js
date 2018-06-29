@@ -10,6 +10,7 @@ import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyerBusinesses } from '../../redux/ducks/buyer'
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import Wrapper from '../../components/content/Wrapper'
+import { theme } from '../../styles'
 
 class BuyerPage extends Component {
   constructor (props) {
@@ -40,22 +41,19 @@ class BuyerPage extends Component {
     })
   }
 
-  _diffDays (date) {
-    date = moment(date, 'YYYYMMDD')
-    return moment(Date.now()).diff(date, 'day')
+  _diffDays = date => {
+    return moment().diff(date, 'day')
   }
 
-  _locked (date) {
-    date = moment(date, 'YYYYMMDD')
-    date = moment(Date.now()).diff(date, 'day')
-    var daysLeft = 'Not Yet'
-    if (date >= 25 && date < 30) {
-      daysLeft = 30 - date + ' days left'
-      if (daysLeft === '1 days left') daysLeft = '1 day left'
+  _locked = date => {
+    const dateLocked = moment().diff(date, 'day')
+    let daysLeft = 'Not Yet'
+    if (dateLocked >= 25 && dateLocked < 30) {
+      daysLeft = `${30 - dateLocked} days left`
+      if (30 - dateLocked === 1) daysLeft = '1 day left'
     }
-    if (date >= 30) {
+    if (dateLocked >= 30) {
       daysLeft = 'Score Overdue: Locked'
-      // this.setState({ lockedBusiness: true })
     }
 
     return daysLeft
@@ -117,14 +115,13 @@ class BuyerPage extends Component {
                     <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
                     <Table.Cell
                       selectable
-                      // onClick={
-                      //   !this.state.lockedBusiness
-                      //     ? () =>
-                      //       history.push(`buyer/business/${item.business.id}`)
-                      //     : null
-                      // }
-                      onClick={() =>
-                        history.push(`buyer/business/${item.business.id}`)
+                      onClick={
+                        item.lastScore &&
+                        item.lastScore.dateTimeCreated &&
+                        this._diffDays(item.lastScore.dateTimeCreated) >= 30
+                          ? () => alert('Test')
+                          : () =>
+                            history.push(`buyer/business/${item.business.id}`)
                       }
                     >
                       {item.business.businessName}
@@ -149,9 +146,9 @@ class BuyerPage extends Component {
                       style={
                         item.lastScore &&
                         item.lastScore.dateTimeCreated &&
-                        this._diffDays(item.lastScore.dateTimeCreated >= 25)
-                          ? { color: 'red' }
-                          : { color: 'blue' }
+                        this._diffDays(item.lastScore.dateTimeCreated) >= 25
+                          ? { color: theme.redColor }
+                          : null
                       }
                     >
                       {item.lastScore && item.lastScore.dateTimeCreated
@@ -180,11 +177,20 @@ class BuyerPage extends Component {
                         <Icon name="star" />
                       </Button>
                     </Table.Cell>
-                    <Table.Cell style={{ color: 'red' }}>
+                    <Table.Cell
+                      style={
+                        item.lastScore &&
+                        item.lastScore.dateSent &&
+                        item.lastScore.dateTimeCreated &&
+                        this._diffDays(item.lastScore.dateTimeCreated) >= 25
+                          ? { color: theme.redColor }
+                          : null
+                      }
+                    >
                       {item.lastScore &&
                       item.lastScore.dateSent &&
                       item.lastScore.dateTimeCreated
-                        ? this._locked(moment(item.lastScore.dateTimeCreated))
+                        ? this._locked(item.lastScore.dateTimeCreated)
                         : '-'}
                     </Table.Cell>
                   </Table.Row>
