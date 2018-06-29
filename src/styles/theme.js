@@ -6,5 +6,6 @@ export const theme = {
   accentColor: '#00BCD4',
   primaryTextColor: '#212121',
   secondaryTextColor: '#757575',
-  dividerColor: '#BDBDBD'
+  dividerColor: '#BDBDBD',
+  redColor: '#db2828'
 }
