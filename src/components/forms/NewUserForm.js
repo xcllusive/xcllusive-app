@@ -55,8 +55,8 @@ class NewUserForm extends Component {
     if (this.props.userCreated !== nextProps.userCreated) this.props.resetForm()
   }
 
-  _handleChangeCheckBox = (e, { value }) => {
-    this.props.setFieldValue(value, !this.props.values[value])
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -79,6 +79,7 @@ class NewUserForm extends Component {
   }
 
   render () {
+    console.log(this.props.values)
     const { dataRegion, userType, state } = this.state.formOptions
 
     const {
