@@ -324,7 +324,10 @@ const mapPropsToValues = props => {
       typeId,
       industryId,
       ratingId,
-      brokerAccountName
+      brokerAccountName,
+      listedPrice,
+      engagementFee,
+      commissionPerc
     } = props.business
 
     const business = {
@@ -333,7 +336,10 @@ const mapPropsToValues = props => {
       businessType: typeId,
       businessIndustry: industryId,
       businessRating: ratingId,
-      brokerAccountName
+      brokerAccountName,
+      listedPrice,
+      engagementFee,
+      commissionPerc
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     return _.mapValues(business, value => (value === null ? '' : value))
@@ -344,7 +350,10 @@ const mapPropsToValues = props => {
     businessType: '',
     businessIndustry: '',
     businessRating: '',
-    pendingDone: true
+    pendingDone: true,
+    listedPrice: 0,
+    engagementFee: 0,
+    commissionPerc: 0
   }
 }
 

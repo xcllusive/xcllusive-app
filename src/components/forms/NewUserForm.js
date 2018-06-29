@@ -79,7 +79,6 @@ class NewUserForm extends Component {
   }
 
   render () {
-    console.log(this.props.values)
     const { dataRegion, userType, state } = this.state.formOptions
 
     const {

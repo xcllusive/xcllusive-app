@@ -57,8 +57,12 @@ export const getBusinessRegister = id => {
   })
 }
 
-export const updateStageSalesMemo = () => {
-  console.log('updateStageSalesMemo')
+export const updateStageSalesMemo = stageSalesMemo => {
+  return request({
+    method: 'put',
+    url: `/business/${stageSalesMemo.businessId}/stage-salesmemo`,
+    data: stageSalesMemo
+  })
 }
 
 export const updateStageLost = stageLost => {

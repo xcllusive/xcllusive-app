@@ -29,7 +29,13 @@ class BuyerListPage extends Component {
   }
 
   render () {
-    const { listBuyersList, history, business, isLoadingBusiness } = this.props
+    const {
+      listBuyersList,
+      history,
+      business,
+      isLoadingBusiness,
+      countAll
+    } = this.props
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -42,9 +48,9 @@ class BuyerListPage extends Component {
                 {listBuyersList ? (
                   <Header
                     as="h2"
-                    content={`${business.businessName} / (${
+                    content={`${business.businessName} / ${
                       listBuyersList.length
-                    } records)`}
+                    } records of ${countAll}`}
                   />
                 ) : (
                   <Header as="h2" content={'0 records'} />
@@ -154,7 +160,8 @@ BuyerListPage.propTypes = {
   history: PropTypes.object,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
-  isLoadingBusiness: PropTypes.bool
+  isLoadingBusiness: PropTypes.bool,
+  countAll: PropTypes.number
 }
 
 const mapDispatchToProps = dispatch =>
@@ -162,6 +169,7 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => ({
   listBuyersList: state.business.getBuyersFromBusiness.array,
+  countAll: state.business.getBuyersFromBusiness.countAll,
   business: state.business.get.object,
   isLoadingBusiness: state.business.get.isLoading
 })

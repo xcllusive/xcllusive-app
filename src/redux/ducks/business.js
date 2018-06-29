@@ -93,6 +93,7 @@ const initialState = {
   getBuyersFromBusiness: {
     isLoading: true,
     array: [],
+    countAll: 0,
     error: null
   },
   getBuyersGroupEmail: {
@@ -342,7 +343,8 @@ export default function reducer (state = initialState, action) {
         getBuyersFromBusiness: {
           ...state.getBuyersFromBusiness,
           isLoading: false,
-          array: action.payload,
+          array: action.payload.array,
+          countAll: action.payload.countAll,
           error: null
         }
       }
