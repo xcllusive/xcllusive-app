@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Message } from 'semantic-ui-react'
 import Yup from 'yup'
 import { closeModal } from '../../redux/ducks/modal'
 
@@ -60,15 +60,16 @@ class ModalReassignBusiness extends Component {
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
+          <Message warning>
+            <Message.Header>IMPORTANT:</Message.Header>
+            You are able to reassign the LISTING agent- not the sales agent.
+            Once this is done, the responsibility of listing this business will
+            be transferred to the allocated Listing Agent. Only do this if this
+            is your intention.
+          </Message>
           <Form>
-            <h4>
-              IMPORTANT: You are able to reassign the LISTING agent- not the
-              sales agent. Once this is done, the responsibility of listing this
-              business will be transferred to the allocated Listing Agent. Only
-              do this if this is your intention.
-            </h4>
             <Form.Group>
-              <Form.Field width={6}>
+              <Form.Field width={8}>
                 <Form.Select
                   required
                   label="Reassign Business To New Listing Agent"

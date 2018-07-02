@@ -20,13 +20,16 @@ const EditBusinessPriceForm = ({
     <Grid divided>
       <Grid.Row columns={2}>
         <Grid.Column>
-          <Segment clearing textAlign="center" color="blue">
-            <Header as="h2" floated="left">
-              Business Pricing
-            </Header>
-            <Header as="h5" floated="right">
-              (For Sale)
-            </Header>
+          <Segment size="mini" inverted color="blue">
+            <Grid>
+              <Grid.Row columns={2}>
+                <Grid.Column>
+                  <Header as="h3" textAlign="left" inverted>
+                    Business Pricing
+                  </Header>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Segment>
           <Form.Group widths="equal">
             <Form.Input
@@ -92,13 +95,21 @@ const EditBusinessPriceForm = ({
           </Form.Group>
         </Grid.Column>
         <Grid.Column>
-          <Segment clearing textAlign="center" color="blue">
-            <Header as="h2" floated="left">
-              Sales Information
-            </Header>
-            <Header as="h5" floated="right">
-              (Deposit and Sold)
-            </Header>
+          <Segment size="mini" inverted color="blue">
+            <Grid>
+              <Grid.Row columns={2}>
+                <Grid.Column>
+                  <Header as="h3" textAlign="left" inverted>
+                    Sales Information
+                  </Header>
+                </Grid.Column>
+                <Grid.Column>
+                  <Header as="h4" floated="right" inverted>
+                    (Deposit and Sold)
+                  </Header>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Segment>
           <Form.Group widths="equal">
             <Form.Input
@@ -273,7 +284,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ updateBusiness }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     handleSubmit,

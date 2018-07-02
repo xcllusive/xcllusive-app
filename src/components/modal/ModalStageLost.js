@@ -13,7 +13,8 @@ import {
   Icon,
   Button,
   Radio,
-  Divider
+  Divider,
+  Message
 } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -82,12 +83,13 @@ class StageLostForm extends Component {
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
+          <Message warning>
+            <Message.Header>IMPORTANT:</Message.Header>
+            Once you have marked this business as `Lost` you can change it back
+            to a potential listing by searching for it and changing the stage
+            manually.
+          </Message>
           <Form>
-            <h5>
-              IMPORTANT: Once you have marked this business as `Lost` you can
-              change it back to a potential listing by searching for it and
-              changing the stage manually.
-            </h5>
             <Form.Group>
               <Form.Field width={10}>
                 <Form.Select

@@ -13,7 +13,8 @@ import {
   Icon,
   Button,
   Radio,
-  Divider
+  Divider,
+  Message
 } from 'semantic-ui-react'
 import Yup from 'yup'
 
@@ -66,11 +67,12 @@ class ModalStageSalesMemo extends Component {
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
+          <Message warning>
+            <Message.Header>IMPORTANT:</Message.Header>
+            Once you click `Save and Return` you will no longer be able to edit
+            the `Stage` unless you contact the main office.
+          </Message>
           <Form>
-            <h5>
-              IMPORTANT: Once you click `Save and Return` you will no longer be
-              able to edit the `Stage` unless you contact the main office.
-            </h5>
             <Form.Group>
               <Form.Field width={5}>
                 <Form.Select
