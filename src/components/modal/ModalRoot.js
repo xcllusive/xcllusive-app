@@ -11,6 +11,8 @@ import ModalUploadFile from './ModalUploadFile'
 import ModalEmailTemplates from './ModalEmailTemplates'
 import ModalGroupEmail from './ModalGroupEmail'
 import ModalStageSalesMemo from './ModalStageSalesMemo'
+import ModalStageLost from './ModalStageLost'
+import ModalReassignBusiness from './ModalReassignBusiness'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -23,7 +25,9 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_UPLOAD_FILE]: ModalUploadFile,
   [TypesModal.MODAL_TYPE_EMAIL_TEMPLATES]: ModalEmailTemplates,
   [TypesModal.MODAL_TYPE_GROUP_EMAIL]: ModalGroupEmail,
-  [TypesModal.MODAL_TYPE_STAGE_SALES_MEMO]: ModalStageSalesMemo
+  [TypesModal.MODAL_TYPE_STAGE_SALES_MEMO]: ModalStageSalesMemo,
+  [TypesModal.MODAL_TYPE_STAGE_LOST]: ModalStageLost,
+  [TypesModal.MODAL_TYPE_STAGE_REASSIGN_BUSINESS]: ModalReassignBusiness
 }
 
 const ModalRoot = ({ type, props }) => {

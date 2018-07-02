@@ -19,8 +19,6 @@ import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
-import ReassignBusinessForm from './ReassignBusinessForm'
-import StageLostForm from './StageLostForm'
 
 class EditBusinessDetailForm extends Component {
   constructor (props) {
@@ -36,9 +34,7 @@ class EditBusinessDetailForm extends Component {
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
       ],
-      modalOpenReassignBusiness: false,
-      modalOpenStageSalesMemo: false,
-      modalOpenStageLost: false
+      modalOpenReassignBusiness: false
     }
   }
 
@@ -47,21 +43,18 @@ class EditBusinessDetailForm extends Component {
       this.props.reassignedBusiness !== nextProps.reassignedBusiness &&
       nextProps.reassignedBusiness
     ) {
-      await this._toggleModal('modalOpenReassignBusiness')
       this.props.getBusiness(nextProps.business.id)
     }
     if (
       this.props.updateStageSalesMemo !== nextProps.updateStageSalesMemo &&
       nextProps.updateStageSalesMemo
     ) {
-      await this._toggleModal('modalOpenStageSalesMemo')
       this.props.getBusiness(nextProps.business.id)
     }
     if (
       this.props.updateStageLost !== nextProps.updateStageLost &&
       nextProps.updateStageLost
     ) {
-      await this._toggleModal('modalOpenStageLost')
       this.props.getBusiness(nextProps.business.id)
       this.props.getLogFromBusiness(nextProps.business.id)
     }
@@ -69,7 +62,7 @@ class EditBusinessDetailForm extends Component {
       this.props.values.stage !== nextProps.values.stage &&
       nextProps.values.stage === 8
     ) {
-      this._toggleModal('modalOpenStageLost')
+      this._openModalStageLost()
     }
     if (
       this.props.values.stage !== nextProps.values.stage &&
@@ -107,6 +100,30 @@ class EditBusinessDetailForm extends Component {
     })
   }
 
+  _openModalStageLost = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_STAGE_LOST, {
+      options: {
+        title: 'Change the business stage to `Lost`'
+      },
+      callBack: isConfirmed => {
+        if (!isConfirmed) {
+          this.props.setFieldValue('stage', this.props.business.stageId)
+        }
+      },
+      business: this.props.business
+    })
+  }
+
+  _openModalReassignBusiness = (id, listingAgent) => {
+    this.props.openModal(TypesModal.MODAL_TYPE_STAGE_REASSIGN_BUSINESS, {
+      options: {
+        title: 'Reassign Business to New Listing Agent'
+      },
+      businessId: id,
+      listingAgent: listingAgent
+    })
+  }
+
   _isUserPreSale = () => {
     return _.includes(this.props.userRoles, 'PRESALE_MENU')
   }
@@ -131,27 +148,12 @@ class EditBusinessDetailForm extends Component {
       stageOptions,
       usersBroker
     } = this.props
-    const { state, modalOpenReassignBusiness, modalOpenStageLost } = this.state
+    const { state } = this.state
     return (
       <Wrapper>
         <Dimmer inverted active={isLoadingGet}>
           <Loader inverted />
         </Dimmer>
-        {modalOpenReassignBusiness ? (
-          <ReassignBusinessForm
-            modalOpen={modalOpenReassignBusiness}
-            toggleModal={() => this._toggleModal('modalOpenReassignBusiness')}
-            businessId={values.id}
-            listingAgent={values.listingAgent}
-          />
-        ) : null}
-        {modalOpenStageLost ? (
-          <StageLostForm
-            modalOpen={modalOpenStageLost}
-            toggleModal={() => this._toggleModal('modalOpenStageLost')}
-            business={this.props.business}
-          />
-        ) : null}
         <Grid celled="internally" divided>
           <Grid.Row columns={2}>
             <Grid.Column>
@@ -382,16 +384,16 @@ class EditBusinessDetailForm extends Component {
                   <Button
                     primary
                     onClick={() =>
-                      this._toggleModal('modalOpenReassignBusiness')
+                      this._openModalReassignBusiness(
+                        values.id,
+                        values.listingAgent
+                      )
                     }
                   >
                     <Icon name="edit" />
                     Reassign Business
                   </Button>
-                  <Form.Button
-                    color="blue"
-                    onClick={() => this._toggleModal('modalOpenStageSalesMemo')}
-                  >
+                  <Form.Button color="blue">
                     <Icon name="file pdf outline" />
                     PDF
                   </Form.Button>

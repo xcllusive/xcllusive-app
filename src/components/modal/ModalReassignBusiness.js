@@ -5,11 +5,12 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import Yup from 'yup'
+import { closeModal } from '../../redux/ducks/modal'
 
 import { reassignBusiness } from '../../redux/ducks/business'
 import { getUsers } from '../../redux/ducks/user'
 
-class ReassignBusinessForm extends Component {
+class ModalReassignBusiness extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -23,7 +24,7 @@ class ReassignBusinessForm extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  _mapValuesToArray = (array) => {
+  _mapValuesToArray = array => {
     if (array.length > 0) {
       return array.map((item, index) => ({
         key: index,
@@ -31,7 +32,19 @@ class ReassignBusinessForm extends Component {
         value: item.firstName
       }))
     }
-    return [{ key: 1, text: 'Nenhum usuario encontrado', value: null }]
+    return [{ key: 1, text: 'No users found', value: null }]
+  }
+
+  _handleConfirm = isConfirmed => {
+    if (!isConfirmed) {
+      this.props.closeModal()
+      return
+    }
+    this.props.reassignBusiness({
+      businessId: this.props.businessId,
+      listingAgentName: this.props.values.listingAgent
+    })
+    this.props.closeModal()
   }
 
   render () {
@@ -39,18 +52,13 @@ class ReassignBusinessForm extends Component {
       values,
       touched,
       errors,
-      handleSubmit,
-      isSubmitting,
       isValid,
       createLoading,
-      modalOpen,
-      toggleModal
+      options
     } = this.props
     return (
-      <Modal dimmer="blurring" open={modalOpen}>
-        <Modal.Header align="center">
-          Reassign Business to New Listing Agent
-        </Modal.Header>
+      <Modal open size="small" onClose={() => this._handleConfirm(false)}>
+        <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
           <Form>
             <h4>
@@ -86,17 +94,14 @@ class ReassignBusinessForm extends Component {
         <Modal.Actions>
           <Button
             color="blue"
-            disabled={isSubmitting || !isValid}
+            disabled={createLoading || !isValid}
             loading={createLoading}
-            onClick={handleSubmit}
+            onClick={this._handleConfirm}
           >
             <Icon name="save" />
             Save and Return
           </Button>
-          <Button
-            color="red"
-            onClick={() => toggleModal('modalOpenReassignBusiness')}
-          >
+          <Button color="red" onClick={() => this._handleConfirm(false)}>
             <Icon name="cancel" />
             Cancel
           </Button>
@@ -106,22 +111,25 @@ class ReassignBusinessForm extends Component {
   }
 }
 
-ReassignBusinessForm.propTypes = {
+ModalReassignBusiness.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
-  handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
-  toggleModal: PropTypes.func,
-  isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  modalOpen: PropTypes.bool,
   users: PropTypes.array,
   getUsers: PropTypes.func,
-  createLoading: PropTypes.bool
+  createLoading: PropTypes.bool,
+  closeModal: PropTypes.func.isRequired,
+  options: PropTypes.shape({
+    title: PropTypes.string.isRequired
+  }).isRequired,
+  reassignBusiness: PropTypes.func,
+  businessId: PropTypes.number.isRequired,
+  listingAgent: PropTypes.string.isRequired
 }
 
-const mapPropsToValues = (props) => {
+const mapPropsToValues = props => {
   if (props && props.listingAgent) {
     return {
       listingAgent: props.listingAgent
@@ -136,14 +144,6 @@ const validationSchema = Yup.object().shape({
   listingAgent: Yup.string().required('Listing Agent is required.')
 })
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.reassignBusiness({
-    businessId: props.businessId,
-    listingAgentName: values.listingAgent
-  })
-  setSubmitting(false)
-}
-
 const mapStateToProps = state => ({
   createLoading: state.business.reassignBusiness.isLoading,
   users: state.user.get.array
@@ -153,13 +153,19 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       reassignBusiness,
-      getUsers
+      getUsers,
+      closeModal
     },
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(withFormik({
-  validationSchema,
-  mapPropsToValues,
-  handleSubmit
-})(ReassignBusinessForm))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  withFormik({
+    validationSchema,
+    mapPropsToValues,
+    enableReinitialize: true
+  })(ModalReassignBusiness)
+)
