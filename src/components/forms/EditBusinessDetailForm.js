@@ -682,7 +682,8 @@ class EditBusinessDetailForm extends Component {
                       autoComplete="stage"
                       value={values.stage}
                       disabled={
-                        !this._isUserPreSale() && values.stage === 3 // || values.stage === 8
+                        !this._isUserPreSale() &&
+                        (values.stage === 3 || values.stage === 8)
                       } /* Sales Memo and Lost */
                       onChange={this._handleSelectChange}
                     />
