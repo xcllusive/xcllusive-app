@@ -6,7 +6,8 @@ import {
   get,
   update,
   enquiries,
-  remove
+  remove,
+  send
 } from '../../services/api/score'
 
 // Action Types
@@ -30,7 +31,10 @@ export const Types = {
   ENQUIRIES_LAST_4_WEEKS_FAILURE: 'ENQUIRIES_LAST_4_WEEKS_FAILURE',
   REMOVE_SCORE_LOADING: 'REMOVE_SCORE_LOADING',
   REMOVE_SCORE_SUCCESS: 'REMOVE_SCORE_SUCCESS',
-  REMOVE_SCORE_FAILURE: 'REMOVE_SCORE_FAILURE'
+  REMOVE_SCORE_FAILURE: 'REMOVE_SCORE_FAILURE',
+  SEND_SCORE_LOADING: 'SEND_SCORE_LOADING',
+  SEND_SCORE_SUCCESS: 'SEND_SCORE_SUCCESS',
+  SEND_SCORE_FAILURE: 'SEND_SCORE_FAILURE'
 }
 
 // Reducer
@@ -66,6 +70,11 @@ const initialState = {
   delete: {
     isLoading: false,
     isDeleted: false,
+    error: null
+  },
+  send: {
+    isLoading: false,
+    isSent: false,
     error: null
   }
 }
@@ -217,6 +226,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SEND_SCORE_LOADING:
+      return {
+        ...state,
+        send: {
+          ...state.send,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_SCORE_SUCCESS:
+      return {
+        ...state,
+        send: {
+          ...state.send,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_SCORE_FAILURE:
+      return {
+        ...state,
+        send: {
+          ...state.send,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_SCORE:
       return initialState
     default:
@@ -349,6 +386,26 @@ export const removeScore = score => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.REMOVE_SCORE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const sendScore = score => async dispatch => {
+  dispatch({
+    type: Types.SEND_SCORE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await send(score)
+    dispatch({
+      type: Types.SEND_SCORE_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_SCORE_FAILURE,
       payload: error
     })
     toast.error(error)

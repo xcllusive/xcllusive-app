@@ -45,3 +45,11 @@ export const remove = scoreId => {
     url: `/score/${scoreId}`
   })
 }
+
+export const send = score => {
+  return request({
+    method: 'post',
+    url: '/send-score',
+    params: { score }
+  })
+}

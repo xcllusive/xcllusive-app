@@ -29,7 +29,8 @@ import {
   getScore,
   clearScore,
   updateScore,
-  enquiriesLast4Weeks
+  enquiriesLast4Weeks,
+  sendScore
 } from '../../redux/ducks/score'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
@@ -796,7 +797,7 @@ class MakeNewScorePage extends Component {
                         <Button
                           color="yellow"
                           floated="right"
-                          // onClick={() => this._toggleModalConfirm(values)}
+                          onClick={() => this.props.sendScore(values)}
                           disabled={!isValid}
                         >
                           <Icon name="send" />
@@ -875,7 +876,8 @@ MakeNewScorePage.propTypes = {
   updateScore: PropTypes.func,
   enquiriesLast4Weeks: PropTypes.func,
   enquiries: PropTypes.object,
-  enquiriesOptions: PropTypes.array
+  enquiriesOptions: PropTypes.array,
+  sendScore: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -963,7 +965,8 @@ const mapDispatchToProps = dispatch =>
       getScore,
       clearScore,
       updateScore,
-      enquiriesLast4Weeks
+      enquiriesLast4Weeks,
+      sendScore
     },
     dispatch
   )
