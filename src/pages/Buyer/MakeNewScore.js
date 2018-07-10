@@ -5,6 +5,7 @@ import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import Yup from 'yup'
+import moment from 'moment'
 import {
   Grid,
   Header,
@@ -106,6 +107,8 @@ class MakeNewScorePage extends Component {
   }
 
   _findItemEnquiries (diff) {
+    if (diff > 4) diff = 4
+    if (diff < -4) diff = -4
     const objectEnquiries = _.find(
       this.props.enquiriesOptions,
       o => o.label === diff.toString()
@@ -189,7 +192,7 @@ class MakeNewScorePage extends Component {
   _dateSent () {
     if (this.props.score) {
       if (this.props.score.dateSent !== null) {
-        return this.props.score.dateSent
+        return moment(this.props.score.dateSent).format('DD/MM/YYYY')
       } else {
         return '#'
       }
