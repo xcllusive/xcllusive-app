@@ -76,7 +76,11 @@ class MakeNewScorePage extends Component {
       this.setState({ score: nextProps.score.total })
     }
 
-    if (this.props.enquiries && nextProps.enquiries) {
+    if (
+      this.props.enquiries &&
+      nextProps.enquiries &&
+      nextProps.enquiries.lastScore
+    ) {
       this.setState({ lastScore: nextProps.enquiries.lastScore.total })
     }
 
