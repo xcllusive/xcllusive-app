@@ -46,10 +46,9 @@ export const remove = scoreId => {
   })
 }
 
-export const send = score => {
+export const send = scoreId => {
   return request({
-    method: 'post',
-    url: '/send-score',
-    params: { score }
+    method: 'get',
+    url: `/score/${scoreId}/generate-pdf`
   })
 }
