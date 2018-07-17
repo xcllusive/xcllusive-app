@@ -804,7 +804,7 @@ class MakeNewScorePage extends Component {
                         <Button
                           color="yellow"
                           floated="right"
-                          onClick={() => this.props.sendScore(values)}
+                          onClick={() => this.props.sendScore(values.scoreId)}
                           disabled={!isValid}
                         >
                           <Icon name="send" />
