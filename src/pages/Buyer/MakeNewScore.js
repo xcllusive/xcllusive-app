@@ -388,7 +388,7 @@ class MakeNewScorePage extends Component {
                     textAlign="center"
                     size="tiny"
                   >
-                    Notes for report : (Max 420 Characters)
+                    Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
                     <Form.TextArea
@@ -471,7 +471,7 @@ class MakeNewScorePage extends Component {
                     textAlign="center"
                     size="tiny"
                   >
-                    Notes for report : (Max 420 Characters)
+                    Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
                     <Form.TextArea
@@ -554,7 +554,7 @@ class MakeNewScorePage extends Component {
                     textAlign="center"
                     size="tiny"
                   >
-                    Notes for report : (Max 420 Characters)
+                    Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
                     <Form.TextArea
@@ -637,7 +637,7 @@ class MakeNewScorePage extends Component {
                     textAlign="center"
                     size="tiny"
                   >
-                    Notes for report : (Max 420 Characters)
+                    Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
                     <Form.TextArea
@@ -720,7 +720,7 @@ class MakeNewScorePage extends Component {
                     textAlign="center"
                     size="tiny"
                   >
-                    Notes for report : (Max 420 Characters)
+                    Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
                     <Form.TextArea
@@ -933,32 +933,32 @@ const mapPropsToValues = props => {
 
 const validationSchema = Yup.object().shape({
   notesEnquiries: Yup.string().max(
-    420,
-    'This notes requires maximum of 420 characteres'
+    310,
+    'This notes requires maximum of 310 characteres'
   ),
   perceivedPrice_id: Yup.string().required(
     'Perceived Price from Buyers is required.'
   ),
   notesPrice: Yup.string().max(
-    420,
-    'This notes requires maximum of 420 characteres'
+    310,
+    'This notes requires maximum of 310 characteres'
   ),
   infoTransMomen_id: Yup.string().required(
     'Information / Transparency / Momentum is required.'
   ),
   notesMomentum: Yup.string().max(
-    420,
-    'This notes requires maximum of 420 characteres'
+    310,
+    'This notes requires maximum of 310 characteres'
   ),
   currentInterest_id: Yup.string().required('Current Interest is required.'),
   notesInterest: Yup.string().max(
-    420,
-    'This notes requires maximum of 420 characteres'
+    310,
+    'This notes requires maximum of 310 characteres'
   ),
   perceivedRisk_id: Yup.string().required('Buyer Perceived Risk is required.'),
   notesRisk: Yup.string().max(
-    420,
-    'This notes requires maximum of 420 characteres'
+    310,
+    'This notes requires maximum of 310 characteres'
   )
 })
 
