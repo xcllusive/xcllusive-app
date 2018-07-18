@@ -162,7 +162,7 @@ class MakeNewScorePage extends Component {
     this._findItemArray(name, value)
   }
 
-  _toggleModalConfirm = values => {
+  _modalConfirmCalculateScore = values => {
     values.total = this._calculateScore()
     if (this.props.score) {
       this.props.updateScore(values)
@@ -179,6 +179,20 @@ class MakeNewScorePage extends Component {
         }
       })
     }
+  }
+
+  _modalConfirmSendScore = scoreId => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Send Score',
+        text: 'Are you sure you want to send the score to the business owner?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.sendScore(scoreId)
+        }
+      }
+    })
   }
 
   _calculateScore () {
@@ -781,7 +795,9 @@ class MakeNewScorePage extends Component {
                           icon
                           color="red"
                           floated="right"
-                          onClick={() => this._toggleModalConfirm(values)}
+                          onClick={() =>
+                            this._modalConfirmCalculateScore(values)
+                          }
                           disabled={!isValid}
                         >
                           <Icon name="calculator" />
@@ -804,8 +820,13 @@ class MakeNewScorePage extends Component {
                         <Button
                           color="yellow"
                           floated="right"
-                          onClick={() => this.props.sendScore(values.scoreId)}
-                          disabled={!isValid}
+                          onClick={() =>
+                            this._modalConfirmSendScore(values.scoreId)
+                          }
+                          disabled={
+                            (this.props.score && this.props.score.dateSent) ||
+                            !this.props.score
+                          }
                         >
                           <Icon name="send" />
                           Send Score
