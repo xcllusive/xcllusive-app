@@ -3,24 +3,21 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import {
-  Form,
-  Label,
-  Icon
-} from 'semantic-ui-react'
+import { Form, Label, Icon } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import Yup from 'yup'
-import { getSystemSettings, updateSystemSettings } from '../../../redux/ducks/systemSettings'
+import {
+  getSystemSettings,
+  updateSystemSettings
+} from '../../../redux/ducks/systemSettings'
 
 class EmailTemplates extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-    }
+    this.state = {}
   }
 
-  componentWillMount () {
-  }
+  componentWillMount () {}
 
   componentDidMount () {
     this.props.getSystemSettings(1)
@@ -51,7 +48,7 @@ class EmailTemplates extends Component {
                 onClick={handleSubmit}
               >
                 <Icon name="save" />
-                  Save
+                Save
               </Form.Button>
             </Form.Field>
           </Form.Group>
@@ -67,12 +64,15 @@ class EmailTemplates extends Component {
               />
               {errors.emailOffice &&
                 touched.emailOffice && (
-                <Label basic color="red" pointing content={errors.emailOffice} />
+                <Label
+                  basic
+                  color="red"
+                  pointing
+                  content={errors.emailOffice}
+                />
               )}
             </Form.Field>
-
           </Form.Group>
-
         </Form>
       </Wrapper>
     )
@@ -99,7 +99,6 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapPropsToValues = props => {
-  console.log(props)
   return {
     emailOffice: props.emailOffice ? props.emailOffice : ''
   }
@@ -122,7 +121,10 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     handleSubmit,

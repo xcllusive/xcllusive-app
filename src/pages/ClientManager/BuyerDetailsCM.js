@@ -66,10 +66,19 @@ class BuyerDetailsCM extends Component {
 
   _selectLog = buyerLog => {
     this.setState({ buyerLog })
-    this.props.setFieldValue('buyerLog_followUp', buyerLog ? buyerLog.followUp : '')
+    this.props.setFieldValue(
+      'buyerLog_followUp',
+      buyerLog ? buyerLog.followUp : ''
+    )
     this.props.setFieldValue('buyerLog_text', buyerLog ? buyerLog.text : '')
-    this.props.setFieldValue('buyer_id', buyerLog && buyerLog.newLog ? buyerLog.buyer_id : null)
-    this.props.setFieldValue('business_id', buyerLog && buyerLog.newLog ? buyerLog.business_id : null)
+    this.props.setFieldValue(
+      'buyer_id',
+      buyerLog && buyerLog.newLog ? buyerLog.buyer_id : null
+    )
+    this.props.setFieldValue(
+      'business_id',
+      buyerLog && buyerLog.newLog ? buyerLog.business_id : null
+    )
   }
 
   _handlePaginationChangeLog = (e, { activePage }) => {
@@ -77,7 +86,12 @@ class BuyerDetailsCM extends Component {
   }
 
   _handlePaginationChangeBusBuyLog = (e, { activePage }) => {
-    this.props.getBusinessBuyerLog(this.props.buyer.id, this.state.buyerLog.business_id, 10, activePage)
+    this.props.getBusinessBuyerLog(
+      this.props.buyer.id,
+      this.state.buyerLog.business_id,
+      10,
+      activePage
+    )
   }
 
   render () {
@@ -96,8 +110,6 @@ class BuyerDetailsCM extends Component {
       values,
       handleChange
     } = this.props
-
-    console.log(values)
 
     const { buyerLog } = this.state
     return (
@@ -306,25 +318,25 @@ class BuyerDetailsCM extends Component {
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
-                        {listBusinessBuyerLogList.array.map(businessBuyerLog => (
-                          <Table.Row
-                            active
-                            key={businessBuyerLog.id}
-                            onClick={() =>
-                              this._selectLog(businessBuyerLog)
-                            }
-                          >
-                            <Table.Cell>{businessBuyerLog.text}</Table.Cell>
-                            <Table.Cell>
-                              {moment(businessBuyerLog.followUp).format(
-                                'DD/MM/YYYY - HH:mm'
-                              )}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {businessBuyerLog.followUpStatus}
-                            </Table.Cell>
-                          </Table.Row>
-                        ))}
+                        {listBusinessBuyerLogList.array.map(
+                          businessBuyerLog => (
+                            <Table.Row
+                              active
+                              key={businessBuyerLog.id}
+                              onClick={() => this._selectLog(businessBuyerLog)}
+                            >
+                              <Table.Cell>{businessBuyerLog.text}</Table.Cell>
+                              <Table.Cell>
+                                {moment(businessBuyerLog.followUp).format(
+                                  'DD/MM/YYYY - HH:mm'
+                                )}
+                              </Table.Cell>
+                              <Table.Cell>
+                                {businessBuyerLog.followUpStatus}
+                              </Table.Cell>
+                            </Table.Row>
+                          )
+                        )}
                       </Table.Body>
                     </Table>
                     <Pagination
@@ -394,7 +406,11 @@ class BuyerDetailsCM extends Component {
                                     floated="right"
                                     type="submit"
                                     color="red"
-                                    disabled={isSubmitting || !isValid || !buyerLog.newLog}
+                                    disabled={
+                                      isSubmitting ||
+                                      !isValid ||
+                                      !buyerLog.newLog
+                                    }
                                     loading={isLoadingUpdate}
                                     onClick={handleSubmit}
                                   >
@@ -490,14 +506,13 @@ BuyerDetailsCM.propTypes = {
 }
 
 const validationSchema = Yup.object().shape({
-  buyerLog_followUp: Yup.string()
-    .required('buyerLog_followUp is required.'),
-  buyerLog_text: Yup.string()
-    .required('First name is required.')
+  buyerLog_followUp: Yup.string().required('buyerLog_followUp is required.'),
+  buyerLog_text: Yup.string().required('First name is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.createNewLog(values)
+  props
+    .createNewLog(values)
     .then(setSubmitting(false))
     .then(props.getBusinessBuyerLog(values.buyer_id, values.business_id))
 }
@@ -536,7 +551,10 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     validationSchema,
