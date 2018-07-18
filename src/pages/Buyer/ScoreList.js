@@ -94,7 +94,7 @@ class ScoreListPage extends Component {
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Created</Table.HeaderCell>
-                      <Table.HeaderCell>Title</Table.HeaderCell>
+                      <Table.HeaderCell>Version</Table.HeaderCell>
                       <Table.HeaderCell>Score</Table.HeaderCell>
                       <Table.HeaderCell>Sent</Table.HeaderCell>
                       <Table.HeaderCell>Edit</Table.HeaderCell>
@@ -109,7 +109,7 @@ class ScoreListPage extends Component {
                             'DD/MM/YYYY - HH:mm'
                           )}
                         </Table.Cell>
-                        <Table.Cell>Score {key + 1}</Table.Cell>
+                        <Table.Cell>Score Version {listScore.version}</Table.Cell>
                         <Table.Cell>{listScore.total}</Table.Cell>
                         <Table.Cell>
                           {listScore.dateSent ? 'Yes' : 'No'}
