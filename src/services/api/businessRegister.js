@@ -25,7 +25,6 @@ export const update = businessRegister => {
 }
 
 export const remove = businessRegisterType => {
-  console.log(businessRegisterType)
   return request({
     method: 'delete',
     url: `/business-register/${businessRegisterType.id}`,

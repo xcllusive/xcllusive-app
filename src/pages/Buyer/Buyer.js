@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
-import { Table, Icon, Button, Input, Grid } from 'semantic-ui-react'
+import { Table, Icon, Button, Grid } from 'semantic-ui-react'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyerBusinesses } from '../../redux/ducks/buyer'
@@ -72,22 +72,6 @@ class BuyerPage extends Component {
           />
         ) : null}
         <Grid padded>
-          <Grid.Row>
-            <Grid.Column width={4}>
-              <Input
-                fluid
-                action={{ icon: 'search' }}
-                placeholder="Find buyers..."
-              />
-            </Grid.Column>
-            <Grid.Column width={4}>
-              <Input
-                fluid
-                action={{ icon: 'search' }}
-                placeholder="Find businesses..."
-              />
-            </Grid.Column>
-          </Grid.Row>
           <Grid.Row>
             <h2>
               <b>
