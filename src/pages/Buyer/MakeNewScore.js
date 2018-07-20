@@ -234,7 +234,8 @@ class MakeNewScorePage extends Component {
       errors,
       touched,
       isValid,
-      score
+      score,
+      isLoadingSendScore
     } = this.props
 
     return (
@@ -294,7 +295,11 @@ class MakeNewScorePage extends Component {
                     <Statistic.Label>Previous Score</Statistic.Label>
                   </Statistic>
                   <Statistic>
-                    <Statistic.Value>No</Statistic.Value>
+                    <Statistic.Value>
+                      {this.props.score && this.props.score.dateSent
+                        ? 'Yes'
+                        : 'No'}
+                    </Statistic.Value>
                     <Statistic.Label>Sent</Statistic.Label>
                   </Statistic>
                   <Statistic>
@@ -827,6 +832,7 @@ class MakeNewScorePage extends Component {
                             (this.props.score && this.props.score.dateSent) ||
                             !this.props.score
                           }
+                          loading={isLoadingSendScore}
                         >
                           <Icon name="send" />
                           Send Score
@@ -905,7 +911,8 @@ MakeNewScorePage.propTypes = {
   enquiriesLast4Weeks: PropTypes.func,
   enquiries: PropTypes.object,
   enquiriesOptions: PropTypes.array,
-  sendScore: PropTypes.func
+  sendScore: PropTypes.func,
+  isLoadingSendScore: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -1008,7 +1015,8 @@ const mapStateToProps = state => ({
   perceivedRiskOptions: state.scoreRegister.get.perceivedRisk.array,
   enquiriesOptions: state.scoreRegister.get.enquiries.array,
   score: state.score.get.object,
-  enquiries: state.score.enquiries.object
+  enquiries: state.score.enquiries.object,
+  isLoadingSendScore: state.score.send.isLoading
 })
 
 export default connect(
