@@ -108,6 +108,13 @@ class MakeNewScorePage extends Component {
     if (nextProps.enquiries) {
       this._findItemEnquiries(nextProps.values.diff)
     }
+    if (!this.props.isCalculated && nextProps.isCalculated) {
+      this.props.history.replace(
+        `/buyer/business/${this.props.match.params.idBusiness}/make-new-score/${
+          nextProps.score.id
+        }`
+      )
+    }
   }
 
   _findItemEnquiries (diff) {
@@ -220,6 +227,7 @@ class MakeNewScorePage extends Component {
   }
 
   render () {
+    console.log(this.props)
     const {
       history,
       values,
@@ -830,8 +838,7 @@ class MakeNewScorePage extends Component {
                           }
                           disabled={
                             (this.props.score && this.props.score.dateSent) ||
-                            !this.props.score ||
-                            !this.state.score
+                            !this.props.score
                           }
                           loading={isLoadingSendScore}
                         >
@@ -913,7 +920,9 @@ MakeNewScorePage.propTypes = {
   enquiries: PropTypes.object,
   enquiriesOptions: PropTypes.array,
   sendScore: PropTypes.func,
-  isLoadingSendScore: PropTypes.bool
+  isLoadingSendScore: PropTypes.bool,
+  isCalculated: PropTypes.bool,
+  scoreCreated: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -1017,7 +1026,8 @@ const mapStateToProps = state => ({
   enquiriesOptions: state.scoreRegister.get.enquiries.array,
   score: state.score.get.object,
   enquiries: state.score.enquiries.object,
-  isLoadingSendScore: state.score.send.isLoading
+  isLoadingSendScore: state.score.send.isLoading,
+  isCalculated: state.score.calculateScore.isCalculated
 })
 
 export default connect(

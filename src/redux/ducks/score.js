@@ -128,6 +128,10 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           isCalculated: true,
           error: null
+        },
+        get: {
+          ...state.get,
+          object: action.payload.data
         }
       }
     case Types.CALCULATE_SCORE_FAILURE:
@@ -311,7 +315,8 @@ export const calculateScore = calculateScore => async dispatch => {
   try {
     const response = await calculate(calculateScore)
     dispatch({
-      type: Types.CALCULATE_SCORE_SUCCESS
+      type: Types.CALCULATE_SCORE_SUCCESS,
+      payload: response
     })
     dispatch({
       type: ModalTypes.MODAL_CLOSE
