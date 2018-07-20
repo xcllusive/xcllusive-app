@@ -830,7 +830,8 @@ class MakeNewScorePage extends Component {
                           }
                           disabled={
                             (this.props.score && this.props.score.dateSent) ||
-                            !this.props.score
+                            !this.props.score ||
+                            !this.state.score
                           }
                           loading={isLoadingSendScore}
                         >

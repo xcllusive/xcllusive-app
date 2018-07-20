@@ -36,9 +36,9 @@ class ScoreListPage extends Component {
         title: 'Delete Score',
         text: 'Are you sure you want to delete this score?'
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this.props.removeScore(idScore)
+          await this.props.removeScore(idScore)
           this.props.listScore(this.props.match.params.id)
           this.props.getBusiness(this.props.match.params.id)
         }
@@ -109,7 +109,9 @@ class ScoreListPage extends Component {
                             'DD/MM/YYYY - HH:mm'
                           )}
                         </Table.Cell>
-                        <Table.Cell>Score Version {listScore.version}</Table.Cell>
+                        <Table.Cell>
+                          Score Version {listScore.version}
+                        </Table.Cell>
                         <Table.Cell>{listScore.total}</Table.Cell>
                         <Table.Cell>
                           {listScore.dateSent ? 'Yes' : 'No'}
