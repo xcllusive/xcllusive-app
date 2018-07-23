@@ -22,6 +22,7 @@ import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+import { getBuyerBusinesses } from '../../redux/ducks/buyer'
 
 class BusinessEditPage extends Component {
   constructor (props) {
@@ -49,6 +50,55 @@ class BusinessEditPage extends Component {
 
   componentWillUnmount () {
     this.props.cleanBusiness()
+  }
+
+  _getProduct (id) {
+    if (id === 1) {
+      return 'Business Sale'
+    }
+    if (id === 2) {
+      return 'Seller Assist'
+    }
+    if (id === 3) {
+      return 'Franchise Sale'
+    }
+  }
+
+  _getStage (id) {
+    if (id === 1) {
+      return 'Potential Listing'
+    }
+    if (id === 2) {
+      return 'Listing Negotiation'
+    }
+    if (id === 3) {
+      return 'Sales Memo'
+    }
+    if (id === 4) {
+      return 'For Sale'
+    }
+    if (id === 5) {
+      return 'Under Offer'
+    }
+    if (id === 6) {
+      return 'Sold'
+    }
+    if (id === 7) {
+      return 'Withdrawn'
+    }
+    if (id === 8) {
+      return 'Lost'
+    }
+    if (id === 9) {
+      return 'Appraisal'
+    }
+    if (id === 10) {
+      return 'Data Gathering'
+    }
+  }
+
+  _diffDays = date => {
+    return moment().diff(date, 'day')
   }
 
   render () {
@@ -85,27 +135,37 @@ class BusinessEditPage extends Component {
                 <Statistic.Label>Business Name</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
-                <Statistic.Value>123131</Statistic.Value>
+                <Statistic.Value>
+                  {this.props.business.listedPrice.toLocaleString()}
+                </Statistic.Value>
                 <Statistic.Label>Price</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
-                <Statistic.Value>123123123</Statistic.Value>
+                <Statistic.Value>
+                  {this._getProduct(this.props.business.productId)}
+                </Statistic.Value>
                 <Statistic.Label>Type of Business Sale</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
-                <Statistic.Value>100</Statistic.Value>
+                <Statistic.Value>{this.props.totalEnquiry}</Statistic.Value>
                 <Statistic.Label>Enquiries</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
-                <Statistic.Value>10</Statistic.Value>
+                <Statistic.Value>
+                  {this._diffDays(this.props.business.daysOnTheMarket)}
+                </Statistic.Value>
                 <Statistic.Label>Days on the market</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
-                <Statistic.Value>5</Statistic.Value>
+                <Statistic.Value>
+                  {this.props.totalLastScore ? this.props.totalLastScore : '#'}
+                </Statistic.Value>
                 <Statistic.Label>Last Feedback Score</Statistic.Label>
               </Statistic>
               <Statistic color="green">
-                <Statistic.Value>{this.props.business.stageId}</Statistic.Value>
+                <Statistic.Value>
+                  {this._getStage(this.props.business.stageId)}
+                </Statistic.Value>
                 <Statistic.Label>Stage</Statistic.Label>
               </Statistic>
             </Statistic.Group>
@@ -246,12 +306,16 @@ BusinessEditPage.propTypes = {
   error: PropTypes.string,
   isLoading: PropTypes.bool,
   arrayLogsFromBusiness: PropTypes.array,
-  getLogFromBusiness: PropTypes.func
+  getLogFromBusiness: PropTypes.func,
+  businessesForSale: PropTypes.array,
+  getBuyerBusinesses: PropTypes.func,
+  totalEnquiry: PropTypes.number,
+  totalLastScore: PropTypes.number
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { getBusiness, cleanBusiness, getLogFromBusiness },
+    { getBusiness, cleanBusiness, getLogFromBusiness, getBuyerBusinesses },
     dispatch
   )
 }
@@ -260,9 +324,14 @@ const mapStateToProps = state => {
   return {
     isLoading: state.business.get.isLoading,
     business: state.business.get.object,
+    totalEnquiry: state.business.get.totalEnquiry,
+    totalLastScore: state.business.get.totalLastScore,
     error: state.business.get.error,
     arrayLogsFromBusiness: state.businessLog.get.array
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessEditPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BusinessEditPage)

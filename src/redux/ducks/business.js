@@ -55,6 +55,8 @@ const initialState = {
   get: {
     isLoading: true,
     object: {},
+    totalEnquiry: 0,
+    totalLastScore: 0,
     stageOptions: [],
     sourceOptions: [],
     ratingOptions: [],
@@ -179,6 +181,8 @@ export default function reducer (state = initialState, action) {
           ...state.get,
           isLoading: false,
           object: action.payload.business,
+          totalEnquiry: action.payload.countAllEnquiry,
+          totalLastScore: action.payload.lastScore.total,
           stageOptions: action.payload.stageList,
           sourceOptions: action.payload.sourceList,
           ratingOptions: action.payload.ratingList,
@@ -480,7 +484,9 @@ export const updateBusiness = business => async dispatch => {
       type: Types.UPDATE_BUSINESS_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(
+      'Error trying to upload the business. Please get in contact with IT department.'
+    )
   }
 }
 
