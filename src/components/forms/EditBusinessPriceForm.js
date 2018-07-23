@@ -36,7 +36,7 @@ const EditBusinessPriceForm = ({
               label="Listed Price"
               name="listedPrice"
               autoComplete="listedPrice"
-              value={values.listedPrice}
+              value={values.listedPrice.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -44,7 +44,7 @@ const EditBusinessPriceForm = ({
               label="Current Price"
               name="currentPrice"
               autoComplete="currentPrice"
-              value={values.currentPrice}
+              value={values.currentPrice.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -54,7 +54,7 @@ const EditBusinessPriceForm = ({
               label="Engagement Fee"
               name="engagementFee"
               autoComplete="engagementFee"
-              value={values.engagementFee}
+              value={values.engagementFee.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -62,7 +62,7 @@ const EditBusinessPriceForm = ({
               label="Commission %"
               name="commissionPerc"
               autoComplete="commissionPerc"
-              value={values.commissionPerc}
+              value={values.commissionPerc.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -72,7 +72,7 @@ const EditBusinessPriceForm = ({
               label="Minimum Com $"
               name="minimumCharge"
               autoComplete="minimumCharge"
-              value={values.minimumCharge}
+              value={values.minimumCharge.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -80,7 +80,7 @@ const EditBusinessPriceForm = ({
               label="Appraisal High $"
               name="appraisalHigh"
               autoComplete="appraisalHigh"
-              value={values.appraisalHigh}
+              value={values.appraisalHigh.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -88,7 +88,7 @@ const EditBusinessPriceForm = ({
               label="Appraisal Low $"
               name="appraisalLow"
               autoComplete="appraisalLow"
-              value={values.appraisalLow}
+              value={values.appraisalLow.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />

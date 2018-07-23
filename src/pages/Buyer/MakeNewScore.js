@@ -227,7 +227,6 @@ class MakeNewScorePage extends Component {
   }
 
   render () {
-    console.log(this.props)
     const {
       history,
       values,
@@ -421,7 +420,9 @@ class MakeNewScorePage extends Component {
                     <Form.TextArea
                       name="notesEnquiries"
                       autoComplete="notesEnquiries"
-                      disabled={this.props.score && this.props.score.dateSent}
+                      disabled={
+                        this.props.score && this.props.score.dateSent !== null
+                      }
                       value={values.notesEnquiries}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -486,7 +487,9 @@ class MakeNewScorePage extends Component {
                         )}
                         name="perceivedPrice_id"
                         autoComplete="perceivedPrice_id"
-                        disabled={this.props.score && this.props.score.dateSent}
+                        disabled={
+                          this.props.score && this.props.score.dateSent !== null
+                        }
                         value={values.perceivedPrice_id}
                         onChange={this._handleSelectChange}
                       />
@@ -504,7 +507,9 @@ class MakeNewScorePage extends Component {
                     <Form.TextArea
                       name="notesPrice"
                       autoComplete="notesPrice"
-                      disabled={this.props.score && this.props.score.dateSent}
+                      disabled={
+                        this.props.score && this.props.score.dateSent !== null
+                      }
                       value={values.notesPrice}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -569,7 +574,9 @@ class MakeNewScorePage extends Component {
                         )}
                         name="infoTransMomen_id"
                         autoComplete="infoTransMomen_id"
-                        disabled={this.props.score && this.props.score.dateSent}
+                        disabled={
+                          this.props.score && this.props.score.dateSent !== null
+                        }
                         value={values.infoTransMomen_id}
                         onChange={this._handleSelectChange}
                       />
@@ -587,7 +594,9 @@ class MakeNewScorePage extends Component {
                     <Form.TextArea
                       name="notesMomentum"
                       autoComplete="notesMomentum"
-                      disabled={this.props.score && this.props.score.dateSent}
+                      disabled={
+                        this.props.score && this.props.score.dateSent !== null
+                      }
                       value={values.notesMomentum}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -652,7 +661,9 @@ class MakeNewScorePage extends Component {
                         )}
                         name="currentInterest_id"
                         autoComplete="currentInterest_id"
-                        disabled={this.props.score && this.props.score.dateSent}
+                        disabled={
+                          this.props.score && this.props.score.dateSent !== null
+                        }
                         value={values.currentInterest_id}
                         onChange={this._handleSelectChange}
                       />
@@ -670,7 +681,9 @@ class MakeNewScorePage extends Component {
                     <Form.TextArea
                       name="notesInterest"
                       autoComplete="notesInterest"
-                      disabled={this.props.score && this.props.score.dateSent}
+                      disabled={
+                        this.props.score && this.props.score.dateSent !== null
+                      }
                       value={values.notesInterest}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -735,7 +748,9 @@ class MakeNewScorePage extends Component {
                         )}
                         name="perceivedRisk_id"
                         autoComplete="perceivedRisk_id"
-                        disabled={this.props.score && this.props.score.dateSent}
+                        disabled={
+                          this.props.score && this.props.score.dateSent !== null
+                        }
                         value={values.perceivedRisk_id}
                         onChange={this._handleSelectChange}
                       />
@@ -753,7 +768,9 @@ class MakeNewScorePage extends Component {
                     <Form.TextArea
                       name="notesRisk"
                       autoComplete="notesRisk"
-                      disabled={this.props.score && this.props.score.dateSent}
+                      disabled={
+                        this.props.score && this.props.score.dateSent !== null
+                      }
                       value={values.notesRisk}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -837,7 +854,8 @@ class MakeNewScorePage extends Component {
                             this._modalConfirmSendScore(values.scoreId)
                           }
                           disabled={
-                            (this.props.score && this.props.score.dateSent) ||
+                            (this.props.score &&
+                              this.props.score.dateSent !== null) ||
                             !this.props.score
                           }
                           loading={isLoadingSendScore}
