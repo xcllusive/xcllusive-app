@@ -228,7 +228,7 @@ export default function reducer (state = initialState, action) {
         update: {
           ...state.update,
           isLoading: false,
-          isUpdated: action.payload,
+          isUpdated: true,
           error: null
         }
       }

@@ -34,6 +34,9 @@ class BusinessEditPage extends Component {
     if (nextprops.error && this.props.error !== nextprops.error) {
       this.props.history.goBack()
     }
+    if (!this.props.isUpdated && nextprops.isUpdated) {
+      this.props.getBusiness(this.props.match.params.id)
+    }
   }
 
   componentWillMount () {
@@ -310,7 +313,8 @@ BusinessEditPage.propTypes = {
   businessesForSale: PropTypes.array,
   getBuyerBusinesses: PropTypes.func,
   totalEnquiry: PropTypes.number,
-  totalLastScore: PropTypes.number
+  totalLastScore: PropTypes.number,
+  isUpdated: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {
@@ -327,7 +331,8 @@ const mapStateToProps = state => {
     totalEnquiry: state.business.get.totalEnquiry,
     totalLastScore: state.business.get.totalLastScore,
     error: state.business.get.error,
-    arrayLogsFromBusiness: state.businessLog.get.array
+    arrayLogsFromBusiness: state.businessLog.get.array,
+    isUpdated: state.business.update.isUpdated
   }
 }
 
