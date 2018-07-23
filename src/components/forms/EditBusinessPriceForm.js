@@ -212,64 +212,66 @@ const mapPropsToValues = props => {
   if (props.business) {
     return {
       ...props.business,
-      listedPrice: props.business.listedPrice ? props.business.listedPrice : '',
+      listedPrice: props.business.listedPrice ? props.business.listedPrice : 0,
       currentPrice: props.business.currentPrice
         ? props.business.currentPrice
-        : '',
+        : 0,
       engagementFee: props.business.engagementFee
         ? props.business.engagementFee
-        : '',
+        : 0,
       commissionPerc: props.business.commissionPerc
         ? props.business.commissionPerc
-        : '',
+        : 0,
       minimumCharge: props.business.minimumCharge
         ? props.business.minimumCharge
-        : '',
+        : 0,
       appraisalHigh: props.business.appraisalHigh
         ? props.business.appraisalHigh
-        : '',
+        : 0,
       appraisalLow: props.business.appraisalLow
         ? props.business.appraisalLow
-        : '',
+        : 0,
       depositeTaken: props.business.depositeTaken
         ? props.business.depositeTaken
-        : '',
+        : 0,
       depositeTakenDate: props.business.depositeTakenDate
         ? props.business.depositeTakenDate
         : '',
       commissionSold: props.business.commissionSold
         ? props.business.commissionSold
-        : '',
+        : 0,
       settlementDate: props.business.settlementDate
         ? props.business.settlementDate
         : '',
-      soldPrice: props.business.soldPrice ? props.business.soldPrice : '',
+      soldPrice: props.business.soldPrice ? props.business.soldPrice : 0,
       attachedPurchaser: props.business.attachedPurchaser
         ? props.business.attachedPurchaser
-        : '',
+        : 0,
       searchNote: props.business.searchNote ? props.business.searchNote : '',
       afterSalesNotes: props.business.afterSalesNotes
         ? props.business.afterSalesNotes
-        : ''
+        : '',
+      conclusionNote: props.business.conclusionNote ? props.business.conclusionNote : ''
     }
   }
   return {
-    id: '',
-    listedPrice: '',
-    currentPrice: '',
-    engagementFee: '',
-    commissionPerc: '',
-    minimumCharge: '',
-    appraisalHigh: '',
-    appraisalLow: '',
-    depositeTaken: '',
+    id: 0,
+    listedPrice: 0,
+    currentPrice: 0,
+    engagementFee: 0,
+    commissionPerc: 0,
+    minimumCharge: 0,
+    appraisalHigh: 0,
+    appraisalLow: 0,
+    depositeTaken: 0,
     depositeTakenDate: '',
-    commissionSold: '',
+    commissionSold: 0,
     settlementDate: '',
-    soldPrice: '',
-    attachedPurchaser: '',
+    soldPrice: 0,
+    attachedPurchaser: 0,
     searchNote: '',
-    afterSalesNotes: ''
+    afterSalesNotes: '',
+    conclusionNote: ''
   }
 }
 
