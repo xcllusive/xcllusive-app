@@ -36,7 +36,7 @@ const EditBusinessPriceForm = ({
               label="Listed Price"
               name="listedPrice"
               autoComplete="listedPrice"
-              value={values.listedPrice}
+              value={values.listedPrice.toLocaleString()}
               onChange={handleChange}
               onBlur={handleBlur}
             />
