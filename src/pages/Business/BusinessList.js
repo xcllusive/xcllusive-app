@@ -61,7 +61,7 @@ class BusinessListPage extends Component {
   }
 
   _getBusinesses = (stage, name) => {
-    this.props.getBusinesses(false, stage, true)
+    this.props.getBusinesses(false, stage, false)
     this.setState({
       stageSelected: stage,
       stageSelectedName: name
