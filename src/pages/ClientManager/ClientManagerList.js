@@ -357,14 +357,14 @@ class ClientManagerList extends Component {
             buyer={this.state.buyer}
           />
         ) : null}
-        <Grid padded="horizontally">
+        <Grid padded="horizontally" style={{ marginTop: 0 }}>
           <Grid.Row columns={4}>
             <Grid.Column floated="left" width={4}>
-              <h3>
+              <h2>
                 <b>
                   <div align="left"> Buyer</div>
                 </b>
-              </h3>
+              </h2>
               <Input
                 fluid
                 icon="search"
@@ -387,11 +387,11 @@ class ClientManagerList extends Component {
               </Button>
             </Grid.Column>
             <Grid.Column floated="left" width={4}>
-              <h3>
+              <h2>
                 <b>
                   <div align="left"> Business </div>
                 </b>
-              </h3>
+              </h2>
               <Input
                 fluid
                 icon="search"
@@ -903,4 +903,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClientManagerList)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ClientManagerList)
