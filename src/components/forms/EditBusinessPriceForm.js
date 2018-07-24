@@ -251,7 +251,9 @@ const mapPropsToValues = props => {
       afterSalesNotes: props.business.afterSalesNotes
         ? props.business.afterSalesNotes
         : '',
-      conclusionNote: props.business.conclusionNote ? props.business.conclusionNote : ''
+      conclusionNote: props.business.conclusionNote
+        ? props.business.conclusionNote
+        : ''
     }
   }
   return {
