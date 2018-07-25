@@ -96,6 +96,7 @@ class BuyerDetailsCM extends Component {
 
   render () {
     const {
+      history,
       listBuyerLogList,
       isLoadingBuyer,
       business,
@@ -222,6 +223,14 @@ class BuyerDetailsCM extends Component {
                         value={this.props.buyer.buyerNotes}
                       />
                     </Form.Group>
+                    <Button
+                      size="small"
+                      color="green"
+                      onClick={() => history.push('/clientManager')}
+                    >
+                      <Icon name="backward" />
+                      Back to Client Manager
+                    </Button>
                   </Form>
                 ) : null}
               </Dimmer.Dimmable>
@@ -479,6 +488,7 @@ class BuyerDetailsCM extends Component {
 }
 
 BuyerDetailsCM.propTypes = {
+  history: PropTypes.object,
   getBuyer: PropTypes.func,
   match: PropTypes.object,
   buyer: PropTypes.object,
@@ -493,7 +503,7 @@ BuyerDetailsCM.propTypes = {
   isLoadingUpdate: PropTypes.bool,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  listBusinessBuyerLogList: PropTypes.array,
+  listBusinessBuyerLogList: PropTypes.object,
   getBusinessBuyerLog: PropTypes.func,
   clearBuyerLog: PropTypes.func,
   isLoadingBusBuyLog: PropTypes.bool,
