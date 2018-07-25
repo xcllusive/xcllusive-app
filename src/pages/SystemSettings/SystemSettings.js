@@ -8,6 +8,7 @@ import UserList from './UserList'
 import Business from './Business/Business'
 import Buyer from './Buyer/Buyer'
 import EmailTemplates from './EmailTemplates'
+import AgreementTemplates from './AgreementTemplates'
 
 import { getSystemSettings } from '../../redux/ducks/systemSettings'
 
@@ -16,6 +17,10 @@ class SystemSettingsPage extends Component {
     super(props)
     this.state = {
       panes: [
+        {
+          menuItem: 'Agreement Templates',
+          render: () => <AgreementTemplates />
+        },
         {
           menuItem: 'Users',
           render: () => <UserList />
@@ -67,4 +72,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(SystemSettingsPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SystemSettingsPage)
