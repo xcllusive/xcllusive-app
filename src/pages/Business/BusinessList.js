@@ -33,7 +33,7 @@ class BusinessListPage extends Component {
   }
 
   async componentWillMount () {
-    await this.props.getBusinesses(false, this.state.stageSelected, true)
+    await this.props.getBusinesses(false, this.state.stageSelected, false)
   }
 
   async componentWillReceiveProps (nextProps) {
@@ -50,7 +50,10 @@ class BusinessListPage extends Component {
       inputSearch: value
     })
 
-    this.timer = setTimeout(() => this.props.getBusinesses(value, this.state.stageSelected, true), 1000)
+    this.timer = setTimeout(
+      () => this.props.getBusinesses(value, this.state.stageSelected, true),
+      1000
+    )
   }
 
   _toggleModal = business => {
@@ -91,27 +94,45 @@ class BusinessListPage extends Component {
         ) : null}
         <GridBusinessStage>
           <Statistic.Group size="mini" color="blue" widths={6}>
-            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(1, 'Potential Listing')}>
+            <Statistic
+              style={{ cursor: 'pointer' }}
+              onClick={() => this._getBusinesses(1, 'Potential Listing')}
+            >
               <Statistic.Value>10</Statistic.Value>
               <Statistic.Label>Potential Listing</Statistic.Label>
             </Statistic>
-            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(2, 'Listing Negotiation')}>
+            <Statistic
+              style={{ cursor: 'pointer' }}
+              onClick={() => this._getBusinesses(2, 'Listing Negotiation')}
+            >
               <Statistic.Value>20</Statistic.Value>
               <Statistic.Label>Listing Negotiation</Statistic.Label>
             </Statistic>
-            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(3, 'Sales Memo')}>
+            <Statistic
+              style={{ cursor: 'pointer' }}
+              onClick={() => this._getBusinesses(3, 'Sales Memo')}
+            >
               <Statistic.Value>30</Statistic.Value>
               <Statistic.Label>Sales Memo</Statistic.Label>
             </Statistic>
-            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(4, 'For Sale')}>
+            <Statistic
+              style={{ cursor: 'pointer' }}
+              onClick={() => this._getBusinesses(4, 'For Sale')}
+            >
               <Statistic.Value>40</Statistic.Value>
               <Statistic.Label>For Sale</Statistic.Label>
             </Statistic>
-            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(6, 'Sold')}>
+            <Statistic
+              style={{ cursor: 'pointer' }}
+              onClick={() => this._getBusinesses(6, 'Sold')}
+            >
               <Statistic.Value>50</Statistic.Value>
               <Statistic.Label>Sold</Statistic.Label>
             </Statistic>
-            <Statistic style={{cursor: 'pointer'}} onClick={() => this._getBusinesses(7, 'Withdrawn')}>
+            <Statistic
+              style={{ cursor: 'pointer' }}
+              onClick={() => this._getBusinesses(7, 'Withdrawn')}
+            >
               <Statistic.Value>60</Statistic.Value>
               <Statistic.Label>Withdrawn</Statistic.Label>
             </Statistic>
@@ -195,4 +216,7 @@ const mapStateToProps = state => ({
   businesses: state.business.getAll.array
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessListPage)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BusinessListPage)
