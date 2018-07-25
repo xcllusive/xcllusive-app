@@ -182,7 +182,7 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           object: action.payload.business,
           totalEnquiry: action.payload.countAllEnquiry,
-          totalLastScore: action.payload.lastScore.total,
+          totalLastScore: action.payload.lastScore,
           stageOptions: action.payload.stageList,
           sourceOptions: action.payload.sourceList,
           ratingOptions: action.payload.ratingList,

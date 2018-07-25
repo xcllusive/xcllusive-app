@@ -128,7 +128,7 @@ class BusinessEditPage extends Component {
           >
             <Statistic.Group size="mini" widths={16}>
               <Statistic color="orange">
-                <Statistic.Value>{this.props.business.id}</Statistic.Value>
+                <Statistic.Value>BS{this.props.business.id}</Statistic.Value>
                 <Statistic.Label>Id</Statistic.Label>
               </Statistic>
               <Statistic color="orange">
@@ -329,7 +329,7 @@ const mapStateToProps = state => {
     isLoading: state.business.get.isLoading,
     business: state.business.get.object,
     totalEnquiry: state.business.get.totalEnquiry,
-    totalLastScore: state.business.get.totalLastScore,
+    totalLastScore: state.business.get.totalLastScore.total,
     error: state.business.get.error,
     arrayLogsFromBusiness: state.businessLog.get.array,
     isUpdated: state.business.update.isUpdated
