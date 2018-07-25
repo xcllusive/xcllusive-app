@@ -113,6 +113,7 @@ class ClientManagerList extends Component {
 
   _backToSearch = () => {
     this._renderBuyer(null)
+    this._renderBuyerLog(null)
     this.props.clearBuyerLog()
   }
 
@@ -774,7 +775,7 @@ class ClientManagerList extends Component {
           ) : null}
         </Grid.Column>
         <Grid.Column>
-          {this.state.buyer ? (
+          {this.state.buyer && this.state.buyerLog ? (
             <Dimmer.Dimmable dimmed>
               <Dimmer inverted active={isLoadingBuyerLog}>
                 <Loader>Loading</Loader>
