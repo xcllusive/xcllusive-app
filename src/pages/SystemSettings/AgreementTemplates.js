@@ -56,7 +56,6 @@ class AgreementTemplates extends Component {
           ['clean']
         ]
       },
-
       formats: [
         'header',
         'bold',
@@ -88,8 +87,16 @@ class AgreementTemplates extends Component {
     this._attachQuillRefs()
   }
 
+  _handleChangeHeader = value => {
+    this.props.setFieldValue('header', value)
+  }
+
   _handleChangeBody = value => {
     this.props.setFieldValue('body', value)
+  }
+
+  _handleChangeFooter = value => {
+    this.props.setFieldValue('footer', value)
   }
 
   _handleSelectChange = (e, { value }) => {
@@ -125,6 +132,9 @@ class AgreementTemplates extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_AGREEMENT_TEMPLATE, {
       options: {
         title: 'Create New Agreement Template'
+      },
+      onCreated: isCreated => {
+        if (isCreated) this.props.getAgreementTemplates()
       }
     })
   }
@@ -137,6 +147,7 @@ class AgreementTemplates extends Component {
       listAgreementTemplates,
       objectAgreementTemplate,
       isLoadingUpdate,
+      isLoadingAllTemplate,
       isSubmitting,
       handleSubmit,
       isValid,
@@ -151,7 +162,7 @@ class AgreementTemplates extends Component {
           <Form.Group widths={16}>
             <Form.Field width={6}>
               <Form.Select
-                style={{ zIndex: 9999 }}
+                style={{ zIndex: 1000 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
                 options={mapArrayToValuesForDropdownTemplates(
@@ -160,6 +171,7 @@ class AgreementTemplates extends Component {
                 name="title"
                 autoComplete="title"
                 value={values.title}
+                loading={isLoadingAllTemplate}
                 onChange={this._handleSelectChange}
               />
               {errors.title &&
@@ -167,7 +179,7 @@ class AgreementTemplates extends Component {
                 <Label basic color="red" pointing content={errors.title} />
               )}
             </Form.Field>
-            <Form.Field style={{ marginLeft: '50px', marginTop: '24px' }}>
+            <Form.Field style={{ width: '100%', alignSelf: 'flex-end' }}>
               <Button
                 onClick={() => this._openModalNewAgreementTemplate()}
                 color="facebook"
@@ -177,29 +189,11 @@ class AgreementTemplates extends Component {
                 New Template
               </Button>
             </Form.Field>
-            {objectAgreementTemplate ? (
-              <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
-                <Form.Button
-                  floated="right"
-                  type="submit"
-                  color="red"
-                  disabled={isSubmitting || !isValid}
-                  loading={isLoadingUpdate}
-                  onClick={handleSubmit}
-                >
-                  <Icon name="save" />
-                  Save
-                </Form.Button>
-              </Form.Field>
-            ) : null}
           </Form.Group>
-          <Dimmer.Dimmable
-            dimmed={!objectAgreementTemplate || isLoadingTemplate}
-          >
+          <Dimmer.Dimmable style={{ zIndex: 999 }} dimmed={!objectAgreementTemplate || isLoadingTemplate}>
             <Dimmer
               inverted
-              active={!objectAgreementTemplate || isLoadingTemplate}
-            >
+              active={!objectAgreementTemplate || isLoadingTemplate}>
               {isLoadingTemplate ? (
                 <Loader inverted />
               ) : (
@@ -323,11 +317,8 @@ class AgreementTemplates extends Component {
                 >
                   <Form.Field>
                     <ReactQuill
-                      ref={el => {
-                        this.reactQuillRef = el
-                      }}
-                      value={values.body}
-                      onChange={this._handleChangeBody}
+                      value={values.header}
+                      onChange={this._handleChangeHeader}
                       style={{ height: '10vh' }}
                       modules={this.state.modules}
                       formats={this.state.formats}
@@ -406,17 +397,31 @@ class AgreementTemplates extends Component {
                 >
                   <Form.Field>
                     <ReactQuill
-                      ref={el => {
-                        this.reactQuillRef = el
-                      }}
-                      value={values.body}
-                      onChange={this._handleChangeBody}
+                      value={values.footer}
+                      onChange={this._handleChangeFooter}
                       style={{ height: '10vh' }}
                       modules={this.state.modules}
                       formats={this.state.formats}
                     />
                   </Form.Field>
                 </Grid.Column>
+              </Grid.Row>
+              <Grid.Row style={{marginTop: '50px'}}>
+                {objectAgreementTemplate ? (
+                  <Form.Field width={16} style={{ alignSelf: 'flex-end' }}>
+                    <Form.Button
+                      floated="right"
+                      type="submit"
+                      color="red"
+                      disabled={isSubmitting || !isValid}
+                      loading={isLoadingUpdate}
+                      onClick={handleSubmit}
+                    >
+                      <Icon name="save" />
+                  Save
+                    </Form.Button>
+                  </Form.Field>
+                ) : null}
               </Grid.Row>
             </Grid>
           </Dimmer.Dimmable>
@@ -443,7 +448,8 @@ AgreementTemplates.propTypes = {
   isLoadingUpdate: PropTypes.bool,
   clearAgreementTemplates: PropTypes.func,
   isLoadingTemplate: PropTypes.bool,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  isLoadingAllTemplate: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -473,7 +479,8 @@ const mapStateToProps = state => ({
   listAgreementTemplates: state.agreementTemplates.getAll.array,
   objectAgreementTemplate: state.agreementTemplates.get.object,
   isLoadingTemplate: state.agreementTemplates.get.isLoading,
-  isLoadingUpdate: state.agreementTemplates.update.isLoading
+  isLoadingUpdate: state.agreementTemplates.update.isLoading,
+  isLoadingAllTemplate: state.agreementTemplates.getAll.isLoading
 })
 
 const mapDispatchToProps = dispatch =>

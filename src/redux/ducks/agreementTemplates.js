@@ -109,6 +109,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CREATE_AGREEMENT_TEMPLATE_LOADING:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          isLoading: true,
+          isCreated: false
+        }
+      }
+    case Types.CREATE_AGREEMENT_TEMPLATE_SUCCESS:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          isLoading: false,
+          isCreated: true
+        }
+      }
+    case Types.CREATE_AGREEMENT_TEMPLATE_FAILURE:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          isLoading: false,
+          isCreated: false,
+          error: action.payload
+        }
+      }
     case Types.UPDATE_AGREEMENT_TEMPLATES_LOADING:
       return {
         ...state,

@@ -29,13 +29,14 @@ class ModalNewAgreementTemplate extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  _handleConfirm = isConfirmed => {
+  _handleConfirm = async isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       return
     }
-    this.props.createAgreementTemplate(this.props.values)
-    this.props.closeModal()
+    await this.props.createAgreementTemplate(this.props.values)
+    await this.props.closeModal()
+    this.props.onCreated(isConfirmed)
   }
 
   render () {
@@ -124,12 +125,18 @@ ModalNewAgreementTemplate.propTypes = {
   options: PropTypes.shape({
     title: PropTypes.string.isRequired
   }).isRequired,
-  createAgreementTemplate: PropTypes.func
+  createAgreementTemplate: PropTypes.func,
+  onCreated: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required.'),
   state: Yup.string().required('State is required.')
+})
+
+const mapPropsToValues = props => ({
+  title: '',
+  state: ''
 })
 
 const mapStateToProps = state => ({
@@ -148,9 +155,8 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(
-  withFormik({
-    validationSchema,
-    enableReinitialize: true
-  })(ModalNewAgreementTemplate)
-)
+)(withFormik({
+  mapPropsToValues,
+  validationSchema,
+  enableReinitialize: true
+})(ModalNewAgreementTemplate))

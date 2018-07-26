@@ -3,7 +3,7 @@ import request from './'
 export const create = template => {
   return request({
     method: 'post',
-    url: '/agreement',
+    url: '/agreement-template',
     data: template
   })
 }
