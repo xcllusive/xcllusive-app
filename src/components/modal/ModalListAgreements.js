@@ -4,29 +4,27 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
-import Yup from 'yup'
 import { closeModal } from '../../redux/ducks/modal'
-import { createAgreementTemplate } from '../../redux/ducks/agreementTemplates'
+import {
+  getAgreementTemplates,
+  getAgreementTemplate,
+  clearAgreementTemplates
+} from '../../redux/ducks/agreementTemplates'
+import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
 
 class ModalListAgreements extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      state: [
-        { key: '1', text: 'ACT', value: 'ACT' },
-        { key: '2', text: 'NT', value: 'NT' },
-        { key: '3', text: 'NSW', value: 'NSW' },
-        { key: '4', text: 'QLD', value: 'QLD' },
-        { key: '5', text: 'SA', value: 'SA' },
-        { key: '6', text: 'TAS', value: 'TAS' },
-        { key: '7', text: 'VIC', value: 'VIC' },
-        { key: '8', text: 'WA', value: 'WA' }
-      ]
-    }
+    this.state = {}
+  }
+
+  componentWillMount () {
+    this.props.getAgreementTemplates(this.props.state)
+    this.props.clearAgreementTemplates()
   }
 
   _handleSelectChange = (e, { name, value }) => {
-    this.props.setFieldValue(name, value)
+    this.props.getAgreementTemplate(value)
   }
 
   _handleConfirm = isConfirmed => {
@@ -34,8 +32,12 @@ class ModalListAgreements extends Component {
       this.props.closeModal()
       return
     }
-    this.props.createAgreementTemplate(this.props.values)
     this.props.closeModal()
+  }
+
+  _showAll = () => {
+    this.props.clearAgreementTemplates()
+    this.props.getAgreementTemplates()
   }
 
   render () {
@@ -43,63 +45,67 @@ class ModalListAgreements extends Component {
       values,
       touched,
       errors,
-      isValid,
-      createLoading,
       options,
-      handleBlur,
-      handleChange
+      listAgreementTemplates,
+      objectAgreementTemplate,
+      agreementLoading
     } = this.props
-    const { state } = this.state
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group>
-              <Form.Field width={16}>
-                <Form.Input
-                  required
+              <Form.Field width={13}>
+                <Form.Select
                   label="Title"
                   name="title"
                   autoComplete="title"
+                  options={mapArrayToValuesForDropdownTemplates(
+                    listAgreementTemplates
+                  )}
                   value={values.title}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={this._handleSelectChange}
                 />
                 {errors.title &&
                   touched.title && (
                   <Label basic color="red" pointing content={errors.title} />
                 )}
               </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field>
-                <Form.Select
-                  required
-                  label="State"
-                  name="state"
-                  options={state}
-                  autoComplete="state"
-                  value={values.state}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.state &&
-                  touched.state && (
-                  <Label basic color="red" pointing content={errors.state} />
-                )}
+              <Form.Field style={{ marginTop: '24px' }} width={3}>
+                <Button
+                  color="facebook"
+                  size="small"
+                  onClick={() => this._showAll()}
+                >
+                  <Icon name="backward" />
+                  Show all
+                </Button>
               </Form.Field>
             </Form.Group>
+            {objectAgreementTemplate ? (
+              <Form.Group>
+                <Form.Field>
+                  <Form.Input
+                    readOnly
+                    label="State"
+                    name="state"
+                    autoComplete="state"
+                    value={values.state}
+                  />
+                </Form.Field>
+              </Form.Group>
+            ) : null}
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
-            color="blue"
-            disabled={createLoading || !isValid}
-            loading={createLoading}
+            positive
+            disabled={!agreementLoading}
             onClick={this._handleConfirm}
           >
-            <Icon name="save" />
-            Save and Return
+            <Icon name="edit" />
+            Preview Agreement
           </Button>
           <Button color="red" onClick={() => this._handleConfirm(false)}>
             <Icon name="cancel" />
@@ -112,35 +118,47 @@ class ModalListAgreements extends Component {
 }
 
 ModalListAgreements.propTypes = {
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isValid: PropTypes.bool,
-  createLoading: PropTypes.bool,
   closeModal: PropTypes.func.isRequired,
   options: PropTypes.shape({
     title: PropTypes.string.isRequired
   }).isRequired,
-  createAgreementTemplate: PropTypes.func
+  getAgreementTemplates: PropTypes.func,
+  listAgreementTemplates: PropTypes.array,
+  getAgreementTemplate: PropTypes.func,
+  objectAgreementTemplate: PropTypes.object,
+  clearAgreementTemplates: PropTypes.func,
+  state: PropTypes.string.isRequired,
+  agreementLoading: PropTypes.bool
 }
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required.'),
-  state: Yup.string().required('State is required.')
+const mapStateToProps = state => ({
+  agreementLoading: state.agreementTemplates.get.isLoading,
+  listAgreementTemplates: state.agreementTemplates.getAll.array,
+  objectAgreementTemplate: state.agreementTemplates.get.object
 })
 
-const mapStateToProps = state => ({
-  createLoading: state.agreementTemplates.create.isLoading
-})
+const mapPropsToValues = props => {
+  if (props && props.objectAgreementTemplate) {
+    return {
+      state: props.objectAgreementTemplate.state
+    }
+  }
+  return {
+    state: ''
+  }
+}
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      createAgreementTemplate
+      getAgreementTemplates,
+      getAgreementTemplate,
+      clearAgreementTemplates
     },
     dispatch
   )
@@ -150,7 +168,7 @@ export default connect(
   mapDispatchToProps
 )(
   withFormik({
-    validationSchema,
+    mapPropsToValues,
     enableReinitialize: true
   })(ModalListAgreements)
 )

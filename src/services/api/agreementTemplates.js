@@ -8,10 +8,15 @@ export const create = template => {
   })
 }
 
-export const getAll = () => {
+export const getAll = state => {
+  const params = {}
+
+  if (state && state.length > 0) params.state = state
+
   return request({
     method: 'get',
-    url: '/agreement-template'
+    url: '/agreement-template',
+    params
   })
 }
 
