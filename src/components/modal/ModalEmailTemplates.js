@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 
-import { mapArrayToValuesForDropdownEmailTemplate } from '../../utils/sharedFunctionArray'
+import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
 
 import {
   getEmailTemplates,
@@ -167,7 +167,7 @@ class ModalEmailTemplates extends Component {
                   style={{ zIndex: 9999 }}
                   label="Templates"
                   placeholder="Please select one template bellow..."
-                  options={mapArrayToValuesForDropdownEmailTemplate(
+                  options={mapArrayToValuesForDropdownTemplates(
                     listEmailTemplates
                   )}
                   name="title"
@@ -309,7 +309,10 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     enableReinitialize: true
