@@ -11,11 +11,13 @@ import {
   Segment,
   Dimmer,
   Loader,
-  Header
+  Header,
+  Button
 } from 'semantic-ui-react'
 import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 
 import {
   getEmailTemplates,
@@ -134,6 +136,14 @@ class AgreementTemplates extends Component {
     }
   }
 
+  _openModalNewAgreementTemplate = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_AGREEMENT_TEMPLATE, {
+      options: {
+        title: 'Create New Agreement Template'
+      }
+    })
+  }
+
   render () {
     const {
       values,
@@ -171,6 +181,16 @@ class AgreementTemplates extends Component {
                 touched.title && (
                 <Label basic color="red" pointing content={errors.title} />
               )}
+            </Form.Field>
+            <Form.Field style={{ marginLeft: '50px', marginTop: '24px' }}>
+              <Button
+                onClick={() => this._openModalNewAgreementTemplate()}
+                color="facebook"
+                floated="right"
+              >
+                <Icon name="add" />
+                New Template
+              </Button>
             </Form.Field>
             {objectEmailTemplate ? (
               <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
@@ -326,7 +346,13 @@ class AgreementTemplates extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <Grid.Row style={{ paddingBottom: 0, paddingLeft: '0px' }}>
+            <Grid.Row
+              style={{
+                marginTop: '55px',
+                paddingBottom: 0,
+                paddingLeft: '0px'
+              }}
+            >
               <h4>Data Base Fields</h4>
             </Grid.Row>
             <Segment>
@@ -373,7 +399,13 @@ class AgreementTemplates extends Component {
               </Grid.Row>
             </Grid>
             <Grid padded="horizontally">
-              <Grid.Row style={{ paddingBottom: 0, paddingLeft: '0px' }}>
+              <Grid.Row
+                style={{
+                  marginTop: '30px',
+                  paddingBottom: 0,
+                  paddingLeft: '0px'
+                }}
+              >
                 <h4>Footer</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
@@ -420,7 +452,8 @@ AgreementTemplates.propTypes = {
   setFieldValue: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
   clearEmailTemplates: PropTypes.func,
-  isLoadingTemplate: PropTypes.bool
+  isLoadingTemplate: PropTypes.bool,
+  openModal: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -463,7 +496,8 @@ const mapDispatchToProps = dispatch =>
       getEmailTemplates,
       getEmailTemplate,
       updateTemplates,
-      clearEmailTemplates
+      clearEmailTemplates,
+      openModal
     },
     dispatch
   )

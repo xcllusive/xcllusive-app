@@ -13,6 +13,7 @@ import ModalGroupEmail from './ModalGroupEmail'
 import ModalStageSalesMemo from './ModalStageSalesMemo'
 import ModalStageLost from './ModalStageLost'
 import ModalReassignBusiness from './ModalReassignBusiness'
+import ModalNewAgreementTemplate from './ModalNewAgreementTemplate'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -27,7 +28,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_GROUP_EMAIL]: ModalGroupEmail,
   [TypesModal.MODAL_TYPE_STAGE_SALES_MEMO]: ModalStageSalesMemo,
   [TypesModal.MODAL_TYPE_STAGE_LOST]: ModalStageLost,
-  [TypesModal.MODAL_TYPE_STAGE_REASSIGN_BUSINESS]: ModalReassignBusiness
+  [TypesModal.MODAL_TYPE_STAGE_REASSIGN_BUSINESS]: ModalReassignBusiness,
+  [TypesModal.MODAL_TYPE_NEW_AGREEMENT_TEMPLATE]: ModalNewAgreementTemplate
 }
 
 const ModalRoot = ({ type, props }) => {
