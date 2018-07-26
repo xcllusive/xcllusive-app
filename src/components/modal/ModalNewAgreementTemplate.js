@@ -6,6 +6,7 @@ import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import Yup from 'yup'
 import { closeModal } from '../../redux/ducks/modal'
+import { createAgreementTemplate } from '../../redux/ducks/agreementTemplates'
 
 class ModalNewAgreementTemplate extends Component {
   constructor (props) {
@@ -33,7 +34,7 @@ class ModalNewAgreementTemplate extends Component {
       this.props.closeModal()
       return
     }
-
+    this.props.createAgreementTemplate(this.props.values)
     this.props.closeModal()
   }
 
@@ -122,7 +123,8 @@ ModalNewAgreementTemplate.propTypes = {
   closeModal: PropTypes.func.isRequired,
   options: PropTypes.shape({
     title: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  createAgreementTemplate: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({
@@ -131,13 +133,14 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapStateToProps = state => ({
-  createLoading: state.business.reassignBusiness.isLoading
+  createLoading: state.agreementTemplates.create.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      closeModal
+      closeModal,
+      createAgreementTemplate
     },
     dispatch
   )

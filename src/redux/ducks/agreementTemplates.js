@@ -1,9 +1,17 @@
 import { toast } from 'react-toastify'
-import { getAll, get, update } from '../../services/api/agreementTemplates'
+import {
+  create,
+  getAll,
+  get,
+  update
+} from '../../services/api/agreementTemplates'
 
 // Action Types
 
 export const Types = {
+  CREATE_AGREEMENT_TEMPLATE_LOADING: 'CREATE_AGREEMENT_TEMPLATE_LOADING',
+  CREATE_AGREEMENT_TEMPLATE_SUCCESS: 'CREATE_AGREEMENT_TEMPLATE_SUCCESS',
+  CREATE_AGREEMENT_TEMPLATE_FAILURE: 'CREATE_AGREEMENT_TEMPLATE_FAILURE',
   GET_AGREEMENT_TEMPLATES_LOADING: 'GET_AGREEMENT_TEMPLATES_LOADING',
   GET_AGREEMENT_TEMPLATES_SUCCESS: 'GET_AGREEMENT_TEMPLATES_SUCCESS',
   GET_AGREEMENT_TEMPLATES_FAILURE: 'GET_AGREEMENT_TEMPLATES_FAILURE',
@@ -19,6 +27,11 @@ export const Types = {
 // Reducer
 
 const initialState = {
+  create: {
+    isLoading: false,
+    isCreated: false,
+    error: null
+  },
   getAll: {
     array: [],
     isLoading: false,
@@ -138,6 +151,24 @@ export const agreementTemplateLoading = (value, type) => ({
   type: Types[type],
   payload: value
 })
+
+export const createAgreementTemplate = template => async dispatch => {
+  dispatch({
+    type: Types.CREATE_AGREEMENT_TEMPLATE_LOADING,
+    payload: true
+  })
+  try {
+    await create(template)
+    dispatch({
+      type: Types.CREATE_AGREEMENT_TEMPLATE_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CREATE_AGREEMENT_TEMPLATE_FAILURE,
+      payload: error
+    })
+  }
+}
 
 export const getAgreementTemplates = () => async dispatch => {
   dispatch({
