@@ -6,10 +6,10 @@ export const mapArrayToValuesForDropdown = array => {
       value: item.id
     }))
   }
-  return [{ key: 0, text: 'Nenhum item encontrado', value: 0 }]
+  return [{ key: 0, text: 'No records found', value: 0 }]
 }
 
-export const mapArrayToValuesForDropdownEmailTemplate = array => {
+export const mapArrayToValuesForDropdownTemplates = array => {
   if (array.length > 0) {
     return array.map((item, index) => ({
       key: index,
@@ -17,5 +17,5 @@ export const mapArrayToValuesForDropdownEmailTemplate = array => {
       value: item.id
     }))
   }
-  return [{ key: 0, text: 'Nenhum item encontrado', value: 0 }]
+  return [{ key: 0, text: 'No records found', value: 0 }]
 }

@@ -20,11 +20,11 @@ import 'react-quill/dist/quill.snow.css'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 
 import {
-  getEmailTemplates,
-  getEmailTemplate,
+  getAgreementTemplates,
+  getAgreementTemplate,
   updateTemplates,
-  clearEmailTemplates
-} from '../../redux/ducks/emailTemplates'
+  clearAgreementTemplates
+} from '../../redux/ducks/agreementTemplates'
 import { mapArrayToValuesForDropdownEmailTemplate } from '../../utils/sharedFunctionArray'
 
 class AgreementTemplates extends Component {
@@ -76,8 +76,8 @@ class AgreementTemplates extends Component {
   }
 
   componentWillMount () {
-    this.props.getEmailTemplates()
-    this.props.clearEmailTemplates()
+    this.props.getAgreementTemplates()
+    this.props.clearAgreementTemplates()
   }
 
   componentDidMount () {
@@ -93,20 +93,11 @@ class AgreementTemplates extends Component {
   }
 
   _handleSelectChange = (e, { value }) => {
-    this.props.getEmailTemplate(value)
+    this.props.getAgreementTemplate(value)
   }
 
   _handleSelectChangeState = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  }
-
-  _handleFileUpload = e => {
-    const file = e.target.files[0]
-    this.props.setFieldValue('attachment', file)
-  }
-
-  _handleChangeCheckBox = (e, { name }) => {
-    this.props.setFieldValue(name, !this.props.values[name])
   }
 
   _attachQuillRefs = () => {
@@ -130,12 +121,6 @@ class AgreementTemplates extends Component {
     this.quillRef.insertText(position, ` {{${word}}} `)
   }
 
-  _openFile = url => {
-    if (url) {
-      window.open(url, '_blank')
-    }
-  }
-
   _openModalNewAgreementTemplate = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_AGREEMENT_TEMPLATE, {
       options: {
@@ -149,8 +134,8 @@ class AgreementTemplates extends Component {
       values,
       touched,
       errors,
-      listEmailTemplates,
-      objectEmailTemplate,
+      listAgreementTemplates,
+      objectAgreementTemplate,
       isLoadingUpdate,
       isSubmitting,
       handleSubmit,
@@ -170,7 +155,7 @@ class AgreementTemplates extends Component {
                 label="Templates"
                 placeholder="Please select one template bellow..."
                 options={mapArrayToValuesForDropdownEmailTemplate(
-                  listEmailTemplates
+                  listAgreementTemplates
                 )}
                 name="title"
                 autoComplete="title"
@@ -192,7 +177,7 @@ class AgreementTemplates extends Component {
                 New Template
               </Button>
             </Form.Field>
-            {objectEmailTemplate ? (
+            {objectAgreementTemplate ? (
               <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
                 <Form.Button
                   floated="right"
@@ -208,8 +193,13 @@ class AgreementTemplates extends Component {
               </Form.Field>
             ) : null}
           </Form.Group>
-          <Dimmer.Dimmable dimmed={!objectEmailTemplate || isLoadingTemplate}>
-            <Dimmer inverted active={!objectEmailTemplate || isLoadingTemplate}>
+          <Dimmer.Dimmable
+            dimmed={!objectAgreementTemplate || isLoadingTemplate}
+          >
+            <Dimmer
+              inverted
+              active={!objectAgreementTemplate || isLoadingTemplate}
+            >
               {isLoadingTemplate ? (
                 <Loader inverted />
               ) : (
@@ -232,9 +222,9 @@ class AgreementTemplates extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            {objectEmailTemplate &&
-            objectEmailTemplate.handlebars &&
-            objectEmailTemplate.handlebars.length > 0 ? (
+            {objectAgreementTemplate &&
+            objectAgreementTemplate.handlebars &&
+            objectAgreementTemplate.handlebars.length > 0 ? (
                 <Fragment>
                   <Grid.Row style={{ paddingBottom: 0, paddingLeft: '0px' }}>
                     <h4>Contract Fields</h4>
@@ -357,8 +347,8 @@ class AgreementTemplates extends Component {
             </Grid.Row>
             <Segment>
               <Label.Group color="teal">
-                {objectEmailTemplate &&
-                  objectEmailTemplate.handlebars.map((item, key) => {
+                {objectAgreementTemplate &&
+                  objectAgreementTemplate.handlebars.map((item, key) => {
                     return (
                       <Label
                         horizontal
@@ -445,37 +435,33 @@ AgreementTemplates.propTypes = {
   handleSubmit: PropTypes.func,
   isValid: PropTypes.bool,
   isSubmitting: PropTypes.bool,
-  getEmailTemplates: PropTypes.func,
-  listEmailTemplates: PropTypes.array,
-  getEmailTemplate: PropTypes.func,
-  objectEmailTemplate: PropTypes.object,
+  getAgreementTemplates: PropTypes.func,
+  listAgreementTemplates: PropTypes.array,
+  getAgreementTemplate: PropTypes.func,
+  objectAgreementTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
-  clearEmailTemplates: PropTypes.func,
+  clearAgreementTemplates: PropTypes.func,
   isLoadingTemplate: PropTypes.bool,
   openModal: PropTypes.func
 }
 
 const mapPropsToValues = props => {
-  if (props && props.objectEmailTemplate) {
+  if (props && props.objectAgreementTemplate) {
     return {
-      description: props.objectEmailTemplate.description,
-      body: props.objectEmailTemplate.body,
-      subject: props.objectEmailTemplate.subject,
-      attachmentPath: props.objectEmailTemplate.attachmentPath,
-      enableAttachment: props.objectEmailTemplate.enableAttachment,
-      id: props.objectEmailTemplate.id,
-      brokersEmail: props.objectEmailTemplate.brokersEmail
+      state: props.objectAgreementTemplate.state,
+      header: props.objectAgreementTemplate.header,
+      body: props.objectAgreementTemplate.body,
+      footer: props.objectAgreementTemplate.footer,
+      id: props.objectAgreementTemplate.id
     }
   }
   return {
-    description: '',
+    state: '',
+    header: '',
     body: '',
-    subject: '',
-    attachmentPath: '',
-    enableAttachment: false,
-    id: '',
-    brokersEmail: ''
+    footer: '',
+    id: ''
   }
 }
 
@@ -484,19 +470,19 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 }
 
 const mapStateToProps = state => ({
-  listEmailTemplates: state.emailTemplates.getAll.array,
-  objectEmailTemplate: state.emailTemplates.get.object,
-  isLoadingTemplate: state.emailTemplates.get.isLoading,
-  isLoadingUpdate: state.emailTemplates.update.isLoading
+  listAgreementTemplates: state.agreementTemplates.getAll.array,
+  objectAgreementTemplate: state.agreementTemplates.get.object,
+  isLoadingTemplate: state.agreementTemplates.get.isLoading,
+  isLoadingUpdate: state.agreementTemplates.update.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getEmailTemplates,
-      getEmailTemplate,
+      getAgreementTemplates,
+      getAgreementTemplate,
       updateTemplates,
-      clearEmailTemplates,
+      clearAgreementTemplates,
       openModal
     },
     dispatch
