@@ -25,7 +25,7 @@ import {
   updateTemplates,
   clearAgreementTemplates
 } from '../../redux/ducks/agreementTemplates'
-import { mapArrayToValuesForDropdownEmailTemplate } from '../../utils/sharedFunctionArray'
+import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
 
 class AgreementTemplates extends Component {
   constructor (props) {
@@ -154,7 +154,7 @@ class AgreementTemplates extends Component {
                 style={{ zIndex: 9999 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
-                options={mapArrayToValuesForDropdownEmailTemplate(
+                options={mapArrayToValuesForDropdownTemplates(
                   listAgreementTemplates
                 )}
                 name="title"
