@@ -20,6 +20,7 @@ import ScoreList from './Buyer/ScoreList'
 import MakeNewScore from './Buyer/MakeNewScore'
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
+import AgreementPage from './Business/BusinessAgreementForm'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
@@ -108,6 +109,11 @@ const Layout = ({ match, logout, menu }) => (
       />
       <Route exact component={ListPage} path={`${match.path}business`} />
       <Route exact component={EditPage} path={`${match.path}business/:id`} />
+      <Route
+        exact
+        component={AgreementPage}
+        path={`${match.path}business/:id/agreement`}
+      />
       {/* <Route
         exact
         component={LogPage}

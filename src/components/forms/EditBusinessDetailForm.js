@@ -133,6 +133,14 @@ class EditBusinessDetailForm extends Component {
       options: {
         title: 'List of Agreements'
       },
+      callBack: isConfirmed => {
+        if (isConfirmed) {
+          this.props.history.push(
+            `business/${this.props.business.id}/agreement`
+          )
+          console.log('test ', this.props.business.id)
+        }
+      },
       state: state
     })
   }
@@ -761,7 +769,8 @@ EditBusinessDetailForm.propTypes = {
   updateStageLost: PropTypes.bool,
   getLogFromBusiness: PropTypes.func,
   openModal: PropTypes.func,
-  userRoles: PropTypes.array
+  userRoles: PropTypes.array,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => {

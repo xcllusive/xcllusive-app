@@ -32,6 +32,7 @@ class ModalListAgreements extends Component {
       this.props.closeModal()
       return
     }
+    this.props.callBack(isConfirmed)
     this.props.closeModal()
   }
 
@@ -104,6 +105,9 @@ class ModalListAgreements extends Component {
             positive
             disabled={!objectAgreementTemplate}
             onClick={this._handleConfirm}
+            // onClick={() =>
+            //   history.push(`business/${this.props.business.id}/agreement`)
+            // }
           >
             <Icon name="edit" />
             Preview Agreement
@@ -133,7 +137,8 @@ ModalListAgreements.propTypes = {
   objectAgreementTemplate: PropTypes.object,
   clearAgreementTemplates: PropTypes.func,
   state: PropTypes.string.isRequired,
-  agreementLoading: PropTypes.bool
+  agreementLoading: PropTypes.bool,
+  callBack: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
