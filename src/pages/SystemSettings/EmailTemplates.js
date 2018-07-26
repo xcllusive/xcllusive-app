@@ -25,7 +25,7 @@ import {
   updateTemplates,
   clearEmailTemplates
 } from '../../redux/ducks/emailTemplates'
-import { mapArrayToValuesForDropdownEmailTemplate } from '../../utils/sharedFunctionArray'
+import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
 
 class EmailTemplates extends Component {
   constructor (props) {
@@ -146,7 +146,7 @@ class EmailTemplates extends Component {
                 style={{ zIndex: 9999 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
-                options={mapArrayToValuesForDropdownEmailTemplate(
+                options={mapArrayToValuesForDropdownTemplates(
                   listEmailTemplates
                 )}
                 name="title"
@@ -400,7 +400,10 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     handleSubmit,
