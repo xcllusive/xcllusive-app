@@ -61,6 +61,7 @@ class ModalListAgreements extends Component {
                   label="Title"
                   name="title"
                   autoComplete="title"
+                  loading={agreementLoading}
                   options={mapArrayToValuesForDropdownTemplates(
                     listAgreementTemplates
                   )}
@@ -101,7 +102,7 @@ class ModalListAgreements extends Component {
         <Modal.Actions>
           <Button
             positive
-            disabled={!agreementLoading}
+            disabled={!objectAgreementTemplate}
             onClick={this._handleConfirm}
           >
             <Icon name="edit" />

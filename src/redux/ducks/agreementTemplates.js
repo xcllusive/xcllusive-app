@@ -85,7 +85,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          isLoading: false,
+          isLoading: true,
           object: null,
           error: null
         }
@@ -95,7 +95,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          isLoading: true,
+          isLoading: false,
           object: action.payload,
           error: null
         }
