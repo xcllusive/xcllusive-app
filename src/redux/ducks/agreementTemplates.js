@@ -85,7 +85,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          isLoading: action.payload,
+          isLoading: false,
           object: null,
           error: null
         }
@@ -95,7 +95,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
-          isLoading: false,
+          isLoading: true,
           object: action.payload,
           error: null
         }
@@ -198,13 +198,13 @@ export const createAgreementTemplate = template => async dispatch => {
   }
 }
 
-export const getAgreementTemplates = () => async dispatch => {
+export const getAgreementTemplates = (state = false) => async dispatch => {
   dispatch({
     type: Types.GET_AGREEMENT_TEMPLATES_LOADING,
     payload: true
   })
   try {
-    const agreementTemplate = await getAll()
+    const agreementTemplate = await getAll(state)
     dispatch({
       type: Types.GET_AGREEMENT_TEMPLATES_SUCCESS,
       payload: agreementTemplate.data

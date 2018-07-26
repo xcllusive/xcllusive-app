@@ -128,6 +128,15 @@ class EditBusinessDetailForm extends Component {
     return _.includes(this.props.userRoles, 'PRESALE_MENU')
   }
 
+  _openModalListAgreement = state => {
+    this.props.openModal(TypesModal.MODAL_TYPE_LIST_AGREEMENTS, {
+      options: {
+        title: 'List of Agreements'
+      },
+      state: state
+    })
+  }
+
   render () {
     const {
       values,
@@ -396,6 +405,15 @@ class EditBusinessDetailForm extends Component {
                   <Form.Button color="blue">
                     <Icon name="file pdf outline" />
                     PDF
+                  </Form.Button>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Button
+                    color="blue"
+                    onClick={() => this._openModalListAgreement(values.state)}
+                  >
+                    <Icon name="file" />
+                    Agreement
                   </Form.Button>
                 </Form.Group>
               </Form>
