@@ -23,7 +23,7 @@ moment.locale('en-au', {
 })
 
 class App extends Component {
-  componentWillMount () {
+  componentDidMount () {
     if (window.localStorage.xcllusiveJWT) {
       setAuthorizationHeader(window.localStorage.xcllusiveJWT)
       store.dispatch(loginWithToken())

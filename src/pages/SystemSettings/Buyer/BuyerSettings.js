@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Form, Label, Icon } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
-import Yup from 'yup'
+import * as Yup from 'yup'
 import {
   getSystemSettings,
   updateSystemSettings
@@ -16,8 +16,6 @@ class EmailTemplates extends Component {
     super(props)
     this.state = {}
   }
-
-  componentWillMount () {}
 
   componentDidMount () {
     this.props.getSystemSettings(1)

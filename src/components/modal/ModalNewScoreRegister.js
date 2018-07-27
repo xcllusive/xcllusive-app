@@ -4,7 +4,7 @@ import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
 import {
@@ -35,7 +35,7 @@ class ModalNewScoreRegister extends Component {
     }
   }
 
-  componentWillReceiveProps = nextProps => {
+  static getDerivedStateFromProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated) {
       this.props.listScoreRegister(this.props.values.type)
     }

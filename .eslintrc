@@ -1,9 +1,17 @@
 {
   "plugins": ["standard"],
-  "extends": ["standard", "plugin:react/recommended", "prettier/react", "prettier/standard"],
+  "extends": [
+    "standard",
+    "plugin:react/recommended",
+    "prettier/react",
+    "prettier/standard"
+  ],
   "parser": "babel-eslint",
   "rules": {
-    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [".js", ".jsx"] }
+    ],
     "no-console": "off",
     "no-underscore-dangle": 0,
     "quotes": ["error", "single"],
@@ -15,9 +23,6 @@
     "browser": true
   },
   "parserOptions": {
-    "ecmaVersion": 8,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
+    "ecmaVersion": 8
   }
 }

@@ -32,11 +32,11 @@ class BusinessListPage extends Component {
     }
   }
 
-  async componentWillMount () {
+  async componentDidMount () {
     await this.props.getBusinesses(false, this.state.stageSelected, false)
   }
 
-  async componentWillReceiveProps (nextProps) {
+  static async getDerivedStateFromProps (nextProps) {
     if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
       await this._toggleModal({})
       this.props.getBusinesses(false, this.state.stageSelected, true)

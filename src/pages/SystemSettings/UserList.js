@@ -35,30 +35,31 @@ class UserList extends React.Component {
         introducer: true
       },
       modalOpen: false,
-      user: false
+      user: false,
+      userCreated: false,
+      userUpdated: false
     }
   }
 
-  async componentWillReceiveProps (nextProps) {
-    if (
-      this.props.userCreated !== nextProps.userCreated &&
-      nextProps.userCreated
-    ) {
-      await this._toggleModal({})
-      this.props.getUsers()
-    }
-    if (
-      this.props.userUpdated !== nextProps.userUpdated &&
-      nextProps.userUpdated
-    ) {
-      await this._toggleModal({})
-      this.props.getUsers()
+  static getDerivedStateFromProps (nextProps) {
+    return {
+      userCreated: nextProps.userCreated,
+      userUpdated: nextProps.userUpdated
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getUsers()
     this.timer = null
+
+    if (this.state.userCreated) {
+      this._toggleModal({})
+      this.props.getUsers()
+    }
+    if (this.state.userUpdated) {
+      this._toggleModal({})
+      this.props.getUsers()
+    }
   }
 
   _handleChangeCheckBox = (e, { value }) => {

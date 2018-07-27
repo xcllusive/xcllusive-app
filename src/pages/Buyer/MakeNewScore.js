@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
-import Yup from 'yup'
+import * as Yup from 'yup'
 import moment from 'moment'
 import {
   Grid,
@@ -54,7 +54,7 @@ class MakeNewScorePage extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBusiness(this.props.match.params.idBusiness)
     this.props.enquiriesLast4Weeks(this.props.match.params.idBusiness)
     if (this.props.match.params.idScore) {
@@ -71,7 +71,7 @@ class MakeNewScorePage extends Component {
     this.props.clearScore()
   }
 
-  componentWillReceiveProps (nextProps) {
+  static getDerivedStateFromProps (nextProps) {
     if (this.props.score && nextProps.score) {
       this.setState({ score: nextProps.score.total })
     }

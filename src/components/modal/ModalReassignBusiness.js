@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button, Message } from 'semantic-ui-react'
-import Yup from 'yup'
+import * as Yup from 'yup'
 import { closeModal } from '../../redux/ducks/modal'
 
 import { reassignBusiness } from '../../redux/ducks/business'

@@ -6,7 +6,7 @@ import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 import {
   Form,
@@ -40,7 +40,7 @@ class BuyerDetailsCM extends Component {
       buyerLog: null
     }
   }
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBuyer(this.props.match.params.id)
     this.props.getLog(this.props.match.params.id)
   }

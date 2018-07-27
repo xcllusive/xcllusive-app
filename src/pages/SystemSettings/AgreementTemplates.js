@@ -74,12 +74,9 @@ class AgreementTemplates extends Component {
     this.reactQuillRef = null
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getAgreementTemplates()
     this.props.clearAgreementTemplates()
-  }
-
-  componentDidMount () {
     this._attachQuillRefs()
   }
 

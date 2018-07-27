@@ -18,7 +18,7 @@ class ModalListAgreements extends Component {
     this.state = {}
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getAgreementTemplates(this.props.state)
     this.props.clearAgreementTemplates()
   }

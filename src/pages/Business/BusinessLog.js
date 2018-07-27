@@ -40,7 +40,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  static getDerivedStateFromProps (nextProps) {
     if (
       nextProps.arrayLogBusiness.length &&
       this.props.arrayLogBusiness.length !== nextProps.arrayLogBusiness.length
@@ -49,7 +49,7 @@ class BusinessLogPage extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getLogFromBusiness(this.props.match.params.id)
     if (this.props.arrayLogBusiness.length) {

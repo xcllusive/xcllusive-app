@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import Yup from 'yup'
+import * as Yup from 'yup'
 import moment from 'moment'
 import { closeModal } from '../../redux/ducks/modal'
 import {

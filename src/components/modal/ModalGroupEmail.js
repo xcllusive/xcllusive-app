@@ -19,7 +19,7 @@ import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 import { getBuyersGroupEmail } from '../../redux/ducks/business'
 import { sendGroupEmail } from '../../redux/ducks/buyer'
@@ -34,11 +34,11 @@ class ModalGroupEmail extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBuyersGroupEmail(this.props.businessId)
   }
 
-  componentWillReceiveProps (nextProps) {
+  static getDerivedStateFromProps (nextProps) {
     if (
       !nextProps.listGroupEmail.length &&
       this.props.listGroupEmail !== nextProps.listGroupEmail

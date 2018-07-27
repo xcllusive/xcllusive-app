@@ -14,7 +14,7 @@ import {
   Radio
 } from 'semantic-ui-react'
 import styled from 'styled-components'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 import { createUser, updateUser } from '../../redux/ducks/user'
 
@@ -51,8 +51,9 @@ class NewUserForm extends Component {
       inputPasswordShow: true
     }
   }
-  componentWillReceiveProps (nextProps) {
-    if (this.props.userCreated !== nextProps.userCreated) this.props.resetForm()
+
+  componentDidMount () {
+    if (this.props.userCreated) this.props.resetForm()
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -499,19 +500,19 @@ const mapPropsToValues = props => {
       id: props.user.id,
       email: props.user.email,
       password: false,
-      firstName: props.user.firstName,
-      lastName: props.user.lastName,
-      phoneHome: props.user.phoneHome,
-      phoneWork: props.user.phoneWork,
-      phoneMobile: props.user.phoneMobile,
-      state: props.user.state,
-      suburb: props.user.suburb,
-      street: props.user.street,
-      postCode: props.user.postCode,
-      dataRegion: props.user.dataRegion,
-      listingAgent: props.user.listingAgent,
-      broker: props.user.listingAgent,
-      userType: props.user.userType,
+      firstName: props.user.firstName ? props.user.firstName : '',
+      lastName: props.user.lastName ? props.user.lastName : '',
+      phoneHome: props.user.phoneHome ? props.user.phoneHome : '',
+      phoneWork: props.user.phoneWork ? props.user.phoneWork : '',
+      phoneMobile: props.user.phoneMobile ? props.user.phoneMobile : '',
+      state: props.user.state ? props.user.state : '',
+      suburb: props.user.suburb ? props.user.suburb : '',
+      street: props.user.street ? props.user.street : '',
+      postCode: props.user.postCode ? props.user.postCode : '',
+      dataRegion: props.user.dataRegion ? props.user.dataRegion : '',
+      listingAgent: props.user.listingAgent ? props.user.listingAgent : false,
+      broker: props.user.listingAgent ? props.user.listingAgent : false,
+      userType: props.user.userType ? props.user.userType : '',
       buyerMenu: _.includes(roles, 'BUYER_MENU'),
       businessMenu: _.includes(roles, 'BUSINESS_MENU'),
       preSaleMenu: _.includes(roles, 'PRESALE_MENU'),

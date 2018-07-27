@@ -27,19 +27,27 @@ import { getBuyerBusinesses } from '../../redux/ducks/buyer'
 class BusinessEditPage extends Component {
   constructor (props) {
     super(props)
-    this.handleChange = (e, { value }) => this.setState({ value })
-  }
-
-  componentWillReceiveProps (nextprops) {
-    if (nextprops.error && this.props.error !== nextprops.error) {
-      this.props.history.goBack()
-    }
-    if (!this.props.isUpdated && nextprops.isUpdated) {
-      this.props.getBusiness(this.props.match.params.id)
+    this.state = {
+      error: null,
+      isUpdated: false
     }
   }
 
-  componentWillMount () {
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.error && nextProps.error !== prevState.error) {
+      nextProps.history.goBack()
+    }
+    if (nextProps.isUpdated && !prevState.isUpdated) {
+      nextProps.getBusiness(nextProps.match.params.id)
+    }
+
+    return {
+      error: nextProps.error,
+      isUpdated: nextProps.isUpdated
+    }
+  }
+
+  componentDidMount () {
     const { id } = this.props.match.params
     this.props.getBusiness(id)
     this.props.getLogFromBusiness(id)

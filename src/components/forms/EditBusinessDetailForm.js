@@ -14,7 +14,7 @@ import {
   Loader,
   Button
 } from 'semantic-ui-react'
-import Yup from 'yup'
+import * as Yup from 'yup'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness } from '../../redux/ducks/business'
@@ -34,41 +34,37 @@ class EditBusinessDetailForm extends Component {
         { key: '7', text: 'VIC', value: 'VIC' },
         { key: '8', text: 'WA', value: 'WA' }
       ],
-      modalOpenReassignBusiness: false
+      modalOpenReassignBusiness: false,
+      reassignedBusiness: false,
+      updateStageSalesMemo: false,
+      updateStageLost: false,
+      stage: 0
     }
   }
 
-  async componentWillReceiveProps (nextProps) {
-    if (
-      this.props.reassignedBusiness !== nextProps.reassignedBusiness &&
-      nextProps.reassignedBusiness
-    ) {
-      this.props.getBusiness(nextProps.business.id)
+  static async getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.reassignedBusiness && prevState.reassignedBusiness !== nextProps.reassignedBusiness) {
+      nextProps.getBusiness(nextProps.business.id)
     }
-    if (
-      this.props.updateStageSalesMemo !== nextProps.updateStageSalesMemo &&
-      nextProps.updateStageSalesMemo
-    ) {
-      this.props.getBusiness(nextProps.business.id)
+    if (nextProps.updateStageSalesMemo && prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo) {
+      nextProps.getBusiness(nextProps.business.id)
     }
-    if (
-      this.props.updateStageLost !== nextProps.updateStageLost &&
-      nextProps.updateStageLost
-    ) {
-      this.props.getBusiness(nextProps.business.id)
-      this.props.getLogFromBusiness(nextProps.business.id)
+    if (nextProps.updateStageLost && prevState.updateStageLost !== nextProps.updateStageLost) {
+      nextProps.getBusiness(nextProps.business.id)
+      nextProps.getLogFromBusiness(nextProps.business.id)
     }
-    if (
-      this.props.values.stage !== nextProps.values.stage &&
-      nextProps.values.stage === 8
-    ) {
+    if (nextProps.values.stage === 8 && prevState.stage !== nextProps.values.stage) {
       this._openModalStageLost()
     }
-    if (
-      this.props.values.stage !== nextProps.values.stage &&
-      nextProps.values.stage === 3
-    ) {
+    if (nextProps.values.stage === 3 && prevState.stage !== nextProps.values.stage) {
       this._openModalStageSalesMemo()
+    }
+
+    return {
+      reassignedBusiness: nextProps.reassignedBusiness,
+      updateStageSalesMemo: nextProps.updateStageSalesMemo,
+      updateStageLost: nextProps.updateStageLost,
+      stage: nextProps.values.stage
     }
   }
 

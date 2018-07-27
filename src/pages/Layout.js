@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import { Menu, Icon, Header } from 'semantic-ui-react'
 import { ToastContainer } from 'react-toastify'
 import { logout } from '../redux/ducks/auth'
+import 'react-toastify/dist/ReactToastify.css'
 
 import ModalRoot from '../components/modal/ModalRoot'
 import { NotFoundPage } from './'

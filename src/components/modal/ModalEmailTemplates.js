@@ -65,20 +65,17 @@ class ModalEmailTemplates extends Component {
     this.quillRef = null
   }
 
-  componentDidMount () {
-    this._attachQuillRefs()
-  }
-
   componentDidUpdate () {
     this._attachQuillRefs()
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getEmailTemplates(true)
     this.props.clearEmailTemplates()
+    this._attachQuillRefs()
   }
 
-  componentWillReceiveProps (nextProps) {
+  static getDerivedStateFromProps (nextProps) {
     if (this.props.isSentEmail !== nextProps.isSentEmail) {
       this.props.closeModal()
     }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 import { createBuyer } from '../../redux/ducks/buyer'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
@@ -26,7 +26,7 @@ class NewBuyerForm extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBusinessRegister(1)
   }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withFormik } from 'formik'
 import { Form, Icon, Message } from 'semantic-ui-react'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 const LoginForm = ({
   values,
@@ -20,7 +20,7 @@ const LoginForm = ({
     <Form.Field>
       <Form.Input
         size="small"
-        icon="mail outline"
+        icon="envelope"
         placeholder="E-mail"
         name="email"
         autoComplete="email"
@@ -33,7 +33,7 @@ const LoginForm = ({
     <Form.Field>
       <Form.Input
         size="small"
-        icon="key"
+        icon="unlock"
         placeholder="Password"
         type="password"
         name="password"
@@ -51,6 +51,7 @@ const LoginForm = ({
         labelPosition="right"
         size="small"
         color="blue"
+        type="submit"
         disabled={isSubmitting || !isValid}
         loading={isLoading}
       >

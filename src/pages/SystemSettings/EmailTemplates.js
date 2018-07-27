@@ -65,12 +65,9 @@ class EmailTemplates extends Component {
     this.reactQuillRef = null
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getEmailTemplates()
     this.props.clearEmailTemplates()
-  }
-
-  componentDidMount () {
     this._attachQuillRefs()
   }
 

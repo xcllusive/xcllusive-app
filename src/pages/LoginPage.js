@@ -22,18 +22,25 @@ class LoginPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      redirectToReferrer: false
+      redirectToReferrer: false,
+      isAuthenticated: false
     }
+  }
+
+  static getDerivedStateFromProps (nextProps) {
+    return {
+      isAuthenticated: nextProps.isAuthenticated
+    }
+  }
+
+  componentDidMount () {
+    if (this.state.isAuthenticated) this.props.history.push('/')
   }
 
   shouldComponentUpdate (nextProps) {
     if (nextProps.isAuthenticated) return false
 
     return true
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.isAuthenticated) this.props.history.push('/')
   }
 
   _submit = (email, password) => this.props.login(email, password)

@@ -41,7 +41,7 @@ class SystemSettingsPage extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getSystemSettings()
   }
 

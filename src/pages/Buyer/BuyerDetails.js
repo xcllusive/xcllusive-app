@@ -61,7 +61,7 @@ class BuyerDetails extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBuyer(this.props.match.params.idBuyer)
     this.props.getBusiness(this.props.match.params.idBusiness)
     this.props.getBusinessBuyerLog(
@@ -73,7 +73,7 @@ class BuyerDetails extends Component {
     this.props.getBuyerRegister(1)
   }
 
-  componentWillReceiveProps (nextProps) {
+  static getDerivedStateFromProps (nextProps) {
     if (
       this.props.listBusinessBuyerLogList.length !==
       nextProps.listBusinessBuyerLogList.length

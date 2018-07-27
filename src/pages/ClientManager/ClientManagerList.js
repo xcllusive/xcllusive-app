@@ -67,7 +67,7 @@ class ClientManagerList extends Component {
     return encodeURIComponent(htmlConverted)
   }
 
-  async componentWillReceiveProps (nextProps) {
+  static async getDerivedStateFromProps (nextProps) {
     if (
       this.props.isUpdatedBuyer !== nextProps.isUpdatedBuyer &&
       nextProps.isUpdatedBuyer

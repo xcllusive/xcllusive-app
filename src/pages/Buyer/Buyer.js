@@ -21,7 +21,7 @@ class BuyerPage extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.props.getBuyerBusinesses(false, 4)
     this.props.getBuyerBusinesses(false, 5)
   }

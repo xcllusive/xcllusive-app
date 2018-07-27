@@ -16,7 +16,7 @@ import {
   Divider,
   Message
 } from 'semantic-ui-react'
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 class ModalStageSalesMemo extends Component {
   _handleSelectChange = (e, { name, value }) => {
