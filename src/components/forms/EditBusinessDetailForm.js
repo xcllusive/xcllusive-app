@@ -134,7 +134,6 @@ class EditBusinessDetailForm extends Component {
           this.props.history.push(
             `business/${this.props.business.id}/agreement`
           )
-          console.log('test ', this.props.business.id)
         }
       },
       state: state

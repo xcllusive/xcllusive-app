@@ -113,7 +113,7 @@ class BusinessEditPage extends Component {
   }
 
   render () {
-    const { arrayLogsFromBusiness, isLoading, business } = this.props
+    const { arrayLogsFromBusiness, isLoading, business, history } = this.props
 
     if (isLoading) {
       return (
@@ -209,7 +209,7 @@ class BusinessEditPage extends Component {
                           </Grid.Row>
                         </Grid>
                       </Segment>
-                      <EditBusinessDetailForm business={business} />
+                      <EditBusinessDetailForm business={business} history={history}/>
                     </Tab.Pane>
                   )
                 },
