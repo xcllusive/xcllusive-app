@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -26,6 +26,9 @@ import {
   clearAgreementTemplates
 } from '../../redux/ducks/agreementTemplates'
 import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
+import ContractFields from '../../components/content/Agreement/ContractFields'
+import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
+import PropertyOption from '../../components/content/Agreement/PropertyOption'
 
 class AgreementTemplates extends Component {
   constructor (props) {
@@ -187,10 +190,14 @@ class AgreementTemplates extends Component {
               </Button>
             </Form.Field>
           </Form.Group>
-          <Dimmer.Dimmable style={{ zIndex: 999 }} dimmed={!objectAgreementTemplate || isLoadingTemplate}>
+          <Dimmer.Dimmable
+            style={{ zIndex: 999 }}
+            dimmed={!objectAgreementTemplate || isLoadingTemplate}
+          >
             <Dimmer
               inverted
-              active={!objectAgreementTemplate || isLoadingTemplate}>
+              active={!objectAgreementTemplate || isLoadingTemplate}
+            >
               {isLoadingTemplate ? (
                 <Loader inverted />
               ) : (
@@ -216,91 +223,47 @@ class AgreementTemplates extends Component {
             {objectAgreementTemplate &&
             objectAgreementTemplate.handlebars &&
             objectAgreementTemplate.handlebars.length > 0 ? (
-                <Fragment>
-                  <Grid.Row style={{ paddingBottom: 0, paddingLeft: '0px' }}>
-                    <h4>Contract Fields</h4>
+                <Grid celled="internally" divided>
+                  <Grid.Row>
+                    <Grid.Column style={{ paddingLeft: '0px' }}>
+                      <Header as="h4" content="Contract Fields" />
+                      <ContractFields
+                        values={values}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
+                        errors={errors}
+                        touched={touched}
+                      />
+                    </Grid.Column>
                   </Grid.Row>
-                  <Segment>
-                    <Form.Group>
-                      <Form.Field>
-                        <Form.Input
-                          label="Price"
-                          name="lastNameV"
-                          autoComplete="lastNameV"
-                          value={values.lastNameV}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.lastNameV &&
-                        touched.lastNameV && (
-                          <Label
-                            basic
-                            color="red"
-                            pointing
-                            content={errors.lastNameV}
-                          />
-                        )}
-                      </Form.Field>
-                      <Form.Field>
-                        <Form.Input
-                          label="Quantity"
-                          name="lastNameV"
-                          autoComplete="lastNameV"
-                          value={values.lastNameV}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.lastNameV &&
-                        touched.lastNameV && (
-                          <Label
-                            basic
-                            color="red"
-                            pointing
-                            content={errors.lastNameV}
-                          />
-                        )}
-                      </Form.Field>
-                      <Form.Field>
-                        <Form.Input
-                          label="Percentual"
-                          name="lastNameV"
-                          autoComplete="lastNameV"
-                          value={values.lastNameV}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.lastNameV &&
-                        touched.lastNameV && (
-                          <Label
-                            basic
-                            color="red"
-                            pointing
-                            content={errors.lastNameV}
-                          />
-                        )}
-                      </Form.Field>
-                      <Form.Field>
-                        <Form.Input
-                          label="Tax"
-                          name="lastNameV"
-                          autoComplete="lastNameV"
-                          value={values.lastNameV}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.lastNameV &&
-                        touched.lastNameV && (
-                          <Label
-                            basic
-                            color="red"
-                            pointing
-                            content={errors.lastNameV}
-                          />
-                        )}
-                      </Form.Field>
-                    </Form.Group>
-                  </Segment>
-                </Fragment>
+                  <Grid.Row>
+                    <Grid.Column style={{ paddingLeft: '0px' }}>
+                      <Header
+                        as="h4"
+                        content="Option For Principal Introduction Of Buyer"
+                      />
+                      <OptionIntroductionBuyer
+                        values={values}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
+                        errors={errors}
+                        touched={touched}
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column style={{ paddingLeft: '0px' }}>
+                      <Header as="h4" content="Property Option" />
+                      <PropertyOption
+                        values={values}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
+                        errors={errors}
+                        touched={touched}
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
               ) : null}
             <Grid padded="horizontally">
               <Grid.Row style={{ paddingBottom: 0, paddingLeft: '0px' }}>
@@ -403,7 +366,7 @@ class AgreementTemplates extends Component {
                   </Form.Field>
                 </Grid.Column>
               </Grid.Row>
-              <Grid.Row style={{marginTop: '50px'}}>
+              <Grid.Row style={{ marginTop: '50px' }}>
                 {objectAgreementTemplate ? (
                   <Form.Field width={16} style={{ alignSelf: 'flex-end' }}>
                     <Form.Button
@@ -415,7 +378,7 @@ class AgreementTemplates extends Component {
                       onClick={handleSubmit}
                     >
                       <Icon name="save" />
-                  Save
+                      Save
                     </Form.Button>
                   </Form.Field>
                 ) : null}
@@ -456,7 +419,17 @@ const mapPropsToValues = props => {
       header: props.objectAgreementTemplate.header,
       body: props.objectAgreementTemplate.body,
       footer: props.objectAgreementTemplate.footer,
-      id: props.objectAgreementTemplate.id
+      id: props.objectAgreementTemplate.id,
+      listedPrice: props.objectAgreementTemplate.listedPrice.toLocaleString(),
+      appraisalHigh: props.objectAgreementTemplate.appraisalHigh.toLocaleString(),
+      appraisalLow: props.objectAgreementTemplate.appraisalLow.toLocaleString(),
+      engagementFee: props.objectAgreementTemplate.engagementFee.toLocaleString(),
+      commissionPerc: props.objectAgreementTemplate.commissionPerc.toLocaleString(),
+      commissionDiscount: props.objectAgreementTemplate.commissionDiscount,
+      introductionParties: props.objectAgreementTemplate.introductionParties,
+      commissionProperty: props.objectAgreementTemplate.commissionProperty,
+      addressProperty: props.objectAgreementTemplate.addressProperty,
+      priceProperty: props.objectAgreementTemplate.priceProperty
     }
   }
   return {
@@ -464,7 +437,17 @@ const mapPropsToValues = props => {
     header: '',
     body: '',
     footer: '',
-    id: ''
+    id: '',
+    listedPrice: 0,
+    appraisalHigh: 0,
+    appraisalLow: 0,
+    engagementFee: 0,
+    commissionPerc: 0,
+    commissionDiscount: 0,
+    introductionParties: '',
+    commissionProperty: 0,
+    addressProperty: '',
+    priceProperty: 0
   }
 }
 

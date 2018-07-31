@@ -1,13 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Segment, Header, Form, Label } from 'semantic-ui-react'
+import { Segment, Form, Label } from 'semantic-ui-react'
 
 class OptionIntroductionBuyer extends Component {
   render () {
     const { values, handleBlur, handleChange, errors, touched } = this.props
     return (
       <Fragment>
-        <Header as="h3" content="Option For Principal Introduction Of Buyer" />
         <Segment>
           <Form>
             <Form.Group widths="equal">

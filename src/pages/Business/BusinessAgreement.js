@@ -12,9 +12,10 @@ import { getBusiness } from '../../redux/ducks/business'
 import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
 
 import ContractFields from '../../components/content/Agreement/ContractFields'
+import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
+import PropertyOption from '../../components/content/Agreement/PropertyOption'
 
 import Wrapper from '../../components/content/Wrapper'
-import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
 
 class BusinessAgreement extends Component {
   constructor (props) {
@@ -88,6 +89,7 @@ class BusinessAgreement extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
+              <Header as="h3" content="Contract Fields" />
               <ContractFields
                 values={values}
                 handleChange={handleChange}
@@ -99,6 +101,10 @@ class BusinessAgreement extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
+              <Header
+                as="h3"
+                content="Option For Principal Introduction Of Buyer"
+              />
               <OptionIntroductionBuyer
                 values={values}
                 handleChange={handleChange}
@@ -111,24 +117,13 @@ class BusinessAgreement extends Component {
           <Grid.Row>
             <Grid.Column>
               <Header as="h3" content="Property Option" />
-              <Segment>
-                <Form>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      label="Commission"
-                      // value={this.props.buyer.firstName}
-                    />
-                    <Form.Input
-                      label="Address"
-                      // value={this.props.buyer.firstName}
-                    />
-                    <Form.Input
-                      label="Price"
-                      // value={this.props.buyer.firstName}
-                    />
-                  </Form.Group>
-                </Form>
-              </Segment>
+              <PropertyOption
+                values={values}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors}
+                touched={touched}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -157,7 +152,16 @@ const validationSchema = Yup.object().shape({
   appraisalHigh: Yup.number().required('Appraisal High is required!'),
   appraisalLow: Yup.number().required('Appraisal Low is required!'),
   engagementFee: Yup.number().required('Engagement Fee is required!'),
-  comissionPerc: Yup.number().required('Comission Perc is required!')
+  comissionPerc: Yup.number().required('Comission Perc is required!'),
+  commissionDiscount: Yup.number().required('Comission Discount is required!'),
+  introductionParties: Yup.string()
+    .required('Comission Perc is required!')
+    .max(300, 'Sorry! you have exceed the area limit of this field.'),
+  commissionProperty: Yup.number().required('Comission is required!'),
+  addressProperty: Yup.string()
+    .required('Address is required!')
+    .max(300, 'Sorry! you have exceed the area limit of this field.'),
+  priceProperty: Yup.number().required('Price is required!')
 })
 
 const mapPropsToValues = props => ({
@@ -165,7 +169,12 @@ const mapPropsToValues = props => ({
   appraisalHigh: 0,
   appraisalLow: 0,
   engagementFee: 0,
-  commissionPerc: 0
+  commissionPerc: 0,
+  commissionDiscount: 0,
+  introductionParties: '',
+  commissionProperty: 0,
+  addressProperty: '',
+  priceProperty: 0
 })
 
 const mapStateToProps = state => ({
