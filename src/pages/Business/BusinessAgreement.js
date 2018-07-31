@@ -14,6 +14,7 @@ import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
 import ContractFields from '../../components/content/Agreement/ContractFields'
 
 import Wrapper from '../../components/content/Wrapper'
+import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
 
 class BusinessAgreement extends Component {
   constructor (props) {
@@ -98,24 +99,13 @@ class BusinessAgreement extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <Header
-                as="h3"
-                content="Option For Principal Introduction Of Buyer"
+              <OptionIntroductionBuyer
+                values={values}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors}
+                touched={touched}
               />
-              <Segment>
-                <Form>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      label="Commission Discount"
-                      // value={this.props.buyer.firstName}
-                    />
-                    <Form.TextArea
-                      label="Introduction Parties"
-                      // value={this.props.buyer.firstName}
-                    />
-                  </Form.Group>
-                </Form>
-              </Segment>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
@@ -171,11 +161,11 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapPropsToValues = props => ({
-  listedPrice: '',
+  listedPrice: 0,
   appraisalHigh: 0,
   appraisalLow: 0,
   engagementFee: 0,
-  comissionPerc: 0
+  commissionPerc: 0
 })
 
 const mapStateToProps = state => ({

@@ -3,10 +3,6 @@ import PropTypes from 'prop-types'
 import { Segment, Header, Form, Label } from 'semantic-ui-react'
 
 class ContractFields extends Component {
-  // constructor (props) {
-  //   super(props)
-  // }
-
   render () {
     const { values, handleBlur, handleChange, errors, touched } = this.props
     return (
@@ -36,20 +32,72 @@ class ContractFields extends Component {
               </Form.Field>
               <Form.Input
                 label="Appraisal High $"
-                // value={this.props.buyer.firstName}
+                name="appraisalHigh"
+                autoComplete="appraisalHigh"
+                value={values.appraisalHigh}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
+              {errors.appraisalHigh &&
+                touched.appraisalHigh && (
+                <Label
+                  basic
+                  pointing
+                  color="red"
+                  content={errors.appraisalHigh}
+                />
+              )}
               <Form.Input
                 label="Appraisal Low $"
-                // value={this.props.buyer.firstName}
+                name="appraisalLow"
+                autoComplete="appraisalLow"
+                value={values.appraisalLow}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
+              {errors.appraisalLow &&
+                touched.appraisalLow && (
+                <Label
+                  basic
+                  pointing
+                  color="red"
+                  content={errors.appraisalLow}
+                />
+              )}
               <Form.Input
                 label="Engagement Fee"
-                // value={this.props.buyer.firstName}
+                name="engagementFee"
+                autoComplete="engagementFee"
+                value={values.engagementFee}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
+              {errors.engagementFee &&
+                touched.engagementFee && (
+                <Label
+                  basic
+                  pointing
+                  color="red"
+                  content={errors.engagementFee}
+                />
+              )}
               <Form.Input
                 label="Commission %"
-                // value={this.props.buyer.firstName}
+                name="commissionPerc"
+                autoComplete="commissionPerc"
+                value={values.commissionPerc}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
+              {errors.commissionPerc &&
+                touched.commissionPerc && (
+                <Label
+                  basic
+                  pointing
+                  color="red"
+                  content={errors.commissionPerc}
+                />
+              )}
             </Form.Group>
           </Form>
         </Segment>
