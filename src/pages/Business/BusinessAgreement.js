@@ -11,6 +11,8 @@ import { Form, Header, Grid, Segment } from 'semantic-ui-react'
 import { getBusiness } from '../../redux/ducks/business'
 import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
 
+import ContractFields from '../../components/content/Agreement/ContractFields'
+
 import Wrapper from '../../components/content/Wrapper'
 
 class BusinessAgreement extends Component {
@@ -24,7 +26,14 @@ class BusinessAgreement extends Component {
   }
 
   render () {
-    const { objectAgreementTemplate } = this.props
+    const {
+      objectAgreementTemplate,
+      values,
+      handleBlur,
+      handleChange,
+      errors,
+      touched
+    } = this.props
     return (
       <Wrapper>
         <Grid celled="internally" divided>
@@ -78,33 +87,13 @@ class BusinessAgreement extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <Header as="h3" content="Contract Fields" />
-              <Segment>
-                <Form>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      label="Listed Price"
-                      // value={this.props.buyer.firstName}
-                    />
-                    <Form.Input
-                      label="Appraisal High $"
-                      // value={this.props.buyer.firstName}
-                    />
-                    <Form.Input
-                      label="Appraisal Low $"
-                      // value={this.props.buyer.firstName}
-                    />
-                    <Form.Input
-                      label="Engagement Fee"
-                      // value={this.props.buyer.firstName}
-                    />
-                    <Form.Input
-                      label="Commission %"
-                      // value={this.props.buyer.firstName}
-                    />
-                  </Form.Group>
-                </Form>
-              </Segment>
+              <ContractFields
+                values={values}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors}
+                touched={touched}
+              />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
@@ -166,12 +155,28 @@ BusinessAgreement.propTypes = {
   business: PropTypes.object,
   values: PropTypes.object,
   getAgreementTemplate: PropTypes.func,
-  objectAgreementTemplate: PropTypes.object
+  objectAgreementTemplate: PropTypes.object,
+  handleBlur: PropTypes.func,
+  handleChange: PropTypes.func,
+  errors: PropTypes.object,
+  touched: PropTypes.object
 }
 
-const validationSchema = Yup.object().shape({})
+const validationSchema = Yup.object().shape({
+  listedPrice: Yup.number().required('Listed Price is required!'),
+  appraisalHigh: Yup.number().required('Appraisal High is required!'),
+  appraisalLow: Yup.number().required('Appraisal Low is required!'),
+  engagementFee: Yup.number().required('Engagement Fee is required!'),
+  comissionPerc: Yup.number().required('Comission Perc is required!')
+})
 
-const mapPropsToValues = props => {}
+const mapPropsToValues = props => ({
+  listedPrice: '',
+  appraisalHigh: 0,
+  appraisalLow: 0,
+  engagementFee: 0,
+  comissionPerc: 0
+})
 
 const mapStateToProps = state => ({
   business: state.business.get.object,
