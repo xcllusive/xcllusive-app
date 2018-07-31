@@ -241,9 +241,9 @@ const mapPropsToValues = props => {
       lastNameV: props.objectBusiness.lastNameV,
       vendorPhone1: props.objectBusiness.vendorPhone1,
       businessABN: props.objectBusiness.businessABN,
-      address: `${props.objectBusiness.address1}, ${
+      address: `${props.objectBusiness.address1} ${
         props.objectBusiness.suburb
-      } - ${props.objectBusiness.state}`,
+      } ${props.objectBusiness.state} ${props.objectBusiness.postCode}`,
 
       id: props.objectAgreementTemplate.id,
       listedPrice: props.objectAgreementTemplate.listedPrice.toLocaleString(),
