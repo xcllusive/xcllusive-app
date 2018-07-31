@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { Form, Header, Grid, Segment } from 'semantic-ui-react'
+import { Form, Header, Grid, Segment, Label } from 'semantic-ui-react'
 
 import { getBusiness } from '../../redux/ducks/business'
 import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
@@ -54,26 +54,91 @@ class BusinessAgreement extends Component {
                   <Form.Group widths="equal">
                     <Form.Input
                       label="First Name"
-                      // value={this.props.buyer.firstName}
+                      name="firstName"
+                      autoComplete="firstNameV"
+                      value={values.firstNameV}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
+                    {errors.firstNameV &&
+                      touched.firstNameV && (
+                      <Label
+                        basic
+                        pointing
+                        color="red"
+                        content={errors.firstNameV}
+                      />
+                    )}
                     <Form.Input
                       label="Last Name"
-                      // value={this.props.buyer.surname}
+                      name="lastNameV"
+                      autoComplete="lastNameV"
+                      value={values.lastNameV}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
+                    {errors.lastNameV &&
+                      touched.lastNameV && (
+                      <Label
+                        basic
+                        pointing
+                        color="red"
+                        content={errors.lastNameV}
+                      />
+                    )}
                     <Form.Input
                       label="Phone"
-                      // value={this.props.buyer.surname}
+                      name="vendorPhone1"
+                      autoComplete="vendorPhone1"
+                      value={values.vendorPhone1}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
+                    {errors.vendorPhone1 &&
+                      touched.vendorPhone1 && (
+                      <Label
+                        basic
+                        pointing
+                        color="red"
+                        content={errors.vendorPhone1}
+                      />
+                    )}
                     <Form.Input
                       label="ABN/ACN"
-                      // value={this.props.buyer.surname}
+                      name="businessABN"
+                      autoComplete="businessABN"
+                      value={values.businessABN}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
+                    {errors.businessABN &&
+                      touched.businessABN && (
+                      <Label
+                        basic
+                        pointing
+                        color="red"
+                        content={errors.businessABN}
+                      />
+                    )}
                   </Form.Group>
                   <Form.Group widths="equal">
                     <Form.Input
                       label="Address"
-                      // value={this.props.buyer.surname}
+                      name="address"
+                      autoComplete="address"
+                      value={values.address}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
+                    {errors.address &&
+                      touched.address && (
+                      <Label
+                        basic
+                        pointing
+                        color="red"
+                        content={errors.address}
+                      />
+                    )}
                     <Form.Input
                       label="For sale of the businesses known as"
                       // value={this.props.buyer.surname}
@@ -137,7 +202,7 @@ BusinessAgreement.propTypes = {
   match: PropTypes.object,
   buyer: PropTypes.object,
   getBusiness: PropTypes.func,
-  business: PropTypes.object,
+  objectBusiness: PropTypes.object,
   values: PropTypes.object,
   getAgreementTemplate: PropTypes.func,
   objectAgreementTemplate: PropTypes.object,
@@ -148,6 +213,11 @@ BusinessAgreement.propTypes = {
 }
 
 const validationSchema = Yup.object().shape({
+  firstNameV: Yup.string().required('First Name is required!'),
+  LastNameV: Yup.string().required('Last Name is required!'),
+  vendorPhone1: Yup.string().required('Phone is required!'),
+  businessABN: Yup.string().required('ABN/ACN is required!'),
+  Address: Yup.string().required('Address is required!'),
   listedPrice: Yup.number().required('Listed Price is required!'),
   appraisalHigh: Yup.number().required('Appraisal High is required!'),
   appraisalLow: Yup.number().required('Appraisal Low is required!'),
@@ -164,21 +234,55 @@ const validationSchema = Yup.object().shape({
   priceProperty: Yup.number().required('Price is required!')
 })
 
-const mapPropsToValues = props => ({
-  listedPrice: 0,
-  appraisalHigh: 0,
-  appraisalLow: 0,
-  engagementFee: 0,
-  commissionPerc: 0,
-  commissionDiscount: 0,
-  introductionParties: '',
-  commissionProperty: 0,
-  addressProperty: '',
-  priceProperty: 0
-})
+const mapPropsToValues = props => {
+  if (props && props.objectAgreementTemplate && props.objectBusiness) {
+    return {
+      firstNameV: props.objectBusiness.firstNameV,
+      lastNameV: props.objectBusiness.lastNameV,
+      vendorPhone1: props.objectBusiness.vendorPhone1,
+      businessABN: props.objectBusiness.businessABN,
+      address: `${props.objectBusiness.address1}, ${
+        props.objectBusiness.suburb
+      } - ${props.objectBusiness.state}`,
+
+      id: props.objectAgreementTemplate.id,
+      listedPrice: props.objectAgreementTemplate.listedPrice.toLocaleString(),
+      appraisalHigh: props.objectAgreementTemplate.appraisalHigh.toLocaleString(),
+      appraisalLow: props.objectAgreementTemplate.appraisalLow.toLocaleString(),
+      engagementFee: props.objectAgreementTemplate.engagementFee.toLocaleString(),
+      commissionPerc: props.objectAgreementTemplate.commissionPerc.toLocaleString(),
+      commissionDiscount: props.objectAgreementTemplate.commissionDiscount.toLocaleString(),
+      introductionParties: props.objectAgreementTemplate.introductionParties,
+      commissionProperty: props.objectAgreementTemplate.commissionProperty.toLocaleString(),
+      addressProperty: props.objectAgreementTemplate.addressProperty,
+      priceProperty: props.objectAgreementTemplate.priceProperty.toLocaleString(),
+      propertyOptions: props.objectAgreementTemplate.propertyOptions,
+      optionIntroductionBuyer:
+        props.objectAgreementTemplate.optionIntroductionBuyer
+    }
+  }
+  return {
+    firstNameV: '',
+    lastNameV: '',
+    vendorPhone1: 0,
+    businessABN: '',
+    address: '',
+
+    listedPrice: 0,
+    appraisalHigh: 0,
+    appraisalLow: 0,
+    engagementFee: 0,
+    commissionPerc: 0,
+    commissionDiscount: 0,
+    introductionParties: '',
+    commissionProperty: 0,
+    addressProperty: '',
+    priceProperty: 0
+  }
+}
 
 const mapStateToProps = state => ({
-  business: state.business.get.object,
+  objectBusiness: state.business.get.object,
   objectAgreementTemplate: state.agreementTemplates.get.object
 })
 
