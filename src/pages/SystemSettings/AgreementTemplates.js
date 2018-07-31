@@ -139,6 +139,10 @@ class AgreementTemplates extends Component {
     })
   }
 
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
+  }
+
   render () {
     const {
       values,
@@ -238,10 +242,24 @@ class AgreementTemplates extends Component {
                   </Grid.Row>
                   <Grid.Row>
                     <Grid.Column style={{ paddingLeft: '0px' }}>
-                      <Header
-                        as="h4"
-                        content="Option For Principal Introduction Of Buyer"
-                      />
+                      <Grid.Row columns={2}>
+                        <Grid.Column>
+                          <Header
+                            as="h4"
+                            content="Option For Principal Introduction Of Buyer"
+                          />
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Header as="h4" floated="right">
+                            <Form.Checkbox
+                              label="N/A"
+                              name="optionIntroductionBuyer"
+                              onChange={this._handleChangeCheckBox}
+                              checked={values.optionIntroductionBuyer}
+                            />
+                          </Header>
+                        </Grid.Column>
+                      </Grid.Row>
                       <OptionIntroductionBuyer
                         values={values}
                         handleChange={handleChange}
@@ -253,7 +271,21 @@ class AgreementTemplates extends Component {
                   </Grid.Row>
                   <Grid.Row>
                     <Grid.Column style={{ paddingLeft: '0px' }}>
-                      <Header as="h4" content="Property Option" />
+                      <Grid.Row columns={2}>
+                        <Grid.Column>
+                          <Header as="h4" content="Property Option" />
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Header as="h4" floated="right">
+                            <Form.Checkbox
+                              label="N/A"
+                              name="propertyOptions"
+                              onChange={this._handleChangeCheckBox}
+                              checked={values.propertyOptions}
+                            />
+                          </Header>
+                        </Grid.Column>
+                      </Grid.Row>
                       <PropertyOption
                         values={values}
                         handleChange={handleChange}
@@ -425,11 +457,14 @@ const mapPropsToValues = props => {
       appraisalLow: props.objectAgreementTemplate.appraisalLow.toLocaleString(),
       engagementFee: props.objectAgreementTemplate.engagementFee.toLocaleString(),
       commissionPerc: props.objectAgreementTemplate.commissionPerc.toLocaleString(),
-      commissionDiscount: props.objectAgreementTemplate.commissionDiscount,
+      commissionDiscount: props.objectAgreementTemplate.commissionDiscount.toLocaleString(),
       introductionParties: props.objectAgreementTemplate.introductionParties,
-      commissionProperty: props.objectAgreementTemplate.commissionProperty,
+      commissionProperty: props.objectAgreementTemplate.commissionProperty.toLocaleString(),
       addressProperty: props.objectAgreementTemplate.addressProperty,
-      priceProperty: props.objectAgreementTemplate.priceProperty
+      priceProperty: props.objectAgreementTemplate.priceProperty.toLocaleString(),
+      propertyOptions: props.objectAgreementTemplate.propertyOptions,
+      optionIntroductionBuyer:
+        props.objectAgreementTemplate.optionIntroductionBuyer
     }
   }
   return {
@@ -447,7 +482,9 @@ const mapPropsToValues = props => {
     introductionParties: '',
     commissionProperty: 0,
     addressProperty: '',
-    priceProperty: 0
+    priceProperty: 0,
+    propertyOptions: false,
+    optionIntroductionBuyer: false
   }
 }
 

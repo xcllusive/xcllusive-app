@@ -17,6 +17,7 @@ class OptionIntroductionBuyer extends Component {
                 value={values.commissionDiscount}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                disabled={values.optionIntroductionBuyer}
               />
               {errors.commissionDiscount &&
                 touched.commissionDiscount && (
@@ -34,6 +35,7 @@ class OptionIntroductionBuyer extends Component {
                 value={values.introductionParties}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                disabled={values.optionIntroductionBuyer}
               />
               {errors.introductionParties &&
                 touched.introductionParties && (

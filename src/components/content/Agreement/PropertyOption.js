@@ -17,6 +17,7 @@ class PropertyOption extends Component {
                 value={values.commissionProperty}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                disabled={values.propertyOptions}
               />
               {errors.commissionProperty &&
                 touched.commissionProperty && (
@@ -34,6 +35,7 @@ class PropertyOption extends Component {
                 value={values.addressProperty}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                disabled={values.propertyOptions}
               />
               {errors.addressProperty &&
                 touched.addressProperty && (
@@ -51,6 +53,7 @@ class PropertyOption extends Component {
                 value={values.priceProperty}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                disabled={values.propertyOptions}
               />
               {errors.priceProperty &&
                 touched.priceProperty && (
