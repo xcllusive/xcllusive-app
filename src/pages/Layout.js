@@ -113,7 +113,7 @@ const Layout = ({ match, logout, menu }) => (
       <Route
         exact
         component={AgreementPage}
-        path={`${match.path}business/:id/agreement`}
+        path={`${match.path}business/:id/agreement/:idAgreement`}
       />
       {/* <Route
         exact

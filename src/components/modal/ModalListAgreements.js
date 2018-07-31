@@ -32,7 +32,7 @@ class ModalListAgreements extends Component {
       this.props.closeModal()
       return
     }
-    this.props.callBack(isConfirmed)
+    this.props.callBack(isConfirmed, this.props.objectAgreementTemplate.id)
     this.props.closeModal()
   }
 

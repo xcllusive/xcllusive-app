@@ -43,20 +43,35 @@ class EditBusinessDetailForm extends Component {
   }
 
   static async getDerivedStateFromProps (nextProps, prevState) {
-    if (nextProps.reassignedBusiness && prevState.reassignedBusiness !== nextProps.reassignedBusiness) {
+    if (
+      nextProps.reassignedBusiness &&
+      prevState.reassignedBusiness !== nextProps.reassignedBusiness
+    ) {
       nextProps.getBusiness(nextProps.business.id)
     }
-    if (nextProps.updateStageSalesMemo && prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo) {
+    if (
+      nextProps.updateStageSalesMemo &&
+      prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo
+    ) {
       nextProps.getBusiness(nextProps.business.id)
     }
-    if (nextProps.updateStageLost && prevState.updateStageLost !== nextProps.updateStageLost) {
+    if (
+      nextProps.updateStageLost &&
+      prevState.updateStageLost !== nextProps.updateStageLost
+    ) {
       nextProps.getBusiness(nextProps.business.id)
       nextProps.getLogFromBusiness(nextProps.business.id)
     }
-    if (nextProps.values.stage === 8 && prevState.stage !== nextProps.values.stage) {
+    if (
+      nextProps.values.stage === 8 &&
+      prevState.stage !== nextProps.values.stage
+    ) {
       this._openModalStageLost()
     }
-    if (nextProps.values.stage === 3 && prevState.stage !== nextProps.values.stage) {
+    if (
+      nextProps.values.stage === 3 &&
+      prevState.stage !== nextProps.values.stage
+    ) {
       this._openModalStageSalesMemo()
     }
 
@@ -129,10 +144,10 @@ class EditBusinessDetailForm extends Component {
       options: {
         title: 'List of Agreements'
       },
-      callBack: isConfirmed => {
+      callBack: (isConfirmed, idAgreement) => {
         if (isConfirmed) {
           this.props.history.push(
-            `business/${this.props.business.id}/agreement`
+            `${this.props.business.id}/agreement/${idAgreement}`
           )
         }
       },

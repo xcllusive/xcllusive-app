@@ -1,484 +1,155 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import moment from 'moment'
-import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 
-import {
-  Form,
-  Header,
-  Table,
-  Grid,
-  Icon,
-  Dimmer,
-  Loader,
-  Segment,
-  Button,
-  Pagination
-} from 'semantic-ui-react'
+import { Form, Header, Grid, Segment } from 'semantic-ui-react'
 
-import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
-import {
-  getLog,
-  // updateBuyerDetails,
-  createNewLog,
-  getBusinessBuyerLog,
-  clearBuyerLog
-} from '../../redux/ducks/buyerLog'
 import { getBusiness } from '../../redux/ducks/business'
+import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
 
 import Wrapper from '../../components/content/Wrapper'
 
-class BuyerDetailsCM extends Component {
+class BusinessAgreement extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      buyerLog: null
-    }
+    this.state = {}
   }
   componentDidMount () {
-    this.props.getBuyer(this.props.match.params.id)
-    this.props.getLog(this.props.match.params.id)
-  }
-
-  componentWillUnmount () {
-    this._selectLog(null)
-  }
-
-  _getBusinessObject = buyerLog => {
-    this.props.getBusiness(buyerLog.business_id)
-    this.props.getBusinessBuyerLog(this.props.buyer.id, buyerLog.business_id)
-    this.props.getBusinessesFromBuyer(this.props.buyer.id)
-    this._selectLog(buyerLog)
-  }
-
-  _handleDateChange = date => {
-    this.props.setFieldValue('buyerLog_followUp', date)
-  }
-
-  _backToSearch = business => {
-    this._selectLog(null)
-  }
-
-  _selectLog = buyerLog => {
-    this.setState({ buyerLog })
-    this.props.setFieldValue(
-      'buyerLog_followUp',
-      buyerLog ? buyerLog.followUp : ''
-    )
-    this.props.setFieldValue('buyerLog_text', buyerLog ? buyerLog.text : '')
-    this.props.setFieldValue(
-      'buyer_id',
-      buyerLog && buyerLog.newLog ? buyerLog.buyer_id : null
-    )
-    this.props.setFieldValue(
-      'business_id',
-      buyerLog && buyerLog.newLog ? buyerLog.business_id : null
-    )
-  }
-
-  _handlePaginationChangeLog = (e, { activePage }) => {
-    this.props.getLog(this.props.match.params.id, 10, activePage)
-  }
-
-  _handlePaginationChangeBusBuyLog = (e, { activePage }) => {
-    this.props.getBusinessBuyerLog(
-      this.props.buyer.id,
-      this.state.buyerLog.business_id,
-      10,
-      activePage
-    )
+    this.props.getBusiness(this.props.match.params.id)
+    this.props.getAgreementTemplate(this.props.match.params.idAgreement)
   }
 
   render () {
-    const {
-      history,
-      listBuyerLogList,
-      isLoadingBuyer,
-      business,
-      isLoadingUpdate,
-      handleSubmit,
-      isSubmitting,
-      isValid,
-      listBusinessBuyerLogList,
-      isLoadingBusBuyLog,
-      isLoadingBuyerLog,
-      listBusinessesFromBuyer,
-      values,
-      handleChange
-    } = this.props
-
-    const { buyerLog } = this.state
+    const { objectAgreementTemplate } = this.props
     return (
       <Wrapper>
         <Grid celled="internally" divided>
+          {objectAgreementTemplate ? (
+            <Header
+              style={{ paddingTop: '1rem' }}
+              as="h2"
+              content={`${objectAgreementTemplate.title}`}
+            />
+          ) : null}
           <Grid.Row>
-            <Grid.Column width={5}>
-              {this.props.buyer ? (
-                <Header as="h3" content="Buyer Details" />
-              ) : null}
-              <Dimmer.Dimmable
-                dimmed={isLoadingBuyer}
-                style={{ height: '80vh' }}
-              >
-                <Dimmer inverted active={isLoadingBuyer}>
-                  <Loader>Loading</Loader>
-                </Dimmer>
-
-                {this.props.buyer ? (
-                  <Form>
-                    <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="First Name"
-                        readOnly
-                        value={this.props.buyer.firstName}
-                      />
-                      <Form.Input
-                        width={8}
-                        label="Last Name"
-                        readOnly
-                        value={this.props.buyer.surname}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Email"
-                        readOnly
-                        icon={
-                          <Icon
-                            name="mail"
-                            inverted
-                            circular
-                            link
-                            onClick={() =>
-                              window.open(`mailto:${this.props.buyer.email}`)
-                            }
-                          />
-                        }
-                        value={this.props.buyer.email}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Street"
-                        readOnly
-                        value={this.props.buyer.streetName}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="Suburb"
-                        readOnly
-                        value={this.props.buyer.suburb}
-                      />
-                      <Form.Input
-                        width={4}
-                        label="State"
-                        readOnly
-                        value={this.props.buyer.state}
-                      />
-                      <Form.Input
-                        width={4}
-                        label="Post Code"
-                        readOnly
-                        value={this.props.buyer.postCode}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Telephone"
-                        readOnly
-                        value={this.props.buyer.telephone1}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="Source"
-                        readOnly
-                        value={this.props.buyer.BusinessSource.label}
-                      />
-                      <Form.Input
-                        width={8}
-                        label="Price To"
-                        readOnly
-                        value={this.props.buyer.priceTo}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.TextArea
-                        width={16}
-                        label="Notes"
-                        readOnly
-                        placeholder="there is no notes..."
-                        value={this.props.buyer.buyerNotes}
-                      />
-                    </Form.Group>
-                    <Button
-                      size="small"
-                      color="green"
-                      onClick={() => history.push('/clientManager')}
-                    >
-                      <Icon name="backward" />
-                      Back to Client Manager
-                    </Button>
-                  </Form>
-                ) : null}
-              </Dimmer.Dimmable>
+            <Grid.Column>
+              <Header as="h3" content="Business Details" />
+              <Segment>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      label="First Name"
+                      // value={this.props.buyer.firstName}
+                    />
+                    <Form.Input
+                      label="Last Name"
+                      // value={this.props.buyer.surname}
+                    />
+                    <Form.Input
+                      label="Phone"
+                      // value={this.props.buyer.surname}
+                    />
+                    <Form.Input
+                      label="ABN/ACN"
+                      // value={this.props.buyer.surname}
+                    />
+                  </Form.Group>
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      label="Address"
+                      // value={this.props.buyer.surname}
+                    />
+                    <Form.Input
+                      label="For sale of the businesses known as"
+                      // value={this.props.buyer.surname}
+                    />
+                    <Form.Input
+                      label="Conducted at"
+                      // value={this.props.buyer.surname}
+                    />
+                  </Form.Group>
+                </Form>
+              </Segment>
             </Grid.Column>
-            <Grid.Column width={11}>
-              <Dimmer.Dimmable dimmed={isLoadingBuyerLog}>
-                <Dimmer inverted active={isLoadingBuyerLog}>
-                  <Loader>Loading</Loader>
-                </Dimmer>
-                <Header style={{ margin: 0 }}>Attached Business Log</Header>
-                {!buyerLog ? (
-                  <Fragment>
-                    <Table
-                      color="blue"
-                      celled
-                      inverted
-                      selectable
-                      size="small"
-                      compact
-                    >
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell>Business Name</Table.HeaderCell>
-                          <Table.HeaderCell>Log</Table.HeaderCell>
-                          <Table.HeaderCell>Date</Table.HeaderCell>
-                          <Table.HeaderCell>Status</Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {listBuyerLogList.array.map(buyerLogList => (
-                          <Table.Row
-                            active
-                            key={buyerLogList.id}
-                            onClick={() =>
-                              this._getBusinessObject(buyerLogList)
-                            }
-                          >
-                            <Table.Cell>
-                              {buyerLogList.Business.businessName}
-                            </Table.Cell>
-                            <Table.Cell>{buyerLogList.text}</Table.Cell>
-                            <Table.Cell>
-                              {moment(buyerLogList.followUp).format(
-                                'DD/MM/YYYY - HH:mm'
-                              )}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {buyerLogList.followUpStatus}
-                            </Table.Cell>
-                          </Table.Row>
-                        ))}
-                      </Table.Body>
-                    </Table>
-                    <Pagination
-                      size="mini"
-                      onPageChange={(e, data) =>
-                        this._handlePaginationChangeLog(e, data, 1)
-                      }
-                      defaultActivePage={listBuyerLogList.activePage}
-                      totalPages={listBuyerLogList.pages}
-                      firstItem={null}
-                      lastItem={null}
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Header as="h3" content="Contract Fields" />
+              <Segment>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      label="Listed Price"
+                      // value={this.props.buyer.firstName}
                     />
-                  </Fragment>
-                ) : null}
-              </Dimmer.Dimmable>
-              <Dimmer.Dimmable
-                dimmed={isLoadingBusBuyLog}
-                style={isLoadingBusBuyLog ? { height: '80vh' } : null}
-              >
-                <Dimmer inverted active={isLoadingBusBuyLog}>
-                  <Loader>Loading</Loader>
-                </Dimmer>
-                {business.businessName && buyerLog ? (
-                  <Fragment>
-                    <Segment size="mini" inverted color="grey">
-                      <Header inverted textAlign="center">
-                        {business.businessName}
-                      </Header>
-                    </Segment>
-                    <Table
-                      color="blue"
-                      celled
-                      inverted
-                      selectable
-                      size="small"
-                      compact
-                    >
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell>Log</Table.HeaderCell>
-                          <Table.HeaderCell>Date</Table.HeaderCell>
-                          <Table.HeaderCell>Status</Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {listBusinessBuyerLogList.array.map(
-                          businessBuyerLog => (
-                            <Table.Row
-                              active
-                              key={businessBuyerLog.id}
-                              onClick={() => this._selectLog(businessBuyerLog)}
-                            >
-                              <Table.Cell>{businessBuyerLog.text}</Table.Cell>
-                              <Table.Cell>
-                                {moment(businessBuyerLog.followUp).format(
-                                  'DD/MM/YYYY - HH:mm'
-                                )}
-                              </Table.Cell>
-                              <Table.Cell>
-                                {businessBuyerLog.followUpStatus}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        )}
-                      </Table.Body>
-                    </Table>
-                    <Pagination
-                      size="mini"
-                      onPageChange={(e, data) =>
-                        this._handlePaginationChangeBusBuyLog(e, data, 1)
-                      }
-                      defaultActivePage={listBusinessBuyerLogList.activePage}
-                      totalPages={listBusinessBuyerLogList.pages}
-                      firstItem={null}
-                      lastItem={null}
+                    <Form.Input
+                      label="Appraisal High $"
+                      // value={this.props.buyer.firstName}
                     />
-                    <Grid celled="internally" divided>
-                      <Grid.Row>
-                        <Grid.Column width={8}>
-                          <Fragment>
-                            <Form>
-                              <Form.Group>
-                                <Form.Field width={11}>
-                                  <h5>Follow Up Date</h5>
-                                  <DatePicker
-                                    selected={moment(values.buyerLog_followUp)}
-                                    onChange={this._handleDateChange}
-                                    popperPlacement="top-end"
-                                    form
-                                  />
-                                </Form.Field>
-                                <Form.Field
-                                  width={5}
-                                  style={{ alignSelf: 'flex-end' }}
-                                >
-                                  <Form.Button
-                                    floated="right"
-                                    size="small"
-                                    color="twitter"
-                                    style={{ alignSelf: 'flex-end' }}
-                                    onClick={() =>
-                                      this._selectLog({
-                                        followUp: moment().add(1, 'day'),
-                                        text: '',
-                                        newLog: true,
-                                        business_id: buyerLog.business_id,
-                                        buyer_id: this.props.buyer.id
-                                      })
-                                    }
-                                  >
-                                    <Icon name="commenting" />
-                                    New Log
-                                  </Form.Button>
-                                </Form.Field>
-                              </Form.Group>
-                              <Form.Group>
-                                <Form.Field width={12}>
-                                  <Form.TextArea
-                                    label="Communication buyerLog_text"
-                                    name="buyerLog_text"
-                                    autoComplete="buyerLog_text"
-                                    value={values.buyerLog_text}
-                                    onChange={handleChange}
-                                  />
-                                </Form.Field>
-                                <Form.Field
-                                  width={4}
-                                  style={{ alignSelf: 'flex-end' }}
-                                >
-                                  <Form.Button
-                                    floated="right"
-                                    type="submit"
-                                    color="red"
-                                    disabled={
-                                      isSubmitting ||
-                                      !isValid ||
-                                      !buyerLog.newLog
-                                    }
-                                    loading={isLoadingUpdate}
-                                    onClick={handleSubmit}
-                                  >
-                                    <Icon name="save" />
-                                    Save
-                                  </Form.Button>
-                                </Form.Field>
-                              </Form.Group>
-                            </Form>
-                            <Button
-                              size="small"
-                              color="green"
-                              onClick={() => this._backToSearch(null)}
-                            >
-                              <Icon name="backward" />
-                              Back to Attached Logs
-                            </Button>
-                          </Fragment>
-                        </Grid.Column>
-                        <Grid.Column width={8}>
-                          <Table
-                            color="blue"
-                            celled
-                            inverted
-                            selectable
-                            size="small"
-                            compact
-                          >
-                            <Table.Header>
-                              <Table.Row>
-                                <Table.HeaderCell>
-                                  Previous Business
-                                </Table.HeaderCell>
-                              </Table.Row>
-                            </Table.Header>
-                            <Table.Body>
-                              {listBusinessesFromBuyer.map(
-                                businessFromBuyer => (
-                                  <Table.Row
-                                    active
-                                    key={businessFromBuyer.business_id}
-                                    onClick={() =>
-                                      this._getBusinessObject(businessFromBuyer)
-                                    }
-                                  >
-                                    <Table.Cell>
-                                      {businessFromBuyer.Business.businessName}
-                                    </Table.Cell>
-                                  </Table.Row>
-                                )
-                              )}
-                            </Table.Body>
-                          </Table>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Fragment>
-                ) : null}
-              </Dimmer.Dimmable>
+                    <Form.Input
+                      label="Appraisal Low $"
+                      // value={this.props.buyer.firstName}
+                    />
+                    <Form.Input
+                      label="Engagement Fee"
+                      // value={this.props.buyer.firstName}
+                    />
+                    <Form.Input
+                      label="Commission %"
+                      // value={this.props.buyer.firstName}
+                    />
+                  </Form.Group>
+                </Form>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Header
+                as="h3"
+                content="Option For Principal Introduction Of Buyer"
+              />
+              <Segment>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      label="Commission Discount"
+                      // value={this.props.buyer.firstName}
+                    />
+                    <Form.TextArea
+                      label="Introduction Parties"
+                      // value={this.props.buyer.firstName}
+                    />
+                  </Form.Group>
+                </Form>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Header as="h3" content="Property Option" />
+              <Segment>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      label="Commission"
+                      // value={this.props.buyer.firstName}
+                    />
+                    <Form.Input
+                      label="Address"
+                      // value={this.props.buyer.firstName}
+                    />
+                    <Form.Input
+                      label="Price"
+                      // value={this.props.buyer.firstName}
+                    />
+                  </Form.Group>
+                </Form>
+              </Segment>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -487,76 +158,31 @@ class BuyerDetailsCM extends Component {
   }
 }
 
-BuyerDetailsCM.propTypes = {
+BusinessAgreement.propTypes = {
   history: PropTypes.object,
-  getBuyer: PropTypes.func,
   match: PropTypes.object,
   buyer: PropTypes.object,
-  listBuyerLogList: PropTypes.object,
-  getLog: PropTypes.func,
-  isLoadingBuyer: PropTypes.bool,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
-  setFieldValue: PropTypes.func,
-  // updateBuyerDetails: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  isLoadingUpdate: PropTypes.bool,
-  isSubmitting: PropTypes.bool,
-  isValid: PropTypes.bool,
-  listBusinessBuyerLogList: PropTypes.object,
-  getBusinessBuyerLog: PropTypes.func,
-  clearBuyerLog: PropTypes.func,
-  isLoadingBusBuyLog: PropTypes.bool,
-  isLoadingBuyerLog: PropTypes.bool,
-  getBusinessesFromBuyer: PropTypes.func,
-  listBusinessesFromBuyer: PropTypes.array,
   values: PropTypes.object,
-  handleChange: PropTypes.func,
-  createNewLog: PropTypes.func
+  getAgreementTemplate: PropTypes.func,
+  objectAgreementTemplate: PropTypes.object
 }
 
-const validationSchema = Yup.object().shape({
-  buyerLog_followUp: Yup.string().required('buyerLog_followUp is required.'),
-  buyerLog_text: Yup.string().required('First name is required.')
-})
+const validationSchema = Yup.object().shape({})
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props
-    .createNewLog(values)
-    .then(setSubmitting(false))
-    .then(props.getBusinessBuyerLog(values.buyer_id, values.business_id))
-}
-
-const mapPropsToValues = props => {
-  return {
-    buyerLog_followUp: '',
-    buyerLog_text: ''
-  }
-}
+const mapPropsToValues = props => {}
 
 const mapStateToProps = state => ({
-  buyer: state.buyer.get.object,
-  isLoadingBuyer: state.buyer.get.isLoading,
-  listBuyerLogList: state.buyerLog.get,
-  isLoadingBuyerLog: state.buyerLog.get.isLoading,
   business: state.business.get.object,
-  isLoadingUpdate: state.buyerLog.update.isLoading,
-  listBusinessBuyerLogList: state.buyerLog.getBusBuyLog,
-  isLoadingBusBuyLog: state.buyerLog.getBusBuyLog.isLoading,
-  listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array
+  objectAgreementTemplate: state.agreementTemplates.get.object
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getBuyer,
-      getLog,
       getBusiness,
-      createNewLog,
-      // updateBuyerDetails,
-      getBusinessBuyerLog,
-      clearBuyerLog,
-      getBusinessesFromBuyer
+      getAgreementTemplate
     },
     dispatch
   )
@@ -568,7 +194,6 @@ export default connect(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit,
     enableReinitialize: true
-  })(BuyerDetailsCM)
+  })(BusinessAgreement)
 )
