@@ -12,7 +12,7 @@ class ContractFields extends Component {
             <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
-                  label="Listed Price"
+                  label="Listed Price $"
                   name="listedPrice"
                   autoComplete="listedPrice"
                   value={values.listedPrice}
@@ -64,7 +64,7 @@ class ContractFields extends Component {
                 />
               )}
               <Form.Input
-                label="Engagement Fee"
+                label="Engagement Fee $"
                 name="engagementFee"
                 autoComplete="engagementFee"
                 value={values.engagementFee}

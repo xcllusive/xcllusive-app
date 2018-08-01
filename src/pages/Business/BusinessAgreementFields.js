@@ -5,8 +5,18 @@ import { connect } from 'react-redux'
 import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
+import numeral from 'numeral'
 
-import { Form, Header, Grid, Segment, Label } from 'semantic-ui-react'
+import {
+  Form,
+  Header,
+  Grid,
+  Segment,
+  Label,
+  Message,
+  Button,
+  Icon
+} from 'semantic-ui-react'
 
 import { getBusiness } from '../../redux/ducks/business'
 import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
@@ -17,7 +27,7 @@ import PropertyOption from '../../components/content/Agreement/PropertyOption'
 
 import Wrapper from '../../components/content/Wrapper'
 
-class BusinessAgreement extends Component {
+class BusinessAgreementFields extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -34,8 +44,11 @@ class BusinessAgreement extends Component {
       handleBlur,
       handleChange,
       errors,
-      touched
+      touched,
+      objectBusiness,
+      history
     } = this.props
+    console.log(errors)
     return (
       <Wrapper>
         <Grid celled="internally" divided>
@@ -54,7 +67,7 @@ class BusinessAgreement extends Component {
                   <Form.Group widths="equal">
                     <Form.Input
                       label="First Name"
-                      name="firstName"
+                      name="firstNameV"
                       autoComplete="firstNameV"
                       value={values.firstNameV}
                       onChange={handleChange}
@@ -164,31 +177,94 @@ class BusinessAgreement extends Component {
               />
             </Grid.Column>
           </Grid.Row>
+          {values.optionIntroductionBuyer ? (
+            <Grid.Row>
+              <Grid.Column>
+                <Header
+                  as="h3"
+                  content="Option For Principal Introduction Of Buyer"
+                />
+                <Message info>
+                  <Message.Header>
+                    This section has been disabled by the office for this
+                    specific agreement.
+                  </Message.Header>
+                  <p>
+                    If you wish to use these fields in the agreement, please get
+                    in contact with the office or just choose another agreement
+                    template.
+                  </p>
+                </Message>
+              </Grid.Column>
+            </Grid.Row>
+          ) : (
+            <Grid.Row>
+              <Grid.Column>
+                <Header
+                  as="h3"
+                  content="Option For Principal Introduction Of Buyer"
+                />
+                <OptionIntroductionBuyer
+                  values={values}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                  touched={touched}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          )}
+          {values.propertyOptions ? (
+            <Grid.Row>
+              <Grid.Column>
+                <Header as="h3" content="Property Option" />
+                <Message info>
+                  <Message.Header>
+                    This section has been disabled by the office for this
+                    specific agreement.
+                  </Message.Header>
+                  <p>
+                    If you wish to use these fields in the agreement, please get
+                    in contact with the office or just try choose agreement
+                    template.
+                  </p>
+                </Message>
+              </Grid.Column>
+            </Grid.Row>
+          ) : (
+            <Grid.Row>
+              <Grid.Column>
+                <Header as="h3" content="Property Option" />
+                <PropertyOption
+                  values={values}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                  touched={touched}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          )}
           <Grid.Row>
             <Grid.Column>
-              <Header
-                as="h3"
-                content="Option For Principal Introduction Of Buyer"
-              />
-              <OptionIntroductionBuyer
-                values={values}
-                handleChange={handleChange}
-                handleBlur={handleBlur}
-                errors={errors}
-                touched={touched}
-              />
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h3" content="Property Option" />
-              <PropertyOption
-                values={values}
-                handleChange={handleChange}
-                handleBlur={handleBlur}
-                errors={errors}
-                touched={touched}
-              />
+              <Button
+                color="green"
+                onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                size="small"
+                floated="left"
+              >
+                <Icon name="backward" />
+                Back to Business
+              </Button>
+              <Button
+                color="red"
+                onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                size="small"
+                floated="right"
+              >
+                <Icon name="edit" />
+                Preview Agreement
+              </Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -197,7 +273,7 @@ class BusinessAgreement extends Component {
   }
 }
 
-BusinessAgreement.propTypes = {
+BusinessAgreementFields.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   buyer: PropTypes.object,
@@ -214,16 +290,16 @@ BusinessAgreement.propTypes = {
 
 const validationSchema = Yup.object().shape({
   firstNameV: Yup.string().required('First Name is required!'),
-  LastNameV: Yup.string().required('Last Name is required!'),
+  lastNameV: Yup.string().required('Last Name is required!'),
   vendorPhone1: Yup.string().required('Phone is required!'),
   businessABN: Yup.string().required('ABN/ACN is required!'),
-  Address: Yup.string().required('Address is required!'),
+  address: Yup.string().required('Address is required!'),
   listedPrice: Yup.number().required('Listed Price is required!'),
   appraisalHigh: Yup.number().required('Appraisal High is required!'),
   appraisalLow: Yup.number().required('Appraisal Low is required!'),
   engagementFee: Yup.number().required('Engagement Fee is required!'),
-  comissionPerc: Yup.number().required('Comission Perc is required!'),
-  commissionDiscount: Yup.number().required('Comission Discount is required!'),
+  commissionPerc: Yup.number().required('Commission Perc is required!'),
+  commissionDiscount: Yup.number().required('Commission Discount is required!'),
   introductionParties: Yup.string()
     .required('Comission Perc is required!')
     .max(300, 'Sorry! you have exceed the area limit of this field.'),
@@ -246,16 +322,32 @@ const mapPropsToValues = props => {
       } ${props.objectBusiness.state} ${props.objectBusiness.postCode}`,
 
       id: props.objectAgreementTemplate.id,
-      listedPrice: props.objectAgreementTemplate.listedPrice.toLocaleString(),
-      appraisalHigh: props.objectAgreementTemplate.appraisalHigh.toLocaleString(),
-      appraisalLow: props.objectAgreementTemplate.appraisalLow.toLocaleString(),
-      engagementFee: props.objectAgreementTemplate.engagementFee.toLocaleString(),
-      commissionPerc: props.objectAgreementTemplate.commissionPerc.toLocaleString(),
-      commissionDiscount: props.objectAgreementTemplate.commissionDiscount.toLocaleString(),
+      listedPrice: numeral(props.objectAgreementTemplate.listedPrice).format(
+        '0,0.00'
+      ),
+      appraisalHigh: numeral(
+        props.objectAgreementTemplate.appraisalHigh
+      ).format('0,0.00'),
+      appraisalLow: numeral(props.objectAgreementTemplate.appraisalLow).format(
+        '0,0.00'
+      ),
+      engagementFee: numeral(
+        props.objectAgreementTemplate.engagementFee
+      ).format('0,0.00'),
+      commissionPerc: numeral(
+        props.objectAgreementTemplate.commissionPerc
+      ).format('0,0.00'),
+      commissionDiscount: numeral(
+        props.objectAgreementTemplate.commissionDiscount
+      ).format('0,0.00'),
       introductionParties: props.objectAgreementTemplate.introductionParties,
-      commissionProperty: props.objectAgreementTemplate.commissionProperty.toLocaleString(),
+      commissionProperty: numeral(
+        props.objectAgreementTemplate.commissionProperty
+      ).format('0,0.00'),
       addressProperty: props.objectAgreementTemplate.addressProperty,
-      priceProperty: props.objectAgreementTemplate.priceProperty.toLocaleString(),
+      priceProperty: numeral(
+        props.objectAgreementTemplate.priceProperty
+      ).format('0,0.00'),
       propertyOptions: props.objectAgreementTemplate.propertyOptions,
       optionIntroductionBuyer:
         props.objectAgreementTemplate.optionIntroductionBuyer
@@ -264,7 +356,7 @@ const mapPropsToValues = props => {
   return {
     firstNameV: '',
     lastNameV: '',
-    vendorPhone1: 0,
+    vendorPhone1: '',
     businessABN: '',
     address: '',
 
@@ -303,5 +395,5 @@ export default connect(
     mapPropsToValues,
     validationSchema,
     enableReinitialize: true
-  })(BusinessAgreement)
+  })(BusinessAgreementFields)
 )

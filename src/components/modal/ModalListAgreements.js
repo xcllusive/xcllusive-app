@@ -110,7 +110,7 @@ class ModalListAgreements extends Component {
             // }
           >
             <Icon name="edit" />
-            Preview Agreement
+            Confirm Agreement
           </Button>
           <Button color="red" onClick={() => this._handleConfirm(false)}>
             <Icon name="cancel" />
