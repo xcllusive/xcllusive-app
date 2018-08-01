@@ -11,7 +11,7 @@ class PropertyOption extends Component {
           <Form>
             <Form.Group widths="equal">
               <Form.Input
-                label="Commission"
+                label="Commission %"
                 name="commissionProperty"
                 autoComplete="commission"
                 value={values.commissionProperty}
@@ -47,7 +47,7 @@ class PropertyOption extends Component {
                 />
               )}
               <Form.Input
-                label="Price"
+                label="Price $"
                 name="priceProperty"
                 autoComplete="priceProperty"
                 value={values.priceProperty}

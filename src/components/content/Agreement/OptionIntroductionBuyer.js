@@ -11,7 +11,7 @@ class OptionIntroductionBuyer extends Component {
           <Form>
             <Form.Group widths="equal">
               <Form.Input
-                label="Commission Discount"
+                label="Commission Discount %"
                 name="commissionDiscount"
                 autoComplete="commissionDiscount"
                 value={values.commissionDiscount}
