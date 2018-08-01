@@ -8,64 +8,62 @@ class PropertyOption extends Component {
     return (
       <Fragment>
         <Segment>
-          <Form>
-            <Form.Group widths="equal">
-              <Form.Input
-                label="Commission"
-                name="commissionProperty"
-                autoComplete="commission"
-                value={values.commissionProperty}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={values.propertyOptions}
+          <Form.Group widths="equal">
+            <Form.Input
+              label="Commission %"
+              name="commissionProperty"
+              autoComplete="commission"
+              value={values.commissionProperty}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={values.propertyOptions}
+            />
+            {errors.commissionProperty &&
+              touched.commissionProperty && (
+              <Label
+                basic
+                pointing
+                color="red"
+                content={errors.commissionProperty}
               />
-              {errors.commissionProperty &&
-                touched.commissionProperty && (
-                <Label
-                  basic
-                  pointing
-                  color="red"
-                  content={errors.commissionProperty}
-                />
-              )}
-              <Form.Input
-                label="Address"
-                name="addressProperty"
-                autoComplete="addressProperty"
-                value={values.addressProperty}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={values.propertyOptions}
+            )}
+            <Form.Input
+              label="Address"
+              name="addressProperty"
+              autoComplete="addressProperty"
+              value={values.addressProperty}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={values.propertyOptions}
+            />
+            {errors.addressProperty &&
+              touched.addressProperty && (
+              <Label
+                basic
+                pointing
+                color="red"
+                content={errors.addressProperty}
               />
-              {errors.addressProperty &&
-                touched.addressProperty && (
-                <Label
-                  basic
-                  pointing
-                  color="red"
-                  content={errors.addressProperty}
-                />
-              )}
-              <Form.Input
-                label="Price"
-                name="priceProperty"
-                autoComplete="priceProperty"
-                value={values.priceProperty}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={values.propertyOptions}
+            )}
+            <Form.Input
+              label="Price $"
+              name="priceProperty"
+              autoComplete="priceProperty"
+              value={values.priceProperty}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={values.propertyOptions}
+            />
+            {errors.priceProperty &&
+              touched.priceProperty && (
+              <Label
+                basic
+                pointing
+                color="red"
+                content={errors.priceProperty}
               />
-              {errors.priceProperty &&
-                touched.priceProperty && (
-                <Label
-                  basic
-                  pointing
-                  color="red"
-                  content={errors.priceProperty}
-                />
-              )}
-            </Form.Group>
-          </Form>
+            )}
+          </Form.Group>
         </Segment>
       </Fragment>
     )

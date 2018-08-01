@@ -18,14 +18,14 @@ import {
   Icon
 } from 'semantic-ui-react'
 
-import { getBusiness } from '../../redux/ducks/business'
-import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
+import { getBusiness } from '../../../redux/ducks/business'
+import { getAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 
-import ContractFields from '../../components/content/Agreement/ContractFields'
-import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
-import PropertyOption from '../../components/content/Agreement/PropertyOption'
+import ContractFields from '../../../components/content/Agreement/ContractFields'
+import OptionIntroductionBuyer from '../../../components/content/Agreement/OptionIntroductionBuyer'
+import PropertyOption from '../../../components/content/Agreement/PropertyOption'
 
-import Wrapper from '../../components/content/Wrapper'
+import Wrapper from '../../../components/content/Wrapper'
 
 class BusinessAgreementFields extends Component {
   constructor (props) {
@@ -51,7 +51,7 @@ class BusinessAgreementFields extends Component {
       objectAgreementIsLoading,
       objectBusinessIsLoading
     } = this.props
-    console.log(this.props)
+
     return (
       <Wrapper loading={objectBusinessIsLoading || objectAgreementIsLoading}>
         <Grid celled="internally" divided>
@@ -193,9 +193,9 @@ class BusinessAgreementFields extends Component {
                     specific agreement.
                   </Message.Header>
                   <p>
-                    If you wish to use these fields in the agreement, please get
-                    in contact with the office or just choose another agreement
-                    template.
+                    If you wish to use these fields in the agreement, please
+                    get in contact with the office or just choose another
+                    agreement template.
                   </p>
                 </Message>
               </Grid.Column>
@@ -217,60 +217,61 @@ class BusinessAgreementFields extends Component {
               </Grid.Column>
             </Grid.Row>
           )}
-          {values.propertyOptions ? (
+            {values.propertyOptions ? (
+              <Grid.Row>
+                <Grid.Column>
+                  <Header as="h3" content="Property Option" />
+                  <Message info>
+                    <Message.Header>
+                      This section has been disabled by the office for this
+                      specific agreement.
+                    </Message.Header>
+                    <p>
+                      If you wish to use these fields in the agreement, please
+                      get in contact with the office or just try choose
+                      agreement template.
+                    </p>
+                  </Message>
+                </Grid.Column>
+              </Grid.Row>
+            ) : (
+              <Grid.Row>
+                <Grid.Column>
+                  <Header as="h3" content="Property Option" />
+                  <PropertyOption
+                    values={values}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            )}
             <Grid.Row>
               <Grid.Column>
-                <Header as="h3" content="Property Option" />
-                <Message info>
-                  <Message.Header>
-                    This section has been disabled by the office for this
-                    specific agreement.
-                  </Message.Header>
-                  <p>
-                    If you wish to use these fields in the agreement, please get
-                    in contact with the office or just try choose agreement
-                    template.
-                  </p>
-                </Message>
+                <Button
+                  color="green"
+                  onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                  size="small"
+                  floated="left"
+                >
+                  <Icon name="backward" />
+                  Back to Business
+                </Button>
+                <Button
+                  color="red"
+                  onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                  size="small"
+                  floated="right"
+                >
+                  <Icon name="edit" />
+                  Preview Agreement
+                </Button>
               </Grid.Column>
             </Grid.Row>
-          ) : (
-            <Grid.Row>
-              <Grid.Column>
-                <Header as="h3" content="Property Option" />
-                <PropertyOption
-                  values={values}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  errors={errors}
-                  touched={touched}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          )}
-          <Grid.Row>
-            <Grid.Column>
-              <Button
-                color="green"
-                onClick={() => history.push(`/business/${objectBusiness.id}`)}
-                size="small"
-                floated="left"
-              >
-                <Icon name="backward" />
-                Back to Business
-              </Button>
-              <Button
-                color="red"
-                onClick={() => history.push(`/business/${objectBusiness.id}`)}
-                size="small"
-                floated="right"
-              >
-                <Icon name="edit" />
-                Preview Agreement
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+          </Grid>
+        </Form>
       </Wrapper>
     )
   }
@@ -309,7 +310,7 @@ const validationSchema = Yup.object().shape({
   commissionPerc: Yup.number().required('Commission Perc is required!'),
   commissionDiscount: Yup.number().required('Commission Discount is required!'),
   introductionParties: Yup.string()
-    .required('Comission Perc is required!')
+    .required('Introduction Parties is required!')
     .max(300, 'Sorry! you have exceed the area limit of this field.'),
   commissionProperty: Yup.number().required('Comission is required!'),
   addressProperty: Yup.string()

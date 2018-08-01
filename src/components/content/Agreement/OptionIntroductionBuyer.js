@@ -8,46 +8,44 @@ class OptionIntroductionBuyer extends Component {
     return (
       <Fragment>
         <Segment>
-          <Form>
-            <Form.Group widths="equal">
-              <Form.Input
-                label="Commission Discount"
-                name="commissionDiscount"
-                autoComplete="commissionDiscount"
-                value={values.commissionDiscount}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={values.optionIntroductionBuyer}
+          <Form.Group widths="equal">
+            <Form.Input
+              label="Commission Discount %"
+              name="commissionDiscount"
+              autoComplete="commissionDiscount"
+              value={values.commissionDiscount}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={values.optionIntroductionBuyer}
+            />
+            {errors.commissionDiscount &&
+              touched.commissionDiscount && (
+              <Label
+                basic
+                pointing
+                color="red"
+                content={errors.commissionDiscount}
               />
-              {errors.commissionDiscount &&
-                touched.commissionDiscount && (
-                <Label
-                  basic
-                  pointing
-                  color="red"
-                  content={errors.commissionDiscount}
-                />
-              )}
-              <Form.TextArea
-                label="Introduction Parties"
-                name="introductionParties"
-                autoComplete="introductionParties"
-                value={values.introductionParties}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={values.optionIntroductionBuyer}
+            )}
+            <Form.TextArea
+              label="Introduction Parties"
+              name="introductionParties"
+              autoComplete="introductionParties"
+              value={values.introductionParties}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={values.optionIntroductionBuyer}
+            />
+            {errors.introductionParties &&
+              touched.introductionParties && (
+              <Label
+                basic
+                pointing
+                color="red"
+                content={errors.introductionParties}
               />
-              {errors.introductionParties &&
-                touched.introductionParties && (
-                <Label
-                  basic
-                  pointing
-                  color="red"
-                  content={errors.introductionParties}
-                />
-              )}
-            </Form.Group>
-          </Form>
+            )}
+          </Form.Group>
         </Segment>
       </Fragment>
     )

@@ -21,7 +21,7 @@ import ScoreList from './Buyer/ScoreList'
 import MakeNewScore from './Buyer/MakeNewScore'
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
-import AgreementPage from './Business/BusinessAgreementFields'
+import AgreementPage from './Business/Agreement/BusinessAgreementFields'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
