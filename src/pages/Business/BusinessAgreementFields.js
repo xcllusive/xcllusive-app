@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import {
   Form,
@@ -32,6 +32,7 @@ class BusinessAgreementFields extends Component {
     super(props)
     this.state = {}
   }
+
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getAgreementTemplate(this.props.match.params.idAgreement)
@@ -46,11 +47,13 @@ class BusinessAgreementFields extends Component {
       errors,
       touched,
       objectBusiness,
-      history
+      history,
+      objectAgreementIsLoading,
+      objectBusinessIsLoading
     } = this.props
-    console.log(errors)
+    console.log(this.props)
     return (
-      <Wrapper>
+      <Wrapper loading={objectBusinessIsLoading || objectAgreementIsLoading}>
         <Grid celled="internally" divided>
           {objectAgreementTemplate ? (
             <Header
@@ -285,7 +288,9 @@ BusinessAgreementFields.propTypes = {
   handleBlur: PropTypes.func,
   handleChange: PropTypes.func,
   errors: PropTypes.object,
-  touched: PropTypes.object
+  touched: PropTypes.object,
+  objectBusinessIsLoading: PropTypes.bool,
+  objectAgreementIsLoading: PropTypes.bool
 }
 
 const validationSchema = Yup.object().shape({
@@ -294,7 +299,10 @@ const validationSchema = Yup.object().shape({
   vendorPhone1: Yup.string().required('Phone is required!'),
   businessABN: Yup.string().required('ABN/ACN is required!'),
   address: Yup.string().required('Address is required!'),
-  listedPrice: Yup.number().required('Listed Price is required!'),
+  listedPrice: Yup.number('Number')
+    .min(0)
+    .integer()
+    .required('Listed Price is required!'),
   appraisalHigh: Yup.number().required('Appraisal High is required!'),
   appraisalLow: Yup.number().required('Appraisal Low is required!'),
   engagementFee: Yup.number().required('Engagement Fee is required!'),
@@ -310,72 +318,65 @@ const validationSchema = Yup.object().shape({
   priceProperty: Yup.number().required('Price is required!')
 })
 
-const mapPropsToValues = props => {
-  if (props && props.objectAgreementTemplate && props.objectBusiness) {
-    return {
-      firstNameV: props.objectBusiness.firstNameV,
-      lastNameV: props.objectBusiness.lastNameV,
-      vendorPhone1: props.objectBusiness.vendorPhone1,
-      businessABN: props.objectBusiness.businessABN,
-      address: `${props.objectBusiness.address1} ${
-        props.objectBusiness.suburb
-      } ${props.objectBusiness.state} ${props.objectBusiness.postCode}`,
-
-      id: props.objectAgreementTemplate.id,
-      listedPrice: numeral(props.objectAgreementTemplate.listedPrice).format(
-        '0,0.00'
-      ),
-      appraisalHigh: numeral(
-        props.objectAgreementTemplate.appraisalHigh
-      ).format('0,0.00'),
-      appraisalLow: numeral(props.objectAgreementTemplate.appraisalLow).format(
-        '0,0.00'
-      ),
-      engagementFee: numeral(
-        props.objectAgreementTemplate.engagementFee
-      ).format('0,0.00'),
-      commissionPerc: numeral(
-        props.objectAgreementTemplate.commissionPerc
-      ).format('0,0.00'),
-      commissionDiscount: numeral(
-        props.objectAgreementTemplate.commissionDiscount
-      ).format('0,0.00'),
-      introductionParties: props.objectAgreementTemplate.introductionParties,
-      commissionProperty: numeral(
-        props.objectAgreementTemplate.commissionProperty
-      ).format('0,0.00'),
-      addressProperty: props.objectAgreementTemplate.addressProperty,
-      priceProperty: numeral(
-        props.objectAgreementTemplate.priceProperty
-      ).format('0,0.00'),
-      propertyOptions: props.objectAgreementTemplate.propertyOptions,
-      optionIntroductionBuyer:
-        props.objectAgreementTemplate.optionIntroductionBuyer
-    }
-  }
-  return {
-    firstNameV: '',
-    lastNameV: '',
-    vendorPhone1: '',
-    businessABN: '',
-    address: '',
-
-    listedPrice: 0,
-    appraisalHigh: 0,
-    appraisalLow: 0,
-    engagementFee: 0,
-    commissionPerc: 0,
-    commissionDiscount: 0,
-    introductionParties: '',
-    commissionProperty: 0,
-    addressProperty: '',
-    priceProperty: 0
-  }
-}
+const mapPropsToValues = props => ({
+  firstNameV: props.objectBusiness.firstNameV
+    ? props.objectBusiness.firstNameV
+    : '',
+  lastNameV: props.objectBusiness.lastNameV
+    ? props.objectBusiness.lastNameV
+    : '',
+  vendorPhone1: props.objectBusiness.vendorPhone1
+    ? props.objectBusiness.vendorPhone1
+    : '',
+  businessABN: props.objectBusiness.businessABN
+    ? props.objectBusiness.businessABN
+    : '',
+  address:
+    props.objectBusiness.address1 &&
+    props.objectBusiness.suburb &&
+    props.objectBusiness.state &&
+    props.objectBusiness.postCode
+      ? `${props.objectBusiness.address1} ${props.objectBusiness.suburb} ${
+        props.objectBusiness.state
+      } ${props.objectBusiness.postCode}`
+      : '',
+  id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : null,
+  listedPrice: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.listedPrice).format('0,0.00')
+    : 0
+  // appraisalHigh: numeral(
+  //   props.objectAgreementTemplate.appraisalHigh
+  // ).format('0,0.00'),
+  // appraisalLow: numeral(props.objectAgreementTemplate.appraisalLow).format(
+  //   '0,0.00'
+  // ),
+  // engagementFee: numeral(
+  //   props.objectAgreementTemplate.engagementFee
+  // ).format('0,0.00'),
+  // commissionPerc: numeral(
+  //   props.objectAgreementTemplate.commissionPerc
+  // ).format('0,0.00'),
+  // commissionDiscount: numeral(
+  //   props.objectAgreementTemplate.commissionDiscount
+  // ).format('0,0.00'),
+  // introductionParties: props.objectAgreementTemplate.introductionParties,
+  // commissionProperty: numeral(
+  //   props.objectAgreementTemplate.commissionProperty
+  // ).format('0,0.00'),
+  // addressProperty: props.objectAgreementTemplate.addressProperty,
+  // priceProperty: numeral(
+  //   props.objectAgreementTemplate.priceProperty
+  // ).format('0,0.00'),
+  // propertyOptions: props.objectAgreementTemplate.propertyOptions,
+  // optionIntroductionBuyer:
+  //       props.objectAgreementTemplate.optionIntroductionBuyer
+})
 
 const mapStateToProps = state => ({
   objectBusiness: state.business.get.object,
-  objectAgreementTemplate: state.agreementTemplates.get.object
+  objectBusinessIsLoading: state.business.get.isLoading,
+  objectAgreementTemplate: state.agreementTemplates.get.object,
+  objectAgreementIsLoading: state.agreementTemplates.get.isLoading
 })
 
 const mapDispatchToProps = dispatch =>

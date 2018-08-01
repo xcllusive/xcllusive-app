@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { Loader } from 'semantic-ui-react'
 
 const WrapperStyled = styled.div`
   padding: 0 10px 0 10px
@@ -8,7 +9,14 @@ const WrapperStyled = styled.div`
 
 class Wrapper extends Component {
   render () {
-    return <WrapperStyled>{this.props.children}</WrapperStyled>
+    if (this.props.loading) {
+      return <Loader active />
+    }
+    return (
+      <WrapperStyled>
+        {this.props.children}
+      </WrapperStyled>
+    )
   }
 }
 
@@ -18,7 +26,8 @@ Wrapper.propTypes = {
     PropTypes.array,
     PropTypes.func,
     PropTypes.element
-  ]).isRequired
+  ]).isRequired,
+  loading: PropTypes.bool
 }
 
 export default Wrapper
