@@ -48,7 +48,6 @@ class BusinessAgreementFields extends Component {
       objectBusiness,
       history
     } = this.props
-    console.log(errors)
     return (
       <Wrapper>
         <Form>
@@ -257,7 +256,13 @@ class BusinessAgreementFields extends Component {
                 </Button>
                 <Button
                   color="red"
-                  onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                  onClick={() =>
+                    history.push(
+                      `/business/${objectBusiness.id}/agreement/${
+                        objectAgreementTemplate.id
+                      }/preview`
+                    )
+                  }
                   size="small"
                   floated="right"
                 >

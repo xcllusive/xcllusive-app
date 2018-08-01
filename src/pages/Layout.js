@@ -22,6 +22,7 @@ import MakeNewScore from './Buyer/MakeNewScore'
 import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
 import AgreementPage from './Business/Agreement/BusinessAgreementFields'
+import PreviewAgreement from './Business/Agreement/PreviewAgreement'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
@@ -114,6 +115,11 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={AgreementPage}
         path={`${match.path}business/:id/agreement/:idAgreement`}
+      />
+      <Route
+        exact
+        component={PreviewAgreement}
+        path={`${match.path}business/:id/agreement/:idAgreement/preview`}
       />
       {/* <Route
         exact
