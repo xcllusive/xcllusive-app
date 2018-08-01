@@ -51,10 +51,6 @@ class BusinessAgreementFields extends Component {
       objectAgreementIsLoading,
       objectBusinessIsLoading
     } = this.props
-<<<<<<< HEAD
-=======
-
->>>>>>> 6276da7ce31b2de3aa06c30cd9027d49257d405f
     return (
       <Wrapper loading={objectBusinessIsLoading || objectAgreementIsLoading}>
         <Form>
@@ -70,7 +66,6 @@ class BusinessAgreementFields extends Component {
               <Grid.Column>
                 <Header as="h3" content="Business Details" />
                 <Segment>
-
                   <Form.Group widths="equal">
                     <Form.Input
                       label="First Name"
@@ -192,13 +187,13 @@ class BusinessAgreementFields extends Component {
                   />
                   <Message info>
                     <Message.Header>
-                    This section has been disabled by the office for this
-                    specific agreement.
+                      This section has been disabled by the office for this
+                      specific agreement.
                     </Message.Header>
                     <p>
-                    If you wish to use these fields in the agreement, please
-                    get in contact with the office or just choose another
-                    agreement template.
+                      If you wish to use these fields in the agreement, please
+                      get in contact with the office or just choose another
+                      agreement template.
                     </p>
                   </Message>
                 </Grid.Column>
@@ -351,35 +346,42 @@ const mapPropsToValues = props => ({
       } ${props.objectBusiness.postCode}`
       : '',
   id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : null,
-  listedPrice: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.listedPrice).format('0,0.00')
+  listedPrice: props.objectBusiness.listedPrice
+    ? numeral(props.objectBusiness.listedPrice).format('0,0.00')
+    : 0,
+  appraisalHigh: props.objectBusiness.appraisalHigh
+    ? numeral(props.objectBusiness.appraisalHigh).format('0,0.00')
+    : 0,
+  appraisalLow: props.objectBusiness.appraisalLow
+    ? numeral(props.objectBusiness.appraisalLow).format('0,0.00')
+    : 0,
+  engagementFee: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.engagementFee).format('0,0.00')
+    : 0,
+  commissionPerc: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.commissionPerc).format('0,0.00')
+    : 0,
+  commissionDiscount: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.commissionDiscount).format('0,0.00')
+    : 0,
+  introductionParties: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.introductionParties
+    : '',
+  commissionProperty: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.commissionProperty).format('0,0.00')
+    : 0,
+  addressProperty: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.addressProperty
+    : '',
+  priceProperty: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.priceProperty).format('0,0.00')
+    : 0,
+  propertyOptions: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.propertyOptions
+    : 0,
+  optionIntroductionBuyer: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.optionIntroductionBuyer
     : 0
-  // appraisalHigh: numeral(
-  //   props.objectAgreementTemplate.appraisalHigh
-  // ).format('0,0.00'),
-  // appraisalLow: numeral(props.objectAgreementTemplate.appraisalLow).format(
-  //   '0,0.00'
-  // ),
-  // engagementFee: numeral(
-  //   props.objectAgreementTemplate.engagementFee
-  // ).format('0,0.00'),
-  // commissionPerc: numeral(
-  //   props.objectAgreementTemplate.commissionPerc
-  // ).format('0,0.00'),
-  // commissionDiscount: numeral(
-  //   props.objectAgreementTemplate.commissionDiscount
-  // ).format('0,0.00'),
-  // introductionParties: props.objectAgreementTemplate.introductionParties,
-  // commissionProperty: numeral(
-  //   props.objectAgreementTemplate.commissionProperty
-  // ).format('0,0.00'),
-  // addressProperty: props.objectAgreementTemplate.addressProperty,
-  // priceProperty: numeral(
-  //   props.objectAgreementTemplate.priceProperty
-  // ).format('0,0.00'),
-  // propertyOptions: props.objectAgreementTemplate.propertyOptions,
-  // optionIntroductionBuyer:
-  //       props.objectAgreementTemplate.optionIntroductionBuyer
 })
 
 const mapStateToProps = state => ({

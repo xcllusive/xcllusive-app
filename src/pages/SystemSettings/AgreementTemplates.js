@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -27,7 +27,6 @@ import {
   clearAgreementTemplates
 } from '../../redux/ducks/agreementTemplates'
 import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
-import ContractFields from '../../components/content/Agreement/ContractFields'
 import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
 import PropertyOption from '../../components/content/Agreement/PropertyOption'
 
@@ -228,39 +227,72 @@ class AgreementTemplates extends Component {
             {objectAgreementTemplate &&
             objectAgreementTemplate.handlebars &&
             objectAgreementTemplate.handlebars.length > 0 ? (
-                <Grid celled="internally" divided>
+                <Grid>
                   <Grid.Row>
-                    <Grid.Column style={{ paddingLeft: '0px' }}>
+                    <Grid.Column>
                       <Header as="h4" content="Contract Fields" />
-                      <ContractFields
-                        values={values}
-                        handleChange={handleChange}
-                        handleBlur={handleBlur}
-                        errors={errors}
-                        touched={touched}
-                      />
+                      <Fragment>
+                        <Segment>
+                          <Form.Group widths="equal">
+                            <Form.Input
+                              label="Engagement Fee $"
+                              name="engagementFee"
+                              autoComplete="engagementFee"
+                              value={values.engagementFee}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                            {errors.engagementFee &&
+                            touched.engagementFee && (
+                              <Label
+                                basic
+                                pointing
+                                color="red"
+                                content={errors.engagementFee}
+                              />
+                            )}
+                            <Form.Input
+                              label="Commission %"
+                              name="commissionPerc"
+                              autoComplete="commissionPerc"
+                              value={values.commissionPerc}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                            {errors.commissionPerc &&
+                            touched.commissionPerc && (
+                              <Label
+                                basic
+                                pointing
+                                color="red"
+                                content={errors.commissionPerc}
+                              />
+                            )}
+                          </Form.Group>
+                        </Segment>
+                      </Fragment>
                     </Grid.Column>
                   </Grid.Row>
                   <Grid.Row>
-                    <Grid.Column style={{ paddingLeft: '0px' }}>
-                      <Grid.Row columns={2}>
-                        <Grid.Column>
-                          <Header
-                            as="h4"
-                            content="Option For Principal Introduction Of Buyer"
-                          />
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Header as="h4" floated="right">
-                            <Form.Checkbox
-                              label="N/A"
-                              name="optionIntroductionBuyer"
-                              onChange={this._handleChangeCheckBox}
-                              checked={values.optionIntroductionBuyer}
-                            />
-                          </Header>
-                        </Grid.Column>
-                      </Grid.Row>
+                    <Grid.Column width={5}>
+                      <Header
+                        as="h4"
+                        content="Option For Principal Introduction Of Buyer"
+                      />
+                    </Grid.Column>
+                    <Grid.Column width={2} floated="right">
+                      <Header as="h4" floated="right">
+                        <Form.Checkbox
+                          label="N/A"
+                          name="optionIntroductionBuyer"
+                          onChange={this._handleChangeCheckBox}
+                          checked={values.optionIntroductionBuyer}
+                        />
+                      </Header>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row style={{ paddingTop: '0px' }}>
+                    <Grid.Column>
                       <OptionIntroductionBuyer
                         values={values}
                         handleChange={handleChange}
@@ -271,22 +303,22 @@ class AgreementTemplates extends Component {
                     </Grid.Column>
                   </Grid.Row>
                   <Grid.Row>
-                    <Grid.Column style={{ paddingLeft: '0px' }}>
-                      <Grid.Row columns={2}>
-                        <Grid.Column>
-                          <Header as="h4" content="Property Option" />
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Header as="h4" floated="right">
-                            <Form.Checkbox
-                              label="N/A"
-                              name="propertyOptions"
-                              onChange={this._handleChangeCheckBox}
-                              checked={values.propertyOptions}
-                            />
-                          </Header>
-                        </Grid.Column>
-                      </Grid.Row>
+                    <Grid.Column width={5}>
+                      <Header as="h4" content="Property Option" />
+                    </Grid.Column>
+                    <Grid.Column width={2} floated="right">
+                      <Header as="h4" floated="right">
+                        <Form.Checkbox
+                          label="N/A"
+                          name="propertyOptions"
+                          onChange={this._handleChangeCheckBox}
+                          checked={values.propertyOptions}
+                        />
+                      </Header>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row style={{ paddingTop: '0px' }}>
+                    <Grid.Column>
                       <PropertyOption
                         values={values}
                         handleChange={handleChange}
@@ -445,65 +477,46 @@ AgreementTemplates.propTypes = {
   isLoadingAllTemplate: PropTypes.bool
 }
 
-const mapPropsToValues = props => {
-  if (props && props.objectAgreementTemplate) {
-    return {
-      state: props.objectAgreementTemplate.state,
-      header: props.objectAgreementTemplate.header,
-      body: props.objectAgreementTemplate.body,
-      footer: props.objectAgreementTemplate.footer,
-      id: props.objectAgreementTemplate.id,
-      listedPrice: numeral(props.objectAgreementTemplate.listedPrice).format(
-        '0,0.00'
-      ),
-      appraisalHigh: numeral(
-        props.objectAgreementTemplate.appraisalHigh
-      ).format('0,0.00'),
-      appraisalLow: numeral(props.objectAgreementTemplate.appraisalLow).format(
-        '0,0.00'
-      ),
-      engagementFee: numeral(
-        props.objectAgreementTemplate.engagementFee
-      ).format('0,0.00'),
-      commissionPerc: numeral(
-        props.objectAgreementTemplate.commissionPerc
-      ).format('0,0.00'),
-      commissionDiscount: numeral(
-        props.objectAgreementTemplate.commissionDiscount
-      ).format('0,0.00'),
-      introductionParties: props.objectAgreementTemplate.introductionParties,
-      commissionProperty: numeral(
-        props.objectAgreementTemplate.commissionProperty
-      ).format('0,0.00'),
-      addressProperty: props.objectAgreementTemplate.addressProperty,
-      priceProperty: numeral(
-        props.objectAgreementTemplate.priceProperty
-      ).format('0,0.00'),
-      propertyOptions: props.objectAgreementTemplate.propertyOptions,
-      optionIntroductionBuyer:
-        props.objectAgreementTemplate.optionIntroductionBuyer
-    }
-  }
-  return {
-    state: '',
-    header: '',
-    body: '',
-    footer: '',
-    id: '',
-    listedPrice: 0,
-    appraisalHigh: 0,
-    appraisalLow: 0,
-    engagementFee: 0,
-    commissionPerc: 0,
-    commissionDiscount: 0,
-    introductionParties: '',
-    commissionProperty: 0,
-    addressProperty: '',
-    priceProperty: 0,
-    propertyOptions: false,
-    optionIntroductionBuyer: false
-  }
-}
+const mapPropsToValues = props => ({
+  state: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.state
+    : '',
+  header: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.header
+    : '',
+  body: props.objectAgreementTemplate ? props.objectAgreementTemplate.body : '',
+  footer: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.footer
+    : '',
+  id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : '',
+  engagementFee: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.engagementFee).format('0,0.00')
+    : 0,
+  commissionPerc: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.commissionPerc).format('0,0.00')
+    : 0,
+  commissionDiscount: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.commissionDiscount).format('0,0.00')
+    : 0,
+  introductionParties: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.introductionParties
+    : '',
+  commissionProperty: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.commissionProperty).format('0,0.00')
+    : 0,
+  addressProperty: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.addressProperty
+    : '',
+  priceProperty: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.priceProperty).format('0,0.00')
+    : 0,
+  propertyOptions: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.propertyOptions
+    : false,
+  optionIntroductionBuyer: props.objectAgreementTemplate
+    ? props.objectAgreementTemplate.optionIntroductionBuyer
+    : false
+})
 
 const handleSubmit = (values, { props, setSubmitting }) => {
   props.updateTemplates(values).then(setSubmitting(false))

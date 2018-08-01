@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
+import numeral from 'numeral'
 import { Form, Header, Grid, Segment, Icon } from 'semantic-ui-react'
 
 import { updateBusiness } from '../../redux/ducks/business'
@@ -36,7 +37,7 @@ const EditBusinessPriceForm = ({
               label="Listed Price"
               name="listedPrice"
               autoComplete="listedPrice"
-              value={values.listedPrice.toLocaleString()}
+              value={values.listedPrice}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -44,7 +45,7 @@ const EditBusinessPriceForm = ({
               label="Current Price"
               name="currentPrice"
               autoComplete="currentPrice"
-              value={values.currentPrice.toLocaleString()}
+              value={values.currentPrice}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -54,7 +55,7 @@ const EditBusinessPriceForm = ({
               label="Engagement Fee"
               name="engagementFee"
               autoComplete="engagementFee"
-              value={values.engagementFee.toLocaleString()}
+              value={values.engagementFee}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -62,7 +63,7 @@ const EditBusinessPriceForm = ({
               label="Commission %"
               name="commissionPerc"
               autoComplete="commissionPerc"
-              value={values.commissionPerc.toLocaleString()}
+              value={values.commissionPerc}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -72,7 +73,7 @@ const EditBusinessPriceForm = ({
               label="Minimum Com $"
               name="minimumCharge"
               autoComplete="minimumCharge"
-              value={values.minimumCharge.toLocaleString()}
+              value={values.minimumCharge}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -80,7 +81,7 @@ const EditBusinessPriceForm = ({
               label="Appraisal High $"
               name="appraisalHigh"
               autoComplete="appraisalHigh"
-              value={values.appraisalHigh.toLocaleString()}
+              value={values.appraisalHigh}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -88,7 +89,7 @@ const EditBusinessPriceForm = ({
               label="Appraisal Low $"
               name="appraisalLow"
               autoComplete="appraisalLow"
-              value={values.appraisalLow.toLocaleString()}
+              value={values.appraisalLow}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -212,38 +213,42 @@ const mapPropsToValues = props => {
   if (props.business) {
     return {
       ...props.business,
-      listedPrice: props.business.listedPrice ? props.business.listedPrice : 0,
+      listedPrice: props.business.listedPrice
+        ? numeral(props.business.listedPrice).format('0,0.00')
+        : 0,
       currentPrice: props.business.currentPrice
-        ? props.business.currentPrice
+        ? numeral(props.business.currentPrice).format('0,0.00')
         : 0,
       engagementFee: props.business.engagementFee
-        ? props.business.engagementFee
+        ? numeral(props.business.engagementFee).format('0,0.00')
         : 0,
       commissionPerc: props.business.commissionPerc
-        ? props.business.commissionPerc
+        ? numeral(props.business.commissionPerc).format('0,0.00')
         : 0,
       minimumCharge: props.business.minimumCharge
-        ? props.business.minimumCharge
+        ? numeral(props.business.minimumCharge).format('0,0.00')
         : 0,
       appraisalHigh: props.business.appraisalHigh
-        ? props.business.appraisalHigh
+        ? numeral(props.business.appraisalHigh).format('0,0.00')
         : 0,
       appraisalLow: props.business.appraisalLow
-        ? props.business.appraisalLow
+        ? numeral(props.business.appraisalLow).format('0,0.00')
         : 0,
       depositeTaken: props.business.depositeTaken
-        ? props.business.depositeTaken
+        ? numeral(props.business.depositeTaken).format('0,0.00')
         : 0,
       depositeTakenDate: props.business.depositeTakenDate
         ? props.business.depositeTakenDate
         : '',
       commissionSold: props.business.commissionSold
-        ? props.business.commissionSold
+        ? numeral(props.business.commissionSold).format('0,0.00')
         : 0,
       settlementDate: props.business.settlementDate
         ? props.business.settlementDate
         : '',
-      soldPrice: props.business.soldPrice ? props.business.soldPrice : 0,
+      soldPrice: props.business.soldPrice
+        ? numeral(props.business.soldPrice).format('0,0.00')
+        : 0,
       attachedPurchaser: props.business.attachedPurchaser
         ? props.business.attachedPurchaser
         : 0,
