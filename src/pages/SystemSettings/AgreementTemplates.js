@@ -18,6 +18,7 @@ import Wrapper from '../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
+import numeral from 'numeral'
 
 import {
   getAgreementTemplates,
@@ -452,16 +453,32 @@ const mapPropsToValues = props => {
       body: props.objectAgreementTemplate.body,
       footer: props.objectAgreementTemplate.footer,
       id: props.objectAgreementTemplate.id,
-      listedPrice: props.objectAgreementTemplate.listedPrice.toLocaleString(),
-      appraisalHigh: props.objectAgreementTemplate.appraisalHigh.toLocaleString(),
-      appraisalLow: props.objectAgreementTemplate.appraisalLow.toLocaleString(),
-      engagementFee: props.objectAgreementTemplate.engagementFee.toLocaleString(),
-      commissionPerc: props.objectAgreementTemplate.commissionPerc.toLocaleString(),
-      commissionDiscount: props.objectAgreementTemplate.commissionDiscount.toLocaleString(),
+      listedPrice: numeral(props.objectAgreementTemplate.listedPrice).format(
+        '0,0.00'
+      ),
+      appraisalHigh: numeral(
+        props.objectAgreementTemplate.appraisalHigh
+      ).format('0,0.00'),
+      appraisalLow: numeral(props.objectAgreementTemplate.appraisalLow).format(
+        '0,0.00'
+      ),
+      engagementFee: numeral(
+        props.objectAgreementTemplate.engagementFee
+      ).format('0,0.00'),
+      commissionPerc: numeral(
+        props.objectAgreementTemplate.commissionPerc
+      ).format('0,0.00'),
+      commissionDiscount: numeral(
+        props.objectAgreementTemplate.commissionDiscount
+      ).format('0,0.00'),
       introductionParties: props.objectAgreementTemplate.introductionParties,
-      commissionProperty: props.objectAgreementTemplate.commissionProperty.toLocaleString(),
+      commissionProperty: numeral(
+        props.objectAgreementTemplate.commissionProperty
+      ).format('0,0.00'),
       addressProperty: props.objectAgreementTemplate.addressProperty,
-      priceProperty: props.objectAgreementTemplate.priceProperty.toLocaleString(),
+      priceProperty: numeral(
+        props.objectAgreementTemplate.priceProperty
+      ).format('0,0.00'),
       propertyOptions: props.objectAgreementTemplate.propertyOptions,
       optionIntroductionBuyer:
         props.objectAgreementTemplate.optionIntroductionBuyer

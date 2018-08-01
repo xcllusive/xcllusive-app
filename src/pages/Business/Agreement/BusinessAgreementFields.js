@@ -18,14 +18,14 @@ import {
   Icon
 } from 'semantic-ui-react'
 
-import { getBusiness } from '../../redux/ducks/business'
-import { getAgreementTemplate } from '../../redux/ducks/agreementTemplates'
+import { getBusiness } from '../../../redux/ducks/business'
+import { getAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 
-import ContractFields from '../../components/content/Agreement/ContractFields'
-import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
-import PropertyOption from '../../components/content/Agreement/PropertyOption'
+import ContractFields from '../../../components/content/Agreement/ContractFields'
+import OptionIntroductionBuyer from '../../../components/content/Agreement/OptionIntroductionBuyer'
+import PropertyOption from '../../../components/content/Agreement/PropertyOption'
 
-import Wrapper from '../../components/content/Wrapper'
+import Wrapper from '../../../components/content/Wrapper'
 
 class BusinessAgreementFields extends Component {
   constructor (props) {
@@ -301,7 +301,7 @@ const validationSchema = Yup.object().shape({
   commissionPerc: Yup.number().required('Commission Perc is required!'),
   commissionDiscount: Yup.number().required('Commission Discount is required!'),
   introductionParties: Yup.string()
-    .required('Comission Perc is required!')
+    .required('Introduction Parties is required!')
     .max(300, 'Sorry! you have exceed the area limit of this field.'),
   commissionProperty: Yup.number().required('Comission is required!'),
   addressProperty: Yup.string()
