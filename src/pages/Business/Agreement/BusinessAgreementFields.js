@@ -54,19 +54,20 @@ class BusinessAgreementFields extends Component {
 
     return (
       <Wrapper loading={objectBusinessIsLoading || objectAgreementIsLoading}>
-        <Grid celled="internally" divided>
-          {objectAgreementTemplate ? (
-            <Header
-              style={{ paddingTop: '1rem' }}
-              as="h2"
-              content={`${objectAgreementTemplate.title}`}
-            />
-          ) : null}
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h3" content="Business Details" />
-              <Segment>
-                <Form>
+        <Form>
+          <Grid celled="internally" divided>
+            {objectAgreementTemplate ? (
+              <Header
+                style={{ paddingTop: '1rem' }}
+                as="h2"
+                content={`${objectAgreementTemplate.title}`}
+              />
+            ) : null}
+            <Grid.Row>
+              <Grid.Column>
+                <Header as="h3" content="Business Details" />
+                <Segment>
+
                   <Form.Group widths="equal">
                     <Form.Input
                       label="First Name"
@@ -164,50 +165,13 @@ class BusinessAgreementFields extends Component {
                       // value={this.props.buyer.surname}
                     />
                   </Form.Group>
-                </Form>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h3" content="Contract Fields" />
-              <ContractFields
-                values={values}
-                handleChange={handleChange}
-                handleBlur={handleBlur}
-                errors={errors}
-                touched={touched}
-              />
-            </Grid.Column>
-          </Grid.Row>
-          {values.optionIntroductionBuyer ? (
-            <Grid.Row>
-              <Grid.Column>
-                <Header
-                  as="h3"
-                  content="Option For Principal Introduction Of Buyer"
-                />
-                <Message info>
-                  <Message.Header>
-                    This section has been disabled by the office for this
-                    specific agreement.
-                  </Message.Header>
-                  <p>
-                    If you wish to use these fields in the agreement, please
-                    get in contact with the office or just choose another
-                    agreement template.
-                  </p>
-                </Message>
+                </Segment>
               </Grid.Column>
             </Grid.Row>
-          ) : (
             <Grid.Row>
               <Grid.Column>
-                <Header
-                  as="h3"
-                  content="Option For Principal Introduction Of Buyer"
-                />
-                <OptionIntroductionBuyer
+                <Header as="h3" content="Contract Fields" />
+                <ContractFields
                   values={values}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
@@ -216,7 +180,43 @@ class BusinessAgreementFields extends Component {
                 />
               </Grid.Column>
             </Grid.Row>
-          )}
+            {values.optionIntroductionBuyer ? (
+              <Grid.Row>
+                <Grid.Column>
+                  <Header
+                    as="h3"
+                    content="Option For Principal Introduction Of Buyer"
+                  />
+                  <Message info>
+                    <Message.Header>
+                    This section has been disabled by the office for this
+                    specific agreement.
+                    </Message.Header>
+                    <p>
+                    If you wish to use these fields in the agreement, please
+                    get in contact with the office or just choose another
+                    agreement template.
+                    </p>
+                  </Message>
+                </Grid.Column>
+              </Grid.Row>
+            ) : (
+              <Grid.Row>
+                <Grid.Column>
+                  <Header
+                    as="h3"
+                    content="Option For Principal Introduction Of Buyer"
+                  />
+                  <OptionIntroductionBuyer
+                    values={values}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                  />
+                </Grid.Column>
+              </Grid.Row>
+            )}
             {values.propertyOptions ? (
               <Grid.Row>
                 <Grid.Column>
