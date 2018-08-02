@@ -148,7 +148,7 @@ class BusinessEditPage extends Component {
               </Statistic>
               <Statistic color="blue">
                 <Statistic.Value>
-                  {numeral(this.props.business.listedPrice.format('0,0.00'))}
+                  {numeral(this.props.business.listedPrice).format('0,0.00')}
                 </Statistic.Value>
                 <Statistic.Label>Price</Statistic.Label>
               </Statistic>
