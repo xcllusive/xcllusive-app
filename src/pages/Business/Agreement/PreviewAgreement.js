@@ -115,6 +115,14 @@ class PreviewAgreement extends Component {
     })
   }
 
+  _openModalEmailAgreement = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT, {
+      options: {
+        title: 'Prepare Group Email'
+      }
+    })
+  }
+
   render () {
     const { values, objectAgreementTemplate } = this.props
     return (
@@ -167,7 +175,7 @@ class PreviewAgreement extends Component {
                 </Button>
                 <Button
                   color="yellow"
-                  onClick={() => this._modalConfirmSendAgreement()}
+                  onClick={() => this._openModalEmailAgreement()}
                   size="small"
                   floated="right"
                 >
