@@ -1,97 +1,86 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Modal,
-  Button,
-  Form,
-  Label,
-  Segment,
-  Header,
-  Icon,
-  Message,
-  Radio,
-  Table,
-  Checkbox,
-  Dimmer,
-  Loader
-} from 'semantic-ui-react'
+import { Modal, Button, Form, Label, Grid, Message } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 import * as Yup from 'yup'
 
-import { getBuyersGroupEmail } from '../../redux/ducks/business'
-import { sendGroupEmail } from '../../redux/ducks/buyer'
+import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
+import { sendAgreement } from '../../redux/ducks/agreement'
 
-class ModalGroupEmail extends Component {
+class ModalEmailAgreement extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      array: [],
-      checkboxMarkAll: false,
-      fileUpload: true
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+          [
+            { list: 'ordered' },
+            { list: 'bullet' },
+            { indent: '-1' },
+            { indent: '+1' }
+          ],
+          ['link', 'image'],
+          ['clean']
+        ]
+      },
+      formats: [
+        'header',
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'blockquote',
+        'list',
+        'bullet',
+        'indent',
+        'link',
+        'image'
+      ]
     }
+    this.quillRef = null
+    this.reactQuillRef = null
   }
 
   componentDidMount () {
-    this.props.getBuyersGroupEmail(this.props.businessId)
+    this.props.getEmailTemplate(6)
+    this._attachQuillRefs()
   }
 
-  static getDerivedStateFromProps (nextProps) {
-    if (
-      !nextProps.listGroupEmail.length &&
-      this.props.listGroupEmail !== nextProps.listGroupEmail
-    ) {
-      alert('This business has no buyers to send email!')
-      this.props.closeModal()
-    }
+  _handleChangeBody = value => {
+    this.props.setFieldValue('body', value)
   }
 
   _handleConfirm = isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
-      return
     }
-    this.props.sendGroupEmail(this.props.values, this.state.array)
-  }
-
-  _removeFileUploaded = e => {
-    if (this.timer) clearTimeout(this.timer)
-    this.setState({fileUpload: false})
-    this.props.setFieldValue('attachment', null)
-    this.timer = setTimeout(() => this.setState({fileUpload: true}), 10)
-  }
-
-  _handleFileUpload = e => {
-    const file = e.target.files[0]
-    this.props.setFieldValue('attachment', file)
+    this.props.sendAgreement()
   }
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _markAllcheckBoxArray = (e, { checked }) => {
-    this.setState(prevState => ({checkboxMarkAll: !prevState.checkboxMarkAll}))
-    return checked ? this.setState({array: this.props.listGroupEmail}) : this.setState({array: []})
-  }
-
-  _checkBoxArray = (e, { values }) => {
-    const isChecked = this.state.array.filter(item => {
-      return item.id === values.id
-    })
-
-    if (!isChecked.length) {
-      const array = this.state.array
-      array.push(values)
-      this.setState({ array })
-    } else {
-      const array = this.state.array.filter(item => {
-        return item.id !== values.id
-      })
-      this.setState({ array })
+  _attachQuillRefs = () => {
+    // Ensure React-Quill reference is available:
+    if (
+      !this.reactQuillRef ||
+      typeof this.reactQuillRef.getEditor !== 'function'
+    ) {
+      return false
     }
+    // Skip if Quill reference is defined:
+    if (this.quillRef !== null) return false
+
+    const quillRef = this.reactQuillRef.getEditor()
+    if (quillRef !== null) this.quillRef = quillRef
   }
 
   render () {
@@ -102,10 +91,7 @@ class ModalGroupEmail extends Component {
       errors,
       isValid,
       handleChange,
-      handleBlur,
-      listGroupEmail,
-      isLoadingGroupEmail,
-      isLoadingSendEmail
+      handleBlur
     } = this.props
 
     return (
@@ -114,41 +100,27 @@ class ModalGroupEmail extends Component {
         <Modal.Content>
           <Form>
             <Form.Group>
-              <Dimmer.Dimmable dimmed={isLoadingGroupEmail}>
-                <Dimmer inverted active={isLoadingGroupEmail}>
-                  <Loader>Loading</Loader>
-                </Dimmer>
-                <Form.Checkbox
-                  label="Mark All"
-                  name="markAll"
-                  checked={this.state.checkboxMarkAll}
-                  onChange={this._markAllcheckBoxArray}
+              <Message info size="small">
+                <p>
+                  When you send this email you will send the agreement attached.
+                </p>
+              </Message>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field width={16}>
+                <Form.Input
+                  label="To"
+                  name="to"
+                  autoComplete="to"
+                  value={values.to}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
-                <Table celled compact definition>
-                  <Table.Body>
-                    {listGroupEmail.map((groupEmail, index) => (
-                      <Table.Row key={index}>
-                        <Table.Cell collapsing>
-                          <Checkbox
-                            checked={this.state.array.some(item => item.id === groupEmail.id) }
-                            values={groupEmail}
-                            onChange={this._checkBoxArray}
-                          />
-                        </Table.Cell>
-                        <Table.Cell>
-                          {groupEmail.firstName} {groupEmail.lastName}
-                        </Table.Cell>
-                        <Table.Cell>{groupEmail.email}</Table.Cell>
-                        <Table.Cell>
-                          <Label color={groupEmail.isPending ? 'red' : 'green'}>
-                            {groupEmail.isPending ? 'Pending' : 'Done'}
-                          </Label>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table>
-              </Dimmer.Dimmable>
+                {errors.to &&
+                  touched.to && (
+                  <Label basic color="red" pointing content={errors.to} />
+                )}
+              </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Field width={16}>
@@ -172,100 +144,41 @@ class ModalGroupEmail extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <h5 style={{ fontSize: '.92857143em' }}>Body</h5>
-            </Form.Group>
-            <Form.Group>
               <Form.Field width={16}>
-                <Segment size="mini" inverted color="grey">
-                  <Header inverted>Dear ‹‹buyer`s name››</Header>
-                </Segment>
-                <Form.TextArea
-                  name="body"
-                  autoComplete="body"
-                  value={values.body}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                <Form.Input
+                  label="Attachment"
+                  name="attachment"
+                  autoComplete="attachment"
+                  value={values.attachment}
+                  readOnly
                 />
-                <Segment size="mini" inverted color="grey">
-                  <Header inverted>
-                    Xcllusive Business Sales
-                    <p />
-                    www.xcllusive.com.au | (02) 9817 3331
-                  </Header>
-                </Segment>
-                {errors.text &&
-                  touched.text && (
-                  <Label basic color="red" pointing content={errors.text} />
-                )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <Form.Field width={11}>
-                { this.state.fileUpload ? (
-                  <Form.Input
-                    type="file"
-                    label="Attachment"
-                    name="attachment"
-                    autoComplete="attachment"
-                    onChange={this._handleFileUpload}
+              <h5 style={{ fontSize: '.92857143em', paddingLeft: '8px' }}>
+                Body
+              </h5>
+            </Form.Group>
+            <Grid.Row columns={1}>
+              <Grid.Column
+                floated="left"
+                width={16}
+                style={{ paddingLeft: '0px', paddingRight: 0 }}
+              >
+                <Form.Field>
+                  <ReactQuill
+                    ref={el => {
+                      this.reactQuillRef = el
+                    }}
+                    value={values.body}
+                    onChange={this._handleChangeBody}
+                    style={{ height: '40vh' }}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
                   />
-                ) : null }
-
-                {errors.attachment &&
-                  touched.attachment && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.attachment}
-                  />
-                )}
-              </Form.Field>
-              <Form.Field width={5} style={{ alignSelf: 'flex-end' }}>
-                <Form.Button
-                  floated="right"
-                  color="yellow"
-                  onClick={e => this._removeFileUploaded(e)}
-                >
-                  <Icon name="remove" />
-                  Remove
-                </Form.Button>
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Message info size="small">
-                <p>
-                  You can attach one file. To send multiple files you can
-                  compress the files and attach.
-                </p>
-              </Message>
-            </Form.Group>
-            <Form.Group>
-              <b>
-                <label>Who would you like the recipients to reply to?</label>
-              </b>
-              <Form.Field
-                control={Radio}
-                label="You only"
-                name="replyTo"
-                onChange={this._handleChangeCheckBox}
-                checked={values.replyTo}
-              />
-              <Form.Field
-                control={Radio}
-                label="You and the office"
-                name="replyTo"
-                onChange={this._handleChangeCheckBox}
-                checked={!values.replyTo}
-              />
-            </Form.Group>
-            <Form.Group>
-              <b>
-                <label>
-                  Total email(s) to be generated: {this.state.array.length}
-                </label>
-              </b>
-            </Form.Group>
+                </Form.Field>
+              </Grid.Column>
+            </Grid.Row>
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -276,11 +189,10 @@ class ModalGroupEmail extends Component {
           />
           <Button
             positive
-            icon="mail"
+            icon="send"
             labelPosition="right"
             content="Send"
             onClick={this._handleConfirm}
-            loading={isLoadingSendEmail}
             disabled={!isValid}
           />
         </Modal.Actions>
@@ -289,7 +201,7 @@ class ModalGroupEmail extends Component {
   }
 }
 
-ModalGroupEmail.propTypes = {
+ModalEmailAgreement.propTypes = {
   closeModal: PropTypes.func.isRequired,
   options: PropTypes.shape({
     title: PropTypes.string.isRequired
@@ -301,38 +213,36 @@ ModalGroupEmail.propTypes = {
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
-  getBuyersGroupEmail: PropTypes.func,
-  businessId: PropTypes.number,
-  listGroupEmail: PropTypes.array,
-  isLoadingGroupEmail: PropTypes.bool,
-  sendGroupEmail: PropTypes.func,
-  isLoadingSendEmail: PropTypes.bool
+  getEmailTemplate: PropTypes.func,
+  objectEmailTemplate: PropTypes.object,
+  sendAgreement: PropTypes.func
 }
 
 const mapStateToProps = state => ({
-  listGroupEmail: state.business.getBuyersGroupEmail.array,
-  isLoadingGroupEmail: state.business.getBuyersGroupEmail.isLoading,
-  isLoadingSendEmail: state.buyer.sendGroupEmail.isLoading
+  objectEmailTemplate: state.emailTemplates.get.object
 })
 
-const mapPropsToValues = () => ({
-  subject: '',
-  body: '',
-  attachment: '',
-  replyTo: true
+const mapPropsToValues = props => ({
+  to: '',
+  subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
+  attachment: 'agreement.pdf',
+  body: props.objectEmailTemplate ? props.objectEmailTemplate.body : ''
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      getBuyersGroupEmail,
-      sendGroupEmail
+      getEmailTemplate,
+      sendAgreement
     },
     dispatch
   )
 
 const validationSchema = Yup.object().shape({
+  to: Yup.string()
+    .required('To is required.')
+    .email('Invalid email address.'),
   subject: Yup.string().required('Subject is required.'),
   body: Yup.string().required('Body is required.')
 })
@@ -345,5 +255,5 @@ export default connect(
     mapPropsToValues,
     enableReinitialize: true,
     validationSchema
-  })(ModalGroupEmail)
+  })(ModalEmailAgreement)
 )

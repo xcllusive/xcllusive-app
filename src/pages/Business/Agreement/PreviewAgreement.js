@@ -100,25 +100,10 @@ class PreviewAgreement extends Component {
     })
   }
 
-  _modalConfirmSendAgreement = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
-      options: {
-        title: 'Generate Agreement',
-        text: 'Are you sure you want to send the agreement?'
-      },
-      onConfirm: isConfirmed => {
-        if (isConfirmed) {
-          this.props.sendAgreement()
-          window.open('mailto:test', '_blank')
-        }
-      }
-    })
-  }
-
   _openModalEmailAgreement = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT, {
       options: {
-        title: 'Prepare Group Email'
+        title: 'Preparing Agreement Email'
       }
     })
   }
@@ -179,7 +164,7 @@ class PreviewAgreement extends Component {
                   size="small"
                   floated="right"
                 >
-                  <Icon name="send" />
+                  <Icon name="mail" />
                   Send Agreement
                 </Button>
               </Grid.Column>
@@ -199,8 +184,7 @@ PreviewAgreement.propTypes = {
   objectAgreementTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
-  generateAgreement: PropTypes.func,
-  sendAgreement: PropTypes.func
+  generateAgreement: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({})
