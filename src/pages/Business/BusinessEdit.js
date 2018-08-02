@@ -16,6 +16,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 import moment from 'moment'
+import numeral from 'numeral'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
@@ -147,7 +148,7 @@ class BusinessEditPage extends Component {
               </Statistic>
               <Statistic color="blue">
                 <Statistic.Value>
-                  {this.props.business.listedPrice.toLocaleString()}
+                  {numeral(this.props.business.listedPrice.format('0,0.00'))}
                 </Statistic.Value>
                 <Statistic.Label>Price</Statistic.Label>
               </Statistic>
@@ -209,7 +210,10 @@ class BusinessEditPage extends Component {
                           </Grid.Row>
                         </Grid>
                       </Segment>
-                      <EditBusinessDetailForm business={business} history={history}/>
+                      <EditBusinessDetailForm
+                        business={business}
+                        history={history}
+                      />
                     </Tab.Pane>
                   )
                 },
