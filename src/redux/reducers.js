@@ -16,6 +16,7 @@ import emailTemplates from './ducks/emailTemplates'
 import systemSettings from './ducks/systemSettings'
 import score from './ducks/score'
 import agreementTemplates from './ducks/agreementTemplates'
+import agreement from './ducks/agreement'
 
 export default combineReducers({
   modal,
@@ -33,5 +34,6 @@ export default combineReducers({
   systemSettings,
   score,
   agreementTemplates,
+  agreement,
   router: routerReducer
 })

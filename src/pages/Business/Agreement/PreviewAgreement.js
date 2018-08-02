@@ -8,10 +8,14 @@ import * as Yup from 'yup'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
-import { Form, Grid, Button, Icon } from 'semantic-ui-react'
+import { Form, Grid, Button, Icon, Header } from 'semantic-ui-react'
 
-import { getBusiness } from '../../../redux/ducks/business'
 import { getAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
+import {
+  generateAgreement,
+  sendAgreement
+} from '../../../redux/ducks/agreement'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -51,7 +55,6 @@ class PreviewAgreement extends Component {
     this.reactQuillRef = null
   }
   componentDidMount () {
-    this.props.getBusiness(this.props.match.params.id)
     this.props.getAgreementTemplate(this.props.match.params.idAgreement)
     this._attachQuillRefs()
   }
@@ -83,14 +86,53 @@ class PreviewAgreement extends Component {
     if (quillRef !== null) this.quillRef = quillRef
   }
 
+  _modalConfirmGenerateAgreement = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Send Agreement',
+        text: 'Are you sure you want to generate the agreement as a PDF?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.generateAgreement()
+        }
+      }
+    })
+  }
+
+  _modalConfirmSendAgreement = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Generate Agreement',
+        text: 'Are you sure you want to send the agreement?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.sendAgreement()
+          window.open('mailto:test', '_blank')
+        }
+      }
+    })
+  }
+
   render () {
-    const { values } = this.props
+    const { values, objectAgreementTemplate } = this.props
     return (
       <Wrapper>
         <Form>
           <Grid padded="horizontally">
-            <Grid.Row style={{ paddingBottom: 0, paddingLeft: '0px' }}>
-              <h4>Body</h4>
+            <Grid.Row>
+              <Grid.Column>
+                <Header
+                  style={{ paddingTop: '1rem' }}
+                  as="h2"
+                  content={
+                    objectAgreementTemplate
+                      ? objectAgreementTemplate.title
+                      : null
+                  }
+                />
+              </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={1}>
               <Grid.Column
@@ -105,7 +147,7 @@ class PreviewAgreement extends Component {
                     }}
                     value={values.body}
                     onChange={this._handleChangeBody}
-                    style={{ height: '80vh' }}
+                    style={{ height: '75vh' }}
                     modules={this.state.modules}
                     formats={this.state.formats}
                   />
@@ -116,18 +158,21 @@ class PreviewAgreement extends Component {
               <Grid.Column style={{ marginTop: '50px' }}>
                 <Button
                   color="red"
-                  // onClick={() =>
-                  //   history.push(
-                  //     `/business/${objectBusiness.id}/agreement/${
-                  //       objectAgreementTemplate.id
-                  //     }/preview`
-                  //   )
-                  // }
+                  onClick={() => this._modalConfirmGenerateAgreement()}
+                  size="small"
+                  floated="left"
+                >
+                  <Icon name="edit" />
+                  Generate Agreement
+                </Button>
+                <Button
+                  color="yellow"
+                  onClick={() => this._modalConfirmSendAgreement()}
                   size="small"
                   floated="right"
                 >
-                  <Icon name="edit" />
-                  Generate PDF
+                  <Icon name="send" />
+                  Send Agreement
                 </Button>
               </Grid.Column>
             </Grid.Row>
@@ -141,12 +186,13 @@ class PreviewAgreement extends Component {
 PreviewAgreement.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
-  getBusiness: PropTypes.func,
-  objectBusiness: PropTypes.object,
   values: PropTypes.object,
   getAgreementTemplate: PropTypes.func,
   objectAgreementTemplate: PropTypes.object,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  openModal: PropTypes.func,
+  generateAgreement: PropTypes.func,
+  sendAgreement: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({})
@@ -163,15 +209,16 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  objectBusiness: state.business.get.object,
   objectAgreementTemplate: state.agreementTemplates.get.object
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getBusiness,
-      getAgreementTemplate
+      getAgreementTemplate,
+      openModal,
+      generateAgreement,
+      sendAgreement
     },
     dispatch
   )
