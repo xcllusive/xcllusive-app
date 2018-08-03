@@ -2,15 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import 'react-datepicker/dist/react-datepicker.css'
-import { withFormik } from 'formik'
-import * as Yup from 'yup'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
-import { Form, Grid, Button, Icon, Header } from 'semantic-ui-react'
+import { Form, Grid, Button, Icon } from 'semantic-ui-react'
 
-import { getAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
+import { previewAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 import {
   generateAgreement,
   sendAgreement
@@ -49,14 +46,30 @@ class PreviewAgreement extends Component {
         'indent',
         'link',
         'image'
-      ]
+      ],
+      body: '',
+      bodyUpdate: false
     }
     this.quillRef = null
     this.reactQuillRef = null
   }
   componentDidMount () {
-    this.props.getAgreementTemplate(this.props.match.params.idAgreement)
+    this.props.previewAgreementTemplate({
+      business: this.props.location.state.business,
+      values: this.props.location.state.values
+    })
     this._attachQuillRefs()
+  }
+
+  static getDerivedStateFromProps (props, state) {
+    if (props.body && !state.bodyUpdate) {
+      console.log('entrou')
+      return {
+        body: props.body,
+        bodyUpdate: true
+      }
+    }
+    return null
   }
 
   componentDidUpdate () {
@@ -64,7 +77,7 @@ class PreviewAgreement extends Component {
   }
 
   _handleChangeBody = value => {
-    this.props.setFieldValue('body', value)
+    this.setState({body: value})
   }
 
   _handleSelectChangeState = (e, { name, value }) => {
@@ -110,69 +123,53 @@ class PreviewAgreement extends Component {
   }
 
   render () {
-    console.log(this.props.location.state.email)
-    const { values, objectAgreementTemplate } = this.props
+    const { isLoading } = this.props
     return (
-      <Wrapper>
-        <Form>
-          <Grid padded="horizontally">
-            <Grid.Row>
-              <Grid.Column>
-                <Header
-                  style={{ paddingTop: '1rem' }}
-                  as="h2"
-                  content={
-                    objectAgreementTemplate
-                      ? objectAgreementTemplate.title
-                      : null
-                  }
+      <Wrapper loading={isLoading}>
+        <Grid padded>
+          <Grid.Row>
+            <Grid.Column
+              floated="left"
+              width={16}
+              style={{ paddingLeft: '0px', paddingRight: 0 }}
+            >
+              <Form.Field>
+                <ReactQuill
+                  ref={el => {
+                    this.reactQuillRef = el
+                  }}
+                  value={this.state.body}
+                  onChange={this._handleChangeBody}
+                  style={{ height: '75vh' }}
+                  modules={this.state.modules}
+                  formats={this.state.formats}
                 />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={1}>
-              <Grid.Column
+              </Form.Field>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column style={{ marginTop: '50px' }}>
+              <Button
+                color="red"
+                onClick={() => this._modalConfirmGenerateAgreement()}
+                size="small"
                 floated="left"
-                width={16}
-                style={{ paddingLeft: '0px', paddingRight: 0 }}
               >
-                <Form.Field>
-                  <ReactQuill
-                    ref={el => {
-                      this.reactQuillRef = el
-                    }}
-                    value={values.body}
-                    onChange={this._handleChangeBody}
-                    style={{ height: '75vh' }}
-                    modules={this.state.modules}
-                    formats={this.state.formats}
-                  />
-                </Form.Field>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column style={{ marginTop: '50px' }}>
-                <Button
-                  color="red"
-                  onClick={() => this._modalConfirmGenerateAgreement()}
-                  size="small"
-                  floated="left"
-                >
-                  <Icon name="edit" />
+                <Icon name="edit" />
                   Generate Agreement
-                </Button>
-                <Button
-                  color="yellow"
-                  onClick={() => this._openModalEmailAgreement()}
-                  size="small"
-                  floated="right"
-                >
-                  <Icon name="mail" />
+              </Button>
+              <Button
+                color="yellow"
+                onClick={() => this._openModalEmailAgreement()}
+                size="small"
+                floated="right"
+              >
+                <Icon name="mail" />
                   Send Agreement
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Form>
+              </Button>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Wrapper>
     )
   }
@@ -182,35 +179,25 @@ PreviewAgreement.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   values: PropTypes.object,
-  getAgreementTemplate: PropTypes.func,
+  previewAgreementTemplate: PropTypes.func,
   objectAgreementTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
   generateAgreement: PropTypes.func,
-  location: PropTypes.object
-}
-
-const validationSchema = Yup.object().shape({})
-
-const mapPropsToValues = props => {
-  if (props && props.objectAgreementTemplate) {
-    return {
-      body: props.objectAgreementTemplate.body
-    }
-  }
-  return {
-    body: ''
-  }
+  location: PropTypes.object,
+  body: PropTypes.string,
+  isLoading: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-  objectAgreementTemplate: state.agreementTemplates.get.object
+  body: state.agreementTemplates.preview.body,
+  isLoading: state.agreementTemplates.preview.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getAgreementTemplate,
+      previewAgreementTemplate,
       openModal,
       generateAgreement,
       sendAgreement
@@ -221,10 +208,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(
-  withFormik({
-    mapPropsToValues,
-    validationSchema,
-    enableReinitialize: true
-  })(PreviewAgreement)
-)
+)(PreviewAgreement)

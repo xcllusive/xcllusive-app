@@ -3,7 +3,8 @@ import {
   create,
   getAll,
   get,
-  update
+  update,
+  preview
 } from '../../services/api/agreementTemplates'
 
 // Action Types
@@ -21,6 +22,9 @@ export const Types = {
   UPDATE_AGREEMENT_TEMPLATES_LOADING: 'UPDATE_AGREEMENT_TEMPLATES_LOADING',
   UPDATE_AGREEMENT_TEMPLATES_SUCCESS: 'UPDATE_AGREEMENT_TEMPLATES_SUCCESS',
   UPDATE_AGREEMENT_TEMPLATES_FAILURE: 'UPDATE_AGREEMENT_TEMPLATES_FAILURE',
+  PREVIEW_AGREEMENT_TEMPLATE_LOADING: 'PREVIEW_AGREEMENT_TEMPLATE_LOADING',
+  PREVIEW_AGREEMENT_TEMPLATE_SUCCESS: 'PREVIEW_AGREEMENT_TEMPLATE_SUCCESS',
+  PREVIEW_AGREEMENT_TEMPLATE_FAILURE: 'PREVIEW_AGREEMENT_TEMPLATE_FAILURE',
   CLEAR_AGREEMENT_TEMPLATES: 'CLEAR_AGREEMENT_TEMPLATES'
 }
 
@@ -47,6 +51,11 @@ const initialState = {
     isUpdated: false,
     error: null,
     templates: {}
+  },
+  preview: {
+    isLoading: false,
+    error: null,
+    body: ''
   }
 }
 
@@ -167,6 +176,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.PREVIEW_AGREEMENT_TEMPLATE_LOADING:
+      return {
+        ...state,
+        preview: {
+          ...state.preview,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.PREVIEW_AGREEMENT_TEMPLATE_SUCCESS:
+      return {
+        ...state,
+        preview: {
+          ...state.preview,
+          isLoading: false,
+          body: action.payload,
+          error: null
+        }
+      }
+    case Types.PREVIEW_AGREEMENT_TEMPLATE_FAILURE:
+      return {
+        ...state,
+        preview: {
+          ...state.preview,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_AGREEMENT_TEMPLATES:
       return initialState
     default:
@@ -232,6 +269,26 @@ export const getAgreementTemplate = id => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_AGREEMENT_TEMPLATE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const previewAgreementTemplate = object => async dispatch => {
+  dispatch({
+    type: Types.PREVIEW_AGREEMENT_TEMPLATE_LOADING,
+    payload: true
+  })
+  try {
+    const previewTemplate = await preview(object)
+    dispatch({
+      type: Types.PREVIEW_AGREEMENT_TEMPLATE_SUCCESS,
+      payload: previewTemplate.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.PREVIEW_AGREEMENT_TEMPLATE_FAILURE,
       payload: error
     })
     toast.error(error)

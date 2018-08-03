@@ -264,7 +264,7 @@ class BusinessAgreementFields extends Component {
                       pathname: `/business/${objectBusiness.id}/agreement/${
                         objectAgreementTemplate.id
                       }/preview`,
-                      state: { business: objectBusiness }
+                      state: { business: objectBusiness, values }
                     })
                   }
                   size="small"

@@ -33,3 +33,13 @@ export const update = template => {
     data: template
   })
 }
+
+export const preview = object => {
+  return request({
+    method: 'post',
+    url: `/agreement-template/preview/${object.values.id}`,
+    data: {
+      values: object.values
+    }
+  })
+}
