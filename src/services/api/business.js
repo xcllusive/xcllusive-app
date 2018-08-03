@@ -35,7 +35,6 @@ export const create = business => {
 }
 
 export const update = business => {
-  console.log(business)
   return request({
     method: 'put',
     url: `/business/${business.id}`,
