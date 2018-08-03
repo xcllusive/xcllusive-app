@@ -346,6 +346,8 @@ const mapPropsToValues = props => ({
         props.objectBusiness.state
       } ${props.objectBusiness.postCode}`
       : '',
+  forSaleBusinessKnown: '',
+  conductedAt: '',
   id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : null,
   listedPrice: props.objectBusiness.listedPrice
     ? numeral(props.objectBusiness.listedPrice).format('0,0.00')

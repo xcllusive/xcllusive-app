@@ -186,7 +186,6 @@ export const updateTemplates = template => async dispatch => {
   })
   try {
     const response = await update(template)
-    console.log(response)
     dispatch({
       type: Types.UPDATE_EMAIL_TEMPLATES_SUCCESS
     })
