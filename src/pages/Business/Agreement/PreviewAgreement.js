@@ -104,11 +104,13 @@ class PreviewAgreement extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT, {
       options: {
         title: 'Preparing Agreement Email'
-      }
+      },
+      vendorEmail: this.props.location.state.business.vendorEmail
     })
   }
 
   render () {
+    console.log(this.props.location.state.email)
     const { values, objectAgreementTemplate } = this.props
     return (
       <Wrapper>
@@ -184,7 +186,8 @@ PreviewAgreement.propTypes = {
   objectAgreementTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
-  generateAgreement: PropTypes.func
+  generateAgreement: PropTypes.func,
+  location: PropTypes.object
 }
 
 const validationSchema = Yup.object().shape({})

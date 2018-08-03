@@ -49,7 +49,7 @@ class ModalEmailAgreement extends Component {
   }
 
   componentDidMount () {
-    this.props.getEmailTemplate(6)
+    this.props.getEmailTemplate(13)
     this._attachQuillRefs()
   }
 
@@ -215,7 +215,8 @@ ModalEmailAgreement.propTypes = {
   isValid: PropTypes.bool,
   getEmailTemplate: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
-  sendAgreement: PropTypes.func
+  sendAgreement: PropTypes.func,
+  vendorEmail: PropTypes.string.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -223,7 +224,7 @@ const mapStateToProps = state => ({
 })
 
 const mapPropsToValues = props => ({
-  to: '',
+  to: props.vendorEmail ? props.vendorEmail : '',
   subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
   attachment: 'agreement.pdf',
   body: props.objectEmailTemplate ? props.objectEmailTemplate.body : ''

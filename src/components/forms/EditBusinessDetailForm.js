@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -38,7 +38,8 @@ class EditBusinessDetailForm extends Component {
       reassignedBusiness: false,
       updateStageSalesMemo: false,
       updateStageLost: false,
-      stage: 0
+      stage: 0,
+      testAgreement: false
     }
   }
 
@@ -410,6 +411,7 @@ class EditBusinessDetailForm extends Component {
                   />
                   <Button
                     primary
+                    size="small"
                     onClick={() =>
                       this._openModalReassignBusiness(
                         values.id,
@@ -420,19 +422,45 @@ class EditBusinessDetailForm extends Component {
                     <Icon name="edit" />
                     Reassign Business
                   </Button>
-                  <Form.Button color="blue">
-                    <Icon name="file pdf outline" />
-                    PDF
-                  </Form.Button>
                 </Form.Group>
                 <Form.Group>
-                  <Form.Button
-                    color="blue"
-                    onClick={() => this._openModalListAgreement(values.state)}
-                  >
-                    <Icon name="file" />
-                    Agreement
-                  </Form.Button>
+                  {!this.state.testAgreement ? (
+                    <Form.Button
+                      size="small"
+                      color="twitter"
+                      onClick={() => this._openModalListAgreement(values.state)}
+                    >
+                      <Icon name="file" />
+                      Agreement
+                    </Form.Button>
+                  ) : (
+                    <Fragment>
+                      <Form.Button
+                        size="small"
+                        color="green"
+                        onClick={() =>
+                          this.props.history.push(
+                            `/business/${
+                              this.props.business.id
+                            }/agreement/${1}/preview`
+                          )
+                        }
+                      >
+                        <Icon name="edit" />
+                        Edit Agreement
+                      </Form.Button>
+                      <Form.Button
+                        size="small"
+                        color="yellow"
+                        onClick={() =>
+                          this._openModalListAgreement(values.state)
+                        }
+                      >
+                        <Icon name="file" />
+                        New Agreement
+                      </Form.Button>
+                    </Fragment>
+                  )}
                 </Form.Group>
               </Form>
             </Grid.Column>

@@ -260,11 +260,12 @@ class BusinessAgreementFields extends Component {
                 <Button
                   color="red"
                   onClick={() =>
-                    history.push(
-                      `/business/${objectBusiness.id}/agreement/${
+                    history.push({
+                      pathname: `/business/${objectBusiness.id}/agreement/${
                         objectAgreementTemplate.id
-                      }/preview`
-                    )
+                      }/preview`,
+                      state: { business: objectBusiness }
+                    })
                   }
                   size="small"
                   floated="right"
