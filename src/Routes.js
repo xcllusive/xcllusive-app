@@ -12,7 +12,7 @@ const Routes = ({ isAuthenticated, isAppLoading, location }) => {
   if (isAppLoading) {
     return (
       <Dimmer page active>
-        <Loader content="Carregando" />
+        <Loader content="Loading..." />
       </Dimmer>
     )
   }
