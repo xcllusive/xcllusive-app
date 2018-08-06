@@ -14,16 +14,26 @@ export const update = agreement => {
   })
 }
 
-export const generate = agreementId => {
+export const generate = object => {
   return request({
     method: 'post',
-    url: `/agreement/${agreementId}/generate-pdf`
+    url: '/agreement/generate',
+    data: {
+      body: object.body,
+      businessId: object.businessId,
+      mail: object.mail
+    }
   })
 }
 
-export const send = agreementId => {
+export const send = object => {
   return request({
     method: 'post',
-    url: `/agreement/${agreementId}/send-pdf`
+    url: '/agreement/send-email',
+    data: {
+      body: object.body,
+      businessId: object.businessId,
+      mail: object.mail
+    }
   })
 }

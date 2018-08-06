@@ -57,11 +57,11 @@ class ModalEmailAgreement extends Component {
     this.props.setFieldValue('body', value)
   }
 
-  _handleConfirm = isConfirmed => {
-    if (!isConfirmed) {
+  _handleConfirm = object => {
+    if (!object) {
       this.props.closeModal()
     }
-    this.props.sendAgreement()
+    this.props.onConfirm(this.props.values)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -216,7 +216,8 @@ ModalEmailAgreement.propTypes = {
   getEmailTemplate: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
   sendAgreement: PropTypes.func,
-  vendorEmail: PropTypes.string.isRequired
+  vendorEmail: PropTypes.string.isRequired,
+  onConfirm: PropTypes.func
 }
 
 const mapStateToProps = state => ({

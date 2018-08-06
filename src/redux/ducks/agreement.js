@@ -30,6 +30,11 @@ const initialState = {
     isLoading: false,
     isUpdated: false,
     error: null
+  },
+  send: {
+    isLoading: false,
+    isSent: false,
+    error: null
   }
 }
 
@@ -180,6 +185,8 @@ export const generateAgreement = agreement => async dispatch => {
   })
   try {
     const response = await generate(agreement)
+    console.log(response)
+    window.open(response, '_blank')
     dispatch({
       type: Types.GENERATE_AGREEMENT_SUCCESS
     })

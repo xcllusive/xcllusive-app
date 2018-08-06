@@ -12,7 +12,7 @@ import {
   generateAgreement,
   sendAgreement
 } from '../../../redux/ducks/agreement'
-import { TypesModal, openModal } from '../../../redux/ducks/modal'
+import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
 
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -53,6 +53,15 @@ class PreviewAgreement extends Component {
     this.quillRef = null
     this.reactQuillRef = null
   }
+
+  shouldComponentUpdate (nextProps) {
+    if (this.props.isSent !== nextProps.isSent && nextProps) {
+      this.props.closeModal()
+    }
+
+    return true
+  }
+
   componentDidMount () {
     this.props.previewAgreementTemplate({
       business: this.props.location.state.business,
@@ -63,7 +72,6 @@ class PreviewAgreement extends Component {
 
   static getDerivedStateFromProps (props, state) {
     if (props.body && !state.bodyUpdate) {
-      console.log('entrou')
       return {
         body: props.body,
         bodyUpdate: true
@@ -107,7 +115,7 @@ class PreviewAgreement extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.generateAgreement()
+          this.props.generateAgreement({businessId: this.props.location.state.business.id, body: this.state.body})
         }
       }
     })
@@ -118,7 +126,16 @@ class PreviewAgreement extends Component {
       options: {
         title: 'Preparing Agreement Email'
       },
-      vendorEmail: this.props.location.state.business.vendorEmail
+      vendorEmail: this.props.location.state.business.vendorEmail,
+      onConfirm: object => {
+        if (object) {
+          this.props.sendAgreement({
+            businessId: this.props.location.state.business.id,
+            body: this.state.body,
+            mail: object
+          })
+        }
+      }
     })
   }
 
@@ -186,12 +203,16 @@ PreviewAgreement.propTypes = {
   generateAgreement: PropTypes.func,
   location: PropTypes.object,
   body: PropTypes.string,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  sendAgreement: PropTypes.func,
+  closeModal: PropTypes.func,
+  isSent: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   body: state.agreementTemplates.preview.body,
-  isLoading: state.agreementTemplates.preview.isLoading
+  isLoading: state.agreementTemplates.preview.isLoading,
+  isSent: state.agreement.send.isSent
 })
 
 const mapDispatchToProps = dispatch =>
@@ -199,6 +220,7 @@ const mapDispatchToProps = dispatch =>
     {
       previewAgreementTemplate,
       openModal,
+      closeModal,
       generateAgreement,
       sendAgreement
     },
