@@ -60,6 +60,7 @@ class ModalEmailAgreement extends Component {
   _handleConfirm = object => {
     if (!object) {
       this.props.closeModal()
+      return
     }
     this.props.onConfirm(this.props.values)
   }
@@ -91,7 +92,8 @@ class ModalEmailAgreement extends Component {
       errors,
       isValid,
       handleChange,
-      handleBlur
+      handleBlur,
+      isLoading
     } = this.props
 
     return (
@@ -193,6 +195,7 @@ class ModalEmailAgreement extends Component {
             labelPosition="right"
             content="Send"
             onClick={this._handleConfirm}
+            loading={isLoading}
             disabled={!isValid}
           />
         </Modal.Actions>
@@ -217,11 +220,13 @@ ModalEmailAgreement.propTypes = {
   objectEmailTemplate: PropTypes.object,
   sendAgreement: PropTypes.func,
   vendorEmail: PropTypes.string.isRequired,
-  onConfirm: PropTypes.func
+  onConfirm: PropTypes.func,
+  isLoading: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-  objectEmailTemplate: state.emailTemplates.get.object
+  objectEmailTemplate: state.emailTemplates.get.object,
+  isLoading: state.agreement.send.isLoading
 })
 
 const mapPropsToValues = props => ({

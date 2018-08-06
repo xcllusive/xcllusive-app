@@ -85,7 +85,7 @@ class PreviewAgreement extends Component {
   }
 
   _handleChangeBody = value => {
-    this.setState({body: value})
+    this.setState({ body: value })
   }
 
   _handleSelectChangeState = (e, { name, value }) => {
@@ -115,7 +115,10 @@ class PreviewAgreement extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.generateAgreement({businessId: this.props.location.state.business.id, body: this.state.body})
+          this.props.generateAgreement({
+            businessId: this.props.location.state.business.id,
+            body: this.state.body
+          })
         }
       }
     })
@@ -140,7 +143,7 @@ class PreviewAgreement extends Component {
   }
 
   render () {
-    const { isLoading } = this.props
+    const { isLoading, isGenerated } = this.props
     return (
       <Wrapper loading={isLoading}>
         <Grid padded>
@@ -173,16 +176,17 @@ class PreviewAgreement extends Component {
                 floated="left"
               >
                 <Icon name="edit" />
-                  Generate Agreement
+                Generate Agreement
               </Button>
               <Button
                 color="yellow"
                 onClick={() => this._openModalEmailAgreement()}
                 size="small"
                 floated="right"
+                disabled={!isGenerated}
               >
                 <Icon name="mail" />
-                  Send Agreement
+                Send Agreement
               </Button>
             </Grid.Column>
           </Grid.Row>
@@ -206,13 +210,15 @@ PreviewAgreement.propTypes = {
   isLoading: PropTypes.bool,
   sendAgreement: PropTypes.func,
   closeModal: PropTypes.func,
-  isSent: PropTypes.bool
+  isSent: PropTypes.bool,
+  isGenerated: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   body: state.agreementTemplates.preview.body,
   isLoading: state.agreementTemplates.preview.isLoading,
-  isSent: state.agreement.send.isSent
+  isSent: state.agreement.send.isSent,
+  isGenerated: state.agreement.generate.isGenerated
 })
 
 const mapDispatchToProps = dispatch =>

@@ -35,6 +35,11 @@ const initialState = {
     isLoading: false,
     isSent: false,
     error: null
+  },
+  generate: {
+    isLoading: false,
+    isGenerated: false,
+    error: null
   }
 }
 
@@ -127,6 +132,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GENERATE_AGREEMENT_LOADING:
+      return {
+        ...state,
+        generate: {
+          ...state.generate,
+          isLoading: action.payload,
+          isGenerated: false,
+          error: null
+        }
+      }
+    case Types.GENERATE_AGREEMENT_SUCCESS:
+      return {
+        ...state,
+        generate: {
+          ...state.generate,
+          isLoading: false,
+          isGenerated: true
+        }
+      }
+    case Types.GENERATE_AGREEMENT_FAILURE:
+      return {
+        ...state,
+        generate: {
+          ...state.generate,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -185,7 +218,6 @@ export const generateAgreement = agreement => async dispatch => {
   })
   try {
     const response = await generate(agreement)
-    console.log(response)
     window.open(response, '_blank')
     dispatch({
       type: Types.GENERATE_AGREEMENT_SUCCESS

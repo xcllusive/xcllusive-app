@@ -49,7 +49,8 @@ class ModalListAgreements extends Component {
       options,
       listAgreementTemplates,
       objectAgreementTemplate,
-      agreementLoading
+      agreementLoading,
+      allAgreementsLoading
     } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
@@ -62,7 +63,7 @@ class ModalListAgreements extends Component {
                   label="Title"
                   name="title"
                   autoComplete="title"
-                  loading={agreementLoading}
+                  loading={agreementLoading || allAgreementsLoading}
                   options={mapArrayToValuesForDropdownTemplates(
                     listAgreementTemplates
                   )}
@@ -79,6 +80,7 @@ class ModalListAgreements extends Component {
                   color="facebook"
                   size="small"
                   onClick={() => this._showAll()}
+                  loading={allAgreementsLoading}
                 >
                   <Icon name="backward" />
                   Show all
@@ -138,12 +140,14 @@ ModalListAgreements.propTypes = {
   clearAgreementTemplates: PropTypes.func,
   state: PropTypes.string.isRequired,
   agreementLoading: PropTypes.bool,
-  callBack: PropTypes.func.isRequired
+  callBack: PropTypes.func.isRequired,
+  allAgreementsLoading: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   agreementLoading: state.agreementTemplates.get.isLoading,
   listAgreementTemplates: state.agreementTemplates.getAll.array,
+  allAgreementsLoading: state.agreementTemplates.getAll.isLoading,
   objectAgreementTemplate: state.agreementTemplates.get.object
 })
 
