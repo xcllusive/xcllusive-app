@@ -44,3 +44,13 @@ export const send = object => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const getEmailTemplate = (idAgreement, businessId) => {
+  return request({
+    method: 'get',
+    url: `/agreement/template-compiled/${idAgreement}`,
+    params: {
+      businessId: businessId
+    }
+  })
+}

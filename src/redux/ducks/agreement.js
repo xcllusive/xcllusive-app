@@ -1,6 +1,12 @@
 import { toast } from 'react-toastify'
 import download from '../../utils/file-download'
-import { get, update, send, generate } from '../../services/api/agreement'
+import {
+  get,
+  update,
+  send,
+  generate,
+  getEmailTemplate
+} from '../../services/api/agreement'
 
 // Action Types
 
@@ -16,7 +22,10 @@ export const Types = {
   SEND_AGREEMENT_FAILURE: 'SEND_AGREEMENT_FAILURE',
   GENERATE_AGREEMENT_LOADING: 'GENERATE_AGREEMENT_LOADING',
   GENERATE_AGREEMENT_SUCCESS: 'GENERATE_AGREEMENT_SUCCESS',
-  GENERATE_AGREEMENT_FAILURE: 'GENERATE_AGREEMENT_FAILURE'
+  GENERATE_AGREEMENT_FAILURE: 'GENERATE_AGREEMENT_FAILURE',
+  GET_EMAIL_TEMPLATE_AGREEMENT_LOADING: 'GET_EMAIL_TEMPLATE_AGREEMENT_LOADING',
+  GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS: 'GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS',
+  GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE: 'GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE'
 }
 
 // Reducer
@@ -40,6 +49,11 @@ const initialState = {
   generate: {
     isLoading: false,
     isGenerated: false,
+    error: null
+  },
+  getEmailTemplate: {
+    object: null,
+    isLoading: false,
     error: null
   }
 }
@@ -161,6 +175,35 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_EMAIL_TEMPLATE_AGREEMENT_LOADING:
+      return {
+        ...state,
+        getEmailTemplate: {
+          ...state.getEmailTemplate,
+          isLoading: true,
+          object: null,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS:
+      return {
+        ...state,
+        getEmailTemplate: {
+          ...state.getEmailTemplate,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE:
+      return {
+        ...state,
+        getEmailTemplate: {
+          ...state.getEmailTemplate,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -222,7 +265,7 @@ export const generateAgreement = agreement => async dispatch => {
     dispatch({
       type: Types.GENERATE_AGREEMENT_SUCCESS
     })
-    download(response, 'agreemente-generated.pdf')
+    download(response, agreement.fileName)
   } catch (error) {
     dispatch({
       type: Types.GENERATE_AGREEMENT_FAILURE,
@@ -246,6 +289,29 @@ export const sendAgreement = agreement => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.SEND_AGREEMENT_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getEmailTemplateAgreement = (
+  idAgreement,
+  idBusiness
+) => async dispatch => {
+  dispatch({
+    type: Types.GET_EMAIL_TEMPLATE_AGREEMENT_LOADING,
+    payload: true
+  })
+  try {
+    const agreementTemplate = await getEmailTemplate(idAgreement, idBusiness)
+    dispatch({
+      type: Types.GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS,
+      payload: agreementTemplate.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE,
       payload: error
     })
     toast.error(error)

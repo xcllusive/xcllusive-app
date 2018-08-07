@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ReactQuill from 'react-quill'
@@ -66,12 +67,12 @@ class PreviewAgreement extends Component {
   componentDidMount () {
     if (this.props.location.state.editAgreement) {
       this.props.getAgreementBody(this.props.match.params.idAgreement)
+    } else {
+      this.props.previewAgreementTemplate({
+        business: this.props.location.state.business,
+        values: this.props.location.state.values
+      })
     }
-
-    this.props.previewAgreementTemplate({
-      business: this.props.location.state.business,
-      values: this.props.location.state.values
-    })
     this._attachQuillRefs()
   }
 
@@ -133,6 +134,10 @@ class PreviewAgreement extends Component {
         if (isConfirmed) {
           this.props.generateAgreement({
             businessId: this.props.location.state.business.id,
+            fileName: `agreement_${this.props.location.state.business.businessName.substring(
+              0,
+              10
+            )}_${moment().format('DD_MM_YYYY')}.pdf`,
             body: this.state.body
           })
         }
@@ -146,6 +151,11 @@ class PreviewAgreement extends Component {
         title: 'Preparing Agreement Email'
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
+      businessId: this.props.location.state.business.id,
+      fileName: `agreement_${this.props.location.state.business.businessName.substring(
+        0,
+        10
+      )}_${moment().format('DD_MM_YYYY')}.pdf`,
       onConfirm: object => {
         if (object) {
           this.props.sendAgreement({

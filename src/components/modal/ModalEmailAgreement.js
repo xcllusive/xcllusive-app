@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import { Modal, Button, Form, Label, Grid, Message } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
@@ -10,8 +9,10 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import * as Yup from 'yup'
 
-import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
-import { sendAgreement } from '../../redux/ducks/agreement'
+import {
+  sendAgreement,
+  getEmailTemplateAgreement
+} from '../../redux/ducks/agreement'
 
 class ModalEmailAgreement extends Component {
   constructor (props) {
@@ -50,7 +51,7 @@ class ModalEmailAgreement extends Component {
   }
 
   componentDidMount () {
-    this.props.getEmailTemplate(13)
+    this.props.getEmailTemplateAgreement(13, this.props.businessId)
     this._attachQuillRefs()
   }
 
@@ -243,23 +244,25 @@ ModalEmailAgreement.propTypes = {
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
-  getEmailTemplate: PropTypes.func,
+  getEmailTemplateAgreement: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
   sendAgreement: PropTypes.func,
   vendorEmail: PropTypes.string.isRequired,
+  businessId: PropTypes.number.isRequired,
+  fileName: PropTypes.string.isRequired,
   onConfirm: PropTypes.func,
   isLoading: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-  objectEmailTemplate: state.emailTemplates.get.object,
+  objectEmailTemplate: state.agreement.getEmailTemplate.object,
   isLoading: state.agreement.send.isLoading
 })
 
 const mapPropsToValues = props => ({
   to: props.vendorEmail ? props.vendorEmail : '',
   subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
-  attachmentName: `agreement_${moment().format('DD_MM_YYYY')}.pdf`,
+  attachmentName: props.fileName,
   body: props.objectEmailTemplate ? props.objectEmailTemplate.body : '',
   attachment: ''
 })
@@ -268,7 +271,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      getEmailTemplate,
+      getEmailTemplateAgreement,
       sendAgreement
     },
     dispatch
