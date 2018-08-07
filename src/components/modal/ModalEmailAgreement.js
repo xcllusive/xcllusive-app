@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { Modal, Button, Form, Label, Grid, Message } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
@@ -86,7 +87,7 @@ class ModalEmailAgreement extends Component {
 
   _handleFileUpload = e => {
     const file = e.target.files[0]
-    this.props.setFieldValue('attachment2', file)
+    this.props.setFieldValue('attachment', file)
   }
 
   render () {
@@ -154,9 +155,9 @@ class ModalEmailAgreement extends Component {
               <Form.Field width={16}>
                 <Form.Input
                   label="Attachment"
-                  name="attachment"
-                  autoComplete="attachment"
-                  value={values.attachment}
+                  name="attachmentName"
+                  autoComplete="attachmentName"
+                  value={values.attachmentName}
                   readOnly
                 />
               </Form.Field>
@@ -166,18 +167,18 @@ class ModalEmailAgreement extends Component {
                 <Form.Input
                   type="file"
                   label="Attachment"
-                  name="attachment2"
-                  autoComplete="attachment2"
+                  name="attachment"
+                  autoComplete="attachment"
                   onChange={this._handleFileUpload}
                 />
 
-                {errors.attachment2 &&
-                  touched.attachment2 && (
+                {errors.attachment &&
+                  touched.attachment && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.attachment2}
+                    content={errors.attachment}
                   />
                 )}
               </Form.Field>
@@ -258,8 +259,9 @@ const mapStateToProps = state => ({
 const mapPropsToValues = props => ({
   to: props.vendorEmail ? props.vendorEmail : '',
   subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
-  attachment: 'agreement.pdf',
-  body: props.objectEmailTemplate ? props.objectEmailTemplate.body : ''
+  attachmentName: `agreement_${moment().format('DD_MM_YYYY')}.pdf`,
+  body: props.objectEmailTemplate ? props.objectEmailTemplate.body : '',
+  attachment: ''
 })
 
 const mapDispatchToProps = dispatch =>
