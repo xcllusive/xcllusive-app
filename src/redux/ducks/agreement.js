@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import download from '../../utils/file-download'
 import { get, update, send, generate } from '../../services/api/agreement'
 
 // Action Types
@@ -218,11 +219,10 @@ export const generateAgreement = agreement => async dispatch => {
   })
   try {
     const response = await generate(agreement)
-    window.open(response, '_blank')
     dispatch({
       type: Types.GENERATE_AGREEMENT_SUCCESS
     })
-    toast.success(response.message)
+    download(response, 'agreemente-generated.pdf')
   } catch (error) {
     dispatch({
       type: Types.GENERATE_AGREEMENT_FAILURE,
