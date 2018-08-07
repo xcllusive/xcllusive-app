@@ -151,7 +151,6 @@ class PreviewAgreement extends Component {
           this.props.sendAgreement({
             businessId: this.props.location.state.business.id,
             body: this.state.body,
-            attachment: object.attachment,
             mail: object
           })
         }

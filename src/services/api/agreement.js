@@ -32,9 +32,9 @@ export const send = object => {
 
   data.append('body', object.body)
   data.append('businessId', object.businessId)
-  data.append('mail', object.mail)
-  if (object.attachment) {
-    data.append('attachment', object.attachment)
+  data.append('mail', JSON.stringify(object.mail))
+  if (object.mail.attachment) {
+    data.append('attachment', object.mail.attachment)
   }
 
   return request({
