@@ -10,7 +10,8 @@ import { Form, Grid, Button, Icon } from 'semantic-ui-react'
 import { previewAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 import {
   generateAgreement,
-  sendAgreement
+  sendAgreement,
+  getAgreementBody
 } from '../../../redux/ducks/agreement'
 import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
 
@@ -63,6 +64,10 @@ class PreviewAgreement extends Component {
   }
 
   componentDidMount () {
+    if (this.props.location.state.editAgreement) {
+      this.props.getAgreementBody(this.props.match.params.idAgreement)
+    }
+
     this.props.previewAgreementTemplate({
       business: this.props.location.state.business,
       values: this.props.location.state.values
@@ -71,6 +76,17 @@ class PreviewAgreement extends Component {
   }
 
   static getDerivedStateFromProps (props, state) {
+    if (
+      props.agreementExisted &&
+      !state.bodyUpdate &&
+      props.location.state.editAgreement
+    ) {
+      return {
+        body: props.agreementExisted.body,
+        bodyUpdate: true
+      }
+    }
+
     if (props.body && !state.bodyUpdate) {
       return {
         body: props.body,
@@ -111,7 +127,7 @@ class PreviewAgreement extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Send Agreement',
-        text: 'Are you sure you want to generate the agreement as a PDF?'
+        text: 'Are you sure you want to download the agreement?'
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
@@ -143,7 +159,7 @@ class PreviewAgreement extends Component {
   }
 
   render () {
-    const { isLoading, isGenerated } = this.props
+    const { isLoading, isLoadingDownloading } = this.props
     return (
       <Wrapper loading={isLoading}>
         <Grid padded>
@@ -174,16 +190,16 @@ class PreviewAgreement extends Component {
                 onClick={() => this._modalConfirmGenerateAgreement()}
                 size="small"
                 floated="left"
+                loading={isLoadingDownloading}
               >
                 <Icon name="edit" />
-                Generate Agreement
+                Download Agreement
               </Button>
               <Button
                 color="yellow"
                 onClick={() => this._openModalEmailAgreement()}
                 size="small"
                 floated="right"
-                disabled={!isGenerated}
               >
                 <Icon name="mail" />
                 Send Agreement
@@ -211,14 +227,17 @@ PreviewAgreement.propTypes = {
   sendAgreement: PropTypes.func,
   closeModal: PropTypes.func,
   isSent: PropTypes.bool,
-  isGenerated: PropTypes.bool
+  getAgreementBody: PropTypes.func,
+  agreementExisted: PropTypes.object,
+  isLoadingDownloading: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   body: state.agreementTemplates.preview.body,
   isLoading: state.agreementTemplates.preview.isLoading,
   isSent: state.agreement.send.isSent,
-  isGenerated: state.agreement.generate.isGenerated
+  agreementExisted: state.agreement.get.object,
+  isLoadingDownloading: state.agreement.generate.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -228,7 +247,8 @@ const mapDispatchToProps = dispatch =>
       openModal,
       closeModal,
       generateAgreement,
-      sendAgreement
+      sendAgreement,
+      getAgreementBody
     },
     dispatch
   )

@@ -39,7 +39,8 @@ class EditBusinessDetailForm extends Component {
       updateStageSalesMemo: false,
       updateStageLost: false,
       stage: 0,
-      testAgreement: false
+      testAgreement: true,
+      editAgreement: true
     }
   }
 
@@ -424,7 +425,7 @@ class EditBusinessDetailForm extends Component {
                   </Button>
                 </Form.Group>
                 <Form.Group>
-                  {!this.state.testAgreement ? (
+                  {!this.props.business.agreement_id ? (
                     <Form.Button
                       size="small"
                       color="twitter"
@@ -439,11 +440,17 @@ class EditBusinessDetailForm extends Component {
                         size="small"
                         color="green"
                         onClick={() =>
-                          this.props.history.push(
-                            `/business/${
+                          this.props.history.push({
+                            pathname: `/business/${
                               this.props.business.id
-                            }/agreement/${1}/preview`
-                          )
+                            }/agreement/${
+                              this.props.business.agreement_id
+                            }/preview`,
+                            state: {
+                              business: this.props.business,
+                              editAgreement: this.state.editAgreement
+                            }
+                          })
                         }
                       >
                         <Icon name="edit" />

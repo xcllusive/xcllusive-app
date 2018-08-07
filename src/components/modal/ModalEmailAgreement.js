@@ -84,6 +84,11 @@ class ModalEmailAgreement extends Component {
     if (quillRef !== null) this.quillRef = quillRef
   }
 
+  _handleFileUpload = e => {
+    const file = e.target.files[0]
+    this.props.setFieldValue('attachment2', file)
+  }
+
   render () {
     const {
       options,
@@ -157,6 +162,27 @@ class ModalEmailAgreement extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Group>
+              <Form.Field width={11}>
+                <Form.Input
+                  type="file"
+                  label="Attachment"
+                  name="attachment2"
+                  autoComplete="attachment2"
+                  onChange={this._handleFileUpload}
+                />
+
+                {errors.attachment2 &&
+                  touched.attachment2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.attachment2}
+                  />
+                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
               <h5 style={{ fontSize: '.92857143em', paddingLeft: '8px' }}>
                 Body
               </h5>
@@ -167,14 +193,14 @@ class ModalEmailAgreement extends Component {
                 width={16}
                 style={{ paddingLeft: '0px', paddingRight: 0 }}
               >
-                <Form.Field>
+                <Form.Field style={{ height: '40vh' }}>
                   <ReactQuill
                     ref={el => {
                       this.reactQuillRef = el
                     }}
                     value={values.body}
                     onChange={this._handleChangeBody}
-                    style={{ height: '40vh' }}
+                    style={{ height: '90%' }}
                     modules={this.state.modules}
                     formats={this.state.formats}
                   />
