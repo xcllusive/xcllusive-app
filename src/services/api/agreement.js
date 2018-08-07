@@ -14,7 +14,7 @@ export const update = agreement => {
   })
 }
 
-export const generate = object => {
+export const downloadAgree = object => {
   return request({
     method: 'post',
     url: '/agreement/generate',

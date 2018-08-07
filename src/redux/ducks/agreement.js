@@ -4,7 +4,7 @@ import {
   get,
   update,
   send,
-  generate,
+  downloadAgree,
   getEmailTemplate
 } from '../../services/api/agreement'
 
@@ -20,9 +20,9 @@ export const Types = {
   SEND_AGREEMENT_LOADING: 'SEND_AGREEMENT_LOADING',
   SEND_AGREEMENT_SUCCESS: 'SEND_AGREEMENT_SUCCESS',
   SEND_AGREEMENT_FAILURE: 'SEND_AGREEMENT_FAILURE',
-  GENERATE_AGREEMENT_LOADING: 'GENERATE_AGREEMENT_LOADING',
-  GENERATE_AGREEMENT_SUCCESS: 'GENERATE_AGREEMENT_SUCCESS',
-  GENERATE_AGREEMENT_FAILURE: 'GENERATE_AGREEMENT_FAILURE',
+  DOWNLOAD_AGREEMENT_LOADING: 'DOWNLOAD_AGREEMENT_LOADING',
+  DOWNLOAD_AGREEMENT_SUCCESS: 'DOWNLOAD_AGREEMENT_SUCCESS',
+  DOWNLOAD_AGREEMENT_FAILURE: 'DOWNLOAD_AGREEMENT_FAILURE',
   GET_EMAIL_TEMPLATE_AGREEMENT_LOADING: 'GET_EMAIL_TEMPLATE_AGREEMENT_LOADING',
   GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS: 'GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS',
   GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE: 'GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE'
@@ -46,9 +46,9 @@ const initialState = {
     isSent: false,
     error: null
   },
-  generate: {
+  download: {
     isLoading: false,
-    isGenerated: false,
+    isDownloaded: false,
     error: null
   },
   getEmailTemplate: {
@@ -147,30 +147,30 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.GENERATE_AGREEMENT_LOADING:
+    case Types.DOWNLOAD_AGREEMENT_LOADING:
       return {
         ...state,
-        generate: {
-          ...state.generate,
+        download: {
+          ...state.download,
           isLoading: action.payload,
-          isGenerated: false,
+          isDownloaded: false,
           error: null
         }
       }
-    case Types.GENERATE_AGREEMENT_SUCCESS:
+    case Types.DOWNLOAD_AGREEMENT_SUCCESS:
       return {
         ...state,
-        generate: {
-          ...state.generate,
+        download: {
+          ...state.download,
           isLoading: false,
-          isGenerated: true
+          isDownloaded: true
         }
       }
-    case Types.GENERATE_AGREEMENT_FAILURE:
+    case Types.DOWNLOAD_AGREEMENT_FAILURE:
       return {
         ...state,
-        generate: {
-          ...state.generate,
+        download: {
+          ...state.download,
           isLoading: false,
           error: action.payload
         }
@@ -255,20 +255,20 @@ export const updateAgreementBody = body => async dispatch => {
   }
 }
 
-export const generateAgreement = agreement => async dispatch => {
+export const downloadAgreement = agreement => async dispatch => {
   dispatch({
-    type: Types.GENERATE_AGREEMENT_LOADING,
+    type: Types.DOWNLOAD_AGREEMENT_LOADING,
     payload: true
   })
   try {
-    const response = await generate(agreement)
+    const response = await downloadAgree(agreement)
     dispatch({
-      type: Types.GENERATE_AGREEMENT_SUCCESS
+      type: Types.DOWNLOAD_AGREEMENT_SUCCESS
     })
     download(response, agreement.fileName)
   } catch (error) {
     dispatch({
-      type: Types.GENERATE_AGREEMENT_FAILURE,
+      type: Types.DOWNLOAD_AGREEMENT_FAILURE,
       payload: error
     })
     toast.error(error)

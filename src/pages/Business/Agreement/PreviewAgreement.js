@@ -10,7 +10,7 @@ import { Form, Grid, Button, Icon } from 'semantic-ui-react'
 
 import { previewAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 import {
-  generateAgreement,
+  downloadAgreement,
   sendAgreement,
   getAgreementBody
 } from '../../../redux/ducks/agreement'
@@ -132,7 +132,7 @@ class PreviewAgreement extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.generateAgreement({
+          this.props.downloadAgreement({
             businessId: this.props.location.state.business.id,
             fileName: `agreement_${this.props.location.state.business.businessName.substring(
               0,
@@ -230,7 +230,7 @@ PreviewAgreement.propTypes = {
   objectAgreementTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
-  generateAgreement: PropTypes.func,
+  downloadAgreement: PropTypes.func,
   location: PropTypes.object,
   body: PropTypes.string,
   isLoading: PropTypes.bool,
@@ -247,7 +247,7 @@ const mapStateToProps = state => ({
   isLoading: state.agreementTemplates.preview.isLoading,
   isSent: state.agreement.send.isSent,
   agreementExisted: state.agreement.get.object,
-  isLoadingDownloading: state.agreement.generate.isLoading
+  isLoadingDownloading: state.agreement.download.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -256,7 +256,7 @@ const mapDispatchToProps = dispatch =>
       previewAgreementTemplate,
       openModal,
       closeModal,
-      generateAgreement,
+      downloadAgreement,
       sendAgreement,
       getAgreementBody
     },
