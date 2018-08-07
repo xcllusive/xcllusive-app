@@ -22,7 +22,8 @@ export const generate = object => {
       body: object.body,
       businessId: object.businessId,
       mail: object.mail
-    }
+    },
+    responseType: 'blob'
   })
 }
 
