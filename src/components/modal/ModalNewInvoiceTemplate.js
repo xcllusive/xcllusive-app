@@ -6,9 +6,9 @@ import { withFormik } from 'formik'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { closeModal } from '../../redux/ducks/modal'
-import { createAgreementTemplate } from '../../redux/ducks/agreementTemplates'
+import { createInvoiceTemplate } from '../../redux/ducks/invoiceTemplates'
 
-class ModalNewAgreementTemplate extends Component {
+class ModalNewInvoiceTemplate extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -34,7 +34,7 @@ class ModalNewAgreementTemplate extends Component {
       this.props.closeModal()
       return
     }
-    await this.props.createAgreementTemplate(this.props.values)
+    await this.props.createInvoiceTemplate(this.props.values)
     await this.props.closeModal()
     this.props.onCreated(isConfirmed)
   }
@@ -60,7 +60,7 @@ class ModalNewAgreementTemplate extends Component {
               <Form.Field width={16}>
                 <Form.Input
                   required
-                  label="Title TEST"
+                  label="Title"
                   name="title"
                   autoComplete="title"
                   value={values.title}
@@ -112,7 +112,7 @@ class ModalNewAgreementTemplate extends Component {
   }
 }
 
-ModalNewAgreementTemplate.propTypes = {
+ModalNewInvoiceTemplate.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
@@ -125,7 +125,7 @@ ModalNewAgreementTemplate.propTypes = {
   options: PropTypes.shape({
     title: PropTypes.string.isRequired
   }).isRequired,
-  createAgreementTemplate: PropTypes.func,
+  createInvoiceTemplate: PropTypes.func,
   onCreated: PropTypes.func
 }
 
@@ -140,14 +140,14 @@ const mapPropsToValues = props => ({
 })
 
 const mapStateToProps = state => ({
-  createLoading: state.agreementTemplates.create.isLoading
+  createLoading: state.invoiceTemplates.create.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      createAgreementTemplate
+      createInvoiceTemplate
     },
     dispatch
   )
@@ -160,5 +160,5 @@ export default connect(
     mapPropsToValues,
     validationSchema,
     enableReinitialize: true
-  })(ModalNewAgreementTemplate)
+  })(ModalNewInvoiceTemplate)
 )
