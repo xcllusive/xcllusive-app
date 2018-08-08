@@ -196,14 +196,17 @@ class PreviewAgreement extends Component {
           <Grid.Row>
             <Grid.Column style={{ marginTop: '50px' }}>
               <Button
-                color="red"
-                onClick={() => this._modalConfirmGenerateAgreement()}
+                color="facebook"
+                onClick={() =>
+                  this.props.history.push(
+                    `/business/${this.props.location.state.business.id}/invoice`
+                  )
+                }
                 size="small"
                 floated="left"
-                loading={isLoadingDownloading}
               >
-                <Icon name="edit" />
-                Download Agreement
+                <Icon name="file" />
+                Invoice
               </Button>
               <Button
                 color="yellow"
@@ -213,6 +216,16 @@ class PreviewAgreement extends Component {
               >
                 <Icon name="mail" />
                 Send Agreement
+              </Button>
+              <Button
+                color="red"
+                onClick={() => this._modalConfirmGenerateAgreement()}
+                size="small"
+                floated="right"
+                loading={isLoadingDownloading}
+              >
+                <Icon name="edit" />
+                Download Agreement
               </Button>
             </Grid.Column>
           </Grid.Row>

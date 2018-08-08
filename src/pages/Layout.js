@@ -23,6 +23,7 @@ import UserPage from './SystemSettings/SystemSettings'
 import ClientManagerList from './ClientManager/ClientManagerList'
 import AgreementPage from './Business/Agreement/BusinessAgreementFields'
 import PreviewAgreement from './Business/Agreement/PreviewAgreement'
+import MakeTaxInvoice from './Business/Invoice/MakeTaxInvoice'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
@@ -120,6 +121,11 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={PreviewAgreement}
         path={`${match.path}business/:id/agreement/:idAgreement/preview`}
+      />
+      <Route
+        exact
+        component={MakeTaxInvoice}
+        path={`${match.path}business/:id/invoice`}
       />
       {/* <Route
         exact
