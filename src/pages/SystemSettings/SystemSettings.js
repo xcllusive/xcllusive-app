@@ -9,6 +9,7 @@ import Business from './Business/Business'
 import Buyer from './Buyer/Buyer'
 import EmailTemplates from './EmailTemplates'
 import AgreementTemplates from './AgreementTemplates'
+import InvoiceTemplates from './InvoiceTemplates'
 
 import { getSystemSettings } from '../../redux/ducks/systemSettings'
 
@@ -17,6 +18,10 @@ class SystemSettingsPage extends Component {
     super(props)
     this.state = {
       panes: [
+        {
+          menuItem: 'Invoice Templates',
+          render: () => <InvoiceTemplates />
+        },
         {
           menuItem: 'Agreement Templates',
           render: () => <AgreementTemplates />
