@@ -26,6 +26,18 @@ export const get = id =>
     url: `/invoice-template/${id}`
   })
 
+export const getState = state => {
+  const params = {}
+
+  if (state && state.length > 0) params.state = state
+
+  return request({
+    method: 'get',
+    url: '/invoice-template',
+    params
+  })
+}
+
 export const update = template => {
   return request({
     method: 'put',

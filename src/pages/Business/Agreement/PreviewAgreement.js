@@ -198,9 +198,12 @@ class PreviewAgreement extends Component {
               <Button
                 color="facebook"
                 onClick={() =>
-                  this.props.history.push(
-                    `/business/${this.props.location.state.business.id}/invoice`
-                  )
+                  this.props.history.push({
+                    pathname: `/business/${
+                      this.props.location.state.business.id
+                    }/invoice`,
+                    state: { state: this.props.location.state.business.state }
+                  })
                 }
                 size="small"
                 floated="left"

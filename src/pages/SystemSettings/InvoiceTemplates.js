@@ -20,11 +20,11 @@ import { TypesModal, openModal } from '../../redux/ducks/modal'
 import numeral from 'numeral'
 
 import {
-  getAgreementTemplates,
-  getAgreementTemplate,
+  getInvoiceTemplates,
+  getInvoiceTemplate,
   updateTemplates,
-  clearAgreementTemplates
-} from '../../redux/ducks/agreementTemplates'
+  clearInvoiceTemplates
+} from '../../redux/ducks/invoiceTemplates'
 import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
 
 class InvoiceTemplates extends Component {
@@ -75,8 +75,8 @@ class InvoiceTemplates extends Component {
   }
 
   componentDidMount () {
-    this.props.getAgreementTemplates()
-    this.props.clearAgreementTemplates()
+    this.props.getInvoiceTemplates()
+    this.props.clearInvoiceTemplates()
     this._attachQuillRefs()
   }
 
@@ -84,20 +84,20 @@ class InvoiceTemplates extends Component {
     this._attachQuillRefs()
   }
 
-  _handleChangeHeader = value => {
-    this.props.setFieldValue('header', value)
+  _handleChangeOfficeDetails = value => {
+    this.props.setFieldValue('officeDetails', value)
   }
 
-  _handleChangeBody = value => {
-    this.props.setFieldValue('body', value)
+  _handleChangeDescription = value => {
+    this.props.setFieldValue('description', value)
   }
 
-  _handleChangeFooter = value => {
-    this.props.setFieldValue('footer', value)
+  _handleChangeBankDetails = value => {
+    this.props.setFieldValue('bankDetails', value)
   }
 
   _handleSelectChange = (e, { value }) => {
-    this.props.getAgreementTemplate(value)
+    this.props.getInvoiceTemplate(value)
   }
 
   _handleSelectChangeState = (e, { name, value }) => {
@@ -125,13 +125,13 @@ class InvoiceTemplates extends Component {
     this.quillRef.insertText(position, ` {{${word}}} `)
   }
 
-  _openModalNewAgreementTemplate = () => {
+  _openModalNewInvoiceTemplate = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_INVOICE_TEMPLATE, {
       options: {
         title: 'Create New Invoice Template'
       },
       onCreated: isCreated => {
-        if (isCreated) this.props.getAgreementTemplates()
+        if (isCreated) this.props.getInvoiceTemplates()
       }
     })
   }
@@ -145,8 +145,8 @@ class InvoiceTemplates extends Component {
       values,
       touched,
       errors,
-      listAgreementTemplates,
-      objectAgreementTemplate,
+      listInvoiceTemplates,
+      objectInvoiceTemplate,
       isLoadingUpdate,
       isLoadingAllTemplate,
       isSubmitting,
@@ -167,7 +167,7 @@ class InvoiceTemplates extends Component {
                 label="Templates"
                 placeholder="Please select one template bellow..."
                 options={mapArrayToValuesForDropdownTemplates(
-                  listAgreementTemplates
+                  listInvoiceTemplates
                 )}
                 name="title"
                 autoComplete="title"
@@ -182,7 +182,7 @@ class InvoiceTemplates extends Component {
             </Form.Field>
             <Form.Field style={{ width: '100%', alignSelf: 'flex-end' }}>
               <Button
-                onClick={() => this._openModalNewAgreementTemplate()}
+                onClick={() => this._openModalNewInvoiceTemplate()}
                 color="facebook"
                 floated="right"
               >
@@ -193,11 +193,11 @@ class InvoiceTemplates extends Component {
           </Form.Group>
           <Dimmer.Dimmable
             style={{ zIndex: 999 }}
-            dimmed={!objectAgreementTemplate || isLoadingTemplate}
+            dimmed={!objectInvoiceTemplate || isLoadingTemplate}
           >
             <Dimmer
               inverted
-              active={!objectAgreementTemplate || isLoadingTemplate}
+              active={!objectInvoiceTemplate || isLoadingTemplate}
             >
               {isLoadingTemplate ? (
                 <Loader inverted />
@@ -233,8 +233,8 @@ class InvoiceTemplates extends Component {
                 >
                   <Form.Field>
                     <ReactQuill
-                      value={values.header}
-                      onChange={this._handleChangeHeader}
+                      value={values.officeDetails}
+                      onChange={this._handleChangeOfficeDetails}
                       style={{ height: '25vh' }}
                       modules={this.state.modules}
                       formats={this.state.formats}
@@ -261,8 +261,8 @@ class InvoiceTemplates extends Component {
                 >
                   <Form.Field>
                     <ReactQuill
-                      value={values.footer}
-                      onChange={this._handleChangeFooter}
+                      value={values.description}
+                      onChange={this._handleChangeDescription}
                       style={{ height: '10vh' }}
                       modules={this.state.modules}
                       formats={this.state.formats}
@@ -287,8 +287,8 @@ class InvoiceTemplates extends Component {
                 >
                   <Form.Field>
                     <ReactQuill
-                      value={values.footer}
-                      onChange={this._handleChangeFooter}
+                      value={values.bankDetails}
+                      onChange={this._handleChangeBankDetails}
                       style={{ height: '10vh' }}
                       modules={this.state.modules}
                       formats={this.state.formats}
@@ -297,7 +297,7 @@ class InvoiceTemplates extends Component {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row style={{ marginTop: '50px' }}>
-                {objectAgreementTemplate ? (
+                {objectInvoiceTemplate ? (
                   <Form.Field width={16} style={{ alignSelf: 'flex-end' }}>
                     <Form.Button
                       floated="right"
@@ -330,56 +330,57 @@ InvoiceTemplates.propTypes = {
   handleSubmit: PropTypes.func,
   isValid: PropTypes.bool,
   isSubmitting: PropTypes.bool,
-  getAgreementTemplates: PropTypes.func,
-  listAgreementTemplates: PropTypes.array,
-  getAgreementTemplate: PropTypes.func,
-  objectAgreementTemplate: PropTypes.object,
+  getInvoiceTemplates: PropTypes.func,
+  listInvoiceTemplates: PropTypes.array,
+  getInvoiceTemplate: PropTypes.func,
+  objectInvoiceTemplate: PropTypes.object,
   setFieldValue: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
-  clearAgreementTemplates: PropTypes.func,
+  clearInvoiceTemplates: PropTypes.func,
   isLoadingTemplate: PropTypes.bool,
   openModal: PropTypes.func,
   isLoadingAllTemplate: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
-  state: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.state
+  state: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.state : '',
+  header: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.header : '',
+  officeDetails: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.officeDetails
     : '',
-  header: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.header
+  description: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.description
     : '',
-  body: props.objectAgreementTemplate ? props.objectAgreementTemplate.body : '',
-  footer: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.footer
+  bankDetails: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.bankDetails
     : '',
-  id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : '',
-  engagementFee: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.engagementFee).format('0,0.00')
+  id: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.id : '',
+  engagementFee: props.objectInvoiceTemplate
+    ? numeral(props.objectInvoiceTemplate.engagementFee).format('0,0.00')
     : 0,
-  commissionPerc: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionPerc).format('0,0.00')
+  commissionPerc: props.objectInvoiceTemplate
+    ? numeral(props.objectInvoiceTemplate.commissionPerc).format('0,0.00')
     : 0,
-  commissionDiscount: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionDiscount).format('0,0.00')
+  commissionDiscount: props.objectInvoiceTemplate
+    ? numeral(props.objectInvoiceTemplate.commissionDiscount).format('0,0.00')
     : 0,
-  introductionParties: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.introductionParties
+  introductionParties: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.introductionParties
     : '',
-  commissionProperty: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionProperty).format('0,0.00')
+  commissionProperty: props.objectInvoiceTemplate
+    ? numeral(props.objectInvoiceTemplate.commissionProperty).format('0,0.00')
     : 0,
-  addressProperty: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.addressProperty
+  addressProperty: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.addressProperty
     : '',
-  priceProperty: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.priceProperty).format('0,0.00')
+  priceProperty: props.objectInvoiceTemplate
+    ? numeral(props.objectInvoiceTemplate.priceProperty).format('0,0.00')
     : 0,
-  propertyOptions: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.propertyOptions
+  propertyOptions: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.propertyOptions
     : false,
-  optionIntroductionBuyer: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.optionIntroductionBuyer
+  optionIntroductionBuyer: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.optionIntroductionBuyer
     : false
 })
 
@@ -388,20 +389,20 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 }
 
 const mapStateToProps = state => ({
-  listAgreementTemplates: state.agreementTemplates.getAll.array,
-  objectAgreementTemplate: state.agreementTemplates.get.object,
-  isLoadingTemplate: state.agreementTemplates.get.isLoading,
-  isLoadingUpdate: state.agreementTemplates.update.isLoading,
-  isLoadingAllTemplate: state.agreementTemplates.getAll.isLoading
+  listInvoiceTemplates: state.invoiceTemplates.getAll.array,
+  objectInvoiceTemplate: state.invoiceTemplates.get.object,
+  isLoadingTemplate: state.invoiceTemplates.get.isLoading,
+  isLoadingUpdate: state.invoiceTemplates.update.isLoading,
+  isLoadingAllTemplate: state.invoiceTemplates.getAll.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getAgreementTemplates,
-      getAgreementTemplate,
+      getInvoiceTemplates,
+      getInvoiceTemplate,
       updateTemplates,
-      clearAgreementTemplates,
+      clearInvoiceTemplates,
       openModal
     },
     dispatch

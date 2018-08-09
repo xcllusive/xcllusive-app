@@ -3,7 +3,8 @@ import {
   create,
   getAll,
   get,
-  update
+  update,
+  getState
 } from '../../services/api/invoiceTemplates'
 
 // Action Types
@@ -256,6 +257,26 @@ export const getInvoiceTemplate = id => async dispatch => {
     dispatch({
       type: Types.GET_INVOICE_TEMPLATE_SUCCESS,
       payload: invoiceTemplate.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_INVOICE_TEMPLATE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getInvoiceTemplateState = state => async dispatch => {
+  dispatch({
+    type: Types.GET_INVOICE_TEMPLATE_LOADING,
+    payload: true
+  })
+  try {
+    const invoiceTemplate = await getState(state)
+    dispatch({
+      type: Types.GET_INVOICE_TEMPLATE_SUCCESS,
+      payload: invoiceTemplate.data[0]
     })
   } catch (error) {
     dispatch({

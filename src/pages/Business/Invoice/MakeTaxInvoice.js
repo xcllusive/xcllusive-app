@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 // import numeral from 'numeral'
+import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -17,11 +18,12 @@ import {
   Button,
   Icon,
   Label,
-  Table
+  Table,
+  Message
 } from 'semantic-ui-react'
 
 import { getBusiness } from '../../../redux/ducks/business'
-import { getInvoiceTemplate } from '../../../redux/ducks/invoiceTemplates'
+import { getInvoiceTemplateState } from '../../../redux/ducks/invoiceTemplates'
 
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -74,7 +76,7 @@ class MakeTaxInvoice extends Component {
 
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
-    this.props.getInvoiceTemplate(this.props.match.params.idAgreement)
+    this.props.getInvoiceTemplateState(this.props.location.state)
   }
 
   componentDidUpdate () {
@@ -96,6 +98,14 @@ class MakeTaxInvoice extends Component {
     if (quillRef !== null) this.quillRef = quillRef
   }
 
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+  }
+
+  _handleChangeDescription = value => {
+    this.props.setFieldValue('description', value)
+  }
+
   render () {
     const {
       objectInvoiceTemplate,
@@ -109,6 +119,7 @@ class MakeTaxInvoice extends Component {
       objectInvoiceIsLoading,
       objectBusinessIsLoading
     } = this.props
+    const { state } = this.state
     return (
       <Wrapper loading={objectBusinessIsLoading || objectInvoiceIsLoading}>
         <Form>
@@ -118,12 +129,11 @@ class MakeTaxInvoice extends Component {
                 <Header as="h2" content="Tax Invoice" />
                 <Segment>
                   <Form.Group widths="equal">
-                    <Form.Field>
+                    <Form.Field style={{ height: '15vh' }}>
                       <ReactQuill
                         readOnly
-                        // value={values.header}
-                        onChange={this._handleChangeHeader}
-                        style={{ height: '15vh' }}
+                        value={values.officeDetails}
+                        style={{ height: '12vh' }}
                         modules={this.state.modules}
                         formats={this.state.formats}
                       />
@@ -163,7 +173,7 @@ class MakeTaxInvoice extends Component {
                         label="Date"
                         name="date"
                         autoComplete="date"
-                        // value={values.ref}
+                        value={values.date}
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
@@ -196,11 +206,11 @@ class MakeTaxInvoice extends Component {
                 <Header as="h3" content="Description" />
                 <Segment>
                   <Form.Group widths="equal">
-                    <Form.Field>
+                    <Form.Field style={{ height: '12vh' }}>
                       <ReactQuill
-                        // value={values.header}
-                        onChange={this._handleChangeHeader}
-                        style={{ height: '10vh' }}
+                        value={values.description}
+                        onChange={this._handleChangeDescription}
+                        style={{ height: '9vh' }}
                         modules={this.state.modules}
                         formats={this.state.formats}
                       />
@@ -221,7 +231,7 @@ class MakeTaxInvoice extends Component {
                             label="Amount $"
                             name="amount"
                             autoComplete="amount"
-                            // value={values.amount}
+                            value={values.amount}
                             onChange={handleChange}
                             onBlur={handleBlur}
                           />
@@ -236,14 +246,14 @@ class MakeTaxInvoice extends Component {
                           )}
                         </Form.Field>
                         <Form.Field width={4}>
-                          <Form.Input readOnly label="GST" />
+                          <Form.Input readOnly label="GST" value={values.gst} />
                         </Form.Field>
                         <Form.Field width={6}>
                           <Form.Input
                             label="Total $"
                             name="total"
                             autoComplete="total"
-                            // value={values.total}
+                            value={values.total}
                             onChange={handleChange}
                             onBlur={handleBlur}
                           />
@@ -263,17 +273,37 @@ class MakeTaxInvoice extends Component {
                 </Segment>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
+            <Grid.Row columns={2}>
               <Grid.Column>
-                <Button
-                  color="green"
-                  onClick={() => history.push(`/business/${objectBusiness.id}`)}
-                  size="small"
-                  floated="left"
-                >
-                  <Icon name="backward" />
-                  Back to Business
-                </Button>
+                <Form.Group>
+                  <Form.Field width={8}>
+                    <Form.Select
+                      label="State"
+                      name="state"
+                      options={state}
+                      autoComplete="state"
+                      value={values.state}
+                      onChange={this._handleSelectChange}
+                    />
+                    {/* {errors.state &&
+                      touched.state && (
+                      <Label
+                        basic
+                        color="red"
+                        pointing
+                        content={errors.state}
+                      />
+                    )} */}
+                  </Form.Field>
+                  <Message info size="small">
+                    <p>
+                      When you change the state it automatically changes the
+                      office and bank details on the invoice.
+                    </p>
+                  </Message>
+                </Form.Group>
+              </Grid.Column>
+              <Grid.Column>
                 <Button
                   color="red"
                   onClick={() =>
@@ -287,13 +317,25 @@ class MakeTaxInvoice extends Component {
                   size="small"
                   floated="right"
                 >
-                  <Icon name="edit" />
-                  Preview Agreement
+                  <Icon name="save" />
+                  Save and Send
+                </Button>
+                <Button
+                  color="green"
+                  onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                  size="small"
+                  floated="left"
+                >
+                  <Icon name="backward" />
+                  Back to Business
+                </Button>
+                <Button color="facebook" size="small" floated="right">
+                  <Icon name="add" />
+                  New
                 </Button>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-              <Header>{this.state.stageSelectedName}</Header>
               <Table
                 color="blue"
                 celled
@@ -342,14 +384,16 @@ MakeTaxInvoice.propTypes = {
   getBusiness: PropTypes.func,
   objectBusiness: PropTypes.object,
   values: PropTypes.object,
-  getInvoiceTemplate: PropTypes.func,
+  getInvoiceTemplateState: PropTypes.func,
   objectInvoiceTemplate: PropTypes.object,
   handleBlur: PropTypes.func,
   handleChange: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
   objectBusinessIsLoading: PropTypes.bool,
-  objectInvoiceIsLoading: PropTypes.bool
+  objectInvoiceIsLoading: PropTypes.bool,
+  location: PropTypes.object,
+  setFieldValue: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({
@@ -377,12 +421,24 @@ const validationSchema = Yup.object().shape({
   priceProperty: Yup.number().required('Price is required!')
 })
 
-const mapPropsToValues = props => ({})
+const mapPropsToValues = props => ({
+  officeDetails: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.officeDetails
+    : '',
+  description: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.description
+    : '',
+  date: moment().format('DD/MM/YYYY'),
+  gst: '$ 10%',
+  amount: 1500,
+  total: 1650 // (props.amount * 10) / 100,
+  // state: props.location.state
+})
 
 const mapStateToProps = state => ({
   objectBusiness: state.business.get.object,
   objectBusinessIsLoading: state.business.get.isLoading,
-  objectInvoiceTemplate: state.agreementTemplates.get.object,
+  objectInvoiceTemplate: state.invoiceTemplates.get.object,
   objectInvoiceIsLoading: state.invoiceTemplates.get.isLoading
 })
 
@@ -390,7 +446,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getBusiness,
-      getInvoiceTemplate
+      getInvoiceTemplateState
     },
     dispatch
   )
