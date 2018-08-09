@@ -24,6 +24,7 @@ import {
 
 import { getBusiness } from '../../../redux/ducks/business'
 import { getInvoiceTemplateState } from '../../../redux/ducks/invoiceTemplates'
+import { getInvoices } from '../../../redux/ducks/invoice'
 
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -68,7 +69,11 @@ class MakeTaxInvoice extends Component {
         'indent',
         'link',
         'image'
-      ]
+      ],
+      modulesDetails: {
+        toolbar: []
+      },
+      formatsDetails: []
     }
     this.quillRef = null
     this.reactQuillRef = null
@@ -77,6 +82,7 @@ class MakeTaxInvoice extends Component {
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getInvoiceTemplateState(this.props.location.state)
+    this.props.getInvoices(this.props.match.params.id)
   }
 
   componentDidUpdate () {
@@ -117,9 +123,11 @@ class MakeTaxInvoice extends Component {
       objectBusiness,
       history,
       objectInvoiceIsLoading,
-      objectBusinessIsLoading
+      objectBusinessIsLoading,
+      objectInvoices
     } = this.props
     const { state } = this.state
+    console.log(objectInvoices)
     return (
       <Wrapper loading={objectBusinessIsLoading || objectInvoiceIsLoading}>
         <Form>
@@ -134,8 +142,8 @@ class MakeTaxInvoice extends Component {
                         readOnly
                         value={values.officeDetails}
                         style={{ height: '12vh' }}
-                        modules={this.state.modules}
-                        formats={this.state.formats}
+                        modules={this.state.modulesDetails}
+                        formats={this.state.formatsDetails}
                       />
                     </Form.Field>
                   </Form.Group>
@@ -250,22 +258,12 @@ class MakeTaxInvoice extends Component {
                         </Form.Field>
                         <Form.Field width={6}>
                           <Form.Input
+                            readOnly
                             label="Total $"
                             name="total"
                             autoComplete="total"
                             value={values.total}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
                           />
-                          {errors.total &&
-                            touched.total && (
-                            <Label
-                              basic
-                              pointing
-                              color="red"
-                              content={errors.total}
-                            />
-                          )}
                         </Form.Field>
                       </Form.Group>
                     </Form.Field>
@@ -393,7 +391,9 @@ MakeTaxInvoice.propTypes = {
   objectBusinessIsLoading: PropTypes.bool,
   objectInvoiceIsLoading: PropTypes.bool,
   location: PropTypes.object,
-  setFieldValue: PropTypes.func
+  setFieldValue: PropTypes.func,
+  getInvoices: PropTypes.func,
+  objectInvoices: PropTypes.array
 }
 
 const validationSchema = Yup.object().shape({
@@ -440,13 +440,15 @@ const mapStateToProps = state => ({
   objectBusinessIsLoading: state.business.get.isLoading,
   objectInvoiceTemplate: state.invoiceTemplates.get.object,
   objectInvoiceIsLoading: state.invoiceTemplates.get.isLoading
+  // objectInvoices: state.invoice.getAll.array
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getBusiness,
-      getInvoiceTemplateState
+      getInvoiceTemplateState,
+      getInvoices
     },
     dispatch
   )

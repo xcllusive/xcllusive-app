@@ -1,27 +1,21 @@
 import { toast } from 'react-toastify'
-import {
-  create,
-  getAll,
-  get,
-  update,
-  getState
-} from '../../services/api/invoiceTemplates'
+import { create, getAll, get, update } from '../../services/api/invoice'
 
 // Action Types
 
 export const Types = {
-  CREATE_INVOICE_TEMPLATE_LOADING: 'CREATE_INVOICE_TEMPLATE_LOADING',
-  CREATE_INVOICE_TEMPLATE_SUCCESS: 'CREATE_INVOICE_TEMPLATE_SUCCESS',
-  CREATE_INVOICE_TEMPLATE_FAILURE: 'CREATE_INVOICE_TEMPLATE_FAILURE',
-  GET_INVOICE_TEMPLATES_LOADING: 'GET_INVOICE_TEMPLATES_LOADING',
-  GET_INVOICE_TEMPLATES_SUCCESS: 'GET_INVOICE_TEMPLATES_SUCCESS',
-  GET_INVOICE_TEMPLATES_FAILURE: 'GET_INVOICE_TEMPLATES_FAILURE',
-  GET_INVOICE_TEMPLATE_LOADING: 'GET_INVOICE_TEMPLATE_LOADING',
-  GET_INVOICE_TEMPLATE_SUCCESS: 'GET_INVOICE_TEMPLATE_SUCCESS',
-  GET_INVOICE_TEMPLATE_FAILURE: 'GET_INVOICE_TEMPLATE_FAILURE',
-  UPDATE_INVOICE_TEMPLATES_LOADING: 'UPDATE_INVOICE_TEMPLATES_LOADING',
-  UPDATE_INVOICE_TEMPLATES_SUCCESS: 'UPDATE_INVOICE_TEMPLATES_SUCCESS',
-  UPDATE_INVOICE_TEMPLATES_FAILURE: 'UPDATE_INVOICE_TEMPLATES_FAILURE',
+  CREATE_INVOICE_LOADING: 'CREATE_INVOICE_LOADING',
+  CREATE_INVOICE_SUCCESS: 'CREATE_INVOICE_SUCCESS',
+  CREATE_INVOICE_FAILURE: 'CREATE_INVOICE_FAILURE',
+  GET_INVOICE_LOADING: 'GET_INVOICE_LOADING',
+  GET_INVOICE_SUCCESS: 'GET_INVOICE_SUCCESS',
+  GET_INVOICE_FAILURE: 'GET_INVOICE_FAILURE',
+  GET_INVOICES_LOADING: 'GET_INVOICES_LOADING',
+  GET_INVOICES_SUCCESS: 'GET_INVOICES_SUCCESS',
+  GET_INVOICES_FAILURE: 'GET_INVOICES_FAILURE',
+  UPDATE_INVOICE_LOADING: 'UPDATE_INVOICE_LOADING',
+  UPDATE_INVOICE_SUCCESS: 'UPDATE_INVOICE_SUCCESS',
+  UPDATE_INVOICE_FAILURE: 'UPDATE_INVOICE_FAILURE',
   CLEAR_INVOICE_TEMPLATES: 'CLEAR_INVOICE_TEMPLATES'
 }
 
@@ -47,13 +41,13 @@ const initialState = {
     isLoading: false,
     isUpdated: false,
     error: null,
-    templates: {}
+    invoice: {}
   }
 }
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
-    case Types.GET_INVOICE_TEMPLATES_LOADING:
+    case Types.GET_INVOICES_LOADING:
       return {
         ...state,
         getAll: {
@@ -62,7 +56,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_INVOICE_TEMPLATES_SUCCESS:
+    case Types.GET_INVOICES_SUCCESS:
       return {
         ...state,
         getAll: {
@@ -72,7 +66,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_INVOICE_TEMPLATES_FAILURE:
+    case Types.GET_INVOICES_FAILURE:
       return {
         ...state,
         getAll: {
@@ -81,7 +75,7 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.GET_INVOICE_TEMPLATE_LOADING:
+    case Types.GET_INVOICE_LOADING:
       return {
         ...state,
         get: {
@@ -91,7 +85,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_INVOICE_TEMPLATE_SUCCESS:
+    case Types.GET_INVOICE_SUCCESS:
       return {
         ...state,
         get: {
@@ -101,7 +95,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_INVOICE_TEMPLATE_FAILURE:
+    case Types.GET_INVOICE_FAILURE:
       return {
         ...state,
         get: {
@@ -110,7 +104,7 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.CREATE_INVOICE_TEMPLATE_LOADING:
+    case Types.CREATE_INVOICE_LOADING:
       return {
         ...state,
         create: {
@@ -119,7 +113,7 @@ export default function reducer (state = initialState, action) {
           isCreated: false
         }
       }
-    case Types.CREATE_INVOICE_TEMPLATE_SUCCESS:
+    case Types.CREATE_INVOICE_SUCCESS:
       return {
         ...state,
         create: {
@@ -128,7 +122,7 @@ export default function reducer (state = initialState, action) {
           isCreated: true
         }
       }
-    case Types.CREATE_INVOICE_TEMPLATE_FAILURE:
+    case Types.CREATE_INVOICE_FAILURE:
       return {
         ...state,
         create: {
@@ -138,7 +132,7 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.UPDATE_INVOICE_TEMPLATES_LOADING:
+    case Types.UPDATE_INVOICE_LOADING:
       return {
         ...state,
         update: {
@@ -148,7 +142,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.UPDATE_INVOICE_TEMPLATES_SUCCESS:
+    case Types.UPDATE_INVOICE_SUCCESS:
       return {
         ...state,
         update: {
@@ -158,7 +152,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.UPDATE_INVOICE_TEMPLATES_FAILURE:
+    case Types.UPDATE_INVOICE_FAILURE:
       return {
         ...state,
         update: {
@@ -181,106 +175,88 @@ export const invoiceTemplateLoading = (value, type) => ({
   payload: value
 })
 
-export const createInvoiceTemplate = template => async dispatch => {
+export const createInvoice = invoice => async dispatch => {
   dispatch({
-    type: Types.CREATE_INVOICE_TEMPLATE_LOADING,
+    type: Types.CREATE_INVOICE_LOADING,
     payload: true
   })
   try {
-    await create(template)
+    await create(invoice)
     dispatch({
-      type: Types.CREATE_INVOICE_TEMPLATE_SUCCESS
+      type: Types.CREATE_INVOICE_SUCCESS
     })
   } catch (error) {
     dispatch({
-      type: Types.CREATE_INVOICE_TEMPLATE_FAILURE,
+      type: Types.CREATE_INVOICE_FAILURE,
       payload: error
     })
   }
 }
 
-export const getInvoiceTemplates = (state = false) => async dispatch => {
+export const getInvoices = businessId => async dispatch => {
   dispatch({
-    type: Types.GET_INVOICE_TEMPLATES_LOADING,
+    type: Types.GET_INVOICES_LOADING,
     payload: true
   })
   try {
-    const invoiceTemplate = await getAll(state)
+    console.log(businessId)
+    const invoice = await getAll(businessId)
+    console.log(invoice)
     dispatch({
-      type: Types.GET_INVOICE_TEMPLATES_SUCCESS,
-      payload: invoiceTemplate.data
+      type: Types.GET_INVOICES_SUCCESS,
+      payload: invoice.data
     })
   } catch (error) {
     dispatch({
-      type: Types.GET_INVOICE_TEMPLATES_FAILURE,
-      payload: error
-    })
-    toast.error(error)
-  }
-}
-
-export const getInvoiceTemplate = id => async dispatch => {
-  dispatch({
-    type: Types.GET_INVOICE_TEMPLATE_LOADING,
-    payload: true
-  })
-  try {
-    const invoiceTemplate = await get(id)
-    dispatch({
-      type: Types.GET_INVOICE_TEMPLATE_SUCCESS,
-      payload: invoiceTemplate.data
-    })
-  } catch (error) {
-    dispatch({
-      type: Types.GET_INVOICE_TEMPLATE_FAILURE,
+      type: Types.GET_INVOICES_FAILURE,
       payload: error
     })
     toast.error(error)
   }
 }
 
-export const getInvoiceTemplateState = state => async dispatch => {
+export const getInvoice = id => async dispatch => {
   dispatch({
-    type: Types.GET_INVOICE_TEMPLATE_LOADING,
+    type: Types.GET_INVOICE_LOADING,
     payload: true
   })
   try {
-    const invoiceTemplate = await getState(state)
+    const invoice = await get(id)
     dispatch({
-      type: Types.GET_INVOICE_TEMPLATE_SUCCESS,
-      payload: invoiceTemplate.data[0]
+      type: Types.GET_INVOICE_SUCCESS,
+      payload: invoice.data
     })
   } catch (error) {
     dispatch({
-      type: Types.GET_INVOICE_TEMPLATE_FAILURE,
+      type: Types.GET_INVOICE_FAILURE,
       payload: error
     })
     toast.error(error)
   }
 }
 
-export const updateTemplates = template => async dispatch => {
+export const updateInvoice = invoice => async dispatch => {
   dispatch({
-    type: Types.UPDATE_INVOICE_TEMPLATES_LOADING,
+    type: Types.UPDATE_INVOICE_LOADING,
     payload: true
   })
   try {
-    const response = await update(template)
+    const response = await update(invoice)
     dispatch({
-      type: Types.UPDATE_INVOICE_TEMPLATES_SUCCESS
+      type: Types.UPDATE_INVOICE_SUCCESS
     })
     toast.success(response.message)
   } catch (error) {
     dispatch({
-      type: Types.UPDATE_INVOICE_TEMPLATES_FAILURE,
+      type: Types.UPDATE_INVOICE_FAILURE,
       payload: error
     })
     toast.error(error)
   }
 }
 
-export const clearInvoiceTemplates = () => async dispatch => {
+export const clearInvoice = () => async dispatch => {
   dispatch({
-    type: Types.CLEAR_INVOICE_TEMPLATES
+    type: Types.CLEAR_INVOICE
   })
 }
