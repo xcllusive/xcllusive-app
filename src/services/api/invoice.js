@@ -26,9 +26,16 @@ export const getAll = businessId => {
   return request({
     method: 'get',
     url: '/invoice',
-    params: businessId
+    params: { businessId }
   })
 }
+
+export const getLast = businessId =>
+  request({
+    method: 'get',
+    url: '/invoice/last/',
+    params: { businessId }
+  })
 
 // export const downloadAgree = object => {
 //   return request({

@@ -1,5 +1,11 @@
 import { toast } from 'react-toastify'
-import { create, getAll, get, update } from '../../services/api/invoice'
+import {
+  create,
+  getAll,
+  get,
+  update,
+  getLast
+} from '../../services/api/invoice'
 
 // Action Types
 
@@ -16,7 +22,10 @@ export const Types = {
   UPDATE_INVOICE_LOADING: 'UPDATE_INVOICE_LOADING',
   UPDATE_INVOICE_SUCCESS: 'UPDATE_INVOICE_SUCCESS',
   UPDATE_INVOICE_FAILURE: 'UPDATE_INVOICE_FAILURE',
-  CLEAR_INVOICE_TEMPLATES: 'CLEAR_INVOICE_TEMPLATES'
+  CLEAR_INVOICE_TEMPLATES: 'CLEAR_INVOICE_TEMPLATES',
+  GET_LAST_INVOICE_LOADING: 'GET_LAST_INVOICE_LOADING',
+  GET_LAST_INVOICE_SUCCESS: 'GET_LAST_INVOICE_SUCCESS',
+  GET_LAST_INVOICE_FAILURE: 'GET_LAST_INVOICE_FAILURE'
 }
 
 // Reducer
@@ -42,6 +51,11 @@ const initialState = {
     isUpdated: false,
     error: null,
     invoice: {}
+  },
+  getLastInvoice: {
+    object: null,
+    isLoading: false,
+    error: null
   }
 }
 
@@ -162,6 +176,35 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_LAST_INVOICE_LOADING:
+      return {
+        ...state,
+        getLastInvoice: {
+          ...state.getLastInvoice,
+          isLoading: true,
+          object: null,
+          error: null
+        }
+      }
+    case Types.GET_LAST_INVOICE_SUCCESS:
+      return {
+        ...state,
+        getLastInvoice: {
+          ...state.getLastInvoice,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_LAST_INVOICE_FAILURE:
+      return {
+        ...state,
+        getLastInvoice: {
+          ...state.getLastInvoice,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_INVOICE_TEMPLATES:
       return initialState
     default:
@@ -199,12 +242,10 @@ export const getInvoices = businessId => async dispatch => {
     payload: true
   })
   try {
-    console.log(businessId)
     const invoice = await getAll(businessId)
-    console.log(invoice)
     dispatch({
       type: Types.GET_INVOICES_SUCCESS,
-      payload: invoice.data
+      payload: invoice.data.rows
     })
   } catch (error) {
     dispatch({
@@ -249,6 +290,26 @@ export const updateInvoice = invoice => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_INVOICE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getLastInvoice = businessId => async dispatch => {
+  dispatch({
+    type: Types.GET_LAST_INVOICE_LOADING,
+    payload: true
+  })
+  try {
+    const invoice = await getLast(businessId)
+    dispatch({
+      type: Types.GET_LAST_INVOICE_SUCCESS,
+      payload: invoice.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_LAST_INVOICE_FAILURE,
       payload: error
     })
     toast.error(error)

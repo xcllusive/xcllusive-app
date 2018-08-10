@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-// import numeral from 'numeral'
+import numeral from 'numeral'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactQuill from 'react-quill'
@@ -24,7 +24,7 @@ import {
 
 import { getBusiness } from '../../../redux/ducks/business'
 import { getInvoiceTemplateState } from '../../../redux/ducks/invoiceTemplates'
-import { getInvoices } from '../../../redux/ducks/invoice'
+import { getInvoices, getLastInvoice } from '../../../redux/ducks/invoice'
 
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -83,6 +83,7 @@ class MakeTaxInvoice extends Component {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getInvoiceTemplateState(this.props.location.state)
     this.props.getInvoices(this.props.match.params.id)
+    this.props.getLastInvoice(this.props.match.params.id)
   }
 
   componentDidUpdate () {
@@ -112,6 +113,15 @@ class MakeTaxInvoice extends Component {
     this.props.setFieldValue('description', value)
   }
 
+  _calculateTotal = (e, { name, value }) => {
+    // const total = numeral(
+    //   numeral(value).value() + (numeral(value).value() * 10) / 100
+    // ).format('0,0.00')
+
+    this.props.setFieldValue(name, value)
+    // this.props.setFieldValue('total', total)
+  }
+
   render () {
     const {
       objectInvoiceTemplate,
@@ -124,10 +134,10 @@ class MakeTaxInvoice extends Component {
       history,
       objectInvoiceIsLoading,
       objectBusinessIsLoading,
-      objectInvoices
+      listInvoices
+      // objectLastInvoice
     } = this.props
     const { state } = this.state
-    console.log(objectInvoices)
     return (
       <Wrapper loading={objectBusinessIsLoading || objectInvoiceIsLoading}>
         <Form>
@@ -239,8 +249,8 @@ class MakeTaxInvoice extends Component {
                             label="Amount $"
                             name="amount"
                             autoComplete="amount"
-                            value={values.amount}
-                            onChange={handleChange}
+                            value={numeral(values.amount).format('0,0.00')}
+                            onChange={this._calculateTotal}
                             onBlur={handleBlur}
                           />
                           {errors.amount &&
@@ -271,7 +281,7 @@ class MakeTaxInvoice extends Component {
                 </Segment>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row>
               <Grid.Column>
                 <Form.Group>
                   <Form.Field width={8}>
@@ -301,6 +311,8 @@ class MakeTaxInvoice extends Component {
                   </Message>
                 </Form.Group>
               </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
               <Grid.Column>
                 <Button
                   color="red"
@@ -333,41 +345,45 @@ class MakeTaxInvoice extends Component {
                 </Button>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
-              <Table
-                color="blue"
-                celled
-                inverted
-                selectable
-                compact
-                size="small"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Ref.</Table.HeaderCell>
-                    <Table.HeaderCell>Description</Table.HeaderCell>
-                    <Table.HeaderCell>Amount $</Table.HeaderCell>
-                    <Table.HeaderCell>Date</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {/* {businesses.map(business => ( */}
-                  <Table.Row
-                    active
-                    // key={business.id}
-                    // onClick={() =>
-                    //   history.push(`${match.path}/${business.id}`)
-                    // }
-                  >
-                    <Table.Cell>{'1CafeZoran'}</Table.Cell>
-                    <Table.Cell>{'testing'}</Table.Cell>
-                    <Table.Cell>{'3,500.00'}</Table.Cell>
-                    <Table.Cell>{'08/08/2018'}</Table.Cell>
-                  </Table.Row>
-                  {/* ))} */}
-                </Table.Body>
-              </Table>
-            </Grid.Row>
+            {listInvoices ? (
+              <Grid.Row>
+                <Table
+                  color="blue"
+                  celled
+                  inverted
+                  selectable
+                  compact
+                  size="small"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Ref.</Table.HeaderCell>
+                      <Table.HeaderCell>Description</Table.HeaderCell>
+                      <Table.HeaderCell>Amount $</Table.HeaderCell>
+                      <Table.HeaderCell>Date</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {listInvoices.map(invoices => (
+                      <Table.Row
+                        active
+                        key={invoices.id}
+                        // onClick={() =>
+                        //   history.push(`${match.path}/${business.id}`)
+                        // }
+                      >
+                        <Table.Cell>{invoices.ref}</Table.Cell>
+                        <Table.Cell>{invoices.description}</Table.Cell>
+                        <Table.Cell>{invoices.amount}</Table.Cell>
+                        <Table.Cell>
+                          {moment(invoices.date).format('DD/MM/YYYY')}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              </Grid.Row>
+            ) : null}
           </Grid>
         </Form>
       </Wrapper>
@@ -393,7 +409,9 @@ MakeTaxInvoice.propTypes = {
   location: PropTypes.object,
   setFieldValue: PropTypes.func,
   getInvoices: PropTypes.func,
-  objectInvoices: PropTypes.array
+  listInvoices: PropTypes.array,
+  getLastInvoice: PropTypes.func,
+  objectLastInvoice: PropTypes.object
 }
 
 const validationSchema = Yup.object().shape({
@@ -422,16 +440,19 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapPropsToValues = props => ({
-  officeDetails: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.officeDetails
-    : '',
+  officeDetails: props.objectLastInvoice
+    ? props.objectLastInvoice.officeDetails
+    : props.objectInvoiceTemplate
+      ? props.objectInvoiceTemplate.officeDetails
+      : '',
+
   description: props.objectInvoiceTemplate
     ? props.objectInvoiceTemplate.description
     : '',
   date: moment().format('DD/MM/YYYY'),
   gst: '$ 10%',
   amount: 1500,
-  total: 1650 // (props.amount * 10) / 100,
+  total: props.objectLastInvoice ? props.objectLastInvoice.total : 0
   // state: props.location.state
 })
 
@@ -439,8 +460,9 @@ const mapStateToProps = state => ({
   objectBusiness: state.business.get.object,
   objectBusinessIsLoading: state.business.get.isLoading,
   objectInvoiceTemplate: state.invoiceTemplates.get.object,
-  objectInvoiceIsLoading: state.invoiceTemplates.get.isLoading
-  // objectInvoices: state.invoice.getAll.array
+  objectInvoiceIsLoading: state.invoiceTemplates.get.isLoading,
+  listInvoices: state.invoice.getAll.array,
+  objectLastInvoice: state.invoice.getLastInvoice.object
 })
 
 const mapDispatchToProps = dispatch =>
@@ -448,7 +470,8 @@ const mapDispatchToProps = dispatch =>
     {
       getBusiness,
       getInvoiceTemplateState,
-      getInvoices
+      getInvoices,
+      getLastInvoice
     },
     dispatch
   )
