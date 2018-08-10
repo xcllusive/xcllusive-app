@@ -24,9 +24,15 @@ import {
 
 import { getBusiness } from '../../../redux/ducks/business'
 import { getInvoiceTemplateState } from '../../../redux/ducks/invoiceTemplates'
-import { getInvoices, getLastInvoice } from '../../../redux/ducks/invoice'
+import {
+  getInvoices,
+  getLastInvoice,
+  createInvoice
+} from '../../../redux/ducks/invoice'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 import Wrapper from '../../../components/content/Wrapper'
+import { isValid } from 'ipaddr.js'
 
 class MakeTaxInvoice extends Component {
   constructor (props) {
@@ -114,17 +120,52 @@ class MakeTaxInvoice extends Component {
   }
 
   _calculateTotal = (e, { name, value }) => {
-    // const total = numeral(
-    //   numeral(value).value() + (numeral(value).value() * 10) / 100
-    // ).format('0,0.00')
+    const total = numeral(
+      numeral(value).value() + (numeral(value).value() * 10) / 100
+    ).format('0,0.00')
 
     this.props.setFieldValue(name, value)
-    // this.props.setFieldValue('total', total)
+    this.props.setFieldValue('total', total)
+  }
+
+  _newInvoice = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Tax Invoice',
+        text: 'Are you sure you want to make a new invoice?'
+      },
+      onConfirm: isConfirmed => {
+        this.props.setFieldValue(
+          'officeDetails',
+          this.props.objectInvoiceTemplate.officeDetails
+        )
+        this.props.setFieldValue('ref', '')
+        this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
+        this.props.setFieldValue(
+          'to',
+          `${this.props.objectBusiness.businessName} - ${
+            this.props.objectBusiness.streetName
+          } - ${this.props.objectBusiness.suburb} - ${
+            this.props.objectBusiness.state
+          } - ${this.props.objectBusiness.postCode}`
+        )
+        this.props.setFieldValue(
+          'description',
+          this.props.objectInvoiceTemplate.description
+        )
+        this.props.setFieldValue('amount', 0.0)
+        this.props.setFieldValue('total', 0.0)
+        this.props.setFieldValue('state', this.props.objectBusiness.state)
+      }
+    })
+  }
+
+  _saveSendInvoice = () => {
+    this.props.createInvoice(this.props.values, this.props.objectBusiness.id)
   }
 
   render () {
     const {
-      objectInvoiceTemplate,
       values,
       handleBlur,
       handleChange,
@@ -135,7 +176,6 @@ class MakeTaxInvoice extends Component {
       objectInvoiceIsLoading,
       objectBusinessIsLoading,
       listInvoices
-      // objectLastInvoice
     } = this.props
     const { state } = this.state
     return (
@@ -171,7 +211,7 @@ class MakeTaxInvoice extends Component {
                         label="Ref."
                         name="ref"
                         autoComplete="ref"
-                        // value={values.ref}
+                        value={values.ref}
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
@@ -211,7 +251,10 @@ class MakeTaxInvoice extends Component {
                       label="To"
                       name="to"
                       autoComplete="to"
-                      // value={values.to}
+                      // readOnly={
+                      //   objectLastInvoice ? objectLastInvoice.dateSent : null
+                      // }
+                      value={values.to}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -231,6 +274,9 @@ class MakeTaxInvoice extends Component {
                         style={{ height: '9vh' }}
                         modules={this.state.modules}
                         formats={this.state.formats}
+                        // readOnly={
+                        //   objectLastInvoice ? objectLastInvoice.dateSent : false
+                        // }
                       />
                     </Form.Field>
                   </Form.Group>
@@ -252,6 +298,11 @@ class MakeTaxInvoice extends Component {
                             value={numeral(values.amount).format('0,0.00')}
                             onChange={this._calculateTotal}
                             onBlur={handleBlur}
+                            // readOnly={
+                            //   objectLastInvoice
+                            //     ? objectLastInvoice.dateSent
+                            //     : null
+                            // }
                           />
                           {errors.amount &&
                             touched.amount && (
@@ -292,6 +343,9 @@ class MakeTaxInvoice extends Component {
                       autoComplete="state"
                       value={values.state}
                       onChange={this._handleSelectChange}
+                      // disabled={
+                      //   objectLastInvoice ? objectLastInvoice.dateSent : null
+                      // }
                     />
                     {/* {errors.state &&
                       touched.state && (
@@ -316,16 +370,10 @@ class MakeTaxInvoice extends Component {
               <Grid.Column>
                 <Button
                   color="red"
-                  onClick={() =>
-                    history.push({
-                      pathname: `/business/${objectBusiness.id}/agreement/${
-                        objectInvoiceTemplate.id
-                      }/preview`,
-                      state: { business: objectBusiness, values }
-                    })
-                  }
+                  onClick={this._saveSendInvoice}
                   size="small"
                   floated="right"
+                  disabled={!isValid}
                 >
                   <Icon name="save" />
                   Save and Send
@@ -339,7 +387,12 @@ class MakeTaxInvoice extends Component {
                   <Icon name="backward" />
                   Back to Business
                 </Button>
-                <Button color="facebook" size="small" floated="right">
+                <Button
+                  color="facebook"
+                  size="small"
+                  floated="right"
+                  onClick={this._newInvoice}
+                >
                   <Icon name="add" />
                   New
                 </Button>
@@ -411,49 +464,57 @@ MakeTaxInvoice.propTypes = {
   getInvoices: PropTypes.func,
   listInvoices: PropTypes.array,
   getLastInvoice: PropTypes.func,
-  objectLastInvoice: PropTypes.object
+  objectLastInvoice: PropTypes.object,
+  openModal: PropTypes.func,
+  createInvoice: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({
-  firstNameV: Yup.string().required('First Name is required!'),
-  lastNameV: Yup.string().required('Last Name is required!'),
-  vendorPhone1: Yup.string().required('Phone is required!'),
-  businessABN: Yup.string().required('ABN/ACN is required!'),
-  address: Yup.string().required('Address is required!'),
-  listedPrice: Yup.number('Number')
-    .min(0)
-    .integer()
-    .required('Listed Price is required!'),
-  appraisalHigh: Yup.number().required('Appraisal High is required!'),
-  appraisalLow: Yup.number().required('Appraisal Low is required!'),
-  engagementFee: Yup.number().required('Engagement Fee is required!'),
-  commissionPerc: Yup.number().required('Commission Perc is required!'),
-  commissionDiscount: Yup.number().required('Commission Discount is required!'),
-  introductionParties: Yup.string()
-    .required('Introduction Parties is required!')
-    .max(300, 'Sorry! you have exceed the area limit of this field.'),
-  commissionProperty: Yup.number().required('Comission is required!'),
-  addressProperty: Yup.string()
-    .required('Address is required!')
-    .max(300, 'Sorry! you have exceed the area limit of this field.'),
-  priceProperty: Yup.number().required('Price is required!')
+  to: Yup.string().required('To is required'),
+  description: Yup.string().required('Description is required!'),
+  amount: Yup.number('Only numbers, please!')
 })
 
 const mapPropsToValues = props => ({
+  businessId: props.objectBusiness.id,
+
   officeDetails: props.objectLastInvoice
     ? props.objectLastInvoice.officeDetails
     : props.objectInvoiceTemplate
       ? props.objectInvoiceTemplate.officeDetails
       : '',
+  ref: props.objectLastInvoice ? props.objectLastInvoice.ref : '',
 
+  /* Details */
+  date: props.objectLastInvoice
+    ? moment(props.objectLastInvoice.date).format('DD/MM/YYYY')
+    : moment().format('DD/MM/YYYY'),
+  to: props.objectLastInvoice
+    ? props.objectLastInvoice.to
+    : props.objectBusiness
+      ? `${props.objectBusiness.businessName} - ${
+        props.objectBusiness.streetName
+      } - ${props.objectBusiness.suburb} - ${props.objectBusiness.state} - ${
+        props.objectBusiness.postCode
+      }`
+      : '',
+
+  /* Description */
   description: props.objectInvoiceTemplate
     ? props.objectInvoiceTemplate.description
     : '',
-  date: moment().format('DD/MM/YYYY'),
+
+  /* Values */
   gst: '$ 10%',
-  amount: 1500,
-  total: props.objectLastInvoice ? props.objectLastInvoice.total : 0
-  // state: props.location.state
+  amount: props.objectLastInvoice ? props.objectLastInvoice.amount : 0,
+  total: props.objectLastInvoice ? props.objectLastInvoice.total : 0,
+
+  /* State */
+  state: props.objectLastInvoice
+    ? props.objectLastInvoice.state
+    : props.objectBusiness
+      ? props.objectBusiness.state
+      : ''
 })
 
 const mapStateToProps = state => ({
@@ -471,7 +532,9 @@ const mapDispatchToProps = dispatch =>
       getBusiness,
       getInvoiceTemplateState,
       getInvoices,
-      getLastInvoice
+      getLastInvoice,
+      openModal,
+      createInvoice
     },
     dispatch
   )

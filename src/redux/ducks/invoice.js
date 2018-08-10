@@ -218,13 +218,13 @@ export const invoiceTemplateLoading = (value, type) => ({
   payload: value
 })
 
-export const createInvoice = invoice => async dispatch => {
+export const createInvoice = (invoice, businessId) => async dispatch => {
   dispatch({
     type: Types.CREATE_INVOICE_LOADING,
     payload: true
   })
   try {
-    await create(invoice)
+    await create(invoice, businessId)
     dispatch({
       type: Types.CREATE_INVOICE_SUCCESS
     })

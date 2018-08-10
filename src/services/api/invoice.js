@@ -1,10 +1,10 @@
 import request from './'
 
-export const create = invoice => {
+export const create = (invoice, businessId) => {
   return request({
     method: 'post',
     url: '/invoice',
-    data: invoice
+    data: { invoice, businessId }
   })
 }
 
