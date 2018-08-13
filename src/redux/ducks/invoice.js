@@ -22,7 +22,7 @@ export const Types = {
   UPDATE_INVOICE_LOADING: 'UPDATE_INVOICE_LOADING',
   UPDATE_INVOICE_SUCCESS: 'UPDATE_INVOICE_SUCCESS',
   UPDATE_INVOICE_FAILURE: 'UPDATE_INVOICE_FAILURE',
-  CLEAR_INVOICE_TEMPLATES: 'CLEAR_INVOICE_TEMPLATES',
+  CLEAR_INVOICE: 'CLEAR_INVOICE',
   GET_LAST_INVOICE_LOADING: 'GET_LAST_INVOICE_LOADING',
   GET_LAST_INVOICE_SUCCESS: 'GET_LAST_INVOICE_SUCCESS',
   GET_LAST_INVOICE_FAILURE: 'GET_LAST_INVOICE_FAILURE'
@@ -205,7 +205,7 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.CLEAR_INVOICE_TEMPLATES:
+    case Types.CLEAR_INVOICE:
       return initialState
     default:
       return state

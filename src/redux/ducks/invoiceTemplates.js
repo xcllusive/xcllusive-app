@@ -4,7 +4,8 @@ import {
   getAll,
   get,
   update,
-  getState
+  getState,
+  getChangeState
 } from '../../services/api/invoiceTemplates'
 
 // Action Types
@@ -22,7 +23,13 @@ export const Types = {
   UPDATE_INVOICE_TEMPLATES_LOADING: 'UPDATE_INVOICE_TEMPLATES_LOADING',
   UPDATE_INVOICE_TEMPLATES_SUCCESS: 'UPDATE_INVOICE_TEMPLATES_SUCCESS',
   UPDATE_INVOICE_TEMPLATES_FAILURE: 'UPDATE_INVOICE_TEMPLATES_FAILURE',
-  CLEAR_INVOICE_TEMPLATES: 'CLEAR_INVOICE_TEMPLATES'
+  CLEAR_INVOICE_TEMPLATES: 'CLEAR_INVOICE_TEMPLATES',
+  GET_INVOICE_TEMPLATE_CHANGE_STATE_LOADING:
+    'GET_INVOICE_TEMPLATE_CHANGE_STATE_LOADING',
+  GET_INVOICE_TEMPLATE_CHANGE_STATE_SUCCESS:
+    'GET_INVOICE_TEMPLATE_CHANGE_STATE_SUCCESS',
+  GET_INVOICE_TEMPLATE_CHANGE_STATE_FAILURE:
+    'GET_INVOICE_TEMPLATE_CHANGE_STATE_FAILURE'
 }
 
 // Reducer
@@ -48,6 +55,11 @@ const initialState = {
     isUpdated: false,
     error: null,
     templates: {}
+  },
+  getChangeState: {
+    object: null,
+    isLoading: false,
+    error: null
   }
 }
 
@@ -168,6 +180,35 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_INVOICE_TEMPLATE_CHANGE_STATE_LOADING:
+      return {
+        ...state,
+        getChangeState: {
+          ...state.getChangeState,
+          isLoading: true,
+          object: null,
+          error: null
+        }
+      }
+    case Types.GET_INVOICE_TEMPLATE_CHANGE_STATE_SUCCESS:
+      return {
+        ...state,
+        getChangeState: {
+          ...state.getChangeState,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_INVOICE_TEMPLATE_CHANGE_STATE_FAILURE:
+      return {
+        ...state,
+        getChangeState: {
+          ...state.getChangeState,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_INVOICE_TEMPLATES:
       return initialState
     default:
@@ -253,6 +294,26 @@ export const getInvoiceTemplateState = state => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_INVOICE_TEMPLATE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getInvoiceTemplateChangeState = state => async dispatch => {
+  dispatch({
+    type: Types.GET_INVOICE_TEMPLATE_CHANGE_STATE_LOADING,
+    payload: true
+  })
+  try {
+    const invoiceTemplate = await getChangeState(state)
+    dispatch({
+      type: Types.GET_INVOICE_TEMPLATE_CHANGE_STATE_SUCCESS,
+      payload: invoiceTemplate.data[0]
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_INVOICE_TEMPLATE_CHANGE_STATE_FAILURE,
       payload: error
     })
     toast.error(error)

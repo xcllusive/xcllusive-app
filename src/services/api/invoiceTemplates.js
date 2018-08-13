@@ -38,6 +38,18 @@ export const getState = state => {
   })
 }
 
+export const getChangeState = state => {
+  const params = {}
+
+  if (state && state.length > 0) params.state = state
+
+  return request({
+    method: 'get',
+    url: '/invoice-template',
+    params
+  })
+}
+
 export const update = template => {
   return request({
     method: 'put',
