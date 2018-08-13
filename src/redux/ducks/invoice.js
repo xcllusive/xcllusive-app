@@ -224,10 +224,11 @@ export const createInvoice = (invoice, businessId) => async dispatch => {
     payload: true
   })
   try {
-    await create(invoice, businessId)
+    const response = await create(invoice, businessId)
     dispatch({
       type: Types.CREATE_INVOICE_SUCCESS
     })
+    toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.CREATE_INVOICE_FAILURE,

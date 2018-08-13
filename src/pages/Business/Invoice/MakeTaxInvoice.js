@@ -182,11 +182,14 @@ class MakeTaxInvoice extends Component {
     })
   }
 
-  _saveSendInvoice = () => {
+  _saveSendInvoice = async () => {
     if (this.state.newInvoice) {
-      this.props.createInvoice(this.props.values, this.props.objectBusiness.id)
+      await this.props.createInvoice(
+        this.props.values,
+        this.props.objectBusiness.id
+      )
     } else {
-      this.props.updateInvoice(this.props.values)
+      await this.props.updateInvoice(this.props.values)
     }
     this.props.getInvoices(this.props.match.params.id)
 
@@ -267,17 +270,17 @@ class MakeTaxInvoice extends Component {
                         label="Date"
                         name="date"
                         autoComplete="date"
-                        value={values.dateTimeCreated}
+                        value={values.dateCreated}
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      {errors.dateTimeCreated &&
-                        touched.dateTimeCreated && (
+                      {errors.dateCreated &&
+                        touched.dateCreated && (
                         <Label
                           basic
                           pointing
                           color="red"
-                          content={errors.dateTimeCreated}
+                          content={errors.dateCreated}
                         />
                       )}
                     </Form.Field>
@@ -538,7 +541,7 @@ const mapPropsToValues = props => {
       ref: props.objectLastInvoice.ref,
 
       /* Details */
-      dateTimeCreated: moment(props.objectLastInvoice.dateTimeCreated).format(
+      dateCreated: moment(props.objectLastInvoice.dateTimeCreated).format(
         'DD/MM/YYYY'
       ),
       to: props.objectLastInvoice.to,
@@ -563,7 +566,7 @@ const mapPropsToValues = props => {
       ref: props.objectInvoice.ref,
 
       /* Details */
-      dateTimeCreated: moment(props.objectInvoice.dateTimeCreated).format(
+      dateCreated: moment(props.objectInvoice.dateTimeCreated).format(
         'DD/MM/YYYY'
       ),
       to: props.objectInvoice.to,
@@ -592,7 +595,7 @@ const mapPropsToValues = props => {
       ref: '',
 
       /* Details */
-      dateTimeCreated: moment().format('DD/MM/YYYY'),
+      dateCreated: moment().format('DD/MM/YYYY'),
       to: props.objectBusiness
         ? `${props.objectBusiness.businessName} - ${
           props.objectBusiness.address1
