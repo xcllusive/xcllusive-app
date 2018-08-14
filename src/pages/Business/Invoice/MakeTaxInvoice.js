@@ -101,8 +101,11 @@ class MakeTaxInvoice extends Component {
     this._attachQuillRefs()
   }
 
+  componentWillUnmount () {
+    this.props.clearInvoice()
+  }
+
   static getDerivedStateFromProps (nextProps, prevState) {
-    console.log(prevState.newInvoice)
     if (nextProps.objectLastInvoice && !prevState.currentInvoice) {
       return {
         currentInvoice: nextProps.objectLastInvoice
