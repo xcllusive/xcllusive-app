@@ -474,7 +474,7 @@ class EditBusinessDetailForm extends Component {
                       this.props.history.push({
                         pathname: `/business/${this.props.business.id}/invoice`,
                         state: {
-                          state: this.props.business.state
+                          business: this.props.business
                         }
                       })
                     }

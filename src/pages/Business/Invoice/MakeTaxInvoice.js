@@ -22,7 +22,6 @@ import {
   Message
 } from 'semantic-ui-react'
 
-import { getBusiness } from '../../../redux/ducks/business'
 import {
   getInvoiceTemplateState,
   getInvoiceTemplateChangeState
@@ -85,21 +84,31 @@ class MakeTaxInvoice extends Component {
         toolbar: []
       },
       formatsDetails: [],
-      newInvoice: false
+      newInvoice: false,
+      currentInvoice: null
     }
     this.quillRef = null
     this.reactQuillRef = null
   }
 
   componentDidMount () {
-    this.props.getBusiness(this.props.match.params.id)
-    this.props.getInvoiceTemplateState(this.props.location.state)
+    this.props.getInvoiceTemplateState(this.props.location.state.business.state)
     this.props.getInvoices(this.props.match.params.id)
     this.props.getLastInvoice(this.props.match.params.id)
   }
 
   componentDidUpdate () {
     this._attachQuillRefs()
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    console.log(prevState.newInvoice)
+    if (nextProps.objectLastInvoice && !prevState.currentInvoice) {
+      return {
+        currentInvoice: nextProps.objectLastInvoice
+      }
+    }
+    return null
   }
 
   _attachQuillRefs = () => {
@@ -163,11 +172,11 @@ class MakeTaxInvoice extends Component {
         this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
         this.props.setFieldValue(
           'to',
-          `${this.props.objectBusiness.businessName} - ${
-            this.props.objectBusiness.address1
-          } - ${this.props.objectBusiness.suburb} - ${
-            this.props.objectBusiness.state
-          } - ${this.props.objectBusiness.postCode}`
+          `${this.props.location.state.business.businessName} - ${
+            this.props.location.state.business.address1
+          } - ${this.props.location.state.business.suburb} - ${
+            this.props.location.state.business.state
+          } - ${this.props.location.state.business.postCode}`
         )
         this.props.setFieldValue(
           'description',
@@ -175,7 +184,10 @@ class MakeTaxInvoice extends Component {
         )
         this.props.setFieldValue('amount', null)
         this.props.setFieldValue('total', 0.0)
-        this.props.setFieldValue('state', this.props.objectBusiness.state)
+        this.props.setFieldValue(
+          'state',
+          this.props.location.state.business.state
+        )
 
         this.setState({ newInvoice: true })
       }
@@ -186,7 +198,7 @@ class MakeTaxInvoice extends Component {
     if (this.state.newInvoice) {
       await this.props.createInvoice(
         this.props.values,
-        this.props.objectBusiness.id
+        this.props.location.state.business.id
       )
     } else {
       await this.props.updateInvoice(this.props.values)
@@ -196,8 +208,11 @@ class MakeTaxInvoice extends Component {
     this.setState({ newInvoice: false })
   }
 
-  _getInvoice = async id => {
-    await this.props.getInvoice(id)
+  _getInvoice = async invoice => {
+    await this.props.getInvoice(invoice.id)
+
+    this.setState({ currentInvoice: invoice })
+    this.setState({ newInvoice: false })
   }
 
   render () {
@@ -207,18 +222,16 @@ class MakeTaxInvoice extends Component {
       handleChange,
       errors,
       touched,
-      objectBusiness,
       history,
       objectInvoiceIsLoading,
-      objectBusinessIsLoading,
       listInvoices,
       isCreateLoading,
       isUpdateLoading,
       isValid
     } = this.props
-    const { state } = this.state
+    const { state, currentInvoice, newInvoice } = this.state
     return (
-      <Wrapper loading={objectBusinessIsLoading || objectInvoiceIsLoading}>
+      <Wrapper loading={objectInvoiceIsLoading}>
         <Form>
           <Grid celled="internally" divided>
             <Grid.Row>
@@ -290,9 +303,13 @@ class MakeTaxInvoice extends Component {
                       label="To"
                       name="to"
                       autoComplete="to"
-                      // readOnly={
-                      //   objectLastInvoice ? objectLastInvoice.dateSent : null
-                      // }
+                      disabled={
+                        !!(
+                          currentInvoice &&
+                          currentInvoice.dateSent &&
+                          !newInvoice
+                        )
+                      }
                       value={values.to}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -313,9 +330,13 @@ class MakeTaxInvoice extends Component {
                         style={{ height: '9vh' }}
                         modules={this.state.modules}
                         formats={this.state.formats}
-                        // readOnly={
-                        //   objectLastInvoice ? objectLastInvoice.dateSent : false
-                        // }
+                        disabled={
+                          !!(
+                            currentInvoice &&
+                            currentInvoice.dateSent &&
+                            !newInvoice
+                          )
+                        }
                       />
                     </Form.Field>
                   </Form.Group>
@@ -337,11 +358,13 @@ class MakeTaxInvoice extends Component {
                             value={numeral(values.amount).format('0,0.00')}
                             onChange={this._calculateTotal}
                             onBlur={handleBlur}
-                            // readOnly={
-                            //   objectLastInvoice
-                            //     ? objectLastInvoice.dateSent
-                            //     : null
-                            // }
+                            disabled={
+                              !!(
+                                currentInvoice &&
+                                currentInvoice.dateSent &&
+                                !newInvoice
+                              )
+                            }
                           />
                           {errors.amount &&
                             touched.amount && (
@@ -382,19 +405,14 @@ class MakeTaxInvoice extends Component {
                       autoComplete="state"
                       value={values.state}
                       onChange={this._handleSelectChange}
-                      // disabled={
-                      //   objectLastInvoice ? objectLastInvoice.dateSent : null
-                      // }
+                      disabled={
+                        !!(
+                          currentInvoice &&
+                          currentInvoice.dateSent &&
+                          !newInvoice
+                        )
+                      }
                     />
-                    {/* {errors.state &&
-                      touched.state && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.state}
-                      />
-                    )} */}
                   </Form.Field>
                   <Message info size="small">
                     <p>
@@ -412,15 +430,22 @@ class MakeTaxInvoice extends Component {
                   onClick={this._saveSendInvoice}
                   size="small"
                   floated="right"
-                  disabled={!isValid}
                   loading={isCreateLoading || isUpdateLoading}
+                  disabled={
+                    !isValid ||
+                    !!(currentInvoice && currentInvoice.dateSent && !newInvoice)
+                  }
                 >
                   <Icon name="save" />
                   Save and Send
                 </Button>
                 <Button
                   color="green"
-                  onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                  onClick={() =>
+                    history.push(
+                      `/business/${this.props.location.state.business.id}`
+                    )
+                  }
                   size="small"
                   floated="left"
                 >
@@ -461,7 +486,7 @@ class MakeTaxInvoice extends Component {
                       <Table.Row
                         active
                         key={invoices.id}
-                        onClick={() => this._getInvoice(invoices.id)}
+                        onClick={() => this._getInvoice(invoices)}
                       >
                         <Table.Cell>{invoices.ref}</Table.Cell>
                         <Table.Cell>{invoices.description}</Table.Cell>
@@ -490,8 +515,6 @@ MakeTaxInvoice.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   buyer: PropTypes.object,
-  getBusiness: PropTypes.func,
-  objectBusiness: PropTypes.object,
   values: PropTypes.object,
   getInvoiceTemplateState: PropTypes.func,
   objectInvoiceTemplate: PropTypes.object,
@@ -499,7 +522,6 @@ MakeTaxInvoice.propTypes = {
   handleChange: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  objectBusinessIsLoading: PropTypes.bool,
   objectInvoiceIsLoading: PropTypes.bool,
   location: PropTypes.object,
   setFieldValue: PropTypes.func,
@@ -527,15 +549,10 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapPropsToValues = props => {
-  if (
-    props &&
-    props.objectLastInvoice &&
-    props.objectBusiness &&
-    !props.objectInvoice
-  ) {
+  if (props && props.objectLastInvoice && !props.objectInvoice) {
     return {
       id: props.objectLastInvoice.id,
-      businessId: props.objectBusiness.id,
+      businessId: props.location.state.business.id,
       officeDetails: props.objectLastInvoice.officeDetails,
       bankDetails: props.objectLastInvoice.officeDetails,
       ref: props.objectLastInvoice.ref,
@@ -557,10 +574,10 @@ const mapPropsToValues = props => {
       /* State */
       state: props.objectLastInvoice.state
     }
-  } else if (props && props.objectInvoice && props.objectBusiness) {
+  } else if (props && props.objectInvoice) {
     return {
       id: props.objectInvoice.id,
-      businessId: props.objectBusiness.id,
+      businessId: props.location.state.business.id,
       officeDetails: props.objectInvoice.officeDetails,
       bankDetails: props.objectInvoice.officeDetails,
       ref: props.objectInvoice.ref,
@@ -585,7 +602,7 @@ const mapPropsToValues = props => {
   } else {
     return {
       id: '',
-      businessId: props.objectBusiness ? props.objectBusiness.id : '',
+      businessId: props.location ? props.location.state.business.id : '',
       officeDetails: props.objectInvoiceTemplate
         ? props.objectInvoiceTemplate.officeDetails
         : '',
@@ -596,12 +613,12 @@ const mapPropsToValues = props => {
 
       /* Details */
       dateCreated: moment().format('DD/MM/YYYY'),
-      to: props.objectBusiness
-        ? `${props.objectBusiness.businessName} - ${
-          props.objectBusiness.address1
-        } - ${props.objectBusiness.suburb} - ${
-          props.objectBusiness.state
-        } - ${props.objectBusiness.postCode}`
+      to: props.location.state.business
+        ? `${props.location.state.business.businessName} - ${
+          props.location.state.business.address1
+        } - ${props.location.state.business.suburb} - ${
+          props.location.state.business.state
+        } - ${props.location.state.business.postCode}`
         : '',
 
       /* Description */
@@ -614,14 +631,14 @@ const mapPropsToValues = props => {
       total: 0,
 
       /* State */
-      state: props.objectBusiness ? props.objectBusiness.state : ''
+      state: props.location.state.business
+        ? props.location.state.business.state
+        : ''
     }
   }
 }
 
 const mapStateToProps = state => ({
-  objectBusiness: state.business.get.object,
-  objectBusinessIsLoading: state.business.get.isLoading,
   objectInvoiceTemplate: state.invoiceTemplates.get.object,
   objectInvoiceIsLoading: state.invoiceTemplates.get.isLoading,
   listInvoices: state.invoice.getAll.array,
@@ -636,7 +653,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getBusiness,
       getInvoiceTemplateState,
       getInvoices,
       getLastInvoice,

@@ -202,7 +202,7 @@ class PreviewAgreement extends Component {
                     pathname: `/business/${
                       this.props.location.state.business.id
                     }/invoice`,
-                    state: { state: this.props.location.state.business.state }
+                    state: { business: this.props.location.state.business }
                   })
                 }
                 size="small"
