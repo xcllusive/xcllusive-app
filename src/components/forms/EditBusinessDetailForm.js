@@ -19,6 +19,7 @@ import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+import { theme } from '../../styles'
 
 class EditBusinessDetailForm extends Component {
   constructor (props) {
@@ -428,7 +429,7 @@ class EditBusinessDetailForm extends Component {
                   {!this.props.business.agreement_id ? (
                     <Form.Button
                       size="small"
-                      color="twitter"
+                      color="brown"
                       onClick={() => this._openModalListAgreement(values.state)}
                     >
                       <Icon name="file" />
@@ -438,7 +439,7 @@ class EditBusinessDetailForm extends Component {
                     <Fragment>
                       <Form.Button
                         size="small"
-                        color="green"
+                        color={theme.buttonEdit}
                         onClick={() =>
                           this.props.history.push({
                             pathname: `/business/${
@@ -458,7 +459,7 @@ class EditBusinessDetailForm extends Component {
                       </Form.Button>
                       <Form.Button
                         size="small"
-                        color="yellow"
+                        color={theme.buttonNew}
                         onClick={() =>
                           this._openModalListAgreement(values.state)
                         }
@@ -469,7 +470,7 @@ class EditBusinessDetailForm extends Component {
                     </Fragment>
                   )}
                   <Button
-                    color="facebook"
+                    color="grey"
                     onClick={() =>
                       this.props.history.push({
                         pathname: `/business/${this.props.business.id}/invoice`,
@@ -788,7 +789,7 @@ class EditBusinessDetailForm extends Component {
                     type="submit"
                     disabled={isSubmitting || !isValid}
                     loading={isLoadingUpdate}
-                    color="red"
+                    color={theme.buttonSave}
                     onClick={handleSubmit}
                   >
                     <Icon name="save" />

@@ -7,5 +7,10 @@ export const theme = {
   primaryTextColor: '#212121',
   secondaryTextColor: '#757575',
   dividerColor: '#BDBDBD',
-  redColor: '#db2828'
+  redColor: '#db2828',
+  buttonNew: 'facebook',
+  buttonEdit: 'orange',
+  buttonSave: 'red',
+  buttonBack: 'green',
+  buttonDownload: 'yellow'
 }

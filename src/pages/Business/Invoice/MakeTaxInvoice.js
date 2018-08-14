@@ -37,6 +37,7 @@ import {
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 import Wrapper from '../../../components/content/Wrapper'
+import { theme } from '../../../styles'
 
 class MakeTaxInvoice extends Component {
   constructor (props) {
@@ -198,7 +199,7 @@ class MakeTaxInvoice extends Component {
   }
 
   _saveSendInvoice = async () => {
-    if (this.state.newInvoice) {
+    if (this.state.newInvoice || this.props.listInvoices.length === 0) {
       await this.props.createInvoice(
         this.props.values,
         this.props.location.state.business.id
@@ -303,6 +304,7 @@ class MakeTaxInvoice extends Component {
                   </Form.Group>
                   <Form.Group widths="equal">
                     <Form.TextArea
+                      className="editable"
                       label="To"
                       name="to"
                       autoComplete="to"
@@ -333,7 +335,7 @@ class MakeTaxInvoice extends Component {
                         style={{ height: '9vh' }}
                         modules={this.state.modules}
                         formats={this.state.formats}
-                        disabled={
+                        readOnly={
                           !!(
                             currentInvoice &&
                             currentInvoice.dateSent &&
@@ -429,7 +431,7 @@ class MakeTaxInvoice extends Component {
             <Grid.Row>
               <Grid.Column>
                 <Button
-                  color="red"
+                  color={theme.buttonSave}
                   onClick={this._saveSendInvoice}
                   size="small"
                   floated="right"
@@ -443,7 +445,7 @@ class MakeTaxInvoice extends Component {
                   Save and Send
                 </Button>
                 <Button
-                  color="green"
+                  color={theme.buttonBack}
                   onClick={() =>
                     history.push(
                       `/business/${this.props.location.state.business.id}`
@@ -456,7 +458,7 @@ class MakeTaxInvoice extends Component {
                   Back to Business
                 </Button>
                 <Button
-                  color="facebook"
+                  color={theme.buttonNew}
                   size="small"
                   floated="right"
                   onClick={this._newInvoice}
@@ -676,6 +678,7 @@ export default connect(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    enableReinitialize: true
+    enableReinitialize: true,
+    isInitialValid: true
   })(MakeTaxInvoice)
 )

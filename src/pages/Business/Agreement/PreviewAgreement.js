@@ -17,6 +17,7 @@ import {
 import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
 
 import Wrapper from '../../../components/content/Wrapper'
+import { theme } from '../../../styles'
 
 class PreviewAgreement extends Component {
   constructor (props) {
@@ -196,7 +197,7 @@ class PreviewAgreement extends Component {
           <Grid.Row>
             <Grid.Column style={{ marginTop: '50px' }}>
               <Button
-                color="facebook"
+                color="grey"
                 onClick={() =>
                   this.props.history.push({
                     pathname: `/business/${
@@ -212,7 +213,7 @@ class PreviewAgreement extends Component {
                 Invoice
               </Button>
               <Button
-                color="yellow"
+                color={theme.buttonSave}
                 onClick={() => this._openModalEmailAgreement()}
                 size="small"
                 floated="right"
@@ -221,7 +222,7 @@ class PreviewAgreement extends Component {
                 Send Agreement
               </Button>
               <Button
-                color="red"
+                color={theme.buttonDownload}
                 onClick={() => this._modalConfirmGenerateAgreement()}
                 size="small"
                 floated="right"
