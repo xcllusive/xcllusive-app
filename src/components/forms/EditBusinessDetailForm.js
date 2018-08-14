@@ -468,6 +468,22 @@ class EditBusinessDetailForm extends Component {
                       </Form.Button>
                     </Fragment>
                   )}
+                  <Button
+                    color="facebook"
+                    onClick={() =>
+                      this.props.history.push({
+                        pathname: `/business/${this.props.business.id}/invoice`,
+                        state: {
+                          state: this.props.business.state
+                        }
+                      })
+                    }
+                    size="small"
+                    floated="left"
+                  >
+                    <Icon name="file" />
+                    Invoice
+                  </Button>
                 </Form.Group>
               </Form>
             </Grid.Column>
