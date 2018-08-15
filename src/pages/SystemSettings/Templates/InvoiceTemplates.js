@@ -13,10 +13,10 @@ import {
   Header,
   Button
 } from 'semantic-ui-react'
-import Wrapper from '../../components/content/Wrapper'
+import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import numeral from 'numeral'
 
 import {
@@ -24,8 +24,8 @@ import {
   getInvoiceTemplate,
   updateTemplates,
   clearInvoiceTemplates
-} from '../../redux/ducks/invoiceTemplates'
-import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
+} from '../../../redux/ducks/invoiceTemplates'
+import { mapArrayToValuesForDropdownTemplates } from '../../../utils/sharedFunctionArray'
 
 class InvoiceTemplates extends Component {
   constructor (props) {

@@ -304,7 +304,7 @@ class MakeTaxInvoice extends Component {
                   </Form.Group>
                   <Form.Group widths="equal">
                     <Form.TextArea
-                      className="editable"
+                      // className="editable"
                       label="To"
                       name="to"
                       autoComplete="to"

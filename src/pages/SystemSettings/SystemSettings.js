@@ -7,9 +7,10 @@ import { Tab } from 'semantic-ui-react'
 import UserList from './UserList'
 import Business from './Business/Business'
 import Buyer from './Buyer/Buyer'
-import EmailTemplates from './EmailTemplates'
-import AgreementTemplates from './AgreementTemplates'
-import InvoiceTemplates from './InvoiceTemplates'
+// import EmailTemplates from './EmailTemplates'
+// import AgreementTemplates from './AgreementTemplates'
+// import InvoiceTemplates from './InvoiceTemplates'
+import Templates from './Templates/Templates'
 
 import { getSystemSettings } from '../../redux/ducks/systemSettings'
 
@@ -18,14 +19,6 @@ class SystemSettingsPage extends Component {
     super(props)
     this.state = {
       panes: [
-        {
-          menuItem: 'Invoice Templates',
-          render: () => <InvoiceTemplates />
-        },
-        {
-          menuItem: 'Agreement Templates',
-          render: () => <AgreementTemplates />
-        },
         {
           menuItem: 'Users',
           render: () => <UserList />
@@ -39,8 +32,8 @@ class SystemSettingsPage extends Component {
           render: () => <Business />
         },
         {
-          menuItem: 'Email Templates',
-          render: () => <EmailTemplates />
+          menuItem: 'Templates',
+          render: () => <Templates />
         }
       ]
     }

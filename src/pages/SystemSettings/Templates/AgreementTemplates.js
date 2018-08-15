@@ -14,10 +14,10 @@ import {
   Header,
   Button
 } from 'semantic-ui-react'
-import Wrapper from '../../components/content/Wrapper'
+import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import numeral from 'numeral'
 
 import {
@@ -25,10 +25,10 @@ import {
   getAgreementTemplate,
   updateTemplates,
   clearAgreementTemplates
-} from '../../redux/ducks/agreementTemplates'
-import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
-import OptionIntroductionBuyer from '../../components/content/Agreement/OptionIntroductionBuyer'
-import PropertyOption from '../../components/content/Agreement/PropertyOption'
+} from '../../../redux/ducks/agreementTemplates'
+import { mapArrayToValuesForDropdownTemplates } from '../../../utils/sharedFunctionArray'
+import OptionIntroductionBuyer from '../../../components/content/Agreement/OptionIntroductionBuyer'
+import PropertyOption from '../../../components/content/Agreement/PropertyOption'
 
 class AgreementTemplates extends Component {
   constructor (props) {

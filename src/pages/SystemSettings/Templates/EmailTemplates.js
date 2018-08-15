@@ -15,7 +15,7 @@ import {
   Header,
   Button
 } from 'semantic-ui-react'
-import Wrapper from '../../components/content/Wrapper'
+import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
@@ -24,8 +24,8 @@ import {
   getEmailTemplate,
   updateTemplates,
   clearEmailTemplates
-} from '../../redux/ducks/emailTemplates'
-import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
+} from '../../../redux/ducks/emailTemplates'
+import { mapArrayToValuesForDropdownTemplates } from '../../../utils/sharedFunctionArray'
 
 class EmailTemplates extends Component {
   constructor (props) {
