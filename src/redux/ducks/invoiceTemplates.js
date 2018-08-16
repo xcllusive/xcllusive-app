@@ -237,6 +237,7 @@ export const createInvoiceTemplate = template => async dispatch => {
       type: Types.CREATE_INVOICE_TEMPLATE_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }
 
