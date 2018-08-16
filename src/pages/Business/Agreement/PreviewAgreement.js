@@ -153,10 +153,11 @@ class PreviewAgreement extends Component {
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
-      fileName: `agreement_${this.props.location.state.business.businessName.substring(
+      fileNameAgreement: `agreement_${this.props.location.state.business.businessName.substring(
         0,
         10
       )}_${moment().format('DD_MM_YYYY')}.pdf`,
+      fileNameInvoice: '',
       onConfirm: object => {
         if (object) {
           this.props.sendAgreement({
