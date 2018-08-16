@@ -160,7 +160,7 @@ class ModalEmailAgreement extends Component {
               />
               <Header as="h4" style={{ marginTop: 0 }}>
                 <Form.Checkbox
-                  label="Attach"
+                  label="Attach Agreement"
                   name="attachAgreement"
                   onChange={this._handleChangeCheckBox}
                   checked={values.attachAgreement}
@@ -182,7 +182,7 @@ class ModalEmailAgreement extends Component {
               />
               <Header as="h4" style={{ marginTop: 0 }}>
                 <Form.Checkbox
-                  label="Attach"
+                  label="Attach Invoice"
                   name="attachInvoice"
                   onChange={this._handleChangeCheckBox}
                   checked={values.attachInvoice}
