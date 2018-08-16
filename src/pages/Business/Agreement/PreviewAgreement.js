@@ -15,6 +15,7 @@ import {
   getAgreementBody
 } from '../../../redux/ducks/agreement'
 import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
+import { getLastInvoice } from '../../../redux/ducks/invoice'
 
 import Wrapper from '../../../components/content/Wrapper'
 import { theme } from '../../../styles'
@@ -75,6 +76,8 @@ class PreviewAgreement extends Component {
       })
     }
     this._attachQuillRefs()
+
+    this.props.getLastInvoice(this.props.match.params.id)
   }
 
   static getDerivedStateFromProps (props, state) {
@@ -147,7 +150,7 @@ class PreviewAgreement extends Component {
   }
 
   _openModalEmailAgreement = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT, {
+    this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT_INVOICE, {
       options: {
         title: 'Preparing Agreement/Invoice Email'
       },
@@ -157,7 +160,9 @@ class PreviewAgreement extends Component {
         0,
         10
       )}_${moment().format('DD_MM_YYYY')}.pdf`,
-      fileNameInvoice: '',
+      fileNameInvoice: this.props.objectLastInvoice
+        ? `${this.props.objectLastInvoice.ref}.pdf`
+        : '',
       onConfirm: object => {
         if (object) {
           this.props.sendAgreement({
@@ -257,7 +262,9 @@ PreviewAgreement.propTypes = {
   isSent: PropTypes.bool,
   getAgreementBody: PropTypes.func,
   agreementExisted: PropTypes.object,
-  isLoadingDownloading: PropTypes.bool
+  isLoadingDownloading: PropTypes.bool,
+  getLastInvoice: PropTypes.func,
+  objectLastInvoice: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -265,7 +272,8 @@ const mapStateToProps = state => ({
   isLoading: state.agreementTemplates.preview.isLoading,
   isSent: state.agreement.send.isSent,
   agreementExisted: state.agreement.get.object,
-  isLoadingDownloading: state.agreement.download.isLoading
+  isLoadingDownloading: state.agreement.download.isLoading,
+  objectLastInvoice: state.invoice.getLastInvoice.object
 })
 
 const mapDispatchToProps = dispatch =>
@@ -276,7 +284,8 @@ const mapDispatchToProps = dispatch =>
       closeModal,
       downloadAgreement,
       sendAgreement,
-      getAgreementBody
+      getAgreementBody,
+      getLastInvoice
     },
     dispatch
   )

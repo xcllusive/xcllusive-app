@@ -36,6 +36,7 @@ import {
   downloadInvoice
 } from '../../../redux/ducks/invoice'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
+import { getAgreementBody } from '../../../redux/ducks/agreement'
 
 import Wrapper from '../../../components/content/Wrapper'
 import { theme } from '../../../styles'
@@ -97,6 +98,11 @@ class MakeTaxInvoice extends Component {
     this.props.getInvoiceTemplateState(this.props.location.state.business.state)
     this.props.getInvoices(this.props.match.params.id)
     this.props.getLastInvoice(this.props.match.params.id)
+    if (this.props.location.state.business.agreement_id) {
+      this.props.getAgreementBody(
+        this.props.location.state.business.agreement_id
+      )
+    }
   }
 
   componentDidUpdate () {
@@ -209,19 +215,21 @@ class MakeTaxInvoice extends Component {
       await this.props.updateInvoice(this.props.values)
     }
     this.props.getInvoices(this.props.match.params.id)
+    await this.props.getLastInvoice(this.props.match.params.id)
 
     this.setState({ newInvoice: false })
-
-    this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT, {
+    this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT_INVOICE, {
       options: {
         title: 'Preparing Agreement/Invoice Email'
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
-      fileNameAgreement: `agreement_${this.props.location.state.business.businessName.substring(
-        0,
-        10
-      )}_${moment().format('DD_MM_YYYY')}.pdf`,
+      fileNameAgreement: this.props.agreementExisted
+        ? `agreement_${this.props.location.state.business.businessName.substring(
+          0,
+          10
+        )}_${moment().format('DD_MM_YYYY')}.pdf`
+        : '',
       fileNameInvoice: `${this.props.values.ref}.pdf`,
       onConfirm: object => {
         if (object) {
@@ -601,7 +609,9 @@ MakeTaxInvoice.propTypes = {
   isUpdateLoading: PropTypes.bool,
   isValid: PropTypes.bool,
   downloadInvoice: PropTypes.func,
-  isLoadingDownloading: PropTypes.bool
+  isLoadingDownloading: PropTypes.bool,
+  getAgreementBody: PropTypes.func,
+  agreementExisted: PropTypes.object
 }
 
 const validationSchema = Yup.object().shape({
@@ -710,7 +720,8 @@ const mapStateToProps = state => ({
     state.invoiceTemplates.getChangeState.object,
   isCreateLoading: state.invoice.create.isLoading,
   isUpdateLoading: state.invoice.update.isLoading,
-  isLoadingDownloading: state.invoice.download.isLoading
+  isLoadingDownloading: state.invoice.download.isLoading,
+  agreementExisted: state.agreement.get.object
 })
 
 const mapDispatchToProps = dispatch =>
@@ -725,7 +736,8 @@ const mapDispatchToProps = dispatch =>
       clearInvoice,
       updateInvoice,
       getInvoiceTemplateChangeState,
-      downloadInvoice
+      downloadInvoice,
+      getAgreementBody
     },
     dispatch
   )

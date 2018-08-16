@@ -15,7 +15,7 @@ import ModalStageLost from './ModalStageLost'
 import ModalReassignBusiness from './ModalReassignBusiness'
 import ModalNewAgreementTemplate from './ModalNewAgreementTemplate'
 import ModalListAgreements from './ModalListAgreements'
-import ModalEmailAgreement from './ModalEmailAgreement'
+import ModalEmailAgreementInvoice from './ModalEmailAgreementInvoice'
 import ModalNewInvoiceTemplate from './ModalNewInvoiceTemplate'
 
 const MODAL_COMPONENTS = {
@@ -34,7 +34,7 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_STAGE_REASSIGN_BUSINESS]: ModalReassignBusiness,
   [TypesModal.MODAL_TYPE_NEW_AGREEMENT_TEMPLATE]: ModalNewAgreementTemplate,
   [TypesModal.MODAL_TYPE_LIST_AGREEMENTS]: ModalListAgreements,
-  [TypesModal.MODAL_TYPE_EMAIL_AGREEMENT]: ModalEmailAgreement,
+  [TypesModal.MODAL_TYPE_EMAIL_AGREEMENT_INVOICE]: ModalEmailAgreementInvoice,
   [TypesModal.MODAL_TYPE_NEW_INVOICE_TEMPLATE]: ModalNewInvoiceTemplate
 }
 
