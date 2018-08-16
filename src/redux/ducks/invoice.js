@@ -1,10 +1,13 @@
 import { toast } from 'react-toastify'
+import download from '../../utils/file-download'
 import {
   create,
   getAll,
   get,
   update,
-  getLast
+  getLast,
+  downloadInv,
+  send
 } from '../../services/api/invoice'
 
 // Action Types
@@ -25,7 +28,13 @@ export const Types = {
   CLEAR_INVOICE: 'CLEAR_INVOICE',
   GET_LAST_INVOICE_LOADING: 'GET_LAST_INVOICE_LOADING',
   GET_LAST_INVOICE_SUCCESS: 'GET_LAST_INVOICE_SUCCESS',
-  GET_LAST_INVOICE_FAILURE: 'GET_LAST_INVOICE_FAILURE'
+  GET_LAST_INVOICE_FAILURE: 'GET_LAST_INVOICE_FAILURE',
+  DOWNLOAD_INVOICE_LOADING: 'DOWNLOAD_INVOICE_LOADING',
+  DOWNLOAD_INVOICE_SUCCESS: 'DOWNLOAD_INVOICE_SUCCESS',
+  DOWNLOAD_INVOICE_FAILURE: 'DOWNLOAD_INVOICE_FAILURE',
+  SEND_INVOICE_LOADING: 'SEND_INVOICE_LOADING',
+  SEND_INVOICE_SUCCESS: 'SEND_INVOICE_SUCCESS',
+  SEND_INVOICE_FAILURE: 'SEND_INVOICE_FAILURE'
 }
 
 // Reducer
@@ -55,6 +64,16 @@ const initialState = {
   getLastInvoice: {
     object: null,
     isLoading: false,
+    error: null
+  },
+  download: {
+    isLoading: false,
+    isDownloaded: false,
+    error: null
+  },
+  send: {
+    isLoading: false,
+    isSent: false,
     error: null
   }
 }
@@ -205,6 +224,62 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.DOWNLOAD_INVOICE_LOADING:
+      return {
+        ...state,
+        download: {
+          ...state.download,
+          isLoading: action.payload,
+          isDownloaded: false,
+          error: null
+        }
+      }
+    case Types.DOWNLOAD_INVOICE_SUCCESS:
+      return {
+        ...state,
+        download: {
+          ...state.download,
+          isLoading: false,
+          isDownloaded: true
+        }
+      }
+    case Types.DOWNLOAD_INVOICE_FAILURE:
+      return {
+        ...state,
+        download: {
+          ...state.download,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.SEND_INVOICE_LOADING:
+      return {
+        ...state,
+        send: {
+          ...state.send,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_INVOICE_SUCCESS:
+      return {
+        ...state,
+        send: {
+          ...state.send,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_INVOICE_FAILURE:
+      return {
+        ...state,
+        send: {
+          ...state.send,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_INVOICE:
       return initialState
     default:
@@ -311,6 +386,46 @@ export const getLastInvoice = businessId => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_LAST_INVOICE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const downloadInvoice = invoice => async dispatch => {
+  dispatch({
+    type: Types.DOWNLOAD_INVOICE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await downloadInv(invoice)
+    dispatch({
+      type: Types.DOWNLOAD_INVOICE_SUCCESS
+    })
+    download(response, invoice.fileName)
+  } catch (error) {
+    dispatch({
+      type: Types.DOWNLOAD_INVOICE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const sendInvoice = invoice => async dispatch => {
+  dispatch({
+    type: Types.SEND_INVOICE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await send(invoice)
+    dispatch({
+      type: Types.SEND_INVOICE_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_INVOICE_FAILURE,
       payload: error
     })
     toast.error(error)

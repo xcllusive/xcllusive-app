@@ -32,7 +32,8 @@ import {
   createInvoice,
   getInvoice,
   clearInvoice,
-  updateInvoice
+  updateInvoice,
+  downloadInvoice
 } from '../../../redux/ducks/invoice'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
@@ -210,6 +211,33 @@ class MakeTaxInvoice extends Component {
     this.props.getInvoices(this.props.match.params.id)
 
     this.setState({ newInvoice: false })
+
+    this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT, {
+      options: {
+        title: 'Preparing Agreement/Invoice Email'
+      },
+      vendorEmail: this.props.location.state.business.vendorEmail,
+      businessId: this.props.location.state.business.id,
+      fileNameAgreement: `agreement_${this.props.location.state.business.businessName.substring(
+        0,
+        10
+      )}_${moment().format('DD_MM_YYYY')}.pdf`,
+      fileNameInvoice: `${this.props.values.ref}.pdf`,
+      onConfirm: object => {
+        if (object) {
+          // this.props.sendAgreement({
+          //   businessId: this.props.location.state.business.id,
+          //   body: this.state.body,
+          //   mail: object
+          // })
+          // this.props.sendInvoice({
+          //   businessId: this.props.location.state.business.id,
+          //   body: this.state.body,
+          //   mail: object
+          // })
+        }
+      }
+    })
   }
 
   _getInvoice = async invoice => {
@@ -217,6 +245,22 @@ class MakeTaxInvoice extends Component {
 
     this.setState({ currentInvoice: invoice })
     this.setState({ newInvoice: false })
+  }
+
+  _modalConfirmDownloadInvoice = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Download Invoice',
+        text: 'Are you sure you want to download the invoice?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.downloadInvoice({
+            fileName: this.props.values.ref
+          })
+        }
+      }
+    })
   }
 
   render () {
@@ -231,7 +275,8 @@ class MakeTaxInvoice extends Component {
       listInvoices,
       isCreateLoading,
       isUpdateLoading,
-      isValid
+      isValid,
+      isLoadingDownloading
     } = this.props
     const { state, currentInvoice, newInvoice } = this.state
     return (
@@ -466,6 +511,16 @@ class MakeTaxInvoice extends Component {
                   <Icon name="add" />
                   New
                 </Button>
+                <Button
+                  color={theme.buttonDownload}
+                  onClick={this._modalConfirmDownloadInvoice}
+                  size="small"
+                  floated="right"
+                  loading={isLoadingDownloading}
+                >
+                  <Icon name="edit" />
+                  Download Invoice
+                </Button>
               </Grid.Column>
             </Grid.Row>
             {listInvoices.length ? (
@@ -544,7 +599,9 @@ MakeTaxInvoice.propTypes = {
   objectInvoiceTemplateChangeState: PropTypes.object,
   isCreateLoading: PropTypes.bool,
   isUpdateLoading: PropTypes.bool,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  downloadInvoice: PropTypes.func,
+  isLoadingDownloading: PropTypes.bool
 }
 
 const validationSchema = Yup.object().shape({
@@ -652,7 +709,8 @@ const mapStateToProps = state => ({
   objectInvoiceTemplateChangeState:
     state.invoiceTemplates.getChangeState.object,
   isCreateLoading: state.invoice.create.isLoading,
-  isUpdateLoading: state.invoice.update.isLoading
+  isUpdateLoading: state.invoice.update.isLoading,
+  isLoadingDownloading: state.invoice.download.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -666,7 +724,8 @@ const mapDispatchToProps = dispatch =>
       getInvoice,
       clearInvoice,
       updateInvoice,
-      getInvoiceTemplateChangeState
+      getInvoiceTemplateChangeState,
+      downloadInvoice
     },
     dispatch
   )

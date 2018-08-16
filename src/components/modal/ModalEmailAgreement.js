@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Button, Form, Label, Grid, Message } from 'semantic-ui-react'
+import {
+  Modal,
+  Button,
+  Form,
+  Label,
+  Grid,
+  Message,
+  Header
+} from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
@@ -67,7 +75,7 @@ class ModalEmailAgreement extends Component {
     this.props.onConfirm(this.props.values)
   }
 
-  _handleChangeCheckBox = (e, { name }) => {
+  _handleChangeCheckBox = (e, { name, checked }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
@@ -152,17 +160,58 @@ class ModalEmailAgreement extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            <Form.Group>
-              <Form.Field width={16}>
-                <Form.Input
-                  label="Attachment"
-                  name="attachmentName"
-                  autoComplete="attachmentName"
-                  value={values.attachmentName}
-                  readOnly
-                />
-              </Form.Field>
-            </Form.Group>
+            <Grid.Row>
+              <Grid.Column width={10}>
+                <Form.Field width={10}>
+                  <Form.Input
+                    label="Attachment Agreement"
+                    name="attachmentAgreement"
+                    autoComplete="attachmentAgreement"
+                    value={values.attachmentAgreement}
+                    readOnly
+                    disabled={!values.attachAgreement}
+                  />
+                </Form.Field>
+              </Grid.Column>
+              <Grid.Column width={3} verticalAlign="middle" floated="right">
+                <Form.Field width={3}>
+                  <Header as="h4">
+                    <Form.Checkbox
+                      label="Attach"
+                      name="attachAgreement"
+                      onChange={this._handleChangeCheckBox}
+                      checked={values.attachAgreement}
+                    />
+                  </Header>
+                </Form.Field>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <Form.Group>
+                  <Form.Field width={16}>
+                    <Form.Input
+                      label="Attachment Invoice"
+                      name="attachmentInvoice"
+                      autoComplete="attachmentInvoice"
+                      value={values.attachmentInvoice}
+                      readOnly
+                      disabled={!values.attachInvoice}
+                    />
+                  </Form.Field>
+                </Form.Group>
+              </Grid.Column>
+              <Grid.Column width={2} floated="right">
+                <Header as="h4" floated="right">
+                  <Form.Checkbox
+                    label="Attach"
+                    name="attachInvoice"
+                    onChange={this._handleChangeCheckBox}
+                    checked={values.attachInvoice}
+                  />
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
             <Form.Group>
               <Form.Field width={11}>
                 <Form.Input
@@ -249,7 +298,8 @@ ModalEmailAgreement.propTypes = {
   sendAgreement: PropTypes.func,
   vendorEmail: PropTypes.string.isRequired,
   businessId: PropTypes.number.isRequired,
-  fileName: PropTypes.string.isRequired,
+  fileNameAgreement: PropTypes.string.isRequired,
+  fileNameInvoice: PropTypes.string.isRequired,
   onConfirm: PropTypes.func,
   isLoading: PropTypes.bool
 }
@@ -262,9 +312,12 @@ const mapStateToProps = state => ({
 const mapPropsToValues = props => ({
   to: props.vendorEmail ? props.vendorEmail : '',
   subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
-  attachmentName: props.fileName,
+  attachmentAgreement: props.fileNameAgreement,
+  attachmentInvoice: props.fileNameInvoice,
   body: props.objectEmailTemplate ? props.objectEmailTemplate.body : '',
-  attachment: ''
+  attachment: '',
+  attachAgreement: true,
+  attachInvoice: true
 })
 
 const mapDispatchToProps = dispatch =>
@@ -292,6 +345,7 @@ export default connect(
   withFormik({
     mapPropsToValues,
     enableReinitialize: true,
-    validationSchema
+    validationSchema,
+    isInitialValid: true
   })(ModalEmailAgreement)
 )

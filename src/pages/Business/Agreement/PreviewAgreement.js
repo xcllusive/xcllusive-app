@@ -125,10 +125,10 @@ class PreviewAgreement extends Component {
     if (quillRef !== null) this.quillRef = quillRef
   }
 
-  _modalConfirmGenerateAgreement = () => {
+  _modalConfirmDownloadAgreement = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
-        title: 'Send Agreement',
+        title: 'Download Agreement',
         text: 'Are you sure you want to download the agreement?'
       },
       onConfirm: isConfirmed => {
@@ -149,7 +149,7 @@ class PreviewAgreement extends Component {
   _openModalEmailAgreement = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT, {
       options: {
-        title: 'Preparing Agreement Email'
+        title: 'Preparing Agreement/Invoice Email'
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
@@ -223,7 +223,7 @@ class PreviewAgreement extends Component {
               </Button>
               <Button
                 color={theme.buttonDownload}
-                onClick={() => this._modalConfirmGenerateAgreement()}
+                onClick={this._modalConfirmDownloadAgreement}
                 size="small"
                 floated="right"
                 loading={isLoadingDownloading}
