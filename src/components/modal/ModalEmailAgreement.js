@@ -114,7 +114,7 @@ class ModalEmailAgreement extends Component {
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
-        <Modal.Content>
+        <Modal.Content scrolling>
           <Form>
             <Form.Group>
               <Message info size="small">
@@ -160,32 +160,25 @@ class ModalEmailAgreement extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            <Grid.Row>
-              <Grid.Column width={10}>
-                <Form.Field width={10}>
-                  <Form.Input
-                    label="Attachment Agreement"
-                    name="attachmentAgreement"
-                    autoComplete="attachmentAgreement"
-                    value={values.attachmentAgreement}
-                    readOnly
-                    disabled={!values.attachAgreement}
-                  />
-                </Form.Field>
-              </Grid.Column>
-              <Grid.Column width={3} verticalAlign="middle" floated="right">
-                <Form.Field width={3}>
-                  <Header as="h4">
-                    <Form.Checkbox
-                      label="Attach"
-                      name="attachAgreement"
-                      onChange={this._handleChangeCheckBox}
-                      checked={values.attachAgreement}
-                    />
-                  </Header>
-                </Form.Field>
-              </Grid.Column>
-            </Grid.Row>
+            <Form.Group inline>
+              <Form.Input
+                label="Attachment Agreement"
+                name="attachmentAgreement"
+                autoComplete="attachmentAgreement"
+                value={values.attachmentAgreement}
+                readOnly
+                disabled={!values.attachAgreement}
+                width={14}
+              />
+              <Header as="h4" style={{marginTop: 0}}>
+                <Form.Checkbox
+                  label="Attach"
+                  name="attachAgreement"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.attachAgreement}
+                />
+              </Header>
+            </Form.Group>
             <Grid.Row>
               <Grid.Column>
                 <Form.Group>
