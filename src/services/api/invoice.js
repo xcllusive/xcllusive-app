@@ -40,7 +40,7 @@ export const getLast = businessId =>
 export const downloadInv = object => {
   return request({
     method: 'post',
-    url: '/invoice/generate',
+    url: '/invoice/download-pdf',
     data: {
       // body: object.body,
       // businessId: object.businessId,
