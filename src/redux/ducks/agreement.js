@@ -5,7 +5,8 @@ import {
   update,
   send,
   downloadAgree,
-  getEmailTemplate
+  getEmailTemplate,
+  sendAgreeInvo
 } from '../../services/api/agreement'
 
 // Action Types
@@ -25,7 +26,10 @@ export const Types = {
   DOWNLOAD_AGREEMENT_FAILURE: 'DOWNLOAD_AGREEMENT_FAILURE',
   GET_EMAIL_TEMPLATE_AGREEMENT_LOADING: 'GET_EMAIL_TEMPLATE_AGREEMENT_LOADING',
   GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS: 'GET_EMAIL_TEMPLATE_AGREEMENT_SUCCESS',
-  GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE: 'GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE'
+  GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE: 'GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE',
+  SEND_AGREEMENT_INVOICE_LOADING: 'SEND_AGREEMENT_INVOICE_LOADING',
+  SEND_AGREEMENT_INVOICE_SUCCESS: 'SEND_AGREEMENT_INVOICE_SUCCESS',
+  SEND_AGREEMENT_INVOICE_FAILURE: 'SEND_AGREEMENT_INVOICE_FAILURE'
 }
 
 // Reducer
@@ -54,6 +58,11 @@ const initialState = {
   getEmailTemplate: {
     object: null,
     isLoading: false,
+    error: null
+  },
+  sendAgreeInvo: {
+    isLoading: false,
+    isSent: false,
     error: null
   }
 }
@@ -204,6 +213,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SEND_AGREEMENT_INVOICE_LOADING:
+      return {
+        ...state,
+        sendAgreeInvo: {
+          ...state.sendAgreeInvo,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_AGREEMENT_INVOICE_SUCCESS:
+      return {
+        ...state,
+        sendAgreeInvo: {
+          ...state.sendAgreeInvo,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_AGREEMENT_INVOICE_FAILURE:
+      return {
+        ...state,
+        sendAgreeInvo: {
+          ...state.sendAgreeInvo,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -312,6 +349,26 @@ export const getEmailTemplateAgreement = (
   } catch (error) {
     dispatch({
       type: Types.GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const sendAgreementInvoice = (agreement, invoice) => async dispatch => {
+  dispatch({
+    type: Types.SEND_AGREEMENT_INVOICE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await sendAgreeInvo(agreement, invoice)
+    dispatch({
+      type: Types.SEND_AGREEMENT_INVOICE_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_AGREEMENT_INVOICE_FAILURE,
       payload: error
     })
     toast.error(error)

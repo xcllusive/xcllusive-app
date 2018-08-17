@@ -67,7 +67,7 @@ class ModalEmailAgreement extends Component {
     this.props.onConfirm(this.props.values)
   }
 
-  _handleChangeCheckBox = (e, { name, checked }) => {
+  _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 

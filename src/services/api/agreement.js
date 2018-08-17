@@ -54,3 +54,21 @@ export const getEmailTemplate = (idAgreement, businessId) => {
     }
   })
 }
+
+export const sendAgreeInvo = (agreement, invoice) => {
+  const data = new FormData()
+
+  // data.append('body', object.body)
+  // data.append('businessId', object.businessId)
+  // data.append('mail', JSON.stringify(object.mail))
+  // if (object.mail.attachment) {
+  //   data.append('attachment', object.mail.attachment)
+  // }
+
+  return request({
+    method: 'post',
+    url: '/agreement/send-email',
+    data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
