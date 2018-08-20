@@ -17,7 +17,6 @@ import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
-import numeral from 'numeral'
 
 import {
   getInvoiceTemplates,
@@ -152,9 +151,9 @@ class InvoiceTemplates extends Component {
       isSubmitting,
       handleSubmit,
       isValid,
-      isLoadingTemplate
-      // handleChange,
-      // handleBlur
+      isLoadingTemplate,
+      handleChange,
+      handleBlur
     } = this.props
     const { state } = this.state
     return (
@@ -223,7 +222,7 @@ class InvoiceTemplates extends Component {
             </Form.Group>
             <Grid padded="horizontally">
               <Grid.Row style={{ paddingBottom: 0, paddingLeft: '0px' }}>
-                <h4>Office Details</h4>
+                <h4 style={{ fontSize: '.92857143em' }}>Office Details</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
                 <Grid.Column
@@ -251,7 +250,7 @@ class InvoiceTemplates extends Component {
                   paddingLeft: '0px'
                 }}
               >
-                <h4>Description</h4>
+                <h4 style={{ fontSize: '.92857143em' }}>Description</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
                 <Grid.Column
@@ -270,14 +269,31 @@ class InvoiceTemplates extends Component {
                   </Form.Field>
                 </Grid.Column>
               </Grid.Row>
+              <Grid.Row>
+                <Grid.Column
+                  style={{
+                    paddingLeft: '0px',
+                    paddingRight: 0,
+                    marginTop: '30px'
+                  }}
+                >
+                  <Form.TextArea
+                    label="Payment Terms"
+                    name="paymentTerms"
+                    autoComplete="paymentTerms"
+                    value={values.paymentTerms}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Grid.Column>
+              </Grid.Row>
               <Grid.Row
                 style={{
-                  marginTop: '30px',
                   paddingBottom: 0,
                   paddingLeft: '0px'
                 }}
               >
-                <h4>Bank Details</h4>
+                <h4 style={{ fontSize: '.92857143em' }}>Bank Details</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
                 <Grid.Column
@@ -344,44 +360,19 @@ InvoiceTemplates.propTypes = {
 
 const mapPropsToValues = props => ({
   state: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.state : '',
-  header: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.header : '',
   officeDetails: props.objectInvoiceTemplate
     ? props.objectInvoiceTemplate.officeDetails
     : '',
   description: props.objectInvoiceTemplate
     ? props.objectInvoiceTemplate.description
     : '',
+  paymentTerms: props.objectInvoiceTemplate
+    ? props.objectInvoiceTemplate.paymentTerms
+    : '',
   bankDetails: props.objectInvoiceTemplate
     ? props.objectInvoiceTemplate.bankDetails
     : '',
-  id: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.id : '',
-  engagementFee: props.objectInvoiceTemplate
-    ? numeral(props.objectInvoiceTemplate.engagementFee).format('0,0.00')
-    : 0,
-  commissionPerc: props.objectInvoiceTemplate
-    ? numeral(props.objectInvoiceTemplate.commissionPerc).format('0,0.00')
-    : 0,
-  commissionDiscount: props.objectInvoiceTemplate
-    ? numeral(props.objectInvoiceTemplate.commissionDiscount).format('0,0.00')
-    : 0,
-  introductionParties: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.introductionParties
-    : '',
-  commissionProperty: props.objectInvoiceTemplate
-    ? numeral(props.objectInvoiceTemplate.commissionProperty).format('0,0.00')
-    : 0,
-  addressProperty: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.addressProperty
-    : '',
-  priceProperty: props.objectInvoiceTemplate
-    ? numeral(props.objectInvoiceTemplate.priceProperty).format('0,0.00')
-    : 0,
-  propertyOptions: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.propertyOptions
-    : false,
-  optionIntroductionBuyer: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.optionIntroductionBuyer
-    : false
+  id: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.id : ''
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
