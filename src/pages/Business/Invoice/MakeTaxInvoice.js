@@ -33,10 +33,15 @@ import {
   getInvoice,
   clearInvoice,
   updateInvoice,
-  downloadInvoice
+  downloadInvoice,
+  sendInvoice
 } from '../../../redux/ducks/invoice'
-import { TypesModal, openModal } from '../../../redux/ducks/modal'
-import { getAgreementBody } from '../../../redux/ducks/agreement'
+import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
+import {
+  getAgreementBody,
+  sendAgreementInvoice,
+  sendAgreement
+} from '../../../redux/ducks/agreement'
 
 import Wrapper from '../../../components/content/Wrapper'
 import { theme } from '../../../styles'
@@ -235,18 +240,27 @@ class MakeTaxInvoice extends Component {
         )}_${moment().format('DD_MM_YYYY')}.pdf`
         : '',
       fileNameInvoice: `${this.props.values.ref}.pdf`,
-      onConfirm: object => {
+      onConfirm: async object => {
         if (object) {
-          // this.props.sendAgreement({
-          //   businessId: this.props.location.state.business.id,
-          //   body: this.state.body,
-          //   mail: object
-          // })
-          // this.props.sendInvoice({
-          //   businessId: this.props.location.state.business.id,
-          //   body: this.state.body,
-          //   mail: object
-          // })
+          if (object.attachAgreement && object.attachInvoice) {
+            await this.props.sendAgreementInvoice()
+          } else {
+            if (object.attachAgreement) {
+              await this.props.sendAgreement({
+                businessId: this.props.location.state.business.id,
+                body: this.state.body,
+                mail: object
+              })
+            }
+            if (object.attachInvoice) {
+              await this.props.sendInvoice({
+                businessId: this.props.location.state.business.id,
+                body: this.state.body,
+                mail: object
+              })
+            }
+          }
+          this.props.closeModal()
         }
       }
     })
@@ -268,6 +282,7 @@ class MakeTaxInvoice extends Component {
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           this.props.downloadInvoice({
+            id: this.props.values.id,
             fileName: this.props.values.ref
           })
         }
@@ -547,6 +562,7 @@ class MakeTaxInvoice extends Component {
                   size="small"
                   floated="right"
                   loading={isLoadingDownloading}
+                  disabled={this.props.values.id === null}
                 >
                   <Icon name="edit" />
                   Download Invoice
@@ -633,7 +649,11 @@ MakeTaxInvoice.propTypes = {
   downloadInvoice: PropTypes.func,
   isLoadingDownloading: PropTypes.bool,
   getAgreementBody: PropTypes.func,
-  agreementExisted: PropTypes.object
+  agreementExisted: PropTypes.object,
+  sendAgreementInvoice: PropTypes.func,
+  sendInvoice: PropTypes.func,
+  sendAgreement: PropTypes.func,
+  closeModal: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({
@@ -772,7 +792,11 @@ const mapDispatchToProps = dispatch =>
       updateInvoice,
       getInvoiceTemplateChangeState,
       downloadInvoice,
-      getAgreementBody
+      getAgreementBody,
+      sendAgreementInvoice,
+      sendInvoice,
+      sendAgreement,
+      closeModal
     },
     dispatch
   )
