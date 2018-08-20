@@ -193,6 +193,10 @@ class MakeTaxInvoice extends Component {
           'description',
           this.props.objectInvoiceTemplate.description
         )
+        this.props.setFieldValue(
+          'paymentTerms',
+          this.props.objectInvoiceTemplate.paymentTerms
+        )
         this.props.setFieldValue('amount', null)
         this.props.setFieldValue('total', 0.0)
         this.props.setFieldValue(
@@ -395,6 +399,24 @@ class MakeTaxInvoice extends Component {
                             !newInvoice
                           )
                         }
+                      />
+                    </Form.Field>
+                  </Form.Group>
+                </Segment>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <Header as="h3" content="Payment Terms" />
+                <Segment>
+                  <Form.Group widths="equal">
+                    <Form.Field>
+                      <Form.TextArea
+                        name="paymentTerms"
+                        autoComplete="paymentTerms"
+                        value={values.paymentTerms}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
                     </Form.Field>
                   </Form.Group>
@@ -617,6 +639,7 @@ MakeTaxInvoice.propTypes = {
 const validationSchema = Yup.object().shape({
   to: Yup.string().required('To is required'),
   description: Yup.string().required('Description is required!'),
+  paymentTerms: Yup.string().required('Description is required!'),
   amount: Yup.number('Only numbers, please!')
 })
 
@@ -637,6 +660,9 @@ const mapPropsToValues = props => {
 
       /* Description */
       description: props.objectLastInvoice.description,
+
+      /* Payment Terms */
+      paymentTerms: props.objectLastInvoice.paymentTerms,
 
       /* Values */
       gst: '$ 10%',
@@ -662,6 +688,9 @@ const mapPropsToValues = props => {
 
       /* Description */
       description: props.objectInvoice.description,
+
+      /* Payment Terms */
+      paymentTerms: props.objectInvoice.paymentTerms,
 
       /* Values */
       gst: '$ 10%',
@@ -697,6 +726,12 @@ const mapPropsToValues = props => {
       description: props.objectInvoiceTemplate
         ? props.objectInvoiceTemplate.description
         : '',
+
+      /* Payment Terms */
+      paymentTerms: props.objectInvoiceTemplate
+        ? props.objectInvoiceTemplate.paymentTerms
+        : '',
+
       /* Values */
       gst: '$ 10%',
       amount: 0.0,
