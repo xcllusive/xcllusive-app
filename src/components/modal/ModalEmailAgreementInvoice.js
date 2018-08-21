@@ -2,17 +2,17 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Button, Form, Label, Grid, Header } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 import * as Yup from 'yup'
 
+import { closeModal } from '../../redux/ducks/modal'
 import {
   sendAgreement,
   getEmailTemplateAgreement
 } from '../../redux/ducks/agreement'
+import 'react-quill/dist/quill.snow.css'
 
 class ModalEmailAgreement extends Component {
   constructor (props) {

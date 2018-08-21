@@ -33,7 +33,8 @@ import {
   getInvoice,
   clearInvoice,
   updateInvoice,
-  downloadInvoice
+  downloadInvoice,
+  sendInvoice
 } from '../../../redux/ducks/invoice'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import { getAgreementBody } from '../../../redux/ducks/agreement'
@@ -233,16 +234,11 @@ class MakeTaxInvoice extends Component {
       fileNameInvoice: `${this.props.values.ref}.pdf`,
       onConfirm: object => {
         if (object) {
-          // this.props.sendAgreement({
-          //   businessId: this.props.location.state.business.id,
-          //   body: this.state.body,
-          //   mail: object
-          // })
-          // this.props.sendInvoice({
-          //   businessId: this.props.location.state.business.id,
-          //   body: this.state.body,
-          //   mail: object
-          // })
+          this.props.sendInvoice({
+            businessId: this.props.location.state.business.id,
+            mail: object,
+            invoiceId: this.state.currentInvoice.id
+          })
         }
       }
     })
@@ -251,8 +247,7 @@ class MakeTaxInvoice extends Component {
   _getInvoice = async invoice => {
     await this.props.getInvoice(invoice.id)
 
-    this.setState({ currentInvoice: invoice })
-    this.setState({ newInvoice: false })
+    this.setState({ currentInvoice: invoice, newInvoice: false })
   }
 
   _modalConfirmDownloadInvoice = () => {
@@ -611,7 +606,8 @@ MakeTaxInvoice.propTypes = {
   downloadInvoice: PropTypes.func,
   isLoadingDownloading: PropTypes.bool,
   getAgreementBody: PropTypes.func,
-  agreementExisted: PropTypes.object
+  agreementExisted: PropTypes.object,
+  sendInvoice: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({
@@ -737,7 +733,8 @@ const mapDispatchToProps = dispatch =>
       updateInvoice,
       getInvoiceTemplateChangeState,
       downloadInvoice,
-      getAgreementBody
+      getAgreementBody,
+      sendInvoice
     },
     dispatch
   )

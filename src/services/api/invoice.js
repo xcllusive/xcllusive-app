@@ -53,12 +53,12 @@ export const downloadInv = object => {
 export const send = object => {
   const data = new FormData()
 
-  // data.append('body', object.body)
-  // data.append('businessId', object.businessId)
-  // data.append('mail', JSON.stringify(object.mail))
-  // if (object.mail.attachment) {
-  //   data.append('attachment', object.mail.attachment)
-  // }
+  data.append('businessId', object.businessId)
+  data.append('invoiceId', object.invoiceId)
+  data.append('mail', JSON.stringify(object.mail))
+  if (object.mail.attachment) {
+    data.append('attachment', object.mail.attachment)
+  }
 
   return request({
     method: 'post',
