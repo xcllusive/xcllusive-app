@@ -418,6 +418,7 @@ export const sendInvoice = invoice => async dispatch => {
     payload: true
   })
   try {
+    console.log(invoice)
     const response = await send(invoice)
     dispatch({
       type: Types.SEND_INVOICE_SUCCESS

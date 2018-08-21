@@ -255,27 +255,12 @@ class MakeTaxInvoice extends Component {
       fileNameInvoice: `${this.props.values.ref}.pdf`,
       onConfirm: async object => {
         if (object) {
-          if (object.attachAgreement && object.attachInvoice) {
-            console.log(object)
-            await this.props.sendAgreementInvoice(object)
-          } else {
-            if (object.attachAgreement) {
-              await this.props.sendAgreement({
-                businessId: this.props.location.state.business.id,
-                body: this.state.body,
-                mail: object
-              })
-            }
-            if (object.attachInvoice) {
-              await this.props.sendInvoice({
-                businessId: this.props.location.state.business.id,
-                body: this.state.body,
-                mail: object
-              })
-            }
-          }
-          this.props.closeModal()
+          await this.props.sendInvoice({
+            invoiceId: this.state.currentInvoice.id,
+            mail: object
+          })
         }
+        this.props.closeModal()
       }
     })
   }
