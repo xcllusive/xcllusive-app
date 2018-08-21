@@ -355,13 +355,13 @@ export const getEmailTemplateAgreement = (
   }
 }
 
-export const sendAgreementInvoice = (agreement, invoice) => async dispatch => {
+export const sendAgreementInvoice = object => async dispatch => {
   dispatch({
     type: Types.SEND_AGREEMENT_INVOICE_LOADING,
     payload: true
   })
   try {
-    const response = await sendAgreeInvo(agreement, invoice)
+    const response = await sendAgreeInvo(object)
     dispatch({
       type: Types.SEND_AGREEMENT_INVOICE_SUCCESS
     })

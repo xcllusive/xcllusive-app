@@ -219,12 +219,14 @@ class MakeTaxInvoice extends Component {
   }
 
   _saveSendInvoice = async () => {
-    const amountComma = this.props.values.amount.replace(',', '.')
-    const amountFormated = amountComma.replace('.', '')
-    await this.props.setFieldValue('amount', amountFormated)
-    const totalComma = this.props.values.total.replace(',', '.')
-    const totalFormated = totalComma.replace('.', '')
-    await this.props.setFieldValue('total', totalFormated)
+    if (this.props.values.amount.toString().search(',') !== -1) {
+      const amountComma = this.props.values.amount.replace(',', '.')
+      const amountFormated = amountComma.replace('.', '')
+      await this.props.setFieldValue('amount', amountFormated)
+      const totalComma = this.props.values.total.replace(',', '.')
+      const totalFormated = totalComma.replace('.', '')
+      await this.props.setFieldValue('total', totalFormated)
+    }
 
     if (this.state.newInvoice || this.props.listInvoices.length === 0) {
       await this.props.createInvoice(
@@ -254,7 +256,8 @@ class MakeTaxInvoice extends Component {
       onConfirm: async object => {
         if (object) {
           if (object.attachAgreement && object.attachInvoice) {
-            await this.props.sendAgreementInvoice()
+            console.log(object)
+            await this.props.sendAgreementInvoice(object)
           } else {
             if (object.attachAgreement) {
               await this.props.sendAgreement({

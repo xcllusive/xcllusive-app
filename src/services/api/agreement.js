@@ -55,15 +55,15 @@ export const getEmailTemplate = (idAgreement, businessId) => {
   })
 }
 
-export const sendAgreeInvo = (agreement, invoice) => {
+export const sendAgreeInvo = object => {
   const data = new FormData()
 
-  // data.append('body', object.body)
-  // data.append('businessId', object.businessId)
-  // data.append('mail', JSON.stringify(object.mail))
-  // if (object.mail.attachment) {
-  //   data.append('attachment', object.mail.attachment)
-  // }
+  data.append('body', object.body)
+  data.append('businessId', object.businessId)
+  data.append('mail', JSON.stringify(object.mail))
+  if (object.mail.attachment) {
+    data.append('attachment', object.mail.attachment)
+  }
 
   return request({
     method: 'post',
