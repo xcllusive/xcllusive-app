@@ -38,17 +38,16 @@ export const getLast = businessId =>
   })
 
 export const downloadInv = object => {
-  console.log(object)
   return request({
-    method: 'post',
-    url: `/invoice/${object.id}/download-pdf`
+    method: 'get',
+    url: `/invoice/${object.id}/download-pdf`,
     // data: {
     //   // body: object.body,
     //   id: object.id,
     //   businessId: object.businessId
     //   // mail: object.mail
     // }
-    // responseType: 'blob'
+    responseType: 'blob'
   })
 }
 

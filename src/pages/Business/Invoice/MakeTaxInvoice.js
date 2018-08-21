@@ -184,6 +184,10 @@ class MakeTaxInvoice extends Component {
           'officeDetails',
           this.props.objectInvoiceTemplate.officeDetails
         )
+        this.props.setFieldValue(
+          'bankDetails',
+          this.props.objectInvoiceTemplate.bankDetails
+        )
         this.props.setFieldValue('ref', '')
         this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
         this.props.setFieldValue(
@@ -215,6 +219,13 @@ class MakeTaxInvoice extends Component {
   }
 
   _saveSendInvoice = async () => {
+    const amountComma = this.props.values.amount.replace(',', '.')
+    const amountFormated = amountComma.replace('.', '')
+    await this.props.setFieldValue('amount', amountFormated)
+    const totalComma = this.props.values.total.replace(',', '.')
+    const totalFormated = totalComma.replace('.', '')
+    await this.props.setFieldValue('total', totalFormated)
+
     if (this.state.newInvoice || this.props.listInvoices.length === 0) {
       await this.props.createInvoice(
         this.props.values,
@@ -283,7 +294,7 @@ class MakeTaxInvoice extends Component {
         if (isConfirmed) {
           this.props.downloadInvoice({
             id: this.props.values.id,
-            fileName: this.props.values.ref
+            fileName: `${this.props.values.ref}.pdf`
           })
         }
       }
@@ -480,7 +491,7 @@ class MakeTaxInvoice extends Component {
                             label="Total $"
                             name="total"
                             autoComplete="total"
-                            value={values.total}
+                            value={numeral(values.total).format('0,0.00')}
                           />
                         </Form.Field>
                       </Form.Group>
@@ -669,7 +680,7 @@ const mapPropsToValues = props => {
       id: props.objectLastInvoice.id,
       businessId: props.location.state.business.id,
       officeDetails: props.objectLastInvoice.officeDetails,
-      bankDetails: props.objectLastInvoice.officeDetails,
+      bankDetails: props.objectLastInvoice.bankDetails,
       ref: props.objectLastInvoice.ref,
 
       /* Details */
@@ -697,7 +708,7 @@ const mapPropsToValues = props => {
       id: props.objectInvoice.id,
       businessId: props.location.state.business.id,
       officeDetails: props.objectInvoice.officeDetails,
-      bankDetails: props.objectInvoice.officeDetails,
+      bankDetails: props.objectInvoice.bankDetails,
       ref: props.objectInvoice.ref,
 
       /* Details */
