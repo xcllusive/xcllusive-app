@@ -36,8 +36,12 @@ import {
   downloadInvoice,
   sendInvoice
 } from '../../../redux/ducks/invoice'
-import { TypesModal, openModal } from '../../../redux/ducks/modal'
-import { getAgreementBody } from '../../../redux/ducks/agreement'
+import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
+import {
+  getAgreementBody,
+  sendAgreementInvoice,
+  sendAgreement
+} from '../../../redux/ducks/agreement'
 
 import Wrapper from '../../../components/content/Wrapper'
 import { theme } from '../../../styles'
@@ -180,6 +184,10 @@ class MakeTaxInvoice extends Component {
           'officeDetails',
           this.props.objectInvoiceTemplate.officeDetails
         )
+        this.props.setFieldValue(
+          'bankDetails',
+          this.props.objectInvoiceTemplate.bankDetails
+        )
         this.props.setFieldValue('ref', '')
         this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
         this.props.setFieldValue(
@@ -194,6 +202,10 @@ class MakeTaxInvoice extends Component {
           'description',
           this.props.objectInvoiceTemplate.description
         )
+        this.props.setFieldValue(
+          'paymentTerms',
+          this.props.objectInvoiceTemplate.paymentTerms
+        )
         this.props.setFieldValue('amount', null)
         this.props.setFieldValue('total', 0.0)
         this.props.setFieldValue(
@@ -207,6 +219,13 @@ class MakeTaxInvoice extends Component {
   }
 
   _saveSendInvoice = async () => {
+    const amountComma = this.props.values.amount.replace(',', '.')
+    const amountFormated = amountComma.replace('.', '')
+    await this.props.setFieldValue('amount', amountFormated)
+    const totalComma = this.props.values.total.replace(',', '.')
+    const totalFormated = totalComma.replace('.', '')
+    await this.props.setFieldValue('total', totalFormated)
+
     if (this.state.newInvoice || this.props.listInvoices.length === 0) {
       await this.props.createInvoice(
         this.props.values,
@@ -232,13 +251,27 @@ class MakeTaxInvoice extends Component {
         )}_${moment().format('DD_MM_YYYY')}.pdf`
         : '',
       fileNameInvoice: `${this.props.values.ref}.pdf`,
-      onConfirm: object => {
+      onConfirm: async object => {
         if (object) {
-          this.props.sendInvoice({
-            businessId: this.props.location.state.business.id,
-            mail: object,
-            invoiceId: this.state.currentInvoice.id
-          })
+          if (object.attachAgreement && object.attachInvoice) {
+            await this.props.sendAgreementInvoice()
+          } else {
+            if (object.attachAgreement) {
+              await this.props.sendAgreement({
+                businessId: this.props.location.state.business.id,
+                body: this.state.body,
+                mail: object
+              })
+            }
+            if (object.attachInvoice) {
+              await this.props.sendInvoice({
+                businessId: this.props.location.state.business.id,
+                body: this.state.body,
+                mail: object
+              })
+            }
+          }
+          this.props.closeModal()
         }
       }
     })
@@ -259,7 +292,8 @@ class MakeTaxInvoice extends Component {
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           this.props.downloadInvoice({
-            fileName: this.props.values.ref
+            id: this.props.values.id,
+            fileName: `${this.props.values.ref}.pdf`
           })
         }
       }
@@ -398,6 +432,24 @@ class MakeTaxInvoice extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
+                <Header as="h3" content="Payment Terms" />
+                <Segment>
+                  <Form.Group widths="equal">
+                    <Form.Field>
+                      <Form.TextArea
+                        name="paymentTerms"
+                        autoComplete="paymentTerms"
+                        value={values.paymentTerms}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                    </Form.Field>
+                  </Form.Group>
+                </Segment>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
                 <Header as="h3" content="Values $" />
                 <Segment>
                   <Form.Group widths="equal">
@@ -438,7 +490,7 @@ class MakeTaxInvoice extends Component {
                             label="Total $"
                             name="total"
                             autoComplete="total"
-                            value={values.total}
+                            value={numeral(values.total).format('0,0.00')}
                           />
                         </Form.Field>
                       </Form.Group>
@@ -520,6 +572,7 @@ class MakeTaxInvoice extends Component {
                   size="small"
                   floated="right"
                   loading={isLoadingDownloading}
+                  disabled={this.props.values.id === null}
                 >
                   <Icon name="edit" />
                   Download Invoice
@@ -613,6 +666,7 @@ MakeTaxInvoice.propTypes = {
 const validationSchema = Yup.object().shape({
   to: Yup.string().required('To is required'),
   description: Yup.string().required('Description is required!'),
+  paymentTerms: Yup.string().required('Description is required!'),
   amount: Yup.number('Only numbers, please!')
 })
 
@@ -622,7 +676,7 @@ const mapPropsToValues = props => {
       id: props.objectLastInvoice.id,
       businessId: props.location.state.business.id,
       officeDetails: props.objectLastInvoice.officeDetails,
-      bankDetails: props.objectLastInvoice.officeDetails,
+      bankDetails: props.objectLastInvoice.bankDetails,
       ref: props.objectLastInvoice.ref,
 
       /* Details */
@@ -633,6 +687,9 @@ const mapPropsToValues = props => {
 
       /* Description */
       description: props.objectLastInvoice.description,
+
+      /* Payment Terms */
+      paymentTerms: props.objectLastInvoice.paymentTerms,
 
       /* Values */
       gst: '$ 10%',
@@ -647,7 +704,7 @@ const mapPropsToValues = props => {
       id: props.objectInvoice.id,
       businessId: props.location.state.business.id,
       officeDetails: props.objectInvoice.officeDetails,
-      bankDetails: props.objectInvoice.officeDetails,
+      bankDetails: props.objectInvoice.bankDetails,
       ref: props.objectInvoice.ref,
 
       /* Details */
@@ -658,6 +715,9 @@ const mapPropsToValues = props => {
 
       /* Description */
       description: props.objectInvoice.description,
+
+      /* Payment Terms */
+      paymentTerms: props.objectInvoice.paymentTerms,
 
       /* Values */
       gst: '$ 10%',
@@ -693,6 +753,12 @@ const mapPropsToValues = props => {
       description: props.objectInvoiceTemplate
         ? props.objectInvoiceTemplate.description
         : '',
+
+      /* Payment Terms */
+      paymentTerms: props.objectInvoiceTemplate
+        ? props.objectInvoiceTemplate.paymentTerms
+        : '',
+
       /* Values */
       gst: '$ 10%',
       amount: 0.0,
@@ -734,7 +800,10 @@ const mapDispatchToProps = dispatch =>
       getInvoiceTemplateChangeState,
       downloadInvoice,
       getAgreementBody,
-      sendInvoice
+      sendAgreementInvoice,
+      sendInvoice,
+      sendAgreement,
+      closeModal
     },
     dispatch
   )

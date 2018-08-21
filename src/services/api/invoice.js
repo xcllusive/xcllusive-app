@@ -39,13 +39,14 @@ export const getLast = businessId =>
 
 export const downloadInv = object => {
   return request({
-    method: 'post',
-    url: '/invoice/download-pdf',
-    data: {
-      // body: object.body,
-      // businessId: object.businessId,
-      // mail: object.mail
-    },
+    method: 'get',
+    url: `/invoice/${object.id}/download-pdf`,
+    // data: {
+    //   // body: object.body,
+    //   id: object.id,
+    //   businessId: object.businessId
+    //   // mail: object.mail
+    // }
     responseType: 'blob'
   })
 }
