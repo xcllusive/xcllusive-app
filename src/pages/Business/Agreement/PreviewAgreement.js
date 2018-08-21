@@ -163,6 +163,7 @@ class PreviewAgreement extends Component {
       fileNameInvoice: this.props.objectLastInvoice
         ? `${this.props.objectLastInvoice.ref}.pdf`
         : '',
+      fromAgreement: true,
       onConfirm: object => {
         if (object) {
           this.props.sendAgreement({

@@ -253,6 +253,7 @@ class MakeTaxInvoice extends Component {
         )}_${moment().format('DD_MM_YYYY')}.pdf`
         : '',
       fileNameInvoice: `${this.props.values.ref}.pdf`,
+      fromInvoice: true,
       onConfirm: async object => {
         if (object) {
           await this.props.sendInvoice({

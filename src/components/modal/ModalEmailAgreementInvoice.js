@@ -101,7 +101,9 @@ class ModalEmailAgreement extends Component {
       handleChange,
       handleBlur,
       isLoading,
-      isLoadingInvoice
+      isLoadingInvoice,
+      fromInvoice,
+      fromAgreement
     } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
@@ -161,6 +163,7 @@ class ModalEmailAgreement extends Component {
               />
               <Header as="h4" style={{ marginTop: 0 }}>
                 <Form.Checkbox
+                  readOnly={fromAgreement}
                   label="Attach Agreement"
                   name="attachAgreement"
                   onChange={this._handleChangeCheckBox}
@@ -183,6 +186,7 @@ class ModalEmailAgreement extends Component {
               />
               <Header as="h4" style={{ marginTop: 0 }}>
                 <Form.Checkbox
+                  readOnly={fromInvoice}
                   label="Attach Invoice"
                   name="attachInvoice"
                   onChange={this._handleChangeCheckBox}
@@ -281,7 +285,9 @@ ModalEmailAgreement.propTypes = {
   fileNameInvoice: PropTypes.string.isRequired,
   onConfirm: PropTypes.func,
   isLoading: PropTypes.bool,
-  isLoadingInvoice: PropTypes.bool
+  isLoadingInvoice: PropTypes.bool,
+  fromInvoice: PropTypes.bool,
+  fromAgreement: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
