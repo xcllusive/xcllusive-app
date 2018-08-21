@@ -41,12 +41,6 @@ export const downloadInv = object => {
   return request({
     method: 'get',
     url: `/invoice/${object.id}/download-pdf`,
-    // data: {
-    //   // body: object.body,
-    //   id: object.id,
-    //   businessId: object.businessId
-    //   // mail: object.mail
-    // }
     responseType: 'blob'
   })
 }
@@ -54,13 +48,9 @@ export const downloadInv = object => {
 export const send = object => {
   const data = new FormData()
 
-<<<<<<< HEAD
-  data.append('businessId', object.businessId)
-  data.append('invoiceId', object.invoiceId)
-=======
   data.append('body', object.body)
+  data.append('invoiceId', object.invoiceId)
   data.append('businessId', object.businessId)
->>>>>>> 9a3f6daea53f63813f8043244f1891781d5cf99f
   data.append('mail', JSON.stringify(object.mail))
   if (object.mail.attachment) {
     data.append('attachment', object.mail.attachment)

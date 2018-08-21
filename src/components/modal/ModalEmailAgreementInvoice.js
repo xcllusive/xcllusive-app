@@ -100,7 +100,8 @@ class ModalEmailAgreement extends Component {
       isValid,
       handleChange,
       handleBlur,
-      isLoading
+      isLoading,
+      isLoadingInvoice
     } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
@@ -250,7 +251,7 @@ class ModalEmailAgreement extends Component {
             labelPosition="right"
             content="Send"
             onClick={this._handleConfirm}
-            loading={isLoading}
+            loading={isLoading || isLoadingInvoice}
             disabled={!isValid}
           />
         </Modal.Actions>
@@ -279,12 +280,14 @@ ModalEmailAgreement.propTypes = {
   fileNameAgreement: PropTypes.string.isRequired,
   fileNameInvoice: PropTypes.string.isRequired,
   onConfirm: PropTypes.func,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  isLoadingInvoice: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   objectEmailTemplate: state.agreement.getEmailTemplate.object,
-  isLoading: state.agreement.send.isLoading
+  isLoading: state.agreement.send.isLoading,
+  isLoadingInvoice: state.invoice.send.isLoading
 })
 
 const mapPropsToValues = props => ({

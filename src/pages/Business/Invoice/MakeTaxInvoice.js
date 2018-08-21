@@ -256,7 +256,6 @@ class MakeTaxInvoice extends Component {
       onConfirm: async object => {
         if (object) {
           if (object.attachAgreement && object.attachInvoice) {
-            console.log(object)
             await this.props.sendAgreementInvoice(object)
           } else {
             if (object.attachAgreement) {
@@ -268,6 +267,7 @@ class MakeTaxInvoice extends Component {
             }
             if (object.attachInvoice) {
               await this.props.sendInvoice({
+                invoiceId: this.props.values.id,
                 businessId: this.props.location.state.business.id,
                 body: this.state.body,
                 mail: object
