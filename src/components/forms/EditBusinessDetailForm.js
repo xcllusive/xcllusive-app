@@ -884,7 +884,7 @@ const mapPropsToValues = props => {
       address1,
       suburb,
       state,
-      postCode: postCode && postCode.length > 3 ? postCode : '0000',
+      postCode: postCode && postCode.toString().length > 3 ? postCode : '0000',
       data120DayGuarantee,
       notifyOwner,
       listingAgent,

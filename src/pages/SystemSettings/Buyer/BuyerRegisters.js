@@ -10,6 +10,8 @@ import {
   Button,
   Grid,
   Header,
+  Dimmer,
+  Loader,
   Pagination
 } from 'semantic-ui-react'
 
@@ -65,76 +67,85 @@ class BuyerRegisters extends Component {
   }
 
   render () {
+    const { isLoadingBuyerRegister } = this.props
     return (
       <Wrapper>
-        <Grid padded="horizontally">
-          <Grid.Row columns={1}>
-            <Grid.Column floated="right" width={2}>
-              <Button onClick={this._newBuyer} color="facebook" size="small">
-                <Icon name="add" />
-                New Register
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column>
-              <Header as="h5" attached="top">
-                Buyer Type
-              </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Label</Table.HeaderCell>
-                    <Table.HeaderCell>Settings</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.typeOptions.array.map(typeOptions => {
-                    return (
-                      <Table.Row active key={typeOptions.id}>
-                        <Table.Cell>{typeOptions.id}</Table.Cell>
-                        <Table.Cell>{typeOptions.label}</Table.Cell>
-                        <Table.Cell>
-                          <Icon
-                            link
-                            name="edit"
-                            onClick={() => this._editBuyer(typeOptions, 1)}
-                          />
-                          <Icon
-                            link
-                            name="trash"
-                            color="red"
-                            onClick={() =>
-                              this._toggleModalConfirm(typeOptions.id, 1)
-                            }
-                          />
-                        </Table.Cell>
-                      </Table.Row>
-                    )
-                  })}
-                </Table.Body>
-              </Table>
-              <Pagination
-                size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 5)
-                }
-                defaultActivePage={this.props.typeOptions.activePage}
-                totalPages={this.props.typeOptions.pages}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Dimmer.Dimmable
+          dimmed={isLoadingBuyerRegister}
+          style={{ height: '80vh' }}
+        >
+          <Dimmer inverted active={isLoadingBuyerRegister}>
+            <Loader>Loading</Loader>
+          </Dimmer>
+          <Grid padded="horizontally">
+            <Grid.Row columns={1}>
+              <Grid.Column floated="right" width={2}>
+                <Button onClick={this._newBuyer} color="facebook" size="small">
+                  <Icon name="add" />
+                  New Register
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={3}>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  Buyer Type
+                </Header>
+                <Table
+                  compact
+                  celled
+                  inverted
+                  selectable
+                  color="blue"
+                  size="small"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>ID</Table.HeaderCell>
+                      <Table.HeaderCell>Label</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.typeOptions.array.map(typeOptions => {
+                      return (
+                        <Table.Row active key={typeOptions.id}>
+                          <Table.Cell>{typeOptions.id}</Table.Cell>
+                          <Table.Cell>{typeOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            <Icon
+                              link
+                              name="edit"
+                              onClick={() => this._editBuyer(typeOptions, 1)}
+                            />
+                            <Icon
+                              link
+                              name="trash"
+                              color="red"
+                              onClick={() =>
+                                this._toggleModalConfirm(typeOptions.id, 1)
+                              }
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) =>
+                    this._handlePaginationChange(e, data, 5)
+                  }
+                  defaultActivePage={this.props.typeOptions.activePage}
+                  totalPages={this.props.typeOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Dimmer.Dimmable>
       </Wrapper>
     )
   }
@@ -144,15 +155,16 @@ BuyerRegisters.propTypes = {
   removeBuyerRegister: PropTypes.func,
   typeOptions: PropTypes.object,
   openModal: PropTypes.func,
-  getBuyerRegister: PropTypes.func
+  getBuyerRegister: PropTypes.func,
+  isLoadingBuyerRegister: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-  isLoading: state.buyer.get.isLoading,
   typeOptions: state.buyerRegister.get.type,
   createBuyerRegister: state.buyerRegister.create.isCreated,
   updateBuyerRegister: state.buyerRegister.update.isUpdated,
-  deleteBuyerRegister: state.buyerRegister.delete.isDeleted
+  deleteBuyerRegister: state.buyerRegister.delete.isDeleted,
+  isLoadingBuyerRegister: state.buyerRegister.get.type.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -165,4 +177,7 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuyerRegisters)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BuyerRegisters)
