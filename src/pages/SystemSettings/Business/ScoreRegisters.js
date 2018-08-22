@@ -10,6 +10,8 @@ import {
   Button,
   Grid,
   Header,
+  Dimmer,
+  Loader,
   Pagination
 } from 'semantic-ui-react'
 
@@ -69,123 +71,81 @@ class ScoreRegisters extends Component {
   }
 
   render () {
+    const {
+      isLoadingPerceivedPrice,
+      isLoadingCurrentInterest,
+      isLoadingEnquiries,
+      isLoadingInfoTransMomen,
+      isLoadingPerceivedRisk
+    } = this.props
     return (
       <Wrapper>
-        <Grid padded="horizontally">
-          <Grid.Row columns={1}>
-            <Grid.Column floated="right" width={2}>
-              <Button onClick={this._newScore} color="facebook" size="small">
-                <Icon name="add" />
-                New Register
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
+        <Dimmer.Dimmable
+          dimmed={
+            isLoadingPerceivedPrice ||
+            isLoadingCurrentInterest ||
+            isLoadingEnquiries ||
+            isLoadingInfoTransMomen ||
+            isLoadingPerceivedRisk
+          }
+          style={{ height: '80vh' }}
+        >
+          <Dimmer
+            inverted
+            active={
+              isLoadingPerceivedPrice ||
+              isLoadingCurrentInterest ||
+              isLoadingEnquiries ||
+              isLoadingInfoTransMomen ||
+              isLoadingPerceivedRisk
+            }
+          >
+            <Loader>Loading</Loader>
+          </Dimmer>
+          <Grid padded="horizontally">
+            <Grid.Row columns={1}>
+              <Grid.Column floated="right" width={2}>
+                <Button onClick={this._newScore} color="facebook" size="small">
+                  <Icon name="add" />
+                  New Register
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
 
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <Header as="h5" attached="top">
-                Enquiries
-              </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Score</Table.HeaderCell>
-                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
-                    <Table.HeaderCell>Weight</Table.HeaderCell>
-                    <Table.HeaderCell>Settings</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.enquiriesOptions.array.map(enquiriesOptions => {
-                    return (
-                      <Table.Row active key={enquiriesOptions.id}>
-                        <Table.Cell>{enquiriesOptions.label}</Table.Cell>
-                        <Table.Cell>{enquiriesOptions.textReport}</Table.Cell>
-                        <Table.Cell>{enquiriesOptions.weight}</Table.Cell>
-                        <Table.Cell>
-                          <Icon
-                            link
-                            name="edit"
-                            onClick={() =>
-                              this._editScore(enquiriesOptions, 'enquiries')
-                            }
-                          />
-                          <Icon
-                            link
-                            name="trash"
-                            color="red"
-                            onClick={() =>
-                              this._toggleModalConfirm(
-                                enquiriesOptions.id,
-                                'enquiries'
-                              )
-                            }
-                          />
-                        </Table.Cell>
-                      </Table.Row>
-                    )
-                  })}
-                </Table.Body>
-              </Table>
-              <Pagination
-                size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'enquiries')
-                }
-                defaultActivePage={this.props.enquiriesOptions.activePage}
-                totalPages={this.props.enquiriesOptions.pages}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h5" attached="top">
-                Perceived Price from Buyers
-              </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Select Options</Table.HeaderCell>
-                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
-                    <Table.HeaderCell>Weight</Table.HeaderCell>
-                    <Table.HeaderCell>Settings</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.perceivedPriceOptions.array.map(
-                    perceivedPriceOptions => {
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  Enquiries
+                </Header>
+                <Table
+                  compact
+                  celled
+                  inverted
+                  selectable
+                  color="blue"
+                  size="small"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Score</Table.HeaderCell>
+                      <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                      <Table.HeaderCell>Weight</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.enquiriesOptions.array.map(enquiriesOptions => {
                       return (
-                        <Table.Row active key={perceivedPriceOptions.id}>
-                          <Table.Cell>{perceivedPriceOptions.label}</Table.Cell>
-                          <Table.Cell>
-                            {perceivedPriceOptions.textReport}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {perceivedPriceOptions.weight}
-                          </Table.Cell>
+                        <Table.Row active key={enquiriesOptions.id}>
+                          <Table.Cell>{enquiriesOptions.label}</Table.Cell>
+                          <Table.Cell>{enquiriesOptions.textReport}</Table.Cell>
+                          <Table.Cell>{enquiriesOptions.weight}</Table.Cell>
                           <Table.Cell>
                             <Icon
                               link
                               name="edit"
                               onClick={() =>
-                                this._editScore(
-                                  perceivedPriceOptions,
-                                  'perceivedPrice'
-                                )
+                                this._editScore(enquiriesOptions, 'enquiries')
                               }
                             />
                             <Icon
@@ -194,247 +154,333 @@ class ScoreRegisters extends Component {
                               color="red"
                               onClick={() =>
                                 this._toggleModalConfirm(
-                                  perceivedPriceOptions.id,
-                                  'perceivedPrice'
+                                  enquiriesOptions.id,
+                                  'enquiries'
                                 )
                               }
                             />
                           </Table.Cell>
                         </Table.Row>
                       )
-                    }
-                  )}
-                </Table.Body>
-              </Table>
-              <Pagination
-                size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'perceivedPrice')
-                }
-                defaultActivePage={this.props.perceivedPriceOptions.activePage}
-                totalPages={this.props.perceivedPriceOptions.pages}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h5" attached="top">
-                Information / Transparency / Momentum
-              </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Select Options</Table.HeaderCell>
-                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
-                    <Table.HeaderCell>Weight</Table.HeaderCell>
-                    <Table.HeaderCell>Settings</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.infoTransMomenOptions.array.map(
-                    infoTransMomenOptions => {
-                      return (
-                        <Table.Row active key={infoTransMomenOptions.id}>
-                          <Table.Cell>{infoTransMomenOptions.label}</Table.Cell>
-                          <Table.Cell>
-                            {infoTransMomenOptions.textReport}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {infoTransMomenOptions.weight}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editScore(
-                                  infoTransMomenOptions,
-                                  'infoTransMomen'
-                                )
-                              }
-                            />
-                            <Icon
-                              link
-                              name="trash"
-                              color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(
-                                  infoTransMomenOptions.id,
-                                  'infoTransMomen'
-                                )
-                              }
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    }
-                  )}
-                </Table.Body>
-              </Table>
-              <Pagination
-                size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'infoTransMomen')
-                }
-                defaultActivePage={this.props.infoTransMomenOptions.activePage}
-                totalPages={this.props.infoTransMomenOptions.pages}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h5" attached="top">
-                Current Interest
-              </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Select Options</Table.HeaderCell>
-                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
-                    <Table.HeaderCell>Weight</Table.HeaderCell>
-                    <Table.HeaderCell>Settings</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.currentInterestOptions.array.map(
-                    currentInterestOptions => {
-                      return (
-                        <Table.Row active key={currentInterestOptions.id}>
-                          <Table.Cell>
-                            {currentInterestOptions.label}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {currentInterestOptions.textReport}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {currentInterestOptions.weight}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editScore(
-                                  currentInterestOptions,
-                                  'currentInterest'
-                                )
-                              }
-                            />
-                            <Icon
-                              link
-                              name="trash"
-                              color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(
-                                  currentInterestOptions.id,
-                                  'currentInterest'
-                                )
-                              }
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    }
-                  )}
-                </Table.Body>
-              </Table>
-              <Pagination
-                size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'currentInterest')
-                }
-                defaultActivePage={this.props.currentInterestOptions.activePage}
-                totalPages={this.props.currentInterestOptions.pages}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Grid.Column>
-            <Grid.Column>
-              <Header as="h5" attached="top">
-                Buyer Perceived Risk
-              </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Select Options</Table.HeaderCell>
-                    <Table.HeaderCell>Text for Report</Table.HeaderCell>
-                    <Table.HeaderCell>Weight</Table.HeaderCell>
-                    <Table.HeaderCell>Settings</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {this.props.perceivedRiskOptions.array.map(
-                    perceivedRiskOptions => {
-                      return (
-                        <Table.Row active key={perceivedRiskOptions.id}>
-                          <Table.Cell>{perceivedRiskOptions.label}</Table.Cell>
-                          <Table.Cell>
-                            {perceivedRiskOptions.textReport}
-                          </Table.Cell>
-                          <Table.Cell>{perceivedRiskOptions.weight}</Table.Cell>
-                          <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editScore(
-                                  perceivedRiskOptions,
-                                  'perceivedRisk'
-                                )
-                              }
-                            />
-                            <Icon
-                              link
-                              name="trash"
-                              color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(
-                                  perceivedRiskOptions.id,
-                                  'perceivedRisk'
-                                )
-                              }
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    }
-                  )}
-                </Table.Body>
-              </Table>
-              <Pagination
-                size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'perceivedRisk')
-                }
-                defaultActivePage={this.props.perceivedRiskOptions.activePage}
-                totalPages={this.props.perceivedRiskOptions.pages}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+                    })}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) =>
+                    this._handlePaginationChange(e, data, 'enquiries')
+                  }
+                  defaultActivePage={this.props.enquiriesOptions.activePage}
+                  totalPages={this.props.enquiriesOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  Perceived Price from Buyers
+                </Header>
+                <Table
+                  compact
+                  celled
+                  inverted
+                  selectable
+                  color="blue"
+                  size="small"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Select Options</Table.HeaderCell>
+                      <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                      <Table.HeaderCell>Weight</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.perceivedPriceOptions.array.map(
+                      perceivedPriceOptions => {
+                        return (
+                          <Table.Row active key={perceivedPriceOptions.id}>
+                            <Table.Cell>
+                              {perceivedPriceOptions.label}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {perceivedPriceOptions.textReport}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {perceivedPriceOptions.weight}
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Icon
+                                link
+                                name="edit"
+                                onClick={() =>
+                                  this._editScore(
+                                    perceivedPriceOptions,
+                                    'perceivedPrice'
+                                  )
+                                }
+                              />
+                              <Icon
+                                link
+                                name="trash"
+                                color="red"
+                                onClick={() =>
+                                  this._toggleModalConfirm(
+                                    perceivedPriceOptions.id,
+                                    'perceivedPrice'
+                                  )
+                                }
+                              />
+                            </Table.Cell>
+                          </Table.Row>
+                        )
+                      }
+                    )}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) =>
+                    this._handlePaginationChange(e, data, 'perceivedPrice')
+                  }
+                  defaultActivePage={
+                    this.props.perceivedPriceOptions.activePage
+                  }
+                  totalPages={this.props.perceivedPriceOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  Information / Transparency / Momentum
+                </Header>
+                <Table
+                  compact
+                  celled
+                  inverted
+                  selectable
+                  color="blue"
+                  size="small"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Select Options</Table.HeaderCell>
+                      <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                      <Table.HeaderCell>Weight</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.infoTransMomenOptions.array.map(
+                      infoTransMomenOptions => {
+                        return (
+                          <Table.Row active key={infoTransMomenOptions.id}>
+                            <Table.Cell>
+                              {infoTransMomenOptions.label}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {infoTransMomenOptions.textReport}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {infoTransMomenOptions.weight}
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Icon
+                                link
+                                name="edit"
+                                onClick={() =>
+                                  this._editScore(
+                                    infoTransMomenOptions,
+                                    'infoTransMomen'
+                                  )
+                                }
+                              />
+                              <Icon
+                                link
+                                name="trash"
+                                color="red"
+                                onClick={() =>
+                                  this._toggleModalConfirm(
+                                    infoTransMomenOptions.id,
+                                    'infoTransMomen'
+                                  )
+                                }
+                              />
+                            </Table.Cell>
+                          </Table.Row>
+                        )
+                      }
+                    )}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) =>
+                    this._handlePaginationChange(e, data, 'infoTransMomen')
+                  }
+                  defaultActivePage={
+                    this.props.infoTransMomenOptions.activePage
+                  }
+                  totalPages={this.props.infoTransMomenOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  Current Interest
+                </Header>
+                <Table
+                  compact
+                  celled
+                  inverted
+                  selectable
+                  color="blue"
+                  size="small"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Select Options</Table.HeaderCell>
+                      <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                      <Table.HeaderCell>Weight</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.currentInterestOptions.array.map(
+                      currentInterestOptions => {
+                        return (
+                          <Table.Row active key={currentInterestOptions.id}>
+                            <Table.Cell>
+                              {currentInterestOptions.label}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {currentInterestOptions.textReport}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {currentInterestOptions.weight}
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Icon
+                                link
+                                name="edit"
+                                onClick={() =>
+                                  this._editScore(
+                                    currentInterestOptions,
+                                    'currentInterest'
+                                  )
+                                }
+                              />
+                              <Icon
+                                link
+                                name="trash"
+                                color="red"
+                                onClick={() =>
+                                  this._toggleModalConfirm(
+                                    currentInterestOptions.id,
+                                    'currentInterest'
+                                  )
+                                }
+                              />
+                            </Table.Cell>
+                          </Table.Row>
+                        )
+                      }
+                    )}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) =>
+                    this._handlePaginationChange(e, data, 'currentInterest')
+                  }
+                  defaultActivePage={
+                    this.props.currentInterestOptions.activePage
+                  }
+                  totalPages={this.props.currentInterestOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  Buyer Perceived Risk
+                </Header>
+                <Table
+                  compact
+                  celled
+                  inverted
+                  selectable
+                  color="blue"
+                  size="small"
+                >
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Select Options</Table.HeaderCell>
+                      <Table.HeaderCell>Text for Report</Table.HeaderCell>
+                      <Table.HeaderCell>Weight</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.perceivedRiskOptions.array.map(
+                      perceivedRiskOptions => {
+                        return (
+                          <Table.Row active key={perceivedRiskOptions.id}>
+                            <Table.Cell>
+                              {perceivedRiskOptions.label}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {perceivedRiskOptions.textReport}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {perceivedRiskOptions.weight}
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Icon
+                                link
+                                name="edit"
+                                onClick={() =>
+                                  this._editScore(
+                                    perceivedRiskOptions,
+                                    'perceivedRisk'
+                                  )
+                                }
+                              />
+                              <Icon
+                                link
+                                name="trash"
+                                color="red"
+                                onClick={() =>
+                                  this._toggleModalConfirm(
+                                    perceivedRiskOptions.id,
+                                    'perceivedRisk'
+                                  )
+                                }
+                              />
+                            </Table.Cell>
+                          </Table.Row>
+                        )
+                      }
+                    )}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) =>
+                    this._handlePaginationChange(e, data, 'perceivedRisk')
+                  }
+                  defaultActivePage={this.props.perceivedRiskOptions.activePage}
+                  totalPages={this.props.perceivedRiskOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Dimmer.Dimmable>
       </Wrapper>
     )
   }
@@ -448,7 +494,12 @@ ScoreRegisters.propTypes = {
   perceivedRiskOptions: PropTypes.object,
   enquiriesOptions: PropTypes.object,
   openModal: PropTypes.func,
-  listScoreRegister: PropTypes.func
+  listScoreRegister: PropTypes.func,
+  isLoadingPerceivedPrice: PropTypes.bool,
+  isLoadingCurrentInterest: PropTypes.bool,
+  isLoadingEnquiries: PropTypes.bool,
+  isLoadingInfoTransMomen: PropTypes.bool,
+  isLoadingPerceivedRisk: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
@@ -460,7 +511,12 @@ const mapStateToProps = state => ({
   enquiriesOptions: state.scoreRegister.get.enquiries,
   createScoreRegister: state.scoreRegister.create.isCreated,
   updateScoreRegister: state.scoreRegister.update.isUpdated,
-  deleteScoreRegister: state.scoreRegister.delete.isDeleted
+  deleteScoreRegister: state.scoreRegister.delete.isDeleted,
+  isLoadingEnquiries: state.scoreRegister.get.enquiries.isLoading,
+  isLoadingPerceivedPrice: state.scoreRegister.get.perceivedPrice.isLoading,
+  isLoadingInfoTransMomen: state.scoreRegister.get.infoTransMomen.isLoading,
+  isLoadingCurrentInterest: state.scoreRegister.get.currentInterest.isLoading,
+  isLoadingPerceivedRisk: state.scoreRegister.get.perceivedRisk.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
