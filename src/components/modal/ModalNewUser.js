@@ -16,7 +16,7 @@ import {
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { createUser, updateUser } from '../../redux/ducks/user'
+import { closeModal } from '../../redux/ducks/modal'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em;
@@ -53,7 +53,7 @@ class NewUserForm extends Component {
   }
 
   componentDidMount () {
-    if (this.props.userCreated) this.props.resetForm()
+    this.props.resetForm()
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -92,13 +92,13 @@ class NewUserForm extends Component {
       isValid,
       createLoading,
       updateLoading,
-      modalOpen,
-      toggleModal
+      closeModal,
+      title
     } = this.props
     return (
-      <Modal dimmer={'blurring'} open={modalOpen}>
+      <Modal open dimmer={'blurring'}>
         <Modal.Header align="center">
-          {this.props.user && this.props.user.id ? 'Edit User' : 'New User'}
+          {title}
         </Modal.Header>
         <Modal.Content>
           <Form>
@@ -456,6 +456,7 @@ class NewUserForm extends Component {
         <Modal.Actions>
           <Button
             color="blue"
+            type="submit"
             disabled={createLoading || updateLoading || !isValid}
             loading={createLoading || updateLoading}
             onClick={handleSubmit}
@@ -465,7 +466,7 @@ class NewUserForm extends Component {
               ? 'Edit User'
               : 'Create User'}
           </Button>
-          <Button color="red" onClick={toggleModal}>
+          <Button color="red" onClick={closeModal}>
             <Icon name="cancel" />
             Cancel
           </Button>
@@ -483,18 +484,17 @@ NewUserForm.propTypes = {
   handleBlur: PropTypes.func,
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
-  toggleModal: PropTypes.func,
+  closeModal: PropTypes.func,
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
   updateLoading: PropTypes.bool,
-  modalOpen: PropTypes.bool,
-  userCreated: PropTypes.bool,
   resetForm: PropTypes.func,
-  user: PropTypes.object
+  user: PropTypes.object,
+  title: PropTypes.string
 }
 
 const mapPropsToValues = props => {
-  if (props && props.user.id) {
+  if (props && props.user) {
     const roles = JSON.parse(props.user.roles)
     return {
       id: props.user.id,
@@ -572,11 +572,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  if (props.user && props.user.id) {
-    props.updateUser(values).then(setSubmitting(false))
-  } else {
-    props.createUser(values).then(setSubmitting(false))
-  }
+  props.onConfirm(values)
 }
 
 const mapStateToProps = state => {
@@ -587,7 +583,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ createUser, updateUser }, dispatch)
+  return bindActionCreators({ closeModal }, dispatch)
 }
 
 export default connect(

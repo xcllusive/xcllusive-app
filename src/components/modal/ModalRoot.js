@@ -17,6 +17,7 @@ import ModalNewAgreementTemplate from './ModalNewAgreementTemplate'
 import ModalListAgreements from './ModalListAgreements'
 import ModalEmailAgreementInvoice from './ModalEmailAgreementInvoice'
 import ModalNewInvoiceTemplate from './ModalNewInvoiceTemplate'
+import ModalNewUser from './ModalNewUser'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -35,7 +36,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_NEW_AGREEMENT_TEMPLATE]: ModalNewAgreementTemplate,
   [TypesModal.MODAL_TYPE_LIST_AGREEMENTS]: ModalListAgreements,
   [TypesModal.MODAL_TYPE_EMAIL_AGREEMENT_INVOICE]: ModalEmailAgreementInvoice,
-  [TypesModal.MODAL_TYPE_NEW_INVOICE_TEMPLATE]: ModalNewInvoiceTemplate
+  [TypesModal.MODAL_TYPE_NEW_INVOICE_TEMPLATE]: ModalNewInvoiceTemplate,
+  [TypesModal.MODAL_TYPE_NEW_USER]: ModalNewUser
 }
 
 const ModalRoot = ({ type, props }) => {

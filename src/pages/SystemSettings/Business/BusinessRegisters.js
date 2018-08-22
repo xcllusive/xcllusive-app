@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-
 import {
   Table,
   Icon,
@@ -12,7 +10,6 @@ import {
   Header,
   Pagination
 } from 'semantic-ui-react'
-
 import {
   getBusinessRegister,
   removeBusinessRegister

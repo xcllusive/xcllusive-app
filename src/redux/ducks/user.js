@@ -1,6 +1,8 @@
 import { getAll, create, update } from '../../services/api/user'
 import { toast } from 'react-toastify'
 
+import { Types as TypesModal } from './modal'
+
 // Action Types
 
 export const Types = {
@@ -81,6 +83,10 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           isCreated: true,
           error: null
+        },
+        get: {
+          ...state.get,
+          array: state.get.array.concat(action.payload)
         }
       }
     case Types.CREATE_USER_FAILURE:
@@ -138,11 +144,11 @@ export const userLoading = (value, type) => {
 export const createUser = user => async dispatch => {
   dispatch(userLoading(true, 'CREATE_USER_LOADING'))
   try {
-    await create(user)
-    dispatch({ type: Types.CREATE_USER_SUCCESS })
-    toast.success('User created with success')
+    const resUser = await create(user)
+    dispatch({ type: Types.CREATE_USER_SUCCESS, payload: resUser.data })
+    dispatch({ type: TypesModal.MODAL_CLOSE })
+    toast.success(resUser.message)
   } catch (error) {
-    console.log(error)
     dispatch({
       type: Types.CREATE_USER_FAILURE,
       payload: error.message
@@ -158,7 +164,8 @@ export const updateUser = user => async dispatch => {
   })
   try {
     await update(user)
-    dispatch({ type: Types.UPDATE_USER_SUCCESS })
+    dispatch({ type: Types.UPDATE_USER_SUCCESS})
+    dispatch({ type: TypesModal.MODAL_CLOSE })
     toast.success('User updated with success')
   } catch (error) {
     dispatch({

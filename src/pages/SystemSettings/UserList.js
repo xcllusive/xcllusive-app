@@ -14,11 +14,9 @@ import {
   Dimmer,
   Loader
 } from 'semantic-ui-react'
-
-import { getUsers } from '../../redux/ducks/user'
-
+import { getUsers, createUser, updateUser } from '../../redux/ducks/user'
+import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
-import NewUserForm from '../../components/forms/NewUserForm'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em;
@@ -33,33 +31,13 @@ class UserList extends React.Component {
         admin: true,
         broker: true,
         introducer: true
-      },
-      modalOpen: false,
-      user: false,
-      userCreated: false,
-      userUpdated: false
-    }
-  }
-
-  static getDerivedStateFromProps (nextProps) {
-    return {
-      userCreated: nextProps.userCreated,
-      userUpdated: nextProps.userUpdated
+      }
     }
   }
 
   componentDidMount () {
     this.props.getUsers()
     this.timer = null
-
-    if (this.state.userCreated) {
-      this._toggleModal({})
-      this.props.getUsers()
-    }
-    if (this.state.userUpdated) {
-      this._toggleModal({})
-      this.props.getUsers()
-    }
   }
 
   _handleChangeCheckBox = (e, { value }) => {
@@ -88,24 +66,32 @@ class UserList extends React.Component {
     )
   }
 
-  _toggleModal = user => {
-    this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen,
-      user
-    }))
+  _newUser = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_USER, {
+      title: 'New User',
+      onConfirm: async (values) => {
+        if (values) {
+          await this.props.createUser(values)
+        }
+      }
+    })
+  }
+
+  _editUser = user => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_USER, {
+      title: 'Edit User',
+      user,
+      onConfirm: async (values) => {
+        if (values) {
+          await this.props.updateUser(values)
+        }
+      }
+    })
   }
 
   render () {
     return (
       <Wrapper>
-        {this.state.modalOpen ? (
-          <NewUserForm
-            modalOpen={this.state.modalOpen}
-            toggleModal={this._toggleModal}
-            userCreated={this.props.userCreated}
-            user={this.state.user}
-          />
-        ) : null}
         <Grid padded="horizontally">
           <Grid.Row>
             <Grid.Column width={5}>
@@ -141,7 +127,7 @@ class UserList extends React.Component {
               />
             </Grid.Column>
             <Grid.Column width={2} floated="right">
-              <Button onClick={this._toggleModal} color="facebook">
+              <Button onClick={this._newUser} color="facebook">
                 <Icon name="add" />
                 New User
               </Button>
@@ -173,7 +159,7 @@ class UserList extends React.Component {
                   return (
                     <Table.Row
                       active
-                      onClick={() => this._toggleModal(user)}
+                      onClick={() => this._editUser(user)}
                       key={user.id}
                     >
                       <Table.Cell>{user.id}</Table.Cell>
@@ -223,21 +209,22 @@ UserList.propTypes = {
   users: PropTypes.array,
   getUsers: PropTypes.func,
   userCreated: PropTypes.bool,
-  userUpdated: PropTypes.bool
+  userUpdated: PropTypes.bool,
+  openModal: PropTypes.func,
+  createUser: PropTypes.func,
+  updateUser: PropTypes.func
 }
 
 const mapStateToProps = state => {
   return {
     isLoading: state.user.get.isLoading,
     users: state.user.get.array,
-    error: state.user.get.error,
-    userCreated: state.user.create.isCreated,
-    userUpdated: state.user.update.isUpdated
+    error: state.user.get.error
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getUsers }, dispatch)
+  return bindActionCreators({ getUsers, openModal, createUser, updateUser }, dispatch)
 }
 
 export default connect(
