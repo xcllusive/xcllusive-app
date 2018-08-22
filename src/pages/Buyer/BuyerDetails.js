@@ -57,7 +57,10 @@ class BuyerDetails extends Component {
       // ],
       buyerDetails: null,
       newLog: false,
-      activePage: null
+      activePage: null,
+      buyerLog_id: null,
+      buyerLog_followUp: null,
+      buyerLog_text: null
     }
   }
 
@@ -73,18 +76,40 @@ class BuyerDetails extends Component {
     this.props.getBuyerRegister(1)
   }
 
+  // static getDerivedStateFromProps (nextProps) {
+  //   if (
+  //     this.props.listBusinessBuyerLogList.length !==
+  //     nextProps.listBusinessBuyerLogList.length
+  //   ) {
+  //     this._selectLog(nextProps.listBusinessBuyerLogList[0])
+  //   }
+  //   if (!this.props.values && nextProps.values) {
+  //     this.setState({
+  //       lastObjValues: this.props.values
+  //     })
+  //   }
+  // }
+
   static getDerivedStateFromProps (nextProps) {
     if (
-      this.props.listBusinessBuyerLogList.length !==
-      nextProps.listBusinessBuyerLogList.length
+      nextProps.listBusinessBuyerLogList.length &&
+      !nextProps.isLoadingBusinessBuyerLogList
     ) {
-      this._selectLog(nextProps.listBusinessBuyerLogList[0])
+      const {
+        newLog,
+        id,
+        followUp,
+        text
+      } = nextProps.listBusinessBuyerLogList[0]
+
+      return {
+        newLog: !!newLog,
+        buyerLog_id: id,
+        buyerLog_followUp: followUp,
+        buyerLog_text: text
+      }
     }
-    if (!this.props.values && nextProps.values) {
-      this.setState({
-        lastObjValues: this.props.values
-      })
-    }
+    return null
   }
 
   componentWillUnmount () {
@@ -132,6 +157,18 @@ class BuyerDetails extends Component {
   }
 
   _handleSubmit = async () => {
+    if (this.state.buyerLog_id) {
+      this.props.setFieldValue('buyerLog_id', this.state.buyerLog_id)
+      if (this.props.values.buyerLog_followUp === '') {
+        this.props.setFieldValue(
+          'buyerLog_followUp',
+          this.state.buyerLog_followUp
+        )
+      }
+      if (this.props.values.buyerLog_text === '') {
+        this.props.setFieldValue('buyerLog_text', this.state.buyerLog_text)
+      }
+    }
     const updateBuyer = {
       ...this.props.values,
       id: this.props.match.params.idBuyer
@@ -335,7 +372,7 @@ class BuyerDetails extends Component {
                     <Dimmer inverted active={isLoadingLogTable}>
                       <Loader>Loading</Loader>
                     </Dimmer>
-                    {values.buyerLog_id ? (
+                    {values.buyerLog_id || this.state.buyerLog_id ? (
                       <Form>
                         <Form.Group>
                           <Form.Field width={16}>
@@ -343,7 +380,11 @@ class BuyerDetails extends Component {
                               label="Communication text"
                               name="buyerLog_text"
                               autoComplete="buyerLog_text"
-                              value={values.buyerLog_text}
+                              value={
+                                values.buyerLog_text
+                                  ? values.buyerLog_text
+                                  : this.state.buyerLog_text
+                              }
                               onChange={handleChange}
                             />
                           </Form.Field>
@@ -352,7 +393,11 @@ class BuyerDetails extends Component {
                           <Form.Field width={11}>
                             <h5>Follow Up Date</h5>
                             <DatePicker
-                              selected={moment(values.buyerLog_followUp)}
+                              selected={
+                                values.buyerLog_followUp
+                                  ? moment(values.buyerLog_followUp)
+                                  : moment(this.state.buyerLog_followUp)
+                              }
                               onChange={this._handleDateChange}
                               popperPlacement="top-end"
                               form
@@ -587,7 +632,8 @@ BuyerDetails.propTypes = {
   isLoadingLogTable: PropTypes.bool,
   getBuyerRegister: PropTypes.func,
   typeOptions: PropTypes.array,
-  finaliseBuyerLog: PropTypes.func
+  finaliseBuyerLog: PropTypes.func,
+  isLoadingBusinessBuyerLogList: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -615,7 +661,8 @@ const mapStateToProps = state => ({
   activePageBusinessBuyerLogList: state.buyerLog.getBusBuyLog.activePage,
   listBusinessesFromBuyer: state.buyer.getBusinessesFromBuyer.array,
   isLoadingPreviousBusiness: state.buyer.getBusinessesFromBuyer.isLoading,
-  typeOptions: state.buyerRegister.get.type.array
+  typeOptions: state.buyerRegister.get.type.array,
+  isLoadingBusinessBuyerLogList: state.buyerLog.getBusBuyLog.isLoading
 })
 
 export default connect(
