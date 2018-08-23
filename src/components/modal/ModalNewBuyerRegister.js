@@ -23,7 +23,7 @@ class ModalNewBuyerRegister extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated) {
-      this.props.getBuyerRegister(this.props.values.buyerRegister)
+      nextProps.getBuyerRegister(nextProps.values.buyerRegister)
     }
   }
 
@@ -175,7 +175,10 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     validationSchema,

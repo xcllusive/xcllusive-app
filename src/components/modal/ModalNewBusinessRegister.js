@@ -27,14 +27,16 @@ class ModalNewBusinessRegister extends Component {
         { key: 7, text: 'Business Stage', value: 7 },
         { key: 8, text: 'Stage Not Signed', value: 8 },
         { key: 9, text: 'Stage Not Want', value: 9 }
-      ]
+      ],
+      updatedSomething: null
     }
   }
 
   static getDerivedStateFromProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated) {
-      this.props.getBusinessRegister(this.props.values.businessRegisterType)
+      nextProps.getBusinessRegister(nextProps.values.businessRegisterType)
     }
+    return null
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -187,7 +189,10 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     validationSchema,

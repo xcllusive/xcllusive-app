@@ -37,7 +37,7 @@ class ModalNewScoreRegister extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated) {
-      this.props.listScoreRegister(this.props.values.type)
+      nextProps.listScoreRegister(nextProps.values.type)
     }
   }
 

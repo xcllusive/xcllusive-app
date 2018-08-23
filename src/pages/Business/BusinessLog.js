@@ -21,7 +21,6 @@ import {
   Grid,
   Input,
   Table,
-  Segment,
   Form,
   Label,
   Button,
@@ -130,10 +129,13 @@ class BusinessLogPage extends Component {
     return (
       <Wrapper>
         <div>
-          <Statistic.Group size="mini" widths={4}>
+          <Statistic.Group style={{ marginTop: '20px' }} size="mini" widths={4}>
             <Statistic color="orange">
               <Statistic.Value>{business.businessName}</Statistic.Value>
-              <Statistic.Label>{this.props.match.params.id}</Statistic.Label>
+              <Statistic.Label>
+                BS
+                {this.props.match.params.id}
+              </Statistic.Label>
             </Statistic>
             <Statistic color="blue">
               <Statistic.Value>
@@ -158,10 +160,7 @@ class BusinessLogPage extends Component {
               <Statistic.Label>Telephone</Statistic.Label>
             </Statistic>
           </Statistic.Group>
-          <Segment size="small" inverted color="blue">
-            <h4>Business Log Detail</h4>
-          </Segment>
-          <Grid centered>
+          <Grid style={{ marginTop: '10px' }} centered>
             <Grid.Column textAlign="center" width={5}>
               <Input
                 fluid
@@ -212,10 +211,9 @@ class BusinessLogPage extends Component {
           </Table>
           <Form>
             <Form.Group>
-              <Form.Field width={3}>
+              <Form.Field style={{ marginLeft: '35px' }} width={3}>
                 <h5>Follow Up Date</h5>
                 <DatePicker
-                  style={{ left: '30px' }}
                   selected={
                     values.businessLog_followUp
                       ? moment(values.businessLog_followUp)
@@ -223,12 +221,12 @@ class BusinessLogPage extends Component {
                   }
                   onChange={this._handleDateChange}
                   popperPlacement="top-end"
-                  left="30px"
                   form
                 />
               </Form.Field>
               <Form.Field width={13}>
                 <Form.TextArea
+                  style={{ height: '15vh' }}
                   label="Communication text"
                   name="businessLog_text"
                   autoComplete="businessLog_text"
