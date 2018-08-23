@@ -74,7 +74,7 @@ class BuyerListPage extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          {listBuyersList.length > 0 ? (
+          {listBuyersList && listBuyersList.length > 0 ? (
             <Grid padded="horizontally" style={{ marginTop: 0 }}>
               <Grid.Row>
                 <Table
