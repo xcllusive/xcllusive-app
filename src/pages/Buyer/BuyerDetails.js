@@ -534,9 +534,10 @@ class BuyerDetails extends Component {
                       <Form.Field width={16}>
                         <Form.TextArea
                           label="Business Type"
-                          name="type"
-                          autoComplete="type"
-                          //  value={this.state.buyerLog.text}
+                          name="businessType"
+                          autoComplete="businessType"
+                          value={values.businessType}
+                          onChange={handleChange}
                         />
                       </Form.Field>
                       <Form.Field>
@@ -640,6 +641,7 @@ const mapPropsToValues = props => {
   return {
     buyerNotes: props.buyer ? props.buyer.buyerNotes : '',
     profile: props.buyer ? props.buyer.profile : '',
+    businessType: props.buyer ? props.buyer.businessType : '',
     typeId: props.buyer ? props.buyer.typeId : null,
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
