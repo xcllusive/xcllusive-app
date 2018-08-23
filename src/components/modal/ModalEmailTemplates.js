@@ -75,11 +75,11 @@ class ModalEmailTemplates extends Component {
     this._attachQuillRefs()
   }
 
-  static getDerivedStateFromProps (nextProps) {
-    if (this.props.isSentEmail !== nextProps.isSentEmail) {
-      this.props.closeModal()
-    }
-  }
+  // static getDerivedStateFromProps (nextProps) {
+  //   if (this.props.isSentEmail !== nextProps.isSentEmail) {
+  //     this.props.closeModal()
+  //   }
+  // }
 
   _handleChangeBody = value => {
     if (value === '<p><br></p>') {
@@ -117,6 +117,7 @@ class ModalEmailTemplates extends Component {
     // sendEmail.subject = this.props.values.subject
     // sendEmail.buyerId = parseInt(this.props.buyerId)
     // this.props.sendEmailBuyerBrokersEmail(sendEmail)
+    alert('Don`t worry! An e-mail app will be opened for you very shortly.')
     window.location.href = `mailto:${this.props.email} ?subject=${
       this.props.values.subject
     } &body=${this._convertHtmlToRightText(this.props.values.body)}`
