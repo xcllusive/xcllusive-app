@@ -36,17 +36,37 @@ class BusinessLogPage extends Component {
       focused: false,
       newLog: false,
       inputSearch: '',
-      businessLog: null
+      businessLog: null,
+      businessLog_id: null,
+      businessLog_followUp: null,
+      businessLog_text: null
     }
   }
+
+  // static getDerivedStateFromProps (nextProps) {
+  //   if (
+  //     nextProps.arrayLogBusiness.length &&
+  //     this.props.arrayLogBusiness.length !== nextProps.arrayLogBusiness.length
+  //   ) {
+  //     this._selectLog(nextProps.arrayLogBusiness[0])
+  //   }
+  // }
 
   static getDerivedStateFromProps (nextProps) {
     if (
       nextProps.arrayLogBusiness.length &&
-      this.props.arrayLogBusiness.length !== nextProps.arrayLogBusiness.length
+      !nextProps.isLoadingarrayLogBusiness
     ) {
-      this._selectLog(nextProps.arrayLogBusiness[0])
+      const { newLog, id, followUp, text } = nextProps.arrayLogBusiness[0]
+
+      return {
+        newLog: !!newLog,
+        businessLog_id: id,
+        businessLog_followUp: followUp,
+        businessLog_text: text
+      }
     }
+    return null
   }
 
   componentDidMount () {
@@ -196,7 +216,11 @@ class BusinessLogPage extends Component {
                 <h5>Follow Up Date</h5>
                 <DatePicker
                   style={{ left: '30px' }}
-                  selected={moment(values.businessLog_followUp)}
+                  selected={
+                    values.businessLog_followUp
+                      ? moment(values.businessLog_followUp)
+                      : moment(this.state.businessLog_followUp)
+                  }
                   onChange={this._handleDateChange}
                   popperPlacement="top-end"
                   left="30px"
@@ -228,7 +252,7 @@ class BusinessLogPage extends Component {
                         newLog: true,
                         id: 1,
                         followUp: moment().add(1, 'day'),
-                        text: ''
+                        text: ' '
                       })
                     }
                   >
@@ -337,7 +361,7 @@ const mapPropsToValues = () => {
   return {
     textLog: '',
     businessLog_id: '',
-    businessLog_followUp: '',
+    businessLog_followUp: moment(),
     businessLog_text: '',
     newLog: false
   }

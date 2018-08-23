@@ -119,8 +119,6 @@ class BuyerDetails extends Component {
   _selectLog = buyerLog => {
     const { newLog, id, followUp, text } = buyerLog
 
-    console.log(buyerLog)
-
     if (newLog) this.props.setFieldValue('newLog', true)
     else this.props.setFieldValue('newLog', false)
 
@@ -231,7 +229,6 @@ class BuyerDetails extends Component {
     } = this.props
 
     const { priceOptions } = this.state
-    console.log(this.props.values)
     return (
       <Wrapper>
         {buyer ? (
