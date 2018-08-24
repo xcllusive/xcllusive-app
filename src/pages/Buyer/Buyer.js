@@ -8,7 +8,6 @@ import { Table, Icon, Button, Grid, Dimmer, Loader } from 'semantic-ui-react'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyerBusinesses } from '../../redux/ducks/buyer'
-import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import Wrapper from '../../components/content/Wrapper'
 import { theme } from '../../styles'
 
@@ -16,7 +15,6 @@ class BuyerPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpen: false,
       lockedBusiness: false
     }
   }
@@ -24,12 +22,6 @@ class BuyerPage extends Component {
   componentDidMount () {
     this.props.getBuyerBusinesses(false, 4)
     this.props.getBuyerBusinesses(false, 5)
-  }
-
-  _toggleModal = () => {
-    this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen
-    }))
   }
 
   _toggleModalGroupEmail = businessId => {
@@ -68,15 +60,8 @@ class BuyerPage extends Component {
       isLoadingUnderOffer
     } = this.props
 
-    const { modalOpen } = this.state
     return (
       <Wrapper>
-        {modalOpen ? (
-          <NewBusinessForm
-            modalOpen={modalOpen}
-            toggleModal={this._toggleModal}
-          />
-        ) : null}
         <Grid padded>
           <Grid.Row style={{ paddingBottom: 0 }}>
             <h2>
