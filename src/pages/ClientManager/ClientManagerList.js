@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import _ from 'lodash'
+// import _ from 'lodash'
 
 import {
   Table,
@@ -16,14 +16,14 @@ import {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import NewBuyerForm from '../../components/forms/NewBuyerForm'
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
 import EditBuyerForm from '../../components/forms/EditBuyerForm'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
-import { getBuyers } from '../../redux/ducks/buyer'
+import { getBuyers, createBuyer } from '../../redux/ducks/buyer'
 import { getBusinesses, getBusiness } from '../../redux/ducks/business'
 import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
+
 import {
   enquiryBusiness,
   sendCa,
@@ -42,7 +42,6 @@ class ClientManagerList extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpenBuyer: false,
       modalOpenBusiness: false,
       modalOpenEditBuyer: false,
       buyer: null,
@@ -67,42 +66,55 @@ class ClientManagerList extends Component {
     return encodeURIComponent(htmlConverted)
   }
 
-  static async getDerivedStateFromProps (nextProps) {
-    if (
-      this.props.isUpdatedBuyer !== nextProps.isUpdatedBuyer &&
-      nextProps.isUpdatedBuyer
-    ) {
-      await this._toggleModal('modalOpenEditBuyer')
-      this.setState({
-        buyer: nextProps.buyerUpdated
-      })
-    }
-    if (
-      this.props.isCreatedBuyer !== nextProps.isCreatedBuyer &&
-      nextProps.isCreatedBuyer
-    ) {
-      await this._toggleModal('modalOpenBuyer')
-      this.props.getBuyers()
-      this._backToSearch()
-    }
+  static async getDerivedStateFromProps (nextProps, prevState) {
+    // console.log(nextProps, prevState)
+    // if (nextProps.isUpdatedBuyer) {
+    //   const modal = 'modalOpenEditBuyer'
+    //   return {
+    //     prevState: {
+    //       [modal]: !prevState[modal],
+    //       buyer: prevState.buyer
+    //     }
+    //   }
+    //   // await ClientManagerList._toggleModal('modalOpenEditBuyer')
+    // }
+    return null
 
-    if (
-      this.props.isCreatedBusiness !== nextProps.isCreatedBusiness &&
-      nextProps.isCreatedBusiness
-    ) {
-      await this._toggleModal('modalOpenBusiness')
-      this.setState({
-        buyer: nextProps.isCreatedBusiness
-      })
-    }
+    // if (
+    //   this.props.isUpdatedBuyer !== nextProps.isUpdatedBuyer &&
+    //   nextProps.isUpdatedBuyer
+    // ) {
+    //   await this._toggleModal('modalOpenEditBuyer')
+    //   this.setState({
+    //     buyer: nextProps.buyerUpdated
+    //   })
+    // }
+    // if (
+    //   this.props.isCreatedBuyer !== nextProps.isCreatedBuyer &&
+    //   nextProps.isCreatedBuyer
+    // ) {
+    //   await this._toggleModal('modalOpenBuyer')
+    //   this.props.getBuyers()
+    //   this._backToSearch()
+    // }
 
-    if (
-      this.props.businessObject !== nextProps.businessObject &&
-      nextProps.businessObject &&
-      !_.isEmpty(nextProps.businessObject)
-    ) {
-      this._renderBusiness(nextProps.businessObject)
-    }
+    // if (
+    //   this.props.isCreatedBusiness !== nextProps.isCreatedBusiness &&
+    //   nextProps.isCreatedBusiness
+    // ) {
+    //   await this._toggleModal('modalOpenBusiness')
+    //   this.setState({
+    //     buyer: nextProps.isCreatedBusiness
+    //   })
+    // }
+
+    // if (
+    //   this.props.businessObject !== nextProps.businessObject &&
+    //   nextProps.businessObject &&
+    //   !_.isEmpty(nextProps.businessObject)
+    // ) {
+    //   this._renderBusiness(nextProps.businessObject)
+    // }
   }
 
   componentDidMount () {
@@ -319,8 +331,19 @@ class ClientManagerList extends Component {
     }
   }
 
+  _newBuyer = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUYER, {
+      title: 'New Buyer',
+      onConfirm: async values => {
+        if (values) {
+          await this.props.createBuyer(values)
+        }
+      }
+    })
+  }
+
   render () {
-    const { modalOpenBuyer, modalOpenBusiness, modalOpenEditBuyer } = this.state
+    const { modalOpenBusiness, modalOpenEditBuyer } = this.state
     const {
       listBuyerList,
       listBusinessList,
@@ -339,12 +362,6 @@ class ClientManagerList extends Component {
     } = this.props
     return (
       <Wrapper>
-        {modalOpenBuyer ? (
-          <NewBuyerForm
-            modalOpen={modalOpenBuyer}
-            toggleModal={() => this._toggleModal('modalOpenBuyer')}
-          />
-        ) : null}
         {modalOpenBusiness ? (
           <NewBusinessForm
             modalOpen={modalOpenBusiness}
@@ -378,11 +395,7 @@ class ClientManagerList extends Component {
             <Grid.Column floated="right">
               <br />
               <br />
-              <Button
-                size="small"
-                onClick={() => this._toggleModal('modalOpenBuyer')}
-                color="facebook"
-              >
+              <Button size="small" onClick={this._newBuyer} color="facebook">
                 <Icon name="add" />
                 New Buyer
               </Button>
@@ -857,7 +870,8 @@ ClientManagerList.propTypes = {
   clearBuyerLog: PropTypes.func,
   buyerUpdated: PropTypes.object,
   getEmailTemplate: PropTypes.func,
-  objectEmailTemplate: PropTypes.object
+  objectEmailTemplate: PropTypes.object,
+  createBuyer: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -899,7 +913,8 @@ const mapDispatchToProps = dispatch =>
       sendEnquiryToOwner,
       getBusiness,
       clearBuyerLog,
-      getEmailTemplate
+      getEmailTemplate,
+      createBuyer
     },
     dispatch
   )
