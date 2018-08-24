@@ -17,10 +17,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import NewBusinessForm from '../../components/forms/NewBusinessForm'
-import EditBuyerForm from '../../components/forms/EditBuyerForm'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
-import { getBuyers, createBuyer } from '../../redux/ducks/buyer'
+import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
 import { getBusinesses, getBusiness } from '../../redux/ducks/business'
 import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
 
@@ -43,7 +42,6 @@ class ClientManagerList extends Component {
     super(props)
     this.state = {
       modalOpenBusiness: false,
-      modalOpenEditBuyer: false,
       buyer: null,
       business: null,
       buyerLog: null,
@@ -342,8 +340,20 @@ class ClientManagerList extends Component {
     })
   }
 
+  _editBuyer = buyer => {
+    this.props.openModal(TypesModal.MODAL_TYPE_EDIT_BUYER, {
+      title: 'Edit Buyer',
+      buyer,
+      onConfirm: async values => {
+        if (values) {
+          await this.props.updateBuyer(values)
+        }
+      }
+    })
+  }
+
   render () {
-    const { modalOpenBusiness, modalOpenEditBuyer } = this.state
+    const { modalOpenBusiness } = this.state
     const {
       listBuyerList,
       listBusinessList,
@@ -368,13 +378,7 @@ class ClientManagerList extends Component {
             toggleModal={() => this._toggleModal('modalOpenBusiness')}
           />
         ) : null}
-        {modalOpenEditBuyer ? (
-          <EditBuyerForm
-            modalOpen={modalOpenEditBuyer}
-            toggleModal={() => this._toggleModal('modalOpenEditBuyer')}
-            buyer={this.state.buyer}
-          />
-        ) : null}
+
         <Grid padded="horizontally" style={{ marginTop: 0 }}>
           <Grid.Row columns={4}>
             <Grid.Column floated="left" width={4}>
@@ -475,12 +479,7 @@ class ClientManagerList extends Component {
                       <Table.Row>
                         <Table.HeaderCell>BuyerID</Table.HeaderCell>
                         <Table.Cell
-                          onClick={() =>
-                            this._toggleModal(
-                              'modalOpenEditBuyer',
-                              this.state.buyer
-                            )
-                          }
+                          onClick={() => this._editBuyer(this.state.buyer)}
                           selectable
                         >
                           <Icon link name="search" />
@@ -871,7 +870,8 @@ ClientManagerList.propTypes = {
   buyerUpdated: PropTypes.object,
   getEmailTemplate: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
-  createBuyer: PropTypes.func
+  createBuyer: PropTypes.func,
+  updateBuyer: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -914,7 +914,8 @@ const mapDispatchToProps = dispatch =>
       getBusiness,
       clearBuyerLog,
       getEmailTemplate,
-      createBuyer
+      createBuyer,
+      updateBuyer
     },
     dispatch
   )

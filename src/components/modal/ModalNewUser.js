@@ -22,7 +22,7 @@ const CheckboxFormatted = styled.div`
   padding-right: 1em;
 `
 
-class NewUserForm extends Component {
+class ModalNewUser extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -97,9 +97,7 @@ class NewUserForm extends Component {
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
-        <Modal.Header align="center">
-          {title}
-        </Modal.Header>
+        <Modal.Header align="center">{title}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group widths="equal">
@@ -476,7 +474,7 @@ class NewUserForm extends Component {
   }
 }
 
-NewUserForm.propTypes = {
+ModalNewUser.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
@@ -595,5 +593,5 @@ export default connect(
     validationSchema,
     handleSubmit,
     enableReinitialize: true
-  })(NewUserForm)
+  })(ModalNewUser)
 )

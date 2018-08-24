@@ -9,7 +9,7 @@ import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 import { closeModal } from '../../redux/ducks/modal'
 
-class NewBuyerForm extends Component {
+class ModalNewBuyer extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -282,7 +282,7 @@ class NewBuyerForm extends Component {
   }
 }
 
-NewBuyerForm.propTypes = {
+ModalNewBuyer.propTypes = {
   toggleModal: PropTypes.func,
   modalOpen: PropTypes.bool,
   values: PropTypes.object,
@@ -355,5 +355,5 @@ export default connect(
     mapPropsToValues,
     validationSchema,
     handleSubmit
-  })(NewBuyerForm)
+  })(ModalNewBuyer)
 )

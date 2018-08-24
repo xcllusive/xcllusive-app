@@ -6,15 +6,16 @@ import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
-import { createBuyer } from '../../redux/ducks/buyer'
+import { updateBuyer } from '../../redux/ducks/buyer'
+import { closeModal } from '../../redux/ducks/modal'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
+
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 
-class NewBuyerForm extends Component {
+class ModalEditBuyer extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      priceOptions: OptionsPriceSelectBuyer,
       state: [
         { key: 1, text: 'NSW', value: 'NSW' },
         { key: 2, text: 'QLD', value: 'QLD' },
@@ -22,10 +23,10 @@ class NewBuyerForm extends Component {
         { key: 4, text: 'TAS', value: 'TAS' },
         { key: 5, text: 'VIC', value: 'VIC' },
         { key: 6, text: 'WA', value: 'WA' }
-      ]
+      ],
+      priceOptions: OptionsPriceSelectBuyer
     }
   }
-
   componentDidMount () {
     this.props.getBusinessRegister(1)
   }
@@ -37,8 +38,6 @@ class NewBuyerForm extends Component {
   render () {
     const { state, priceOptions } = this.state
     const {
-      modalOpen,
-      toggleModal,
       values,
       handleChange,
       handleBlur,
@@ -49,12 +48,13 @@ class NewBuyerForm extends Component {
       isValid,
       isLoading,
       sourceOptions,
-      dropDownLoading
+      dropDownLoading,
+      title,
+      closeModal
     } = this.props
-
     return (
-      <Modal dimmer={'blurring'} open={modalOpen}>
-        <Modal.Header align="center">New Buyer</Modal.Header>
+      <Modal open dimmer={'blurring'}>
+        <Modal.Header align="center">{title}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group widths="equal">
@@ -98,8 +98,6 @@ class NewBuyerForm extends Component {
                   />
                 )}
               </Form.Field>
-            </Form.Group>
-            <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
                   required
@@ -113,6 +111,27 @@ class NewBuyerForm extends Component {
                 {errors.email &&
                   touched.email && (
                   <Label basic color="red" pointing content={errors.email} />
+                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  label="Email (optional)"
+                  name="emailOptional"
+                  autoComplete="emailOptional"
+                  value={values.emailOptional}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.emailOptional &&
+                  touched.emailOptional && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.emailOptional}
+                  />
                 )}
               </Form.Field>
               <Form.Field>
@@ -149,7 +168,6 @@ class NewBuyerForm extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-
             <Form.Group>
               <Form.Field width={4}>
                 <Form.Select
@@ -224,20 +242,20 @@ class NewBuyerForm extends Component {
                   required
                   label="Source"
                   options={sourceOptions}
-                  name="sourceId"
-                  autoComplete="sourceId"
+                  name="source_id"
+                  autoComplete="source_id"
                   loading={dropDownLoading}
                   disabled={dropDownLoading}
-                  value={values.sourceId}
+                  value={values.source_id}
                   onChange={this._handleSelectChange}
                 />
-                {errors.sourceId &&
-                  touched.sourceId && (
+                {errors.source_id &&
+                  touched.source_id && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.sourceId}
+                    content={errors.source_id}
                   />
                 )}
               </Form.Field>
@@ -272,9 +290,9 @@ class NewBuyerForm extends Component {
             onClick={handleSubmit}
           >
             <Icon name="save" />
-            Create Buyer
+            Update Buyer
           </Button>
-          <Button color="red" onClick={toggleModal}>
+          <Button color="red" onClick={closeModal}>
             <Icon name="cancel" />
             Cancel
           </Button>
@@ -284,7 +302,7 @@ class NewBuyerForm extends Component {
   }
 }
 
-NewBuyerForm.propTypes = {
+ModalEditBuyer.propTypes = {
   toggleModal: PropTypes.func,
   modalOpen: PropTypes.bool,
   values: PropTypes.object,
@@ -299,23 +317,31 @@ NewBuyerForm.propTypes = {
   setFieldValue: PropTypes.func,
   sourceOptions: PropTypes.array,
   getBusinessRegister: PropTypes.func,
-  dropDownLoading: PropTypes.bool
+  dropDownLoading: PropTypes.bool,
+  buyer: PropTypes.object,
+  title: PropTypes.string,
+  closeModal: PropTypes.func
 }
 
-const mapPropsToValues = () => ({
-  firstName: '',
-  surname: '',
-  email: '',
-  sourceId: '',
-  streetName: '',
-  suburb: '',
-  state: '',
-  postCode: '',
-  telephone1: '',
-  telephone2: '',
-  priceFrom: '',
-  priceTo: ''
-})
+const mapPropsToValues = props => {
+  return {
+    id: props.buyer ? props.buyer.id : '',
+    firstName: props.buyer ? props.buyer.firstName : '',
+    surname: props.buyer ? props.buyer.surname : '',
+    email: props.buyer ? props.buyer.email : '',
+    source_id: props.buyer ? props.buyer.source_id : '',
+    streetName: props.buyer ? props.buyer.streetName : '',
+    suburb: props.buyer ? props.buyer.suburb : '',
+    state: props.buyer ? props.buyer.state : '',
+    postCode: props.buyer ? props.buyer.postCode : '',
+    telephone1: props.buyer ? props.buyer.telephone1 : '',
+    telephone2: props.buyer.telephone2 ? props.buyer.telephone2 : '',
+    priceFrom: props.buyer ? props.buyer.priceFrom : '',
+    priceTo: props.buyer ? props.buyer.priceTo : '',
+    emailOptional:
+      props.buyer && props.buyer.emailOptional ? props.buyer.emailOptional : ''
+  }
+}
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -327,16 +353,15 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
-  sourceId: Yup.number().required('Source is required.'),
+  source_id: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.number().typeError('You must type only number here!'),
   telephone2: Yup.number().typeError('You must type only number here!'),
-  priceFrom: Yup.number().typeError('You must type only number here!'),
-  priceTo: Yup.number().typeError('You must type only number here!')
+  emailOptional: Yup.string().email('Invalid email address.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) =>
-  props.createBuyer(values).then(setSubmitting(false))
+  props.onConfirm(values)
 
 const mapStateToProps = state => ({
   isLoading: state.buyer.update.isLoading,
@@ -345,12 +370,15 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ createBuyer, getBusinessRegister }, dispatch)
+  bindActionCreators({ updateBuyer, getBusinessRegister, closeModal }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     validationSchema,
     handleSubmit
-  })(NewBuyerForm)
+  })(ModalEditBuyer)
 )

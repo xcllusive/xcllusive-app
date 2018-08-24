@@ -19,6 +19,7 @@ import ModalEmailAgreementInvoice from './ModalEmailAgreementInvoice'
 import ModalNewInvoiceTemplate from './ModalNewInvoiceTemplate'
 import ModalNewUser from './ModalNewUser'
 import ModalNewBuyer from './ModalNewBuyer'
+import ModalEditBuyer from './ModalEditBuyer'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -39,7 +40,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_EMAIL_AGREEMENT_INVOICE]: ModalEmailAgreementInvoice,
   [TypesModal.MODAL_TYPE_NEW_INVOICE_TEMPLATE]: ModalNewInvoiceTemplate,
   [TypesModal.MODAL_TYPE_NEW_USER]: ModalNewUser,
-  [TypesModal.MODAL_TYPE_NEW_BUYER]: ModalNewBuyer
+  [TypesModal.MODAL_TYPE_NEW_BUYER]: ModalNewBuyer,
+  [TypesModal.MODAL_TYPE_EDIT_BUYER]: ModalEditBuyer
 }
 
 const ModalRoot = ({ type, props }) => {
