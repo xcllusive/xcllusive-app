@@ -33,7 +33,8 @@ class ModalNewBusiness extends Component {
       isLoading,
       sourceOptions,
       dropDownLoading,
-      title
+      title,
+      closeModal
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>

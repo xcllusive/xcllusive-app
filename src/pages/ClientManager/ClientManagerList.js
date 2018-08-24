@@ -66,6 +66,10 @@ class ClientManagerList extends Component {
   }
 
   static async getDerivedStateFromProps (nextProps, prevState) {
+    // if (nextProps.isUpdatedBuyer) {
+    //   nextProps.closeModal()
+    //   return null
+    // }
     // console.log(nextProps, prevState)
     // if (nextProps.isUpdatedBuyer) {
     //   const modal = 'modalOpenEditBuyer'
