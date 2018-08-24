@@ -278,16 +278,12 @@ class ModalGroupEmail extends Component {
                   </b>
                 </Form.Group>
               </Form>
-            ) : (
-              ''
-            )}
+            ) : null}
             {!listGroupEmail.length && !isLoadingGroupEmail ? (
               <b>
                 <label>This business has no buyers enquired! </label>
               </b>
-            ) : (
-              ''
-            )}
+            ) : null}
           </Dimmer.Dimmable>
         </Modal.Content>
         <Modal.Actions>

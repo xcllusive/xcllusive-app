@@ -16,7 +16,7 @@ import {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
 import {
   getBusinesses,
@@ -47,7 +47,8 @@ class ClientManagerList extends Component {
       business: null,
       buyerLog: null,
       inputSearchBuyer: '',
-      inputSearchBusiness: ''
+      inputSearchBusiness: '',
+      isUpdatedBuyer: false
     }
   }
 
@@ -65,33 +66,17 @@ class ClientManagerList extends Component {
     return encodeURIComponent(htmlConverted)
   }
 
-  static async getDerivedStateFromProps (nextProps, prevState) {
-    // if (nextProps.isUpdatedBuyer) {
-    //   nextProps.closeModal()
-    //   return null
-    // }
-    // console.log(nextProps, prevState)
-    // if (nextProps.isUpdatedBuyer) {
-    //   const modal = 'modalOpenEditBuyer'
-    //   return {
-    //     prevState: {
-    //       [modal]: !prevState[modal],
-    //       buyer: prevState.buyer
-    //     }
-    //   }
-    //   // await ClientManagerList._toggleModal('modalOpenEditBuyer')
-    // }
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.isUpdatedBuyer && !prevState.isUpdatedBuyer) {
+      nextProps.closeModal()
+      return {
+        buyer: nextProps.buyerUpdated,
+        isUpdatedBuyer: !prevState.isUpdatedBuyer
+      }
+    }
+
     return null
 
-    // if (
-    //   this.props.isUpdatedBuyer !== nextProps.isUpdatedBuyer &&
-    //   nextProps.isUpdatedBuyer
-    // ) {
-    //   await this._toggleModal('modalOpenEditBuyer')
-    //   this.setState({
-    //     buyer: nextProps.buyerUpdated
-    //   })
-    // }
     // if (
     //   this.props.isCreatedBuyer !== nextProps.isCreatedBuyer &&
     //   nextProps.isCreatedBuyer
@@ -126,9 +111,10 @@ class ClientManagerList extends Component {
     //  this.props.getLog()
   }
 
-  _backToSearch = () => {
+  _backToSearch = async () => {
     this._renderBuyer(null)
     this._renderBuyerLog(null)
+    await this.props.getBuyers()
     this.props.clearBuyerLog()
   }
 
@@ -350,8 +336,10 @@ class ClientManagerList extends Component {
       title: 'Edit Buyer',
       buyer,
       onConfirm: async values => {
+        this.setState({ isUpdatedBuyer: false })
         if (values) {
           await this.props.updateBuyer(values)
+          this.setState({ buyer: values })
         }
       }
     })
@@ -876,7 +864,8 @@ ClientManagerList.propTypes = {
   objectEmailTemplate: PropTypes.object,
   createBuyer: PropTypes.func,
   updateBuyer: PropTypes.func,
-  createBusiness: PropTypes.func
+  createBusiness: PropTypes.func,
+  closeModal: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -921,7 +910,8 @@ const mapDispatchToProps = dispatch =>
       getEmailTemplate,
       createBuyer,
       updateBuyer,
-      createBusiness
+      createBusiness,
+      closeModal
     },
     dispatch
   )
