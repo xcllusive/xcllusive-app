@@ -6,12 +6,12 @@ import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
-import { createBusiness } from '../../redux/ducks/business'
+import { closeModal } from '../../redux/ducks/modal'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
-class NewBusinessForm extends Component {
+class ModalNewBusiness extends Component {
   componentDidMount () {
     this.props.getBusinessRegister(1)
   }
@@ -22,8 +22,6 @@ class NewBusinessForm extends Component {
 
   render () {
     const {
-      modalOpen,
-      toggleModal,
       values,
       handleChange,
       handleBlur,
@@ -34,12 +32,12 @@ class NewBusinessForm extends Component {
       isValid,
       isLoading,
       sourceOptions,
-      dropDownLoading
+      dropDownLoading,
+      title
     } = this.props
-
     return (
-      <Modal dimmer={'blurring'} open={modalOpen}>
-        <Modal.Header align="center">New Business</Modal.Header>
+      <Modal open dimmer={'blurring'}>
+        <Modal.Header align="center">{title}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group widths="equal">
@@ -260,7 +258,7 @@ class NewBusinessForm extends Component {
             <Icon name="save" />
             Create Business
           </Button>
-          <Button color="red" onClick={toggleModal}>
+          <Button color="red" onClick={closeModal}>
             <Icon name="cancel" />
             Cancel
           </Button>
@@ -270,9 +268,7 @@ class NewBusinessForm extends Component {
   }
 }
 
-NewBusinessForm.propTypes = {
-  toggleModal: PropTypes.func,
-  modalOpen: PropTypes.bool,
+ModalNewBusiness.propTypes = {
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -285,7 +281,9 @@ NewBusinessForm.propTypes = {
   setFieldValue: PropTypes.func,
   sourceOptions: PropTypes.array,
   getBusinessRegister: PropTypes.func,
-  dropDownLoading: PropTypes.bool
+  dropDownLoading: PropTypes.bool,
+  title: PropTypes.string,
+  closeModal: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -325,8 +323,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.createBusiness(values)
-  setSubmitting(false)
+  props.onConfirm(values)
 }
 
 const mapStateToProps = state => {
@@ -338,13 +335,16 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ createBusiness, getBusinessRegister }, dispatch)
+  return bindActionCreators({ getBusinessRegister, closeModal }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withFormik({
     mapPropsToValues,
     validationSchema,
     handleSubmit
-  })(NewBusinessForm)
+  })(ModalNewBusiness)
 )

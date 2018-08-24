@@ -283,8 +283,6 @@ class ModalNewBuyer extends Component {
 }
 
 ModalNewBuyer.propTypes = {
-  toggleModal: PropTypes.func,
-  modalOpen: PropTypes.bool,
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,

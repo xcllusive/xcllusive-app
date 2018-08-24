@@ -6,7 +6,6 @@ import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
-import { updateBuyer } from '../../redux/ducks/buyer'
 import { closeModal } from '../../redux/ducks/modal'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 
@@ -303,8 +302,6 @@ class ModalEditBuyer extends Component {
 }
 
 ModalEditBuyer.propTypes = {
-  toggleModal: PropTypes.func,
-  modalOpen: PropTypes.bool,
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -370,7 +367,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ updateBuyer, getBusinessRegister, closeModal }, dispatch)
+  bindActionCreators({ getBusinessRegister, closeModal }, dispatch)
 
 export default connect(
   mapStateToProps,

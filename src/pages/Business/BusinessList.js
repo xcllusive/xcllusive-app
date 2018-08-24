@@ -14,9 +14,10 @@ import {
   Header
 } from 'semantic-ui-react'
 
-import { getBusinesses } from '../../redux/ducks/business'
+import { getBusinesses, createBusiness } from '../../redux/ducks/business'
 
-import NewBusinessForm from '../../components/forms/NewBusinessForm'
+import { TypesModal, openModal } from '../../redux/ducks/modal'
+
 import Wrapper from '../../components/content/Wrapper'
 import GridBusinessStage from '../../components/content/GridBusinessStage'
 
@@ -25,7 +26,6 @@ class BusinessListPage extends Component {
     super(props)
     this.timer = null
     this.state = {
-      modalOpen: false,
       inputSearch: '',
       stageSelected: 4,
       stageSelectedName: 'For Sale'
@@ -38,7 +38,8 @@ class BusinessListPage extends Component {
 
   static async getDerivedStateFromProps (nextProps) {
     if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
-      await this._toggleModal({})
+      // await this._toggleModal({})
+      // must close the new business modal
       this.props.getBusinesses(false, this.state.stageSelected, true)
     }
   }
@@ -56,11 +57,15 @@ class BusinessListPage extends Component {
     )
   }
 
-  _toggleModal = business => {
-    this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen,
-      business
-    }))
+  _newBusiness = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
+      title: 'New Business',
+      onConfirm: async values => {
+        if (values) {
+          await this.props.createBusiness(values)
+        }
+      }
+    })
   }
 
   _getBusinesses = (stage, name) => {
@@ -74,8 +79,6 @@ class BusinessListPage extends Component {
   render () {
     const { isLoading, history, match, businesses } = this.props
 
-    const { modalOpen } = this.state
-
     if (isLoading) {
       return (
         <Dimmer inverted active={isLoading}>
@@ -86,12 +89,6 @@ class BusinessListPage extends Component {
 
     return (
       <Wrapper>
-        {modalOpen ? (
-          <NewBusinessForm
-            modalOpen={modalOpen}
-            toggleModal={this._toggleModal}
-          />
-        ) : null}
         <GridBusinessStage>
           <Statistic.Group size="mini" color="blue" widths={6}>
             <Statistic
@@ -152,7 +149,7 @@ class BusinessListPage extends Component {
             </Grid.Column>
             <Grid.Column floated="right" width={3}>
               <Button
-                onClick={this._toggleModal}
+                onClick={this._newBusiness}
                 color="facebook"
                 floated="right"
               >
@@ -204,11 +201,13 @@ BusinessListPage.propTypes = {
   isLoading: PropTypes.bool,
   getBusinesses: PropTypes.func,
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
+  openModal: PropTypes.func,
+  createBusiness: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusinesses }, dispatch)
+  bindActionCreators({ getBusinesses, openModal, createBusiness }, dispatch)
 
 const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,

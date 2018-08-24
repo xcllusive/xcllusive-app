@@ -16,11 +16,13 @@ import {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import NewBusinessForm from '../../components/forms/NewBusinessForm'
-
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
-import { getBusinesses, getBusiness } from '../../redux/ducks/business'
+import {
+  getBusinesses,
+  getBusiness,
+  createBusiness
+} from '../../redux/ducks/business'
 import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
 
 import {
@@ -41,7 +43,6 @@ class ClientManagerList extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      modalOpenBusiness: false,
       buyer: null,
       business: null,
       buyerLog: null,
@@ -352,8 +353,18 @@ class ClientManagerList extends Component {
     })
   }
 
+  _newBusiness = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
+      title: 'New Business',
+      onConfirm: async values => {
+        if (values) {
+          await this.props.createBusiness(values)
+        }
+      }
+    })
+  }
+
   render () {
-    const { modalOpenBusiness } = this.state
     const {
       listBuyerList,
       listBusinessList,
@@ -372,13 +383,6 @@ class ClientManagerList extends Component {
     } = this.props
     return (
       <Wrapper>
-        {modalOpenBusiness ? (
-          <NewBusinessForm
-            modalOpen={modalOpenBusiness}
-            toggleModal={() => this._toggleModal('modalOpenBusiness')}
-          />
-        ) : null}
-
         <Grid padded="horizontally" style={{ marginTop: 0 }}>
           <Grid.Row columns={4}>
             <Grid.Column floated="left" width={4}>
@@ -422,11 +426,7 @@ class ClientManagerList extends Component {
             <Grid.Column>
               <br />
               <br />
-              <Button
-                size="small"
-                onClick={() => this._toggleModal('modalOpenBusiness')}
-                color="facebook"
-              >
+              <Button size="small" onClick={this._newBusiness} color="facebook">
                 <Icon name="add" />
                 New Business
               </Button>
@@ -871,7 +871,8 @@ ClientManagerList.propTypes = {
   getEmailTemplate: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
   createBuyer: PropTypes.func,
-  updateBuyer: PropTypes.func
+  updateBuyer: PropTypes.func,
+  createBusiness: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -915,7 +916,8 @@ const mapDispatchToProps = dispatch =>
       clearBuyerLog,
       getEmailTemplate,
       createBuyer,
-      updateBuyer
+      updateBuyer,
+      createBusiness
     },
     dispatch
   )
