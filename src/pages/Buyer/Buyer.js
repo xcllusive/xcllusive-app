@@ -51,6 +51,17 @@ class BuyerPage extends Component {
     return daysLeft
   }
 
+  _showMsg = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_SHOW_MSG, {
+      options: {
+        title: 'Alert:',
+        content: 'Got it!',
+        text:
+          'This business has been automatically locked because the Buyer Feedback Score is overdue. To unlock this business record please complete a new buyer Feedback Score for this busines. Sorry, it should only take a few minutes.'
+      }
+    })
+  }
+
   render () {
     const {
       history,
@@ -103,7 +114,7 @@ class BuyerPage extends Component {
                           item.lastScore &&
                           item.lastScore.dateTimeCreated &&
                           this._diffDays(item.lastScore.dateTimeCreated) >= 30
-                            ? () => alert('Test')
+                            ? () => this._showMsg()
                             : () =>
                               history.push(
                                 `buyer/business/${item.business.id}`
