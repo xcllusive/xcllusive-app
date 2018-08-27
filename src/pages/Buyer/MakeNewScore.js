@@ -50,7 +50,15 @@ class MakeNewScorePage extends Component {
       currentInterestChange: false,
       perceivedRiskChange: false,
       score: '#',
-      lastScore: '#'
+      lastScore: '#',
+      updateLastScore: false,
+      updatePerceivedPrice: false,
+      updateEnquiries: false,
+      updateInfoTransMomen: false,
+      updateCurrentInterest: false,
+      updatePerceivedRisk: false,
+      updateCalculated: true,
+      updateSent: false
     }
   }
 
@@ -71,63 +79,177 @@ class MakeNewScorePage extends Component {
     this.props.clearScore()
   }
 
-  static getDerivedStateFromProps (nextProps) {
-    if (this.props.score && nextProps.score) {
-      this.setState({ score: nextProps.score.total })
+  componentDidUpdate () {
+    if (
+      this.props.enquiries &&
+      this.props.enquiries.lastScore &&
+      !this.state.updateLastScore
+    ) {
+      this.setState({ lastScore: this.props.enquiries.lastScore.total })
+      this.setState({ updateLastScore: true })
     }
 
     if (
+      !this.props.isLoadingEnquiries &&
       this.props.enquiries &&
-      nextProps.enquiries &&
-      nextProps.enquiries.lastScore
+      !this.state.updateEnquiries
     ) {
-      this.setState({ lastScore: nextProps.enquiries.lastScore.total })
+      if (this.props.values.diff > 4) this.props.values.diff = 4
+      if (this.props.values.diff < -4) this.props.values.diff = -4
+      const objectEnquiries = _.find(
+        this.props.enquiriesOptions,
+        o => o.label === this.props.values.diff.toString()
+      )
+      this.setState({ objectEnquiries })
+      this.setState({ updateEnquiries: true })
     }
 
-    if (this.props.score && nextProps.values.perceivedPrice_id) {
+    if (
+      this.props.score &&
+      this.props.values.perceivedPrice_id &&
+      !this.props.isLoadingPerceivedPrice &&
+      !this.state.updatePerceivedPrice
+    ) {
       this._findItemArray(
         'perceivedPrice_id',
-        nextProps.values.perceivedPrice_id
+        this.props.values.perceivedPrice_id
       )
+      this.setState({ updatePerceivedPrice: true })
     }
-    if (this.props.score && nextProps.values.infoTransMomen_id) {
+
+    if (
+      this.props.score &&
+      this.props.values.infoTransMomen_id &&
+      !this.props.isLoadingInfoTransMomen &&
+      !this.state.updateInfoTransMomen
+    ) {
       this._findItemArray(
         'infoTransMomen_id',
-        nextProps.values.infoTransMomen_id
+        this.props.values.infoTransMomen_id
       )
+      this.setState({ updateInfoTransMomen: true })
     }
-    if (this.props.score && nextProps.values.currentInterest_id) {
+
+    if (
+      this.props.score &&
+      this.props.values.currentInterest_id &&
+      !this.props.isLoadingCurrentInterest &&
+      !this.state.updateCurrentInterest
+    ) {
       this._findItemArray(
         'currentInterest_id',
-        nextProps.values.currentInterest_id
+        this.props.values.currentInterest_id
       )
+      this.setState({ updateCurrentInterest: true })
     }
-    if (this.props.score && nextProps.values.perceivedRisk_id) {
-      this._findItemArray('perceivedRisk_id', nextProps.values.perceivedRisk_id)
+
+    if (
+      this.props.score &&
+      this.props.values.perceivedRisk_id &&
+      !this.props.isLoadingPerceivedRisk &&
+      !this.state.updatePerceivedRisk
+    ) {
+      this._findItemArray(
+        'perceivedRisk_id',
+        this.props.values.perceivedRisk_id
+      )
+      this.setState({ updatePerceivedRisk: true })
     }
-    if (nextProps.enquiries) {
-      this._findItemEnquiries(nextProps.values.diff)
-    }
-    if (!this.props.isCalculated && nextProps.isCalculated) {
+
+    if (
+      this.props.score &&
+      this.props.isCalculated &&
+      !this.state.updateCalculated
+    ) {
       this.props.history.replace(
         `/buyer/business/${this.props.match.params.idBusiness}/make-new-score/${
-          nextProps.score.id
+          this.props.score.id
         }`
       )
+      this.setState({ updateCalculated: true })
+    }
+
+    if (this.props.isLoadingCalculated && !this.state.updateSent) {
+      this.setState({ updateSent: true })
     }
   }
 
-  _findItemEnquiries (diff) {
-    if (diff > 4) diff = 4
-    if (diff < -4) diff = -4
-    const objectEnquiries = _.find(
-      this.props.enquiriesOptions,
-      o => o.label === diff.toString()
-    )
-    this.setState({
-      objectEnquiries
-    })
+  static getDerivedStateFromProps (nextProps) {
+    if (nextProps.score) {
+      return { score: nextProps.score.total }
+    }
+
+    if (nextProps.enquiries) {
+      if (nextProps.values.diff > 4) nextProps.values.diff = 4
+      if (nextProps.values.diff < -4) nextProps.values.diff = -4
+      const objectEnquiries = _.find(
+        nextProps.enquiriesOptions,
+        o => o.label === nextProps.values.diff.toString()
+      )
+      return {
+        objectEnquiries
+      }
+    }
+    return null
   }
+
+  // static getDerivedStateFromProps (nextProps) {
+  //   if (this.props.score && nextProps.score) {
+  //     this.setState({ score: nextProps.score.total })
+  //   }
+
+  //   if (
+  //     this.props.enquiries &&
+  //     nextProps.enquiries &&
+  //     nextProps.enquiries.lastScore
+  //   ) {
+  //     this.setState({ lastScore: nextProps.enquiries.lastScore.total })
+  //   }
+
+  //   if (this.props.score && nextProps.values.perceivedPrice_id) {
+  //     this._findItemArray(
+  //       'perceivedPrice_id',
+  //       nextProps.values.perceivedPrice_id
+  //     )
+  //   }
+  //   if (this.props.score && nextProps.values.infoTransMomen_id) {
+  //     this._findItemArray(
+  //       'infoTransMomen_id',
+  //       nextProps.values.infoTransMomen_id
+  //     )
+  //   }
+  //   if (this.props.score && nextProps.values.currentInterest_id) {
+  //     this._findItemArray(
+  //       'currentInterest_id',
+  //       nextProps.values.currentInterest_id
+  //     )
+  //   }
+  //   if (this.props.score && nextProps.values.perceivedRisk_id) {
+  //     this._findItemArray('perceivedRisk_id', nextProps.values.perceivedRisk_id)
+  //   }
+  //   if (nextProps.enquiries) {
+  //     this._findItemEnquiries(nextProps.values.diff)
+  //   }
+  //   if (!this.props.isCalculated && nextProps.isCalculated) {
+  //     this.props.history.replace(
+  //       `/buyer/business/${this.props.match.params.idBusiness}/make-new-score/${
+  //         nextProps.score.id
+  //       }`
+  //     )
+  //   }
+  // }
+
+  // _findItemEnquiries (diff) {
+  //   if (diff > 4) diff = 4
+  //   if (diff < -4) diff = -4
+  //   const objectEnquiries = _.find(
+  //     this.props.enquiriesOptions,
+  //     o => o.label === diff.toString()
+  //   )
+  //   this.setState({
+  //     objectEnquiries
+  //   })
+  // }
 
   _findItemArray = (name, id) => {
     if (name === 'perceivedPrice_id') {
@@ -182,6 +304,9 @@ class MakeNewScorePage extends Component {
         onConfirm: isConfirmed => {
           if (isConfirmed) {
             this.props.calculateScore(values)
+            this.setState({
+              updateCalculated: false
+            })
           }
         }
       })
@@ -216,7 +341,7 @@ class MakeNewScorePage extends Component {
 
   _dateSent () {
     if (this.props.score) {
-      if (this.props.score.dateSent !== null) {
+      if (this.props.score.dateSent) {
         return moment(this.props.score.dateSent).format('DD/MM/YYYY')
       } else {
         return '#'
@@ -244,7 +369,6 @@ class MakeNewScorePage extends Component {
       score,
       isLoadingSendScore
     } = this.props
-
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -856,7 +980,8 @@ class MakeNewScorePage extends Component {
                           disabled={
                             (this.props.score &&
                               this.props.score.dateSent !== null) ||
-                            !this.props.score
+                            !this.props.score ||
+                            (!this.state.updateSent && !this.props.score)
                           }
                           loading={isLoadingSendScore}
                         >
@@ -940,7 +1065,14 @@ MakeNewScorePage.propTypes = {
   sendScore: PropTypes.func,
   isLoadingSendScore: PropTypes.bool,
   isCalculated: PropTypes.bool,
-  scoreCreated: PropTypes.object
+  scoreCreated: PropTypes.object,
+  isLoadingEnquiries: PropTypes.bool,
+  isLoadingPerceivedPrice: PropTypes.bool,
+  isLoadingInfoTransMomen: PropTypes.bool,
+  isLoadingCurrentInterest: PropTypes.bool,
+  isLoadingPerceivedRisk: PropTypes.bool,
+  isLoadingCalculated: PropTypes.bool,
+  isSentScore: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -1038,14 +1170,21 @@ const mapStateToProps = state => ({
   business: state.business.get.object,
   isLoadingBusiness: state.business.get.isLoading,
   perceivedPriceOptions: state.scoreRegister.get.perceivedPrice.array,
+  isLoadingPerceivedPrice: state.scoreRegister.get.perceivedPrice.isLoading,
   infoTransMomenOptions: state.scoreRegister.get.infoTransMomen.array,
+  isLoadingInfoTransMomen: state.scoreRegister.get.infoTransMomen.isLoading,
   currentInterestOptions: state.scoreRegister.get.currentInterest.array,
+  isLoadingCurrentInterest: state.scoreRegister.get.currentInterest.isLoading,
   perceivedRiskOptions: state.scoreRegister.get.perceivedRisk.array,
+  isLoadingPerceivedRisk: state.scoreRegister.get.perceivedRisk.isLoading,
   enquiriesOptions: state.scoreRegister.get.enquiries.array,
+  isLoadingEnquiries: state.scoreRegister.get.enquiries.isLoading,
   score: state.score.get.object,
   enquiries: state.score.enquiries.object,
   isLoadingSendScore: state.score.send.isLoading,
-  isCalculated: state.score.calculateScore.isCalculated
+  isSentScore: state.score.send.isSent,
+  isCalculated: state.score.calculateScore.isCalculated,
+  isLoadingCalculated: state.score.calculateScore.isLoading
 })
 
 export default connect(
