@@ -18,7 +18,7 @@ const ModalConfirm = ({ closeModal, options }) => {
       <Modal.Actions>
         <Button
           positive
-          icon="checkmark"
+          icon="thumbs up"
           labelPosition="right"
           content={options.content}
           onClick={() => handleConfirm(options)}
