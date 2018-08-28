@@ -36,7 +36,6 @@ class EditBusinessDetailForm extends Component {
         { key: '8', text: 'WA', value: 'WA' }
       ],
       modalOpenReassignBusiness: false,
-      reassignedBusiness: false,
       updateStageSalesMemo: false,
       updateStageLost: false,
       stage: 0,
@@ -45,13 +44,16 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
-  static async getDerivedStateFromProps (nextProps, prevState) {
+  componentDidUpdate (nextProps) {
     if (
-      nextProps.reassignedBusiness &&
-      prevState.reassignedBusiness !== nextProps.reassignedBusiness
+      this.props.reassignedBusiness &&
+      nextProps.reassignedBusiness !== this.props.reassignedBusiness
     ) {
-      nextProps.getBusiness(nextProps.business.id)
+      this.props.getBusiness(this.props.business.id)
     }
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
     if (
       nextProps.updateStageSalesMemo &&
       prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo
@@ -79,7 +81,6 @@ class EditBusinessDetailForm extends Component {
     }
 
     return {
-      reassignedBusiness: nextProps.reassignedBusiness,
       updateStageSalesMemo: nextProps.updateStageSalesMemo,
       updateStageLost: nextProps.updateStageLost,
       stage: nextProps.values.stage
