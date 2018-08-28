@@ -94,8 +94,7 @@ class ScoreListPage extends Component {
                     <Table.HeaderCell>Version</Table.HeaderCell>
                     <Table.HeaderCell>Score</Table.HeaderCell>
                     <Table.HeaderCell>Sent</Table.HeaderCell>
-                    <Table.HeaderCell>Edit</Table.HeaderCell>
-                    <Table.HeaderCell>Delete</Table.HeaderCell>
+                    <Table.HeaderCell>Options</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -124,8 +123,6 @@ class ScoreListPage extends Component {
                         >
                           <Icon link name="edit" size="large" />
                         </Button>
-                      </Table.Cell>
-                      <Table.Cell>
                         <Button
                           icon
                           disabled={listScore.dateSent !== null}
