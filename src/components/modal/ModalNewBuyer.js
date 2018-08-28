@@ -10,8 +10,6 @@ import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 import { closeModal } from '../../redux/ducks/modal'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
-import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
-
 class ModalNewBuyer extends Component {
   constructor (props) {
     super(props)
