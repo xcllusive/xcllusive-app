@@ -10,7 +10,8 @@ import {
   Input,
   Grid,
   Dimmer,
-  Loader
+  Loader,
+  Pagination
 } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
@@ -315,6 +316,10 @@ class ClientManagerList extends Component {
     })
   }
 
+  _handlePaginationChange = (e, { activePage }) => {
+    this.props.getLog(this.state.buyer.id, 10, activePage)
+  }
+
   render () {
     const {
       listBuyerList,
@@ -351,9 +356,7 @@ class ClientManagerList extends Component {
                 value={this.state.inputSearchBuyer}
               />
             </Grid.Column>
-            <Grid.Column floated="right">
-              <br />
-              <br />
+            <Grid.Column style={{ marginTop: '47px' }} floated="right">
               <Button size="small" onClick={this._newBuyer} color="facebook">
                 <Icon name="add" />
                 New Buyer
@@ -374,9 +377,7 @@ class ClientManagerList extends Component {
                 value={this.state.inputSearchBusiness}
               />
             </Grid.Column>
-            <Grid.Column>
-              <br />
-              <br />
+            <Grid.Column style={{ marginTop: '47px' }}>
               <Button size="small" onClick={this._newBusiness} color="facebook">
                 <Icon name="add" />
                 New Business
@@ -760,7 +761,7 @@ class ClientManagerList extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {listBuyerLogList.map(buyerLog => (
+                  {listBuyerLogList.array.map(buyerLog => (
                     <Table.Row
                       active
                       key={buyerLog.id}
@@ -778,6 +779,16 @@ class ClientManagerList extends Component {
                   ))}
                 </Table.Body>
               </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) =>
+                  this._handlePaginationChange(e, data)
+                }
+                defaultActivePage={this.props.listBuyerLogList.activePage}
+                totalPages={this.props.listBuyerLogList.pages}
+                firstItem={null}
+                lastItem={null}
+              />
             </Dimmer.Dimmable>
           ) : null}
         </Grid.Column>
@@ -801,7 +812,7 @@ ClientManagerList.propTypes = {
   getBusinesses: PropTypes.func,
   isLoadingBuyerLog: PropTypes.bool,
   getLog: PropTypes.func,
-  listBuyerLogList: PropTypes.array,
+  listBuyerLogList: PropTypes.object,
   sendCa: PropTypes.func,
   isLoadingSendCa: PropTypes.bool,
   isLoadingSendIm: PropTypes.bool,
@@ -835,7 +846,7 @@ const mapStateToProps = state => ({
   isCreatedBusiness: state.business.create.isCreated,
   isCreatedBuyer: state.buyer.create.isCreated,
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
-  listBuyerLogList: state.buyerLog.get.array,
+  listBuyerLogList: state.buyerLog.get,
   isLoadingSendCa: state.clientManager.sentCa.isLoading,
   isLoadingSendIm: state.clientManager.sentIm.isLoading,
   isLoadingCaReceived: state.clientManager.caReceived.isLoading,
