@@ -267,6 +267,7 @@ class ModalNewBuyer extends Component {
         <Modal.Actions>
           <Button
             color="blue"
+            type="submit"
             disabled={isSubmitting || !isValid}
             loading={isLoading}
             onClick={handleSubmit}

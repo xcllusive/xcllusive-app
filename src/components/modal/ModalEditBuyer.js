@@ -283,6 +283,7 @@ class ModalEditBuyer extends Component {
         <Modal.Actions>
           <Button
             color="blue"
+            type="submit"
             disabled={isSubmitting || !isValid}
             loading={isLoading}
             onClick={handleSubmit}
@@ -375,6 +376,7 @@ export default connect(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit
+    handleSubmit,
+    enableReinitialize: true
   })(ModalEditBuyer)
 )
