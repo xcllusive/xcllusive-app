@@ -267,13 +267,17 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const listScore = businessId => async dispatch => {
+export const listScore = (
+  businessId,
+  limit = 5,
+  page = null
+) => async dispatch => {
   dispatch({
     type: Types.LIST_SCORE_LOADING,
     payload: true
   })
   try {
-    const listScore = await list(businessId)
+    const listScore = await list(businessId, limit, page)
     dispatch({
       type: Types.LIST_SCORE_SUCCESS,
       payload: listScore

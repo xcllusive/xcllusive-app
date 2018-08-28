@@ -6,10 +6,9 @@ import {
   Table,
   Grid,
   Header,
-  Dimmer,
-  Loader,
   Button,
-  Icon
+  Icon,
+  Pagination
 } from 'semantic-ui-react'
 
 import { getBusiness } from '../../redux/ducks/business'
@@ -46,122 +45,124 @@ class ScoreListPage extends Component {
     })
   }
 
+  _handlePaginationChange = (e, { activePage }) => {
+    this.props.listScore(this.props.match.params.id, 5, activePage)
+  }
+
   render () {
     const { listScoreList, history, business, isLoadingBusiness } = this.props
     return (
-      <Wrapper>
-        <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
-          <Dimmer inverted active={isLoadingBusiness}>
-            <Loader>Loading</Loader>
-          </Dimmer>
-          <Grid style={{ marginTop: 0 }}>
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <Header
-                  as="h2"
-                  color="blue"
-                  content={`Sellability Score Log: ${business.businessName}`}
-                />
-              </Grid.Column>
-              <Grid.Column>
-                <Button
-                  color="facebook"
-                  onClick={() =>
-                    history.push(
-                      `/buyer/business/${business.id}/make-new-score`
-                    )
-                  }
-                  size="small"
-                  floated="right"
-                >
-                  <Icon name="star" />
-                  Make New Score
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          {listScoreList.length > 0 ? (
-            <Grid padded="horizontally" style={{ marginTop: 0 }}>
-              <Grid.Row>
-                <Table
-                  color="blue"
-                  celled
-                  inverted
-                  selectable
-                  size="small"
-                  compact
-                >
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Created</Table.HeaderCell>
-                      <Table.HeaderCell>Version</Table.HeaderCell>
-                      <Table.HeaderCell>Score</Table.HeaderCell>
-                      <Table.HeaderCell>Sent</Table.HeaderCell>
-                      <Table.HeaderCell>Edit</Table.HeaderCell>
-                      <Table.HeaderCell>Delete</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {listScoreList.map((listScore, key) => (
-                      <Table.Row active key={listScore.id}>
-                        <Table.Cell>
-                          {moment(listScore.dateTimeCreated).format(
-                            'DD/MM/YYYY - HH:mm'
-                          )}
-                        </Table.Cell>
-                        <Table.Cell>
-                          Score Version {listScore.version}
-                        </Table.Cell>
-                        <Table.Cell>{listScore.total}</Table.Cell>
-                        <Table.Cell>
-                          {listScore.dateSent ? 'Yes' : 'No'}
-                        </Table.Cell>
-                        <Table.Cell>
-                          <Button
-                            icon
-                            onClick={() =>
-                              history.push(
-                                `/buyer/business/${
-                                  business.id
-                                }/make-new-score/${listScore.id}`
-                              )
-                            }
-                          >
-                            <Icon link name="edit" size="large" />
-                          </Button>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <Button
-                            icon
-                            disabled={listScore.dateSent !== null}
-                            onClick={() =>
-                              this._toggleModalConfirmDelete(listScore.id)
-                            }
-                          >
-                            <Icon link color="red" size="large" name="trash" />
-                          </Button>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table>
-              </Grid.Row>
-            </Grid>
-          ) : null}
-          <Grid style={{ marginTop: 0 }}>
+      <Wrapper loading={isLoadingBusiness}>
+        <Grid style={{ marginTop: 0 }}>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Header
+                as="h2"
+                color="blue"
+                content={`Sellability Score Log: ${business.businessName}`}
+              />
+            </Grid.Column>
             <Grid.Column>
               <Button
-                color="green"
-                onClick={() => history.push('/buyer')}
+                color="facebook"
+                onClick={() =>
+                  history.push(`/buyer/business/${business.id}/make-new-score`)
+                }
                 size="small"
-                floated="left"
+                floated="right"
               >
-                <Icon name="backward" />
-                Return to Business
+                <Icon name="star" />
+                Make New Score
               </Button>
             </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        {listScoreList.array.length > 0 ? (
+          <Grid padded="horizontally" style={{ marginTop: 0 }}>
+            <Grid.Row>
+              <Table
+                color="blue"
+                celled
+                inverted
+                selectable
+                size="small"
+                compact
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Created</Table.HeaderCell>
+                    <Table.HeaderCell>Version</Table.HeaderCell>
+                    <Table.HeaderCell>Score</Table.HeaderCell>
+                    <Table.HeaderCell>Sent</Table.HeaderCell>
+                    <Table.HeaderCell>Options</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {listScoreList.array.map((listScore, key) => (
+                    <Table.Row active key={listScore.id}>
+                      <Table.Cell>
+                        {moment(listScore.dateTimeCreated).format(
+                          'DD/MM/YYYY - HH:mm'
+                        )}
+                      </Table.Cell>
+                      <Table.Cell>Score Version {listScore.version}</Table.Cell>
+                      <Table.Cell>{listScore.total}</Table.Cell>
+                      <Table.Cell>
+                        {listScore.dateSent ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          onClick={() =>
+                            history.push(
+                              `/buyer/business/${business.id}/make-new-score/${
+                                listScore.id
+                              }`
+                            )
+                          }
+                        >
+                          <Icon link name="edit" size="large" />
+                        </Button>
+                        <Button
+                          icon
+                          disabled={listScore.dateSent !== null}
+                          onClick={() =>
+                            this._toggleModalConfirmDelete(listScore.id)
+                          }
+                        >
+                          <Icon link color="red" size="large" name="trash" />
+                        </Button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) =>
+                  this._handlePaginationChange(e, data)
+                }
+                defaultActivePage={this.props.listScoreList.activePage}
+                totalPages={this.props.listScoreList.pages}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Grid.Row>
           </Grid>
-        </Dimmer.Dimmable>
+        ) : null}
+        <Grid style={{ marginTop: 0 }}>
+          <Grid.Column>
+            <Button
+              color="green"
+              onClick={() => history.push('/buyer')}
+              size="small"
+              floated="left"
+            >
+              <Icon name="backward" />
+              Return to Business
+            </Button>
+          </Grid.Column>
+        </Grid>
       </Wrapper>
     )
   }
@@ -170,7 +171,7 @@ class ScoreListPage extends Component {
 ScoreListPage.propTypes = {
   getBuyersFromBusiness: PropTypes.func,
   match: PropTypes.object,
-  listScoreList: PropTypes.array,
+  listScoreList: PropTypes.object,
   history: PropTypes.object,
   getBusiness: PropTypes.func,
   business: PropTypes.object,
@@ -187,7 +188,7 @@ const mapDispatchToProps = dispatch =>
   )
 
 const mapStateToProps = state => ({
-  listScoreList: state.score.listScore.array,
+  listScoreList: state.score.listScore,
   business: state.business.get.object,
   isLoadingBusiness: state.business.get.isLoading
 })

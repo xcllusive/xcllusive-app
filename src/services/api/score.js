@@ -8,11 +8,11 @@ export const calculate = calculateScore => {
   })
 }
 
-export const list = business => {
+export const list = (business, limit = null, page = null) => {
   return request({
     method: 'get',
     url: '/score',
-    params: { business }
+    params: { business, limit, page }
   })
 }
 
