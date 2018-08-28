@@ -396,6 +396,7 @@ class ModalNewUser extends Component {
               <Form.Field width={2}>
                 <Checkbox
                   as={CheckboxFormatted}
+                  name="buyerMenu"
                   label="Buyer"
                   value="buyerMenu"
                   checked={values.buyerMenu}
@@ -405,6 +406,7 @@ class ModalNewUser extends Component {
               <Form.Field width={2}>
                 <Checkbox
                   as={CheckboxFormatted}
+                  name="businessMenu"
                   label="Business"
                   value="businessMenu"
                   checked={values.businessMenu}
@@ -414,6 +416,7 @@ class ModalNewUser extends Component {
               <Form.Field width={11}>
                 <Checkbox
                   as={CheckboxFormatted}
+                  name="preSaleMenu"
                   label="Pre Sale"
                   value="preSaleMenu"
                   checked={values.preSaleMenu === true}
@@ -423,6 +426,7 @@ class ModalNewUser extends Component {
               <Form.Field width={10}>
                 <Checkbox
                   as={CheckboxFormatted}
+                  name="resourcesMenu"
                   label="Resources"
                   value="resourcesMenu"
                   checked={values.resourcesMenu === true}
@@ -432,6 +436,7 @@ class ModalNewUser extends Component {
               <Form.Field width={14}>
                 <Checkbox
                   as={CheckboxFormatted}
+                  name="clientManagerMenu"
                   label="Client Manager"
                   value="clientManagerMenu"
                   checked={values.clientManagerMenu === true}
