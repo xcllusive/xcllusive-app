@@ -341,7 +341,7 @@ const mapStateToProps = state => {
     isLoading: state.business.get.isLoading,
     business: state.business.get.object,
     totalEnquiry: state.business.get.totalEnquiry,
-    totalLastScore: state.business.get.totalLastScore.total,
+    totalLastScore: state.business.get.totalLastScore,
     error: state.business.get.error,
     arrayLogsFromBusiness: state.businessLog.get.array,
     isUpdated: state.business.update.isUpdated

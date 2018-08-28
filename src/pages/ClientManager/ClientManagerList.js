@@ -47,8 +47,7 @@ class ClientManagerList extends Component {
       business: null,
       buyerLog: null,
       inputSearchBuyer: '',
-      inputSearchBusiness: '',
-      isUpdatedBuyer: false
+      inputSearchBusiness: ''
     }
   }
 
@@ -64,45 +63,6 @@ class ClientManagerList extends Component {
     htmlConverted = htmlConverted.replace(/<[^>]+>/gi, '')
 
     return encodeURIComponent(htmlConverted)
-  }
-
-  static getDerivedStateFromProps (nextProps, prevState) {
-    if (nextProps.isUpdatedBuyer && !prevState.isUpdatedBuyer) {
-      nextProps.closeModal()
-      return {
-        buyer: nextProps.buyerUpdated,
-        isUpdatedBuyer: !prevState.isUpdatedBuyer
-      }
-    }
-
-    return null
-
-    // if (
-    //   this.props.isCreatedBuyer !== nextProps.isCreatedBuyer &&
-    //   nextProps.isCreatedBuyer
-    // ) {
-    //   await this._toggleModal('modalOpenBuyer')
-    //   this.props.getBuyers()
-    //   this._backToSearch()
-    // }
-
-    // if (
-    //   this.props.isCreatedBusiness !== nextProps.isCreatedBusiness &&
-    //   nextProps.isCreatedBusiness
-    // ) {
-    //   await this._toggleModal('modalOpenBusiness')
-    //   this.setState({
-    //     buyer: nextProps.isCreatedBusiness
-    //   })
-    // }
-
-    // if (
-    //   this.props.businessObject !== nextProps.businessObject &&
-    //   nextProps.businessObject &&
-    //   !_.isEmpty(nextProps.businessObject)
-    // ) {
-    //   this._renderBusiness(nextProps.businessObject)
-    // }
   }
 
   componentDidMount () {
@@ -336,7 +296,6 @@ class ClientManagerList extends Component {
       title: 'Edit Buyer',
       buyer,
       onConfirm: async values => {
-        this.setState({ isUpdatedBuyer: false })
         if (values) {
           await this.props.updateBuyer(values)
           this.setState({ buyer: values })
@@ -837,7 +796,6 @@ ClientManagerList.propTypes = {
   getBuyers: PropTypes.func,
   isLoadingBuyerList: PropTypes.bool,
   isLoadingBusinessList: PropTypes.bool,
-  isUpdatedBuyer: PropTypes.bool,
   isCreatedBuyer: PropTypes.bool,
   isCreatedBusiness: PropTypes.bool,
   getBusinesses: PropTypes.func,
@@ -873,7 +831,6 @@ const mapStateToProps = state => ({
   isLoadingBusinessList: state.business.getAll.isLoading,
   listBuyerList: state.buyer.getAll.array,
   listBusinessList: state.business.getAll.array,
-  isUpdatedBuyer: state.buyer.update.isUpdated,
   buyerUpdated: state.buyer.update.buyer,
   isCreatedBusiness: state.business.create.isCreated,
   isCreatedBuyer: state.buyer.create.isCreated,

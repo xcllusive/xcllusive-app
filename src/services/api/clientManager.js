@@ -26,7 +26,7 @@ export const caReceived = (caFile, buyerId, businessId) => {
   data.append('buyerId', buyerId)
   data.append('businessId', businessId)
 
-  request({
+  return request({
     method: 'post',
     url: '/buyer/received-ca',
     data,

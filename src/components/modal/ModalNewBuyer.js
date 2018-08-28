@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 import { closeModal } from '../../redux/ducks/modal'
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
@@ -52,6 +53,7 @@ class ModalNewBuyer extends Component {
       title,
       closeModal
     } = this.props
+
     return (
       <Modal open dimmer={'blurring'}>
         <Modal.Header align="center">{title}</Modal.Header>
