@@ -168,13 +168,14 @@ class MakeNewScorePage extends Component {
       )
       this.setState({ updateCalculated: true })
     }
-
-    if (this.props.isLoadingCalculated && !this.state.updateSent) {
-      this.setState({ updateSent: true })
-    }
   }
 
-  static getDerivedStateFromProps (nextProps) {
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (prevState.updateSent && nextProps.isSentScore) {
+      nextProps.history.push(
+        `/buyer/business/${nextProps.business.id}/score-list`
+      )
+    }
     if (nextProps.score) {
       return { score: nextProps.score.total }
     }
@@ -322,6 +323,9 @@ class MakeNewScorePage extends Component {
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           this.props.sendScore(scoreId)
+          this.setState({
+            updateSent: true
+          })
         }
       }
     })
@@ -545,7 +549,9 @@ class MakeNewScorePage extends Component {
                       name="notesEnquiries"
                       autoComplete="notesEnquiries"
                       disabled={
-                        this.props.score && this.props.score.dateSent !== null
+                        this.props.score &&
+                        this.props.score.dateSent !== null &&
+                        typeof this.props.score.dateSent !== 'undefined'
                       }
                       value={values.notesEnquiries}
                       onChange={handleChange}
@@ -612,7 +618,9 @@ class MakeNewScorePage extends Component {
                         name="perceivedPrice_id"
                         autoComplete="perceivedPrice_id"
                         disabled={
-                          this.props.score && this.props.score.dateSent !== null
+                          this.props.score &&
+                          this.props.score.dateSent !== null &&
+                          typeof this.props.score.dateSent !== 'undefined'
                         }
                         value={values.perceivedPrice_id}
                         onChange={this._handleSelectChange}
@@ -632,7 +640,9 @@ class MakeNewScorePage extends Component {
                       name="notesPrice"
                       autoComplete="notesPrice"
                       disabled={
-                        this.props.score && this.props.score.dateSent !== null
+                        this.props.score &&
+                        this.props.score.dateSent !== null &&
+                        typeof this.props.score.dateSent !== 'undefined'
                       }
                       value={values.notesPrice}
                       onChange={handleChange}
@@ -699,7 +709,9 @@ class MakeNewScorePage extends Component {
                         name="infoTransMomen_id"
                         autoComplete="infoTransMomen_id"
                         disabled={
-                          this.props.score && this.props.score.dateSent !== null
+                          this.props.score &&
+                          this.props.score.dateSent !== null &&
+                          typeof this.props.score.dateSent !== 'undefined'
                         }
                         value={values.infoTransMomen_id}
                         onChange={this._handleSelectChange}
@@ -719,7 +731,9 @@ class MakeNewScorePage extends Component {
                       name="notesMomentum"
                       autoComplete="notesMomentum"
                       disabled={
-                        this.props.score && this.props.score.dateSent !== null
+                        this.props.score &&
+                        this.props.score.dateSent !== null &&
+                        typeof this.props.score.dateSent !== 'undefined'
                       }
                       value={values.notesMomentum}
                       onChange={handleChange}
@@ -786,7 +800,9 @@ class MakeNewScorePage extends Component {
                         name="currentInterest_id"
                         autoComplete="currentInterest_id"
                         disabled={
-                          this.props.score && this.props.score.dateSent !== null
+                          this.props.score &&
+                          this.props.score.dateSent !== null &&
+                          typeof this.props.score.dateSent !== 'undefined'
                         }
                         value={values.currentInterest_id}
                         onChange={this._handleSelectChange}
@@ -806,7 +822,9 @@ class MakeNewScorePage extends Component {
                       name="notesInterest"
                       autoComplete="notesInterest"
                       disabled={
-                        this.props.score && this.props.score.dateSent !== null
+                        this.props.score &&
+                        this.props.score.dateSent !== null &&
+                        typeof this.props.score.dateSent !== 'undefined'
                       }
                       value={values.notesInterest}
                       onChange={handleChange}
@@ -873,7 +891,9 @@ class MakeNewScorePage extends Component {
                         name="perceivedRisk_id"
                         autoComplete="perceivedRisk_id"
                         disabled={
-                          this.props.score && this.props.score.dateSent !== null
+                          this.props.score &&
+                          this.props.score.dateSent !== null &&
+                          typeof this.props.score.dateSent !== 'undefined'
                         }
                         value={values.perceivedRisk_id}
                         onChange={this._handleSelectChange}
@@ -893,7 +913,9 @@ class MakeNewScorePage extends Component {
                       name="notesRisk"
                       autoComplete="notesRisk"
                       disabled={
-                        this.props.score && this.props.score.dateSent !== null
+                        this.props.score &&
+                        this.props.score.dateSent !== null &&
+                        typeof this.props.score.dateSent !== 'undefined'
                       }
                       value={values.notesRisk}
                       onChange={handleChange}
@@ -979,9 +1001,10 @@ class MakeNewScorePage extends Component {
                           }
                           disabled={
                             (this.props.score &&
-                              this.props.score.dateSent !== null) ||
-                            !this.props.score ||
-                            (!this.state.updateSent && !this.props.score)
+                              this.props.score.dateSent !== null &&
+                              typeof this.props.score.dateSent !==
+                                'undefined') ||
+                            !this.props.score
                           }
                           loading={isLoadingSendScore}
                         >
