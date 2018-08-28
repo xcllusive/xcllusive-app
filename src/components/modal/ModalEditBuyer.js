@@ -5,11 +5,10 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
-
 import { closeModal } from '../../redux/ducks/modal'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
-
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class ModalEditBuyer extends Component {
   constructor (props) {
@@ -240,7 +239,7 @@ class ModalEditBuyer extends Component {
                 <Form.Select
                   required
                   label="Source"
-                  options={sourceOptions}
+                  options={mapArrayToValuesForDropdown(sourceOptions)}
                   name="source_id"
                   autoComplete="source_id"
                   loading={dropDownLoading}

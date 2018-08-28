@@ -347,6 +347,7 @@ export const caReceived = (caFile, buyerId, businessId) => async dispatch => {
     dispatch({
       type: Types.CA_RECEIVED_SUCCESS
     })
+    console.log(response)
     toast.success(response.message)
   } catch (error) {
     dispatch({
