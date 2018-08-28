@@ -9,6 +9,8 @@ import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 import { closeModal } from '../../redux/ducks/modal'
 
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
+
 class ModalNewBuyer extends Component {
   constructor (props) {
     super(props)
@@ -221,7 +223,7 @@ class ModalNewBuyer extends Component {
                 <Form.Select
                   required
                   label="Source"
-                  options={sourceOptions}
+                  options={mapArrayToValuesForDropdown(sourceOptions)}
                   name="sourceId"
                   autoComplete="sourceId"
                   loading={dropDownLoading}
