@@ -20,12 +20,24 @@ import Wrapper from '../../components/content/Wrapper'
 class BuyerListPage extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      showAll: true
+    }
   }
 
   componentDidMount () {
     this.props.getBuyersFromBusiness(this.props.match.params.id)
     this.props.getBusiness(this.props.match.params.id)
+  }
+
+  _showAll () {
+    this.setState({ showAll: false })
+    this.props.getBuyersFromBusiness(this.props.match.params.id, true)
+  }
+
+  _showLess () {
+    this.setState({ showAll: true })
+    this.props.getBuyersFromBusiness(this.props.match.params.id)
   }
 
   render () {
@@ -57,20 +69,27 @@ class BuyerListPage extends Component {
                 )}
               </Grid.Column>
               <Grid.Column>
-                <Button
-                  color="facebook"
-                  onClick={() =>
-                    this.props.getBuyersFromBusiness(
-                      this.props.match.params.id,
-                      true
-                    )
-                  }
-                  size="small"
-                  floated="right"
-                >
-                  <Icon name="backward" />
-                  Show all
-                </Button>
+                {this.state.showAll ? (
+                  <Button
+                    color="facebook"
+                    onClick={() => this._showAll()}
+                    size="small"
+                    floated="right"
+                  >
+                    <Icon name="zoom" />
+                    Show all
+                  </Button>
+                ) : (
+                  <Button
+                    color="twitter"
+                    onClick={() => this._showLess()}
+                    size="small"
+                    floated="right"
+                  >
+                    <Icon name="cut" />
+                    Show less
+                  </Button>
+                )}
               </Grid.Column>
             </Grid.Row>
           </Grid>
