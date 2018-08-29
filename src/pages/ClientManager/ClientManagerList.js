@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-// import _ from 'lodash'
+import numeral from 'numeral'
 
 import {
   Table,
@@ -89,7 +89,8 @@ class ClientManagerList extends Component {
   }
 
   _getBusinessObject = id => {
-    this.props.getBusiness(id)
+    const value = 'BS' + id
+    this.props.getBusinesses(value, [4, 5])
   }
 
   _renderBuyerLog = buyerLog => {
@@ -426,7 +427,12 @@ class ClientManagerList extends Component {
               ) : null}
               {this.state.buyer ? (
                 <Fragment>
-                  <Table size="small" basic="very" compact>
+                  <Table
+                    style={{ paddingRight: '300px' }}
+                    size="small"
+                    basic="very"
+                    compact
+                  >
                     <Table.Body>
                       <Table.Row>
                         <Table.HeaderCell>BuyerID</Table.HeaderCell>
@@ -568,7 +574,9 @@ class ClientManagerList extends Component {
                         >
                           <Table.Cell>{`BS${business.id}`}</Table.Cell>
                           <Table.Cell>{business.businessName}</Table.Cell>
-                          <Table.Cell>{business.listedPrice}</Table.Cell>
+                          <Table.Cell>
+                            {numeral(business.listedPrice).format('0,0.00')}
+                          </Table.Cell>
                           <Table.Cell>{business.description}</Table.Cell>
                         </Table.Row>
                       ))}
@@ -578,7 +586,12 @@ class ClientManagerList extends Component {
               ) : null}
               {this.state.business && this.state.business.id ? (
                 <Fragment>
-                  <Table size="small" basic="very" compact>
+                  <Table
+                    style={{ paddingRight: '300px' }}
+                    size="small"
+                    basic="very"
+                    compact
+                  >
                     <Table.Body>
                       <Table.Row>
                         <Table.HeaderCell>BusinessID</Table.HeaderCell>
@@ -616,7 +629,9 @@ class ClientManagerList extends Component {
                       <Table.Row>
                         <Table.HeaderCell>Price</Table.HeaderCell>
                         <Table.Cell>
-                          {this.state.business.listedPrice}
+                          {numeral(this.state.business.listedPrice).format(
+                            '0,0.00'
+                          )}
                         </Table.Cell>
                       </Table.Row>
                       <Table.Row>
