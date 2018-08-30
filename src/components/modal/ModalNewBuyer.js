@@ -51,7 +51,6 @@ class ModalNewBuyer extends Component {
       title,
       closeModal
     } = this.props
-
     return (
       <Modal open dimmer={'blurring'}>
         <Modal.Header align="center">{title}</Modal.Header>
@@ -332,8 +331,14 @@ const validationSchema = Yup.object().shape({
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.number().typeError('You must type only number here!'),
   telephone2: Yup.number().typeError('You must type only number here!'),
-  priceFrom: Yup.number().typeError('You must type only number here!'),
-  priceTo: Yup.number().typeError('You must type only number here!')
+  priceTo: Yup.string().test('field-match', 'Fields do not match', function (
+    value
+  ) {
+    const { priceFrom } = this.parent
+    return parseInt(priceFrom) === parseInt(value)
+  })
+  // priceFrom: Yup.number().typeError('You must type only number here!'),
+  // priceTo: Yup.number().typeError('You must type only number here!')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) =>

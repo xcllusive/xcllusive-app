@@ -11,7 +11,8 @@ import {
   Grid,
   Dimmer,
   Loader,
-  Pagination
+  Pagination,
+  Message
 } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
@@ -48,7 +49,8 @@ class ClientManagerList extends Component {
       business: null,
       buyerLog: null,
       inputSearchBuyer: '',
-      inputSearchBusiness: ''
+      inputSearchBusiness: '',
+      showMsgBusiness: false
     }
   }
 
@@ -89,6 +91,8 @@ class ClientManagerList extends Component {
   }
 
   _getBusinessObject = id => {
+    this.setState({ business: null })
+    this.setState({ showMsgBusiness: true })
     const value = 'BS' + id
     this.props.getBusinesses(value, [4, 5])
   }
@@ -208,6 +212,7 @@ class ClientManagerList extends Component {
   }
 
   _onSearchBusiness = (e, { value }) => {
+    this.setState({ showMsgBusiness: false })
     if (this.timer) clearTimeout(this.timer)
 
     this.setState({
@@ -583,6 +588,13 @@ class ClientManagerList extends Component {
                     </Table.Body>
                   </Table>
                 </Dimmer.Dimmable>
+              ) : null}
+              {listBusinessList.length === 0 && this.state.showMsgBusiness ? (
+                <Message warning>
+                  <Message.Header>
+                    Sorry! this business is not `Under Offer` neither `For Sale`
+                  </Message.Header>
+                </Message>
               ) : null}
               {this.state.business && this.state.business.id ? (
                 <Fragment>
