@@ -24,6 +24,8 @@ import ClientManagerList from './ClientManager/ClientManagerList'
 import AgreementPage from './Business/Agreement/BusinessAgreementFields'
 import PreviewAgreement from './Business/Agreement/PreviewAgreement'
 import MakeTaxInvoice from './Business/Invoice/MakeTaxInvoice'
+import AppraisalMenu from './Business/Appraisal/AppraisalMenu'
+import AppraisalList from './Business/Appraisal/AppraisalList'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
@@ -126,6 +128,16 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={MakeTaxInvoice}
         path={`${match.path}business/:id/invoice`}
+      />
+      <Route
+        exact
+        component={AppraisalList}
+        path={`${match.path}business/:id/appraisalList`}
+      />
+      <Route
+        exact
+        component={AppraisalMenu}
+        path={`${match.path}business/:id/appraisalMenu`}
       />
       {/* <Route
         exact

@@ -425,6 +425,21 @@ class EditBusinessDetailForm extends Component {
                     <Icon name="edit" />
                     Reassign Business
                   </Button>
+                  <Button
+                    color={'yellow'}
+                    size="small"
+                    onClick={() =>
+                      this.props.history.push({
+                        pathname: `${this.props.business.id}/appraisalList`,
+                        state: {
+                          business: this.props.business
+                        }
+                      })
+                    }
+                  >
+                    <Icon name="edit" />
+                    Appraisal Mgmt
+                  </Button>
                 </Form.Group>
                 <Form.Group>
                   {!this.props.business.agreement_id ? (
