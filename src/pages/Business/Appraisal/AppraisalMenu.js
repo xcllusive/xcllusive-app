@@ -2,18 +2,26 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Menu, Segment, Grid, Button, Icon, Header } from 'semantic-ui-react'
+import {
+  Menu,
+  Segment,
+  Grid,
+  Button,
+  Icon,
+  Header
+  // Label
+} from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
-import LoginForm from '../../../components/forms/LoginForm'
-
+import BusinessDetails from './BusinessDetails'
+import About from './About'
+import { theme } from '../../../styles'
 // import { getSystemSettings } from '../../redux/ducks/systemSettings'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Business Details',
-      test: 'test'
+      activeItem: 'About'
     }
   }
 
@@ -21,7 +29,57 @@ class AppraisalMenuPage extends Component {
     // this.props.getSystemSettings()
   }
 
-  _handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  _handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name })
+  }
+
+  _nextStep = () => {
+    if (this.state.activeItem === 'Business Details') {
+      this.setState({ activeItem: 'About' })
+    }
+    if (this.state.activeItem === 'About') {
+      this.setState({ activeItem: 'Business Analysis' })
+    }
+    if (this.state.activeItem === 'Business Analysis') {
+      this.setState({ activeItem: 'Financial Analysis' })
+    }
+    if (this.state.activeItem === 'Financial Analysis') {
+      this.setState({ activeItem: 'Comparable Data' })
+    }
+    if (this.state.activeItem === 'Comparable Data') {
+      this.setState({ activeItem: 'Pricing' })
+    }
+    if (this.state.activeItem === 'Pricing') {
+      this.setState({ activeItem: 'Recommendations' })
+    }
+    if (this.state.activeItem === 'Recommendations') {
+      this.setState({ activeItem: 'Confirm and Send' })
+    }
+  }
+
+  _previousStep = () => {
+    if (this.state.activeItem === 'About') {
+      this.setState({ activeItem: 'Business Details' })
+    }
+    if (this.state.activeItem === 'Business Analysis') {
+      this.setState({ activeItem: 'About' })
+    }
+    if (this.state.activeItem === 'Financial Analysis') {
+      this.setState({ activeItem: 'Business Analysis' })
+    }
+    if (this.state.activeItem === 'Comparable Data') {
+      this.setState({ activeItem: 'Financial Analysis' })
+    }
+    if (this.state.activeItem === 'Pricing') {
+      this.setState({ activeItem: 'Comparable Data' })
+    }
+    if (this.state.activeItem === 'Recommendations') {
+      this.setState({ activeItem: 'Pricing' })
+    }
+    if (this.state.activeItem === 'Confirm and Send') {
+      this.setState({ activeItem: 'Recommendations' })
+    }
+  }
 
   render () {
     const { activeItem } = this.state
@@ -92,32 +150,44 @@ class AppraisalMenuPage extends Component {
         </Menu>
         {this.state.activeItem === 'Business Details' ? (
           <Segment>
-            <LoginForm />
-            <LoginForm />
-            <LoginForm />
-            <LoginForm />
-            <LoginForm />
-            <LoginForm />
-            <LoginForm />
+            <BusinessDetails business={business} />
           </Segment>
         ) : null}
         {this.state.activeItem === 'About' ? (
           <Segment>
-            <LoginForm />
+            <About business={business} />
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>
           <Grid.Column>
             <Button
-              color="green"
+              color={theme.buttonSave}
               onClick={() =>
                 history.push(`/business/${this.props.match.params.id}`)
               }
               size="small"
               floated="left"
             >
+              <Icon name="save" />
+              Save and Complete Later
+            </Button>
+            <Button
+              color="facebook"
+              onClick={this._nextStep}
+              size="small"
+              floated="right"
+            >
+              <Icon name="forward" />
+              Next Step
+            </Button>
+            <Button
+              color={theme.buttonBack}
+              onClick={this._previousStep}
+              size="small"
+              floated="right"
+            >
               <Icon name="backward" />
-              Return to Business
+              Previous Step
             </Button>
           </Grid.Column>
         </Grid>
@@ -133,6 +203,8 @@ AppraisalMenuPage.propTypes = {
 }
 
 const mapStateToProps = state => ({})
+
+// const mapPropsToValues = props => ({})
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
