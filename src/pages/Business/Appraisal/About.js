@@ -16,6 +16,7 @@ import {
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { getBusiness } from '../../../redux/ducks/business'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import { BusinessCommencedOptions } from '../../../constants/BusinessCommencedOptions'
 
 class AboutPage extends Component {
@@ -37,6 +38,26 @@ class AboutPage extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+  }
+
+  _newBusinessRegister = type => {
+    let typeName = null
+    if (type === 4) typeName = 'Industry'
+    else typeName = 'Type'
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Confirming...',
+        text: `This will add a new business '${typeName}' to the list. Before you do this, please ensure that an applicable option is not included in the list.`
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS_REGISTER, {
+            title: 'New Business Register',
+            type: type
+          })
+        }
+      }
+    })
   }
 
   render () {
@@ -104,14 +125,12 @@ class AboutPage extends Component {
                         inverted
                         circular
                         link
-                        onClick={() =>
-                          window.open('https://abr.business.gov.au/')
-                        }
+                        onClick={() => this._newBusinessRegister(5)}
                       />
                     </Form.Field>
                     <Form.Field>
                       <Form.Select
-                        label="Industry"
+                        label="Business Industry"
                         options={industryOptions}
                         name="businessIndustry"
                         autoComplete="businessIndustry"
@@ -136,9 +155,7 @@ class AboutPage extends Component {
                         inverted
                         circular
                         link
-                        onClick={() =>
-                          window.open('https://abr.business.gov.au/')
-                        }
+                        onClick={() => this._newBusinessRegister(4)}
                       />
                     </Form.Field>
                   </Form.Group>
@@ -306,7 +323,8 @@ AboutPage.propTypes = {
   business: PropTypes.object,
   typeOptions: PropTypes.array,
   industryOptions: PropTypes.array,
-  getBusiness: PropTypes.func
+  getBusiness: PropTypes.func,
+  openModal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -356,7 +374,7 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness }, dispatch)
+  return bindActionCreators({ getBusiness, openModal }, dispatch)
 }
 
 export default connect(

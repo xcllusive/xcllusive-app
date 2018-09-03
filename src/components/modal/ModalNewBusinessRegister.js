@@ -75,7 +75,10 @@ class ModalNewBusinessRegister extends Component {
                   autoComplete="businessRegisterType"
                   value={values.businessRegisterType}
                   onChange={this._handleSelectChange}
-                  disabled={this.props.businessRegister !== undefined}
+                  disabled={
+                    this.props.businessRegister !== undefined ||
+                    this.props.type !== undefined
+                  }
                 />
                 {errors.businessRegisterType &&
                   touched.businessRegisterType && (
@@ -110,6 +113,7 @@ class ModalNewBusinessRegister extends Component {
         <Modal.Actions>
           <Button
             color="blue"
+            type="submit"
             disabled={createLoading || updateLoading || !isValid}
             loading={createLoading || updateLoading}
             onClick={handleSubmit}
@@ -144,13 +148,16 @@ ModalNewBusinessRegister.propTypes = {
   updateLoading: PropTypes.bool,
   isCreated: PropTypes.bool,
   isUpdated: PropTypes.bool,
-  getBusinessRegister: PropTypes.func
+  getBusinessRegister: PropTypes.func,
+  type: PropTypes.number
 }
 
 const mapPropsToValues = props => ({
   businessRegisterType: props.businessRegisterType
     ? props.businessRegisterType
-    : '',
+    : props.type
+      ? props.type
+      : null,
   label: props.businessRegister ? props.businessRegister.label : '',
   id: props.businessRegister ? props.businessRegister.id : null
 })
