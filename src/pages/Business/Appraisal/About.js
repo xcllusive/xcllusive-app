@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -19,25 +19,15 @@ import { getBusiness } from '../../../redux/ducks/business'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import { BusinessCommencedOptions } from '../../../constants/BusinessCommencedOptions'
 import CustomersSuppliersForm from '../../../components/forms/CustomersSuppliersForm'
+import PremisesAndEmployeesForm from '../../../components/forms/PremisesAndEmployeesForm'
+import OwnershipAndFinalNotesForm from '../../../components/forms/OwnershipAndFinalNotesForm'
 
 class AboutPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
       businessCommencedOptions: BusinessCommencedOptions,
-      currentOwnerOptions: BusinessCommencedOptions,
-      premisesOwnedRentedOptions: [
-        { key: '1', text: 'Rented', value: 'Rented' },
-        { key: '2', text: 'Owned', value: 'Owned' },
-        { key: '3', text: 'Other', value: 'Other' }
-      ],
-      owners1sHoursOptions: [
-        { key: '1', text: '< 5 days', value: '< 5 days' },
-        { key: '2', text: '5 days', value: '5 days' },
-        { key: '3', text: '6 days', value: '6 days' },
-        { key: '4', text: '7 days', value: '7 days' },
-        { key: '5', text: 'Under Management', value: 'Under Management' }
-      ]
+      currentOwnerOptions: BusinessCommencedOptions
     }
   }
 
@@ -92,12 +82,7 @@ class AboutPage extends Component {
       // isSubmitting,
       isValid
     } = this.props
-    const {
-      businessCommencedOptions,
-      currentOwnerOptions,
-      premisesOwnedRentedOptions,
-      owners1sHoursOptions
-    } = this.state
+    const { businessCommencedOptions, currentOwnerOptions } = this.state
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -323,182 +308,7 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Premises and Employees
                   </Header>
-                  <Form.Group>
-                    <Form.Field width={6}>
-                      <Form.Select
-                        label="Premises Owned or Rented"
-                        options={premisesOwnedRentedOptions}
-                        name="premisesOwnedRented"
-                        autoComplete="premisesOwnedRented"
-                        value={values.premisesOwnedRented}
-                        onChange={this._handleSelectChange}
-                      />
-                      {errors.premisesOwnedRented &&
-                        touched.premisesOwnedRented && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.premisesOwnedRented}
-                        />
-                      )}
-                    </Form.Field>
-                    {this.props.values.premisesOwnedRented === 'Rented' ? (
-                      <Fragment>
-                        <Form.Field width={5}>
-                          <Form.Input
-                            label="Rent Cost"
-                            name="rentCost"
-                            autoComplete="rentCost"
-                            value={values.rentCost}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                          {errors.rentCost &&
-                            touched.rentCost && (
-                            <Label
-                              basic
-                              color="red"
-                              pointing
-                              content={errors.rentCost}
-                            />
-                          )}
-                        </Form.Field>
-                        <Form.Field width={5}>
-                          <Form.Input
-                            label="Time remaining on Lease"
-                            name="timeRemLease"
-                            autoComplete="timeRemLease"
-                            value={values.timeRemLease}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                          {errors.timeRemLease &&
-                            touched.timeRemLease && (
-                            <Label
-                              basic
-                              color="red"
-                              pointing
-                              content={errors.timeRemLease}
-                            />
-                          )}
-                        </Form.Field>
-                      </Fragment>
-                    ) : null}
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Field>
-                      <Form.TextArea
-                        label="Premises Notes"
-                        name="premisesNotes"
-                        autoComplete="premisesNotes"
-                        value={values.premisesNotes}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.premisesNotes &&
-                        touched.premisesNotes && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.premisesNotes}
-                        />
-                      )}
-                    </Form.Field>
-                  </Form.Group>
-                  <Form.Group>
-                    <h4>Number of Employees (Not including Owners)</h4>
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Field width={4}>
-                      <Form.Input
-                        label="Full Time"
-                        name="fullTime"
-                        autoComplete="fullTime"
-                        value={values.fullTime}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.fullTime &&
-                        touched.fullTime && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.fullTime}
-                        />
-                      )}
-                    </Form.Field>
-                    <Form.Field width={4}>
-                      <Form.Input
-                        label="Part Time"
-                        name="partTime"
-                        autoComplete="partTime"
-                        value={values.partTime}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.partTime &&
-                        touched.partTime && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.partTime}
-                        />
-                      )}
-                    </Form.Field>
-                    <Form.Field width={4}>
-                      <Form.Input
-                        label="Sub-Contractors"
-                        name="subContractors"
-                        autoComplete="subContractors"
-                        value={values.subContractors}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.subContractors &&
-                        touched.subContractors && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.subContractors}
-                        />
-                      )}
-                    </Form.Field>
-                    <Form.Field width={4}>
-                      <Form.Input
-                        label="Casuals"
-                        name="casual"
-                        autoComplete="casual"
-                        value={values.casual}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.casual &&
-                        touched.casual && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.casual}
-                        />
-                      )}
-                    </Form.Field>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Field>
-                      <Form.Checkbox
-                        label="Please confirm that you have completed the above information"
-                        name="confirmAbout"
-                        onChange={this._handleChangeCheckBox}
-                        checked={values.confirmPremisesEnployees}
-                        disabled={!isValid}
-                      />
-                    </Form.Field>
-                  </Form.Group>
+                  <PremisesAndEmployeesForm />
                 </Segment>
               </Grid.Column>
               <Grid.Column>
@@ -506,126 +316,7 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Ownership and Final Notes
                   </Header>
-                  <Form.Group>
-                    <Form.Field width={6}>
-                      <Form.Input
-                        label="Number of Owners"
-                        name="numberOwners"
-                        autoComplete="numberOwners"
-                        value={values.numberOwners}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.numberOwners &&
-                        touched.numberOwners && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.numberOwners}
-                        />
-                      )}
-                    </Form.Field>
-                    <Form.Field width={10}>
-                      <Form.Select
-                        label="Owner 1's Hours"
-                        options={owners1sHoursOptions}
-                        name="owners1sHours"
-                        autoComplete="owners1sHours"
-                        value={values.owners1sHours}
-                        onChange={this._handleSelectChange}
-                      />
-                      {errors.owners1sHours &&
-                        touched.owners1sHours && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.owners1sHours}
-                        />
-                      )}
-                    </Form.Field>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Field width={10}>
-                      <Form.TextArea
-                        label="Owner 1's Role"
-                        name="owners1sRole"
-                        autoComplete="owners1sRole"
-                        value={values.owners1sRole}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.owners1sRole &&
-                        touched.owners1sRole && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.owners1sRole}
-                        />
-                      )}
-                    </Form.Field>
-                    <Form.Field width={6}>
-                      <Form.Select
-                        label="Other Owners' Hours"
-                        options={owners1sHoursOptions}
-                        name="otherOwnersHours"
-                        autoComplete="otherOwnersHours"
-                        value={values.otherOwnersHours}
-                        onChange={this._handleSelectChange}
-                      />
-                      {errors.otherOwnersHours &&
-                        touched.otherOwnersHours && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.otherOwnersHours}
-                        />
-                      )}
-                    </Form.Field>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Field width={10}>
-                      <Form.TextArea
-                        label="Other Owners' Role"
-                        name="otherOwnersRole"
-                        autoComplete="otherOwnersRole"
-                        value={values.otherOwnersRole}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.otherOwnersRole &&
-                        touched.otherOwnersRole && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.otherOwnersRole}
-                        />
-                      )}
-                    </Form.Field>
-                    <Form.Field width={10}>
-                      <Form.TextArea
-                        label="Other Relevant Notes"
-                        name="otherRelevantNotes"
-                        autoComplete="otherRelevantNotes"
-                        value={values.otherRelevantNotes}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      {errors.otherRelevantNotes &&
-                        touched.otherRelevantNotes && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.otherRelevantNotes}
-                        />
-                      )}
-                    </Form.Field>
-                  </Form.Group>
+                  <OwnershipAndFinalNotesForm />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -673,9 +364,9 @@ const validationSchema = Yup.object().shape({
   productsServices: Yup.string()
     .required('This field is required.')
     .max(130, 'This field require max 130 characters.'),
-  tradingHours: Yup.number().typeError('You must type only number here!'),
+  tradingHours: Yup.number().typeError('You must type only numbers here!'),
   nOfBusinessLocations: Yup.number().typeError(
-    'You must type only number here!'
+    'You must type only numbers here!'
   )
 })
 

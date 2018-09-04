@@ -38,7 +38,6 @@ class CustomersSuppliersForm extends Component {
       handleBlur,
       errors,
       touched,
-      // isSubmitting,
       isValid
     } = this.props
     const { largestClient5TOOptions } = this.state
@@ -165,7 +164,7 @@ class CustomersSuppliersForm extends Component {
           <Form.Field>
             <Form.Checkbox
               label="Please confirm that you have completed the above information"
-              name="confirmAbout"
+              name="confirmCustomersSuppliers"
               onChange={this._handleChangeCheckBox}
               checked={values.confirmCustomersSuppliers}
               disabled={!isValid}
@@ -181,48 +180,27 @@ CustomersSuppliersForm.propTypes = {
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
-  handleSubmit: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isSubmitting: PropTypes.bool,
-  isValid: PropTypes.bool,
-  business: PropTypes.object,
-  typeOptions: PropTypes.array,
-  industryOptions: PropTypes.array,
-  getBusiness: PropTypes.func,
-  openModal: PropTypes.func
+  isValid: PropTypes.bool
 }
 
-const mapPropsToValues = props => ({
-  tradingHours: 0,
-  nOfBusinessLocations: 0
-})
+const mapPropsToValues = props => ({})
 
 const mapStateToProps = state => {
-  return {
-    typeOptions: state.business.get.typeOptions,
-    industryOptions: state.business.get.industryOptions
-  }
+  return {}
 }
 
 const validationSchema = Yup.object().shape({
-  businessType: Yup.string().required('Business Type is required'),
-  businessIndustry: Yup.string().required('Business Industry is required'),
-  businessCommenced: Yup.string().required('Business Commenced is required'),
-  currentOwner: Yup.string().required('Current Owner is required'),
-  productsServices: Yup.string()
-    .required('This field is required.')
-    .max(130, 'This field require max 130 characters.'),
-  tradingHours: Yup.number().typeError('You must type only number here!'),
-  nOfBusinessLocations: Yup.number().typeError(
-    'You must type only number here!'
-  )
+  descriptionCustomers: Yup.string().required(
+    'Description & Customers is required'
+  ),
+  client5TO: Yup.string().required('Largest 5 clients % of T/O is required'),
+  descriptionSuppliers: Yup.string()
+    .required('Description of Suppliers is required.')
+    .max(130, 'Description of Suppliers require max 130 characters.')
 })
-
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBusiness(values).then(setSubmitting(false))
-}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({}, dispatch)
@@ -235,7 +213,6 @@ export default connect(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit,
     enableReinitialize: true
   })(CustomersSuppliersForm)
 )
