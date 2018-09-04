@@ -15,13 +15,14 @@ import Wrapper from '../../../components/content/Wrapper'
 import BusinessDetails from './BusinessDetails'
 import About from './About'
 import { theme } from '../../../styles'
+import FinancialAnalysis from './FinancialAnalysis'
 // import { getSystemSettings } from '../../redux/ducks/systemSettings'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'About'
+      activeItem: 'Financial Analysis'
     }
   }
 
@@ -156,6 +157,11 @@ class AppraisalMenuPage extends Component {
         {this.state.activeItem === 'About' ? (
           <Segment>
             <About business={business} />
+          </Segment>
+        ) : null}
+        {this.state.activeItem === 'Financial Analysis' ? (
+          <Segment>
+            <FinancialAnalysis business={business} />
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>
