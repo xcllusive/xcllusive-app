@@ -14,13 +14,13 @@ import {
   Icon
 } from 'semantic-ui-react'
 import * as Yup from 'yup'
-import Wrapper from '../../../components/content/Wrapper'
-import { getBusiness } from '../../../redux/ducks/business'
-import { TypesModal, openModal } from '../../../redux/ducks/modal'
-import { BusinessCommencedOptions } from '../../../constants/BusinessCommencedOptions'
-import CustomersSuppliersForm from '../../../components/forms/CustomersSuppliersForm'
-import PremisesAndEmployeesForm from '../../../components/forms/PremisesAndEmployeesForm'
-import OwnershipAndFinalNotesForm from '../../../components/forms/OwnershipAndFinalNotesForm'
+import Wrapper from '../../../../components/content/Wrapper'
+import { getBusiness } from '../../../../redux/ducks/business'
+import { TypesModal, openModal } from '../../../../redux/ducks/modal'
+import { BusinessCommencedOptions } from '../../../../constants/BusinessCommencedOptions'
+import CustomersSuppliersForm from './CustomersSuppliersForm'
+import PremisesAndEmployeesForm from './PremisesAndEmployeesForm'
+import OwnershipAndFinalNotesForm from './OwnershipAndFinalNotesForm'
 
 class AboutPage extends Component {
   constructor (props) {

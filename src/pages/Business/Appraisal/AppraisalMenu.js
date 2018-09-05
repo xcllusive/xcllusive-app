@@ -13,7 +13,7 @@ import {
 } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import BusinessDetails from './BusinessDetails'
-import About from './About'
+import About from './About/About'
 import { theme } from '../../../styles'
 import FinancialAnalysis from './FinancialAnalysis/FinancialAnalysis'
 // import { getSystemSettings } from '../../redux/ducks/systemSettings'

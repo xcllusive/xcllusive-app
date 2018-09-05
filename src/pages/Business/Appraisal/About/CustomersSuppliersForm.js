@@ -6,7 +6,7 @@ import { withFormik } from 'formik'
 import { Form, Label, Radio } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
-import { OptionsLargestClient5TO } from '../../constants/OptionsLargestClient5TO'
+import { OptionsLargestClient5TO } from '../../../../constants/OptionsLargestClient5TO'
 
 class CustomersSuppliersForm extends Component {
   constructor (props) {
