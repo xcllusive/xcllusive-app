@@ -27,10 +27,7 @@ class AddbacksAndAdjustmentsForm extends Component {
     } = this.props
     return (
       <Fragment>
-        <Grid.Row
-          style={{ backgroundColor: 'lightyellow', celledPadding: '.3em' }}
-          columns={9}
-        >
+        <Grid.Row style={{ backgroundColor: 'lightyellow' }} columns={9}>
           <Grid.Column>
             <b>Financial Year</b>
           </Grid.Column>

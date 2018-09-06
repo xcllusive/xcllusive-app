@@ -46,20 +46,21 @@ class BusinessDetailsPage extends Component {
             title="Step 1"
             description="Please Confirm the Business Details"
           />
+          <Message info size="large">
+            <p>
+              From this section of the database you can enter all of the
+              information necessary to complete a business appraisal. The
+              process will take place over 7 steps. If at any time you wish to
+              save your work and come back later, you can click{' '}
+              <b>`Save and Complete Later`</b>. To quickly save your work,
+              simply hit the [Enter] or [Return] key on your keyboard. Once you
+              have completed a step, review your work then click the
+              confirmation check box with the red text next to it. Then, simply
+              click the [Next Stage] button to advance through the appraisal
+              process.
+            </p>
+          </Message>
         </Step.Group>
-        <Message info size="large">
-          <p>
-            From this section of the database you can enter all of the
-            information necessary to complete a business appraisal. The process
-            will take place over 7 steps. If at any time you wish to save your
-            work and come back later, you can click{' '}
-            <b>`Save and Complete Later`</b>. To quickly save your work, simply
-            hit the [Enter] or [Return] key on your keyboard. Once you have
-            completed a step, review your work then click the confirmation check
-            box with the red text next to it. Then, simply click the [Next
-            Stage] button to advance through the appraisal process.
-          </p>
-        </Message>
         <Form>
           <Form.Group>
             <Form.Field width={7}>

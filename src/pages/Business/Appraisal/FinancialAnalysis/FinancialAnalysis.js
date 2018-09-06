@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
 import FinancialAnalysisForm from './FinancialAnalysisForm'
+import TotalAdjustmentsForm from './TotalAdjustmentsForm'
 import moment from 'moment'
 
 class FinancialAnalysisPage extends Component {
@@ -81,6 +82,7 @@ class FinancialAnalysisPage extends Component {
           <AddbacksAndAdjustmentsForm
             financialYear={this.state.financialYear}
           />
+          <TotalAdjustmentsForm />
         </Grid>
       </Wrapper>
     )
