@@ -6,6 +6,7 @@ import {
   update,
   remove
 } from '../../services/api/appraisalRegister'
+import _ from 'lodash'
 
 // Action Types
 
@@ -178,6 +179,20 @@ export default function reducer (state = initialState, action) {
           ...state.delete,
           isLoading: false,
           isDeleted: true
+        },
+        get: {
+          ...state.get,
+          [action.appraisalRegisterType]: {
+            ...state.get[action.appraisalRegisterType],
+            isLoading: false,
+            error: action.payload,
+            array: _.remove(
+              state.get[action.appraisalRegisterType].array,
+              id => {
+                return (id = action.payload.id)
+              }
+            )
+          }
         }
       }
     case Types.REMOVE_APPRAISAL_REGISTER_FAILURE:
@@ -275,7 +290,9 @@ export const removeAppraisalRegister = appraisalRegister => async dispatch => {
   try {
     const response = await remove(appraisalRegister)
     dispatch({
-      type: Types.REMOVE_APPRAISAL_REGISTER_SUCCESS
+      type: Types.REMOVE_APPRAISAL_REGISTER_SUCCESS,
+      payload: appraisalRegister,
+      appraisalRegisterType: appraisalRegister.type
     })
     toast.success(response.message)
   } catch (error) {
