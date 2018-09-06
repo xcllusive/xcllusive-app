@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Tab } from 'semantic-ui-react'
 import BusinessRegisters from './BusinessRegisters'
 import ScoreRegisters from './ScoreRegisters'
+import AppraisalRegisters from './AppraisalRegisters'
 
 class BusinessPage extends Component {
   constructor (props) {
@@ -15,6 +16,10 @@ class BusinessPage extends Component {
         {
           menuItem: 'Score Registers',
           render: () => <ScoreRegisters />
+        },
+        {
+          menuItem: 'Appraisal Registers',
+          render: () => <AppraisalRegisters />
         }
       ]
     }

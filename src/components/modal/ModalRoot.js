@@ -22,6 +22,7 @@ import ModalNewBuyer from './ModalNewBuyer'
 import ModalEditBuyer from './ModalEditBuyer'
 import ModalNewBusiness from './ModalNewBusiness'
 import ModalShowMsg from './ModalShowMsg'
+import ModalNewAppraisalRegister from './ModalNewAppraisalRegister'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -45,7 +46,9 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_NEW_BUYER]: ModalNewBuyer,
   [TypesModal.MODAL_TYPE_EDIT_BUYER]: ModalEditBuyer,
   [TypesModal.MODAL_TYPE_NEW_BUSINESS]: ModalNewBusiness,
-  [TypesModal.MODAL_TYPE_SHOW_MSG]: ModalShowMsg
+  [TypesModal.MODAL_TYPE_SHOW_MSG]: ModalShowMsg,
+  [TypesModal.MODAL_TYPE_NEW_APPRAISAL_REGISTER]: ModalNewAppraisalRegister,
+  [TypesModal.MODAL_TYPE_EDIT_APPRAISAL_REGISTER]: ModalNewAppraisalRegister
 }
 
 const ModalRoot = ({ type, props }) => {
