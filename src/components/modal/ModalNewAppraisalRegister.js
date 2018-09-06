@@ -27,12 +27,6 @@ class ModalNewAppraisalRegister extends Component {
     }
   }
 
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isCreated || nextProps.isUpdated) {
-      nextProps.listAppraisalRegister(nextProps.values.type)
-    }
-  }
-
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
@@ -98,6 +92,7 @@ class ModalNewAppraisalRegister extends Component {
         <Modal.Actions>
           <Button
             color="blue"
+            type="submit"
             disabled={createLoading || updateLoading || !isValid}
             loading={createLoading || updateLoading}
             onClick={handleSubmit}

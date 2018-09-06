@@ -24,7 +24,7 @@ import Wrapper from '../../../components/content/Wrapper'
 
 class AppraisalRegisters extends Component {
   componentDidMount () {
-    // this.props.listAppraisalRegister('perceivedPrice', 5)
+    this.props.listAppraisalRegister('financialInfoSource', 5)
   }
 
   _toggleModalConfirm = (id, registerType) => {

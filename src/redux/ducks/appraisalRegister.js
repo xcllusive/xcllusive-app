@@ -34,11 +34,11 @@ const initialState = {
       error: null,
       pages: 0,
       activePage: 1
-    }
+    },
+    array: []
   },
   create: {
     isLoading: false,
-    isCreated: false,
     error: null
   },
   update: {
@@ -99,7 +99,6 @@ export default function reducer (state = initialState, action) {
         create: {
           ...state.create,
           isLoading: action.payload,
-          isCreated: false,
           error: null
         }
       }
@@ -109,8 +108,18 @@ export default function reducer (state = initialState, action) {
         create: {
           ...state.create,
           isLoading: false,
-          isCreated: true,
           error: null
+        },
+        get: {
+          ...state.get,
+          [action.appraisalRegisterType]: {
+            ...state.get[action.appraisalRegisterType],
+            isLoading: false,
+            error: action.payload,
+            array: state.get[action.appraisalRegisterType].array.concat(
+              action.payload
+            )
+          }
         }
       }
     case Types.CREATE_APPRAISAL_REGISTER_FAILURE:
@@ -119,7 +128,6 @@ export default function reducer (state = initialState, action) {
         create: {
           ...state.create,
           isLoading: false,
-          isCreated: false,
           error: action.payload
         }
       }
@@ -219,7 +227,9 @@ export const createAppraisalRegister = appraisalRegister => async dispatch => {
   try {
     const response = await create(appraisalRegister)
     dispatch({
-      type: Types.CREATE_APPRAISAL_REGISTER_SUCCESS
+      type: Types.CREATE_APPRAISAL_REGISTER_SUCCESS,
+      payload: response.data,
+      appraisalRegisterType: appraisalRegister.type
     })
     dispatch({
       type: ModalTypes.MODAL_CLOSE
@@ -227,7 +237,7 @@ export const createAppraisalRegister = appraisalRegister => async dispatch => {
     toast.success(response.message)
   } catch (error) {
     dispatch({
-      type: Types.CREATE_BUSINESS_REGISTER_FAILURE,
+      type: Types.CREATE_APPRAISAL_REGISTER_FAILURE,
       payload: error
     })
     toast.error(error)
