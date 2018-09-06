@@ -10,6 +10,9 @@ import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
 import FinancialAnalysisForm from './FinancialAnalysisForm'
 import TotalAdjustmentsForm from './TotalAdjustmentsForm'
 import moment from 'moment'
+import OwnersMarketWagesForm from './OwnersMarketWagesForm'
+import StockForm from './StockForm'
+import PhysicalAssetValueForm from './PhysicalAssetValueForm'
 
 class FinancialAnalysisPage extends Component {
   constructor (props) {
@@ -32,14 +35,6 @@ class FinancialAnalysisPage extends Component {
     } else financialYear = moment().format('YYYY')
 
     this.setState({ financialYear })
-  }
-
-  _handleChangeCheckBox = (e, { name }) => {
-    this.props.setFieldValue(name, !this.props.values[name])
-  }
-
-  _handleSelectChange = (e, { name, value }) => {
-    this.props.setFieldValue(name, value)
   }
 
   render () {
@@ -83,6 +78,17 @@ class FinancialAnalysisPage extends Component {
             financialYear={this.state.financialYear}
           />
           <TotalAdjustmentsForm />
+        </Grid>
+        <Grid>
+          <Grid.Row columns={2}>
+            <Grid.Column width={9}>
+              <OwnersMarketWagesForm />
+            </Grid.Column>
+            <Grid.Column width={7}>
+              <StockForm />
+              <PhysicalAssetValueForm />
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </Wrapper>
     )
