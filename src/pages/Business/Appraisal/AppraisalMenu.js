@@ -8,8 +8,8 @@ import {
   Grid,
   Button,
   Icon,
-  Header
-  // Label
+  Header,
+  Progress
 } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import BusinessDetails from './BusinessDetails'
@@ -22,12 +22,14 @@ class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Financial Analysis'
+      activeItem: 'Financial Analysis',
+      percent: 75,
+      colorProgress: null
     }
   }
 
   componentDidMount () {
-    // this.props.getSystemSettings()
+    this.setState({ colorProgress: this._colorProgress() })
   }
 
   _handleItemClick = (e, { name }) => {
@@ -82,16 +84,24 @@ class AppraisalMenuPage extends Component {
     }
   }
 
+  _colorProgress = () => {
+    if (this.state.percent >= 0 && this.state.percent <= 24) return 'red'
+    if (this.state.percent >= 25 && this.state.percent <= 50) return 'orange'
+    if (this.state.percent >= 50 && this.state.percent <= 75) return 'yellow'
+    if (this.state.percent >= 75 && this.state.percent <= 99) return 'blue'
+    if (this.state.percent === 100) return 'green'
+  }
+
   render () {
-    const { activeItem } = this.state
+    const { activeItem, colorProgress } = this.state
     const { history } = this.props
     const { business } = this.props.location.state
     return (
       <Wrapper>
         <Segment size="mini">
           <Grid>
-            <Grid.Row style={{ backgroundColor: '#ecf0f3' }}>
-              <Grid.Column>
+            <Grid.Row style={{ backgroundColor: '#ecf0f3' }} columns={2}>
+              <Grid.Column width={11}>
                 <Header as="h3" textAlign="center">
                   Business Appraisal Wizard
                 </Header>
@@ -103,6 +113,14 @@ class AppraisalMenuPage extends Component {
                 >
                   {business.businessName}
                 </Header>
+              </Grid.Column>
+              <Grid.Column width={5}>
+                <Progress
+                  label="Complete"
+                  color={colorProgress}
+                  percent={this.state.percent}
+                  progress
+                />
               </Grid.Column>
             </Grid.Row>
           </Grid>

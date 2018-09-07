@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Grid } from 'semantic-ui-react'
+import { Form, Label, Grid, Button, Icon } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
@@ -29,6 +29,60 @@ class AddbacksAndAdjustmentsForm extends Component {
     } = this.props
     return (
       <Fragment>
+        <Grid.Row>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Group>
+                <Form.Field width={2}>
+                  <Form.Input
+                    label="Months Covered"
+                    name="monthsCovered"
+                    autoComplete="monthsCovered"
+                    type="number"
+                    value={values.monthsCovered}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.monthsCovered &&
+                    touched.monthsCovered && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      content={errors.monthsCovered}
+                    />
+                  )}
+                </Form.Field>
+                <Form.Field width={2}>
+                  <Form.Input
+                    label="Seasonal Adjustment (%)"
+                    name="seasonalAdjusment"
+                    autoComplete="seasonalAdjusment"
+                    type="number"
+                    value={values.seasonalAdjusment}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.seasonalAdjusment &&
+                    touched.seasonalAdjusment && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      content={errors.seasonalAdjusment}
+                    />
+                  )}
+                </Form.Field>
+                <Form.Field style={{ marginTop: '20px' }} width={2}>
+                  <Button color="facebook" size="small">
+                    <Icon name="forward" />
+                    Move Financial Year
+                  </Button>
+                </Form.Field>
+              </Form.Group>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
         <Grid.Row style={{ backgroundColor: 'lightyellow' }} columns={9}>
           <CustomColumn>
             <b>Financial Year</b>
