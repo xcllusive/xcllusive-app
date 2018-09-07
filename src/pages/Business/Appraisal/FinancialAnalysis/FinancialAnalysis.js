@@ -15,6 +15,8 @@ import StockForm from './StockForm'
 import PhysicalAssetValueForm from './PhysicalAssetValueForm'
 import FinancialInformationSourceForm from './FinancialInformationSourceForm'
 
+import CustomColumn from '../../../../components/content/CustomGridColumn'
+
 class FinancialAnalysisPage extends Component {
   constructor (props) {
     super(props)
@@ -64,7 +66,7 @@ class FinancialAnalysisPage extends Component {
         <Grid celled="internally" divided>
           <FinancialAnalysisForm financialYear={this.state.financialYear} />
           <Grid.Row>
-            <Grid.Column>
+            <CustomColumn>
               <Header
                 style={{ marginTop: '10px', marginBottom: '10px' }}
                 as="h3"
@@ -73,7 +75,7 @@ class FinancialAnalysisPage extends Component {
               >
                 Addbacks and Adjustments
               </Header>
-            </Grid.Column>
+            </CustomColumn>
           </Grid.Row>
           <AddbacksAndAdjustmentsForm
             financialYear={this.state.financialYear}
@@ -82,13 +84,13 @@ class FinancialAnalysisPage extends Component {
         </Grid>
         <Grid>
           <Grid.Row columns={2}>
-            <Grid.Column width={9}>
+            <CustomColumn width={9}>
               <OwnersMarketWagesForm />
-            </Grid.Column>
-            <Grid.Column width={7}>
+            </CustomColumn>
+            <CustomColumn width={7}>
               <StockForm />
               <PhysicalAssetValueForm />
-            </Grid.Column>
+            </CustomColumn>
           </Grid.Row>
         </Grid>
         <Grid>

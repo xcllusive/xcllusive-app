@@ -6,6 +6,8 @@ import { withFormik } from 'formik'
 import { Grid } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
+import CustomColumn from '../../../../components/content/CustomGridColumn'
+
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
     super(props)
@@ -28,40 +30,40 @@ class AddbacksAndAdjustmentsForm extends Component {
     return (
       <Fragment>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Total Adjustments</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
+          </CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Total Adjusted Profit INCL. Owners Wages</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
-          <Grid.Column textAlign="center">0</Grid.Column>
+          </CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Adjusted Profit % </b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">0 %</Grid.Column>
-          <Grid.Column textAlign="center">0 %</Grid.Column>
-          <Grid.Column textAlign="center">0 %</Grid.Column>
-          <Grid.Column textAlign="center">0 %</Grid.Column>
-          <Grid.Column textAlign="center">0 %</Grid.Column>
-          <Grid.Column textAlign="center">0 %</Grid.Column>
-          <Grid.Column textAlign="center">0 %</Grid.Column>
+          </CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
         </Grid.Row>
       </Fragment>
     )

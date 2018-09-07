@@ -6,6 +6,8 @@ import { withFormik } from 'formik'
 import { Grid, Segment, Header, Form, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
+import CustomColumn from '../../../../components/content/CustomGridColumn'
+
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
     super(props)
@@ -31,10 +33,10 @@ class AddbacksAndAdjustmentsForm extends Component {
           </Header>
           <Grid celled="internally" divided>
             <Grid.Row columns={3}>
-              <Grid.Column textAlign="center">
+              <CustomColumn textAlign="center">
                 Physical Asset Value (Excluding Stock)
-              </Grid.Column>
-              <Grid.Column>
+              </CustomColumn>
+              <CustomColumn>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -55,8 +57,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column />
+              </CustomColumn>
+              <CustomColumn />
             </Grid.Row>
           </Grid>
         </Segment>

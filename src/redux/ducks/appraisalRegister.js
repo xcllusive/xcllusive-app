@@ -35,8 +35,7 @@ const initialState = {
       error: null,
       pages: 0,
       activePage: 1
-    },
-    array: []
+    }
   },
   create: {
     isLoading: false,
@@ -116,7 +115,7 @@ export default function reducer (state = initialState, action) {
           [action.appraisalRegisterType]: {
             ...state.get[action.appraisalRegisterType],
             isLoading: false,
-            error: action.payload,
+            error: null,
             array: state.get[action.appraisalRegisterType].array.concat(
               action.payload
             )
@@ -150,6 +149,15 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           isUpdated: true,
           error: null
+        },
+        get: {
+          ...state.get,
+          [action.payload.type]: {
+            ...state.get[action.payload.type],
+            isLoading: false,
+            error: null,
+            array: _.filter(state.get[action.payload.type].array, obj => obj.id !== action.payload.id).concat(action.payload)
+          }
         }
       }
     case Types.UPDATE_APPRAISAL_REGISTER_FAILURE:
@@ -178,20 +186,16 @@ export default function reducer (state = initialState, action) {
         delete: {
           ...state.delete,
           isLoading: false,
-          isDeleted: true
+          isDeleted: true,
+          error: null
         },
         get: {
           ...state.get,
-          [action.appraisalRegisterType]: {
-            ...state.get[action.appraisalRegisterType],
+          [action.payload.type]: {
+            ...state.get[action.payload.type],
             isLoading: false,
-            error: action.payload,
-            array: _.remove(
-              state.get[action.appraisalRegisterType].array,
-              obj => {
-                return (obj.id = action.payload.id)
-              }
-            )
+            error: null,
+            array: _.filter(state.get[action.payload.type].array, obj => obj.id !== action.payload.id)
           }
         }
       }
@@ -267,7 +271,8 @@ export const updateAppraisalRegister = appraisalRegister => async dispatch => {
   try {
     const response = await update(appraisalRegister)
     dispatch({
-      type: Types.UPDATE_APPRAISAL_REGISTER_SUCCESS
+      type: Types.UPDATE_APPRAISAL_REGISTER_SUCCESS,
+      payload: appraisalRegister
     })
     toast.success(response.message)
     dispatch({
@@ -291,8 +296,7 @@ export const removeAppraisalRegister = appraisalRegister => async dispatch => {
     const response = await remove(appraisalRegister)
     dispatch({
       type: Types.REMOVE_APPRAISAL_REGISTER_SUCCESS,
-      payload: appraisalRegister,
-      appraisalRegisterType: appraisalRegister.type
+      payload: appraisalRegister
     })
     toast.success(response.message)
   } catch (error) {
