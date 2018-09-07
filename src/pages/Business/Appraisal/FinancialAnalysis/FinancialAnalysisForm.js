@@ -6,6 +6,8 @@ import { withFormik } from 'formik'
 import { Form, Label, Grid } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
+import CustomColumn from '../../../../components/content/CustomGridColumn'
+
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
     super(props)
@@ -28,39 +30,39 @@ class AddbacksAndAdjustmentsForm extends Component {
     return (
       <Fragment>
         <Grid.Row style={{ backgroundColor: 'lightyellow' }} columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Financial Year</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>{financialYear - 5}</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>{financialYear - 4}</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>{financialYear - 3}</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>{financialYear - 2}</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>{financialYear - 1}</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>{financialYear} YTD</b>{' '}
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>{financialYear} Annualised</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <b>Annualised Yes/No</b>
-          </Grid.Column>
+          </CustomColumn>
         </Grid.Row>
         <Grid.Row style={{ backgroundColor: '#dae4ef' }} columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Sales</b>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -81,8 +83,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -103,8 +105,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -125,8 +127,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -147,8 +149,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -169,8 +171,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -191,8 +193,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -213,8 +215,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
@@ -224,13 +226,13 @@ class AddbacksAndAdjustmentsForm extends Component {
                 />
               </Form.Field>
             </Form>
-          </Grid.Column>
+          </CustomColumn>
         </Grid.Row>
         <Grid.Row style={{ backgroundColor: '#dae4ef' }} columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>COGS</b>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -246,8 +248,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -263,8 +265,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -280,8 +282,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -297,8 +299,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -314,8 +316,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -331,8 +333,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -348,8 +350,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
@@ -359,39 +361,39 @@ class AddbacksAndAdjustmentsForm extends Component {
                 />
               </Form.Field>
             </Form>
-          </Grid.Column>
+          </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Gross Margin</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center" />
+          </CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Gross Margin %</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center" />
+          </CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row style={{ backgroundColor: '#dae4ef' }} columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Other Income</b>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -412,8 +414,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -434,8 +436,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -456,8 +458,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -478,8 +480,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -500,8 +502,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -522,8 +524,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -544,8 +546,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
@@ -555,26 +557,26 @@ class AddbacksAndAdjustmentsForm extends Component {
                 />
               </Form.Field>
             </Form>
-          </Grid.Column>
+          </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Gross Profit</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center" />
+          </CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row style={{ backgroundColor: '#dae4ef' }} columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Expenses</b>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -595,8 +597,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -617,8 +619,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -639,8 +641,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -661,8 +663,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -683,8 +685,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -705,8 +707,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column>
+          </CustomColumn>
+          <CustomColumn>
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
@@ -727,8 +729,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                 )}
               </Form.Field>
             </Form>
-          </Grid.Column>
-          <Grid.Column textAlign="center">
+          </CustomColumn>
+          <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
@@ -738,33 +740,33 @@ class AddbacksAndAdjustmentsForm extends Component {
                 />
               </Form.Field>
             </Form>
-          </Grid.Column>
+          </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Operating Profit</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center">50</Grid.Column>
-          <Grid.Column textAlign="center" />
+          </CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row columns={9}>
-          <Grid.Column>
+          <CustomColumn>
             <b>Operating Profit %</b>
-          </Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center">50 %</Grid.Column>
-          <Grid.Column textAlign="center" />
+          </CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center" />
         </Grid.Row>
       </Fragment>
     )

@@ -6,6 +6,8 @@ import { withFormik } from 'formik'
 import { Grid, Segment, Header, Form, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
+import CustomColumn from '../../../../components/content/CustomGridColumn'
+
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
     super(props)
@@ -31,17 +33,17 @@ class AddbacksAndAdjustmentsForm extends Component {
           </Header>
           <Grid celled="internally" divided>
             <Grid.Row columns={3}>
-              <Grid.Column />
-              <Grid.Column textAlign="center">
+              <CustomColumn />
+              <CustomColumn textAlign="center">
                 <b>Position</b>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <b>Annual Wage inc Super</b>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
-              <Grid.Column>Owner 1/New Owner</Grid.Column>
-              <Grid.Column textAlign="center">
+              <CustomColumn>Owner 1/New Owner</CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -62,8 +64,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -84,11 +86,11 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row columns={3}>
-              <Grid.Column>Owner 2</Grid.Column>
-              <Grid.Column textAlign="center">
+              <CustomColumn>Owner 2</CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -109,8 +111,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -131,11 +133,11 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
-              <Grid.Column>Owner 3</Grid.Column>
-              <Grid.Column textAlign="center">
+              <CustomColumn>Owner 3</CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -156,8 +158,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -178,11 +180,11 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row columns={3}>
-              <Grid.Column>Owner 4</Grid.Column>
-              <Grid.Column textAlign="center">
+              <CustomColumn>Owner 4</CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -203,8 +205,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -225,11 +227,11 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
-              <Grid.Column>Owner 6</Grid.Column>
-              <Grid.Column textAlign="center">
+              <CustomColumn>Owner 6</CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -250,8 +252,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -272,11 +274,11 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row columns={3}>
-              <Grid.Column>Owner 7</Grid.Column>
-              <Grid.Column textAlign="center">
+              <CustomColumn>Owner 7</CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -297,8 +299,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -319,12 +321,12 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
-              <Grid.Column>Total Wages</Grid.Column>
-              <Grid.Column />
-              <Grid.Column textAlign="center">0</Grid.Column>
+              <CustomColumn>Total Wages</CustomColumn>
+              <CustomColumn />
+              <CustomColumn textAlign="center">0</CustomColumn>
             </Grid.Row>
           </Grid>
         </Segment>

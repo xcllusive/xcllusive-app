@@ -6,6 +6,8 @@ import { withFormik } from 'formik'
 import { Grid, Segment, Header, Form, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
+import CustomColumn from '../../../../components/content/CustomGridColumn'
+
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
     super(props)
@@ -31,16 +33,16 @@ class AddbacksAndAdjustmentsForm extends Component {
           </Header>
           <Grid celled="internally" divided>
             <Grid.Row columns={3}>
-              <Grid.Column />
-              <Grid.Column />
-              <Grid.Column textAlign="center">
+              <CustomColumn />
+              <CustomColumn />
+              <CustomColumn textAlign="center">
                 Select to use in Valuation
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
-              <Grid.Column />
-              <Grid.Column textAlign="center">No Stock</Grid.Column>
-              <Grid.Column textAlign="center">
+              <CustomColumn />
+              <CustomColumn textAlign="center">No Stock</CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
@@ -50,11 +52,11 @@ class AddbacksAndAdjustmentsForm extends Component {
                     />
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row columns={3}>
-              <Grid.Column textAlign="center">Current Stock Level</Grid.Column>
-              <Grid.Column>
+              <CustomColumn textAlign="center">Current Stock Level</CustomColumn>
+              <CustomColumn>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -75,8 +77,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
@@ -86,13 +88,13 @@ class AddbacksAndAdjustmentsForm extends Component {
                     />
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
-              <Grid.Column textAlign="center">
+              <CustomColumn textAlign="center">
                 Stock necessary for Operation of the business
-              </Grid.Column>
-              <Grid.Column>
+              </CustomColumn>
+              <CustomColumn>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
@@ -113,8 +115,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     )}
                   </Form.Field>
                 </Form>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
+              </CustomColumn>
+              <CustomColumn textAlign="center">
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
@@ -124,7 +126,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     />
                   </Form.Field>
                 </Form>
-              </Grid.Column>
+              </CustomColumn>
             </Grid.Row>
           </Grid>
         </Segment>
