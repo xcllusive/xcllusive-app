@@ -46,9 +46,9 @@ class AppraisalRegisters extends Component {
     })
   }
 
-  _removeAppraisalRegister = async (id, registerType) => {
-    await this.props.removeAppraisalRegister(id)
-    this.props.listAppraisalRegister(registerType)
+  _removeAppraisalRegister = async (id, type) => {
+    await this.props.removeAppraisalRegister({id, type})
+    // this.props.listAppraisalRegister(type)
   }
 
   _editAppraisal = (appraisalRegister, appraisalRegisterType) => {
@@ -132,7 +132,7 @@ class AppraisalRegisters extends Component {
                               onClick={() =>
                                 this._editAppraisal(
                                   financialInfoSourceOptions,
-                                  'enquiries'
+                                  'financialInfoSource'
                                 )
                               }
                             />
@@ -143,7 +143,7 @@ class AppraisalRegisters extends Component {
                               onClick={() =>
                                 this._toggleModalConfirm(
                                   financialInfoSourceOptions.id,
-                                  'enquiries'
+                                  'financialInfoSource'
                                 )
                               }
                             />
@@ -157,7 +157,7 @@ class AppraisalRegisters extends Component {
               <Pagination
                 size="mini"
                 onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'enquiries')
+                  this._handlePaginationChange(e, data, 'financialInfoSource')
                 }
                 defaultActivePage={
                   this.props.financialInfoSourceOptions.activePage
