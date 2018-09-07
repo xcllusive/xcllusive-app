@@ -188,8 +188,8 @@ export default function reducer (state = initialState, action) {
             error: action.payload,
             array: _.remove(
               state.get[action.appraisalRegisterType].array,
-              id => {
-                return (id = action.payload.id)
+              obj => {
+                return (obj.id = action.payload.id)
               }
             )
           }
