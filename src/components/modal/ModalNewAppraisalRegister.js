@@ -62,7 +62,10 @@ class ModalNewAppraisalRegister extends Component {
                   autoComplete="type"
                   value={values.type}
                   onChange={this._handleSelectChange}
-                  disabled={this.props.appraisalRegister !== undefined}
+                  disabled={
+                    this.props.appraisalRegister !== undefined ||
+                    this.props.typeAdd !== undefined
+                  }
                 />
                 {errors.type &&
                   touched.type && (
@@ -127,11 +130,16 @@ ModalNewAppraisalRegister.propTypes = {
   updateLoading: PropTypes.bool,
   isCreated: PropTypes.bool,
   isUpdated: PropTypes.bool,
-  listAppraisalRegister: PropTypes.func
+  listAppraisalRegister: PropTypes.func,
+  typeAdd: PropTypes.string
 }
 
 const mapPropsToValues = props => ({
-  type: props.appraisalRegister ? props.appraisalRegister.type : '',
+  type: props.appraisalRegister
+    ? props.appraisalRegister.type
+    : props.typeAdd
+      ? props.typeAdd
+      : '',
   label: props.appraisalRegister ? props.appraisalRegister.label : '',
   id: props.appraisalRegister ? props.appraisalRegister.id : ''
 })

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Message, Step, Grid, Header } from 'semantic-ui-react'
+import { Message, Step, Grid, Header, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
@@ -27,6 +27,10 @@ class FinancialAnalysisPage extends Component {
     this._calculateFinancialYear()
   }
 
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
+  }
+
   _calculateFinancialYear = () => {
     const dateChangeFinancialYear = moment('30/06', 'DD/MM')
     const currentDayMonth = moment()
@@ -41,6 +45,7 @@ class FinancialAnalysisPage extends Component {
   }
 
   render () {
+    const { values, isValid } = this.props
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -94,9 +99,28 @@ class FinancialAnalysisPage extends Component {
           </Grid.Row>
         </Grid>
         <Grid>
-          <Grid.Row>
+          <Grid.Row centered>
             <Grid.Column width={6}>
               <FinancialInformationSourceForm />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column>
+              <Form>
+                <Form.Group>
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="Please confirm that you have completed the above information"
+                      name="confirmAbout"
+                      onChange={this._handleChangeCheckBox}
+                      checked={values.confirmFinancialAnalysis}
+                      disabled={!isValid}
+                    />
+                  </Form.Field>
+                </Form.Group>
+              </Form>
             </Grid.Column>
           </Grid.Row>
         </Grid>
