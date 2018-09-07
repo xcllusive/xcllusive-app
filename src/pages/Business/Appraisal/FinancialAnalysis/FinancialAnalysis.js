@@ -13,6 +13,7 @@ import moment from 'moment'
 import OwnersMarketWagesForm from './OwnersMarketWagesForm'
 import StockForm from './StockForm'
 import PhysicalAssetValueForm from './PhysicalAssetValueForm'
+import FinancialInformationSourceForm from './FinancialInformationSourceForm'
 
 class FinancialAnalysisPage extends Component {
   constructor (props) {
@@ -87,6 +88,13 @@ class FinancialAnalysisPage extends Component {
             <Grid.Column width={7}>
               <StockForm />
               <PhysicalAssetValueForm />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={6}>
+              <FinancialInformationSourceForm />
             </Grid.Column>
           </Grid.Row>
         </Grid>
