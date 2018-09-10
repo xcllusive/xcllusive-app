@@ -31,7 +31,7 @@ class AddbacksAndAdjustmentsForm extends Component {
       <Fragment>
         <Grid.Row>
           <CustomColumn>
-            <Form size="tiny">
+            <Form>
               <Form.Group>
                 <Form.Field width={2}>
                   <Form.Input

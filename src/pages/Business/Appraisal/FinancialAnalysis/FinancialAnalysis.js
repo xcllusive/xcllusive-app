@@ -45,7 +45,7 @@ class FinancialAnalysisPage extends Component {
   }
 
   render () {
-    const { values, isValid } = this.props
+    const { values } = this.props
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -116,7 +116,7 @@ class FinancialAnalysisPage extends Component {
                       name="confirmAbout"
                       onChange={this._handleChangeCheckBox}
                       checked={values.confirmFinancialAnalysis}
-                      disabled={!isValid}
+                      // disabled={!isValid}
                     />
                   </Form.Field>
                 </Form.Group>
