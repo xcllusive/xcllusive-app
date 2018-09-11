@@ -20,6 +20,7 @@ import agreement from './ducks/agreement'
 import invoiceTemplates from './ducks/invoiceTemplates'
 import invoice from './ducks/invoice'
 import appraisalRegister from './ducks/appraisalRegister'
+import appraisal from './ducks/appraisal'
 
 export default combineReducers({
   modal,
@@ -41,5 +42,6 @@ export default combineReducers({
   invoiceTemplates,
   invoice,
   appraisalRegister,
+  appraisal,
   router: routerReducer
 })
