@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux'
 import { Table, Grid, Header, Button, Icon } from 'semantic-ui-react'
 
 import { theme } from '../../../styles'
-
-// import moment from 'moment'
-
 import Wrapper from '../../../components/content/Wrapper'
+
+import { createAppraisal, getAppraisals } from '../../../redux/ducks/appraisal'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 class AppraisalListPage extends Component {
   constructor (props) {
@@ -16,7 +16,31 @@ class AppraisalListPage extends Component {
     this.state = {}
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    this.props.getAppraisals(this.props.location.state.business.id)
+  }
+
+  _newAppraisal () {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Creating Appraisal',
+        text:
+          'Are you sure you want to create a new appraisal for this business?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.createAppraisal()
+          this.props.history.push({
+            pathname: 'appraisalMenu',
+            state: {
+              business: this.props.location.state.business,
+              isLoadingCreating: this.props.isLoadingCreating
+            }
+          })
+        }
+      }
+    })
+  }
 
   render () {
     const { history } = this.props
@@ -35,12 +59,7 @@ class AppraisalListPage extends Component {
             <Grid.Column>
               <Button
                 color={theme.buttonNew}
-                onClick={() =>
-                  history.push({
-                    pathname: 'appraisalMenu',
-                    state: { business: business }
-                  })
-                }
+                onClick={() => this._newAppraisal()}
                 size="small"
                 floated="right"
               >
@@ -137,12 +156,19 @@ AppraisalListPage.propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
   getBusiness: PropTypes.func,
-  location: PropTypes.object
+  location: PropTypes.object,
+  createAppraisal: PropTypes.func,
+  openModal: PropTypes.func,
+  isLoadingCreating: PropTypes.bool,
+  getAppraisals: PropTypes.func
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ createAppraisal, openModal, getAppraisals }, dispatch)
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  isLoadingCreating: state.appraisal.create.isLoading
+})
 
 export default connect(
   mapStateToProps,

@@ -6,6 +6,7 @@ import { withFormik } from 'formik'
 import { Form, Label, Message, Step, Icon } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
+import { updateAppraisal } from '../../../redux/ducks/appraisal'
 
 class BusinessDetailsPage extends Component {
   constructor (props) {
@@ -26,6 +27,10 @@ class BusinessDetailsPage extends Component {
 
   componentDidUpdate () {}
 
+  componentWillUnmount () {
+    this.props.updateAppraisal(this.props.values)
+  }
+
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
@@ -35,10 +40,17 @@ class BusinessDetailsPage extends Component {
   }
 
   render () {
-    const { values, handleChange, handleBlur, errors, touched } = this.props
+    const {
+      values,
+      handleChange,
+      handleBlur,
+      errors,
+      touched,
+      isLoadingCreating
+    } = this.props
     const { state } = this.state
     return (
-      <Wrapper>
+      <Wrapper loading={isLoadingCreating}>
         <Step.Group size="large">
           <Step
             active
@@ -239,7 +251,9 @@ BusinessDetailsPage.propTypes = {
   setFieldValue: PropTypes.func,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-  business: PropTypes.object
+  business: PropTypes.object,
+  updateAppraisal: PropTypes.func,
+  isLoadingCreating: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -277,16 +291,14 @@ const validationSchema = Yup.object().shape({
     .max(4, 'Post Code require max 4 integers.')
 })
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBusiness(values).then(setSubmitting(false))
-}
+const handleSubmit = (values, { props, setSubmitting }) => {}
 
 const mapStateToProps = state => {
   return {}
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch)
+  return bindActionCreators({ updateAppraisal }, dispatch)
 }
 
 export default connect(
