@@ -2896,6 +2896,2841 @@ class AddbacksAndAdjustmentsForm extends Component {
             </Form>
           </CustomColumn>
         </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16"
+                  autoComplete="aaRow16"
+                  value={values.aaRow16}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16 &&
+                  touched.aaRow16 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16Year1"
+                  autoComplete="aaRow16Year1"
+                  value={values.aaRow16Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16Year1 &&
+                  touched.aaRow16Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16Year2"
+                  autoComplete="aaRow16Year2"
+                  value={values.aaRow16Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16Year2 &&
+                  touched.aaRow16Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16Year3"
+                  autoComplete="aaRow16Year3"
+                  value={values.aaRow16Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16Year3 &&
+                  touched.aaRow16Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16Year4"
+                  autoComplete="aaRow16Year4"
+                  value={values.aaRow16Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16Year4 &&
+                  touched.aaRow16Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16Year5"
+                  autoComplete="aaRow16Year5"
+                  value={values.aaRow16Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16Year5 &&
+                  touched.aaRow16Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16Year6"
+                  autoComplete="aaRow16Year6"
+                  value={values.aaRow16Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16Year6 &&
+                  touched.aaRow16Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow16Year7"
+                  autoComplete="aaRow16Year7"
+                  value={values.aaRow16Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow16Year7 &&
+                  touched.aaRow16Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow16Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow16YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow16YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17"
+                  autoComplete="aaRow17"
+                  value={values.aaRow17}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17 &&
+                  touched.aaRow17 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17Year1"
+                  autoComplete="aaRow17Year1"
+                  value={values.aaRow17Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17Year1 &&
+                  touched.aaRow17Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17Year2"
+                  autoComplete="aaRow17Year2"
+                  value={values.aaRow17Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17Year2 &&
+                  touched.aaRow17Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17Year3"
+                  autoComplete="aaRow17Year3"
+                  value={values.aaRow17Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17Year3 &&
+                  touched.aaRow17Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17Year4"
+                  autoComplete="aaRow17Year4"
+                  value={values.aaRow17Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17Year4 &&
+                  touched.aaRow17Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17Year5"
+                  autoComplete="aaRow17Year5"
+                  value={values.aaRow17Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17Year5 &&
+                  touched.aaRow17Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17Year6"
+                  autoComplete="aaRow17Year6"
+                  value={values.aaRow17Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17Year6 &&
+                  touched.aaRow17Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow17Year7"
+                  autoComplete="aaRow17Year7"
+                  value={values.aaRow17Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow17Year7 &&
+                  touched.aaRow17Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow17Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow17YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow17YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18"
+                  autoComplete="aaRow18"
+                  value={values.aaRow18}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18 &&
+                  touched.aaRow18 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18Year1"
+                  autoComplete="aaRow18Year1"
+                  value={values.aaRow18Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18Year1 &&
+                  touched.aaRow18Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18Year2"
+                  autoComplete="aaRow18Year2"
+                  value={values.aaRow18Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18Year2 &&
+                  touched.aaRow18Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18Year3"
+                  autoComplete="aaRow18Year3"
+                  value={values.aaRow18Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18Year3 &&
+                  touched.aaRow18Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18Year4"
+                  autoComplete="aaRow18Year4"
+                  value={values.aaRow18Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18Year4 &&
+                  touched.aaRow18Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18Year5"
+                  autoComplete="aaRow18Year5"
+                  value={values.aaRow18Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18Year5 &&
+                  touched.aaRow18Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18Year6"
+                  autoComplete="aaRow18Year6"
+                  value={values.aaRow18Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18Year6 &&
+                  touched.aaRow18Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow18Year7"
+                  autoComplete="aaRow18Year7"
+                  value={values.aaRow18Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow18Year7 &&
+                  touched.aaRow18Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow18Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow18YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow18YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19"
+                  autoComplete="aaRow19"
+                  value={values.aaRow19}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19 &&
+                  touched.aaRow19 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19Year1"
+                  autoComplete="aaRow19Year1"
+                  value={values.aaRow19Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19Year1 &&
+                  touched.aaRow19Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19Year2"
+                  autoComplete="aaRow19Year2"
+                  value={values.aaRow19Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19Year2 &&
+                  touched.aaRow19Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19Year3"
+                  autoComplete="aaRow19Year3"
+                  value={values.aaRow19Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19Year3 &&
+                  touched.aaRow19Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19Year4"
+                  autoComplete="aaRow19Year4"
+                  value={values.aaRow19Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19Year4 &&
+                  touched.aaRow19Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19Year5"
+                  autoComplete="aaRow19Year5"
+                  value={values.aaRow19Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19Year5 &&
+                  touched.aaRow19Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19Year6"
+                  autoComplete="aaRow19Year6"
+                  value={values.aaRow19Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19Year6 &&
+                  touched.aaRow19Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow19Year7"
+                  autoComplete="aaRow19Year7"
+                  value={values.aaRow19Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow19Year7 &&
+                  touched.aaRow19Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow19Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow19YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow19YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20"
+                  autoComplete="aaRow20"
+                  value={values.aaRow20}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20 &&
+                  touched.aaRow20 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20Year1"
+                  autoComplete="aaRow20Year1"
+                  value={values.aaRow20Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20Year1 &&
+                  touched.aaRow20Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20Year2"
+                  autoComplete="aaRow20Year2"
+                  value={values.aaRow20Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20Year2 &&
+                  touched.aaRow20Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20Year3"
+                  autoComplete="aaRow20Year3"
+                  value={values.aaRow20Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20Year3 &&
+                  touched.aaRow20Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20Year4"
+                  autoComplete="aaRow20Year4"
+                  value={values.aaRow20Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20Year4 &&
+                  touched.aaRow20Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20Year5"
+                  autoComplete="aaRow20Year5"
+                  value={values.aaRow20Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20Year5 &&
+                  touched.aaRow20Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20Year6"
+                  autoComplete="aaRow20Year6"
+                  value={values.aaRow20Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20Year6 &&
+                  touched.aaRow20Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow20Year7"
+                  autoComplete="aaRow20Year7"
+                  value={values.aaRow20Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow20Year7 &&
+                  touched.aaRow20Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow20Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow20YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow20YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21"
+                  autoComplete="aaRow21"
+                  value={values.aaRow21}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21 &&
+                  touched.aaRow21 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21Year1"
+                  autoComplete="aaRow21Year1"
+                  value={values.aaRow21Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21Year1 &&
+                  touched.aaRow21Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21Year2"
+                  autoComplete="aaRow21Year2"
+                  value={values.aaRow21Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21Year2 &&
+                  touched.aaRow21Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21Year3"
+                  autoComplete="aaRow21Year3"
+                  value={values.aaRow21Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21Year3 &&
+                  touched.aaRow21Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21Year4"
+                  autoComplete="aaRow21Year4"
+                  value={values.aaRow21Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21Year4 &&
+                  touched.aaRow21Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21Year5"
+                  autoComplete="aaRow21Year5"
+                  value={values.aaRow21Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21Year5 &&
+                  touched.aaRow21Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21Year6"
+                  autoComplete="aaRow21Year6"
+                  value={values.aaRow21Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21Year6 &&
+                  touched.aaRow21Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow21Year7"
+                  autoComplete="aaRow21Year7"
+                  value={values.aaRow21Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow21Year7 &&
+                  touched.aaRow21Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow21Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow21YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow21YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22"
+                  autoComplete="aaRow22"
+                  value={values.aaRow22}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22 &&
+                  touched.aaRow22 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22Year1"
+                  autoComplete="aaRow22Year1"
+                  value={values.aaRow22Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22Year1 &&
+                  touched.aaRow22Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22Year2"
+                  autoComplete="aaRow22Year2"
+                  value={values.aaRow22Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22Year2 &&
+                  touched.aaRow22Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22Year3"
+                  autoComplete="aaRow22Year3"
+                  value={values.aaRow22Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22Year3 &&
+                  touched.aaRow22Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22Year4"
+                  autoComplete="aaRow22Year4"
+                  value={values.aaRow22Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22Year4 &&
+                  touched.aaRow22Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22Year5"
+                  autoComplete="aaRow22Year5"
+                  value={values.aaRow22Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22Year5 &&
+                  touched.aaRow22Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22Year6"
+                  autoComplete="aaRow22Year6"
+                  value={values.aaRow22Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22Year6 &&
+                  touched.aaRow22Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow22Year7"
+                  autoComplete="aaRow22Year7"
+                  value={values.aaRow22Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow22Year7 &&
+                  touched.aaRow22Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow22Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow22YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow22YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23"
+                  autoComplete="aaRow23"
+                  value={values.aaRow23}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23 &&
+                  touched.aaRow23 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23Year1"
+                  autoComplete="aaRow23Year1"
+                  value={values.aaRow23Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23Year1 &&
+                  touched.aaRow23Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23Year2"
+                  autoComplete="aaRow23Year2"
+                  value={values.aaRow23Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23Year2 &&
+                  touched.aaRow23Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23Year3"
+                  autoComplete="aaRow23Year3"
+                  value={values.aaRow23Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23Year3 &&
+                  touched.aaRow23Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23Year4"
+                  autoComplete="aaRow23Year4"
+                  value={values.aaRow23Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23Year4 &&
+                  touched.aaRow23Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23Year5"
+                  autoComplete="aaRow23Year5"
+                  value={values.aaRow23Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23Year5 &&
+                  touched.aaRow23Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23Year6"
+                  autoComplete="aaRow23Year6"
+                  value={values.aaRow23Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23Year6 &&
+                  touched.aaRow23Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow23Year7"
+                  autoComplete="aaRow23Year7"
+                  value={values.aaRow23Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow23Year7 &&
+                  touched.aaRow23Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow23Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow23YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow23YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24"
+                  autoComplete="aaRow24"
+                  value={values.aaRow24}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24 &&
+                  touched.aaRow24 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24Year1"
+                  autoComplete="aaRow24Year1"
+                  value={values.aaRow24Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24Year1 &&
+                  touched.aaRow24Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24Year2"
+                  autoComplete="aaRow24Year2"
+                  value={values.aaRow24Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24Year2 &&
+                  touched.aaRow24Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24Year3"
+                  autoComplete="aaRow24Year3"
+                  value={values.aaRow24Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24Year3 &&
+                  touched.aaRow24Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24Year4"
+                  autoComplete="aaRow24Year4"
+                  value={values.aaRow24Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24Year4 &&
+                  touched.aaRow24Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24Year5"
+                  autoComplete="aaRow24Year5"
+                  value={values.aaRow24Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24Year5 &&
+                  touched.aaRow24Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24Year6"
+                  autoComplete="aaRow24Year6"
+                  value={values.aaRow24Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24Year6 &&
+                  touched.aaRow24Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow24Year7"
+                  autoComplete="aaRow24Year7"
+                  value={values.aaRow24Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow24Year7 &&
+                  touched.aaRow24Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow24Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow24YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow24YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25"
+                  autoComplete="aaRow25"
+                  value={values.aaRow25}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25 &&
+                  touched.aaRow25 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25Year1"
+                  autoComplete="aaRow25Year1"
+                  value={values.aaRow25Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25Year1 &&
+                  touched.aaRow25Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25Year2"
+                  autoComplete="aaRow25Year2"
+                  value={values.aaRow25Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25Year2 &&
+                  touched.aaRow25Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25Year3"
+                  autoComplete="aaRow25Year3"
+                  value={values.aaRow25Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25Year3 &&
+                  touched.aaRow25Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25Year4"
+                  autoComplete="aaRow25Year4"
+                  value={values.aaRow25Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25Year4 &&
+                  touched.aaRow25Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25Year5"
+                  autoComplete="aaRow25Year5"
+                  value={values.aaRow25Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25Year5 &&
+                  touched.aaRow25Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25Year6"
+                  autoComplete="aaRow25Year6"
+                  value={values.aaRow25Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25Year6 &&
+                  touched.aaRow25Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow25Year7"
+                  autoComplete="aaRow25Year7"
+                  value={values.aaRow25Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow25Year7 &&
+                  touched.aaRow25Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow25Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow25YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow25YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26"
+                  autoComplete="aaRow26"
+                  value={values.aaRow26}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26 &&
+                  touched.aaRow26 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26Year1"
+                  autoComplete="aaRow26Year1"
+                  value={values.aaRow26Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26Year1 &&
+                  touched.aaRow26Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26Year2"
+                  autoComplete="aaRow26Year2"
+                  value={values.aaRow26Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26Year2 &&
+                  touched.aaRow26Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26Year3"
+                  autoComplete="aaRow26Year3"
+                  value={values.aaRow26Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26Year3 &&
+                  touched.aaRow26Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26Year4"
+                  autoComplete="aaRow26Year4"
+                  value={values.aaRow26Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26Year4 &&
+                  touched.aaRow26Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26Year5"
+                  autoComplete="aaRow26Year5"
+                  value={values.aaRow26Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26Year5 &&
+                  touched.aaRow26Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26Year6"
+                  autoComplete="aaRow26Year6"
+                  value={values.aaRow26Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26Year6 &&
+                  touched.aaRow26Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow26Year7"
+                  autoComplete="aaRow26Year7"
+                  value={values.aaRow26Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow26Year7 &&
+                  touched.aaRow26Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow26Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow26YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow26YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27"
+                  autoComplete="aaRow27"
+                  value={values.aaRow27}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27 &&
+                  touched.aaRow27 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27Year1"
+                  autoComplete="aaRow27Year1"
+                  value={values.aaRow27Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27Year1 &&
+                  touched.aaRow27Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27Year2"
+                  autoComplete="aaRow27Year2"
+                  value={values.aaRow27Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27Year2 &&
+                  touched.aaRow27Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27Year3"
+                  autoComplete="aaRow27Year3"
+                  value={values.aaRow27Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27Year3 &&
+                  touched.aaRow27Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27Year4"
+                  autoComplete="aaRow27Year4"
+                  value={values.aaRow27Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27Year4 &&
+                  touched.aaRow27Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27Year5"
+                  autoComplete="aaRow27Year5"
+                  value={values.aaRow27Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27Year5 &&
+                  touched.aaRow27Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27Year6"
+                  autoComplete="aaRow27Year6"
+                  value={values.aaRow27Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27Year6 &&
+                  touched.aaRow27Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow27Year7"
+                  autoComplete="aaRow27Year7"
+                  value={values.aaRow27Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow27Year7 &&
+                  touched.aaRow27Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow27Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow27YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow27YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28"
+                  autoComplete="aaRow28"
+                  value={values.aaRow28}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28 &&
+                  touched.aaRow28 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28Year1"
+                  autoComplete="aaRow28Year1"
+                  value={values.aaRow28Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28Year1 &&
+                  touched.aaRow28Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28Year2"
+                  autoComplete="aaRow28Year2"
+                  value={values.aaRow28Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28Year2 &&
+                  touched.aaRow28Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28Year3"
+                  autoComplete="aaRow28Year3"
+                  value={values.aaRow28Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28Year3 &&
+                  touched.aaRow28Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28Year4"
+                  autoComplete="aaRow28Year4"
+                  value={values.aaRow28Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28Year4 &&
+                  touched.aaRow28Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28Year5"
+                  autoComplete="aaRow28Year5"
+                  value={values.aaRow28Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28Year5 &&
+                  touched.aaRow28Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28Year6"
+                  autoComplete="aaRow28Year6"
+                  value={values.aaRow28Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28Year6 &&
+                  touched.aaRow28Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow28Year7"
+                  autoComplete="aaRow28Year7"
+                  value={values.aaRow28Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow28Year7 &&
+                  touched.aaRow28Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow28Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow28YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow28YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29"
+                  autoComplete="aaRow29"
+                  value={values.aaRow29}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29 &&
+                  touched.aaRow29 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29Year1"
+                  autoComplete="aaRow29Year1"
+                  value={values.aaRow29Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29Year1 &&
+                  touched.aaRow29Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29Year2"
+                  autoComplete="aaRow29Year2"
+                  value={values.aaRow29Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29Year2 &&
+                  touched.aaRow29Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29Year3"
+                  autoComplete="aaRow29Year3"
+                  value={values.aaRow29Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29Year3 &&
+                  touched.aaRow29Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29Year4"
+                  autoComplete="aaRow29Year4"
+                  value={values.aaRow29Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29Year4 &&
+                  touched.aaRow29Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29Year5"
+                  autoComplete="aaRow29Year5"
+                  value={values.aaRow29Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29Year5 &&
+                  touched.aaRow29Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29Year6"
+                  autoComplete="aaRow29Year6"
+                  value={values.aaRow29Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29Year6 &&
+                  touched.aaRow29Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow29Year7"
+                  autoComplete="aaRow29Year7"
+                  value={values.aaRow29Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow29Year7 &&
+                  touched.aaRow29Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow29Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow29YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow29YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30"
+                  autoComplete="aaRow30"
+                  value={values.aaRow30}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30 &&
+                  touched.aaRow30 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30Year1"
+                  autoComplete="aaRow30Year1"
+                  value={values.aaRow30Year1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30Year1 &&
+                  touched.aaRow30Year1 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30Year1}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30Year2"
+                  autoComplete="aaRow30Year2"
+                  value={values.aaRow30Year2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30Year2 &&
+                  touched.aaRow30Year2 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30Year2}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30Year3"
+                  autoComplete="aaRow30Year3"
+                  value={values.aaRow30Year3}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30Year3 &&
+                  touched.aaRow30Year3 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30Year3}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30Year4"
+                  autoComplete="aaRow30Year4"
+                  value={values.aaRow30Year4}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30Year4 &&
+                  touched.aaRow30Year4 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30Year4}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30Year5"
+                  autoComplete="aaRow30Year5"
+                  value={values.aaRow30Year5}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30Year5 &&
+                  touched.aaRow30Year5 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30Year5}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30Year6"
+                  autoComplete="aaRow30Year6"
+                  value={values.aaRow30Year6}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30Year6 &&
+                  touched.aaRow30Year6 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30Year6}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn>
+            <Form size="tiny">
+              <Form.Field>
+                <Form.Input
+                  name="aaRow30Year7"
+                  autoComplete="aaRow30Year7"
+                  value={values.aaRow30Year7}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.aaRow30Year7 &&
+                  touched.aaRow30Year7 && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={errors.aaRow30Year7}
+                  />
+                )}
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <Form size="tiny">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name="aaRow30YesNo"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.aaRow30YesNo}
+                />
+              </Form.Field>
+            </Form>
+          </CustomColumn>
+        </Grid.Row>
       </Fragment>
     )
   }

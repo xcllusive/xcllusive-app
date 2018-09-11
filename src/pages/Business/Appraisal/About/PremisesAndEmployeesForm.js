@@ -176,15 +176,15 @@ class PremisesAndEmployeesForm extends Component {
           <Form.Field width={4}>
             <Form.Input
               label="Casuals"
-              name="casual"
-              autoComplete="casual"
-              value={values.casual}
+              name="casuals"
+              autoComplete="casuals"
+              value={values.casuals}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.casual &&
-              touched.casual && (
-              <Label basic color="red" pointing content={errors.casual} />
+            {errors.casuals &&
+              touched.casuals && (
+              <Label basic color="red" pointing content={errors.casuals} />
             )}
           </Form.Field>
         </Form.Group>
@@ -233,7 +233,7 @@ const validationSchema = Yup.object().shape({
   fullTime: Yup.number().typeError('You must type only numbers.'),
   partTime: Yup.number().typeError('You must type only numbers.'),
   subContractors: Yup.number().typeError('You must type only numbers.'),
-  casual: Yup.number().typeError('You must type only numbers.')
+  casuals: Yup.number().typeError('You must type only numbers.')
 })
 
 const mapDispatchToProps = dispatch => {

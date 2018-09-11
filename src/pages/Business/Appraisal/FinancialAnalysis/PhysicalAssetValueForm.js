@@ -40,19 +40,19 @@ class AddbacksAndAdjustmentsForm extends Component {
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
-                      name="physicaLAssetValue"
-                      autoComplete="physicaLAssetValue"
-                      value={values.physicaLAssetValue}
+                      name="physicalAssetValue"
+                      autoComplete="physicalAssetValue"
+                      value={values.physicalAssetValue}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.physicaLAssetValue &&
-                      touched.physicaLAssetValue && (
+                    {errors.physicalAssetValue &&
+                      touched.physicalAssetValue && (
                       <Label
                         basic
                         color="red"
                         pointing
-                        content={errors.physicaLAssetValue}
+                        content={errors.physicalAssetValue}
                       />
                     )}
                   </Form.Field>

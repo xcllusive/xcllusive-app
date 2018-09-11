@@ -120,20 +120,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="sales01"
-                  autoComplete="sales01"
-                  value={values.sales01}
+                  name="sales1"
+                  autoComplete="sales1"
+                  value={values.sales1}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sales01 &&
-                  touched.sales01 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sales01}
-                  />
+                {errors.sales1 &&
+                  touched.sales1 && (
+                  <Label basic color="red" pointing content={errors.sales1} />
                 )}
               </Form.Field>
             </Form>
@@ -142,20 +137,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="sales02"
-                  autoComplete="sales02"
-                  value={values.sales02}
+                  name="sales2"
+                  autoComplete="sales2"
+                  value={values.sales2}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sales02 &&
-                  touched.sales02 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sales02}
-                  />
+                {errors.sales2 &&
+                  touched.sales2 && (
+                  <Label basic color="red" pointing content={errors.sales2} />
                 )}
               </Form.Field>
             </Form>
@@ -164,20 +154,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="sales03"
-                  autoComplete="sales03"
-                  value={values.sales03}
+                  name="sales3"
+                  autoComplete="sales3"
+                  value={values.sales3}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sales03 &&
-                  touched.sales03 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sales03}
-                  />
+                {errors.sales3 &&
+                  touched.sales3 && (
+                  <Label basic color="red" pointing content={errors.sales3} />
                 )}
               </Form.Field>
             </Form>
@@ -186,20 +171,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="sales04"
-                  autoComplete="sales04"
-                  value={values.sales04}
+                  name="sales4"
+                  autoComplete="sales4"
+                  value={values.sales4}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sales04 &&
-                  touched.sales04 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sales04}
-                  />
+                {errors.sales4 &&
+                  touched.sales4 && (
+                  <Label basic color="red" pointing content={errors.sales4} />
                 )}
               </Form.Field>
             </Form>
@@ -208,20 +188,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="sales05"
-                  autoComplete="sales05"
-                  value={values.sales05}
+                  name="sales5"
+                  autoComplete="sales5"
+                  value={values.sales5}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sales05 &&
-                  touched.sales05 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sales05}
-                  />
+                {errors.sales5 &&
+                  touched.sales5 && (
+                  <Label basic color="red" pointing content={errors.sales5} />
                 )}
               </Form.Field>
             </Form>
@@ -230,20 +205,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="sales06"
-                  autoComplete="sales06"
-                  value={values.sales06}
+                  name="sales6"
+                  autoComplete="sales6"
+                  value={values.sales6}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sales06 &&
-                  touched.sales06 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sales06}
-                  />
+                {errors.sales6 &&
+                  touched.sales6 && (
+                  <Label basic color="red" pointing content={errors.sales6} />
                 )}
               </Form.Field>
             </Form>
@@ -252,20 +222,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="sales07"
-                  autoComplete="sales07"
-                  value={values.sales07}
+                  name="sales7"
+                  autoComplete="sales7"
+                  value={values.sales7}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sales07 &&
-                  touched.sales07 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sales07}
-                  />
+                {errors.sales7 &&
+                  touched.sales7 && (
+                  <Label basic color="red" pointing content={errors.sales7} />
                 )}
               </Form.Field>
             </Form>
@@ -290,15 +255,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="cogs01"
-                  autoComplete="cogs01"
-                  value={values.cogs01}
+                  name="cogs1"
+                  autoComplete="cogs1"
+                  value={values.cogs1}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.cogs01 &&
-                  touched.cogs01 && (
-                  <Label basic color="red" pointing content={errors.cogs01} />
+                {errors.cogs1 &&
+                  touched.cogs1 && (
+                  <Label basic color="red" pointing content={errors.cogs1} />
                 )}
               </Form.Field>
             </Form>
@@ -307,15 +272,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="cogs02"
-                  autoComplete="cogs02"
-                  value={values.cogs02}
+                  name="cogs2"
+                  autoComplete="cogs2"
+                  value={values.cogs2}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.cogs02 &&
-                  touched.cogs02 && (
-                  <Label basic color="red" pointing content={errors.cogs02} />
+                {errors.cogs2 &&
+                  touched.cogs2 && (
+                  <Label basic color="red" pointing content={errors.cogs2} />
                 )}
               </Form.Field>
             </Form>
@@ -324,15 +289,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="cogs03"
-                  autoComplete="cogs03"
-                  value={values.cogs03}
+                  name="cogs3"
+                  autoComplete="cogs3"
+                  value={values.cogs3}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.cogs03 &&
-                  touched.cogs03 && (
-                  <Label basic color="red" pointing content={errors.cogs03} />
+                {errors.cogs3 &&
+                  touched.cogs3 && (
+                  <Label basic color="red" pointing content={errors.cogs3} />
                 )}
               </Form.Field>
             </Form>
@@ -341,15 +306,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="cogs04"
-                  autoComplete="cogs04"
-                  value={values.cogs04}
+                  name="cogs4"
+                  autoComplete="cogs4"
+                  value={values.cogs4}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.cogs04 &&
-                  touched.cogs04 && (
-                  <Label basic color="red" pointing content={errors.cogs04} />
+                {errors.cogs4 &&
+                  touched.cogs4 && (
+                  <Label basic color="red" pointing content={errors.cogs4} />
                 )}
               </Form.Field>
             </Form>
@@ -358,15 +323,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="cogs05"
-                  autoComplete="cogs05"
-                  value={values.cogs05}
+                  name="cogs5"
+                  autoComplete="cogs5"
+                  value={values.cogs5}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.cogs05 &&
-                  touched.cogs05 && (
-                  <Label basic color="red" pointing content={errors.cogs05} />
+                {errors.cogs5 &&
+                  touched.cogs5 && (
+                  <Label basic color="red" pointing content={errors.cogs5} />
                 )}
               </Form.Field>
             </Form>
@@ -375,15 +340,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="cogs06"
-                  autoComplete="cogs06"
-                  value={values.cogs06}
+                  name="cogs6"
+                  autoComplete="cogs6"
+                  value={values.cogs6}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.cogs06 &&
-                  touched.cogs06 && (
-                  <Label basic color="red" pointing content={errors.cogs06} />
+                {errors.cogs6 &&
+                  touched.cogs6 && (
+                  <Label basic color="red" pointing content={errors.cogs6} />
                 )}
               </Form.Field>
             </Form>
@@ -392,15 +357,15 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="cogs07"
-                  autoComplete="cogs07"
-                  value={values.cogs07}
+                  name="cogs7"
+                  autoComplete="cogs7"
+                  value={values.cogs7}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.cogs07 &&
-                  touched.cogs07 && (
-                  <Label basic color="red" pointing content={errors.cogs07} />
+                {errors.cogs7 &&
+                  touched.cogs7 && (
+                  <Label basic color="red" pointing content={errors.cogs7} />
                 )}
               </Form.Field>
             </Form>
@@ -451,19 +416,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="otherIncome01"
-                  autoComplete="otherIncome01"
-                  value={values.otherIncome01}
+                  name="otherIncome1"
+                  autoComplete="otherIncome1"
+                  value={values.otherIncome1}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.otherIncome01 &&
-                  touched.otherIncome01 && (
+                {errors.otherIncome1 &&
+                  touched.otherIncome1 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.otherIncome01}
+                    content={errors.otherIncome1}
                   />
                 )}
               </Form.Field>
@@ -473,19 +438,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="otherIncome02"
-                  autoComplete="otherIncome02"
-                  value={values.otherIncome02}
+                  name="otherIncome2"
+                  autoComplete="otherIncome2"
+                  value={values.otherIncome2}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.otherIncome02 &&
-                  touched.otherIncome02 && (
+                {errors.otherIncome2 &&
+                  touched.otherIncome2 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.otherIncome02}
+                    content={errors.otherIncome2}
                   />
                 )}
               </Form.Field>
@@ -495,19 +460,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="otherIncome03"
-                  autoComplete="otherIncome03"
-                  value={values.otherIncome03}
+                  name="otherIncome3"
+                  autoComplete="otherIncome3"
+                  value={values.otherIncome3}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.otherIncome03 &&
-                  touched.otherIncome03 && (
+                {errors.otherIncome3 &&
+                  touched.otherIncome3 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.otherIncome03}
+                    content={errors.otherIncome3}
                   />
                 )}
               </Form.Field>
@@ -517,19 +482,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="otherIncome04"
-                  autoComplete="otherIncome04"
-                  value={values.otherIncome04}
+                  name="otherIncome4"
+                  autoComplete="otherIncome4"
+                  value={values.otherIncome4}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.otherIncome04 &&
-                  touched.otherIncome04 && (
+                {errors.otherIncome4 &&
+                  touched.otherIncome4 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.otherIncome04}
+                    content={errors.otherIncome4}
                   />
                 )}
               </Form.Field>
@@ -539,19 +504,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="otherIncome05"
-                  autoComplete="otherIncome05"
-                  value={values.otherIncome05}
+                  name="otherIncome5"
+                  autoComplete="otherIncome5"
+                  value={values.otherIncome5}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.otherIncome05 &&
-                  touched.otherIncome05 && (
+                {errors.otherIncome5 &&
+                  touched.otherIncome5 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.otherIncome05}
+                    content={errors.otherIncome5}
                   />
                 )}
               </Form.Field>
@@ -561,19 +526,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="otherIncome06"
-                  autoComplete="otherIncome06"
-                  value={values.otherIncome06}
+                  name="otherIncome6"
+                  autoComplete="otherIncome6"
+                  value={values.otherIncome6}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.otherIncome06 &&
-                  touched.otherIncome06 && (
+                {errors.otherIncome6 &&
+                  touched.otherIncome6 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.otherIncome06}
+                    content={errors.otherIncome6}
                   />
                 )}
               </Form.Field>
@@ -583,19 +548,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="otherIncome07"
-                  autoComplete="otherIncome07"
-                  value={values.otherIncome07}
+                  name="otherIncome7"
+                  autoComplete="otherIncome7"
+                  value={values.otherIncome7}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.otherIncome07 &&
-                  touched.otherIncome07 && (
+                {errors.otherIncome7 &&
+                  touched.otherIncome7 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.otherIncome07}
+                    content={errors.otherIncome7}
                   />
                 )}
               </Form.Field>
@@ -634,19 +599,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="expenses01"
-                  autoComplete="expenses01"
-                  value={values.expenses01}
+                  name="expenses1"
+                  autoComplete="expenses1"
+                  value={values.expenses1}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.expenses01 &&
-                  touched.expenses01 && (
+                {errors.expenses1 &&
+                  touched.expenses1 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.expenses01}
+                    content={errors.expenses1}
                   />
                 )}
               </Form.Field>
@@ -656,19 +621,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="expenses02"
-                  autoComplete="expenses02"
-                  value={values.expenses02}
+                  name="expenses2"
+                  autoComplete="expenses2"
+                  value={values.expenses2}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.expenses02 &&
-                  touched.expenses02 && (
+                {errors.expenses2 &&
+                  touched.expenses2 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.expenses02}
+                    content={errors.expenses2}
                   />
                 )}
               </Form.Field>
@@ -678,19 +643,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="expenses03"
-                  autoComplete="expenses03"
-                  value={values.expenses03}
+                  name="expenses3"
+                  autoComplete="expenses3"
+                  value={values.expenses3}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.expenses03 &&
-                  touched.expenses03 && (
+                {errors.expenses3 &&
+                  touched.expenses3 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.expenses03}
+                    content={errors.expenses3}
                   />
                 )}
               </Form.Field>
@@ -700,19 +665,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="expenses04"
-                  autoComplete="expenses04"
-                  value={values.expenses04}
+                  name="expenses4"
+                  autoComplete="expenses4"
+                  value={values.expenses4}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.expenses04 &&
-                  touched.expenses04 && (
+                {errors.expenses4 &&
+                  touched.expenses4 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.expenses04}
+                    content={errors.expenses4}
                   />
                 )}
               </Form.Field>
@@ -722,19 +687,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="expenses05"
-                  autoComplete="expenses05"
-                  value={values.expenses05}
+                  name="expenses5"
+                  autoComplete="expenses5"
+                  value={values.expenses5}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.expenses05 &&
-                  touched.expenses05 && (
+                {errors.expenses5 &&
+                  touched.expenses5 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.expenses05}
+                    content={errors.expenses5}
                   />
                 )}
               </Form.Field>
@@ -744,19 +709,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="expenses06"
-                  autoComplete="expenses06"
-                  value={values.expenses06}
+                  name="expenses6"
+                  autoComplete="expenses6"
+                  value={values.expenses6}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.expenses06 &&
-                  touched.expenses06 && (
+                {errors.expenses6 &&
+                  touched.expenses6 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.expenses06}
+                    content={errors.expenses6}
                   />
                 )}
               </Form.Field>
@@ -766,19 +731,19 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field>
                 <Form.Input
-                  name="expenses07"
-                  autoComplete="expenses07"
-                  value={values.expenses07}
+                  name="expenses7"
+                  autoComplete="expenses7"
+                  value={values.expenses7}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.expenses07 &&
-                  touched.expenses07 && (
+                {errors.expenses7 &&
+                  touched.expenses7 && (
                   <Label
                     basic
                     color="red"
                     pointing
-                    content={errors.expenses07}
+                    content={errors.expenses7}
                   />
                 )}
               </Form.Field>

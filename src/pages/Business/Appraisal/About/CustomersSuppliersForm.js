@@ -107,19 +107,19 @@ class CustomersSuppliersForm extends Component {
             <Form.Field>
               <Form.TextArea
                 label="Description"
-                name="description"
-                autoComplete="description"
-                value={values.description}
+                name="descriptionClient10TO"
+                autoComplete="descriptionClient10TO"
+                value={values.descriptionClient10TO}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.description &&
-                touched.description && (
+              {errors.descriptionClient10TO &&
+                touched.descriptionClient10TO && (
                 <Label
                   basic
                   color="red"
                   pointing
-                  content={errors.description}
+                  content={errors.descriptionClient10TO}
                 />
               )}
             </Form.Field>
