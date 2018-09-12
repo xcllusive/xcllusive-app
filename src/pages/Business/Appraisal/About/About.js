@@ -16,6 +16,7 @@ import {
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import { getBusiness } from '../../../../redux/ducks/business'
+import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 import { TypesModal, openModal } from '../../../../redux/ducks/modal'
 import { BusinessCommencedOptions } from '../../../../constants/BusinessCommencedOptions'
 import CustomersSuppliersForm from './CustomersSuppliersForm'
@@ -29,6 +30,10 @@ class AboutPage extends Component {
       businessCommencedOptions: BusinessCommencedOptions,
       currentOwnerOptions: BusinessCommencedOptions
     }
+  }
+
+  componentWillUnmount () {
+    this.props.updateAppraisal(this.props.values)
   }
 
   componentDidMount () {
@@ -79,7 +84,6 @@ class AboutPage extends Component {
       touched,
       typeOptions,
       industryOptions,
-      // isSubmitting,
       isValid
     } = this.props
     const { businessCommencedOptions, currentOwnerOptions } = this.state
@@ -346,10 +350,20 @@ AboutPage.propTypes = {
   typeOptions: PropTypes.array,
   industryOptions: PropTypes.array,
   getBusiness: PropTypes.func,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  appraisalObject: PropTypes.object,
+  updateAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  productsServices: props.appraisalObject
+    ? props.appraisalObject.productsServices
+    : '',
+  businessCommenced: props.appraisalObject
+    ? props.appraisalObject.businessCommenced
+    : '',
   tradingHours: 0,
   nOfBusinessLocations: 0
 })
@@ -375,12 +389,11 @@ const validationSchema = Yup.object().shape({
   )
 })
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBusiness(values).then(setSubmitting(false))
-}
-
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, openModal }, dispatch)
+  return bindActionCreators(
+    { getBusiness, openModal, updateAppraisal },
+    dispatch
+  )
 }
 
 export default connect(
@@ -390,7 +403,6 @@ export default connect(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit,
     enableReinitialize: true
   })(AboutPage)
 )

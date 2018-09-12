@@ -57,11 +57,9 @@ class BusinessDetailsPage extends Component {
       handleBlur,
       errors,
       touched,
-      isLoadingCreating,
-      appraisalObject
+      isLoadingCreating
     } = this.props
     const { state } = this.state
-    console.log(appraisalObject)
     return (
       <Wrapper loading={isLoadingCreating}>
         <Step.Group size="large">
