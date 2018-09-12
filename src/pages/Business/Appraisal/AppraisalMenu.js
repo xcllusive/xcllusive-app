@@ -95,7 +95,11 @@ class AppraisalMenuPage extends Component {
   render () {
     const { activeItem, colorProgress } = this.state
     const { history } = this.props
-    const { business, isLoadingCreating } = this.props.location.state
+    const {
+      business,
+      isLoadingCreating,
+      appraisalObject
+    } = this.props.location.state
     return (
       <Wrapper>
         <Segment size="mini">
@@ -172,6 +176,7 @@ class AppraisalMenuPage extends Component {
             <BusinessDetails
               business={business}
               isLoadingCreating={isLoadingCreating}
+              appraisalObject={appraisalObject}
             />
           </Segment>
         ) : null}

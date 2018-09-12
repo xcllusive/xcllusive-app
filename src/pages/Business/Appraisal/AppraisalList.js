@@ -2,12 +2,18 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { withFormik } from 'formik'
 import { Table, Grid, Header, Button, Icon } from 'semantic-ui-react'
+import moment from 'moment'
 
 import { theme } from '../../../styles'
 import Wrapper from '../../../components/content/Wrapper'
 
-import { createAppraisal, getAppraisals } from '../../../redux/ducks/appraisal'
+import {
+  createAppraisal,
+  getAppraisals,
+  removeAppraisal
+} from '../../../redux/ducks/appraisal'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 class AppraisalListPage extends Component {
@@ -29,7 +35,7 @@ class AppraisalListPage extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.createAppraisal()
+          this.props.createAppraisal(this.props.values)
           this.props.history.push({
             pathname: 'appraisalMenu',
             state: {
@@ -42,8 +48,24 @@ class AppraisalListPage extends Component {
     })
   }
 
+  _deleteAppraisal (id) {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Creating Appraisal',
+        text:
+          'Are you sure you want to delete the appraisal? Once you have delete you can not get back.'
+      },
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          await this.props.removeAppraisal(id)
+          this.props.getAppraisals(this.props.location.state.business.id)
+        }
+      }
+    })
+  }
+
   render () {
-    const { history } = this.props
+    const { history, listAppraisalList } = this.props
     const { business } = this.props.location.state
     return (
       <Wrapper>
@@ -69,71 +91,80 @@ class AppraisalListPage extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        {/* {listScoreList.array.length > 0 ? ( */}
-        <Grid padded="horizontally" style={{ marginTop: 0 }}>
-          <Grid.Row>
-            <Table color="blue" celled inverted selectable size="small" compact>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Created</Table.HeaderCell>
-                  <Table.HeaderCell>Appraisal No</Table.HeaderCell>
-                  <Table.HeaderCell>Appr. Low</Table.HeaderCell>
-                  <Table.HeaderCell>Appr. High</Table.HeaderCell>
-                  <Table.HeaderCell>% Completed</Table.HeaderCell>
-                  <Table.HeaderCell>Sent</Table.HeaderCell>
-                  <Table.HeaderCell>Sent Date</Table.HeaderCell>
-                  <Table.HeaderCell>Resend</Table.HeaderCell>
-                  <Table.HeaderCell>Edit</Table.HeaderCell>
-                  <Table.HeaderCell>Duplicate</Table.HeaderCell>
-                  <Table.HeaderCell>Download</Table.HeaderCell>
-                  <Table.HeaderCell>Delete</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {/* {listScoreList.array.map((listScore, key) => ( */}
-                <Table.Row active /* key={listScore.id} */>
-                  <Table.Cell />
-                  <Table.Cell>Score Version </Table.Cell>
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell>
-                    <Button
-                      icon
-                      // onClick={() =>
-                      //   history.push(
-                      //     `/buyer/business/${business.id}/make-new-score/${
-                      //       listScore.id
-                      //     }`
-                      //   )
-                      // }
+        {listAppraisalList.length > 0 ? (
+          <Grid padded="horizontally" style={{ marginTop: 0 }}>
+            <Grid.Row>
+              <Table
+                color="blue"
+                celled
+                inverted
+                selectable
+                size="small"
+                compact
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Created</Table.HeaderCell>
+                    <Table.HeaderCell>Appr. Low</Table.HeaderCell>
+                    <Table.HeaderCell>Appr. High</Table.HeaderCell>
+                    <Table.HeaderCell>% Completed</Table.HeaderCell>
+                    <Table.HeaderCell>Sent</Table.HeaderCell>
+                    <Table.HeaderCell>Resend</Table.HeaderCell>
+                    <Table.HeaderCell>Duplicate</Table.HeaderCell>
+                    <Table.HeaderCell>Download</Table.HeaderCell>
+                    <Table.HeaderCell>Delete</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {listAppraisalList.map((listAppraisal, key) => (
+                    <Table.Row
+                      active
+                      key={listAppraisal.id}
+                      onClick={() =>
+                        history.push({
+                          pathname: 'appraisalMenu',
+                          state: {
+                            business: this.props.location.state.business,
+                            isLoadingCreating: this.props.isLoadingCreating,
+                            appraisalObject: listAppraisal
+                          }
+                        })
+                      }
                     >
-                      <Icon link name="edit" size="large" />
-                    </Button>
-                  </Table.Cell>
-                  <Table.Cell />
-                  <Table.Cell>Yes</Table.Cell>
-                  <Table.Cell>
-                    <Button
-                      icon
-                      // disabled={listScore.dateSent !== null}
-                      // onClick={() =>
-                      //   this._toggleModalConfirmDelete(listScore.id)
-                      // }
-                    >
-                      <Icon link color="red" size="large" name="trash" />
-                    </Button>
-                  </Table.Cell>
-                </Table.Row>
-                {/* ))} */}
-              </Table.Body>
-            </Table>
-          </Grid.Row>
-        </Grid>
-        {/* ) : null} */}
+                      <Table.Cell>
+                        {moment(listAppraisal.dateTimeCreated).format(
+                          'DD/MM/YYYY'
+                        )}
+                      </Table.Cell>
+                      <Table.Cell>TBD with Zoran</Table.Cell>
+                      <Table.Cell>TBD with Zoran</Table.Cell>
+                      <Table.Cell>{listAppraisal.completed}</Table.Cell>
+                      <Table.Cell>
+                        {listAppraisal.sentDate
+                          ? moment(listAppraisal.sentDate).format('DD/MM/YYYY')
+                          : 'No'}
+                      </Table.Cell>
+                      <Table.Cell />
+                      <Table.Cell />
+                      <Table.Cell>Yes</Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          disabled={listAppraisal.sentDate !== null}
+                          onClick={() =>
+                            this._deleteAppraisal(listAppraisal.id)
+                          }
+                        >
+                          <Icon link color="red" size="large" name="trash" />
+                        </Button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Grid.Row>
+          </Grid>
+        ) : null}
         <Grid style={{ marginTop: 0 }}>
           <Grid.Column>
             <Button
@@ -153,6 +184,7 @@ class AppraisalListPage extends Component {
 }
 
 AppraisalListPage.propTypes = {
+  values: PropTypes.object,
   match: PropTypes.object,
   history: PropTypes.object,
   getBusiness: PropTypes.func,
@@ -160,17 +192,36 @@ AppraisalListPage.propTypes = {
   createAppraisal: PropTypes.func,
   openModal: PropTypes.func,
   isLoadingCreating: PropTypes.bool,
-  getAppraisals: PropTypes.func
+  getAppraisals: PropTypes.func,
+  listAppraisalList: PropTypes.array,
+  removeAppraisal: PropTypes.func
+}
+
+const mapPropsToValues = props => {
+  return {
+    business_id: props.location.state.business.id
+      ? props.location.state.business.id
+      : null
+  }
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ createAppraisal, openModal, getAppraisals }, dispatch)
+  bindActionCreators(
+    { createAppraisal, openModal, getAppraisals, removeAppraisal },
+    dispatch
+  )
 
 const mapStateToProps = state => ({
-  isLoadingCreating: state.appraisal.create.isLoading
+  isLoadingCreating: state.appraisal.create.isLoading,
+  listAppraisalList: state.appraisal.getAll.array
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AppraisalListPage)
+)(
+  withFormik({
+    mapPropsToValues,
+    enableReinitialize: true
+  })(AppraisalListPage)
+)

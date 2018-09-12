@@ -292,13 +292,13 @@ export const appraisalTemplateLoading = (value, type) => ({
   payload: value
 })
 
-export const createAppraisal = (appraisal, businessId) => async dispatch => {
+export const createAppraisal = businessId => async dispatch => {
   dispatch({
     type: Types.CREATE_APPRAISAL_LOADING,
     payload: true
   })
   try {
-    const response = await create(appraisal, businessId)
+    const response = await create(businessId)
     dispatch({
       type: Types.CREATE_APPRAISAL_SUCCESS
     })
@@ -411,13 +411,13 @@ export const sendAppraisal = appraisal => async dispatch => {
   }
 }
 
-export const removeAppraisal = appraisal => async dispatch => {
+export const removeAppraisal = appraisalId => async dispatch => {
   dispatch({
     type: Types.REMOVE_APPRAISAL_LOADING,
     payload: true
   })
   try {
-    const response = await remove(appraisal)
+    const response = await remove(appraisalId)
     dispatch({
       type: Types.REMOVE_APPRAISAL_SUCCESS
     })

@@ -6,6 +6,7 @@ import { withFormik } from 'formik'
 import { Form, Label, Message, Step, Icon } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
+import { updateBusiness } from '../../../redux/ducks/business'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
 
 class BusinessDetailsPage extends Component {
@@ -28,6 +29,16 @@ class BusinessDetailsPage extends Component {
   componentDidUpdate () {}
 
   componentWillUnmount () {
+    // this.props.updateBusiness(
+    //   this.props.values.businessName,
+    //   this.props.values.businessABN,
+    //   this.props.values.firstNameV,
+    //   this.props.values.lastNameV,
+    //   this.props.values.address1,
+    //   this.props.values.suburb,
+    //   this.props.values.state,
+    //   this.props.values.postCode
+    // )
     this.props.updateAppraisal(this.props.values)
   }
 
@@ -46,9 +57,11 @@ class BusinessDetailsPage extends Component {
       handleBlur,
       errors,
       touched,
-      isLoadingCreating
+      isLoadingCreating,
+      appraisalObject
     } = this.props
     const { state } = this.state
+    console.log(appraisalObject)
     return (
       <Wrapper loading={isLoadingCreating}>
         <Step.Group size="large">
@@ -252,11 +265,14 @@ BusinessDetailsPage.propTypes = {
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
   business: PropTypes.object,
+  updateBusiness: PropTypes.func,
   updateAppraisal: PropTypes.func,
-  isLoadingCreating: PropTypes.bool
+  isLoadingCreating: PropTypes.bool,
+  appraisalObject: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
+  business_id: props.business ? props.business.id : '',
   businessName: props.business ? props.business.businessName : '',
   businessABN: props.business ? props.business.businessABN : '',
   firstNameV: props.business ? props.business.firstNameV : '',
@@ -265,7 +281,9 @@ const mapPropsToValues = props => ({
   suburb: props.business ? props.business.suburb : '',
   state: props.business ? props.business.state : '',
   postCode: props.business ? props.business.postCode : '',
-  confirmBusinessDetail: false
+  confirmBusinessDetail: props.appraisalObject
+    ? props.appraisalObject.confirmBusinessDetail
+    : false
 })
 
 const validationSchema = Yup.object().shape({
@@ -278,9 +296,6 @@ const validationSchema = Yup.object().shape({
   lastNameV: Yup.string()
     .required('Last name is required.')
     .max(40, 'Last name require max 40 characters.'),
-  vendorEmail: Yup.string()
-    .email('Invalid email address.')
-    .required('Email is required.'),
   businessABN: Yup.string()
     .min(11, 'ABN require min 11 integers.')
     .max(11, 'ABN require max 11 integers.'),
@@ -291,14 +306,12 @@ const validationSchema = Yup.object().shape({
     .max(4, 'Post Code require max 4 integers.')
 })
 
-const handleSubmit = (values, { props, setSubmitting }) => {}
-
 const mapStateToProps = state => {
   return {}
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal }, dispatch)
+  return bindActionCreators({ updateBusiness, updateAppraisal }, dispatch)
 }
 
 export default connect(
@@ -308,7 +321,6 @@ export default connect(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit,
     enableReinitialize: true
   })(BusinessDetailsPage)
 )

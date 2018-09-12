@@ -218,7 +218,7 @@ const mapPropsToValues = props => ({
   fullTime: 0,
   partTime: 0,
   subContractors: 0,
-  casual: 0
+  casuals: 0
 })
 
 const mapStateToProps = state => {
