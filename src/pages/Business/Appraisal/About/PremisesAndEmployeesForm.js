@@ -211,14 +211,31 @@ PremisesAndEmployeesForm.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  appraisalObject: PropTypes.object,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
-  fullTime: 0,
-  partTime: 0,
-  subContractors: 0,
-  casuals: 0
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  premisesOwnedRented: props.appraisalObject
+    ? props.appraisalObject.premisesOwnedRented
+    : '',
+  rentCost: props.appraisalObject ? props.appraisalObject.rentCost : 0,
+  timeRemLease: props.appraisalObject ? props.appraisalObject.timeRemLease : 0,
+  premisesNotes: props.appraisalObject
+    ? props.appraisalObject.premisesNotes
+    : '',
+  fullTime: props.appraisalObject ? props.appraisalObject.fullTime : 0,
+  partTime: props.appraisalObject ? props.appraisalObject.partTime : 0,
+  subContractors: props.appraisalObject
+    ? props.appraisalObject.subContractors
+    : 0,
+  casuals: props.appraisalObject ? props.appraisalObject.casuals : 0,
+  confirmPremisesEnployees: props.appraisalObject
+    ? props.appraisalObject.confirmPremisesEnployees
+    : false
 })
 
 const mapStateToProps = state => {
