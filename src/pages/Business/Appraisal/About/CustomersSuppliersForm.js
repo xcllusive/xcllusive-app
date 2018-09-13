@@ -6,6 +6,8 @@ import { withFormik } from 'formik'
 import { Form, Label, Radio } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
+import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+
 import { OptionsLargestClient5TO } from '../../../../constants/OptionsLargestClient5TO'
 
 class CustomersSuppliersForm extends Component {
@@ -21,6 +23,11 @@ class CustomersSuppliersForm extends Component {
         { key: '5', text: 'Under Management', value: 'Under Management' }
       ]
     }
+  }
+
+  componentDidUpdate () {
+    console.log(this.props)
+    this.props.sendValuesToAbout(this.props.values)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -183,10 +190,32 @@ CustomersSuppliersForm.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  appraisalObject: PropTypes.object,
+  updateAppraisal: PropTypes.func,
+  business: PropTypes.object,
+  sendValuesToAbout: PropTypes.func
 }
 
-const mapPropsToValues = props => ({})
+const mapPropsToValues = props => ({
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  descriptionCustomers: props.appraisalObject
+    ? props.appraisalObject.descriptionCustomers
+    : '',
+  clientDatabaseAvailable: props.appraisalObject
+    ? props.appraisalObject.clientDatabaseAvailable
+    : false,
+  client10TO: props.appraisalObject ? props.appraisalObject.client10TO : false,
+  descriptionClient10TO: props.appraisalObject
+    ? props.appraisalObject.descriptionClient10TO
+    : '',
+
+  client5TO: props.appraisalObject ? props.appraisalObject.client5TO : '',
+  descriptionSuppliers: props.appraisalObject
+    ? props.appraisalObject.descriptionSuppliers
+    : ''
+})
 
 const mapStateToProps = state => {
   return {}
@@ -203,7 +232,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch)
+  return bindActionCreators({ updateAppraisal }, dispatch)
 }
 
 export default connect(

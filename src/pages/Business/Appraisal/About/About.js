@@ -28,7 +28,8 @@ class AboutPage extends Component {
     super(props)
     this.state = {
       businessCommencedOptions: BusinessCommencedOptions,
-      currentOwnerOptions: BusinessCommencedOptions
+      currentOwnerOptions: BusinessCommencedOptions,
+      form: {}
     }
   }
 
@@ -69,6 +70,13 @@ class AboutPage extends Component {
       'currentOwner',
       this.props.values.businessCommenced
     )
+  }
+
+  _assignValuesToUpdateAppraisal = valuesFromForms => {
+    // this.setState({ form: Object.assign(valuesFromForms, this.state.form) })
+    const form = Object.assign(valuesFromForms, this.state.form)
+    this.setState({ form })
+    console.log(form)
   }
 
   render () {
@@ -301,7 +309,11 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Customers and Suppliers
                   </Header>
-                  <CustomersSuppliersForm />
+                  <CustomersSuppliersForm
+                    appraisalObject={this.props.appraisalObject}
+                    business={this.props.business}
+                    sendValuesToAbout={this._assignValuesToUpdateAppraisal}
+                  />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -360,8 +372,11 @@ const mapPropsToValues = props => ({
   businessCommenced: props.appraisalObject
     ? props.appraisalObject.businessCommenced
     : '',
+  currentOwner: props.appraisalObject ? props.appraisalObject.currentOwner : '',
   tradingHours: props.appraisalObject ? props.appraisalObject.tradingHours : 0,
-  nOfBusinessLocations: 0
+  nOfBusinessLocations: props.appraisalObject
+    ? props.appraisalObject.nOfBusinessLocations
+    : 0
 })
 
 const mapStateToProps = state => {

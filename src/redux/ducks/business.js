@@ -182,7 +182,9 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           object: action.payload.business,
           totalEnquiry: action.payload.countAllEnquiry,
-          totalLastScore: action.payload.lastScore ? action.payload.lastScore.total : null,
+          totalLastScore: action.payload.lastScore
+            ? action.payload.lastScore.total
+            : null,
           stageOptions: action.payload.stageList,
           sourceOptions: action.payload.sourceList,
           ratingOptions: action.payload.ratingList,
@@ -234,7 +236,20 @@ export default function reducer (state = initialState, action) {
         get: {
           ...state.get,
           isLoading: false,
-          object: action.payload,
+          object: action.payload.business,
+          totalEnquiry: action.payload.countAllEnquiry,
+          totalLastScore: action.payload.lastScore
+            ? action.payload.lastScore.total
+            : null,
+          stageOptions: action.payload.stageList,
+          sourceOptions: action.payload.sourceList,
+          ratingOptions: action.payload.ratingList,
+          productOptions: action.payload.productList,
+          industryOptions: action.payload.industryList,
+          typeOptions: action.payload.typeList,
+          usersBroker: action.payload.usersBroker,
+          stageNotSignedOptions: action.payload.stageNotSignedList,
+          stageNotWantOptions: action.payload.stageNotWantList,
           error: null
         }
       }
