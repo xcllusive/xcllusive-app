@@ -79,8 +79,7 @@ class AboutPage extends Component {
       errors,
       touched,
       typeOptions,
-      industryOptions,
-      isValid
+      industryOptions
     } = this.props
     const { businessCommencedOptions, currentOwnerOptions } = this.state
     return (
@@ -290,7 +289,17 @@ class AboutPage extends Component {
                         name="confirmAbout"
                         onChange={this._handleChangeCheckBox}
                         checked={values.confirmAbout}
-                        disabled={!isValid}
+                        disabled={
+                          values.businessType === '' ||
+                          values.businessIndustry === '' ||
+                          values.productsServices === '' ||
+                          values.businessCommenced === '' ||
+                          values.currentOwner === '' ||
+                          parseInt(values.tradingHours) === 0 ||
+                          values.tradingHours === '' ||
+                          parseInt(values.nOfBusinessLocations) === 0 ||
+                          values.nOfBusinessLocations === ''
+                        }
                       />
                     </Form.Field>
                   </Form.Group>
@@ -301,9 +310,7 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Customers and Suppliers
                   </Header>
-                  <CustomersSuppliersForm
-                    {...this.props}
-                  />
+                  <CustomersSuppliersForm {...this.props} />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -315,10 +322,7 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Premises and Employees
                   </Header>
-                  <PremisesAndEmployeesForm
-                    appraisalObject={this.props.appraisalObject}
-                    business={this.props.business}
-                  />
+                  <PremisesAndEmployeesForm {...this.props} />
                 </Segment>
               </Grid.Column>
               <Grid.Column>
@@ -326,10 +330,7 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Ownership and Final Notes
                   </Header>
-                  <OwnershipAndFinalNotesForm
-                    appraisalObject={this.props.appraisalObject}
-                    business={this.props.business}
-                  />
+                  <OwnershipAndFinalNotesForm {...this.props} />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -362,6 +363,8 @@ AboutPage.propTypes = {
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
+  businessType: props.business ? props.business.typeId : '',
+  businessIndustry: props.business ? props.business.industryId : '',
   productsServices: props.appraisalObject
     ? props.appraisalObject.productsServices
     : '',
@@ -373,6 +376,10 @@ const mapPropsToValues = props => ({
   nOfBusinessLocations: props.appraisalObject
     ? props.appraisalObject.nOfBusinessLocations
     : 0,
+  confirmAbout: props.appraisalObject
+    ? props.appraisalObject.confirmAbout
+    : false,
+  /* CustomersSuppliersForm */
   descriptionCustomers: props.appraisalObject
     ? props.appraisalObject.descriptionCustomers
     : '',
@@ -387,7 +394,46 @@ const mapPropsToValues = props => ({
   client5TO: props.appraisalObject ? props.appraisalObject.client5TO : '',
   descriptionSuppliers: props.appraisalObject
     ? props.appraisalObject.descriptionSuppliers
-    : ''
+    : '',
+  confirmCustomersSuppliers: props.appraisalObject
+    ? props.appraisalObject.confirmCustomersSuppliers
+    : false,
+  /* PremisesAndEmployeesForm */
+  premisesOwnedRented: props.appraisalObject
+    ? props.appraisalObject.premisesOwnedRented
+    : '',
+  rentCost: props.appraisalObject ? props.appraisalObject.rentCost : 0,
+  timeRemLease: props.appraisalObject ? props.appraisalObject.timeRemLease : 0,
+  premisesNotes: props.appraisalObject
+    ? props.appraisalObject.premisesNotes
+    : '',
+  fullTime: props.appraisalObject ? props.appraisalObject.fullTime : 0,
+  partTime: props.appraisalObject ? props.appraisalObject.partTime : 0,
+  subContractors: props.appraisalObject
+    ? props.appraisalObject.subContractors
+    : 0,
+  casuals: props.appraisalObject ? props.appraisalObject.casuals : 0,
+  confirmPremisesEnployees: props.appraisalObject
+    ? props.appraisalObject.confirmPremisesEnployees
+    : false,
+  /* OwnershipAndFinalNotesForm */
+  numberOwners: props.appraisalObject ? props.appraisalObject.numberOwners : 0,
+  owners1sHours: props.appraisalObject
+    ? props.appraisalObject.owners1sHours
+    : '',
+  owners1sRole: props.appraisalObject ? props.appraisalObject.owners1sRole : '',
+  otherOwnersHours: props.appraisalObject
+    ? props.appraisalObject.otherOwnersHours
+    : '',
+  otherOwnersRole: props.appraisalObject
+    ? props.appraisalObject.otherOwnersRole
+    : '',
+  otherRelevantNotes: props.appraisalObject
+    ? props.appraisalObject.otherRelevantNotes
+    : '',
+  confirmOwnershipFinalNotes: props.appraisalObject
+    ? props.appraisalObject.confirmOwnershipFinalNotes
+    : false
 })
 
 const mapStateToProps = state => {
@@ -408,8 +454,33 @@ const validationSchema = Yup.object().shape({
   tradingHours: Yup.number().typeError('You must type only numbers here!'),
   nOfBusinessLocations: Yup.number().typeError(
     'You must type only numbers here!'
-  )
-
+  ),
+  /* CustomersSuppliersForm */
+  descriptionCustomers: Yup.string().required(
+    'Description & Customers is required'
+  ),
+  client5TO: Yup.string().required('Largest 5 clients % of T/O is required'),
+  descriptionSuppliers: Yup.string()
+    .required('Description of Suppliers is required.')
+    .max(130, 'Description of Suppliers require max 130 characters.'),
+  /* PremisesAndEmployeesForm */
+  premisesOwnedRented: Yup.string().required(
+    'Premises Owned or Rented is required'
+  ),
+  premisesNotes: Yup.string().required('Premises Notes is required'),
+  fullTime: Yup.number().typeError('You must type only numbers.'),
+  partTime: Yup.number().typeError('You must type only numbers.'),
+  subContractors: Yup.number().typeError('You must type only numbers.'),
+  casuals: Yup.number().typeError('You must type only numbers.'),
+  /* OwnershipAndFinalNotesForm */
+  numberOwners: Yup.number()
+    .required('Number of Owners is required')
+    .typeError('You must type only numbers.'),
+  owners1sHours: Yup.string().required('Owner 1`s Hours is required'),
+  owners1sRole: Yup.string().required('Owner 1`s Role is required'),
+  otherOwnersHours: Yup.string().required('Other Owners` Hours is required'),
+  otherOwnersRole: Yup.string().required('Other Owners` Role is required'),
+  otherRelevantNotes: Yup.string().required('Other Relevant Notes is required')
 })
 
 const mapDispatchToProps = dispatch => {
