@@ -183,11 +183,31 @@ OwnershipAndFinalNotesForm.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  appraisalObject: PropTypes.object,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
-  numberOwners: 0
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  numberOwners: props.appraisalObject ? props.appraisalObject.numberOwners : 0,
+  owners1sHours: props.appraisalObject
+    ? props.appraisalObject.owners1sHours
+    : '',
+  owners1sRole: props.appraisalObject ? props.appraisalObject.owners1sRole : '',
+  otherOwnersHours: props.appraisalObject
+    ? props.appraisalObject.otherOwnersHours
+    : '',
+  otherOwnersRole: props.appraisalObject
+    ? props.appraisalObject.otherOwnersRole
+    : '',
+  otherRelevantNotes: props.appraisalObject
+    ? props.appraisalObject.otherRelevantNotes
+    : '',
+  confirmOwnershipFinalNotes: props.appraisalObject
+    ? props.appraisalObject.confirmOwnershipFinalNotes
+    : false
 })
 
 const mapStateToProps = state => {

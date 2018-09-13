@@ -325,7 +325,10 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Premises and Employees
                   </Header>
-                  <PremisesAndEmployeesForm />
+                  <PremisesAndEmployeesForm
+                    appraisalObject={this.props.appraisalObject}
+                    business={this.props.business}
+                  />
                 </Segment>
               </Grid.Column>
               <Grid.Column>
@@ -333,7 +336,10 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Ownership and Final Notes
                   </Header>
-                  <OwnershipAndFinalNotesForm />
+                  <OwnershipAndFinalNotesForm
+                    appraisalObject={this.props.appraisalObject}
+                    business={this.props.business}
+                  />
                 </Segment>
               </Grid.Column>
             </Grid.Row>

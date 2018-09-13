@@ -214,7 +214,10 @@ const mapPropsToValues = props => ({
   client5TO: props.appraisalObject ? props.appraisalObject.client5TO : '',
   descriptionSuppliers: props.appraisalObject
     ? props.appraisalObject.descriptionSuppliers
-    : ''
+    : '',
+  confirmCustomersSuppliers: props.appraisalObject
+    ? props.appraisalObject.confirmCustomersSuppliers
+    : false
 })
 
 const mapStateToProps = state => {
