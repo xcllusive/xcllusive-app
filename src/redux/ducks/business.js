@@ -483,7 +483,7 @@ export const updateBusiness = business => async dispatch => {
     const getBusiness = await get(business.id)
     dispatch({
       type: Types.UPDATE_BUSINESS_SUCCESS,
-      payload: getBusiness.data
+      payload: getBusiness
     })
     toast.success(response.message)
   } catch (error) {
