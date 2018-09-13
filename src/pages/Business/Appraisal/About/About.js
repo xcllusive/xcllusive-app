@@ -28,8 +28,7 @@ class AboutPage extends Component {
     super(props)
     this.state = {
       businessCommencedOptions: BusinessCommencedOptions,
-      currentOwnerOptions: BusinessCommencedOptions,
-      form: {}
+      currentOwnerOptions: BusinessCommencedOptions
     }
   }
 
@@ -70,13 +69,6 @@ class AboutPage extends Component {
       'currentOwner',
       this.props.values.businessCommenced
     )
-  }
-
-  _assignValuesToUpdateAppraisal = valuesFromForms => {
-    // this.setState({ form: Object.assign(valuesFromForms, this.state.form) })
-    const form = Object.assign(valuesFromForms, this.state.form)
-    this.setState({ form })
-    console.log(form)
   }
 
   render () {
@@ -310,9 +302,7 @@ class AboutPage extends Component {
                     Customers and Suppliers
                   </Header>
                   <CustomersSuppliersForm
-                    appraisalObject={this.props.appraisalObject}
-                    business={this.props.business}
-                    sendValuesToAbout={this._assignValuesToUpdateAppraisal}
+                    {...this.props}
                   />
                 </Segment>
               </Grid.Column>
@@ -376,7 +366,22 @@ const mapPropsToValues = props => ({
   tradingHours: props.appraisalObject ? props.appraisalObject.tradingHours : 0,
   nOfBusinessLocations: props.appraisalObject
     ? props.appraisalObject.nOfBusinessLocations
-    : 0
+    : 0,
+  descriptionCustomers: props.appraisalObject
+    ? props.appraisalObject.descriptionCustomers
+    : '',
+  clientDatabaseAvailable: props.appraisalObject
+    ? props.appraisalObject.clientDatabaseAvailable
+    : false,
+  client10TO: props.appraisalObject ? props.appraisalObject.client10TO : false,
+  descriptionClient10TO: props.appraisalObject
+    ? props.appraisalObject.descriptionClient10TO
+    : '',
+
+  client5TO: props.appraisalObject ? props.appraisalObject.client5TO : '',
+  descriptionSuppliers: props.appraisalObject
+    ? props.appraisalObject.descriptionSuppliers
+    : ''
 })
 
 const mapStateToProps = state => {
@@ -398,6 +403,7 @@ const validationSchema = Yup.object().shape({
   nOfBusinessLocations: Yup.number().typeError(
     'You must type only numbers here!'
   )
+
 })
 
 const mapDispatchToProps = dispatch => {
