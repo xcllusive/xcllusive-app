@@ -112,25 +112,13 @@ class AppraisalListPage extends Component {
                     <Table.HeaderCell>Resend</Table.HeaderCell>
                     <Table.HeaderCell>Duplicate</Table.HeaderCell>
                     <Table.HeaderCell>Download</Table.HeaderCell>
+                    <Table.HeaderCell>Edit</Table.HeaderCell>
                     <Table.HeaderCell>Delete</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
                   {listAppraisalList.map((listAppraisal, key) => (
-                    <Table.Row
-                      active
-                      key={listAppraisal.id}
-                      onClick={() =>
-                        history.push({
-                          pathname: 'appraisalMenu',
-                          state: {
-                            business: this.props.location.state.business,
-                            isLoadingCreating: this.props.isLoadingCreating,
-                            appraisalObject: listAppraisal
-                          }
-                        })
-                      }
-                    >
+                    <Table.Row active key={listAppraisal.id}>
                       <Table.Cell>
                         {moment(listAppraisal.dateTimeCreated).format(
                           'DD/MM/YYYY'
@@ -151,6 +139,23 @@ class AppraisalListPage extends Component {
                         <Button
                           icon
                           disabled={listAppraisal.sentDate !== null}
+                          onClick={() =>
+                            history.push({
+                              pathname: 'appraisalMenu',
+                              state: {
+                                business: this.props.location.state.business,
+                                isLoadingCreating: this.props.isLoadingCreating,
+                                appraisalObject: listAppraisal
+                              }
+                            })
+                          }
+                        >
+                          <Icon link size="large" name="edit" />
+                        </Button>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
                           onClick={() =>
                             this._deleteAppraisal(listAppraisal.id)
                           }
