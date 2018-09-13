@@ -19,15 +19,13 @@ import FinancialAnalysis from './FinancialAnalysis/FinancialAnalysis'
 // import { getSystemSettings } from '../../redux/ducks/systemSettings'
 import { getBusiness } from '../../../redux/ducks/business'
 
-import {
-  getAppraisal
-} from '../../../redux/ducks/appraisal'
+import { getAppraisal } from '../../../redux/ducks/appraisal'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Business Details',
+      activeItem: 'About',
       percent: 75,
       colorProgress: null
     }
@@ -37,7 +35,9 @@ class AppraisalMenuPage extends Component {
     this.props.getAppraisal(this.props.location.state.appraisalObject.id)
     this.setState({ colorProgress: this._colorProgress() })
 
-    if (!this.props.business.id) this.props.getBusiness(this.props.location.state.business.id)
+    if (!this.props.business.id) {
+      this.props.getBusiness(this.props.location.state.business.id)
+    }
   }
 
   _handleItemClick = (e, { name }) => {
@@ -103,9 +103,7 @@ class AppraisalMenuPage extends Component {
   render () {
     const { activeItem, colorProgress } = this.state
     const { history, business, appraisal } = this.props
-    const {
-      isLoadingCreating
-    } = this.props.location.state
+    const { isLoadingCreating } = this.props.location.state
     return (
       <Wrapper>
         <Segment size="mini">
@@ -188,9 +186,7 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'About' ? (
           <Segment>
-            <About
-              business={business}
-              appraisalObject={appraisal} />
+            <About business={business} appraisalObject={appraisal} />
           </Segment>
         ) : null}
         {this.state.activeItem === 'Financial Analysis' ? (
