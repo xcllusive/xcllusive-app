@@ -26,20 +26,24 @@ class BusinessDetailsPage extends Component {
     }
   }
 
-  componentDidUpdate () {}
-
   componentWillUnmount () {
-    // this.props.updateBusiness(
-    //   this.props.values.businessName,
-    //   this.props.values.businessABN,
-    //   this.props.values.firstNameV,
-    //   this.props.values.lastNameV,
-    //   this.props.values.address1,
-    //   this.props.values.suburb,
-    //   this.props.values.state,
-    //   this.props.values.postCode
-    // )
     this.props.updateAppraisal(this.props.values)
+    this._updateBusiness(this.props.values)
+  }
+
+  _updateBusiness = values => {
+    const business = {
+      id: values.business_id,
+      businessName: values.businessName,
+      businessABN: values.businessABN,
+      firstNameV: values.firstNameV,
+      lastNameV: values.lastNameV,
+      address1: values.address1,
+      suburb: values.suburb,
+      state: values.state,
+      postCode: values.postCode
+    }
+    this.props.updateBusiness(business)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -271,6 +275,7 @@ BusinessDetailsPage.propTypes = {
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : '',
   businessName: props.business ? props.business.businessName : '',
   businessABN: props.business ? props.business.businessABN : '',
   firstNameV: props.business ? props.business.firstNameV : '',
@@ -304,9 +309,9 @@ const validationSchema = Yup.object().shape({
     .max(4, 'Post Code require max 4 integers.')
 })
 
-const mapStateToProps = state => {
-  return {}
-}
+const mapStateToProps = state => ({
+
+})
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({ updateBusiness, updateAppraisal }, dispatch)

@@ -183,6 +183,12 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           isUpdated: true,
           error: null
+        },
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload,
+          error: null
         }
       }
     case Types.UPDATE_APPRAISAL_FAILURE:
@@ -358,8 +364,10 @@ export const updateAppraisal = appraisal => async dispatch => {
   })
   try {
     const response = await update(appraisal)
+    const getAppraisal = await get(appraisal.id)
     dispatch({
-      type: Types.UPDATE_APPRAISAL_SUCCESS
+      type: Types.UPDATE_APPRAISAL_SUCCESS,
+      payload: getAppraisal.data
     })
     toast.success(response.message)
   } catch (error) {

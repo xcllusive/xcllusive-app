@@ -36,10 +36,6 @@ class AboutPage extends Component {
     this.props.updateAppraisal(this.props.values)
   }
 
-  componentDidMount () {
-    this.props.getBusiness(this.props.business.id)
-  }
-
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
@@ -364,7 +360,7 @@ const mapPropsToValues = props => ({
   businessCommenced: props.appraisalObject
     ? props.appraisalObject.businessCommenced
     : '',
-  tradingHours: 0,
+  tradingHours: props.appraisalObject ? props.appraisalObject.tradingHours : 0,
   nOfBusinessLocations: 0
 })
 

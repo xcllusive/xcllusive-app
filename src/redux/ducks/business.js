@@ -230,6 +230,12 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           isUpdated: true,
           error: null
+        },
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload,
+          error: null
         }
       }
     case Types.UPDATE_BUSINESS_FAILURE:
@@ -476,7 +482,7 @@ export const updateBusiness = business => async dispatch => {
     const response = await update(business)
     dispatch({
       type: Types.UPDATE_BUSINESS_SUCCESS,
-      payload: response.message
+      payload: response.data
     })
     toast.success(response.message)
   } catch (error) {

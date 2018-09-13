@@ -17,19 +17,27 @@ import About from './About/About'
 import { theme } from '../../../styles'
 import FinancialAnalysis from './FinancialAnalysis/FinancialAnalysis'
 // import { getSystemSettings } from '../../redux/ducks/systemSettings'
+import { getBusiness } from '../../../redux/ducks/business'
+
+import {
+  getAppraisal
+} from '../../../redux/ducks/appraisal'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'About',
+      activeItem: 'Business Details',
       percent: 75,
       colorProgress: null
     }
   }
 
   componentDidMount () {
+    this.props.getAppraisal(this.props.location.state.appraisalObject.id)
     this.setState({ colorProgress: this._colorProgress() })
+
+    if (!this.props.business.id) this.props.getBusiness(this.props.location.state.business.id)
   }
 
   _handleItemClick = (e, { name }) => {
@@ -94,11 +102,9 @@ class AppraisalMenuPage extends Component {
 
   render () {
     const { activeItem, colorProgress } = this.state
-    const { history } = this.props
+    const { history, business, appraisal } = this.props
     const {
-      business,
-      isLoadingCreating,
-      appraisalObject
+      isLoadingCreating
     } = this.props.location.state
     return (
       <Wrapper>
@@ -176,13 +182,15 @@ class AppraisalMenuPage extends Component {
             <BusinessDetails
               business={business}
               isLoadingCreating={isLoadingCreating}
-              appraisalObject={appraisalObject}
+              appraisalObject={appraisal}
             />
           </Segment>
         ) : null}
         {this.state.activeItem === 'About' ? (
           <Segment>
-            <About business={business} appraisalObject={appraisalObject} />
+            <About
+              business={business}
+              appraisalObject={appraisal} />
           </Segment>
         ) : null}
         {this.state.activeItem === 'Financial Analysis' ? (
@@ -231,17 +239,25 @@ class AppraisalMenuPage extends Component {
 AppraisalMenuPage.propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object,
+  business: PropTypes.object,
+  appraisal: PropTypes.object,
+  getAppraisal: PropTypes.func,
+  getBusiness: PropTypes.func
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  appraisal: state.appraisal.get.object,
+  business: state.business.get.object
+})
 
 // const mapPropsToValues = props => ({})
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      // getSystemSettings
+      getAppraisal,
+      getBusiness
     },
     dispatch
   )
