@@ -25,6 +25,7 @@ import Wrapper from '../../../components/content/Wrapper'
 class AppraisalRegisters extends Component {
   componentDidMount () {
     this.props.listAppraisalRegister('financialInfoSource', 5)
+    this.props.listAppraisalRegister('risks', 5)
   }
 
   _toggleModalConfirm = (id, registerType) => {
@@ -47,7 +48,7 @@ class AppraisalRegisters extends Component {
   }
 
   _removeAppraisalRegister = async (id, type) => {
-    await this.props.removeAppraisalRegister({id, type})
+    await this.props.removeAppraisalRegister({ id, type })
     // this.props.listAppraisalRegister(type)
   }
 
@@ -167,6 +168,66 @@ class AppraisalRegisters extends Component {
                 lastItem={null}
               />
             </Grid.Column>
+            <Grid.Column>
+              <Header as="h5" attached="top">
+                Risks
+              </Header>
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.risksOptions.array.map(risksOptions => {
+                    return (
+                      <Table.Row active key={risksOptions.id}>
+                        <Table.Cell>{risksOptions.id}</Table.Cell>
+                        <Table.Cell>{risksOptions.label}</Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            onClick={() =>
+                              this._editAppraisal(risksOptions, 'risks')
+                            }
+                          />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() =>
+                              this._toggleModalConfirm(risksOptions.id, 'risks')
+                            }
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) =>
+                  this._handlePaginationChange(e, data, 'financialInfoSource')
+                }
+                defaultActivePage={
+                  this.props.financialInfoSourceOptions.activePage
+                }
+                totalPages={this.props.financialInfoSourceOptions.pages}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Grid.Column>
           </Grid.Row>
         </Grid>
         {/* </Dimmer.Dimmable> */}
@@ -181,12 +242,14 @@ AppraisalRegisters.propTypes = {
   openModal: PropTypes.func,
   listAppraisalRegister: PropTypes.func,
   isLoadingPerceivedPrice: PropTypes.bool,
-  isLoadingFinancialInfoSource: PropTypes.bool
+  isLoadingFinancialInfoSource: PropTypes.bool,
+  risksOptions: PropTypes.object
 }
 
 const mapStateToProps = state => ({
   isLoading: state.business.get.isLoading,
   financialInfoSourceOptions: state.appraisalRegister.get.financialInfoSource,
+  risksOptions: state.appraisalRegister.get.risks,
   createAppraisalRegister: state.appraisalRegister.create.isCreated,
   updateAppraisalRegister: state.appraisalRegister.update.isUpdated,
   deleteAppraisalRegister: state.appraisalRegister.delete.isDeleted,

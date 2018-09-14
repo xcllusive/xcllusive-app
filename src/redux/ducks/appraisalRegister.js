@@ -35,6 +35,13 @@ const initialState = {
       error: null,
       pages: 0,
       activePage: 1
+    },
+    risks: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
     }
   },
   create: {
@@ -156,7 +163,10 @@ export default function reducer (state = initialState, action) {
             ...state.get[action.payload.type],
             isLoading: false,
             error: null,
-            array: _.filter(state.get[action.payload.type].array, obj => obj.id !== action.payload.id).concat(action.payload)
+            array: _.filter(
+              state.get[action.payload.type].array,
+              obj => obj.id !== action.payload.id
+            ).concat(action.payload)
           }
         }
       }
@@ -195,7 +205,10 @@ export default function reducer (state = initialState, action) {
             ...state.get[action.payload.type],
             isLoading: false,
             error: null,
-            array: _.filter(state.get[action.payload.type].array, obj => obj.id !== action.payload.id)
+            array: _.filter(
+              state.get[action.payload.type].array,
+              obj => obj.id !== action.payload.id
+            )
           }
         }
       }
