@@ -15,7 +15,6 @@ import {
 } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
-import { getBusiness } from '../../../../redux/ducks/business'
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 import { TypesModal, openModal } from '../../../../redux/ducks/modal'
 import { BusinessCommencedOptions } from '../../../../constants/BusinessCommencedOptions'
@@ -354,7 +353,6 @@ AboutPage.propTypes = {
   business: PropTypes.object,
   typeOptions: PropTypes.array,
   industryOptions: PropTypes.array,
-  getBusiness: PropTypes.func,
   openModal: PropTypes.func,
   appraisalObject: PropTypes.object,
   updateAppraisal: PropTypes.func
@@ -484,10 +482,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
-    { getBusiness, openModal, updateAppraisal },
-    dispatch
-  )
+  return bindActionCreators({ openModal, updateAppraisal }, dispatch)
 }
 
 export default connect(

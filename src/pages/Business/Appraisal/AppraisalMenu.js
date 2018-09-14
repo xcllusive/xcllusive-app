@@ -20,12 +20,13 @@ import FinancialAnalysis from './FinancialAnalysis/FinancialAnalysis'
 import { getBusiness } from '../../../redux/ducks/business'
 
 import { getAppraisal } from '../../../redux/ducks/appraisal'
+import BusinessAnalysis from './BusinessAnalysis'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Financial Analysis',
+      activeItem: 'Business Analysis',
       percent: 75,
       colorProgress: null
     }
@@ -187,6 +188,11 @@ class AppraisalMenuPage extends Component {
         {this.state.activeItem === 'About' ? (
           <Segment>
             <About business={business} appraisalObject={appraisal} />
+          </Segment>
+        ) : null}
+        {this.state.activeItem === 'Business Analysis' ? (
+          <Segment>
+            <BusinessAnalysis business={business} appraisalObject={appraisal} />
           </Segment>
         ) : null}
         {this.state.activeItem === 'Financial Analysis' ? (
