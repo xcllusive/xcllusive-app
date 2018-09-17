@@ -16,7 +16,8 @@
     "no-underscore-dangle": 0,
     "quotes": ["error", "single"],
     "eqeqeq": ["error"],
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "space-before-function-paren": ["error", "always"]
   },
   "env": {
     "es6": true,

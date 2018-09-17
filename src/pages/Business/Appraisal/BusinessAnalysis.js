@@ -39,8 +39,22 @@ class AboutPage extends Component {
     this.props.setFieldValue(name, value)
   }
 
+  _handleChangeTextArea = e => {
+    if (e.target.type === 'textarea' && e.which === 13 /* Enter */) {
+      e.preventDefault()
+    }
+  }
+
+  _insertOnTextArea = text => {
+    const textToInsert =
+      this.props.values.riskList === ''
+        ? text
+        : `${this.props.values.riskList}\n${text}`
+    this.props.setFieldValue('riskList', textToInsert)
+  }
+
   render () {
-    // const { values, handleChange, handleBlur, errors, touched } = this.props
+    const { values, handleChange } = this.props
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -76,7 +90,13 @@ class AboutPage extends Component {
             <Grid.Column width={9}>
               <Form>
                 <Form.Field>
-                  <Form.TextArea style={{ height: '205px' }} />
+                  <Form.TextArea
+                    name="riskList"
+                    value={values.riskList}
+                    style={{ height: '205px' }}
+                    onChange={handleChange}
+                    onKeyDown={this._handleChangeTextArea}
+                  />
                 </Form.Field>
               </Form>
             </Grid.Column>
@@ -91,7 +111,13 @@ class AboutPage extends Component {
                 <Table.Body>
                   {this.props.risksOptions.array.map(risksOptions => {
                     return (
-                      <Table.Row active key={risksOptions.id}>
+                      <Table.Row
+                        active
+                        onClick={() =>
+                          this._insertOnTextArea(risksOptions.label)
+                        }
+                        key={risksOptions.id}
+                      >
                         <Table.Cell>{risksOptions.id}</Table.Cell>
                         <Table.Cell>{risksOptions.label}</Table.Cell>
                       </Table.Row>
@@ -137,7 +163,8 @@ AboutPage.propTypes = {
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
-  id: props.appraisalObject ? props.appraisalObject.id : ''
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  riskList: ''
 })
 
 const mapStateToProps = state => {
