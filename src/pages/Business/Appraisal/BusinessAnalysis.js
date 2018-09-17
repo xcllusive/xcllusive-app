@@ -77,9 +77,8 @@ class AboutPage extends Component {
     }
   }
 
-  _insertOnTextArea = text => {
-    const textToInsert = this.props.values.riskList === '' ? text : `${this.props.values.riskList}\n${text}`
-    this.props.setFieldValue('riskList', textToInsert)
+  _insertOnTextArea = (name, text) => {
+    this.props.setFieldValue(name, this.props.values[name] === '' ? text : `${this.props.values[name]}\n${text}`)
   }
 
   render () {
@@ -106,7 +105,12 @@ class AboutPage extends Component {
             <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
               <Grid.Column width={9}>
                 <Form.Field>
-                  <Form.TextArea style={{ height: '205px' }} />
+                  <Form.TextArea
+                    name="riskList"
+                    value={values.riskList}
+                    style={{ height: '205px' }}
+                    onChange={handleChange}
+                    onKeyDown={this._handleChangeTextArea} />
                 </Form.Field>
               </Grid.Column>
               <Grid.Column width={7}>
@@ -123,7 +127,7 @@ class AboutPage extends Component {
                         <Table.Row
                           active
                           key={risksOptions.id}
-                          onClick={() => this._insertOnTextArea(risksOptions.label)}
+                          onClick={() => this._insertOnTextArea('riskList', risksOptions.label)}
                         >
                           <Table.Cell>{risksOptions.id}</Table.Cell>
                           <Table.Cell>{risksOptions.label}</Table.Cell>
@@ -148,7 +152,12 @@ class AboutPage extends Component {
             <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
               <Grid.Column width={9}>
                 <Form.Field>
-                  <Form.TextArea style={{ height: '205px' }} />
+                  <Form.TextArea
+                    name="valueDriversList"
+                    value={values.valueDriversList}
+                    style={{ height: '205px' }}
+                    onChange={handleChange}
+                    onKeyDown={this._handleChangeTextArea} />
                 </Form.Field>
               </Grid.Column>
               <Grid.Column width={7}>
@@ -162,7 +171,11 @@ class AboutPage extends Component {
                   <Table.Body>
                     {this.props.valueDriversOptions.array.map(valueDriversOptions => {
                       return (
-                        <Table.Row active key={valueDriversOptions.id}>
+                        <Table.Row
+                          active
+                          key={valueDriversOptions.id}
+                          onClick={() => this._insertOnTextArea('valueDriversList', valueDriversOptions.label)}
+                        >
                           <Table.Cell>{valueDriversOptions.id}</Table.Cell>
                           <Table.Cell>{valueDriversOptions.label}</Table.Cell>
                         </Table.Row>
@@ -187,8 +200,8 @@ class AboutPage extends Component {
               <Grid.Column width={9}>
                 <Form.Field>
                   <Form.TextArea
-                    name="riskList"
-                    value={values.riskList}
+                    name="criticalIssuesList"
+                    value={values.criticalIssuesListcriticalIssuesList}
                     style={{ height: '205px' }}
                     onChange={handleChange}
                     onKeyDown={this._handleChangeTextArea}
@@ -206,7 +219,11 @@ class AboutPage extends Component {
                   <Table.Body>
                     {this.props.criticalIssuesOptions.array.map(criticalIssuesOptions => {
                       return (
-                        <Table.Row active key={criticalIssuesOptions.id}>
+                        <Table.Row
+                          active
+                          key={criticalIssuesOptions.id}
+                          onClick={() => this._insertOnTextArea('criticalIssuesList', criticalIssuesOptions.label)}
+                        >
                           <Table.Cell>{criticalIssuesOptions.id}</Table.Cell>
                           <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
                         </Table.Row>
@@ -275,7 +292,9 @@ AboutPage.propTypes = {
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  riskList: ''
+  riskList: '',
+  criticalIssuesList: '',
+  valueDriversList: ''
 })
 
 const mapStateToProps = state => {
