@@ -218,7 +218,7 @@ class AppraisalRegisters extends Component {
               <Pagination
                 size="mini"
                 onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'financialInfoSource')
+                  this._handlePaginationChange(e, data, 'risks')
                 }
                 defaultActivePage={
                   this.props.financialInfoSourceOptions.activePage
