@@ -27,6 +27,16 @@ class ModalNewAppraisalRegister extends Component {
           key: 2,
           text: 'Risks',
           value: 'risks'
+        },
+        {
+          key: 3,
+          text: 'Value Drivers',
+          value: 'valueDrivers'
+        },
+        {
+          key: 4,
+          text: 'Critical Issues',
+          value: 'criticalIssues'
         }
       ]
     }
@@ -156,21 +166,14 @@ const validationSchema = Yup.object().shape({
     .max(200, 'Label require max 200 characters.')
     .test('field-match', 'Label require max 50 characters.', function (value) {
       const { type } = this.parent
-      return type === 'risks' && value.length <= 50
+      return (
+        (type === 'risks' ||
+          type === 'valueDrivers' ||
+          type === 'criticalIssues') &&
+        value.length <= 50
+      )
     }),
   type: Yup.string().required('Appraisal Register is required.')
-
-  // label:
-  //   this.values.type ?  === 'risks'
-  //     ? Yup.string()
-  //       .required('Label is required.')
-  //       .min(1, 'Label require minimum 1 characters.')
-  //       .max(50, 'Label require max 50 characters.')
-  //     : Yup.string()
-  //       .required('Label is required.')
-  //       .min(1, 'Label require minimum 1 characters.')
-  //       .max(200, 'Label require max 200 characters.'),
-  // type: Yup.string().required('Appraisal Register is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

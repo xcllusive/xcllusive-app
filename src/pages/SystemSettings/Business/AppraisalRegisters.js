@@ -26,6 +26,8 @@ class AppraisalRegisters extends Component {
   componentDidMount () {
     this.props.listAppraisalRegister('financialInfoSource', 5)
     this.props.listAppraisalRegister('risks', 5)
+    this.props.listAppraisalRegister('valueDrivers', 5)
+    this.props.listAppraisalRegister('criticalIssues', 5)
   }
 
   _toggleModalConfirm = (id, registerType) => {
@@ -229,6 +231,140 @@ class AppraisalRegisters extends Component {
               />
             </Grid.Column>
           </Grid.Row>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Header as="h5" attached="top">
+                Value Drivers
+              </Header>
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.valueDriversOptions.array.map(
+                    valueDriversOptions => {
+                      return (
+                        <Table.Row active key={valueDriversOptions.id}>
+                          <Table.Cell>{valueDriversOptions.id}</Table.Cell>
+                          <Table.Cell>{valueDriversOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            <Icon
+                              link
+                              name="edit"
+                              onClick={() =>
+                                this._editAppraisal(
+                                  valueDriversOptions,
+                                  'valueDrivers'
+                                )
+                              }
+                            />
+                            <Icon
+                              link
+                              name="trash"
+                              color="red"
+                              onClick={() =>
+                                this._toggleModalConfirm(
+                                  valueDriversOptions.id,
+                                  'valueDrivers'
+                                )
+                              }
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      )
+                    }
+                  )}
+                </Table.Body>
+              </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) =>
+                  this._handlePaginationChange(e, data, 'valueDrivers')
+                }
+                defaultActivePage={this.props.valueDriversOptions.activePage}
+                totalPages={this.props.valueDriversOptions.pages}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Header as="h5" attached="top">
+                Critical Issues
+              </Header>
+              <Table
+                compact
+                celled
+                inverted
+                selectable
+                color="blue"
+                size="small"
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.criticalIssuesOptions.array.map(
+                    criticalIssuesOptions => {
+                      return (
+                        <Table.Row active key={criticalIssuesOptions.id}>
+                          <Table.Cell>{criticalIssuesOptions.id}</Table.Cell>
+                          <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            <Icon
+                              link
+                              name="edit"
+                              onClick={() =>
+                                this._editAppraisal(
+                                  criticalIssuesOptions,
+                                  'criticalIssues'
+                                )
+                              }
+                            />
+                            <Icon
+                              link
+                              name="trash"
+                              color="red"
+                              onClick={() =>
+                                this._toggleModalConfirm(
+                                  criticalIssuesOptions.id,
+                                  'criticalIssues'
+                                )
+                              }
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      )
+                    }
+                  )}
+                </Table.Body>
+              </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) =>
+                  this._handlePaginationChange(e, data, 'valueDrivers')
+                }
+                defaultActivePage={this.props.criticalIssuesOptions.activePage}
+                totalPages={this.props.criticalIssuesOptions.pages}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
         {/* </Dimmer.Dimmable> */}
       </Wrapper>
@@ -243,13 +379,17 @@ AppraisalRegisters.propTypes = {
   listAppraisalRegister: PropTypes.func,
   isLoadingPerceivedPrice: PropTypes.bool,
   isLoadingFinancialInfoSource: PropTypes.bool,
-  risksOptions: PropTypes.object
+  risksOptions: PropTypes.object,
+  valueDriversOptions: PropTypes.object,
+  criticalIssuesOptions: PropTypes.object
 }
 
 const mapStateToProps = state => ({
   isLoading: state.business.get.isLoading,
   financialInfoSourceOptions: state.appraisalRegister.get.financialInfoSource,
   risksOptions: state.appraisalRegister.get.risks,
+  valueDriversOptions: state.appraisalRegister.get.valueDrivers,
+  criticalIssuesOptions: state.appraisalRegister.get.criticalIssues,
   createAppraisalRegister: state.appraisalRegister.create.isCreated,
   updateAppraisalRegister: state.appraisalRegister.update.isUpdated,
   deleteAppraisalRegister: state.appraisalRegister.delete.isDeleted,

@@ -42,6 +42,20 @@ const initialState = {
       error: null,
       pages: 0,
       activePage: 1
+    },
+    valueDrivers: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
+    criticalIssues: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
     }
   },
   create: {
