@@ -14,9 +14,12 @@ class AboutPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      sliderValue: 50,
-      colorSlider: 'yellow',
-      descriptionSlider: 'Acceptable Risk'
+      sliderValueBR: 50,
+      colorSliderBR: 'yellow',
+      descriptionSliderBR: 'Acceptable Risk',
+      sliderValueM: 50,
+      colorSliderM: 'yellow',
+      descriptionSliderM: 'Risk 3'
     }
   }
 
@@ -38,35 +41,68 @@ class AboutPage extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  _labelSlider = value => {
+  _labelSliderBusinessRisk = value => {
     this.setState({
-      sliderValue: value
+      sliderValueBR: value
     })
     if (value >= 0 && value <= 20) {
       this.setState({
-        descriptionSlider: 'Unsustainable Risk',
-        colorSlider: 'red'
+        descriptionSliderBR: 'Unsustainable Risk',
+        colorSliderBR: 'red'
       })
     }
     if (value >= 21 && value <= 40) {
       this.setState({
-        descriptionSlider: 'Challenge Risk',
-        colorSlider: 'orange'
+        descriptionSliderBR: 'Challenge Risk',
+        colorSliderBR: 'orange'
       })
     }
     if (value >= 41 && value <= 60) {
       this.setState({
-        descriptionSlider: 'Acceptable Risk',
-        colorSlider: 'yellow'
+        descriptionSliderBR: 'Acceptable Risk',
+        colorSliderBR: 'yellow'
       })
     }
     if (value >= 61 && value <= 80) {
-      this.setState({ descriptionSlider: 'Attractive', colorSlider: 'teal' })
+      this.setState({ descriptionSliderBR: 'Attractive', colorSliderBR: 'teal' })
     }
     if (value >= 81 && value <= 100) {
       this.setState({
-        descriptionSlider: 'Highly Attractive',
-        colorSlider: 'green'
+        descriptionSliderBR: 'Highly Attractive',
+        colorSliderBR: 'green'
+      })
+    }
+  }
+
+  _labelSliderMarket = value => {
+    this.setState({
+      sliderValueM: value
+    })
+    if (value >= 0 && value <= 20) {
+      this.setState({
+        descriptionSliderM: 'Risk 1',
+        colorSliderM: 'red'
+      })
+    }
+    if (value >= 21 && value <= 40) {
+      this.setState({
+        descriptionSliderM: 'Risk 2',
+        colorSliderM: 'orange'
+      })
+    }
+    if (value >= 41 && value <= 60) {
+      this.setState({
+        descriptionSliderM: 'Risk 3',
+        colorSliderM: 'yellow'
+      })
+    }
+    if (value >= 61 && value <= 80) {
+      this.setState({ descriptionSliderM: 'Risk 4', colorSliderM: 'teal' })
+    }
+    if (value >= 81 && value <= 100) {
+      this.setState({
+        descriptionSliderM: 'Risk 5',
+        colorSliderM: 'green'
       })
     }
   }
@@ -110,7 +146,8 @@ class AboutPage extends Component {
                     value={values.riskList}
                     style={{ height: '205px' }}
                     onChange={handleChange}
-                    onKeyDown={this._handleChangeTextArea} />
+                    onKeyDown={this._handleChangeTextArea}
+                  />
                 </Form.Field>
               </Grid.Column>
               <Grid.Column width={7}>
@@ -157,7 +194,8 @@ class AboutPage extends Component {
                     value={values.valueDriversList}
                     style={{ height: '205px' }}
                     onChange={handleChange}
-                    onKeyDown={this._handleChangeTextArea} />
+                    onKeyDown={this._handleChangeTextArea}
+                  />
                 </Form.Field>
               </Grid.Column>
               <Grid.Column width={7}>
@@ -201,7 +239,7 @@ class AboutPage extends Component {
                 <Form.Field>
                   <Form.TextArea
                     name="criticalIssuesList"
-                    value={values.criticalIssuesListcriticalIssuesList}
+                    value={values.criticalIssuesList}
                     style={{ height: '205px' }}
                     onChange={handleChange}
                     onKeyDown={this._handleChangeTextArea}
@@ -243,22 +281,49 @@ class AboutPage extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+                <Header as="h3" textAlign="center" color="blue">
+                  Business Risk
+                </Header>
                 <Segment>
-                  <h1>{this.state.descriptionSlider}</h1>
+                  <h3>{this.state.descriptionSliderBR}</h3>
                   <Slider
-                    color={this.state.colorSlider}
+                    color={this.state.colorSliderBR}
                     inverted={false}
                     settings={{
-                      start: this.state.sliderValue,
+                      start: this.state.sliderValueBR,
                       min: 0,
                       max: 100,
-                      step: 5,
+                      step: 10,
                       onChange: value => {
-                        this._labelSlider(value)
+                        this._labelSliderBusinessRisk(value)
                       }
                     }}
                   />
-                  <Label color={this.state.colorSlider}>{this.state.sliderValue}</Label>
+                  <Label color={this.state.colorSliderBR}>{this.state.sliderValueBR}</Label>
+                </Segment>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+                <Header as="h3" textAlign="center" color="blue">
+                  Market
+                </Header>
+                <Segment>
+                  <h3>{this.state.descriptionSliderM}</h3>
+                  <Slider
+                    color={this.state.colorSliderM}
+                    inverted={false}
+                    settings={{
+                      start: this.state.sliderValueM,
+                      min: 0,
+                      max: 100,
+                      step: 10,
+                      onChange: value => {
+                        this._labelSliderMarket(value)
+                      }
+                    }}
+                  />
+                  <Label color={this.state.colorSliderM}>{this.state.sliderValueM}</Label>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
