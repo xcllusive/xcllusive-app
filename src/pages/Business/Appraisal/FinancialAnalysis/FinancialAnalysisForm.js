@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Grid, Button, Icon } from 'semantic-ui-react'
+import { Form, Label, Grid, Button, Icon, Input } from 'semantic-ui-react'
 import * as Yup from 'yup'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
@@ -17,14 +17,6 @@ class AddbacksAndAdjustmentsForm extends Component {
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
-  }
-
-  handleRef = (c) => {
-    this.inputRef = c
-  }
-
-  focus = () => {
-    this.inputRef.focus()
   }
 
   render () {
@@ -51,6 +43,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     value={values.monthsCovered}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    tabIndex={-1}
                   />
                   {errors.monthsCovered &&
                     touched.monthsCovered && (
@@ -71,6 +64,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     value={values.seasonalAdjusment}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    tabIndex={-1}
                   />
                   {errors.seasonalAdjusment &&
                     touched.seasonalAdjusment && (
@@ -126,126 +120,109 @@ class AddbacksAndAdjustmentsForm extends Component {
             <b>Sales</b>
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="sales1"
-                  autoComplete="sales1"
-                  value={values.sales1}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  tabIndex={0}
-                  focus
-                  ref={this.handleRef}
-                />
-                {errors.sales1 &&
+            <Input
+              fluid
+              tabIndex={10}
+              name="sales1"
+              autoComplete="sales1"
+              value={values.sales1}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.sales1 &&
                   touched.sales1 && (
-                  <Label basic color="red" pointing content={errors.sales1} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.sales1} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="sales2"
-                  autoComplete="sales2"
-                  value={values.sales2}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.sales2 &&
+            <Input
+              fluid
+              tabIndex={20}
+              name="sales2"
+              autoComplete="sales2"
+              value={values.sales2}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.sales2 &&
                   touched.sales2 && (
-                  <Label basic color="red" pointing content={errors.sales2} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.sales2} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="sales3"
-                  autoComplete="sales3"
-                  value={values.sales3}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.sales3 &&
+            <Input
+              fluid
+              tabIndex={30}
+              name="sales3"
+              autoComplete="sales3"
+              value={values.sales3}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.sales3 &&
                   touched.sales3 && (
-                  <Label basic color="red" pointing content={errors.sales3} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.sales3} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="sales4"
-                  autoComplete="sales4"
-                  value={values.sales4}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.sales4 &&
+            <Input
+              fluid
+              tabIndex={40}
+              name="sales4"
+              autoComplete="sales4"
+              value={values.sales4}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.sales4 &&
                   touched.sales4 && (
-                  <Label basic color="red" pointing content={errors.sales4} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.sales4} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="sales5"
-                  autoComplete="sales5"
-                  value={values.sales5}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.sales5 &&
+            <Input
+              fluid
+              tabIndex={50}
+              name="sales5"
+              autoComplete="sales5"
+              value={values.sales5}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.sales5 &&
                   touched.sales5 && (
-                  <Label basic color="red" pointing content={errors.sales5} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.sales5} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="sales6"
-                  autoComplete="sales6"
-                  value={values.sales6}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.sales6 &&
+            <Input
+              fluid
+              tabIndex={60}
+              name="sales6"
+              autoComplete="sales6"
+              value={values.sales6}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.sales6 &&
                   touched.sales6 && (
-                  <Label basic color="red" pointing content={errors.sales6} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.sales6} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="sales7"
-                  autoComplete="sales7"
-                  value={values.sales7}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.sales7 &&
+            <Input
+              fluid
+              tabIndex={70}
+              name="sales7"
+              autoComplete="sales7"
+              value={values.sales7}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.sales7 &&
                   touched.sales7 && (
-                  <Label basic color="red" pointing content={errors.sales7} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.sales7} />
+            )}
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
@@ -264,124 +241,110 @@ class AddbacksAndAdjustmentsForm extends Component {
             <b>COGS</b>
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="cogs1"
-                  autoComplete="cogs1"
-                  value={values.cogs1}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  tabIndex={1}
-                />
-                {errors.cogs1 &&
+            <Input
+              fluid
+              tabIndex={11}
+              name="cogs1"
+              autoComplete="cogs1"
+              value={values.cogs1}
+              onChange={handleChange}
+              onBlur={handleBlur}
+
+            />
+            {errors.cogs1 &&
                   touched.cogs1 && (
-                  <Label basic color="red" pointing content={errors.cogs1} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.cogs1} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="cogs2"
-                  autoComplete="cogs2"
-                  value={values.cogs2}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.cogs2 &&
+            <Input
+              fluid
+              tabIndex={21}
+              name="cogs2"
+              autoComplete="cogs2"
+              value={values.cogs2}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.cogs2 &&
                   touched.cogs2 && (
-                  <Label basic color="red" pointing content={errors.cogs2} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.cogs2} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="cogs3"
-                  autoComplete="cogs3"
-                  value={values.cogs3}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.cogs3 &&
+            <Input
+              fluid
+              tabIndex={31}
+              name="cogs3"
+              autoComplete="cogs3"
+              value={values.cogs3}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.cogs3 &&
                   touched.cogs3 && (
-                  <Label basic color="red" pointing content={errors.cogs3} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.cogs3} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="cogs4"
-                  autoComplete="cogs4"
-                  value={values.cogs4}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.cogs4 &&
+            <Input
+              fluid
+              tabIndex={41}
+              name="cogs4"
+              autoComplete="cogs4"
+              value={values.cogs4}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.cogs4 &&
                   touched.cogs4 && (
-                  <Label basic color="red" pointing content={errors.cogs4} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.cogs4} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="cogs5"
-                  autoComplete="cogs5"
-                  value={values.cogs5}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.cogs5 &&
+            <Input
+              fluid
+              tabIndex={51}
+              name="cogs5"
+              autoComplete="cogs5"
+              value={values.cogs5}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.cogs5 &&
                   touched.cogs5 && (
-                  <Label basic color="red" pointing content={errors.cogs5} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.cogs5} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="cogs6"
-                  autoComplete="cogs6"
-                  value={values.cogs6}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.cogs6 &&
+            <Input
+              fluid
+              tabIndex={61}
+              name="cogs6"
+              autoComplete="cogs6"
+              value={values.cogs6}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.cogs6 &&
                   touched.cogs6 && (
-                  <Label basic color="red" pointing content={errors.cogs6} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.cogs6} />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="cogs7"
-                  autoComplete="cogs7"
-                  value={values.cogs7}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.cogs7 &&
+            <Input
+              fluid
+              tabIndex={71}
+              name="cogs7"
+              autoComplete="cogs7"
+              value={values.cogs7}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.cogs7 &&
                   touched.cogs7 && (
-                  <Label basic color="red" pointing content={errors.cogs7} />
-                )}
-              </Form.Field>
-            </Form>
+              <Label basic color="red" pointing content={errors.cogs7} />
+            )}
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
@@ -426,158 +389,144 @@ class AddbacksAndAdjustmentsForm extends Component {
             <b>Other Income</b>
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="otherIncome1"
-                  autoComplete="otherIncome1"
-                  value={values.otherIncome1}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.otherIncome1 &&
+            <Input
+              fluid
+              tabIndex={12}
+              name="otherIncome1"
+              autoComplete="otherIncome1"
+              value={values.otherIncome1}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.otherIncome1 &&
                   touched.otherIncome1 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.otherIncome1}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.otherIncome1}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="otherIncome2"
-                  autoComplete="otherIncome2"
-                  value={values.otherIncome2}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.otherIncome2 &&
+            <Input
+              fluid
+              tabIndex={22}
+              name="otherIncome2"
+              autoComplete="otherIncome2"
+              value={values.otherIncome2}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.otherIncome2 &&
                   touched.otherIncome2 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.otherIncome2}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.otherIncome2}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="otherIncome3"
-                  autoComplete="otherIncome3"
-                  value={values.otherIncome3}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.otherIncome3 &&
+            <Input
+              fluid
+              tabIndex={32}
+              name="otherIncome3"
+              autoComplete="otherIncome3"
+              value={values.otherIncome3}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.otherIncome3 &&
                   touched.otherIncome3 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.otherIncome3}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.otherIncome3}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="otherIncome4"
-                  autoComplete="otherIncome4"
-                  value={values.otherIncome4}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.otherIncome4 &&
-                  touched.otherIncome4 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.otherIncome4}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={42}
+              name="otherIncome4"
+              autoComplete="otherIncome4"
+              value={values.otherIncome4}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.otherIncome4 &&
+              touched.otherIncome4 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.otherIncome4}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="otherIncome5"
-                  autoComplete="otherIncome5"
-                  value={values.otherIncome5}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.otherIncome5 &&
-                  touched.otherIncome5 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.otherIncome5}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={52}
+              name="otherIncome5"
+              autoComplete="otherIncome5"
+              value={values.otherIncome5}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.otherIncome5 &&
+              touched.otherIncome5 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.otherIncome5}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="otherIncome6"
-                  autoComplete="otherIncome6"
-                  value={values.otherIncome6}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.otherIncome6 &&
-                  touched.otherIncome6 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.otherIncome6}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={62}
+              name="otherIncome6"
+              autoComplete="otherIncome6"
+              value={values.otherIncome6}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.otherIncome6 &&
+              touched.otherIncome6 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.otherIncome6}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="otherIncome7"
-                  autoComplete="otherIncome7"
-                  value={values.otherIncome7}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.otherIncome7 &&
-                  touched.otherIncome7 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.otherIncome7}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={72}
+              name="otherIncome7"
+              autoComplete="otherIncome7"
+              value={values.otherIncome7}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.otherIncome7 &&
+              touched.otherIncome7 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.otherIncome7}
+              />
+            )}
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
@@ -609,158 +558,144 @@ class AddbacksAndAdjustmentsForm extends Component {
             <b>Expenses</b>
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="expenses1"
-                  autoComplete="expenses1"
-                  value={values.expenses1}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.expenses1 &&
-                  touched.expenses1 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.expenses1}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={13}
+              name="expenses1"
+              autoComplete="expenses1"
+              value={values.expenses1}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.expenses1 &&
+              touched.expenses1 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.expenses1}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="expenses2"
-                  autoComplete="expenses2"
-                  value={values.expenses2}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.expenses2 &&
-                  touched.expenses2 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.expenses2}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={23}
+              name="expenses2"
+              autoComplete="expenses2"
+              value={values.expenses2}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.expenses2 &&
+              touched.expenses2 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.expenses2}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="expenses3"
-                  autoComplete="expenses3"
-                  value={values.expenses3}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.expenses3 &&
-                  touched.expenses3 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.expenses3}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={33}
+              name="expenses3"
+              autoComplete="expenses3"
+              value={values.expenses3}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.expenses3 &&
+              touched.expenses3 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.expenses3}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="expenses4"
-                  autoComplete="expenses4"
-                  value={values.expenses4}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.expenses4 &&
-                  touched.expenses4 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.expenses4}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={43}
+              name="expenses4"
+              autoComplete="expenses4"
+              value={values.expenses4}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.expenses4 &&
+              touched.expenses4 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.expenses4}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="expenses5"
-                  autoComplete="expenses5"
-                  value={values.expenses5}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.expenses5 &&
-                  touched.expenses5 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.expenses5}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={53}
+              name="expenses5"
+              autoComplete="expenses5"
+              value={values.expenses5}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.expenses5 &&
+              touched.expenses5 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.expenses5}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="expenses6"
-                  autoComplete="expenses6"
-                  value={values.expenses6}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.expenses6 &&
-                  touched.expenses6 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.expenses6}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={63}
+              name="expenses6"
+              autoComplete="expenses6"
+              value={values.expenses6}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.expenses6 &&
+              touched.expenses6 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.expenses6}
+              />
+            )}
           </CustomColumn>
           <CustomColumn>
-            <Form size="tiny">
-              <Form.Field>
-                <Form.Input
-                  name="expenses7"
-                  autoComplete="expenses7"
-                  value={values.expenses7}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.expenses7 &&
-                  touched.expenses7 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.expenses7}
-                  />
-                )}
-              </Form.Field>
-            </Form>
+            <Input
+              fluid
+              tabIndex={73}
+              name="expenses7"
+              autoComplete="expenses7"
+              value={values.expenses7}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.expenses7 &&
+              touched.expenses7 && (
+              <Label
+                basic
+                color="red"
+                pointing
+                content={errors.expenses7}
+              />
+            )}
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
