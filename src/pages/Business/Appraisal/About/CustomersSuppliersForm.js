@@ -4,11 +4,15 @@ import { Form, Label, Radio } from 'semantic-ui-react'
 
 import { OptionsLargestClient5TO } from '../../../../constants/OptionsLargestClient5TO'
 
-const CustomersSuppliersForm = ({ values,
+const CustomersSuppliersForm = ({
+  values,
   handleChange,
   handleBlur,
   errors,
-  touched, isValid }) => {
+  touched,
+  isValid,
+  setFieldValue
+}) => {
   const state = {
     largestClient5TOOptions: OptionsLargestClient5TO,
     owners1sHoursOptions: [
@@ -20,11 +24,11 @@ const CustomersSuppliersForm = ({ values,
     ]
   }
   const _handleChangeCheckBox = (e, { name }) => {
-    this.props.setFieldValue(name, !this.props.values[name])
+    setFieldValue(name, !values[name])
   }
 
   const _handleSelectChange = (e, { name, value }) => {
-    this.props.setFieldValue(name, value)
+    setFieldValue(name, value)
   }
 
   return (
@@ -40,7 +44,7 @@ const CustomersSuppliersForm = ({ values,
             onBlur={handleBlur}
           />
           {errors.descriptionCustomers &&
-              touched.descriptionCustomers && (
+            touched.descriptionCustomers && (
             <Label
               basic
               color="red"
@@ -69,7 +73,7 @@ const CustomersSuppliersForm = ({ values,
           checked={!values.clientDatabaseAvailable}
         />
         <label>
-            Are there any clients taking up greater than 10% of the T/O?
+          Are there any clients taking up greater than 10% of the T/O?
         </label>
         <Form.Field
           width={2}
@@ -100,7 +104,7 @@ const CustomersSuppliersForm = ({ values,
               onBlur={handleBlur}
             />
             {errors.descriptionClient10TO &&
-                touched.descriptionClient10TO && (
+              touched.descriptionClient10TO && (
               <Label
                 basic
                 color="red"
@@ -122,7 +126,7 @@ const CustomersSuppliersForm = ({ values,
             onChange={_handleSelectChange}
           />
           {errors.client5TO &&
-              touched.client5TO && (
+            touched.client5TO && (
             <Label basic color="red" pointing content={errors.client5TO} />
           )}
         </Form.Field>
@@ -136,7 +140,7 @@ const CustomersSuppliersForm = ({ values,
             onBlur={handleBlur}
           />
           {errors.descriptionSuppliers &&
-              touched.descriptionSuppliers && (
+            touched.descriptionSuppliers && (
             <Label
               basic
               color="red"
@@ -151,9 +155,13 @@ const CustomersSuppliersForm = ({ values,
           <Form.Checkbox
             label="Please confirm that you have completed the above information"
             name="confirmCustomersSuppliers"
-            onChange={this._handleChangeCheckBox}
+            onChange={_handleChangeCheckBox}
             checked={values.confirmCustomersSuppliers}
-            disabled={!isValid}
+            disabled={
+              values.descriptionCustomers === '' ||
+              values.client5TO === '' ||
+              values.descriptionSuppliers === ''
+            }
           />
         </Form.Field>
       </Form.Group>

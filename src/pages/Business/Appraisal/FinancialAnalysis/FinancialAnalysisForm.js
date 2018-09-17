@@ -11,8 +11,7 @@ import CustomColumn from '../../../../components/content/CustomGridColumn'
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-    }
+    this.state = {}
   }
 
   _handleChangeCheckBox = (e, { name }) => {
