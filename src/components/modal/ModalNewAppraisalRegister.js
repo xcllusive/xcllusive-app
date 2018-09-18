@@ -37,6 +37,16 @@ class ModalNewAppraisalRegister extends Component {
           key: 4,
           text: 'Critical Issues',
           value: 'criticalIssues'
+        },
+        {
+          key: 5,
+          text: 'Description Business Risk',
+          value: 'descriptionBusinessRisk'
+        },
+        {
+          key: 6,
+          text: 'Description Market',
+          value: 'descriptionMarket'
         }
       ]
     }
@@ -62,9 +72,7 @@ class ModalNewAppraisalRegister extends Component {
     const { typesAppraisalRegisters } = this.state
     return (
       <Modal open dimmer="blurring">
-        <Modal.Header align="center">
-          {this.props.title ? this.props.title : ''}
-        </Modal.Header>
+        <Modal.Header align="center">{this.props.title ? this.props.title : ''}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group>
@@ -77,15 +85,9 @@ class ModalNewAppraisalRegister extends Component {
                   autoComplete="type"
                   value={values.type}
                   onChange={this._handleSelectChange}
-                  disabled={
-                    this.props.appraisalRegister !== undefined ||
-                    this.props.typeAdd !== undefined
-                  }
+                  disabled={this.props.appraisalRegister !== undefined || this.props.typeAdd !== undefined}
                 />
-                {errors.type &&
-                  touched.type && (
-                  <Label basic pointing color="red" content={errors.type} />
-                )}
+                {errors.type && touched.type && <Label basic pointing color="red" content={errors.type} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -99,12 +101,24 @@ class ModalNewAppraisalRegister extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.label &&
-                  touched.label && (
-                  <Label basic color="red" pointing content={errors.label} />
-                )}
+                {errors.label && touched.label && <Label basic color="red" pointing content={errors.label} />}
               </Form.Field>
             </Form.Group>
+            {values.type === 'descriptionBusinessRisk' || values.type === 'descriptionMarket' ? (
+              <Form.Group>
+                <Form.Field width={2}>
+                  <Form.Input
+                    label="Points"
+                    name="points"
+                    autoComplete="points"
+                    value={values.points}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.points && touched.points && <Label basic color="red" pointing content={errors.points} />}
+                </Form.Field>
+              </Form.Group>
+            ) : null}
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -150,30 +164,33 @@ ModalNewAppraisalRegister.propTypes = {
 }
 
 const mapPropsToValues = props => ({
-  type: props.appraisalRegister
-    ? props.appraisalRegister.type
-    : props.typeAdd
-      ? props.typeAdd
-      : '',
+  type: props.appraisalRegister ? props.appraisalRegister.type : props.typeAdd ? props.typeAdd : '',
   label: props.appraisalRegister ? props.appraisalRegister.label : '',
-  id: props.appraisalRegister ? props.appraisalRegister.id : ''
+  id: props.appraisalRegister ? props.appraisalRegister.id : '',
+  points: props.appraisalRegister ? props.appraisalRegister.points : ''
 })
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
     .min(1, 'Label require minimum 1 characters.')
-    .max(200, 'Label require max 200 characters.')
-    .test('field-match', 'Label require max 50 characters.', function (value) {
-      const { type } = this.parent
-      return (
-        (type === 'risks' ||
-          type === 'valueDrivers' ||
-          type === 'criticalIssues') &&
-        value.length <= 50
-      )
-    }),
+    .max(200, 'Label require max 200 characters.'),
+  // .test('field-match', 'Label require max 50 characters.', function (value) {
+  //   const { type } = this.parent
+  //   console.log(type)
+  //   return (
+  //     (type === 'risks' || type === 'valueDrivers' || type === 'criticalIssues') &&
+  //     value.length <= 50
+  //   )
+  // }),
   type: Yup.string().required('Appraisal Register is required.')
+  // points: Yup.number()
+  //   .typeError('You must type only numbers.')
+  //   .test('field-match', 'Points is required.', function (value) {
+  //     const { type } = this.parent
+  //     console.log(type, value)
+  //     return type === 'descriptionBusinessRisk' && value !== undefined
+  //   })
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

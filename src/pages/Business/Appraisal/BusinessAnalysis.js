@@ -5,21 +5,23 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Message, Step, Grid, Table, Header, Form, Pagination, Segment, Label } from 'semantic-ui-react'
 import { Slider } from 'react-semantic-ui-range'
+import _ from 'lodash'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
 import { listAppraisalRegister } from '../../../redux/ducks/appraisalRegister'
 
-class AboutPage extends Component {
+class BusinessAnalysisPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      sliderValueBR: 50,
+      valueSliderBR: 50,
       colorSliderBR: 'yellow',
-      descriptionSliderBR: 'Acceptable Risk',
-      sliderValueM: 50,
-      colorSliderM: 'yellow',
-      descriptionSliderM: 'Risk 3'
+      labelSliderBR: 'Acceptable Risk',
+      valueSliderMarket: 50,
+      colorSliderMarket: 'yellow',
+      labelSliderMarket: 'Fair',
+      objectDescriptionBR: {}
     }
   }
 
@@ -31,6 +33,8 @@ class AboutPage extends Component {
     this.props.listAppraisalRegister('risks', 10)
     this.props.listAppraisalRegister('valueDrivers', 10)
     this.props.listAppraisalRegister('criticalIssues', 10)
+    this.props.listAppraisalRegister('descriptionBusinessRisk')
+    this.props.listAppraisalRegister('descriptionMarket')
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -43,32 +47,34 @@ class AboutPage extends Component {
 
   _labelSliderBusinessRisk = value => {
     this.setState({
-      sliderValueBR: value
+      valueSliderBR: value
     })
+    this.setState({ objectDescriptionBR: _.find(this.props.descriptionBusinessRiskArray, o => o.points === value) })
+
     if (value >= 0 && value <= 20) {
       this.setState({
-        descriptionSliderBR: 'Unsustainable Risk',
+        labelSliderBR: 'Unsustainable Risk',
         colorSliderBR: 'red'
       })
     }
     if (value >= 21 && value <= 40) {
       this.setState({
-        descriptionSliderBR: 'Challenge Risk',
+        labelSliderBR: 'Challenge Risk',
         colorSliderBR: 'orange'
       })
     }
     if (value >= 41 && value <= 60) {
       this.setState({
-        descriptionSliderBR: 'Acceptable Risk',
+        labelSliderBR: 'Acceptable Risk',
         colorSliderBR: 'yellow'
       })
     }
     if (value >= 61 && value <= 80) {
-      this.setState({ descriptionSliderBR: 'Attractive', colorSliderBR: 'teal' })
+      this.setState({ labelSliderBR: 'Attractive', colorSliderBR: 'teal' })
     }
     if (value >= 81 && value <= 100) {
       this.setState({
-        descriptionSliderBR: 'Highly Attractive',
+        labelSliderBR: 'Highly Attractive',
         colorSliderBR: 'green'
       })
     }
@@ -76,33 +82,34 @@ class AboutPage extends Component {
 
   _labelSliderMarket = value => {
     this.setState({
-      sliderValueM: value
+      valueSliderMarket: value
     })
+    this.setState({ objectDescriptionMarket: _.find(this.props.descriptionMarketArray, o => o.points === value) })
     if (value >= 0 && value <= 20) {
       this.setState({
-        descriptionSliderM: 'Risk 1',
-        colorSliderM: 'red'
+        labelSliderMarket: 'Poor',
+        colorSliderMarket: 'red'
       })
     }
     if (value >= 21 && value <= 40) {
       this.setState({
-        descriptionSliderM: 'Risk 2',
-        colorSliderM: 'orange'
+        labelSliderMarket: 'Weak',
+        colorSliderMarket: 'orange'
       })
     }
     if (value >= 41 && value <= 60) {
       this.setState({
-        descriptionSliderM: 'Risk 3',
-        colorSliderM: 'yellow'
+        labelSliderMarket: 'Fair',
+        colorSliderMarket: 'yellow'
       })
     }
     if (value >= 61 && value <= 80) {
-      this.setState({ descriptionSliderM: 'Risk 4', colorSliderM: 'teal' })
+      this.setState({ labelSliderMarket: 'Good', colorSliderMarket: 'teal' })
     }
     if (value >= 81 && value <= 100) {
       this.setState({
-        descriptionSliderM: 'Risk 5',
-        colorSliderM: 'green'
+        labelSliderMarket: 'Bullish',
+        colorSliderMarket: 'green'
       })
     }
   }
@@ -285,12 +292,13 @@ class AboutPage extends Component {
                   Business Risk
                 </Header>
                 <Segment>
-                  <h3>{this.state.descriptionSliderBR}</h3>
+                  <h3>{this.state.labelSliderBR}</h3>
+                  <label>{this.state.objectDescriptionBR ? this.state.objectDescriptionBR.label : null}</label>
                   <Slider
                     color={this.state.colorSliderBR}
                     inverted={false}
                     settings={{
-                      start: this.state.sliderValueBR,
+                      start: this.state.valueSliderBR,
                       min: 0,
                       max: 100,
                       step: 10,
@@ -299,7 +307,7 @@ class AboutPage extends Component {
                       }
                     }}
                   />
-                  <Label color={this.state.colorSliderBR}>{this.state.sliderValueBR}</Label>
+                  <Label color={this.state.colorSliderBR}>{this.state.valueSliderBR}</Label>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -309,12 +317,13 @@ class AboutPage extends Component {
                   Market
                 </Header>
                 <Segment>
-                  <h3>{this.state.descriptionSliderM}</h3>
+                  <h3>{this.state.labelSliderMarket}</h3>
+                  <label>{this.state.objectDescriptionMarket ? this.state.objectDescriptionMarket.label : null}</label>
                   <Slider
-                    color={this.state.colorSliderM}
+                    color={this.state.colorSliderMarket}
                     inverted={false}
                     settings={{
-                      start: this.state.sliderValueM,
+                      start: this.state.valueSliderMarket,
                       min: 0,
                       max: 100,
                       step: 10,
@@ -323,10 +332,20 @@ class AboutPage extends Component {
                       }
                     }}
                   />
-                  <Label color={this.state.colorSliderM}>{this.state.sliderValueM}</Label>
+                  <Label color={this.state.colorSliderMarket}>{this.state.valueSliderMarket}</Label>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
+            <Form.Group>
+              <Form.Field>
+                <Form.Checkbox
+                  label="Please confirm that you have completed the above information"
+                  name="confirmBusinessAnalysis"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.confirmBusinessAnalysis}
+                />
+              </Form.Field>
+            </Form.Group>
           </Grid>
         </Form>
       </Wrapper>
@@ -334,7 +353,7 @@ class AboutPage extends Component {
   }
 }
 
-AboutPage.propTypes = {
+BusinessAnalysisPage.propTypes = {
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -351,22 +370,31 @@ AboutPage.propTypes = {
   risksOptions: PropTypes.object,
   listAppraisalRegister: PropTypes.func,
   valueDriversOptions: PropTypes.object,
-  criticalIssuesOptions: PropTypes.object
+  criticalIssuesOptions: PropTypes.object,
+  descriptionBusinessRiskArray: PropTypes.array,
+  descriptionMarketArray: PropTypes.array
 }
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  riskList: '',
-  criticalIssuesList: '',
-  valueDriversList: ''
+  riskList: props.appraisalObject ? props.appraisalObject.riskList : '',
+  criticalIssuesList: props.appraisalObject ? props.appraisalObject.criticalIssuesList : '',
+  valueDriversList: props.appraisalObject ? props.appraisalObject.valueDriversList : '',
+  labelSliderBR: props.appraisalObject ? props.appraisalObject.labelSliderBR : '',
+  descriptionBR: props.appraisalObject ? props.appraisalObject.descriptionBR : '',
+  labelSliderMarket: props.appraisalObject ? props.appraisalObject.labelSliderMarket : '',
+  descriptionMarket: props.appraisalObject ? props.appraisalObject.descriptionMarket : '',
+  confirmBusinessAnalysis: props.appraisalObject ? props.appraisalObject.confirmBusinessAnalysis : false
 })
 
 const mapStateToProps = state => {
   return {
     risksOptions: state.appraisalRegister.get.risks,
     valueDriversOptions: state.appraisalRegister.get.valueDrivers,
-    criticalIssuesOptions: state.appraisalRegister.get.criticalIssues
+    criticalIssuesOptions: state.appraisalRegister.get.criticalIssues,
+    descriptionBusinessRiskArray: state.appraisalRegister.get.descriptionBusinessRisk.array,
+    descriptionMarketArray: state.appraisalRegister.get.descriptionMarket.array
   }
 }
 
@@ -384,5 +412,5 @@ export default connect(
     mapPropsToValues,
     validationSchema,
     enableReinitialize: true
-  })(AboutPage)
+  })(BusinessAnalysisPage)
 )

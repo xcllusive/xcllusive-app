@@ -15,10 +15,7 @@ import {
   Pagination
 } from 'semantic-ui-react'
 
-import {
-  listAppraisalRegister,
-  removeAppraisalRegister
-} from '../../../redux/ducks/appraisalRegister'
+import { listAppraisalRegister, removeAppraisalRegister } from '../../../redux/ducks/appraisalRegister'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -28,6 +25,8 @@ class AppraisalRegisters extends Component {
     this.props.listAppraisalRegister('risks', 5)
     this.props.listAppraisalRegister('valueDrivers', 5)
     this.props.listAppraisalRegister('criticalIssues', 5)
+    this.props.listAppraisalRegister('descriptionBusinessRisk', 5)
+    this.props.listAppraisalRegister('descriptionMarket', 5)
   }
 
   _toggleModalConfirm = (id, registerType) => {
@@ -40,10 +39,7 @@ class AppraisalRegisters extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this._removeAppraisalRegister(
-            isConfirmed.id,
-            isConfirmed.registerType
-          )
+          this._removeAppraisalRegister(isConfirmed.id, isConfirmed.registerType)
         }
       }
     })
@@ -86,11 +82,7 @@ class AppraisalRegisters extends Component {
         <Grid padded="horizontally">
           <Grid.Row columns={1}>
             <Grid.Column floated="right" width={2}>
-              <Button
-                onClick={this._newAppraisal}
-                color="facebook"
-                size="small"
-              >
+              <Button onClick={this._newAppraisal} color="facebook" size="small">
                 <Icon name="add" />
                 New Register
               </Button>
@@ -102,14 +94,7 @@ class AppraisalRegisters extends Component {
               <Header as="h5" attached="top">
                 Financial Information Source
               </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
+              <Table compact celled inverted selectable color="blue" size="small">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -118,53 +103,35 @@ class AppraisalRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {this.props.financialInfoSourceOptions.array.map(
-                    financialInfoSourceOptions => {
-                      return (
-                        <Table.Row active key={financialInfoSourceOptions.id}>
-                          <Table.Cell>
-                            {financialInfoSourceOptions.id}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {financialInfoSourceOptions.label}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editAppraisal(
-                                  financialInfoSourceOptions,
-                                  'financialInfoSource'
-                                )
-                              }
-                            />
-                            <Icon
-                              link
-                              name="trash"
-                              color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(
-                                  financialInfoSourceOptions.id,
-                                  'financialInfoSource'
-                                )
-                              }
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    }
-                  )}
+                  {this.props.financialInfoSourceOptions.array.map(financialInfoSourceOptions => {
+                    return (
+                      <Table.Row active key={financialInfoSourceOptions.id}>
+                        <Table.Cell>{financialInfoSourceOptions.id}</Table.Cell>
+                        <Table.Cell>{financialInfoSourceOptions.label}</Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            onClick={() => this._editAppraisal(financialInfoSourceOptions, 'financialInfoSource')}
+                          />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() =>
+                              this._toggleModalConfirm(financialInfoSourceOptions.id, 'financialInfoSource')
+                            }
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
                 </Table.Body>
               </Table>
               <Pagination
                 size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'financialInfoSource')
-                }
-                defaultActivePage={
-                  this.props.financialInfoSourceOptions.activePage
-                }
+                onPageChange={(e, data) => this._handlePaginationChange(e, data, 'financialInfoSource')}
+                defaultActivePage={this.props.financialInfoSourceOptions.activePage}
                 totalPages={this.props.financialInfoSourceOptions.pages}
                 firstItem={null}
                 lastItem={null}
@@ -174,14 +141,7 @@ class AppraisalRegisters extends Component {
               <Header as="h5" attached="top">
                 Risks
               </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
+              <Table compact celled inverted selectable color="blue" size="small">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -196,20 +156,12 @@ class AppraisalRegisters extends Component {
                         <Table.Cell>{risksOptions.id}</Table.Cell>
                         <Table.Cell>{risksOptions.label}</Table.Cell>
                         <Table.Cell>
-                          <Icon
-                            link
-                            name="edit"
-                            onClick={() =>
-                              this._editAppraisal(risksOptions, 'risks')
-                            }
-                          />
+                          <Icon link name="edit" onClick={() => this._editAppraisal(risksOptions, 'risks')} />
                           <Icon
                             link
                             name="trash"
                             color="red"
-                            onClick={() =>
-                              this._toggleModalConfirm(risksOptions.id, 'risks')
-                            }
+                            onClick={() => this._toggleModalConfirm(risksOptions.id, 'risks')}
                           />
                         </Table.Cell>
                       </Table.Row>
@@ -219,12 +171,8 @@ class AppraisalRegisters extends Component {
               </Table>
               <Pagination
                 size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'risks')
-                }
-                defaultActivePage={
-                  this.props.financialInfoSourceOptions.activePage
-                }
+                onPageChange={(e, data) => this._handlePaginationChange(e, data, 'risks')}
+                defaultActivePage={this.props.financialInfoSourceOptions.activePage}
                 totalPages={this.props.financialInfoSourceOptions.pages}
                 firstItem={null}
                 lastItem={null}
@@ -236,14 +184,7 @@ class AppraisalRegisters extends Component {
               <Header as="h5" attached="top">
                 Value Drivers
               </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
+              <Table compact celled inverted selectable color="blue" size="small">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -252,46 +193,32 @@ class AppraisalRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {this.props.valueDriversOptions.array.map(
-                    valueDriversOptions => {
-                      return (
-                        <Table.Row active key={valueDriversOptions.id}>
-                          <Table.Cell>{valueDriversOptions.id}</Table.Cell>
-                          <Table.Cell>{valueDriversOptions.label}</Table.Cell>
-                          <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editAppraisal(
-                                  valueDriversOptions,
-                                  'valueDrivers'
-                                )
-                              }
-                            />
-                            <Icon
-                              link
-                              name="trash"
-                              color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(
-                                  valueDriversOptions.id,
-                                  'valueDrivers'
-                                )
-                              }
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    }
-                  )}
+                  {this.props.valueDriversOptions.array.map(valueDriversOptions => {
+                    return (
+                      <Table.Row active key={valueDriversOptions.id}>
+                        <Table.Cell>{valueDriversOptions.id}</Table.Cell>
+                        <Table.Cell>{valueDriversOptions.label}</Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            onClick={() => this._editAppraisal(valueDriversOptions, 'valueDrivers')}
+                          />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() => this._toggleModalConfirm(valueDriversOptions.id, 'valueDrivers')}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
                 </Table.Body>
               </Table>
               <Pagination
                 size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'valueDrivers')
-                }
+                onPageChange={(e, data) => this._handlePaginationChange(e, data, 'valueDrivers')}
                 defaultActivePage={this.props.valueDriversOptions.activePage}
                 totalPages={this.props.valueDriversOptions.pages}
                 firstItem={null}
@@ -302,14 +229,7 @@ class AppraisalRegisters extends Component {
               <Header as="h5" attached="top">
                 Critical Issues
               </Header>
-              <Table
-                compact
-                celled
-                inverted
-                selectable
-                color="blue"
-                size="small"
-              >
+              <Table compact celled inverted selectable color="blue" size="small">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -318,48 +238,134 @@ class AppraisalRegisters extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {this.props.criticalIssuesOptions.array.map(
-                    criticalIssuesOptions => {
-                      return (
-                        <Table.Row active key={criticalIssuesOptions.id}>
-                          <Table.Cell>{criticalIssuesOptions.id}</Table.Cell>
-                          <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
-                          <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editAppraisal(
-                                  criticalIssuesOptions,
-                                  'criticalIssues'
-                                )
-                              }
-                            />
-                            <Icon
-                              link
-                              name="trash"
-                              color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(
-                                  criticalIssuesOptions.id,
-                                  'criticalIssues'
-                                )
-                              }
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    }
-                  )}
+                  {this.props.criticalIssuesOptions.array.map(criticalIssuesOptions => {
+                    return (
+                      <Table.Row active key={criticalIssuesOptions.id}>
+                        <Table.Cell>{criticalIssuesOptions.id}</Table.Cell>
+                        <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            onClick={() => this._editAppraisal(criticalIssuesOptions, 'criticalIssues')}
+                          />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() => this._toggleModalConfirm(criticalIssuesOptions.id, 'criticalIssues')}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
                 </Table.Body>
               </Table>
               <Pagination
                 size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data, 'valueDrivers')
-                }
+                onPageChange={(e, data) => this._handlePaginationChange(e, data, 'valueDrivers')}
                 defaultActivePage={this.props.criticalIssuesOptions.activePage}
                 totalPages={this.props.criticalIssuesOptions.pages}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Header as="h5" attached="top">
+                Description Business Risk
+              </Header>
+              <Table compact celled inverted selectable color="blue" size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Points</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.descriptionBusinessRiskOptions.array.map(descriptionBusinessRiskOptions => {
+                    return (
+                      <Table.Row active key={descriptionBusinessRiskOptions.id}>
+                        <Table.Cell>{descriptionBusinessRiskOptions.id}</Table.Cell>
+                        <Table.Cell>{descriptionBusinessRiskOptions.label}</Table.Cell>
+                        <Table.Cell>{descriptionBusinessRiskOptions.points}</Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            onClick={() =>
+                              this._editAppraisal(descriptionBusinessRiskOptions, 'descriptionBusinessRisk')
+                            }
+                          />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() =>
+                              this._toggleModalConfirm(descriptionBusinessRiskOptions.id, 'descriptionBusinessRisk')
+                            }
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) => this._handlePaginationChange(e, data, 'descriptionBusinessRisk')}
+                defaultActivePage={this.props.descriptionBusinessRiskOptions.activePage}
+                totalPages={this.props.descriptionBusinessRiskOptions.pages}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Grid.Column>
+            <Grid.Column>
+              <Header as="h5" attached="top">
+                Description Market
+              </Header>
+              <Table compact celled inverted selectable color="blue" size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Label</Table.HeaderCell>
+                    <Table.HeaderCell>Points</Table.HeaderCell>
+                    <Table.HeaderCell>Settings</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {this.props.descriptionMarketOptions.array.map(descriptionMarketOptions => {
+                    return (
+                      <Table.Row active key={descriptionMarketOptions.id}>
+                        <Table.Cell>{descriptionMarketOptions.id}</Table.Cell>
+                        <Table.Cell>{descriptionMarketOptions.label}</Table.Cell>
+                        <Table.Cell>{descriptionMarketOptions.points}</Table.Cell>
+                        <Table.Cell>
+                          <Icon
+                            link
+                            name="edit"
+                            onClick={() => this._editAppraisal(descriptionMarketOptions, 'descriptionMarket')}
+                          />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() => this._toggleModalConfirm(descriptionMarketOptions.id, 'descriptionMarket')}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+              <Pagination
+                size="mini"
+                onPageChange={(e, data) => this._handlePaginationChange(e, data, 'descriptionMarket')}
+                defaultActivePage={this.props.descriptionMarketOptions.activePage}
+                totalPages={this.props.descriptionMarketOptions.pages}
                 firstItem={null}
                 lastItem={null}
               />
@@ -381,7 +387,9 @@ AppraisalRegisters.propTypes = {
   isLoadingFinancialInfoSource: PropTypes.bool,
   risksOptions: PropTypes.object,
   valueDriversOptions: PropTypes.object,
-  criticalIssuesOptions: PropTypes.object
+  criticalIssuesOptions: PropTypes.object,
+  descriptionBusinessRiskOptions: PropTypes.object,
+  descriptionMarketOptions: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -390,11 +398,12 @@ const mapStateToProps = state => ({
   risksOptions: state.appraisalRegister.get.risks,
   valueDriversOptions: state.appraisalRegister.get.valueDrivers,
   criticalIssuesOptions: state.appraisalRegister.get.criticalIssues,
+  descriptionBusinessRiskOptions: state.appraisalRegister.get.descriptionBusinessRisk,
+  descriptionMarketOptions: state.appraisalRegister.get.descriptionMarket,
   createAppraisalRegister: state.appraisalRegister.create.isCreated,
   updateAppraisalRegister: state.appraisalRegister.update.isUpdated,
   deleteAppraisalRegister: state.appraisalRegister.delete.isDeleted,
-  isLoadingFinancialInfoSource:
-    state.appraisalRegister.get.financialInfoSource.isLoading
+  isLoadingFinancialInfoSource: state.appraisalRegister.get.financialInfoSource.isLoading
 })
 
 const mapDispatchToProps = dispatch =>

@@ -1,11 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import {
-  list,
-  create,
-  update,
-  remove
-} from '../../services/api/appraisalRegister'
+import { list, create, update, remove } from '../../services/api/appraisalRegister'
 import _ from 'lodash'
 
 // Action Types
@@ -51,6 +46,20 @@ const initialState = {
       activePage: 1
     },
     criticalIssues: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
+    descriptionBusinessRisk: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
+    descriptionMarket: {
       isLoading: true,
       array: [],
       error: null,
@@ -137,9 +146,7 @@ export default function reducer (state = initialState, action) {
             ...state.get[action.appraisalRegisterType],
             isLoading: false,
             error: null,
-            array: state.get[action.appraisalRegisterType].array.concat(
-              action.payload
-            )
+            array: state.get[action.appraisalRegisterType].array.concat(action.payload)
           }
         }
       }
@@ -177,10 +184,9 @@ export default function reducer (state = initialState, action) {
             ...state.get[action.payload.type],
             isLoading: false,
             error: null,
-            array: _.filter(
-              state.get[action.payload.type].array,
-              obj => obj.id !== action.payload.id
-            ).concat(action.payload)
+            array: _.filter(state.get[action.payload.type].array, obj => obj.id !== action.payload.id).concat(
+              action.payload
+            )
           }
         }
       }
@@ -219,10 +225,7 @@ export default function reducer (state = initialState, action) {
             ...state.get[action.payload.type],
             isLoading: false,
             error: null,
-            array: _.filter(
-              state.get[action.payload.type].array,
-              obj => obj.id !== action.payload.id
-            )
+            array: _.filter(state.get[action.payload.type].array, obj => obj.id !== action.payload.id)
           }
         }
       }
@@ -242,11 +245,7 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const listAppraisalRegister = (
-  appraisalRegisterType,
-  limit = null,
-  page = null
-) => async dispatch => {
+export const listAppraisalRegister = (appraisalRegisterType, limit = null, page = null) => async dispatch => {
   dispatch({
     type: Types.GET_APPRAISAL_REGISTER_LOADING
   })
