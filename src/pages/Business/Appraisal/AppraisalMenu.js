@@ -2,15 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {
-  Menu,
-  Segment,
-  Grid,
-  Button,
-  Icon,
-  Header,
-  Progress
-} from 'semantic-ui-react'
+import { Menu, Segment, Grid, Button, Icon, Header, Progress } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import BusinessDetails from './BusinessDetails'
 import About from './About/About'
@@ -26,7 +18,7 @@ class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Business Analysis',
+      activeItem: 'Financial Analysis',
       percent: 75,
       colorProgress: null
     }
@@ -114,22 +106,12 @@ class AppraisalMenuPage extends Component {
                 <Header as="h3" textAlign="center">
                   Business Appraisal Wizard
                 </Header>
-                <Header
-                  style={{ marginTop: '-10px' }}
-                  as="h3"
-                  textAlign="center"
-                  color="blue"
-                >
+                <Header style={{ marginTop: '-10px' }} as="h3" textAlign="center" color="blue">
                   {business.businessName}
                 </Header>
               </Grid.Column>
               <Grid.Column width={5}>
-                <Progress
-                  label="Complete"
-                  color={colorProgress}
-                  percent={this.state.percent}
-                  progress
-                />
+                <Progress label="Complete" color={colorProgress} percent={this.state.percent} progress />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -140,11 +122,7 @@ class AppraisalMenuPage extends Component {
             active={activeItem === 'Business Details'}
             onClick={this._handleItemClick}
           />
-          <Menu.Item
-            name="About"
-            active={activeItem === 'About'}
-            onClick={this._handleItemClick}
-          />
+          <Menu.Item name="About" active={activeItem === 'About'} onClick={this._handleItemClick} />
           <Menu.Item
             name="Business Analysis"
             active={activeItem === 'Business Analysis'}
@@ -155,21 +133,9 @@ class AppraisalMenuPage extends Component {
             active={activeItem === 'Financial Analysis'}
             onClick={this._handleItemClick}
           />
-          <Menu.Item
-            name="Comparable Data"
-            active={activeItem === 'Comparable Data'}
-            onClick={this._handleItemClick}
-          />
-          <Menu.Item
-            name="Pricing"
-            active={activeItem === 'Pricing'}
-            onClick={this._handleItemClick}
-          />
-          <Menu.Item
-            name="Recommendations"
-            active={activeItem === 'Recommendations'}
-            onClick={this._handleItemClick}
-          />
+          <Menu.Item name="Comparable Data" active={activeItem === 'Comparable Data'} onClick={this._handleItemClick} />
+          <Menu.Item name="Pricing" active={activeItem === 'Pricing'} onClick={this._handleItemClick} />
+          <Menu.Item name="Recommendations" active={activeItem === 'Recommendations'} onClick={this._handleItemClick} />
           <Menu.Item
             name="Confirm and Send"
             active={activeItem === 'Confirm and Send'}
@@ -178,11 +144,7 @@ class AppraisalMenuPage extends Component {
         </Menu>
         {this.state.activeItem === 'Business Details' ? (
           <Segment>
-            <BusinessDetails
-              business={business}
-              isLoadingCreating={isLoadingCreating}
-              appraisalObject={appraisal}
-            />
+            <BusinessDetails business={business} isLoadingCreating={isLoadingCreating} appraisalObject={appraisal} />
           </Segment>
         ) : null}
         {this.state.activeItem === 'About' ? (
@@ -204,30 +166,18 @@ class AppraisalMenuPage extends Component {
           <Grid.Column>
             <Button
               color={theme.buttonSave}
-              onClick={() =>
-                history.push(`/business/${this.props.match.params.id}`)
-              }
+              onClick={() => history.push(`/business/${this.props.match.params.id}`)}
               size="small"
               floated="left"
             >
               <Icon name="save" />
               Save and Complete Later
             </Button>
-            <Button
-              color="facebook"
-              onClick={this._nextStep}
-              size="small"
-              floated="right"
-            >
+            <Button color="facebook" onClick={this._nextStep} size="small" floated="right">
               <Icon name="forward" />
               Next Step
             </Button>
-            <Button
-              color={theme.buttonBack}
-              onClick={this._previousStep}
-              size="small"
-              floated="right"
-            >
+            <Button color={theme.buttonBack} onClick={this._previousStep} size="small" floated="right">
               <Icon name="backward" />
               Previous Step
             </Button>

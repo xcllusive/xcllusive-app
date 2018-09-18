@@ -87,13 +87,13 @@ class BusinessAnalysisPage extends Component {
     this.setState({ objectDescriptionMarket: _.find(this.props.descriptionMarketArray, o => o.points === value) })
     if (value >= 0 && value <= 20) {
       this.setState({
-        labelSliderMarket: 'Poor',
+        labelSliderMarket: 'Weak',
         colorSliderMarket: 'red'
       })
     }
     if (value >= 21 && value <= 40) {
       this.setState({
-        labelSliderMarket: 'Weak',
+        labelSliderMarket: 'Challenging',
         colorSliderMarket: 'orange'
       })
     }

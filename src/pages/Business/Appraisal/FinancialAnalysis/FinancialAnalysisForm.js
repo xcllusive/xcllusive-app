@@ -19,14 +19,7 @@ class AddbacksAndAdjustmentsForm extends Component {
   }
 
   render () {
-    const {
-      values,
-      handleChange,
-      handleBlur,
-      errors,
-      touched,
-      financialYear
-    } = this.props
+    const { values, handleChange, handleBlur, errors, touched, financialYear } = this.props
     return (
       <Fragment>
         <Grid.Row>
@@ -45,14 +38,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     tabIndex={-1}
                   />
                   {errors.monthsCovered &&
-                    touched.monthsCovered && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.monthsCovered}
-                    />
-                  )}
+                    touched.monthsCovered && <Label basic color="red" pointing content={errors.monthsCovered} />}
                 </Form.Field>
                 <Form.Field width={2}>
                   <Form.Input
@@ -67,12 +53,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                   />
                   {errors.seasonalAdjusment &&
                     touched.seasonalAdjusment && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.seasonalAdjusment}
-                    />
+                    <Label basic color="red" pointing content={errors.seasonalAdjusment} />
                   )}
                 </Form.Field>
                 <Form.Field style={{ marginTop: '20px' }} width={2}>
@@ -128,10 +109,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.sales1 &&
-                  touched.sales1 && (
-              <Label basic color="red" pointing content={errors.sales1} />
-            )}
+            {errors.sales1 && touched.sales1 && <Label basic color="red" pointing content={errors.sales1} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -143,10 +121,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.sales2 &&
-                  touched.sales2 && (
-              <Label basic color="red" pointing content={errors.sales2} />
-            )}
+            {errors.sales2 && touched.sales2 && <Label basic color="red" pointing content={errors.sales2} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -158,10 +133,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.sales3 &&
-                  touched.sales3 && (
-              <Label basic color="red" pointing content={errors.sales3} />
-            )}
+            {errors.sales3 && touched.sales3 && <Label basic color="red" pointing content={errors.sales3} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -173,10 +145,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.sales4 &&
-                  touched.sales4 && (
-              <Label basic color="red" pointing content={errors.sales4} />
-            )}
+            {errors.sales4 && touched.sales4 && <Label basic color="red" pointing content={errors.sales4} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -188,10 +157,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.sales5 &&
-                  touched.sales5 && (
-              <Label basic color="red" pointing content={errors.sales5} />
-            )}
+            {errors.sales5 && touched.sales5 && <Label basic color="red" pointing content={errors.sales5} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -203,34 +169,15 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.sales6 &&
-                  touched.sales6 && (
-              <Label basic color="red" pointing content={errors.sales6} />
-            )}
+            {errors.sales6 && touched.sales6 && <Label basic color="red" pointing content={errors.sales6} />}
           </CustomColumn>
-          <CustomColumn>
-            <Input
-              fluid
-              tabIndex={70}
-              name="sales7"
-              autoComplete="sales7"
-              value={values.sales7}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.sales7 &&
-                  touched.sales7 && (
-              <Label basic color="red" pointing content={errors.sales7} />
-            )}
+          <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
+            0
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="salesYesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.salesYesNo}
-                />
+                <Form.Checkbox name="salesYesNo" onChange={this._handleChangeCheckBox} checked={values.salesYesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -248,12 +195,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               value={values.cogs1}
               onChange={handleChange}
               onBlur={handleBlur}
-
             />
-            {errors.cogs1 &&
-                  touched.cogs1 && (
-              <Label basic color="red" pointing content={errors.cogs1} />
-            )}
+            {errors.cogs1 && touched.cogs1 && <Label basic color="red" pointing content={errors.cogs1} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -265,10 +208,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.cogs2 &&
-                  touched.cogs2 && (
-              <Label basic color="red" pointing content={errors.cogs2} />
-            )}
+            {errors.cogs2 && touched.cogs2 && <Label basic color="red" pointing content={errors.cogs2} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -280,10 +220,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.cogs3 &&
-                  touched.cogs3 && (
-              <Label basic color="red" pointing content={errors.cogs3} />
-            )}
+            {errors.cogs3 && touched.cogs3 && <Label basic color="red" pointing content={errors.cogs3} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -295,10 +232,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.cogs4 &&
-                  touched.cogs4 && (
-              <Label basic color="red" pointing content={errors.cogs4} />
-            )}
+            {errors.cogs4 && touched.cogs4 && <Label basic color="red" pointing content={errors.cogs4} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -310,10 +244,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.cogs5 &&
-                  touched.cogs5 && (
-              <Label basic color="red" pointing content={errors.cogs5} />
-            )}
+            {errors.cogs5 && touched.cogs5 && <Label basic color="red" pointing content={errors.cogs5} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -325,34 +256,15 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.cogs6 &&
-                  touched.cogs6 && (
-              <Label basic color="red" pointing content={errors.cogs6} />
-            )}
+            {errors.cogs6 && touched.cogs6 && <Label basic color="red" pointing content={errors.cogs6} />}
           </CustomColumn>
-          <CustomColumn>
-            <Input
-              fluid
-              tabIndex={71}
-              name="cogs7"
-              autoComplete="cogs7"
-              value={values.cogs7}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.cogs7 &&
-                  touched.cogs7 && (
-              <Label basic color="red" pointing content={errors.cogs7} />
-            )}
+          <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
+            0
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="cogsYesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.cogsYesNo}
-                />
+                <Form.Checkbox name="cogsYesNo" onChange={this._handleChangeCheckBox} checked={values.cogsYesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -398,14 +310,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onBlur={handleBlur}
             />
             {errors.otherIncome1 &&
-                  touched.otherIncome1 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.otherIncome1}
-              />
-            )}
+              touched.otherIncome1 && <Label basic color="red" pointing content={errors.otherIncome1} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -418,14 +323,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onBlur={handleBlur}
             />
             {errors.otherIncome2 &&
-                  touched.otherIncome2 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.otherIncome2}
-              />
-            )}
+              touched.otherIncome2 && <Label basic color="red" pointing content={errors.otherIncome2} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -438,14 +336,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onBlur={handleBlur}
             />
             {errors.otherIncome3 &&
-                  touched.otherIncome3 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.otherIncome3}
-              />
-            )}
+              touched.otherIncome3 && <Label basic color="red" pointing content={errors.otherIncome3} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -458,14 +349,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onBlur={handleBlur}
             />
             {errors.otherIncome4 &&
-              touched.otherIncome4 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.otherIncome4}
-              />
-            )}
+              touched.otherIncome4 && <Label basic color="red" pointing content={errors.otherIncome4} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -478,14 +362,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onBlur={handleBlur}
             />
             {errors.otherIncome5 &&
-              touched.otherIncome5 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.otherIncome5}
-              />
-            )}
+              touched.otherIncome5 && <Label basic color="red" pointing content={errors.otherIncome5} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -498,34 +375,10 @@ class AddbacksAndAdjustmentsForm extends Component {
               onBlur={handleBlur}
             />
             {errors.otherIncome6 &&
-              touched.otherIncome6 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.otherIncome6}
-              />
-            )}
+              touched.otherIncome6 && <Label basic color="red" pointing content={errors.otherIncome6} />}
           </CustomColumn>
-          <CustomColumn>
-            <Input
-              fluid
-              tabIndex={72}
-              name="otherIncome7"
-              autoComplete="otherIncome7"
-              value={values.otherIncome7}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.otherIncome7 &&
-              touched.otherIncome7 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.otherIncome7}
-              />
-            )}
+          <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
+            0
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
@@ -566,15 +419,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.expenses1 &&
-              touched.expenses1 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.expenses1}
-              />
-            )}
+            {errors.expenses1 && touched.expenses1 && <Label basic color="red" pointing content={errors.expenses1} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -586,15 +431,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.expenses2 &&
-              touched.expenses2 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.expenses2}
-              />
-            )}
+            {errors.expenses2 && touched.expenses2 && <Label basic color="red" pointing content={errors.expenses2} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -606,15 +443,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.expenses3 &&
-              touched.expenses3 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.expenses3}
-              />
-            )}
+            {errors.expenses3 && touched.expenses3 && <Label basic color="red" pointing content={errors.expenses3} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -626,15 +455,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.expenses4 &&
-              touched.expenses4 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.expenses4}
-              />
-            )}
+            {errors.expenses4 && touched.expenses4 && <Label basic color="red" pointing content={errors.expenses4} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -646,15 +467,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.expenses5 &&
-              touched.expenses5 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.expenses5}
-              />
-            )}
+            {errors.expenses5 && touched.expenses5 && <Label basic color="red" pointing content={errors.expenses5} />}
           </CustomColumn>
           <CustomColumn>
             <Input
@@ -666,35 +479,10 @@ class AddbacksAndAdjustmentsForm extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.expenses6 &&
-              touched.expenses6 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.expenses6}
-              />
-            )}
+            {errors.expenses6 && touched.expenses6 && <Label basic color="red" pointing content={errors.expenses6} />}
           </CustomColumn>
-          <CustomColumn>
-            <Input
-              fluid
-              tabIndex={73}
-              name="expenses7"
-              autoComplete="expenses7"
-              value={values.expenses7}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.expenses7 &&
-              touched.expenses7 && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.expenses7}
-              />
-            )}
+          <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
+            0
           </CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
