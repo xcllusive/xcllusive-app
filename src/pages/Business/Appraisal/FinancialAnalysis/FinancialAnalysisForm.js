@@ -18,6 +18,13 @@ class AddbacksAndAdjustmentsForm extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
+  _handleChangeAndCalculate = (e, { name, namefieldcalc, value }) => {
+    this.props.setFieldValue(name, value)
+    this.props.setFieldValue(namefieldcalc, this._calc1(value))
+  }
+
+  _calc1 = value => parseInt(value) + 1
+
   render () {
     const { values, handleChange, handleBlur, errors, touched, financialYear } = this.props
     return (
@@ -105,8 +112,9 @@ class AddbacksAndAdjustmentsForm extends Component {
               tabIndex={10}
               name="sales1"
               autoComplete="sales1"
+              namefieldcalc="sales2"
               value={values.sales1}
-              onChange={handleChange}
+              onChange={this._handleChangeAndCalculate}
               onBlur={handleBlur}
             />
             {errors.sales1 && touched.sales1 && <Label basic color="red" pointing content={errors.sales1} />}
