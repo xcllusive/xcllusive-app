@@ -174,22 +174,27 @@ const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
     .min(1, 'Label require minimum 1 characters.')
-    .max(200, 'Label require max 200 characters.'),
-  // .test('field-match', 'Label require max 50 characters.', function (value) {
-  //   const { type } = this.parent
-  //   console.log(type)
-  //   return (
-  //     (type === 'risks' || type === 'valueDrivers' || type === 'criticalIssues') &&
-  //     value.length <= 50
-  //   )
-  // }),
+    .max(200, 'Label require max 200 characters.')
+    .test('field-match', 'Label require max 50 characters.', function (value) {
+      const { type } = this.parent
+      if (type === 'risks' || type === 'valueDrivers' || type === 'criticalIssues') {
+        if (value.length && value.length <= 50) return true
+      }
+      return true
+    }),
   type: Yup.string().required('Appraisal Register is required.')
   // points: Yup.number()
   //   .typeError('You must type only numbers.')
-  //   .test('field-match', 'Points is required.', function (value) {
+  //   .test('field-required-points', 'Points is required.', function (value) {
   //     const { type } = this.parent
   //     console.log(type, value)
-  //     return type === 'descriptionBusinessRisk' && value !== undefined
+  //     if (
+  //       (type === 'descriptionBusinessRisk' || type === 'descriptionMarket') &&
+  //       (value !== undefined || value !== '')
+  //     ) {
+  //       return true
+  //     }
+  //     return true
   //   })
 })
 
