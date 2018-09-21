@@ -217,14 +217,16 @@ class BusinessAnalysisPage extends Component {
                 <Header as="h3" textAlign="center" color="blue">
                   Business Risk
                 </Header>
-                <Segment>
-                  <SliderComponent
-                    value={values.valueSliderBR}
-                    type="businessRisk"
-                    descriptionArray={this.props.descriptionBusinessRiskArray}
-                    onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
-                  />
-                </Segment>
+                {values.valueSliderBR ? (
+                  <Segment>
+                    <SliderComponent
+                      value={values.valueSliderBR}
+                      type="businessRisk"
+                      descriptionArray={this.props.descriptionBusinessRiskArray}
+                      onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
+                    />
+                  </Segment>
+                ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
@@ -232,14 +234,16 @@ class BusinessAnalysisPage extends Component {
                 <Header as="h3" textAlign="center" color="blue">
                   Market
                 </Header>
-                <Segment>
-                  <SliderComponent
-                    value={values.valueSliderMarket}
-                    type="market"
-                    descriptionArray={this.props.descriptionMarketArray}
-                    onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
-                  />
-                </Segment>
+                {values.valueSliderMarket ? (
+                  <Segment>
+                    <SliderComponent
+                      value={values.valueSliderMarket}
+                      type="market"
+                      descriptionArray={this.props.descriptionMarketArray}
+                      onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
+                    />
+                  </Segment>
+                ) : null}
               </Grid.Column>
             </Grid.Row>
             <Form.Group>
@@ -288,8 +292,8 @@ const mapPropsToValues = props => ({
   criticalIssuesList: props.appraisalObject ? props.appraisalObject.criticalIssuesList : '',
   valueDriversList: props.appraisalObject ? props.appraisalObject.valueDriversList : '',
   confirmBusinessAnalysis: props.appraisalObject ? props.appraisalObject.confirmBusinessAnalysis : false,
-  valueSliderBR: props.appraisalObject ? props.appraisalObject.valueSliderBR : 0,
-  valueSliderMarket: props.appraisalObject ? props.appraisalObject.valueSliderMarket : 0
+  valueSliderBR: props.appraisalObject ? props.appraisalObject.valueSliderBR : null,
+  valueSliderMarket: props.appraisalObject ? props.appraisalObject.valueSliderMarket : null
 })
 
 const mapStateToProps = state => {

@@ -28,7 +28,6 @@ const SliderComponent = ({ value, onChange, type, descriptionArray }) => {
     option.label = type === 'businessRisk' ? 'Highly Attractive' : 'Bullish'
     option.color = 'green'
   }
-  console.log(value)
   return (
     <Fragment>
       <h3>{option.label}</h3>
