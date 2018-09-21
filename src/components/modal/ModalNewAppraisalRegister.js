@@ -167,35 +167,26 @@ const mapPropsToValues = props => ({
   type: props.appraisalRegister ? props.appraisalRegister.type : props.typeAdd ? props.typeAdd : '',
   label: props.appraisalRegister ? props.appraisalRegister.label : '',
   id: props.appraisalRegister ? props.appraisalRegister.id : '',
-  points: props.appraisalRegister ? props.appraisalRegister.points : ''
+  points: props.appraisalRegister ? props.appraisalRegister.points : 0
 })
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
     .min(1, 'Label require minimum 1 characters.')
-    .max(200, 'Label require max 200 characters.')
-    .test('field-match', 'Label require max 50 characters.', function (value) {
-      const { type } = this.parent
-      if (type === 'risks' || type === 'valueDrivers' || type === 'criticalIssues') {
-        if (value.length && value.length <= 50) return true
-      }
-      return true
+    .when('type', {
+      is: type => type === 'risks' || type === 'valueDrivers' || type === 'criticalIssues',
+      then: Yup.string().max(50, 'Label require max 50 characters.'),
+      otherwise: Yup.string().max(200, 'Label require max 200 characters.')
     }),
-  type: Yup.string().required('Appraisal Register is required.')
-  // points: Yup.number()
-  //   .typeError('You must type only numbers.')
-  //   .test('field-required-points', 'Points is required.', function (value) {
-  //     const { type } = this.parent
-  //     console.log(type, value)
-  //     if (
-  //       (type === 'descriptionBusinessRisk' || type === 'descriptionMarket') &&
-  //       (value !== undefined || value !== '')
-  //     ) {
-  //       return true
-  //     }
-  //     return true
-  //   })
+  type: Yup.string().required('Appraisal Register is required.'),
+  points: Yup.number()
+    .notRequired()
+    .when('type', {
+      is: type => type === 'descriptionBusinessRisk' || type === 'descriptionMarket',
+      then: Yup.number().required('Points is required'),
+      otherwise: Yup.number().notRequired()
+    })
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

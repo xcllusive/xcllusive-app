@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import ModalRoot from '../components/modal/ModalRoot'
 import { NotFoundPage } from './'
+import DashBoardPage from './DashBoard'
 import ListPage from './Business/BusinessList'
 import EditPage from './Business/BusinessEdit'
 import LogPage from './Business/BusinessLog'
@@ -37,64 +38,22 @@ const Layout = ({ match, logout, menu }) => (
       </Menu.Item>
       {menu.map(item => {
         if (item === 'BUYER_MENU') {
-          return (
-            <Menu.Item
-              key={item}
-              name="buyer"
-              as={NavLink}
-              to={`${match.url}buyer`}
-            />
-          )
+          return <Menu.Item key={item} name="buyer" as={NavLink} to={`${match.url}buyer`} />
         }
         if (item === 'BUSINESS_MENU') {
-          return (
-            <Menu.Item
-              key={item}
-              name="business"
-              as={NavLink}
-              to={`${match.url}business`}
-            />
-          )
+          return <Menu.Item key={item} name="business" as={NavLink} to={`${match.url}business`} />
         }
         if (item === 'PRESALE_MENU') {
-          return (
-            <Menu.Item
-              key={item}
-              name="pre sale"
-              as={NavLink}
-              to={`${match.url}presale`}
-            />
-          )
+          return <Menu.Item key={item} name="pre sale" as={NavLink} to={`${match.url}presale`} />
         }
         if (item === 'RESOURCES_MENU') {
-          return (
-            <Menu.Item
-              key={item}
-              name="resources"
-              as={NavLink}
-              to={`${match.url}resources`}
-            />
-          )
+          return <Menu.Item key={item} name="resources" as={NavLink} to={`${match.url}resources`} />
         }
         if (item === 'CLIENT_MANAGER_MENU') {
-          return (
-            <Menu.Item
-              key={item}
-              name="client manager"
-              as={NavLink}
-              to={`${match.url}clientManager`}
-            />
-          )
+          return <Menu.Item key={item} name="client manager" as={NavLink} to={`${match.url}clientManager`} />
         }
         if (item === 'SYSTEM_SETTINGS_MENU') {
-          return (
-            <Menu.Item
-              key={item}
-              name="system settings"
-              as={NavLink}
-              to={`${match.url}systemSettings`}
-            />
-          )
+          return <Menu.Item key={item} name="system settings" as={NavLink} to={`${match.url}systemSettings`} />
         }
       })}
       <Menu.Menu position="right">
@@ -107,38 +66,14 @@ const Layout = ({ match, logout, menu }) => (
     <ToastContainer position="bottom-right" />
     <ModalRoot />
     <Switch>
-      <Route
-        exact
-        render={() => <span>dashboard</span>}
-        path={`${match.path}`}
-      />
+      <Route exact component={DashBoardPage} path={`${match.path}`} />
       <Route exact component={ListPage} path={`${match.path}business`} />
       <Route exact component={EditPage} path={`${match.path}business/:id`} />
-      <Route
-        exact
-        component={AgreementPage}
-        path={`${match.path}business/:id/agreement/:idAgreement`}
-      />
-      <Route
-        exact
-        component={PreviewAgreement}
-        path={`${match.path}business/:id/agreement/:idAgreement/preview`}
-      />
-      <Route
-        exact
-        component={MakeTaxInvoice}
-        path={`${match.path}business/:id/invoice`}
-      />
-      <Route
-        exact
-        component={AppraisalList}
-        path={`${match.path}business/:id/appraisalList`}
-      />
-      <Route
-        exact
-        component={AppraisalMenu}
-        path={`${match.path}business/:id/appraisalMenu`}
-      />
+      <Route exact component={AgreementPage} path={`${match.path}business/:id/agreement/:idAgreement`} />
+      <Route exact component={PreviewAgreement} path={`${match.path}business/:id/agreement/:idAgreement/preview`} />
+      <Route exact component={MakeTaxInvoice} path={`${match.path}business/:id/invoice`} />
+      <Route exact component={AppraisalList} path={`${match.path}business/:id/appraisalList`} />
+      <Route exact component={AppraisalMenu} path={`${match.path}business/:id/appraisalMenu`} />
       {/* <Route
         exact
         component={LogPage}
@@ -146,48 +81,15 @@ const Layout = ({ match, logout, menu }) => (
       /> */}
       <Route exact component={LogPage} path={`${match.path}business/:id/log`} />
       <Route exact component={BuyerPage} path={`${match.path}buyer`} />
-      <Route
-        exact
-        component={BuyerDetailsCM}
-        path={`${match.path}clientManager/buyer/:id`}
-      />
-      <Route
-        exact
-        component={BuyerDetails}
-        path={`${match.path}buyer/:idBuyer/business/:idBusiness`}
-      />
-      <Route
-        exact
-        component={BuyerList}
-        path={`${match.path}buyer/business/:id`}
-      />
-      <Route
-        exact
-        component={ScoreList}
-        path={`${match.path}buyer/business/:id/score-list`}
-      />
-      <Route
-        exact
-        component={MakeNewScore}
-        path={`${match.path}buyer/business/:idBusiness/make-new-score`}
-      />
-      <Route
-        exact
-        component={MakeNewScore}
-        path={`${match.path}buyer/business/:idBusiness/make-new-score/:idScore`}
-      />
-      <Route
-        render={() => <span>presale</span>}
-        path={`${match.path}presale`}
-      />
-      <Route
-        render={() => <span>resources</span>}
-        path={`${match.path}resources`}
-      />
-      <Route
-        component={ClientManagerList}
-        path={`${match.path}clientManager`}
-      />
+      <Route exact component={BuyerDetailsCM} path={`${match.path}clientManager/buyer/:id`} />
+      <Route exact component={BuyerDetails} path={`${match.path}buyer/:idBuyer/business/:idBusiness`} />
+      <Route exact component={BuyerList} path={`${match.path}buyer/business/:id`} />
+      <Route exact component={ScoreList} path={`${match.path}buyer/business/:id/score-list`} />
+      <Route exact component={MakeNewScore} path={`${match.path}buyer/business/:idBusiness/make-new-score`} />
+      <Route exact component={MakeNewScore} path={`${match.path}buyer/business/:idBusiness/make-new-score/:idScore`} />
+      <Route render={() => <span>presale</span>} path={`${match.path}presale`} />
+      <Route render={() => <span>resources</span>} path={`${match.path}resources`} />
+      <Route component={ClientManagerList} path={`${match.path}clientManager`} />
       <Route exact component={UserPage} path={`${match.path}systemSettings`} />
       <Route component={NotFoundPage} />
       <Redirect to={`${match.url}`} />
