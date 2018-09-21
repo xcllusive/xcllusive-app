@@ -4,16 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import { withFormik } from 'formik'
-import {
-  Form,
-  Icon,
-  Grid,
-  Radio,
-  Label,
-  Dimmer,
-  Loader,
-  Button
-} from 'semantic-ui-react'
+import { Form, Icon, Grid, Radio, Label, Dimmer, Loader, Button } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
@@ -45,40 +36,25 @@ class EditBusinessDetailForm extends Component {
   }
 
   componentDidUpdate (nextProps) {
-    if (
-      this.props.reassignedBusiness &&
-      nextProps.reassignedBusiness !== this.props.reassignedBusiness
-    ) {
+    if (this.props.reassignedBusiness && nextProps.reassignedBusiness !== this.props.reassignedBusiness) {
       this.props.getBusiness(this.props.business.id)
     }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    if (
-      nextProps.updateStageSalesMemo &&
-      prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo
-    ) {
+    if (nextProps.updateStageSalesMemo && prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo) {
       nextProps.getBusiness(nextProps.business.id)
     }
-    if (
-      nextProps.updateStageLost &&
-      prevState.updateStageLost !== nextProps.updateStageLost
-    ) {
+    if (nextProps.updateStageLost && prevState.updateStageLost !== nextProps.updateStageLost) {
       nextProps.getBusiness(nextProps.business.id)
       nextProps.getLogFromBusiness(nextProps.business.id)
     }
-    if (
-      nextProps.values.stage === 8 &&
-      prevState.stage !== nextProps.values.stage
-    ) {
-      this._openModalStageLost()
-    }
-    if (
-      nextProps.values.stage === 3 &&
-      prevState.stage !== nextProps.values.stage
-    ) {
-      this._openModalStageSalesMemo()
-    }
+    // if (nextProps.values.stage === 8 && prevState.stage !== nextProps.values.stage) {
+    //   this._openModalStageLost()
+    // }
+    // if (nextProps.values.stage === 3 && prevState.stage !== nextProps.values.stage) {
+    //   this._openModalStageSalesMemo()
+    // }
 
     return {
       updateStageSalesMemo: nextProps.updateStageSalesMemo,
@@ -89,6 +65,9 @@ class EditBusinessDetailForm extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+    if (name === 'stage' && value === 8) this._openModalStageLost()
+    if (name === 'stage' && value === 3) this._openModalStageSalesMemo()
+    if (name === 'stage' && value === 6) this._openModalStageSold()
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -105,6 +84,20 @@ class EditBusinessDetailForm extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_STAGE_SALES_MEMO, {
       options: {
         title: 'What to enter for `Sales Memorandum` Stage'
+      },
+      callBack: isConfirmed => {
+        if (!isConfirmed) {
+          this.props.setFieldValue('stage', this.props.business.stageId)
+        }
+      },
+      business: this.props.business
+    })
+  }
+
+  _openModalStageSold = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_STAGE_SOLD, {
+      options: {
+        title: 'Change the business stage to `Sold`'
       },
       callBack: isConfirmed => {
         if (!isConfirmed) {
@@ -150,9 +143,7 @@ class EditBusinessDetailForm extends Component {
       },
       callBack: (isConfirmed, idAgreement) => {
         if (isConfirmed) {
-          this.props.history.push(
-            `${this.props.business.id}/agreement/${idAgreement}`
-          )
+          this.props.history.push(`${this.props.business.id}/agreement/${idAgreement}`)
         }
       },
       state: state
@@ -201,14 +192,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.businessName &&
-                      touched.businessName && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessName}
-                      />
-                    )}
+                      touched.businessName && <Label basic color="red" pointing content={errors.businessName} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -221,14 +205,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.firstNameV &&
-                      touched.firstNameV && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.firstNameV}
-                      />
-                    )}
+                      touched.firstNameV && <Label basic color="red" pointing content={errors.firstNameV} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -241,14 +218,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.lastNameV &&
-                      touched.lastNameV && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.lastNameV}
-                      />
-                    )}
+                      touched.lastNameV && <Label basic color="red" pointing content={errors.lastNameV} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -262,14 +232,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.vendorPhone1 &&
-                      touched.vendorPhone1 && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.vendorPhone1}
-                      />
-                    )}
+                      touched.vendorPhone1 && <Label basic color="red" pointing content={errors.vendorPhone1} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -281,14 +244,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.vendorPhone2 &&
-                      touched.vendorPhone2 && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.vendorPhone2}
-                      />
-                    )}
+                      touched.vendorPhone2 && <Label basic color="red" pointing content={errors.vendorPhone2} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -300,14 +256,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.vendorPhone3 &&
-                      touched.vendorPhone3 && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.vendorPhone3}
-                      />
-                    )}
+                      touched.vendorPhone3 && <Label basic color="red" pointing content={errors.vendorPhone3} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -321,12 +270,7 @@ class EditBusinessDetailForm extends Component {
                           inverted
                           circular
                           link
-                          onClick={() =>
-                            window.open(
-                              `mailto:${values.vendorEmail}`,
-                              '_blank'
-                            )
-                          }
+                          onClick={() => window.open(`mailto:${values.vendorEmail}`, '_blank')}
                         />
                       }
                       name="vendorEmail"
@@ -336,14 +280,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.vendorEmail &&
-                      touched.vendorEmail && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.vendorEmail}
-                      />
-                    )}
+                      touched.vendorEmail && <Label basic color="red" pointing content={errors.vendorEmail} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -356,14 +293,7 @@ class EditBusinessDetailForm extends Component {
                       onChange={this._handleSelectChange}
                     />
                     {errors.businessSource &&
-                      touched.businessSource && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessSource}
-                      />
-                    )}
+                      touched.businessSource && <Label basic color="red" pointing content={errors.businessSource} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -375,14 +305,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.sourceNotes &&
-                      touched.sourceNotes && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.sourceNotes}
-                      />
-                    )}
+                      touched.sourceNotes && <Label basic color="red" pointing content={errors.sourceNotes} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -396,31 +319,15 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.description &&
-                      touched.description && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.description}
-                      />
-                    )}
+                      touched.description && <Label basic color="red" pointing content={errors.description} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
-                  <Form.Input
-                    label="Listing Agent"
-                    placeholder={values.listingAgent}
-                    readOnly
-                  />
+                  <Form.Input label="Listing Agent" placeholder={values.listingAgent} readOnly />
                   <Button
                     primary
                     size="small"
-                    onClick={() =>
-                      this._openModalReassignBusiness(
-                        values.id,
-                        values.listingAgent
-                      )
-                    }
+                    onClick={() => this._openModalReassignBusiness(values.id, values.listingAgent)}
                   >
                     <Icon name="edit" />
                     Reassign Business
@@ -443,11 +350,7 @@ class EditBusinessDetailForm extends Component {
                 </Form.Group>
                 <Form.Group>
                   {!this.props.business.agreement_id ? (
-                    <Form.Button
-                      size="small"
-                      color="brown"
-                      onClick={() => this._openModalListAgreement(values.state)}
-                    >
+                    <Form.Button size="small" color="brown" onClick={() => this._openModalListAgreement(values.state)}>
                       <Icon name="file" />
                       Agreement
                     </Form.Button>
@@ -458,9 +361,7 @@ class EditBusinessDetailForm extends Component {
                         color={theme.buttonEdit}
                         onClick={() =>
                           this.props.history.push({
-                            pathname: `/business/${
-                              this.props.business.id
-                            }/agreement/${
+                            pathname: `/business/${this.props.business.id}/agreement/${
                               this.props.business.agreement_id
                             }/preview`,
                             state: {
@@ -476,9 +377,7 @@ class EditBusinessDetailForm extends Component {
                       <Form.Button
                         size="small"
                         color={theme.buttonNew}
-                        onClick={() =>
-                          this._openModalListAgreement(values.state)
-                        }
+                        onClick={() => this._openModalListAgreement(values.state)}
                       >
                         <Icon name="file" />
                         New Agreement
@@ -518,12 +417,7 @@ class EditBusinessDetailForm extends Component {
                     />
                     {errors.businessNameSecondary &&
                       touched.businessNameSecondary && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessNameSecondary}
-                      />
+                      <Label basic color="red" pointing content={errors.businessNameSecondary} />
                     )}
                   </Form.Field>
                   <Form.Field>
@@ -536,14 +430,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.businessABN &&
-                      touched.businessABN && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessABN}
-                      />
-                    )}
+                      touched.businessABN && <Label basic color="red" pointing content={errors.businessABN} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -554,9 +441,7 @@ class EditBusinessDetailForm extends Component {
                           inverted
                           circular
                           link
-                          onClick={() =>
-                            window.open(`${values.businessURL}`, '_blank')
-                          }
+                          onClick={() => window.open(`${values.businessURL}`, '_blank')}
                         />
                       }
                       name="businessURL"
@@ -566,14 +451,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.businessURL &&
-                      touched.businessURL && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessURL}
-                      />
-                    )}
+                      touched.businessURL && <Label basic color="red" pointing content={errors.businessURL} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -587,14 +465,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.address1 &&
-                      touched.address1 && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.address1}
-                      />
-                    )}
+                      touched.address1 && <Label basic color="red" pointing content={errors.address1} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -605,15 +476,7 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.suburb &&
-                      touched.suburb && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.suburb}
-                      />
-                    )}
+                    {errors.suburb && touched.suburb && <Label basic color="red" pointing content={errors.suburb} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -626,15 +489,7 @@ class EditBusinessDetailForm extends Component {
                       value={values.state}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.state &&
-                      touched.state && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.state}
-                      />
-                    )}
+                    {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -646,14 +501,7 @@ class EditBusinessDetailForm extends Component {
                       onBlur={handleBlur}
                     />
                     {errors.postCode &&
-                      touched.postCode && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.postCode}
-                      />
-                    )}
+                      touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
                   </Form.Field>
                   <label>Eligible for 120 Day Guarantee? </label>
                   <Form.Field
@@ -688,14 +536,7 @@ class EditBusinessDetailForm extends Component {
                       onChange={this._handleSelectChange}
                     />
                     {errors.businessRating &&
-                      touched.businessRating && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessRating}
-                      />
-                    )}
+                      touched.businessRating && <Label basic color="red" pointing content={errors.businessRating} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -708,14 +549,7 @@ class EditBusinessDetailForm extends Component {
                       onChange={this._handleSelectChange}
                     />
                     {errors.businessProduct &&
-                      touched.businessProduct && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessProduct}
-                      />
-                    )}
+                      touched.businessProduct && <Label basic color="red" pointing content={errors.businessProduct} />}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -728,12 +562,7 @@ class EditBusinessDetailForm extends Component {
                     />
                     {errors.brokerAccountName &&
                       touched.brokerAccountName && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.brokerAccountName}
-                      />
+                      <Label basic color="red" pointing content={errors.brokerAccountName} />
                     )}
                   </Form.Field>
                 </Form.Group>
@@ -749,12 +578,7 @@ class EditBusinessDetailForm extends Component {
                     />
                     {errors.businessIndustry &&
                       touched.businessIndustry && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessIndustry}
-                      />
+                      <Label basic color="red" pointing content={errors.businessIndustry} />
                     )}
                   </Form.Field>
                   <Form.Field>
@@ -767,14 +591,7 @@ class EditBusinessDetailForm extends Component {
                       onChange={this._handleSelectChange}
                     />
                     {errors.businessType &&
-                      touched.businessType && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.businessType}
-                      />
-                    )}
+                      touched.businessType && <Label basic color="red" pointing content={errors.businessType} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
@@ -786,20 +603,11 @@ class EditBusinessDetailForm extends Component {
                       autoComplete="stage"
                       value={values.stage}
                       disabled={
-                        !this._isUserPreSale() &&
-                        (values.stage === 3 || values.stage === 8)
+                        !this._isUserPreSale() && (values.stage === 3 || values.stage === 8)
                       } /* Sales Memo and Lost */
                       onChange={this._handleSelectChange}
                     />
-                    {errors.stage &&
-                      touched.stage && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.stage}
-                      />
-                    )}
+                    {errors.stage && touched.stage && <Label basic color="red" pointing content={errors.stage} />}
                   </Form.Field>
                   <Form.Button
                     type="submit"
@@ -965,16 +773,11 @@ const validationSchema = Yup.object().shape({
   description: Yup.string()
     .required('Notes is required.')
     .max(2000, 'Source Notes require max 2000 characters.'),
-  businessNameSecondary: Yup.string().max(
-    120,
-    'Source Notes require max 120 characters.'
-  ),
+  businessNameSecondary: Yup.string().max(120, 'Source Notes require max 120 characters.'),
   businessABN: Yup.string()
     .min(11, 'ABN require min 11 integers.')
     .max(11, 'ABN require max 11 integers.'),
-  businessURL: Yup.string().url(
-    'You must type a valid URL (http://website.com.au).'
-  ),
+  businessURL: Yup.string().url('You must type a valid URL (http://website.com.au).'),
   address1: Yup.string().max(100, 'Street require max 100 characters.'),
   suburb: Yup.string().max(100, 'Suburb require max 100 characters.'),
   postCode: Yup.string()
@@ -1005,10 +808,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
-    { updateBusiness, getBusiness, getLogFromBusiness, openModal },
-    dispatch
-  )
+  return bindActionCreators({ updateBusiness, getBusiness, getLogFromBusiness, openModal }, dispatch)
 }
 
 export default connect(
