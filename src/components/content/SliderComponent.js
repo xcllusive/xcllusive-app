@@ -1,77 +1,59 @@
-import React, { Component } from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Label } from 'semantic-ui-react'
 import { Slider } from 'react-semantic-ui-range'
-// import _ from 'lodash'
+import _ from 'lodash'
 
-class SliderComponent extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      colorSliderBR: 'yellow',
-      labelSliderBR: 'Acceptable Risk'
-    }
+const SliderComponent = ({ value, onChange, type, descriptionArray }) => {
+  let objectDescription = _.find(descriptionArray, o => o.points === value)
+
+  let option = { label: '', color: 'white' }
+  if (value >= 0 && value <= 20) {
+    option.label = type === 'businessRisk' ? 'Unsustainable Risk' : 'Weak'
+    option.color = 'red'
   }
-
-  _labelColorSlider (value) {
-    this.setState({
-      valueSliderBR: value
-    })
-    // this.setState({ objectDescriptionBR: _.find(this.props.descriptionBusinessRiskArray, o => o.points === value) })
-
-    if (value >= 0 && value <= 20) {
-      this.setState({
-        labelSliderBR: this.props.type === 'businessRisk' ? 'Unsustainable Risk' : 'Weak',
-        colorSliderBR: 'red'
-      })
-    }
-    if (value >= 21 && value <= 40) {
-      this.setState({
-        labelSliderBR: this.props.type === 'businessRisk' ? 'Challenge Risk' : 'Challenging',
-        colorSliderBR: 'orange'
-      })
-    }
-    if (value >= 41 && value <= 60) {
-      this.setState({
-        labelSliderBR: this.props.type === 'businessRisk' ? 'Acceptable Risk' : 'Fair',
-        colorSliderBR: 'yellow'
-      })
-    }
-    if (value >= 61 && value <= 80) {
-      this.setState({
-        labelSliderBR: this.props.type === 'businessRisk' ? 'Attractive' : 'Good',
-        colorSliderBR: 'teal'
-      })
-    }
-    if (value >= 81 && value <= 100) {
-      this.setState({
-        labelSliderBR: this.props.type === 'businessRisk' ? 'Highly Attractive' : 'Bullish',
-        colorSliderBR: 'green'
-      })
-    }
+  if (value >= 21 && value <= 40) {
+    option.label = type === 'businessRisk' ? 'Challenge Risk' : 'Challenging'
+    option.color = 'orange'
   }
-
-  render () {
-    return (
+  if (value >= 41 && value <= 60) {
+    option.label = type === 'businessRisk' ? 'Acceptable Risk' : 'Fair'
+    option.color = 'yellow'
+  }
+  if (value >= 61 && value <= 80) {
+    option.label = type === 'businessRisk' ? 'Attractive' : 'Good'
+    option.color = 'teal'
+  }
+  if (value >= 81 && value <= 100) {
+    option.label = type === 'businessRisk' ? 'Highly Attractive' : 'Bullish'
+    option.color = 'green'
+  }
+  console.log(value)
+  return (
+    <Fragment>
+      <h3>{option.label}</h3>
+      <label>{objectDescription ? objectDescription.label : null}</label>
       <Slider
-        color={this.state.colorSliderBR}
+        color={option.color}
         inverted={false}
         settings={{
-          start: this.props.value,
+          start: value,
           min: 0,
           max: 100,
           step: 10,
-          onChange: value => {
-            this._labelColorSlider(value)
-          }
+          onChange: value => onChange(value)
         }}
       />
-    )
-  }
+      <Label color={option.color}>{value}</Label>
+    </Fragment>
+  )
 }
 
 SliderComponent.propTypes = {
   value: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  descriptionArray: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 export default SliderComponent
