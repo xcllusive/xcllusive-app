@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Message, Step, Grid, Table, Header, Form, Pagination, Segment, Label } from 'semantic-ui-react'
+import { Message, Step, Grid, Table, Header, Form, Pagination, Segment } from 'semantic-ui-react'
 import SliderComponent from '../../../components/content/SliderComponent'
-import _ from 'lodash'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
@@ -14,16 +13,7 @@ import { listAppraisalRegister } from '../../../redux/ducks/appraisalRegister'
 class BusinessAnalysisPage extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      valueSliderBR: 50,
-      colorSliderBR: 'yellow',
-      labelSliderBR: 'Acceptable Risk',
-      valueSliderMarket: 50,
-      colorSliderMarket: 'yellow',
-      labelSliderMarket: 'Fair',
-      objectDescriptionBR: {},
-      objectDescriptionMarket: {}
-    }
+    this.state = {}
   }
 
   componentDidMount () {
@@ -32,15 +22,6 @@ class BusinessAnalysisPage extends Component {
     this.props.listAppraisalRegister('criticalIssues', 10)
     this.props.listAppraisalRegister('descriptionBusinessRisk')
     this.props.listAppraisalRegister('descriptionMarket')
-  }
-
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.appraisalObject) {
-      if (nextProps.appraisalObject.valueSliderBR > 50) {
-        return { colorSliderBR: 'red' }
-      }
-    }
-    return null
   }
 
   componentWillUnmount () {
@@ -55,77 +36,6 @@ class BusinessAnalysisPage extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  _labelSliderBusinessRisk = value => {
-    this.setState({
-      valueSliderBR: value
-    })
-    this.setState({ objectDescriptionBR: _.find(this.props.descriptionBusinessRiskArray, o => o.points === value) })
-
-    if (value >= 0 && value <= 20) {
-      this.setState({
-        labelSliderBR: 'Unsustainable Risk',
-        colorSliderBR: 'red'
-      })
-    }
-    if (value >= 21 && value <= 40) {
-      this.setState({
-        labelSliderBR: 'Challenge Risk',
-        colorSliderBR: 'orange'
-      })
-    }
-    if (value >= 41 && value <= 60) {
-      this.setState({
-        labelSliderBR: 'Acceptable Risk',
-        colorSliderBR: 'yellow'
-      })
-    }
-    if (value >= 61 && value <= 80) {
-      this.setState({ labelSliderBR: 'Attractive', colorSliderBR: 'teal' })
-    }
-    if (value >= 81 && value <= 100) {
-      this.setState({
-        labelSliderBR: 'Highly Attractive',
-        colorSliderBR: 'green'
-      })
-    }
-    this.props.setFieldValue('valueSliderBR', value)
-  }
-
-  _labelSliderMarket = value => {
-    this.setState({
-      valueSliderMarket: value
-    })
-    this.setState({ objectDescriptionMarket: _.find(this.props.descriptionMarketArray, o => o.points === value) })
-    if (value >= 0 && value <= 20) {
-      this.setState({
-        labelSliderMarket: 'Weak',
-        colorSliderMarket: 'red'
-      })
-    }
-    if (value >= 21 && value <= 40) {
-      this.setState({
-        labelSliderMarket: 'Challenging',
-        colorSliderMarket: 'orange'
-      })
-    }
-    if (value >= 41 && value <= 60) {
-      this.setState({
-        labelSliderMarket: 'Fair',
-        colorSliderMarket: 'yellow'
-      })
-    }
-    if (value >= 61 && value <= 80) {
-      this.setState({ labelSliderMarket: 'Good', colorSliderMarket: 'teal' })
-    }
-    if (value >= 81 && value <= 100) {
-      this.setState({
-        labelSliderMarket: 'Bullish',
-        colorSliderMarket: 'green'
-      })
-    }
-    this.props.setFieldValue('valueSliderMarket', value)
-  }
-
   _handleChangeTextArea = e => {
     if (e.target.type === 'textarea' && e.which === 13 /* Enter */) {
       e.preventDefault()
@@ -134,6 +44,10 @@ class BusinessAnalysisPage extends Component {
 
   _insertOnTextArea = (name, text) => {
     this.props.setFieldValue(name, this.props.values[name] === '' ? text : `${this.props.values[name]}\n${text}`)
+  }
+
+  _handleChangeSlider = (value, name) => {
+    this.props.setFieldValue(name, value)
   }
 
   render () {
@@ -304,31 +218,12 @@ class BusinessAnalysisPage extends Component {
                   Business Risk
                 </Header>
                 <Segment>
-                  <h3>{this.state.labelSliderBR}</h3>
-                  <label>{this.state.objectDescriptionBR ? this.state.objectDescriptionBR.label : null}</label>
                   <SliderComponent
-                    value={this.props.appraisalObject ? this.props.appraisalObject.valueSliderBR : 0}
+                    value={values.valueSliderBR}
                     type="businessRisk"
+                    descriptionArray={this.props.descriptionBusinessRiskArray}
+                    onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
                   />
-                  {/* {this.props.appraisalObject ? (
-                    <Slider
-                      color={this.state.colorSliderBR}
-                      inverted={false}
-                      settings={{
-                        start: this.props.appraisalObject.valueSliderBR,
-                        min: 0,
-                        max: 100,
-                        step: 10,
-                        onChange: value => {
-                          this._labelSliderBusinessRisk(value)
-                        }
-                      }}
-                    />
-                  ) : null} */}
-
-                  <Label color={this.state.colorSliderBR}>
-                    {this.props.appraisalObject ? this.props.appraisalObject.valueSliderBR : this.state.valueSliderBR}
-                  </Label>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -338,26 +233,12 @@ class BusinessAnalysisPage extends Component {
                   Market
                 </Header>
                 <Segment>
-                  <h3>{this.state.labelSliderMarket}</h3>
-                  <label>{this.state.objectDescriptionMarket ? this.state.objectDescriptionMarket.label : null}</label>
                   <SliderComponent
-                    value={this.props.appraisalObject ? this.props.appraisalObject.valueSliderMarket : 0}
+                    value={values.valueSliderMarket}
                     type="market"
+                    descriptionArray={this.props.descriptionMarketArray}
+                    onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
                   />
-                  {/* <SliderComponent
-                    color={this.state.colorSliderMarket}
-                    inverted={false}
-                    settings={{
-                      start: this.state.valueSliderMarket,
-                      min: 0,
-                      max: 100,
-                      step: 10,
-                      onChange: value => {
-                        this._labelSliderMarket(value)
-                      }
-                    }}
-                  /> */}
-                  <Label color={this.state.colorSliderMarket}>{this.state.valueSliderMarket}</Label>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -406,12 +287,9 @@ const mapPropsToValues = props => ({
   riskList: props.appraisalObject ? props.appraisalObject.riskList : '',
   criticalIssuesList: props.appraisalObject ? props.appraisalObject.criticalIssuesList : '',
   valueDriversList: props.appraisalObject ? props.appraisalObject.valueDriversList : '',
-  // labelSliderBR: props.appraisalObject ? props.appraisalObject.labelSliderBR : '',
-  // descriptionBR: props.appraisalObject ? props.appraisalObject.descriptionBR : '',
-  // labelSliderMarket: props.appraisalObject ? props.appraisalObject.labelSliderMarket : '',
-  // descriptionMarket: props.appraisalObject ? props.appraisalObject.descriptionMarket : '',
   confirmBusinessAnalysis: props.appraisalObject ? props.appraisalObject.confirmBusinessAnalysis : false,
-  valueSliderBR: props.appraisalObject ? props.appraisalObject.valueSliderBR : ''
+  valueSliderBR: props.appraisalObject ? props.appraisalObject.valueSliderBR : 0,
+  valueSliderMarket: props.appraisalObject ? props.appraisalObject.valueSliderMarket : 0
 })
 
 const mapStateToProps = state => {
