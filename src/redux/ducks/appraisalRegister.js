@@ -319,7 +319,7 @@ export const removeAppraisalRegister = appraisalRegister => async dispatch => {
     payload: true
   })
   try {
-    const response = await remove(appraisalRegister)
+    const response = await remove(appraisalRegister.id)
     dispatch({
       type: Types.REMOVE_APPRAISAL_REGISTER_SUCCESS,
       payload: appraisalRegister
