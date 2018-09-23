@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Message, Step, Grid, Table, Header, Form, Pagination, Segment } from 'semantic-ui-react'
-import SliderComponent from '../../../components/content/SliderComponent'
+import SliderComponent from '../../../components/content/Appraisal/SliderComponent'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
@@ -217,7 +217,7 @@ class BusinessAnalysisPage extends Component {
                 <Header as="h3" textAlign="center" color="blue">
                   Business Risk
                 </Header>
-                {values.valueSliderBR ? (
+                {values.valueSliderBR || values.valueSliderBR === 0 ? (
                   <Segment>
                     <SliderComponent
                       value={values.valueSliderBR}
@@ -234,7 +234,7 @@ class BusinessAnalysisPage extends Component {
                 <Header as="h3" textAlign="center" color="blue">
                   Market
                 </Header>
-                {values.valueSliderMarket ? (
+                {values.valueSliderMarket || values.valueSliderMarket === 0 ? (
                   <Segment>
                     <SliderComponent
                       value={values.valueSliderMarket}
