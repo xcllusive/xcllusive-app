@@ -1,0 +1,192 @@
+import { get, update, finalise } from '../../services/api/businessSold'
+import { toast } from 'react-toastify'
+
+// Action Types
+
+export const Types = {
+  GET_BUSINESS_SOLD_LOADING: 'GET_BUSINESS_SOLD_LOADING',
+  GET_BUSINESS_SOLD_SUCCESS: 'GET_BUSINESS_SOLD_SUCCESS',
+  GET_BUSINESS_SOLD_FAILURE: 'GET_BUSINESS_SOLD_FAILURE',
+  UPDATE_BUSINESS_SOLD_LOADING: 'UPDATE_BUSINESS_SOLD_LOADING',
+  UPDATE_BUSINESS_SOLD_SUCCESS: 'UPDATE_BUSINESS_SOLD_SUCCESS',
+  UPDATE_BUSINESS_SOLD_FAILURE: 'UPDATE_BUSINESS_SOLD_FAILURE',
+  FINALISE_BUSINESS_SOLD_LOADING: 'FINALISE_BUSINESS_SOLD_LOADING',
+  FINALISE_BUSINESS_SOLD_SUCCESS: 'FINALISE_BUSINESS_SOLD_SUCCESS',
+  FINALISE_BUSINESS_SOLD_FAILURE: 'FINALISE_BUSINESS_SOLD_FAILURE'
+}
+
+// Reducer
+
+const initialState = {
+  get: {
+    object: {},
+    isLoading: false,
+    error: null
+  },
+  updateSold: {
+    isLoading: false,
+    isUpdated: false,
+    error: null
+  },
+  finaliseSold: {
+    isLoading: false,
+    isUpdated: false,
+    error: null
+  }
+}
+
+export default function reducer (state = initialState, action) {
+  switch (action.type) {
+    case Types.GET_BUSINESS_SOLD_LOADING:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          object: {},
+          isLoading: true
+        }
+      }
+    case Types.GET_BUSINESS_SOLD_SUCCESS:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          object: action.payload.businessSold,
+          isLoading: false,
+          array: action.payload
+        }
+      }
+    case Types.GET_BUSINESS_SOLD_FAILURE:
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          object: {},
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.UPDATE_BUSINESS_SOLD_LOADING:
+      return {
+        ...state,
+        updateSold: {
+          ...state.updateSold,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_SOLD_SUCCESS:
+      return {
+        ...state,
+        updateSold: {
+          ...state.updateStatus,
+          isLoading: false,
+          isUpdated: action.payload,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_SOLD_FAILURE:
+      return {
+        ...state,
+        updateSold: {
+          ...state.updateSold,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
+    case Types.FINALISE_BUSINESS_SOLD_LOADING:
+      return {
+        ...state,
+        finaliseSold: {
+          ...state.finaliseSold,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.FINALISE_BUSINESS_SOLD_SUCCESS:
+      return {
+        ...state,
+        finaliseSold: {
+          ...state.finaliseSold,
+          isLoading: false,
+          isUpdated: action.payload,
+          error: null
+        }
+      }
+    case Types.FINALISE_BUSINESS_SOLD_FAILURE:
+      return {
+        ...state,
+        finaliseSold: {
+          ...state.finaliseSold,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
+    default:
+      return state
+  }
+}
+
+// Action Creators
+
+export const getBusinessSold = businessId => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESS_SOLD_LOADING,
+    payload: true
+  })
+  try {
+    const businessSold = await get(businessId)
+    dispatch({
+      type: Types.GET_BUSINESS_SOLD_SUCCESS,
+      payload: businessSold
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESS_SOLD_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const updateBusinessSold = businessId => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_BUSINESS_SOLD_LOADING,
+    payload: true
+  })
+  try {
+    const response = await update(businessId)
+    dispatch({
+      type: Types.UPDATE_BUSINESS_SOLD_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_BUSINESS_SOLD_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const finaliseStageSold = businessId => async dispatch => {
+  dispatch({
+    type: Types.FINALISE_BUSINESS_SOLD_LOADING,
+    payload: true
+  })
+  try {
+    const response = await finalise(businessId)
+    dispatch({
+      type: Types.FINALISE_BUSINESS_SOLD_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.FINALISE_BUSINESS_SOLD_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}

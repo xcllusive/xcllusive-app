@@ -10,7 +10,7 @@ import { Modal, Form, Label, Icon, Button, Divider, Header } from 'semantic-ui-r
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { updateStageLost } from '../../redux/ducks/business'
+// import { updateBusinessSold, finaliseStageSold, getBusinessSold } from '../../redux/ducks/businessSold'
 
 class StageSoldForm extends Component {
   constructor (props) {
@@ -20,6 +20,7 @@ class StageSoldForm extends Component {
 
   componentDidMount () {
     this._calculateFinancialYear()
+    // this.props.getBusinessSold(this.props.business.id)
   }
 
   _handleDateChange = date => {
@@ -38,9 +39,10 @@ class StageSoldForm extends Component {
     if (!isConfirmed) {
       this.props.closeModal()
       this.props.callBack(isConfirmed)
-      return
+      // this.props.updateBusinessSold(this.props.values)
+      // return
     }
-    this.props.updateStageLost(this.props.values)
+    // this.props.finaliseStageSold(this.props.values)
   }
 
   _calculateFinancialYear = () => {
@@ -52,22 +54,14 @@ class StageSoldForm extends Component {
         .add(1, 'year')
         .format('YYYY')
     } else financialYear = moment().format('YYYY')
+    console.log(financialYear)
 
-    this.setState({ financialYear })
+    // this.setState({ financialYear })
   }
 
   render () {
-    const {
-      values,
-      touched,
-      errors,
-      isValid,
-      ratingOptions,
-      updateLoading,
-      handleChange,
-      handleBlur,
-      options
-    } = this.props
+    const { values, touched, errors, isValid, handleChange, handleBlur, options } = this.props
+    console.log('oi')
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -104,10 +98,10 @@ class StageSoldForm extends Component {
                 {errors.settlementDate &&
                   touched.settlementDate && <Label basic color="red" pointing content={errors.settlementDate} />}
               </Form.Field>
-              <Form.Field width={10}>
+              {/* <Form.Field width={10}>
                 <Form.Select
                   label="Buyer Name"
-                  options={ratingOptions}
+                  // options={ratingOptions}
                   name="buyerName"
                   autoComplete="buyerName"
                   value={values.buyerName}
@@ -115,7 +109,7 @@ class StageSoldForm extends Component {
                 />
                 {errors.buyerName &&
                   touched.buyerName && <Label basic color="red" pointing content={errors.buyerName} />}
-              </Form.Field>
+              </Form.Field> */}
             </Form.Group>
             <Divider horizontal>Sold Details</Divider>
             <Form.Group>
@@ -274,30 +268,26 @@ class StageSoldForm extends Component {
               <Form.Field width={8}>
                 <Form.TextArea
                   label="Terms of Deal"
-                  name="agreedWageForWorkingOwners"
-                  autoComplete="agreedWageForWorkingOwners"
-                  value={values.agreedWageForWorkingOwners}
+                  name="termsOfDeal"
+                  autoComplete="termsOfDeal"
+                  value={values.termsOfDeal}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.agreedWageForWorkingOwners &&
-                  touched.agreedWageForWorkingOwners && (
-                  <Label basic color="red" pointing content={errors.agreedWageForWorkingOwners} />
-                )}
+                {errors.termsOfDeal &&
+                  touched.termsOfDeal && <Label basic color="red" pointing content={errors.termsOfDeal} />}
               </Form.Field>
               <Form.Field width={8}>
                 <Form.TextArea
                   label="Special Notes"
-                  name="agreedWageForWorkingOwners"
-                  autoComplete="agreedWageForWorkingOwners"
-                  value={values.agreedWageForWorkingOwners}
+                  name="specialNotes"
+                  autoComplete="specialNotes"
+                  value={values.specialNotes}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.agreedWageForWorkingOwners &&
-                  touched.agreedWageForWorkingOwners && (
-                  <Label basic color="red" pointing content={errors.agreedWageForWorkingOwners} />
-                )}
+                {errors.specialNotes &&
+                  touched.specialNotes && <Label basic color="red" pointing content={errors.specialNotes} />}
               </Form.Field>
             </Form.Group>
             <Divider horizontal>(Optional) Set Follow up date</Divider>
@@ -340,18 +330,18 @@ class StageSoldForm extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            color="blue"
-            disabled={updateLoading || !isValid}
-            loading={updateLoading}
-            onClick={this._handleConfirm}
-          >
+          <Button color="blue" onClick={this._handleConfirm}>
             <Icon name="save" />
             Save and Return
           </Button>
-          <Button color="red" onClick={() => this._handleConfirm(false)}>
-            <Icon name="cancel" />
-            Cancel
+          <Button
+            color="green"
+            disabled={!isValid}
+            // loading={updateLoading}
+            onClick={this._handleConfirm(false)}
+          >
+            <Icon name="save" />
+            Save and Change to Sold
           </Button>
         </Modal.Actions>
       </Modal>
@@ -360,13 +350,43 @@ class StageSoldForm extends Component {
 }
 
 const validationSchema = Yup.object().shape({
-  businessRating: Yup.string().required('Rating is required.'),
-  afterSalesNotes: Yup.string().required('Lost Notes is required.'),
-  saleNotesLostMeeting: Yup.string().required('This field is required.'),
-  saleNotesLostWant: Yup.string().required('Lost Notes is required.'),
-  recoveryStageNotSigned: Yup.string().required('This field is required.'),
-  recoveryStageNotWant: Yup.string().required('This field is required.'),
-  date: Yup.string().required('This field is required.')
+  businessType: Yup.string().required('This field is required.'),
+  // settlementDate: Yup.string().required(' is required.'),
+  soldPrice: Yup.number()
+    .required('This field is required.')
+    .typeError('You must type only numbers.'),
+  stockValue: Yup.number()
+    .required('This field is required.')
+    .typeError('You must type only numbers.'),
+  assetValue: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  workingCapitalReq: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  propertyValue: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  year1: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  year2: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  year3: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  nOfWorkingOwners: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  agreedWageForWorkingOwners: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  latestFullYearTotalRevenue: Yup.number()
+    .required('This field required.')
+    .typeError('You must type only numbers.'),
+  termsOfDeal: Yup.string().required('This field is required.'),
+  specialNotes: Yup.string().required('This field is required.')
 })
 
 StageSoldForm.propTypes = {
@@ -375,7 +395,6 @@ StageSoldForm.propTypes = {
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
-  ratingOptions: PropTypes.array,
   updateLoading: PropTypes.bool,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -384,28 +403,25 @@ StageSoldForm.propTypes = {
     title: PropTypes.string.isRequired
   }).isRequired,
   callBack: PropTypes.func.isRequired,
-  updateStageLost: PropTypes.func,
+  // updateBusinessSold: PropTypes.func,
   business: PropTypes.object
+  // businessSold: PropTypes.object,
+  // finaliseStageSold: PropTypes.func,
+  // getBusinessSold: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
-  date: moment(),
-  businessRating: props.business.ratingId ? props.business.ratingId : '',
-  saleNotesLostMeeting: props.business.saleNotesLostMeeting === '1',
-  pendingDone: true,
-  saleNotesLostWant: false,
-  recoveryStageNotSigned: false,
-  followUpLog: false,
   businessId: props.business.id ? props.business.id : '',
-  text: ''
+  // settlementDate: props.businessSold ? props.businessSold.settlementDate : moment(),
+  followUpLog: false
 })
 
 const mapStateToProps = state => ({
-  ratingOptions: state.business.get.ratingOptions,
-  updateLoading: state.business.updateStageLost.isLoading
+  // businessSold: state.businessSold.get.object
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ updateStageLost, closeModal }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ /* getBusinessSold, updateBusinessSold, finaliseStageSold, */ closeModal }, dispatch)
 
 export default connect(
   mapStateToProps,
