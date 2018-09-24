@@ -5,12 +5,18 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment'
-import { closeModal } from '../../redux/ducks/modal'
-import { Modal, Form, Label, Icon, Button, Divider, Header } from 'semantic-ui-react'
+import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
+import { Modal, Form, Label, Icon, Button, Divider, Header, Dimmer, Loader } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import numeral from 'numeral'
 
-// import { updateBusinessSold, finaliseStageSold, getBusinessSold } from '../../redux/ducks/businessSold'
+import {
+  createBusinessSold,
+  updateBusinessSold,
+  finaliseStageSold,
+  getBusinessSold
+} from '../../redux/ducks/businessSold'
 
 class StageSoldForm extends Component {
   constructor (props) {
@@ -20,11 +26,11 @@ class StageSoldForm extends Component {
 
   componentDidMount () {
     this._calculateFinancialYear()
-    // this.props.getBusinessSold(this.props.business.id)
+    this.props.getBusinessSold(this.props.business.id)
   }
 
   _handleDateChange = date => {
-    this.props.setFieldValue('date', date)
+    this.props.setFieldValue('settlementDate', date)
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -39,10 +45,13 @@ class StageSoldForm extends Component {
     if (!isConfirmed) {
       this.props.closeModal()
       this.props.callBack(isConfirmed)
-      // this.props.updateBusinessSold(this.props.values)
-      // return
+      if (!this.props.values.sold) {
+        if (this.props.businessSold === null) this.props.createBusinessSold(this.props.values)
+        else this.props.updateBusinessSold(this.props.values)
+      }
+      return
     }
-    // this.props.finaliseStageSold(this.props.values)
+    this._modalConfirmChangeStage()
   }
 
   _calculateFinancialYear = () => {
@@ -54,51 +63,61 @@ class StageSoldForm extends Component {
         .add(1, 'year')
         .format('YYYY')
     } else financialYear = moment().format('YYYY')
-    console.log(financialYear)
 
-    // this.setState({ financialYear })
+    this.setState({ financialYear })
+  }
+
+  _modalConfirmChangeStage = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Change Stage to Sold',
+        text: 'Are you sure you want to change the stage to SOLD? Once you have changed you can NOT go back.'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.finaliseStageSold(this.props.values)
+        }
+      }
+    })
   }
 
   render () {
-    const { values, touched, errors, isValid, handleChange, handleBlur, options } = this.props
-    console.log('oi')
+    const { values, touched, errors, isValid, handleChange, handleBlur, options, isLoadingBusinessSold } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content scrolling>
-          <Header as="h3" textAlign="center" color="blue">
-            {this.props.business.businessName}
-          </Header>
-          <Form>
-            <Divider horizontal>Business Details</Divider>
-            <Form.Group>
-              <Form.Field width={8}>
-                <Form.Input
-                  label="Business Type Description"
-                  name="businessType"
-                  autoComplete="businessType"
-                  value={values.businessType}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.businessType &&
-                  touched.businessType && <Label basic color="red" pointing content={errors.businessType} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field>
-                <Form.Input
-                  label="Settlement Date"
-                  name="settlementDate"
-                  autoComplete="settlementDate"
-                  value={values.settlementDate}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.settlementDate &&
-                  touched.settlementDate && <Label basic color="red" pointing content={errors.settlementDate} />}
-              </Form.Field>
-              {/* <Form.Field width={10}>
+          <Dimmer.Dimmable dimmed={isLoadingBusinessSold}>
+            <Dimmer inverted active={isLoadingBusinessSold}>
+              <Loader>Loading</Loader>
+            </Dimmer>
+            <Header as="h3" textAlign="center" color="blue">
+              {this.props.business.businessName}
+            </Header>
+            <Form>
+              <Divider horizontal>Business Details</Divider>
+              <Form.Group>
+                <Form.Field width={8}>
+                  <Form.Input
+                    label="Business Type Description"
+                    name="businessType"
+                    autoComplete="businessType"
+                    value={values.businessType}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.businessType &&
+                    touched.businessType && <Label basic color="red" pointing content={errors.businessType} />}
+                </Form.Field>
+              </Form.Group>
+              <label style={{ fontSize: '.92857143em', color: 'rgba(0,0,0,.87)', fontWeight: '700' }}>
+                Settlement Date
+              </label>
+              <Form.Group style={{ marginTop: '-18px' }}>
+                <Form.Field style={{ marginTop: '22px' }} width={4}>
+                  <DatePicker selected={values.settlementDate} onChange={this._handleDateChange} />
+                </Form.Field>
+                {/* <Form.Field width={10}>
                 <Form.Select
                   label="Buyer Name"
                   // options={ratingOptions}
@@ -110,235 +129,201 @@ class StageSoldForm extends Component {
                 {errors.buyerName &&
                   touched.buyerName && <Label basic color="red" pointing content={errors.buyerName} />}
               </Form.Field> */}
-            </Form.Group>
-            <Divider horizontal>Sold Details</Divider>
-            <Form.Group>
-              <Form.Field>
-                <Form.Input
-                  label="Sold Price (Ex. Stock)"
-                  name="soldPrice"
-                  autoComplete="soldPrice"
-                  value={values.soldPrice}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.soldPrice &&
-                  touched.soldPrice && <Label basic color="red" pointing content={errors.soldPrice} />}
-              </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  label="Stock Value"
-                  name="stockValue"
-                  autoComplete="stockValue"
-                  value={values.stockValue}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.stockValue &&
-                  touched.stockValue && <Label basic color="red" pointing content={errors.stockValue} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field>
-                <Form.Input
-                  label="Asset Value"
-                  name="assetValue"
-                  autoComplete="assetValue"
-                  value={values.assetValue}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.assetValue &&
-                  touched.assetValue && <Label basic color="red" pointing content={errors.assetValue} />}
-              </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  label="Working Capital Requirements"
-                  name="workingCapitalReq"
-                  autoComplete="workingCapitalReq"
-                  value={values.workingCapitalReq}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.workingCapitalReq &&
-                  touched.workingCapitalReq && <Label basic color="red" pointing content={errors.workingCapitalReq} />}
-              </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  label="Property Value"
-                  name="propertyValue"
-                  autoComplete="propertyValue"
-                  value={values.propertyValue}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.propertyValue &&
-                  touched.propertyValue && <Label basic color="red" pointing content={errors.propertyValue} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field width={4}>
-                <Form.Input
-                  label={this.state.financialYear - 3}
-                  name="year1"
-                  autoComplete="year1"
-                  value={values.year1}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.year1 && touched.year1 && <Label basic color="red" pointing content={errors.year1} />}
-              </Form.Field>
-              <Form.Field width={4}>
-                <Form.Input
-                  label={this.state.financialYear - 2}
-                  name="year2"
-                  autoComplete="year2"
-                  value={values.year2}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.year2 && touched.year2 && <Label basic color="red" pointing content={errors.year2} />}
-              </Form.Field>
-              <Form.Field width={4}>
-                <Form.Input
-                  label={this.state.financialYear - 1}
-                  name="year3"
-                  autoComplete="year3"
-                  value={values.year3}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.year3 && touched.year3 && <Label basic color="red" pointing content={errors.year3} />}
-              </Form.Field>
-              <Form.Field width={4}>
-                <Form.Input
-                  label={this.state.financialYear + ' YTD (optional)'}
-                  name="year4"
-                  autoComplete="year4"
-                  value={values.year4}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.year4 && touched.year4 && <Label basic color="red" pointing content={errors.year4} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field>
-                <Form.Input
-                  label="N. of Working Owners"
-                  name="nOfWorkingOwners"
-                  autoComplete="nOfWorkingOwners"
-                  value={values.nOfWorkingOwners}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.nOfWorkingOwners &&
-                  touched.nOfWorkingOwners && <Label basic color="red" pointing content={errors.nOfWorkingOwners} />}
-              </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  label="Agreed Wage For Working Owners"
-                  name="agreedWageForWorkingOwners"
-                  autoComplete="agreedWageForWorkingOwners"
-                  value={values.agreedWageForWorkingOwners}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.agreedWageForWorkingOwners &&
-                  touched.agreedWageForWorkingOwners && (
-                  <Label basic color="red" pointing content={errors.agreedWageForWorkingOwners} />
-                )}
-              </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  label="Latest Full Year Total Revenue"
-                  name="latestFullYearTotalRevenue"
-                  autoComplete="latestFullYearTotalRevenue"
-                  value={values.latestFullYearTotalRevenue}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.latestFullYearTotalRevenue &&
-                  touched.latestFullYearTotalRevenue && (
-                  <Label basic color="red" pointing content={errors.latestFullYearTotalRevenue} />
-                )}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field width={8}>
-                <Form.TextArea
-                  label="Terms of Deal"
-                  name="termsOfDeal"
-                  autoComplete="termsOfDeal"
-                  value={values.termsOfDeal}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.termsOfDeal &&
-                  touched.termsOfDeal && <Label basic color="red" pointing content={errors.termsOfDeal} />}
-              </Form.Field>
-              <Form.Field width={8}>
-                <Form.TextArea
-                  label="Special Notes"
-                  name="specialNotes"
-                  autoComplete="specialNotes"
-                  value={values.specialNotes}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.specialNotes &&
-                  touched.specialNotes && <Label basic color="red" pointing content={errors.specialNotes} />}
-              </Form.Field>
-            </Form.Group>
-            <Divider horizontal>(Optional) Set Follow up date</Divider>
-            <Form.Group>
-              <Form.Checkbox
-                label="Make a Follow up log."
-                name="followUpLog"
-                onChange={this._handleChangeCheckBox}
-                checked={values.followUpLog}
-              />
-              {this.props.values.followUpLog ? (
+              </Form.Group>
+              <Divider horizontal>Sold Details</Divider>
+              <Form.Group>
                 <Form.Field>
-                  <DatePicker selected={values.date} onChange={this._handleDateChange} popperPlacement="top-end" />
-                </Form.Field>
-              ) : (
-                <Form.Field>
-                  <DatePicker selected={values.date} onChange={this._handleDateChange} disabled />
-                </Form.Field>
-              )}
-            </Form.Group>
-            <Form.Group>
-              {this.props.values.followUpLog ? (
-                <Form.Field width={10}>
-                  <Form.TextArea
-                    label=""
-                    name="text"
-                    autoComplete="text"
-                    value={values.text}
+                  <Form.Input
+                    label="Sold Price (Ex. Stock)"
+                    name="soldPrice"
+                    autoComplete="soldPrice"
+                    value={values.soldPrice}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
+                  {errors.soldPrice &&
+                    touched.soldPrice && <Label basic color="red" pointing content={errors.soldPrice} />}
                 </Form.Field>
-              ) : (
-                <Form.Field width={10}>
-                  <Form.TextArea disabled name=" " value={''} />
+                <Form.Field>
+                  <Form.Input
+                    label="Stock Value"
+                    name="stockValue"
+                    autoComplete="stockValue"
+                    value={values.stockValue}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.stockValue &&
+                    touched.stockValue && <Label basic color="red" pointing content={errors.stockValue} />}
                 </Form.Field>
-              )}
-            </Form.Group>
-          </Form>
+              </Form.Group>
+              <Form.Group>
+                <Form.Field>
+                  <Form.Input
+                    label="Asset Value"
+                    name="assetValue"
+                    autoComplete="assetValue"
+                    value={values.assetValue}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.assetValue &&
+                    touched.assetValue && <Label basic color="red" pointing content={errors.assetValue} />}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Input
+                    label="Working Capital Requirements"
+                    name="workingCapitalReq"
+                    autoComplete="workingCapitalReq"
+                    value={values.workingCapitalReq}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.workingCapitalReq &&
+                    touched.workingCapitalReq && (
+                    <Label basic color="red" pointing content={errors.workingCapitalReq} />
+                  )}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Input
+                    label="Property Value"
+                    name="propertyValue"
+                    autoComplete="propertyValue"
+                    value={values.propertyValue}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.propertyValue &&
+                    touched.propertyValue && <Label basic color="red" pointing content={errors.propertyValue} />}
+                </Form.Field>
+              </Form.Group>
+              <Form.Group>
+                <Form.Field width={4}>
+                  <Form.Input
+                    label={this.state.financialYear - 3}
+                    name="year1"
+                    autoComplete="year1"
+                    value={values.year1}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.year1 && touched.year1 && <Label basic color="red" pointing content={errors.year1} />}
+                </Form.Field>
+                <Form.Field width={4}>
+                  <Form.Input
+                    label={this.state.financialYear - 2}
+                    name="year2"
+                    autoComplete="year2"
+                    value={values.year2}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.year2 && touched.year2 && <Label basic color="red" pointing content={errors.year2} />}
+                </Form.Field>
+                <Form.Field width={4}>
+                  <Form.Input
+                    label={this.state.financialYear - 1}
+                    name="year3"
+                    autoComplete="year3"
+                    value={values.year3}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.year3 && touched.year3 && <Label basic color="red" pointing content={errors.year3} />}
+                </Form.Field>
+                <Form.Field width={4}>
+                  <Form.Input
+                    label={this.state.financialYear + 'Annualised YTD'}
+                    name="year4"
+                    autoComplete="year4"
+                    value={values.year4}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.year4 && touched.year4 && <Label basic color="red" pointing content={errors.year4} />}
+                </Form.Field>
+              </Form.Group>
+              <Form.Group>
+                <Form.Field>
+                  <Form.Input
+                    label="N. of Working Owners"
+                    name="nOfWorkingOwners"
+                    autoComplete="nOfWorkingOwners"
+                    value={values.nOfWorkingOwners}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.nOfWorkingOwners &&
+                    touched.nOfWorkingOwners && <Label basic color="red" pointing content={errors.nOfWorkingOwners} />}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Input
+                    label="Agreed Wage For Working Owners"
+                    name="agreedWageForWorkingOwners"
+                    autoComplete="agreedWageForWorkingOwners"
+                    value={values.agreedWageForWorkingOwners}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.agreedWageForWorkingOwners &&
+                    touched.agreedWageForWorkingOwners && (
+                    <Label basic color="red" pointing content={errors.agreedWageForWorkingOwners} />
+                  )}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Input
+                    label="Latest Full Year Total Revenue"
+                    name="latestFullYearTotalRevenue"
+                    autoComplete="latestFullYearTotalRevenue"
+                    value={values.latestFullYearTotalRevenue}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.latestFullYearTotalRevenue &&
+                    touched.latestFullYearTotalRevenue && (
+                    <Label basic color="red" pointing content={errors.latestFullYearTotalRevenue} />
+                  )}
+                </Form.Field>
+              </Form.Group>
+              <Form.Group>
+                <Form.Field width={8}>
+                  <Form.TextArea
+                    label="Terms of Deal"
+                    name="termsOfDeal"
+                    autoComplete="termsOfDeal"
+                    value={values.termsOfDeal}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.termsOfDeal &&
+                    touched.termsOfDeal && <Label basic color="red" pointing content={errors.termsOfDeal} />}
+                </Form.Field>
+                <Form.Field width={8}>
+                  <Form.TextArea
+                    label="Special Notes"
+                    name="specialNotes"
+                    autoComplete="specialNotes"
+                    value={values.specialNotes}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.specialNotes &&
+                    touched.specialNotes && <Label basic color="red" pointing content={errors.specialNotes} />}
+                </Form.Field>
+              </Form.Group>
+            </Form>
+          </Dimmer.Dimmable>
         </Modal.Content>
         <Modal.Actions>
-          <Button color="blue" onClick={this._handleConfirm}>
+          <Button color="blue" disabled={values.sold} onClick={() => this._handleConfirm(false)}>
             <Icon name="save" />
             Save and Return
           </Button>
           <Button
             color="green"
-            disabled={!isValid}
+            disabled={!isValid || values.sold}
             // loading={updateLoading}
-            onClick={this._handleConfirm(false)}
+            onClick={this._handleConfirm}
           >
             <Icon name="save" />
             Save and Change to Sold
@@ -403,25 +388,49 @@ StageSoldForm.propTypes = {
     title: PropTypes.string.isRequired
   }).isRequired,
   callBack: PropTypes.func.isRequired,
-  // updateBusinessSold: PropTypes.func,
-  business: PropTypes.object
-  // businessSold: PropTypes.object,
-  // finaliseStageSold: PropTypes.func,
-  // getBusinessSold: PropTypes.func
+  updateBusinessSold: PropTypes.func,
+  business: PropTypes.object,
+  businessSold: PropTypes.object,
+  finaliseStageSold: PropTypes.func,
+  getBusinessSold: PropTypes.func,
+  createBusinessSold: PropTypes.func,
+  openModal: PropTypes.func,
+  isLoadingBusinessSold: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
-  businessId: props.business.id ? props.business.id : '',
-  // settlementDate: props.businessSold ? props.businessSold.settlementDate : moment(),
-  followUpLog: false
+  id: props.businessSold ? props.businessSold.id : null,
+  businessId: props.business ? props.business.id : null,
+  businessType: props.businessSold ? props.businessSold.businessType : '',
+  settlementDate: props.businessSold ? moment(props.businessSold.settlementDate) : moment(),
+  // buyerName: props.businessSold ? props.businessSold.buyerName : '',
+  soldPrice: props.businessSold ? numeral(props.businessSold.soldPrice).format('0,0.00') : 0,
+  stockValue: props.businessSold ? props.businessSold.stockValue : 0,
+  assetValue: props.businessSold ? props.businessSold.assetValue : 0,
+  workingCapitalReq: props.businessSold ? props.businessSold.workingCapitalReq : 0,
+  propertyValue: props.businessSold ? props.businessSold.propertyValue : 0,
+  year1: props.businessSold ? props.businessSold.year1 : 0,
+  year2: props.businessSold ? props.businessSold.year2 : 0,
+  year3: props.businessSold ? props.businessSold.year3 : 0,
+  year4: props.businessSold ? props.businessSold.year4 : 0,
+  nOfWorkingOwners: props.businessSold ? props.businessSold.nOfWorkingOwners : 0,
+  agreedWageForWorkingOwners: props.businessSold ? props.businessSold.agreedWageForWorkingOwners : 0,
+  latestFullYearTotalRevenue: props.businessSold ? props.businessSold.latestFullYearTotalRevenue : 0,
+  termsOfDeal: props.businessSold ? props.businessSold.termsOfDeal : '',
+  specialNotes: props.businessSold ? props.businessSold.specialNotes : '',
+  sold: props.businessSold ? props.businessSold.sold : false
 })
 
 const mapStateToProps = state => ({
-  // businessSold: state.businessSold.get.object
+  businessSold: state.businessSold.get.object.data,
+  isLoadingBusinessSold: state.businessSold.get.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ /* getBusinessSold, updateBusinessSold, finaliseStageSold, */ closeModal }, dispatch)
+  bindActionCreators(
+    { createBusinessSold, getBusinessSold, updateBusinessSold, finaliseStageSold, closeModal, openModal },
+    dispatch
+  )
 
 export default connect(
   mapStateToProps,
