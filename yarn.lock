@@ -6190,6 +6190,12 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.1, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-currency-format@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-currency-format/-/react-currency-format-1.0.0.tgz#9be9c984c357bf8e847368c5422b5f4d4aa819b3"
+  dependencies:
+    prop-types "^15.6.0"
+
 react-datepicker@^1.4.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-1.5.0.tgz#7eacd9609313189c84a21bb7421486054939a4b2"

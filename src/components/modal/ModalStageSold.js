@@ -10,6 +10,7 @@ import { Modal, Form, Label, Icon, Button, Divider, Header, Dimmer, Loader } fro
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import numeral from 'numeral'
+import CurrencyFormat from 'react-currency-format'
 
 import {
   createBusinessSold,
@@ -70,15 +71,24 @@ class StageSoldForm extends Component {
   _modalConfirmChangeStage = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
-        title: 'Change Stage to Sold',
+        title: 'Changing Stage to Sold',
         text: 'Are you sure you want to change the stage to SOLD? Once you have changed you can NOT go back.'
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           this.props.finaliseStageSold(this.props.values)
+          return
         }
+        this.props.callBack(isConfirmed)
       }
     })
+  }
+
+  _numberFormat = (e, { name, value }) => {
+    // new Intl.NumberFormat('en-IN').format()
+    const myNumeral = numeral(value)
+    const numberFormated = myNumeral.format('$0,0,00')
+    this.props.setFieldValue(name, numberFormated)
   }
 
   render () {
@@ -86,7 +96,7 @@ class StageSoldForm extends Component {
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
-        <Modal.Content scrolling>
+        <Modal.Content style={{ paddingTop: '0px' }} scrolling>
           <Dimmer.Dimmable dimmed={isLoadingBusinessSold}>
             <Dimmer inverted active={isLoadingBusinessSold}>
               <Loader>Loading</Loader>
@@ -133,12 +143,13 @@ class StageSoldForm extends Component {
               <Divider horizontal>Sold Details</Divider>
               <Form.Group>
                 <Form.Field>
+                  <CurrencyFormat value={values.soldPrice} thousandSeparator={true} prefix={'$'} />
                   <Form.Input
                     label="Sold Price (Ex. Stock)"
                     name="soldPrice"
                     autoComplete="soldPrice"
                     value={values.soldPrice}
-                    onChange={handleChange}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.soldPrice &&
