@@ -10,24 +10,91 @@ import { Modal, Form, Label, Icon, Button, Divider, Header, Dimmer, Loader } fro
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import numeral from 'numeral'
-import CurrencyFormat from 'react-currency-format'
 
 import {
   createBusinessSold,
   updateBusinessSold,
   finaliseStageSold,
-  getBusinessSold
+  getBusinessSold,
+  getBuyersBusinessSold
 } from '../../redux/ducks/businessSold'
 
 class StageSoldForm extends Component {
   constructor (props) {
     super(props)
-    this.state = { financialYear: null }
+    this.state = {
+      financialYear: null,
+      soldPrice: 0,
+      stockValue: 0,
+      assetValue: 0,
+      year1: 0,
+      year2: 0,
+      year3: 0,
+      year4: 0,
+      agreedWageForWorkingOwners: 0,
+      latestFullYearTotalRevenue: 0
+    }
   }
 
   componentDidMount () {
     this._calculateFinancialYear()
     this.props.getBusinessSold(this.props.business.id)
+    this.props.getBuyersBusinessSold(this.props.business.id, true)
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.businessSold && nextProps.businessSold.soldPrice !== prevState.soldPrice) {
+      var soldPrice = numeral(nextProps.values.soldPrice).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.stockValue !== prevState.stockValue) {
+      var stockValue = numeral(nextProps.values.stockValue).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.assetValue !== prevState.assetValue) {
+      var assetValue = numeral(nextProps.values.assetValue).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.workingCapitalReq !== prevState.workingCapitalReq) {
+      var workingCapitalReq = numeral(nextProps.values.workingCapitalReq).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.propertyValue !== prevState.propertyValue) {
+      var propertyValue = numeral(nextProps.values.propertyValue).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.year1 !== prevState.year1) {
+      var year1 = numeral(nextProps.values.year1).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.year2 !== prevState.year2) {
+      var year2 = numeral(nextProps.values.year2).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.year3 !== prevState.year3) {
+      var year3 = numeral(nextProps.values.year3).format('$0,0.[99]')
+    }
+    if (nextProps.businessSold && nextProps.businessSold.year4 !== prevState.year4) {
+      var year4 = numeral(nextProps.values.year4).format('$0,0.[99]')
+    }
+    if (
+      nextProps.businessSold &&
+      nextProps.businessSold.agreedWageForWorkingOwners !== prevState.agreedWageForWorkingOwners
+    ) {
+      var agreedWageForWorkingOwners = numeral(nextProps.values.agreedWageForWorkingOwners).format('$0,0.[99]')
+    }
+    if (
+      nextProps.businessSold &&
+      nextProps.businessSold.latestFullYearTotalRevenue !== prevState.latestFullYearTotalRevenue
+    ) {
+      var latestFullYearTotalRevenue = numeral(nextProps.values.latestFullYearTotalRevenue).format('$0,0.[99]')
+    }
+    return {
+      soldPrice: soldPrice || 0,
+      stockValue: stockValue || 0,
+      assetValue: assetValue || 0,
+      workingCapitalReq: workingCapitalReq || 0,
+      propertyValue: propertyValue || 0,
+      year1: year1 || 0,
+      year2: year2 || 0,
+      year3: year3 || 0,
+      year4: year4 || 0,
+      agreedWageForWorkingOwners: agreedWageForWorkingOwners || 0,
+      latestFullYearTotalRevenue: latestFullYearTotalRevenue || 0
+    }
   }
 
   _handleDateChange = date => {
@@ -85,14 +152,35 @@ class StageSoldForm extends Component {
   }
 
   _numberFormat = (e, { name, value }) => {
-    // new Intl.NumberFormat('en-IN').format()
     const myNumeral = numeral(value)
-    const numberFormated = myNumeral.format('$0,0,00')
-    this.props.setFieldValue(name, numberFormated)
+    const numberFormated = myNumeral.format('$0,0.[99]')
+    this.props.setFieldValue(name, myNumeral.value())
+    this.setState({ [name]: numberFormated })
+  }
+
+  _mapArrayToValuesForDropdown = array => {
+    if (array.length > 0) {
+      return array.map((item, index) => ({
+        key: index,
+        text: `${item.enquiry.Buyer.firstName} ${item.enquiry.Buyer.surname} - (${item.enquiry.Buyer.email})`,
+        value: `${item.enquiry.Buyer.firstName} ${item.enquiry.Buyer.surname}`
+      }))
+    }
+    return [{ key: 0, text: 'No records found', value: 0 }]
   }
 
   render () {
-    const { values, touched, errors, isValid, handleChange, handleBlur, options, isLoadingBusinessSold } = this.props
+    const {
+      values,
+      touched,
+      errors,
+      isValid,
+      handleChange,
+      handleBlur,
+      options,
+      isLoadingBusinessSold,
+      listBuyersFromBusiness
+    } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -124,31 +212,33 @@ class StageSoldForm extends Component {
                 Settlement Date
               </label>
               <Form.Group style={{ marginTop: '-18px' }}>
-                <Form.Field style={{ marginTop: '22px' }} width={4}>
+                <Form.Field style={{ marginTop: '22px' }} width={3}>
                   <DatePicker selected={values.settlementDate} onChange={this._handleDateChange} />
                 </Form.Field>
-                {/* <Form.Field width={10}>
-                <Form.Select
-                  label="Buyer Name"
-                  // options={ratingOptions}
-                  name="buyerName"
-                  autoComplete="buyerName"
-                  value={values.buyerName}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.buyerName &&
-                  touched.buyerName && <Label basic color="red" pointing content={errors.buyerName} />}
-              </Form.Field> */}
+                <Form.Field width={13}>
+                  <Form.Dropdown
+                    name="buyerName"
+                    label="Buyer Name"
+                    autoComplete="buyerName"
+                    value={values.buyerName}
+                    onChange={this._handleSelectChange}
+                    placeholder="Buyer Name"
+                    search
+                    selection
+                    options={this._mapArrayToValuesForDropdown(listBuyersFromBusiness)}
+                  />
+                  {errors.buyerName &&
+                    touched.buyerName && <Label basic color="red" pointing content={errors.buyerName} />}
+                </Form.Field>
               </Form.Group>
               <Divider horizontal>Sold Details</Divider>
               <Form.Group>
                 <Form.Field>
-                  <CurrencyFormat value={values.soldPrice} thousandSeparator={true} prefix={'$'} />
                   <Form.Input
                     label="Sold Price (Ex. Stock)"
                     name="soldPrice"
                     autoComplete="soldPrice"
-                    value={values.soldPrice}
+                    value={this.state.soldPrice}
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
@@ -160,8 +250,8 @@ class StageSoldForm extends Component {
                     label="Stock Value"
                     name="stockValue"
                     autoComplete="stockValue"
-                    value={values.stockValue}
-                    onChange={handleChange}
+                    value={this.state.stockValue}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.stockValue &&
@@ -174,8 +264,8 @@ class StageSoldForm extends Component {
                     label="Asset Value"
                     name="assetValue"
                     autoComplete="assetValue"
-                    value={values.assetValue}
-                    onChange={handleChange}
+                    value={this.state.assetValue}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.assetValue &&
@@ -186,8 +276,8 @@ class StageSoldForm extends Component {
                     label="Working Capital Requirements"
                     name="workingCapitalReq"
                     autoComplete="workingCapitalReq"
-                    value={values.workingCapitalReq}
-                    onChange={handleChange}
+                    value={this.state.workingCapitalReq}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.workingCapitalReq &&
@@ -200,8 +290,8 @@ class StageSoldForm extends Component {
                     label="Property Value"
                     name="propertyValue"
                     autoComplete="propertyValue"
-                    value={values.propertyValue}
-                    onChange={handleChange}
+                    value={this.state.propertyValue}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.propertyValue &&
@@ -214,8 +304,8 @@ class StageSoldForm extends Component {
                     label={this.state.financialYear - 3}
                     name="year1"
                     autoComplete="year1"
-                    value={values.year1}
-                    onChange={handleChange}
+                    value={this.state.year1}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.year1 && touched.year1 && <Label basic color="red" pointing content={errors.year1} />}
@@ -225,8 +315,8 @@ class StageSoldForm extends Component {
                     label={this.state.financialYear - 2}
                     name="year2"
                     autoComplete="year2"
-                    value={values.year2}
-                    onChange={handleChange}
+                    value={this.state.year2}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.year2 && touched.year2 && <Label basic color="red" pointing content={errors.year2} />}
@@ -236,19 +326,19 @@ class StageSoldForm extends Component {
                     label={this.state.financialYear - 1}
                     name="year3"
                     autoComplete="year3"
-                    value={values.year3}
-                    onChange={handleChange}
+                    value={this.state.year3}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.year3 && touched.year3 && <Label basic color="red" pointing content={errors.year3} />}
                 </Form.Field>
                 <Form.Field width={4}>
                   <Form.Input
-                    label={this.state.financialYear + 'Annualised YTD'}
+                    label={this.state.financialYear + ' Annualised YTD'}
                     name="year4"
                     autoComplete="year4"
-                    value={values.year4}
-                    onChange={handleChange}
+                    value={this.state.year4}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.year4 && touched.year4 && <Label basic color="red" pointing content={errors.year4} />}
@@ -272,8 +362,8 @@ class StageSoldForm extends Component {
                     label="Agreed Wage For Working Owners"
                     name="agreedWageForWorkingOwners"
                     autoComplete="agreedWageForWorkingOwners"
-                    value={values.agreedWageForWorkingOwners}
-                    onChange={handleChange}
+                    value={this.state.agreedWageForWorkingOwners}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.agreedWageForWorkingOwners &&
@@ -286,8 +376,8 @@ class StageSoldForm extends Component {
                     label="Latest Full Year Total Revenue"
                     name="latestFullYearTotalRevenue"
                     autoComplete="latestFullYearTotalRevenue"
-                    value={values.latestFullYearTotalRevenue}
-                    onChange={handleChange}
+                    value={this.state.latestFullYearTotalRevenue}
+                    onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
                   {errors.latestFullYearTotalRevenue &&
@@ -348,37 +438,7 @@ class StageSoldForm extends Component {
 const validationSchema = Yup.object().shape({
   businessType: Yup.string().required('This field is required.'),
   // settlementDate: Yup.string().required(' is required.'),
-  soldPrice: Yup.number()
-    .required('This field is required.')
-    .typeError('You must type only numbers.'),
-  stockValue: Yup.number()
-    .required('This field is required.')
-    .typeError('You must type only numbers.'),
-  assetValue: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
-  workingCapitalReq: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
-  propertyValue: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
-  year1: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
-  year2: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
-  year3: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
   nOfWorkingOwners: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
-  agreedWageForWorkingOwners: Yup.number()
-    .required('This field required.')
-    .typeError('You must type only numbers.'),
-  latestFullYearTotalRevenue: Yup.number()
     .required('This field required.')
     .typeError('You must type only numbers.'),
   termsOfDeal: Yup.string().required('This field is required.'),
@@ -406,7 +466,9 @@ StageSoldForm.propTypes = {
   getBusinessSold: PropTypes.func,
   createBusinessSold: PropTypes.func,
   openModal: PropTypes.func,
-  isLoadingBusinessSold: PropTypes.bool
+  isLoadingBusinessSold: PropTypes.bool,
+  getBuyersBusinessSold: PropTypes.func,
+  listBuyersFromBusiness: PropTypes.array
 }
 
 const mapPropsToValues = props => ({
@@ -414,8 +476,8 @@ const mapPropsToValues = props => ({
   businessId: props.business ? props.business.id : null,
   businessType: props.businessSold ? props.businessSold.businessType : '',
   settlementDate: props.businessSold ? moment(props.businessSold.settlementDate) : moment(),
-  // buyerName: props.businessSold ? props.businessSold.buyerName : '',
-  soldPrice: props.businessSold ? numeral(props.businessSold.soldPrice).format('0,0.00') : 0,
+  buyerName: props.businessSold ? props.businessSold.buyerName : '',
+  soldPrice: props.businessSold ? props.businessSold.soldPrice : 0,
   stockValue: props.businessSold ? props.businessSold.stockValue : 0,
   assetValue: props.businessSold ? props.businessSold.assetValue : 0,
   workingCapitalReq: props.businessSold ? props.businessSold.workingCapitalReq : 0,
@@ -434,12 +496,21 @@ const mapPropsToValues = props => ({
 
 const mapStateToProps = state => ({
   businessSold: state.businessSold.get.object.data,
-  isLoadingBusinessSold: state.businessSold.get.isLoading
+  isLoadingBusinessSold: state.businessSold.get.isLoading,
+  listBuyersFromBusiness: state.businessSold.getBuyersBusiness.array
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { createBusinessSold, getBusinessSold, updateBusinessSold, finaliseStageSold, closeModal, openModal },
+    {
+      createBusinessSold,
+      getBusinessSold,
+      updateBusinessSold,
+      finaliseStageSold,
+      closeModal,
+      openModal,
+      getBuyersBusinessSold
+    },
     dispatch
   )
 

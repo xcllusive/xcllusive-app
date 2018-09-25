@@ -1,4 +1,5 @@
-import { create, get, update, finalise, getBuyersBusiness } from '../../services/api/businessSold'
+import { create, get, update, finalise } from '../../services/api/businessSold'
+import { getBuyersFromBusiness } from '../../services/api/business'
 import { toast } from 'react-toastify'
 
 // Action Types
@@ -182,7 +183,7 @@ export default function reducer (state = initialState, action) {
         ...state,
         getBuyersBusiness: {
           ...state.getBuyersBusiness,
-          array: action.payload.businessSold,
+          array: action.payload,
           isLoading: false
         }
       }
@@ -280,16 +281,16 @@ export const finaliseStageSold = businessSold => async dispatch => {
   }
 }
 
-export const getBuyersBusinessSold = businessId => async dispatch => {
+export const getBuyersBusinessSold = (businessId, showAll) => async dispatch => {
   dispatch({
     type: Types.GET_BUYERS_BUSINESS_SOLD_LOADING,
     payload: true
   })
   try {
-    const businessSold = await getBuyersBusiness(businessId)
+    const businessSold = await getBuyersFromBusiness(businessId, showAll)
     dispatch({
       type: Types.GET_BUYERS_BUSINESS_SOLD_SUCCESS,
-      payload: businessSold
+      payload: businessSold.data.array
     })
   } catch (error) {
     dispatch({
