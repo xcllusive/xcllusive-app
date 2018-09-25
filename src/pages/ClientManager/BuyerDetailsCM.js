@@ -8,18 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 
-import {
-  Form,
-  Header,
-  Table,
-  Grid,
-  Icon,
-  Dimmer,
-  Loader,
-  Segment,
-  Button,
-  Pagination
-} from 'semantic-ui-react'
+import { Form, Header, Table, Grid, Icon, Dimmer, Loader, Segment, Button, Pagination } from 'semantic-ui-react'
 
 import { getBuyer, getBusinessesFromBuyer } from '../../redux/ducks/buyer'
 import {
@@ -66,19 +55,10 @@ class BuyerDetailsCM extends Component {
 
   _selectLog = buyerLog => {
     this.setState({ buyerLog })
-    this.props.setFieldValue(
-      'buyerLog_followUp',
-      buyerLog ? buyerLog.followUp : ''
-    )
+    this.props.setFieldValue('buyerLog_followUp', buyerLog ? buyerLog.followUp : '')
     this.props.setFieldValue('buyerLog_text', buyerLog ? buyerLog.text : '')
-    this.props.setFieldValue(
-      'buyer_id',
-      buyerLog && buyerLog.newLog ? buyerLog.buyer_id : null
-    )
-    this.props.setFieldValue(
-      'business_id',
-      buyerLog && buyerLog.newLog ? buyerLog.business_id : null
-    )
+    this.props.setFieldValue('buyer_id', buyerLog && buyerLog.newLog ? buyerLog.buyer_id : null)
+    this.props.setFieldValue('business_id', buyerLog && buyerLog.newLog ? buyerLog.business_id : null)
   }
 
   _handlePaginationChangeLog = (e, { activePage }) => {
@@ -86,12 +66,7 @@ class BuyerDetailsCM extends Component {
   }
 
   _handlePaginationChangeBusBuyLog = (e, { activePage }) => {
-    this.props.getBusinessBuyerLog(
-      this.props.buyer.id,
-      this.state.buyerLog.business_id,
-      10,
-      activePage
-    )
+    this.props.getBusinessBuyerLog(this.props.buyer.id, this.state.buyerLog.business_id, 10, activePage)
   }
 
   render () {
@@ -118,13 +93,8 @@ class BuyerDetailsCM extends Component {
         <Grid celled="internally" divided>
           <Grid.Row>
             <Grid.Column width={5}>
-              {this.props.buyer ? (
-                <Header as="h3" content="Buyer Details" />
-              ) : null}
-              <Dimmer.Dimmable
-                dimmed={isLoadingBuyer}
-                style={{ height: '80vh' }}
-              >
+              {this.props.buyer ? <Header as="h3" content="Buyer Details" /> : null}
+              <Dimmer.Dimmable dimmed={isLoadingBuyer} style={{ height: '80vh' }}>
                 <Dimmer inverted active={isLoadingBuyer}>
                   <Loader>Loading</Loader>
                 </Dimmer>
@@ -132,18 +102,8 @@ class BuyerDetailsCM extends Component {
                 {this.props.buyer ? (
                   <Form>
                     <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="First Name"
-                        readOnly
-                        value={this.props.buyer.firstName}
-                      />
-                      <Form.Input
-                        width={8}
-                        label="Last Name"
-                        readOnly
-                        value={this.props.buyer.surname}
-                      />
+                      <Form.Input width={8} label="First Name" readOnly value={this.props.buyer.firstName} />
+                      <Form.Input width={8} label="Last Name" readOnly value={this.props.buyer.surname} />
                     </Form.Group>
                     <Form.Group>
                       <Form.Input
@@ -156,63 +116,26 @@ class BuyerDetailsCM extends Component {
                             inverted
                             circular
                             link
-                            onClick={() =>
-                              window.open(`mailto:${this.props.buyer.email}`)
-                            }
+                            onClick={() => (window.location.href = `mailto:${this.props.buyer.email}`)}
                           />
                         }
                         value={this.props.buyer.email}
                       />
                     </Form.Group>
                     <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Street"
-                        readOnly
-                        value={this.props.buyer.streetName}
-                      />
+                      <Form.Input width={16} label="Street" readOnly value={this.props.buyer.streetName} />
                     </Form.Group>
                     <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="Suburb"
-                        readOnly
-                        value={this.props.buyer.suburb}
-                      />
-                      <Form.Input
-                        width={4}
-                        label="State"
-                        readOnly
-                        value={this.props.buyer.state}
-                      />
-                      <Form.Input
-                        width={4}
-                        label="Post Code"
-                        readOnly
-                        value={this.props.buyer.postCode}
-                      />
+                      <Form.Input width={8} label="Suburb" readOnly value={this.props.buyer.suburb} />
+                      <Form.Input width={4} label="State" readOnly value={this.props.buyer.state} />
+                      <Form.Input width={4} label="Post Code" readOnly value={this.props.buyer.postCode} />
                     </Form.Group>
                     <Form.Group>
-                      <Form.Input
-                        width={16}
-                        label="Telephone"
-                        readOnly
-                        value={this.props.buyer.telephone1}
-                      />
+                      <Form.Input width={16} label="Telephone" readOnly value={this.props.buyer.telephone1} />
                     </Form.Group>
                     <Form.Group>
-                      <Form.Input
-                        width={8}
-                        label="Source"
-                        readOnly
-                        value={this.props.buyer.BusinessSource.label}
-                      />
-                      <Form.Input
-                        width={8}
-                        label="Price To"
-                        readOnly
-                        value={this.props.buyer.priceTo}
-                      />
+                      <Form.Input width={8} label="Source" readOnly value={this.props.buyer.BusinessSource.label} />
+                      <Form.Input width={8} label="Price To" readOnly value={this.props.buyer.priceTo} />
                     </Form.Group>
                     <Form.Group>
                       <Form.TextArea
@@ -223,11 +146,7 @@ class BuyerDetailsCM extends Component {
                         value={this.props.buyer.buyerNotes}
                       />
                     </Form.Group>
-                    <Button
-                      size="small"
-                      color="green"
-                      onClick={() => history.push('/clientManager')}
-                    >
+                    <Button size="small" color="green" onClick={() => history.push('/clientManager')}>
                       <Icon name="backward" />
                       Back to Client Manager
                     </Button>
@@ -243,14 +162,7 @@ class BuyerDetailsCM extends Component {
                 <Header style={{ margin: 0 }}>Attached Business Log</Header>
                 {!buyerLog ? (
                   <Fragment>
-                    <Table
-                      color="blue"
-                      celled
-                      inverted
-                      selectable
-                      size="small"
-                      compact
-                    >
+                    <Table color="blue" celled inverted selectable size="small" compact>
                       <Table.Header>
                         <Table.Row>
                           <Table.HeaderCell>Business Name</Table.HeaderCell>
@@ -261,34 +173,18 @@ class BuyerDetailsCM extends Component {
                       </Table.Header>
                       <Table.Body>
                         {listBuyerLogList.array.map(buyerLogList => (
-                          <Table.Row
-                            active
-                            key={buyerLogList.id}
-                            onClick={() =>
-                              this._getBusinessObject(buyerLogList)
-                            }
-                          >
-                            <Table.Cell>
-                              {buyerLogList.Business.businessName}
-                            </Table.Cell>
+                          <Table.Row active key={buyerLogList.id} onClick={() => this._getBusinessObject(buyerLogList)}>
+                            <Table.Cell>{buyerLogList.Business.businessName}</Table.Cell>
                             <Table.Cell>{buyerLogList.text}</Table.Cell>
-                            <Table.Cell>
-                              {moment(buyerLogList.followUp).format(
-                                'DD/MM/YYYY - HH:mm'
-                              )}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {buyerLogList.followUpStatus}
-                            </Table.Cell>
+                            <Table.Cell>{moment(buyerLogList.followUp).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
+                            <Table.Cell>{buyerLogList.followUpStatus}</Table.Cell>
                           </Table.Row>
                         ))}
                       </Table.Body>
                     </Table>
                     <Pagination
                       size="mini"
-                      onPageChange={(e, data) =>
-                        this._handlePaginationChangeLog(e, data, 1)
-                      }
+                      onPageChange={(e, data) => this._handlePaginationChangeLog(e, data, 1)}
                       defaultActivePage={listBuyerLogList.activePage}
                       totalPages={listBuyerLogList.pages}
                       firstItem={null}
@@ -297,10 +193,7 @@ class BuyerDetailsCM extends Component {
                   </Fragment>
                 ) : null}
               </Dimmer.Dimmable>
-              <Dimmer.Dimmable
-                dimmed={isLoadingBusBuyLog}
-                style={isLoadingBusBuyLog ? { height: '80vh' } : null}
-              >
+              <Dimmer.Dimmable dimmed={isLoadingBusBuyLog} style={isLoadingBusBuyLog ? { height: '80vh' } : null}>
                 <Dimmer inverted active={isLoadingBusBuyLog}>
                   <Loader>Loading</Loader>
                 </Dimmer>
@@ -311,14 +204,7 @@ class BuyerDetailsCM extends Component {
                         {business.businessName}
                       </Header>
                     </Segment>
-                    <Table
-                      color="blue"
-                      celled
-                      inverted
-                      selectable
-                      size="small"
-                      compact
-                    >
+                    <Table color="blue" celled inverted selectable size="small" compact>
                       <Table.Header>
                         <Table.Row>
                           <Table.HeaderCell>Log</Table.HeaderCell>
@@ -327,32 +213,18 @@ class BuyerDetailsCM extends Component {
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
-                        {listBusinessBuyerLogList.array.map(
-                          businessBuyerLog => (
-                            <Table.Row
-                              active
-                              key={businessBuyerLog.id}
-                              onClick={() => this._selectLog(businessBuyerLog)}
-                            >
-                              <Table.Cell>{businessBuyerLog.text}</Table.Cell>
-                              <Table.Cell>
-                                {moment(businessBuyerLog.followUp).format(
-                                  'DD/MM/YYYY - HH:mm'
-                                )}
-                              </Table.Cell>
-                              <Table.Cell>
-                                {businessBuyerLog.followUpStatus}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        )}
+                        {listBusinessBuyerLogList.array.map(businessBuyerLog => (
+                          <Table.Row active key={businessBuyerLog.id} onClick={() => this._selectLog(businessBuyerLog)}>
+                            <Table.Cell>{businessBuyerLog.text}</Table.Cell>
+                            <Table.Cell>{moment(businessBuyerLog.followUp).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
+                            <Table.Cell>{businessBuyerLog.followUpStatus}</Table.Cell>
+                          </Table.Row>
+                        ))}
                       </Table.Body>
                     </Table>
                     <Pagination
                       size="mini"
-                      onPageChange={(e, data) =>
-                        this._handlePaginationChangeBusBuyLog(e, data, 1)
-                      }
+                      onPageChange={(e, data) => this._handlePaginationChangeBusBuyLog(e, data, 1)}
                       defaultActivePage={listBusinessBuyerLogList.activePage}
                       totalPages={listBusinessBuyerLogList.pages}
                       firstItem={null}
@@ -373,10 +245,7 @@ class BuyerDetailsCM extends Component {
                                     form
                                   />
                                 </Form.Field>
-                                <Form.Field
-                                  width={5}
-                                  style={{ alignSelf: 'flex-end' }}
-                                >
+                                <Form.Field width={5} style={{ alignSelf: 'flex-end' }}>
                                   <Form.Button
                                     floated="right"
                                     size="small"
@@ -407,19 +276,12 @@ class BuyerDetailsCM extends Component {
                                     onChange={handleChange}
                                   />
                                 </Form.Field>
-                                <Form.Field
-                                  width={4}
-                                  style={{ alignSelf: 'flex-end' }}
-                                >
+                                <Form.Field width={4} style={{ alignSelf: 'flex-end' }}>
                                   <Form.Button
                                     floated="right"
                                     type="submit"
                                     color="red"
-                                    disabled={
-                                      isSubmitting ||
-                                      !isValid ||
-                                      !buyerLog.newLog
-                                    }
+                                    disabled={isSubmitting || !isValid || !buyerLog.newLog}
                                     loading={isLoadingUpdate}
                                     onClick={handleSubmit}
                                   >
@@ -429,48 +291,29 @@ class BuyerDetailsCM extends Component {
                                 </Form.Field>
                               </Form.Group>
                             </Form>
-                            <Button
-                              size="small"
-                              color="green"
-                              onClick={() => this._backToSearch(null)}
-                            >
+                            <Button size="small" color="green" onClick={() => this._backToSearch(null)}>
                               <Icon name="backward" />
                               Back to Attached Logs
                             </Button>
                           </Fragment>
                         </Grid.Column>
                         <Grid.Column width={8}>
-                          <Table
-                            color="blue"
-                            celled
-                            inverted
-                            selectable
-                            size="small"
-                            compact
-                          >
+                          <Table color="blue" celled inverted selectable size="small" compact>
                             <Table.Header>
                               <Table.Row>
-                                <Table.HeaderCell>
-                                  Previous Business
-                                </Table.HeaderCell>
+                                <Table.HeaderCell>Previous Business</Table.HeaderCell>
                               </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                              {listBusinessesFromBuyer.map(
-                                businessFromBuyer => (
-                                  <Table.Row
-                                    active
-                                    key={businessFromBuyer.business_id}
-                                    onClick={() =>
-                                      this._getBusinessObject(businessFromBuyer)
-                                    }
-                                  >
-                                    <Table.Cell>
-                                      {businessFromBuyer.Business.businessName}
-                                    </Table.Cell>
-                                  </Table.Row>
-                                )
-                              )}
+                              {listBusinessesFromBuyer.map(businessFromBuyer => (
+                                <Table.Row
+                                  active
+                                  key={businessFromBuyer.business_id}
+                                  onClick={() => this._getBusinessObject(businessFromBuyer)}
+                                >
+                                  <Table.Cell>{businessFromBuyer.Business.businessName}</Table.Cell>
+                                </Table.Row>
+                              ))}
                             </Table.Body>
                           </Table>
                         </Grid.Column>
