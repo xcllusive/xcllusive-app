@@ -270,7 +270,7 @@ class EditBusinessDetailForm extends Component {
                           inverted
                           circular
                           link
-                          onClick={() => window.open(`mailto:${values.vendorEmail}`, '_blank')}
+                          onClick={() => (window.location.href = `mailto:${values.vendorEmail}`)}
                         />
                       }
                       name="vendorEmail"
