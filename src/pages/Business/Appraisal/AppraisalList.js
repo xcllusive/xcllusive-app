@@ -9,11 +9,7 @@ import moment from 'moment'
 import { theme } from '../../../styles'
 import Wrapper from '../../../components/content/Wrapper'
 
-import {
-  createAppraisal,
-  getAppraisals,
-  removeAppraisal
-} from '../../../redux/ducks/appraisal'
+import { createAppraisal, getAppraisals, removeAppraisal } from '../../../redux/ducks/appraisal'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 class AppraisalListPage extends Component {
@@ -30,8 +26,7 @@ class AppraisalListPage extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Creating Appraisal',
-        text:
-          'Are you sure you want to create a new appraisal for this business?'
+        text: 'Are you sure you want to create a new appraisal for this business?'
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
@@ -52,8 +47,7 @@ class AppraisalListPage extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Creating Appraisal',
-        text:
-          'Are you sure you want to delete the appraisal? Once you have delete you can not get back.'
+        text: 'Are you sure you want to delete the appraisal? Once you have delete you can not get back.'
       },
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
@@ -72,19 +66,10 @@ class AppraisalListPage extends Component {
         <Grid style={{ marginTop: 0 }}>
           <Grid.Row columns={2}>
             <Grid.Column>
-              <Header
-                as="h2"
-                color="blue"
-                content={`Appraisal Log: ${business.businessName}`}
-              />
+              <Header as="h2" color="blue" content={`Appraisal Log: ${business.businessName}`} />
             </Grid.Column>
             <Grid.Column>
-              <Button
-                color={theme.buttonNew}
-                onClick={() => this._newAppraisal()}
-                size="small"
-                floated="right"
-              >
+              <Button color={theme.buttonNew} onClick={() => this._newAppraisal()} size="small" floated="right">
                 <Icon name="add" />
                 New Appraisal
               </Button>
@@ -94,14 +79,7 @@ class AppraisalListPage extends Component {
         {listAppraisalList.length > 0 ? (
           <Grid padded="horizontally" style={{ marginTop: 0 }}>
             <Grid.Row>
-              <Table
-                color="blue"
-                celled
-                inverted
-                selectable
-                size="small"
-                compact
-              >
+              <Table color="blue" celled inverted selectable size="small" compact>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Created</Table.HeaderCell>
@@ -119,18 +97,12 @@ class AppraisalListPage extends Component {
                 <Table.Body>
                   {listAppraisalList.map((listAppraisal, key) => (
                     <Table.Row active key={listAppraisal.id}>
-                      <Table.Cell>
-                        {moment(listAppraisal.dateTimeCreated).format(
-                          'DD/MM/YYYY'
-                        )}
-                      </Table.Cell>
+                      <Table.Cell>{moment(listAppraisal.dateTimeCreated).format('DD/MM/YYYY')}</Table.Cell>
                       <Table.Cell>TBD with Zoran</Table.Cell>
                       <Table.Cell>TBD with Zoran</Table.Cell>
                       <Table.Cell>{listAppraisal.completed}</Table.Cell>
                       <Table.Cell>
-                        {listAppraisal.sentDate
-                          ? moment(listAppraisal.sentDate).format('DD/MM/YYYY')
-                          : 'No'}
+                        {listAppraisal.sentDate ? moment(listAppraisal.sentDate).format('DD/MM/YYYY') : 'No'}
                       </Table.Cell>
                       <Table.Cell />
                       <Table.Cell />
@@ -154,12 +126,7 @@ class AppraisalListPage extends Component {
                         </Button>
                       </Table.Cell>
                       <Table.Cell>
-                        <Button
-                          icon
-                          onClick={() =>
-                            this._deleteAppraisal(listAppraisal.id)
-                          }
-                        >
+                        <Button icon onClick={() => this._deleteAppraisal(listAppraisal.id)}>
                           <Icon link color="red" size="large" name="trash" />
                         </Button>
                       </Table.Cell>
@@ -172,12 +139,7 @@ class AppraisalListPage extends Component {
         ) : null}
         <Grid style={{ marginTop: 0 }}>
           <Grid.Column>
-            <Button
-              color="green"
-              onClick={() => history.push('/business')}
-              size="small"
-              floated="left"
-            >
+            <Button color="green" onClick={() => history.push(`/business/${business.id}`)} size="small" floated="left">
               <Icon name="backward" />
               Return to Business
             </Button>
@@ -204,17 +166,12 @@ AppraisalListPage.propTypes = {
 
 const mapPropsToValues = props => {
   return {
-    business_id: props.location.state.business.id
-      ? props.location.state.business.id
-      : null
+    business_id: props.location.state.business.id ? props.location.state.business.id : null
   }
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    { createAppraisal, openModal, getAppraisals, removeAppraisal },
-    dispatch
-  )
+  bindActionCreators({ createAppraisal, openModal, getAppraisals, removeAppraisal }, dispatch)
 
 const mapStateToProps = state => ({
   isLoadingCreating: state.appraisal.create.isLoading,
