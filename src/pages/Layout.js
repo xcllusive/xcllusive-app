@@ -31,7 +31,7 @@ import AppraisalList from './Business/Appraisal/AppraisalList'
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
     <Menu inverted attached color="blue" size="small">
-      <Menu.Item as={NavLink} to={`${match.url}dashboard`}>
+      <Menu.Item as={NavLink} to={`${match.url}`}>
         <Header inverted as="h4">
           Xcllusive
         </Header>

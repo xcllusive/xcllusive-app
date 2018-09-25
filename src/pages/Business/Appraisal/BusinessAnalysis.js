@@ -87,7 +87,6 @@ class BusinessAnalysisPage extends Component {
                 <Table color="blue" celled inverted selectable compact size="small">
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell>ID</Table.HeaderCell>
                       <Table.HeaderCell>Label</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
@@ -99,7 +98,6 @@ class BusinessAnalysisPage extends Component {
                           key={risksOptions.id}
                           onClick={() => this._insertOnTextArea('riskList', risksOptions.label)}
                         >
-                          <Table.Cell>{risksOptions.id}</Table.Cell>
                           <Table.Cell>{risksOptions.label}</Table.Cell>
                         </Table.Row>
                       )
@@ -135,7 +133,6 @@ class BusinessAnalysisPage extends Component {
                 <Table color="blue" celled inverted selectable compact size="small">
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell>ID</Table.HeaderCell>
                       <Table.HeaderCell>Label</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
@@ -147,7 +144,6 @@ class BusinessAnalysisPage extends Component {
                           key={valueDriversOptions.id}
                           onClick={() => this._insertOnTextArea('valueDriversList', valueDriversOptions.label)}
                         >
-                          <Table.Cell>{valueDriversOptions.id}</Table.Cell>
                           <Table.Cell>{valueDriversOptions.label}</Table.Cell>
                         </Table.Row>
                       )
@@ -183,7 +179,6 @@ class BusinessAnalysisPage extends Component {
                 <Table color="blue" celled inverted selectable compact size="small">
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell>ID</Table.HeaderCell>
                       <Table.HeaderCell>Label</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
@@ -195,7 +190,6 @@ class BusinessAnalysisPage extends Component {
                           key={criticalIssuesOptions.id}
                           onClick={() => this._insertOnTextArea('criticalIssuesList', criticalIssuesOptions.label)}
                         >
-                          <Table.Cell>{criticalIssuesOptions.id}</Table.Cell>
                           <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
                         </Table.Row>
                       )
