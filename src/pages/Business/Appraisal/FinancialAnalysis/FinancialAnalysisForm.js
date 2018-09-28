@@ -18,12 +18,24 @@ class AddbacksAndAdjustmentsForm extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _handleChangeAndCalculate = (e, { name, namefieldcalc, value }) => {
-    this.props.setFieldValue(name, value)
-    this.props.setFieldValue(namefieldcalc, this._calc1(value))
-  }
+  // _handleChangeAndCalculate = (e, { name, namefieldcalc, value }) => {
+  //   this.props.setFieldValue(name, value)
+  //   this.props.setFieldValue(namefieldcalc, this._calc1(value))
+  // }
 
-  _calc1 = value => parseInt(value) + 1
+  // _calc1 = value => parseInt(value) + 1
+
+  _calcGrossMargin = (sales, cogs) => (sales - cogs) || 0
+
+  _calcGrossMarginPerc = (sales, grossMargin) => ((grossMargin * 100) / sales).toFixed(2) || 0
+
+  _calcGrossProfit = (grossMargin, other) => (grossMargin + other) || 0
+
+  _calcOperatingProfit = (grossProfit, other, expense) => (this._calcGrossProfit(grossProfit, other) - expense) || 0
+
+  _calcOperatingProfitPerc = (sales, grossProfit, other, expense) => (this._calcOperatingProfit(grossProfit, other, expense) / sales).toFixed(2) || 0
+
+  _calcAnnualised = (year, monthsCovered, seasonalAdjustment) => (((year / monthsCovered) * 12) + (((year / monthsCovered) - year) + seasonalAdjustment)).toFixed(2) || 0
 
   render () {
     const { values, handleChange, handleBlur, errors, touched, financialYear } = this.props
@@ -50,17 +62,17 @@ class AddbacksAndAdjustmentsForm extends Component {
                 <Form.Field width={2}>
                   <Form.Input
                     label="Seasonal Adjustment (%)"
-                    name="seasonalAdjusment"
-                    autoComplete="seasonalAdjusment"
+                    name="seasonalAdjustment"
+                    autoComplete="seasonalAdjustment"
                     type="number"
-                    value={values.seasonalAdjusment}
+                    value={values.seasonalAdjustment}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     tabIndex={-1}
                   />
-                  {errors.seasonalAdjusment &&
-                    touched.seasonalAdjusment && (
-                    <Label basic color="red" pointing content={errors.seasonalAdjusment} />
+                  {errors.seasonalAdjustment &&
+                    touched.seasonalAdjustment && (
+                    <Label basic color="red" pointing content={errors.seasonalAdjustment} />
                   )}
                 </Form.Field>
                 <Form.Field style={{ marginTop: '20px' }} width={2}>
@@ -112,9 +124,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               tabIndex={10}
               name="sales1"
               autoComplete="sales1"
-              namefieldcalc="sales2"
               value={values.sales1}
-              onChange={this._handleChangeAndCalculate}
+              onChange={handleChange}
               onBlur={handleBlur}
             />
             {errors.sales1 && touched.sales1 && <Label basic color="red" pointing content={errors.sales1} />}
@@ -281,26 +292,54 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <b>Gross Margin</b>
           </CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMargin(this.props.values.sales1, this.props.values.cogs1)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMargin(this.props.values.sales2, this.props.values.cogs2)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMargin(this.props.values.sales3, this.props.values.cogs3)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMargin(this.props.values.sales4, this.props.values.cogs4)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMargin(this.props.values.sales5, this.props.values.cogs5)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMargin(this.props.values.sales6, this.props.values.cogs6)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcAnnualised(financialYear, this.props.values.monthsCovered, this.props.values.seasonalAdjusment)}
+          </CustomColumn>
           <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
             <b>Gross Margin %</b>
           </CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMarginPerc(this.props.values.sales1, this.props.values.cogs1)} %
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMarginPerc(this.props.values.sales2, this.props.values.cogs2)} %
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMarginPerc(this.props.values.sales3, this.props.values.cogs3)} %
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMarginPerc(this.props.values.sales4, this.props.values.cogs4)} %
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMarginPerc(this.props.values.sales5, this.props.values.cogs5)} %
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMarginPerc(this.props.values.sales6, this.props.values.cogs6)} %
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossMarginPerc(this.props.values.sales1, this.props.values.cogs1)} %
+          </CustomColumn>
           <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row style={{ backgroundColor: '#dae4ef' }} columns={9}>
@@ -404,13 +443,27 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <b>Gross Profit</b>
           </CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossProfit(this._calcGrossMargin(this.props.values.sales1, this.props.values.cogs1), this.props.values.otherIncome1)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossProfit(this._calcGrossMargin(this.props.values.sales2, this.props.values.cogs2), this.props.values.otherIncome2)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossProfit(this._calcGrossMargin(this.props.values.sales3, this.props.values.cogs3), this.props.values.otherIncome3)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossProfit(this._calcGrossMargin(this.props.values.sales4, this.props.values.cogs4), this.props.values.otherIncome4)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossProfit(this._calcGrossMargin(this.props.values.sales5, this.props.values.cogs5), this.props.values.otherIncome5)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossProfit(this._calcGrossMargin(this.props.values.sales6, this.props.values.cogs6), this.props.values.otherIncome6)}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            {this._calcGrossProfit(this._calcGrossMargin(this.props.values.sales1, this.props.values.cogs1), this.props.values.otherIncome1)}
+          </CustomColumn>
           <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row style={{ backgroundColor: '#dae4ef' }} columns={9}>
@@ -508,26 +561,26 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <b>Operating Profit</b>
           </CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
-          <CustomColumn textAlign="center">50</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfit(this.props.values.cogs1, this.props.values.otherIncome1, this.props.values.expenses1)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfit(this.props.values.cogs2, this.props.values.otherIncome2, this.props.values.expenses2)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfit(this.props.values.cogs3, this.props.values.otherIncome3, this.props.values.expenses3)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfit(this.props.values.cogs4, this.props.values.otherIncome4, this.props.values.expenses4)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfit(this.props.values.cogs5, this.props.values.otherIncome5, this.props.values.expenses5)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfit(this.props.values.cogs6, this.props.values.otherIncome6, this.props.values.expenses6)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfit(this.props.values.cogs1, this.props.values.otherIncome1, this.props.values.expenses1)}</CustomColumn>
           <CustomColumn textAlign="center" />
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
             <b>Operating Profit %</b>
           </CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
-          <CustomColumn textAlign="center">50 %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfitPerc(this.props.values.sales1, this.props.values.cogs1, this.props.values.otherIncome1, this.props.values.expenses1)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfitPerc(this.props.values.sales2, this.props.values.cogs2, this.props.values.otherIncome2, this.props.values.expenses2)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfitPerc(this.props.values.sales3, this.props.values.cogs3, this.props.values.otherIncome3, this.props.values.expenses3)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfitPerc(this.props.values.sales4, this.props.values.cogs4, this.props.values.otherIncome4, this.props.values.expenses4)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfitPerc(this.props.values.sales5, this.props.values.cogs5, this.props.values.otherIncome5, this.props.values.expenses5)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfitPerc(this.props.values.sales6, this.props.values.cogs6, this.props.values.otherIncome6, this.props.values.expenses6)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcOperatingProfitPerc(this.props.values.sales1, this.props.values.cogs1, this.props.values.otherIncome1, this.props.values.expenses1)} %</CustomColumn>
           <CustomColumn textAlign="center" />
         </Grid.Row>
       </Fragment>
@@ -546,7 +599,35 @@ AddbacksAndAdjustmentsForm.propTypes = {
   financialYear: PropTypes.string
 }
 
-const mapPropsToValues = props => ({})
+const mapPropsToValues = props => ({
+  monthsCovered: props.monthsCovered || 0,
+  seasonalAdjustment: props.seasonalAdjustment || 0,
+  sales1: props.sales1 || 0,
+  sales2: props.sales2 || 0,
+  sales3: props.sales3 || 0,
+  sales4: props.sales4 || 0,
+  sales5: props.sales5 || 0,
+  sales6: props.sales6 || 0,
+  cogs1: props.cogs1 || 0,
+  cogs2: props.cogs2 || 0,
+  cogs3: props.cogs3 || 0,
+  cogs4: props.cogs4 || 0,
+  cogs5: props.cogs5 || 0,
+  cogs6: props.cogs6 || 0,
+  otherIncome1: props.otherIncome1 || 0,
+  otherIncome2: props.otherIncome2 || 0,
+  otherIncome3: props.otherIncome3 || 0,
+  otherIncome4: props.otherIncome4 || 0,
+  otherIncome5: props.otherIncome5 || 0,
+  otherIncome6: props.otherIncome6 || 0,
+  expenses1: props.expenses1 || 0,
+  expenses2: props.expenses2 || 0,
+  expenses3: props.expenses3 || 0,
+  expenses4: props.expenses4 || 0,
+  expenses5: props.expenses5 || 0,
+  expenses6: props.expenses6 || 0
+
+})
 
 const mapStateToProps = state => {
   return {}
