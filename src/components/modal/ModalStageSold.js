@@ -105,8 +105,8 @@ class StageSoldForm extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  _handleChangeCheckBox = (e, { name }) => {
-    this.props.setFieldValue(name, !this.props.values[name])
+  _handleChangeRadio = (e, { value }) => {
+    this.props.setFieldValue('trend', value)
   }
 
   _handleConfirm = isConfirmed => {
@@ -345,6 +345,24 @@ class StageSoldForm extends Component {
                 </Form.Field>
               </Form.Group>
               <Form.Group>
+                <label
+                  style={{ marginLeft: '5px', fontSize: '.92857143em', color: 'rgba(0,0,0,.87)', fontWeight: '700' }}
+                >
+                  Trend:{' '}
+                </label>
+                <Form.Radio label="Up" value="u" checked={values.trend === 'u'} onChange={this._handleChangeRadio} />
+                <Icon name="arrow up" color="green" />
+                <Form.Radio label="Down" value="d" checked={values.trend === 'd'} onChange={this._handleChangeRadio} />
+                <Icon name="arrow down" color="red" />
+                <Form.Radio
+                  label="Steady"
+                  value="s"
+                  checked={values.trend === 's'}
+                  onChange={this._handleChangeRadio}
+                />
+                <Icon name="arrow right" color="yellow" />
+              </Form.Group>
+              <Form.Group>
                 <Form.Field>
                   <Form.Input
                     label="N. of Working Owners"
@@ -491,7 +509,8 @@ const mapPropsToValues = props => ({
   latestFullYearTotalRevenue: props.businessSold ? props.businessSold.latestFullYearTotalRevenue : 0,
   termsOfDeal: props.businessSold ? props.businessSold.termsOfDeal : '',
   specialNotes: props.businessSold ? props.businessSold.specialNotes : '',
-  sold: props.businessSold ? props.businessSold.sold : false
+  sold: props.businessSold ? props.businessSold.sold : false,
+  trend: props.businessSold ? props.businessSold.trend : 'u'
 })
 
 const mapStateToProps = state => ({
