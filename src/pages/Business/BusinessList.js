@@ -2,17 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {
-  Table,
-  Icon,
-  Button,
-  Input,
-  Grid,
-  Statistic,
-  Dimmer,
-  Loader,
-  Header
-} from 'semantic-ui-react'
+import { Table, Icon, Button, Input, Grid, Statistic, Dimmer, Loader, Header } from 'semantic-ui-react'
 
 import { getBusinesses, createBusiness } from '../../redux/ducks/business'
 
@@ -36,13 +26,13 @@ class BusinessListPage extends Component {
     await this.props.getBusinesses(false, this.state.stageSelected, false)
   }
 
-  static async getDerivedStateFromProps (nextProps) {
-    if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
-      // await this._toggleModal({})
-      // must close the new business modal
-      this.props.getBusinesses(false, this.state.stageSelected, true)
-    }
-  }
+  // static async getDerivedStateFromProps (nextProps) {
+  //   if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
+  //     // await this._toggleModal({})
+  //     // must close the new business modal
+  //     this.props.getBusinesses(false, this.state.stageSelected, true)
+  //   }
+  // }
 
   _onSearch = (e, { value }) => {
     if (this.timer) clearTimeout(this.timer)
@@ -51,10 +41,7 @@ class BusinessListPage extends Component {
       inputSearch: value
     })
 
-    this.timer = setTimeout(
-      () => this.props.getBusinesses(value, this.state.stageSelected, true),
-      1000
-    )
+    this.timer = setTimeout(() => this.props.getBusinesses(value, this.state.stageSelected, true), 1000)
   }
 
   _newBusiness = () => {
@@ -91,45 +78,27 @@ class BusinessListPage extends Component {
       <Wrapper>
         <GridBusinessStage>
           <Statistic.Group size="mini" color="blue" widths={6}>
-            <Statistic
-              style={{ cursor: 'pointer' }}
-              onClick={() => this._getBusinesses(1, 'Potential Listing')}
-            >
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(1, 'Potential Listing')}>
               <Statistic.Value>10</Statistic.Value>
               <Statistic.Label>Potential Listing</Statistic.Label>
             </Statistic>
-            <Statistic
-              style={{ cursor: 'pointer' }}
-              onClick={() => this._getBusinesses(2, 'Listing Negotiation')}
-            >
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(2, 'Listing Negotiation')}>
               <Statistic.Value>20</Statistic.Value>
               <Statistic.Label>Listing Negotiation</Statistic.Label>
             </Statistic>
-            <Statistic
-              style={{ cursor: 'pointer' }}
-              onClick={() => this._getBusinesses(3, 'Sales Memo')}
-            >
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(3, 'Sales Memo')}>
               <Statistic.Value>30</Statistic.Value>
               <Statistic.Label>Sales Memo</Statistic.Label>
             </Statistic>
-            <Statistic
-              style={{ cursor: 'pointer' }}
-              onClick={() => this._getBusinesses(4, 'For Sale')}
-            >
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(4, 'For Sale')}>
               <Statistic.Value>40</Statistic.Value>
               <Statistic.Label>For Sale</Statistic.Label>
             </Statistic>
-            <Statistic
-              style={{ cursor: 'pointer' }}
-              onClick={() => this._getBusinesses(6, 'Sold')}
-            >
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(6, 'Sold')}>
               <Statistic.Value>50</Statistic.Value>
               <Statistic.Label>Sold</Statistic.Label>
             </Statistic>
-            <Statistic
-              style={{ cursor: 'pointer' }}
-              onClick={() => this._getBusinesses(7, 'Withdrawn')}
-            >
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(7, 'Withdrawn')}>
               <Statistic.Value>60</Statistic.Value>
               <Statistic.Label>Withdrawn</Statistic.Label>
             </Statistic>
@@ -148,11 +117,7 @@ class BusinessListPage extends Component {
               />
             </Grid.Column>
             <Grid.Column floated="right" width={3}>
-              <Button
-                onClick={this._newBusiness}
-                color="facebook"
-                floated="right"
-              >
+              <Button onClick={this._newBusiness} color="facebook" floated="right">
                 <Icon name="add" />
                 New Business
               </Button>
@@ -172,16 +137,10 @@ class BusinessListPage extends Component {
               </Table.Header>
               <Table.Body>
                 {businesses.map(business => (
-                  <Table.Row
-                    active
-                    key={business.id}
-                    onClick={() => history.push(`${match.path}/${business.id}`)}
-                  >
+                  <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
                     <Table.Cell>{`BS${business.id}`}</Table.Cell>
                     <Table.Cell>{business.businessName}</Table.Cell>
-                    <Table.Cell>{`${business.firstNameV} ${
-                      business.lastNameV
-                    }`}</Table.Cell>
+                    <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
                     <Table.Cell>{''}</Table.Cell>
                     <Table.Cell>{''}</Table.Cell>
                   </Table.Row>
@@ -206,8 +165,7 @@ BusinessListPage.propTypes = {
   createBusiness: PropTypes.func
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusinesses, openModal, createBusiness }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBusinesses, openModal, createBusiness }, dispatch)
 
 const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,

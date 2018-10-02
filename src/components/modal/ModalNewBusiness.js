@@ -53,14 +53,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.businessName &&
-                  touched.businessName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessName}
-                  />
-                )}
+                  touched.businessName && <Label basic color="red" pointing content={errors.businessName} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -73,14 +66,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.firstName &&
-                  touched.firstName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.firstName}
-                  />
-                )}
+                  touched.firstName && <Label basic color="red" pointing content={errors.firstName} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -92,15 +78,7 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.lastName &&
-                  touched.lastName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.lastName}
-                  />
-                )}
+                {errors.lastName && touched.lastName && <Label basic color="red" pointing content={errors.lastName} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -114,14 +92,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.vendorPhone1 &&
-                  touched.vendorPhone1 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.vendorPhone1}
-                  />
-                )}
+                  touched.vendorPhone1 && <Label basic color="red" pointing content={errors.vendorPhone1} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -133,14 +104,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.vendorPhone2 &&
-                  touched.vendorPhone2 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.vendorPhone2}
-                  />
-                )}
+                  touched.vendorPhone2 && <Label basic color="red" pointing content={errors.vendorPhone2} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -152,14 +116,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.vendorPhone3 &&
-                  touched.vendorPhone3 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.vendorPhone3}
-                  />
-                )}
+                  touched.vendorPhone3 && <Label basic color="red" pointing content={errors.vendorPhone3} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -174,14 +131,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.vendorEmail &&
-                  touched.vendorEmail && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.vendorEmail}
-                  />
-                )}
+                  touched.vendorEmail && <Label basic color="red" pointing content={errors.vendorEmail} />}
               </Form.Field>
               <Form.Field>
                 <Form.Select
@@ -196,14 +146,7 @@ class ModalNewBusiness extends Component {
                   onChange={this._handleSelectChange}
                 />
                 {errors.businessSource &&
-                  touched.businessSource && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessSource}
-                  />
-                )}
+                  touched.businessSource && <Label basic color="red" pointing content={errors.businessSource} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -215,14 +158,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.sourceNotes &&
-                  touched.sourceNotes && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sourceNotes}
-                  />
-                )}
+                  touched.sourceNotes && <Label basic color="red" pointing content={errors.sourceNotes} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -237,14 +173,7 @@ class ModalNewBusiness extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.description &&
-                  touched.description && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.description}
-                  />
-                )}
+                  touched.description && <Label basic color="red" pointing content={errors.description} />}
               </Form.Field>
             </Form.Group>
           </Form>
@@ -255,6 +184,7 @@ class ModalNewBusiness extends Component {
             disabled={isSubmitting || !isValid}
             loading={isLoading}
             onClick={handleSubmit}
+            type="submit"
           >
             <Icon name="save" />
             Create Business

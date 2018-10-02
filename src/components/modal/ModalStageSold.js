@@ -83,9 +83,9 @@ class StageSoldForm extends Component {
       var latestFullYearTotalRevenue = numeral(nextProps.values.latestFullYearTotalRevenue).format('$0,0.[99]')
     }
     return {
-      soldPrice: soldPrice || 0,
-      stockValue: stockValue || 0,
-      assetValue: assetValue || 0,
+      soldPrice: soldPrice || prevState.soldPrice,
+      stockValue: stockValue || prevState.stockValue,
+      assetValue: assetValue || prevState.assetValue,
       workingCapitalReq: workingCapitalReq || 0,
       propertyValue: propertyValue || 0,
       year1: year1 || 0,
@@ -152,14 +152,17 @@ class StageSoldForm extends Component {
   }
 
   _numberFormat = (e, { name, value }) => {
+    console.log(name, value)
     const myNumeral = numeral(value)
     const numberFormated = myNumeral.format('$0,0.[99]')
+    console.log(numberFormated)
     this.props.setFieldValue(name, myNumeral.value())
+    console.log(this.props.values)
     this.setState({ [name]: numberFormated })
   }
 
   _mapArrayToValuesForDropdown = array => {
-    if (array.length > 0) {
+    if (array && array.length > 0) {
       return array.map((item, index) => ({
         key: index,
         text: `${item.enquiry.Buyer.firstName} ${item.enquiry.Buyer.surname} - (${item.enquiry.Buyer.email})`,

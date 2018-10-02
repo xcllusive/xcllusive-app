@@ -35,19 +35,20 @@ export const getBuyersBusiness = businessId => {
   })
 }
 
-export const getAll = (search, quantity) => {
+export const getAll = objectValues => {
   const params = {}
 
-  if (search && search.length > 0) params.search = search
-  if (quantity && quantity.length > 0) {
-    params.quantity = JSON.stringify(quantity)
+  if (objectValues.lastBusiness && objectValues.lastBusiness > 0) params.limit = objectValues.lastBusiness
+  if (objectValues.businessType && objectValues.businessType.length > 0) params.type = objectValues.businessType
+  if (objectValues.priceFrom && objectValues.priceFrom.length > 0) {
+    params.priceRangeStart = objectValues.priceFrom
   }
-  if (quantity && quantity > 0) {
-    params.quantity = quantity
+  if (objectValues.priceTo && objectValues.priceTo.length > 0) {
+    params.priceRangeEnd = objectValues.priceTo
   }
-
+  if (objectValues.trend && objectValues.trend.length > 0) params.trend = objectValues.trend
   return request({
-    url: '/business-sold/',
+    url: '/comparable-data/',
     params
   })
 }

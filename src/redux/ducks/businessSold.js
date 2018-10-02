@@ -220,7 +220,7 @@ export default function reducer (state = initialState, action) {
         getAll: {
           ...state.getAll,
           isLoading: false,
-          array: action.payload.data,
+          array: action.payload.data.rows,
           error: null
         }
       }
@@ -337,13 +337,14 @@ export const getBuyersBusinessSold = (businessId, showAll) => async dispatch => 
   }
 }
 
-export const getBusinessesSold = (search = false, quantity = false) => async dispatch => {
+export const getBusinessesSold = objectValues => async dispatch => {
+  console.log(objectValues)
   dispatch({
     type: Types.GET_BUSINESSES_SOLD_LOADING,
     payload: true
   })
   try {
-    const businessesSold = await getAll(search, quantity)
+    const businessesSold = await getAll(objectValues)
     dispatch({
       type: Types.GET_BUSINESSES_SOLD_SUCCESS,
       payload: businessesSold
