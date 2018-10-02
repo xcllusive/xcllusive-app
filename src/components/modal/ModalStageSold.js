@@ -350,14 +350,19 @@ class StageSoldForm extends Component {
                 >
                   Trend:{' '}
                 </label>
-                <Form.Radio label="Up" value="u" checked={values.trend === 'u'} onChange={this._handleChangeRadio} />
+                <Form.Radio label="Up" value="up" checked={values.trend === 'up'} onChange={this._handleChangeRadio} />
                 <Icon name="arrow up" color="green" />
-                <Form.Radio label="Down" value="d" checked={values.trend === 'd'} onChange={this._handleChangeRadio} />
+                <Form.Radio
+                  label="Down"
+                  value="down"
+                  checked={values.trend === 'down'}
+                  onChange={this._handleChangeRadio}
+                />
                 <Icon name="arrow down" color="red" />
                 <Form.Radio
                   label="Steady"
-                  value="s"
-                  checked={values.trend === 's'}
+                  value="steady"
+                  checked={values.trend === 'steady'}
                   onChange={this._handleChangeRadio}
                 />
                 <Icon name="arrow right" color="yellow" />
@@ -510,7 +515,7 @@ const mapPropsToValues = props => ({
   termsOfDeal: props.businessSold ? props.businessSold.termsOfDeal : '',
   specialNotes: props.businessSold ? props.businessSold.specialNotes : '',
   sold: props.businessSold ? props.businessSold.sold : false,
-  trend: props.businessSold ? props.businessSold.trend : 'u'
+  trend: props.businessSold ? props.businessSold.trend : 'up'
 })
 
 const mapStateToProps = state => ({

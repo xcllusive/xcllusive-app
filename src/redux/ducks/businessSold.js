@@ -1,4 +1,4 @@
-import { create, get, update, finalise } from '../../services/api/businessSold'
+import { create, get, update, finalise, getAll } from '../../services/api/businessSold'
 import { getBuyersFromBusiness } from '../../services/api/business'
 import { toast } from 'react-toastify'
 
@@ -19,7 +19,10 @@ export const Types = {
   FINALISE_BUSINESS_SOLD_FAILURE: 'FINALISE_BUSINESS_SOLD_FAILURE',
   GET_BUYERS_BUSINESS_SOLD_LOADING: 'GET_BUYERS_BUSINESS_SOLD_LOADING',
   GET_BUYERS_BUSINESS_SOLD_SUCCESS: 'GET_BUYERS_BUSINESS_SOLD_SUCCESS',
-  GET_BUYERS_BUSINESS_SOLD_FAILURE: 'GET_BUYERS_BUSINESS_SOLD_FAILURE'
+  GET_BUYERS_BUSINESS_SOLD_FAILURE: 'GET_BUYERS_BUSINESS_SOLD_FAILURE',
+  GET_BUSINESSES_SOLD_LOADING: 'GET_BUSINESSES_SOLD_LOADING',
+  GET_BUSINESSES_SOLD_SUCCESS: 'GET_BUSINESSES_SOLD_SUCCESS',
+  GET_BUSINESSES_SOLD_FAILURE: 'GET_BUSINESSES_SOLD_FAILURE'
 }
 
 // Reducer
@@ -48,6 +51,11 @@ const initialState = {
   getBuyersBusiness: {
     array: [],
     isLoading: false,
+    error: null
+  },
+  getAll: {
+    isLoading: true,
+    array: [],
     error: null
   }
 }
@@ -197,6 +205,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUSINESSES_SOLD_LOADING:
+      return {
+        ...state,
+        getAll: {
+          ...state.getAll,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_SOLD_SUCCESS:
+      return {
+        ...state,
+        getAll: {
+          ...state.getAll,
+          isLoading: false,
+          array: action.payload.data,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_SOLD_FAILURE:
+      return {
+        ...state,
+        getAll: {
+          ...state.getAll,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -295,6 +331,26 @@ export const getBuyersBusinessSold = (businessId, showAll) => async dispatch => 
   } catch (error) {
     dispatch({
       type: Types.GET_BUYERS_BUSINESS_SOLD_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getBusinessesSold = (search = false, quantity = false) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESSES_SOLD_LOADING,
+    payload: true
+  })
+  try {
+    const businessesSold = await getAll(search, quantity)
+    dispatch({
+      type: Types.GET_BUSINESSES_SOLD_SUCCESS,
+      payload: businessesSold
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESSES_SOLD_FAILURE,
       payload: error
     })
     toast.error(error)

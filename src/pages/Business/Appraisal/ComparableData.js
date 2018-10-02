@@ -4,11 +4,12 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Message, Step, Form, Label, Segment, Checkbox, Grid, Icon } from 'semantic-ui-react'
+import { Message, Step, Form, Label, Segment, Checkbox, Grid, Icon, Table } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
 import { OptionsPriceSelectBuyer } from '../../../constants/OptionsPriceSelect'
+import { getBusinessesSold } from '../../../redux/ducks/businessSold'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em;
@@ -18,10 +19,10 @@ class ComparableDataPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      lastBusiness: [
-        { key: '1', text: '10 Businesses', value: '10' },
-        { key: '2', text: '20 Businesses', value: '20' },
-        { key: '3', text: '50 Businesses', value: '50' }
+      lastBusinessOptions: [
+        { key: 1, text: '10 Businesses', value: 10 },
+        { key: 2, text: '20 Businesses', value: 20 },
+        { key: 3, text: '50 Businesses', value: 50 }
       ],
       priceOptions: OptionsPriceSelectBuyer,
       optionsSearch: {
@@ -32,7 +33,9 @@ class ComparableDataPage extends Component {
     }
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    this.props.getBusinessesSold(20)
+  }
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
@@ -40,6 +43,9 @@ class ComparableDataPage extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+    if (name === 'lastBusiness') {
+      this.props.getBusinessesSold(value)
+    }
   }
 
   _handleChangeCheckBox = (e, { value }) => {
@@ -53,7 +59,7 @@ class ComparableDataPage extends Component {
 
   render () {
     const { values, errors, touched, handleChange, handleBlur } = this.props
-    const { priceOptions } = this.state
+    const { priceOptions, lastBusinessOptions } = this.state
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -68,7 +74,7 @@ class ComparableDataPage extends Component {
               <Form.Field>
                 <Form.Select
                   label="Last Business Sold"
-                  options={this.state.lastBusiness}
+                  options={lastBusinessOptions}
                   name="lastBusiness"
                   autoComplete="lastBusiness"
                   value={values.lastBusiness}
@@ -140,6 +146,82 @@ class ComparableDataPage extends Component {
             </Form.Group>
           </Segment>
         </Form>
+        <Segment>
+          <Table color="blue" celled inverted size="small" compact>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Business Type</Table.HeaderCell>
+                <Table.HeaderCell>T/O</Table.HeaderCell>
+                <Table.HeaderCell>Average EBITA</Table.HeaderCell>
+                <Table.HeaderCell>Last year EBITA</Table.HeaderCell>
+                <Table.HeaderCell>Trend</Table.HeaderCell>
+                <Table.HeaderCell>Stock Value</Table.HeaderCell>
+                <Table.HeaderCell>Assets Value</Table.HeaderCell>
+                <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
+                <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
+                <Table.HeaderCell>Last Y X</Table.HeaderCell>
+                <Table.HeaderCell>Notes</Table.HeaderCell>
+                <Table.HeaderCell>Pick max. 10</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {/* {listBusinessesSold.map(businessSold => ( */}
+              <Table.Row active>
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell>
+                  <Checkbox onChange={this.handleChange} />
+                </Table.Cell>
+              </Table.Row>
+              {/* ))} */}
+            </Table.Body>
+          </Table>
+        </Segment>
+        <Segment>
+          <Table color="blue" celled inverted size="small" compact>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Business Type</Table.HeaderCell>
+                <Table.HeaderCell>T/O</Table.HeaderCell>
+                <Table.HeaderCell>Average EBITA</Table.HeaderCell>
+                <Table.HeaderCell>Last year EBITA</Table.HeaderCell>
+                <Table.HeaderCell>Trend</Table.HeaderCell>
+                <Table.HeaderCell>Stock Value</Table.HeaderCell>
+                <Table.HeaderCell>Assets Value</Table.HeaderCell>
+                <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
+                <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
+                <Table.HeaderCell>Last Y X</Table.HeaderCell>
+                <Table.HeaderCell>Notes</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {/* {businessesUnderOffer.map(item => ( */}
+              <Table.Row active>
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+              </Table.Row>
+              {/* ))} */}
+            </Table.Body>
+          </Table>
+        </Segment>
       </Wrapper>
     )
   }
@@ -158,22 +240,27 @@ ComparableDataPage.propTypes = {
   business: PropTypes.object,
   openModal: PropTypes.func,
   appraisalObject: PropTypes.object,
-  updateAppraisal: PropTypes.func
+  updateAppraisal: PropTypes.func,
+  getBusinessesSold: PropTypes.func,
+  listBusinessesSold: PropTypes.array
 }
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
-  id: props.appraisalObject ? props.appraisalObject.id : ''
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  lastBusiness: 20
 })
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    listBusinessesSold: state.businessSold.getAll.array
+  }
 }
 
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal }, dispatch)
+  return bindActionCreators({ updateAppraisal, getBusinessesSold }, dispatch)
 }
 
 export default connect(

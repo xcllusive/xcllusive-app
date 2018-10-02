@@ -13,7 +13,7 @@ import { getBusiness } from '../../../redux/ducks/business'
 
 import { getAppraisal } from '../../../redux/ducks/appraisal'
 import BusinessAnalysis from './BusinessAnalysis'
-import ComparableData from './Comparable Data'
+import ComparableData from './ComparableData'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {

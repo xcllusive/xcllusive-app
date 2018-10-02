@@ -22,7 +22,6 @@ export const update = businessSold => {
 }
 
 export const finalise = businessSold => {
-  console.log(businessSold)
   return request({
     method: 'post',
     url: `/business/${businessSold.businessId}/sold/${businessSold.id}/finalise`,
@@ -33,5 +32,22 @@ export const finalise = businessSold => {
 export const getBuyersBusiness = businessId => {
   return request({
     url: `/business-sold/${businessId}`
+  })
+}
+
+export const getAll = (search, quantity) => {
+  const params = {}
+
+  if (search && search.length > 0) params.search = search
+  if (quantity && quantity.length > 0) {
+    params.quantity = JSON.stringify(quantity)
+  }
+  if (quantity && quantity > 0) {
+    params.quantity = quantity
+  }
+
+  return request({
+    url: '/business-sold/',
+    params
   })
 }
