@@ -17,13 +17,16 @@ import {
   Table,
   Header,
   Dimmer,
-  Loader
+  Loader,
+  Button
 } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
 import { OptionsPriceSelectBuyer } from '../../../constants/OptionsPriceSelect'
 import { getBusinessesSold } from '../../../redux/ducks/businessSold'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
+import numeral from 'numeral'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em;
@@ -44,12 +47,13 @@ class ComparableDataPage extends Component {
         down: true,
         steady: true
       },
-      trendOptions: ['up', 'down', 'steady']
+      trendOptions: ['up', 'down', 'steady'],
+      inputSearch: '',
+      selectedList: []
     }
   }
 
-  async componentDidMount () {
-    // await this.props.setFieldValue('trend', this.state.trendOptions)
+  componentDidMount () {
     this.props.getBusinessesSold(this.props.values)
   }
 
@@ -57,48 +61,78 @@ class ComparableDataPage extends Component {
     this.props.updateAppraisal(this.props.values)
   }
 
-  _handleSelectChange = (e, { name, value }) => {
-    this.props.setFieldValue(name, value)
+  async _handleSelectChange (data) {
+    await this.props.setFieldValue(data.name, data.value)
     this.props.getBusinessesSold(this.props.values)
   }
 
-  _handleChangeCheckBox = (e, { value }) => {
+  async _handleChangeCheckBox (data) {
     this.setState({
       optionsSearch: {
         ...this.state.optionsSearch,
-        [value]: !this.state.optionsSearch[value]
+        [data.value]: !this.state.optionsSearch[data.value]
       }
     })
-    if (!this.state.optionsSearch[value] && value === 'up') {
+    if (!this.state.optionsSearch[data.value] && data.value === 'up') {
       this.state.trendOptions.push('up')
     }
-    if (this.state.optionsSearch[value] && value === 'up') {
+    if (this.state.optionsSearch[data.value] && data.value === 'up') {
       _.remove(this.state.trendOptions, item => item === 'up')
     }
-    if (!this.state.optionsSearch[value] && value === 'down') {
+    if (!this.state.optionsSearch[data.value] && data.value === 'down') {
       this.state.trendOptions.push('down')
     }
-    if (this.state.optionsSearch[value] && value === 'down') {
+    if (this.state.optionsSearch[data.value] && data.value === 'down') {
       _.remove(this.state.trendOptions, item => item === 'down')
     }
-    if (!this.state.optionsSearch[value] && value === 'steady') {
+    if (!this.state.optionsSearch[data.value] && data.value === 'steady') {
       this.state.trendOptions.push('steady')
     }
-    if (this.state.optionsSearch[value] && value === 'steady') {
+    if (this.state.optionsSearch[data.value] && data.value === 'steady') {
       _.remove(this.state.trendOptions, item => item === 'steady')
     }
+    await this.props.setFieldValue('trend', this.state.trendOptions)
+    this.props.getBusinessesSold(this.props.values)
+  }
+
+  _onSearch = (e, { value }) => {
+    if (this.timer) clearTimeout(this.timer)
+
+    this.setState({
+      inputSearch: value
+    })
+    this.props.setFieldValue('businessType', value)
+
+    this.timer = setTimeout(() => this.props.getBusinessesSold(this.props.values), 1000)
+  }
+
+  _addToSelectedList = objectBusinessSold => {
+    if (this.state.selectedList.length === 0) this.state.selectedList.push(objectBusinessSold)
+    else {
+      if (!_.find(this.state.selectedList, o => o.id === objectBusinessSold.id)) {
+        this.state.selectedList.push(objectBusinessSold)
+      } else alert('You have already added this business to the list!')
+    }
+
+    // var res = Object.entries(this.state.selectedList).map(value => value)
+  }
+
+  _toggleModalConfirmDelete = idSelected => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Delete Item',
+        text: 'Are you sure you want to remove from the list?'
+      },
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          _.remove(this.state.selectedList, item => item.id === idSelected)
+        }
+      }
+    })
   }
 
   render () {
-    const {
-      values,
-      errors,
-      touched,
-      handleChange,
-      handleBlur,
-      listBusinessesSold,
-      isLoadingBusinessesSold
-    } = this.props
+    const { values, errors, touched, listBusinessesSold, isLoadingBusinessesSold } = this.props
     const { priceOptions, lastBusinessOptions } = this.state
     return (
       <Wrapper>
@@ -109,40 +143,36 @@ class ComparableDataPage extends Component {
           </Message>
         </Step.Group>
         <Form>
-          <Segment>
+          <Segment style={{ backgroundColor: 'aliceblue' }}>
             <Header as="h3" textAlign="center">
               Filters
             </Header>
             <Form.Group>
               <Form.Field>
                 <Form.Select
-                  label="Last Business Sold"
-                  options={lastBusinessOptions}
+                  label="Last Businesses Sold"
                   name="lastBusiness"
                   autoComplete="lastBusiness"
+                  options={lastBusinessOptions}
                   value={values.lastBusiness}
-                  // onChange={this._handleSelectChange}
-                  onChange={async value => {
-                    this.props.setFieldValue('lastBusiness', value)
-                    console.log(value)
-                    await Promise.resolve()
-                    await this.props.getBusinessesSold(this.props.values)
+                  onChange={async (e, data) => {
+                    this._handleSelectChange(data)
                   }}
                 />
                 {errors.lastBusiness &&
                   touched.lastBusiness && <Label basic color="red" pointing content={errors.lastBusiness} />}
               </Form.Field>
-              <Form.Field width={8}>
+              <Form.Field width={5}>
                 <Form.Input
+                  fluid
+                  icon="search"
                   label="Business Type"
                   name="businessType"
-                  autoComplete="businessType"
-                  value={values.businessType}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  placeholder="Ex: Coffee, Restaurant..."
+                  loading={this.state.isLoadingBusinessesSold}
+                  onChange={this._onSearch}
+                  value={this.state.inputSearch}
                 />
-                {errors.businessType &&
-                  touched.businessType && <Label basic color="red" pointing content={errors.businessType} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -153,7 +183,9 @@ class ComparableDataPage extends Component {
                   name="priceFrom"
                   autoComplete="priceFrom"
                   value={values.priceFrom}
-                  onChange={this._handleSelectChange}
+                  onChange={async (e, data) => {
+                    this._handleSelectChange(data)
+                  }}
                 />
               </Form.Field>
               <Form.Field>
@@ -163,7 +195,9 @@ class ComparableDataPage extends Component {
                   name="priceTo"
                   autoComplete="priceTo"
                   value={values.priceTo}
-                  onChange={this._handleSelectChange}
+                  onChange={async (e, data) => {
+                    this._handleSelectChange(data)
+                  }}
                 />
               </Form.Field>
               <label style={{ fontSize: '.92857143em', color: 'rgba(0,0,0,.87)', fontWeight: '700' }}>Trend</label>
@@ -174,7 +208,10 @@ class ComparableDataPage extends Component {
                   name="trend"
                   value="up"
                   checked={this.state.optionsSearch.up === true}
-                  onChange={this._handleChangeCheckBox}
+                  onChange={async (e, data) => {
+                    this._handleChangeCheckBox(data)
+                  }}
+                  // onChange={this._handleChangeCheckBox}
                 />
                 <Icon style={{ marginLeft: '-12px', marginRight: '20px' }} name="arrow up" color="green" />
                 <Checkbox
@@ -183,7 +220,10 @@ class ComparableDataPage extends Component {
                   name="trend"
                   value="down"
                   checked={this.state.optionsSearch.down === true}
-                  onChange={this._handleChangeCheckBox}
+                  // onChange={this._handleChangeCheckBox}
+                  onChange={async (e, data) => {
+                    this._handleChangeCheckBox(data)
+                  }}
                 />
                 <Icon style={{ marginLeft: '-12px', marginRight: '20px' }} name="arrow down" color="red" />
                 <Checkbox
@@ -191,14 +231,17 @@ class ComparableDataPage extends Component {
                   name="trend"
                   value="steady"
                   checked={this.state.optionsSearch.steady === true}
-                  onChange={this._handleChangeCheckBox}
+                  // onChange={this._handleChangeCheckBox}
+                  onChange={async (e, data) => {
+                    this._handleChangeCheckBox(data)
+                  }}
                 />
                 <Icon style={{ marginLeft: '5px' }} name="arrow right" color="yellow" />
               </Grid.Column>
             </Form.Group>
           </Segment>
         </Form>
-        <Segment>
+        <Segment style={{ backgroundColor: 'linen' }}>
           <Header as="h3" textAlign="center">
             Database`s List
           </Header>
@@ -206,7 +249,7 @@ class ComparableDataPage extends Component {
             <Dimmer inverted active={isLoadingBusinessesSold}>
               <Loader>Loading</Loader>
             </Dimmer>
-            <Table color="blue" celled inverted size="small" compact>
+            <Table color="blue" celled inverted size="small" compact selectable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Business Type</Table.HeaderCell>
@@ -224,14 +267,14 @@ class ComparableDataPage extends Component {
               </Table.Header>
               <Table.Body>
                 {listBusinessesSold.map(businessSold => (
-                  <Table.Row active key={businessSold.id}>
+                  <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
                     <Table.Cell>{businessSold.businessType}</Table.Cell>
                     <Table.Cell />
                     <Table.Cell />
                     <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
+                    <Table.Cell>{businessSold.trend}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.stockValue).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.assetValue).format('$0,0.[99]')}</Table.Cell>
                     <Table.Cell />
                     <Table.Cell />
                     <Table.Cell />
@@ -242,7 +285,7 @@ class ComparableDataPage extends Component {
             </Table>
           </Dimmer.Dimmable>
         </Segment>
-        <Segment>
+        <Segment style={{ backgroundColor: 'darkgrey' }}>
           <Header as="h3" textAlign="center">
             Your Selected List
           </Header>
@@ -260,24 +303,30 @@ class ComparableDataPage extends Component {
                 <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
                 <Table.HeaderCell>Last Y X</Table.HeaderCell>
                 <Table.HeaderCell>Notes</Table.HeaderCell>
+                <Table.HeaderCell>Remove</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {/* {businessesUnderOffer.map(item => ( */}
-              <Table.Row active>
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-                <Table.Cell />
-              </Table.Row>
-              {/* ))} */}
+              {this.state.selectedList.map(selectedList => (
+                <Table.Row active key={selectedList.id}>
+                  <Table.Cell>{selectedList.businessType}</Table.Cell>
+                  <Table.Cell />
+                  <Table.Cell />
+                  <Table.Cell />
+                  <Table.Cell>{selectedList.trend}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.stockValue).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.assetValue).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell />
+                  <Table.Cell />
+                  <Table.Cell />
+                  <Table.Cell />
+                  <Table.Cell>
+                    <Button icon onClick={() => this._toggleModalConfirmDelete(selectedList.id)}>
+                      <Icon link color="red" name="trash" />
+                    </Button>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
             </Table.Body>
           </Table>
         </Segment>
@@ -309,9 +358,10 @@ const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
   lastBusiness: 20,
-  businessType: props.appraisalObject ? props.appraisalObject.businessType : '',
-  priceFrom: props.appraisalObject ? props.appraisalObject.priceFrom : '',
-  priceTo: props.appraisalObject ? props.appraisalObject.priceTo : ''
+  businessType: ''
+  // priceFrom: 'Any',
+  // priceTo: 'Any'
+  // trend: ['up', 'down', 'steady']
 })
 
 const mapStateToProps = state => {
@@ -324,7 +374,7 @@ const mapStateToProps = state => {
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal, getBusinessesSold }, dispatch)
+  return bindActionCreators({ updateAppraisal, getBusinessesSold, openModal }, dispatch)
 }
 
 export default connect(
