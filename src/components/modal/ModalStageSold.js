@@ -152,12 +152,9 @@ class StageSoldForm extends Component {
   }
 
   _numberFormat = (e, { name, value }) => {
-    console.log(name, value)
     const myNumeral = numeral(value)
     const numberFormated = myNumeral.format('$0,0.[99]')
-    console.log(numberFormated)
     this.props.setFieldValue(name, myNumeral.value())
-    console.log(this.props.values)
     this.setState({ [name]: numberFormated })
   }
 

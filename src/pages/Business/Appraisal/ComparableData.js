@@ -111,7 +111,7 @@ class ComparableDataPage extends Component {
     else {
       if (!_.find(this.state.selectedList, o => o.id === objectBusinessSold.id)) {
         this.state.selectedList.push(objectBusinessSold)
-      } else alert('You have already added this business to the list!')
+      } else this._showMsg()
     }
 
     // var res = Object.entries(this.state.selectedList).map(value => value)
@@ -127,6 +127,16 @@ class ComparableDataPage extends Component {
         if (isConfirmed) {
           _.remove(this.state.selectedList, item => item.id === idSelected)
         }
+      }
+    })
+  }
+
+  _showMsg = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_SHOW_MSG, {
+      options: {
+        title: 'Alert:',
+        content: 'Got it!',
+        text: 'You have already added this business to the list!'
       }
     })
   }

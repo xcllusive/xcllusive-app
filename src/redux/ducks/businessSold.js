@@ -338,7 +338,6 @@ export const getBuyersBusinessSold = (businessId, showAll) => async dispatch => 
 }
 
 export const getBusinessesSold = objectValues => async dispatch => {
-  console.log(objectValues)
   dispatch({
     type: Types.GET_BUSINESSES_SOLD_LOADING,
     payload: true
