@@ -254,11 +254,13 @@ export const createBusinessSold = businessSold => async dispatch => {
       type: Types.CREATE_BUSINESS_SOLD_SUCCESS,
       payload: response.data
     })
+    return response.data
   } catch (error) {
     dispatch({
       type: Types.CREATE_BUSINESS_SOLD_FAILURE,
       payload: error
     })
+    return error
   }
 }
 
@@ -306,7 +308,6 @@ export const finaliseStageSold = (businessSoldId, businessId) => async dispatch 
     type: Types.FINALISE_BUSINESS_SOLD_LOADING,
     payload: true
   })
-
   try {
     const response = await finalise(businessSoldId, businessId)
     dispatch({
@@ -314,13 +315,11 @@ export const finaliseStageSold = (businessSoldId, businessId) => async dispatch 
       payload: response.data
     })
     toast.success(response.message)
-    return response.data
   } catch (error) {
     dispatch({
       type: Types.FINALISE_BUSINESS_SOLD_FAILURE,
       payload: error
     })
-    return error
   }
 }
 

@@ -145,18 +145,17 @@ class StageSoldForm extends Component {
       },
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          if (this.props.businessSold === null) {
-            try {
+          try {
+            if (this.props.businessSold === null) {
               const createBusinessSold = await this.props.createBusinessSold(this.props.values)
-              console.log(createBusinessSold)
-            } catch (error) {
-              console.log(error)
+              this.props.finaliseStageSold(createBusinessSold.id, this.props.business.id)
+            } else {
+              await this.props.updateBusinessSold(this.props.values)
+              this.props.finaliseStageSold(this.props.values.id, this.props.business.id)
             }
-          } else {
-            await this.props.updateBusinessSold(this.props.values)
+          } catch (error) {
+            console.log(error)
           }
-          // const idSold = this.props.businessSoldCreated ? this.props.businessSoldCreated.id : this.props.values.id
-          // this.props.finaliseStageSold(idSold, this.props.business.id)
           return
         }
         this.props.callBack(isConfirmed)
