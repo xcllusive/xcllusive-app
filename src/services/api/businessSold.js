@@ -21,11 +21,10 @@ export const update = businessSold => {
   })
 }
 
-export const finalise = businessSold => {
+export const finalise = (businessSoldId, businessId) => {
   return request({
     method: 'post',
-    url: `/business/${businessSold.businessId}/sold/${businessSold.id}/finalise`,
-    data: businessSold
+    url: `/business/${businessId}/sold/${businessSoldId}/finalise`
   })
 }
 

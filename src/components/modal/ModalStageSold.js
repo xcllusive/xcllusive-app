@@ -27,6 +27,8 @@ class StageSoldForm extends Component {
       soldPrice: 0,
       stockValue: 0,
       assetValue: 0,
+      workingCapitalReq: 0,
+      propertyValue: 0,
       year1: 0,
       year2: 0,
       year3: 0,
@@ -86,14 +88,14 @@ class StageSoldForm extends Component {
       soldPrice: soldPrice || prevState.soldPrice,
       stockValue: stockValue || prevState.stockValue,
       assetValue: assetValue || prevState.assetValue,
-      workingCapitalReq: workingCapitalReq || 0,
-      propertyValue: propertyValue || 0,
-      year1: year1 || 0,
-      year2: year2 || 0,
-      year3: year3 || 0,
-      year4: year4 || 0,
-      agreedWageForWorkingOwners: agreedWageForWorkingOwners || 0,
-      latestFullYearTotalRevenue: latestFullYearTotalRevenue || 0
+      workingCapitalReq: workingCapitalReq || prevState.workingCapitalReq,
+      propertyValue: propertyValue || prevState.propertyValue,
+      year1: year1 || prevState.year1,
+      year2: year2 || prevState.year2,
+      year3: year3 || prevState.year3,
+      year4: year4 || prevState.year4,
+      agreedWageForWorkingOwners: agreedWageForWorkingOwners || prevState.agreedWageForWorkingOwners,
+      latestFullYearTotalRevenue: latestFullYearTotalRevenue || prevState.latestFullYearTotalRevenue
     }
   }
 
@@ -141,9 +143,20 @@ class StageSoldForm extends Component {
         title: 'Changing Stage to Sold',
         text: 'Are you sure you want to change the stage to SOLD? Once you have changed you can NOT go back.'
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this.props.finaliseStageSold(this.props.values)
+          if (this.props.businessSold === null) {
+            try {
+              const createBusinessSold = await this.props.createBusinessSold(this.props.values)
+              console.log(createBusinessSold)
+            } catch (error) {
+              console.log(error)
+            }
+          } else {
+            await this.props.updateBusinessSold(this.props.values)
+          }
+          // const idSold = this.props.businessSoldCreated ? this.props.businessSoldCreated.id : this.props.values.id
+          // this.props.finaliseStageSold(idSold, this.props.business.id)
           return
         }
         this.props.callBack(isConfirmed)
@@ -167,6 +180,7 @@ class StageSoldForm extends Component {
       }))
     }
     return [{ key: 0, text: 'No records found', value: 0 }]
+    // return null
   }
 
   render () {
@@ -220,9 +234,9 @@ class StageSoldForm extends Component {
                     name="buyerName"
                     label="Buyer Name"
                     autoComplete="buyerName"
+                    placeholder="Select one Buyer"
                     value={values.buyerName}
                     onChange={this._handleSelectChange}
-                    placeholder="Buyer Name"
                     search
                     selection
                     options={this._mapArrayToValuesForDropdown(listBuyersFromBusiness)}
@@ -460,6 +474,7 @@ class StageSoldForm extends Component {
 
 const validationSchema = Yup.object().shape({
   businessType: Yup.string().required('This field is required.'),
+  buyerName: Yup.string().required('This field is required.'),
   // settlementDate: Yup.string().required(' is required.'),
   nOfWorkingOwners: Yup.number()
     .required('This field required.')
@@ -491,7 +506,8 @@ StageSoldForm.propTypes = {
   openModal: PropTypes.func,
   isLoadingBusinessSold: PropTypes.bool,
   getBuyersBusinessSold: PropTypes.func,
-  listBuyersFromBusiness: PropTypes.array
+  listBuyersFromBusiness: PropTypes.array,
+  businessSoldCreated: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
@@ -521,7 +537,8 @@ const mapPropsToValues = props => ({
 const mapStateToProps = state => ({
   businessSold: state.businessSold.get.object.data,
   isLoadingBusinessSold: state.businessSold.get.isLoading,
-  listBuyersFromBusiness: state.businessSold.getBuyersBusiness.array
+  listBuyersFromBusiness: state.businessSold.getBuyersBusiness.array,
+  businessSoldCreated: state.businessSold.create.object
 })
 
 const mapDispatchToProps = dispatch =>

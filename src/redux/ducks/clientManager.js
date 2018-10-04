@@ -347,7 +347,6 @@ export const caReceived = (caFile, buyerId, businessId) => async dispatch => {
     dispatch({
       type: Types.CA_RECEIVED_SUCCESS
     })
-    console.log(response)
     toast.success(response.message)
   } catch (error) {
     dispatch({
@@ -378,10 +377,7 @@ export const emailBuyer = (buyerId, businessId) => async dispatch => {
   }
 }
 
-export const requestOwnersApproval = (
-  buyerId,
-  businessId
-) => async dispatch => {
+export const requestOwnersApproval = (buyerId, businessId) => async dispatch => {
   dispatch({
     type: Types.REQUEST_OWNERS_APPROVAL_LOADING,
     payload: true
