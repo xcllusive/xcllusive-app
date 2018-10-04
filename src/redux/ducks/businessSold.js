@@ -298,22 +298,32 @@ export const updateBusinessSold = businessSold => async dispatch => {
 }
 
 export const finaliseStageSold = businessSold => async dispatch => {
-  dispatch({
-    type: Types.FINALISE_BUSINESS_SOLD_LOADING,
-    payload: true
-  })
-  try {
-    const response = await finalise(businessSold)
+
+  const onSuccess = response => {
     dispatch({
       type: Types.FINALISE_BUSINESS_SOLD_SUCCESS
     })
     toast.success(response.message)
-  } catch (error) {
+    return response
+  }
+  const onError =  (error) => {
     dispatch({
       type: Types.FINALISE_BUSINESS_SOLD_FAILURE,
       payload: error
     })
-    toast.error(error)
+    return error
+  }
+
+  dispatch({
+    type: Types.FINALISE_BUSINESS_SOLD_LOADING,
+    payload: true
+  })
+
+  try {
+    const response = await finalise(businessSold)
+    return onSuccess(response)
+  } catch (error) {
+    return onError(error)
   }
 }
 
