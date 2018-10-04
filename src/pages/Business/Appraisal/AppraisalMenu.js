@@ -165,7 +165,7 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Comparable Data' ? (
           <Segment>
-            <ComparableData business={business} />
+            <ComparableData business={business} appraisalObject={appraisal} />
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>

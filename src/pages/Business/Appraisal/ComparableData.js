@@ -107,10 +107,15 @@ class ComparableDataPage extends Component {
   }
 
   _addToSelectedList = objectBusinessSold => {
-    if (this.state.selectedList.length === 0) this.state.selectedList.push(objectBusinessSold)
-    else {
+    if (this.state.selectedList.length === 0) {
+      this.setState(prevState => ({
+        selectedList: [...prevState.selectedList, objectBusinessSold]
+      }))
+    } else {
       if (!_.find(this.state.selectedList, o => o.id === objectBusinessSold.id)) {
-        this.state.selectedList.push(objectBusinessSold)
+        this.setState(prevState => ({
+          selectedList: [...prevState.selectedList, objectBusinessSold]
+        }))
       } else this._showMsg()
     }
 
@@ -125,7 +130,9 @@ class ComparableDataPage extends Component {
       },
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          _.remove(this.state.selectedList, item => item.id === idSelected)
+          this.setState(prevState => ({
+            selectedList: [..._.remove(this.state.selectedList, item => item.id !== idSelected)]
+          }))
         }
       }
     })
@@ -251,50 +258,6 @@ class ComparableDataPage extends Component {
             </Form.Group>
           </Segment>
         </Form>
-        <Segment style={{ backgroundColor: 'linen' }}>
-          <Header as="h3" textAlign="center">
-            Database`s List
-          </Header>
-          <Dimmer.Dimmable dimmed={isLoadingBusinessesSold} style={{ width: '100%' }}>
-            <Dimmer inverted active={isLoadingBusinessesSold}>
-              <Loader>Loading</Loader>
-            </Dimmer>
-            <Table color="blue" celled inverted size="small" compact selectable>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Business Type</Table.HeaderCell>
-                  <Table.HeaderCell>T/O</Table.HeaderCell>
-                  <Table.HeaderCell>Average EBITA</Table.HeaderCell>
-                  <Table.HeaderCell>Last year EBITA</Table.HeaderCell>
-                  <Table.HeaderCell>Trend</Table.HeaderCell>
-                  <Table.HeaderCell>Stock Value</Table.HeaderCell>
-                  <Table.HeaderCell>Assets Value</Table.HeaderCell>
-                  <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
-                  <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
-                  <Table.HeaderCell>Last Y X</Table.HeaderCell>
-                  <Table.HeaderCell>Notes</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {listBusinessesSold.map(businessSold => (
-                  <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
-                    <Table.Cell>{businessSold.businessType}</Table.Cell>
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell>{businessSold.trend}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.stockValue).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.assetValue).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
-          </Dimmer.Dimmable>
-        </Segment>
         <Segment style={{ backgroundColor: 'darkgrey' }}>
           <Header as="h3" textAlign="center">
             Your Selected List
@@ -340,6 +303,52 @@ class ComparableDataPage extends Component {
             </Table.Body>
           </Table>
         </Segment>
+        <Segment style={{ backgroundColor: 'linen' }}>
+          <Header as="h3" textAlign="center">
+            Database`s List
+          </Header>
+          <Dimmer.Dimmable dimmed={isLoadingBusinessesSold} style={{ width: '100%' }}>
+            <Dimmer inverted active={isLoadingBusinessesSold}>
+              <Loader>Loading</Loader>
+            </Dimmer>
+            <Table color="blue" celled inverted size="small" compact selectable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Business Type</Table.HeaderCell>
+                  <Table.HeaderCell>T/O</Table.HeaderCell>
+                  <Table.HeaderCell>Average EBITA</Table.HeaderCell>
+                  <Table.HeaderCell>Last year EBITA</Table.HeaderCell>
+                  <Table.HeaderCell>Trend</Table.HeaderCell>
+                  <Table.HeaderCell>Sold Price</Table.HeaderCell>
+                  <Table.HeaderCell>Stock Value</Table.HeaderCell>
+                  <Table.HeaderCell>Assets Value</Table.HeaderCell>
+                  <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
+                  <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
+                  <Table.HeaderCell>Last Y X</Table.HeaderCell>
+                  <Table.HeaderCell>Notes</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {listBusinessesSold.map(businessSold => (
+                  <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
+                    <Table.Cell>{businessSold.businessType}</Table.Cell>
+                    <Table.Cell />
+                    <Table.Cell />
+                    <Table.Cell />
+                    <Table.Cell>{businessSold.trend}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.soldPrice).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.stockValue).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.assetValue).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell />
+                    <Table.Cell />
+                    <Table.Cell />
+                    <Table.Cell />
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </Dimmer.Dimmable>
+        </Segment>
       </Wrapper>
     )
   }
@@ -368,10 +377,10 @@ const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
   lastBusiness: 20,
-  businessType: ''
-  // priceFrom: 'Any',
-  // priceTo: 'Any'
-  // trend: ['up', 'down', 'steady']
+  businessType: '',
+  priceFrom: 0,
+  priceTo: 0,
+  trend: ['up', 'down', 'steady']
 })
 
 const mapStateToProps = state => {
