@@ -31,7 +31,8 @@ const initialState = {
   create: {
     isLoading: false,
     isCreated: false,
-    error: null
+    error: null,
+    object: null
   },
   get: {
     object: {},
@@ -68,7 +69,8 @@ export default function reducer (state = initialState, action) {
         create: {
           ...state.create,
           isLoading: action.payload,
-          error: null
+          error: null,
+          object: null
         }
       }
     case Types.CREATE_BUSINESS_SOLD_SUCCESS:
@@ -78,7 +80,8 @@ export default function reducer (state = initialState, action) {
           ...state.create,
           isLoading: false,
           isCreated: true,
-          error: null
+          error: null,
+          object: action.payload
         }
       }
     case Types.CREATE_BUSINESS_SOLD_FAILURE:
@@ -246,9 +249,10 @@ export const createBusinessSold = businessSold => async dispatch => {
     payload: true
   })
   try {
-    await create(businessSold)
+    const response = await create(businessSold)
     dispatch({
-      type: Types.CREATE_BUSINESS_SOLD_SUCCESS
+      type: Types.CREATE_BUSINESS_SOLD_SUCCESS,
+      payload: response.data
     })
   } catch (error) {
     dispatch({
@@ -297,8 +301,7 @@ export const updateBusinessSold = businessSold => async dispatch => {
   }
 }
 
-export const finaliseStageSold = businessSold => async dispatch => {
-
+export const finaliseStageSold = (businessSoldId, businessId) => async dispatch => {
   const onSuccess = response => {
     dispatch({
       type: Types.FINALISE_BUSINESS_SOLD_SUCCESS
@@ -306,7 +309,7 @@ export const finaliseStageSold = businessSold => async dispatch => {
     toast.success(response.message)
     return response
   }
-  const onError =  (error) => {
+  const onError = error => {
     dispatch({
       type: Types.FINALISE_BUSINESS_SOLD_FAILURE,
       payload: error
@@ -320,7 +323,7 @@ export const finaliseStageSold = businessSold => async dispatch => {
   })
 
   try {
-    const response = await finalise(businessSold)
+    const response = await finalise(businessSoldId, businessId)
     return onSuccess(response)
   } catch (error) {
     return onError(error)
