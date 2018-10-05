@@ -24,7 +24,7 @@ import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
 import { OptionsPriceSelectBuyer } from '../../../constants/OptionsPriceSelect'
-import { getBusinessesSold } from '../../../redux/ducks/businessSold'
+import { getBusinessesSold, saveSelectedList, getSelectedList } from '../../../redux/ducks/businessSold'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import numeral from 'numeral'
 
@@ -49,16 +49,20 @@ class ComparableDataPage extends Component {
       },
       trendOptions: ['up', 'down', 'steady'],
       inputSearch: '',
-      selectedList: []
+      selectedList: [],
+      nameArrow: '',
+      colorArrow: 'green'
     }
   }
 
   componentDidMount () {
     this.props.getBusinessesSold(this.props.values)
+    // this.props.getSelectedList(this.state.selectedList, this.props.appraisalObject.id)
   }
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
+    // this.props.saveSelectedList(this.state.selectedList, this.props.appraisalObject.id)
   }
 
   async _handleSelectChange (data) {
@@ -146,6 +150,68 @@ class ComparableDataPage extends Component {
         text: 'You have already added this business to the list!'
       }
     })
+  }
+
+  _lastYearEbita = businessSold => {
+    if (businessSold.year4 > 0) return businessSold.year4
+    if (businessSold.year3 > 0) return businessSold.year3
+    if (businessSold.year2 > 0) return businessSold.year2
+    if (businessSold.year1 > 0) return businessSold.year1
+  }
+
+  _averageEbita = businessSold => {
+    let count = 0
+    let totalYear = 0
+
+    if (businessSold.year4 > 0) {
+      count = count + 1
+      totalYear = totalYear + businessSold.year4
+    }
+    if (businessSold.year3 > 0) {
+      count = count + 1
+      totalYear = totalYear + businessSold.year3
+    }
+    if (businessSold.year2 > 0) {
+      count = count + 1
+      totalYear = totalYear + businessSold.year2
+    }
+    if (businessSold.year1 > 0) {
+      totalYear = totalYear + businessSold.year1
+      count = count + 1
+    }
+
+    return totalYear / count
+  }
+
+  _trendArrows = businessSold => {
+    if (businessSold.trend === 'up') {
+      this.setState({ nameArrow: 'arrow up', colorArrow: 'green' })
+    }
+    console.log(this.state.nameArrow, this.state.colorArrow)
+  }
+
+  _colorArrow = businessSold => {
+    if (businessSold.trend === 'up') {
+      return 'green'
+    }
+    if (businessSold.trend === 'down') {
+      return 'red'
+    }
+    if (businessSold.trend === 'steady') {
+      return 'yellow'
+    }
+  }
+
+  _nameArrow = businessSold => {
+    if (businessSold.trend === 'up') {
+      return 'arrow up'
+    }
+    if (businessSold.trend === 'down') {
+      return 'arrow down'
+    }
+    if (businessSold.trend === 'steady') {
+      return 'arrow right'
+    }
   }
 
   render () {
@@ -270,12 +336,17 @@ class ComparableDataPage extends Component {
                 <Table.HeaderCell>Average EBITA</Table.HeaderCell>
                 <Table.HeaderCell>Last year EBITA</Table.HeaderCell>
                 <Table.HeaderCell>Trend</Table.HeaderCell>
+                <Table.HeaderCell>Sold Price</Table.HeaderCell>
                 <Table.HeaderCell>Stock Value</Table.HeaderCell>
                 <Table.HeaderCell>Assets Value</Table.HeaderCell>
                 <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
                 <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
                 <Table.HeaderCell>Last Y X</Table.HeaderCell>
-                <Table.HeaderCell>Notes</Table.HeaderCell>
+                <Table.HeaderCell>Last + Stock X</Table.HeaderCell>
+                <Table.HeaderCell>Avg EBITA X</Table.HeaderCell>
+                <Table.HeaderCell>Avg EBITA + Stock X</Table.HeaderCell>
+                <Table.HeaderCell>Terms Of Deal</Table.HeaderCell>
+                <Table.HeaderCell>Special Notes</Table.HeaderCell>
                 <Table.HeaderCell>Remove</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -283,16 +354,39 @@ class ComparableDataPage extends Component {
               {this.state.selectedList.map(selectedList => (
                 <Table.Row active key={selectedList.id}>
                   <Table.Cell>{selectedList.businessType}</Table.Cell>
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell>{selectedList.trend}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._averageEbita(selectedList)).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._lastYearEbita(selectedList)).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>
+                    <Icon color={this._colorArrow(selectedList)} name={this._nameArrow(selectedList)} />
+                  </Table.Cell>
+                  <Table.Cell>{numeral(selectedList.soldPrice).format('$0,0.[99]')}</Table.Cell>
                   <Table.Cell>{numeral(selectedList.stockValue).format('$0,0.[99]')}</Table.Cell>
                   <Table.Cell>{numeral(selectedList.assetValue).format('$0,0.[99]')}</Table.Cell>
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell />
-                  <Table.Cell />
+                  <Table.Cell>
+                    {numeral(selectedList.soldPrice + selectedList.stockValue).format('$0,0.[99]')}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {numeral(selectedList.soldPrice / selectedList.latestFullYearTotalRevenue).format('0,0.[99]')}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {numeral(selectedList.soldPrice / this._lastYearEbita(selectedList)).format('0,0.[99]')}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {numeral(
+                      (selectedList.soldPrice + selectedList.stockValue) / this._lastYearEbita(selectedList)
+                    ).format('0,0.[99]')}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {numeral(selectedList.soldPrice / this._averageEbita(selectedList)).format('0,0.[99]')}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {numeral(
+                      (selectedList.soldPrice + selectedList.stockValue) / this._averageEbita(selectedList)
+                    ).format('0,0.[99]')}
+                  </Table.Cell>
+                  <Table.Cell>{selectedList.termsOfDeal} </Table.Cell>
+                  <Table.Cell>{selectedList.specialNotes} </Table.Cell>
                   <Table.Cell>
                     <Button icon onClick={() => this._toggleModalConfirmDelete(selectedList.id)}>
                       <Icon link color="red" name="trash" />
@@ -325,24 +419,50 @@ class ComparableDataPage extends Component {
                   <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
                   <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
                   <Table.HeaderCell>Last Y X</Table.HeaderCell>
-                  <Table.HeaderCell>Notes</Table.HeaderCell>
+                  <Table.HeaderCell>Last + Stock X</Table.HeaderCell>
+                  <Table.HeaderCell>Avg EBITA X</Table.HeaderCell>
+                  <Table.HeaderCell>Avg EBITA + Stock X</Table.HeaderCell>
+                  <Table.HeaderCell>Terms Of Deal</Table.HeaderCell>
+                  <Table.HeaderCell>Special Notes</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {listBusinessesSold.map(businessSold => (
                   <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
                     <Table.Cell>{businessSold.businessType}</Table.Cell>
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell>{businessSold.trend}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._averageEbita(businessSold)).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._lastYearEbita(businessSold)).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>
+                      <Icon color={this._colorArrow(businessSold)} name={this._nameArrow(businessSold)} />
+                    </Table.Cell>
                     <Table.Cell>{numeral(businessSold.soldPrice).format('$0,0.[99]')}</Table.Cell>
                     <Table.Cell>{numeral(businessSold.stockValue).format('$0,0.[99]')}</Table.Cell>
                     <Table.Cell>{numeral(businessSold.assetValue).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
-                    <Table.Cell />
+                    <Table.Cell>
+                      {numeral(businessSold.soldPrice + businessSold.stockValue).format('$0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(businessSold.soldPrice / businessSold.latestFullYearTotalRevenue).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(businessSold.soldPrice / this._lastYearEbita(businessSold)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(
+                        (businessSold.soldPrice + businessSold.stockValue) / this._lastYearEbita(businessSold)
+                      ).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(businessSold.soldPrice / this._averageEbita(businessSold)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(
+                        (businessSold.soldPrice + businessSold.stockValue) / this._averageEbita(businessSold)
+                      ).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>{businessSold.termsOfDeal} </Table.Cell>
+                    <Table.Cell>{businessSold.specialNotes} </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -370,7 +490,9 @@ ComparableDataPage.propTypes = {
   updateAppraisal: PropTypes.func,
   getBusinessesSold: PropTypes.func,
   listBusinessesSold: PropTypes.array,
-  isLoadingBusinessesSold: PropTypes.bool
+  isLoadingBusinessesSold: PropTypes.bool,
+  saveSelectedList: PropTypes.func,
+  getSelectedList: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -393,7 +515,10 @@ const mapStateToProps = state => {
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal, getBusinessesSold, openModal }, dispatch)
+  return bindActionCreators(
+    { updateAppraisal, getBusinessesSold, openModal, saveSelectedList, getSelectedList },
+    dispatch
+  )
 }
 
 export default connect(

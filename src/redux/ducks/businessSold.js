@@ -1,4 +1,4 @@
-import { create, get, update, finalise, getAll } from '../../services/api/businessSold'
+import { create, get, update, finalise, getAll, saveList, getList } from '../../services/api/businessSold'
 import { getBuyersFromBusiness } from '../../services/api/business'
 import { toast } from 'react-toastify'
 
@@ -55,6 +55,16 @@ const initialState = {
     error: null
   },
   getAll: {
+    isLoading: true,
+    array: [],
+    error: null
+  },
+  saveList: {
+    isLoading: false,
+    isSaved: false,
+    error: null
+  },
+  getList: {
     isLoading: true,
     array: [],
     error: null
@@ -236,6 +246,63 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SAVE_SELECTED_LIST_LOADING:
+      return {
+        ...state,
+        saveList: {
+          ...state.saveList,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.SAVE_SELECTED_LIST_SUCCESS:
+      return {
+        ...state,
+        saveList: {
+          ...state.saveList,
+          isLoading: false,
+          isSaved: action.payload,
+          error: null
+        }
+      }
+    case Types.SAVE_SELECTED_LIST_FAILURE:
+      return {
+        ...state,
+        saveList: {
+          ...state.saveList,
+          isLoading: false,
+          isSaved: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_SELECTED_LIST_LOADING:
+      return {
+        ...state,
+        getList: {
+          ...state.getList,
+          isLoading: true,
+          error: null
+        }
+      }
+    case Types.GET_SELECTED_LIST_SUCCESS:
+      return {
+        ...state,
+        getList: {
+          ...state.getList,
+          array: action.payload.data,
+          isLoading: false,
+          error: null
+        }
+      }
+    case Types.GET_SELECTED_LIST_FAILURE:
+      return {
+        ...state,
+        getList: {
+          ...state.getList,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -357,6 +424,45 @@ export const getBusinessesSold = objectValues => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_BUSINESSES_SOLD_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const saveSelectedList = (list, appraisalId) => async dispatch => {
+  dispatch({
+    type: Types.SAVE_SELECTED_LIST_LOADING,
+    payload: true
+  })
+  try {
+    await saveList(list, appraisalId)
+    dispatch({
+      type: Types.SAVE_SELECTED_LIST_SUCCESS
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.SAVE_SELECTED_LIST_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getSelectedList = appraisalId => async dispatch => {
+  dispatch({
+    type: Types.GET_SELECTED_LIST_LOADING,
+    payload: true
+  })
+  try {
+    const selectedList = await getList(appraisalId)
+    dispatch({
+      type: Types.GET_SELECTED_LIST_SUCCESS,
+      payload: selectedList
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_SELECTED_LIST_FAILURE,
       payload: error
     })
     toast.error(error)

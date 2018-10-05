@@ -48,3 +48,16 @@ export const getAll = objectValues => {
     params
   })
 }
+
+export const saveList = (list, appraisalId) => {
+  return request({
+    method: 'post'
+    // url: `/business/${businessId}/sold/${businessSoldId}/finalise`
+  })
+}
+
+export const getList = appraisalId => {
+  return request({
+    // url: `/business/${businessId}/sold`
+  })
+}
