@@ -49,15 +49,19 @@ export const getAll = objectValues => {
   })
 }
 
-export const saveList = (list, appraisalId) => {
+export const saveList = (selectedList, appraisalId) => {
   return request({
-    method: 'post'
-    // url: `/business/${businessId}/sold/${businessSoldId}/finalise`
+    method: 'post',
+    url: '/comparable-data/save',
+    data: {
+      appraisalId,
+      selectedList
+    }
   })
 }
 
 export const getList = appraisalId => {
   return request({
-    // url: `/business/${businessId}/sold`
+    url: `selected-list/${appraisalId}`
   })
 }
