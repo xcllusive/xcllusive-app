@@ -96,10 +96,10 @@ class AppraisalMenuPage extends Component {
 
   render () {
     const { activeItem, colorProgress } = this.state
-    const { history, business, appraisal } = this.props
+    const { history, business, appraisal, isLoadingAppraisal } = this.props
     const { isLoadingCreating } = this.props.location.state
     return (
-      <Wrapper>
+      <Wrapper loading={isLoadingAppraisal}>
         <Segment size="mini">
           <Grid>
             <Grid.Row style={{ backgroundColor: '#ecf0f3' }} columns={2}>
@@ -165,7 +165,7 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Comparable Data' ? (
           <Segment>
-            <ComparableData business={business} appraisalObject={appraisal} />
+            {appraisal && appraisal.id ? <ComparableData business={business} appraisalObject={appraisal} /> : null}
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>
@@ -201,11 +201,13 @@ AppraisalMenuPage.propTypes = {
   business: PropTypes.object,
   appraisal: PropTypes.object,
   getAppraisal: PropTypes.func,
-  getBusiness: PropTypes.func
+  getBusiness: PropTypes.func,
+  isLoadingAppraisal: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   appraisal: state.appraisal.get.object,
+  isLoadingAppraisal: state.appraisal.get.isLoading,
   business: state.business.get.object
 })
 

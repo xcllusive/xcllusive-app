@@ -1,6 +1,7 @@
 import { create, get, update, finalise, getAll, saveList, getList } from '../../services/api/businessSold'
 import { getBuyersFromBusiness } from '../../services/api/business'
 import { toast } from 'react-toastify'
+import _ from 'lodash'
 
 // Action Types
 
@@ -22,7 +23,15 @@ export const Types = {
   GET_BUYERS_BUSINESS_SOLD_FAILURE: 'GET_BUYERS_BUSINESS_SOLD_FAILURE',
   GET_BUSINESSES_SOLD_LOADING: 'GET_BUSINESSES_SOLD_LOADING',
   GET_BUSINESSES_SOLD_SUCCESS: 'GET_BUSINESSES_SOLD_SUCCESS',
-  GET_BUSINESSES_SOLD_FAILURE: 'GET_BUSINESSES_SOLD_FAILURE'
+  GET_BUSINESSES_SOLD_FAILURE: 'GET_BUSINESSES_SOLD_FAILURE',
+  SAVE_SELECTED_LIST_LOADING: 'SAVE_SELECTED_LIST_LOADING',
+  SAVE_SELECTED_LIST_SUCCESS: 'SAVE_SELECTED_LIST_SUCCESS',
+  SAVE_SELECTED_LIST_FAILURE: 'SAVE_SELECTED_LIST_FAILURE',
+  GET_SELECTED_LIST_LOADING: 'GET_SELECTED_LIST_LOADING',
+  GET_SELECTED_LIST_SUCCESS: 'GET_SELECTED_LIST_SUCCESS',
+  GET_SELECTED_LIST_FAILURE: 'GET_SELECTED_LIST_FAILURE',
+  ADD_SELECTED_LIST: 'ADD_SELECTED_LIST',
+  REMOVE_SELECTED_LIST: 'REMOVE_SELECTED_LIST'
 }
 
 // Reducer
@@ -303,6 +312,22 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.ADD_SELECTED_LIST:
+      return {
+        ...state,
+        getList: {
+          ...state.getList,
+          array: [...state.getList.array, action.payload]
+        }
+      }
+    case Types.REMOVE_SELECTED_LIST:
+      return {
+        ...state,
+        getList: {
+          ...state.getList,
+          array: [..._.remove(state.getList.array, item => item.id !== action.payload.id)]
+        }
+      }
     default:
       return state
   }
@@ -467,4 +492,18 @@ export const getSelectedList = appraisalId => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const addSelectedList = objectList => async dispatch => {
+  dispatch({
+    type: Types.ADD_SELECTED_LIST,
+    payload: objectList
+  })
+}
+
+export const removeSelectedList = objectList => async dispatch => {
+  dispatch({
+    type: Types.REMOVE_SELECTED_LIST,
+    payload: objectList
+  })
 }

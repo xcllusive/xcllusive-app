@@ -24,7 +24,13 @@ import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
 import { OptionsPriceSelectBuyer } from '../../../constants/OptionsPriceSelect'
-import { getBusinessesSold, saveSelectedList, getSelectedList } from '../../../redux/ducks/businessSold'
+import {
+  getBusinessesSold,
+  saveSelectedList,
+  getSelectedList,
+  addSelectedList,
+  removeSelectedList
+} from '../../../redux/ducks/businessSold'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import numeral from 'numeral'
 
@@ -57,12 +63,12 @@ class ComparableDataPage extends Component {
 
   componentDidMount () {
     this.props.getBusinessesSold(this.props.values)
-    // this.props.getSelectedList(this.state.selectedList, this.props.appraisalObject.id)
+    this.props.getSelectedList(this.props.appraisalObject.id)
   }
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
-    // this.props.saveSelectedList(this.state.selectedList, this.props.appraisalObject.id)
+    this.props.saveSelectedList(this.props.listSelected, this.props.appraisalObject.id)
   }
 
   async _handleSelectChange (data) {
@@ -111,15 +117,14 @@ class ComparableDataPage extends Component {
   }
 
   _addToSelectedList = objectBusinessSold => {
-    if (this.state.selectedList.length === 0) {
-      this.setState(prevState => ({
-        selectedList: [...prevState.selectedList, objectBusinessSold]
-      }))
+    if (this.props.listSelected.length === 0) {
+      // this.setState(prevState => ({
+      //   selectedList: [this.props.listSelected, objectBusinessSold]
+      // }))
+      this.props.addSelectedList(objectBusinessSold)
     } else {
-      if (!_.find(this.state.selectedList, o => o.id === objectBusinessSold.id)) {
-        this.setState(prevState => ({
-          selectedList: [...prevState.selectedList, objectBusinessSold]
-        }))
+      if (!_.find(this.props.listSelected, o => o.id === objectBusinessSold.id)) {
+        this.props.addSelectedList(objectBusinessSold)
       } else this._showMsg()
     }
 
@@ -134,9 +139,10 @@ class ComparableDataPage extends Component {
       },
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this.setState(prevState => ({
-            selectedList: [..._.remove(this.state.selectedList, item => item.id !== idSelected)]
-          }))
+          // this.setState(prevState => ({
+          //   selectedList: [..._.remove(this.state.selectedList, item => item.id === idSelected)]
+          // }))
+          this.props.removeSelectedList(idSelected)
         }
       }
     })
@@ -183,13 +189,6 @@ class ComparableDataPage extends Component {
     return totalYear / count
   }
 
-  _trendArrows = businessSold => {
-    if (businessSold.trend === 'up') {
-      this.setState({ nameArrow: 'arrow up', colorArrow: 'green' })
-    }
-    console.log(this.state.nameArrow, this.state.colorArrow)
-  }
-
   _colorArrow = businessSold => {
     if (businessSold.trend === 'up') {
       return 'green'
@@ -215,7 +214,7 @@ class ComparableDataPage extends Component {
   }
 
   render () {
-    const { values, errors, touched, listBusinessesSold, isLoadingBusinessesSold } = this.props
+    const { values, errors, touched, listBusinessesSold, isLoadingBusinessesSold, listSelected } = this.props
     const { priceOptions, lastBusinessOptions } = this.state
     return (
       <Wrapper>
@@ -351,7 +350,7 @@ class ComparableDataPage extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {this.state.selectedList.map(selectedList => (
+              {listSelected.map(selectedList => (
                 <Table.Row active key={selectedList.id}>
                   <Table.Cell>{selectedList.businessType}</Table.Cell>
                   <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0.[99]')}</Table.Cell>
@@ -388,7 +387,7 @@ class ComparableDataPage extends Component {
                   <Table.Cell>{selectedList.termsOfDeal} </Table.Cell>
                   <Table.Cell>{selectedList.specialNotes} </Table.Cell>
                   <Table.Cell>
-                    <Button icon onClick={() => this._toggleModalConfirmDelete(selectedList.id)}>
+                    <Button icon onClick={() => this._toggleModalConfirmDelete(selectedList)}>
                       <Icon link color="red" name="trash" />
                     </Button>
                   </Table.Cell>
@@ -492,7 +491,10 @@ ComparableDataPage.propTypes = {
   listBusinessesSold: PropTypes.array,
   isLoadingBusinessesSold: PropTypes.bool,
   saveSelectedList: PropTypes.func,
-  getSelectedList: PropTypes.func
+  getSelectedList: PropTypes.func,
+  listSelected: PropTypes.array,
+  addSelectedList: PropTypes.func,
+  removeSelectedList: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -508,7 +510,8 @@ const mapPropsToValues = props => ({
 const mapStateToProps = state => {
   return {
     listBusinessesSold: state.businessSold.getAll.array,
-    isLoadingBusinessesSold: state.businessSold.getAll.isLoading
+    isLoadingBusinessesSold: state.businessSold.getAll.isLoading,
+    listSelected: state.businessSold.getList.array
   }
 }
 
@@ -516,7 +519,15 @@ const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { updateAppraisal, getBusinessesSold, openModal, saveSelectedList, getSelectedList },
+    {
+      updateAppraisal,
+      getBusinessesSold,
+      openModal,
+      saveSelectedList,
+      getSelectedList,
+      addSelectedList,
+      removeSelectedList
+    },
     dispatch
   )
 }

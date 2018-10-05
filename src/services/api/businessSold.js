@@ -62,6 +62,6 @@ export const saveList = (selectedList, appraisalId) => {
 
 export const getList = appraisalId => {
   return request({
-    url: `selected-list/${appraisalId}`
+    url: `comparable-data/selected-list/${appraisalId}`
   })
 }
