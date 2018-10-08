@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Form, Label, Grid, Button, Icon, Input } from 'semantic-ui-react'
 import * as Yup from 'yup'
+import numeral from 'numeral'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
 
@@ -27,9 +28,9 @@ class AddbacksAndAdjustmentsForm extends Component {
 
   _calcGrossMargin = (sales, cogs) => (sales - cogs) || 0
 
-  _calcGrossMarginPerc = (sales, grossMargin) => ((grossMargin * 100) / sales).toFixed(2) || 0
+  _calcGrossMarginPerc = (sales, cogs) => (((sales - cogs) * 100) / sales).toFixed(2) || 0
 
-  _calcGrossProfit = (grossMargin, other) => (grossMargin + other) || 0
+  _calcGrossProfit = (grossMargin, other) => (numeral(grossMargin).value() + numeral(other).value()) || 0
 
   _calcOperatingProfit = (grossProfit, other, expense) => (this._calcGrossProfit(grossProfit, other) - expense) || 0
 
