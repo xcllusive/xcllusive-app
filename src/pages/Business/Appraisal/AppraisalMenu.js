@@ -19,7 +19,7 @@ class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Comparable Data',
+      activeItem: 'Financial Analysis',
       percent: 75,
       colorProgress: null
     }
