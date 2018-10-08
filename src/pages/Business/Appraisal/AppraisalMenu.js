@@ -161,7 +161,7 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Financial Analysis' ? (
           <Segment>
-            <FinancialAnalysis business={business} />
+            <FinancialAnalysis business={business} appraisalObject={appraisal} />
           </Segment>
         ) : null}
         {this.state.activeItem === 'Comparable Data' ? (

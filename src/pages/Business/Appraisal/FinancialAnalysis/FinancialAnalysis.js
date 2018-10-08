@@ -16,6 +16,7 @@ import PhysicalAssetValueForm from './PhysicalAssetValueForm'
 import FinancialInformationSourceForm from './FinancialInformationSourceForm'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
+import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
 class FinancialAnalysisPage extends Component {
   constructor (props) {
@@ -24,14 +25,18 @@ class FinancialAnalysisPage extends Component {
   }
 
   componentDidMount () {
-    this._calculateFinancialYear()
+    if (this.props.appraisalObject && this.props.appraisalObject.year6 === 0) this._calculateFinancialYear()
+  }
+
+  componentWillUnmount () {
+    this.props.updateAppraisal(this.props.values)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _calculateFinancialYear = () => {
+  _calculateFinancialYear = async () => {
     const dateChangeFinancialYear = moment('30/06', 'DD/MM')
     const currentDayMonth = moment()
     let financialYear = null
@@ -41,50 +46,41 @@ class FinancialAnalysisPage extends Component {
         .format('YYYY')
     } else financialYear = moment().format('YYYY')
 
-    this.setState({ financialYear })
+    await this.setState({ financialYear })
+    this.props.setFieldValue('year1', this.state.financialYear - 5)
+    this.props.setFieldValue('year2', this.state.financialYear - 4)
+    this.props.setFieldValue('year3', this.state.financialYear - 3)
+    this.props.setFieldValue('year4', this.state.financialYear - 2)
+    this.props.setFieldValue('year5', this.state.financialYear - 1)
+    this.props.setFieldValue('year6', this.state.financialYear)
   }
 
   render () {
-    const { values } = this.props
+    const { values, appraisalObject } = this.props
     return (
       <Wrapper>
         <Step.Group size="large">
-          <Step
-            active
-            icon="chart line"
-            title="Step 4"
-            description="Financial Analysis"
-          />
+          <Step active icon="chart line" title="Step 4" description="Financial Analysis" />
           <Message info size="large">
             <p>
-              The data you enter on this page will be used on the `Financial
-              Analysis` page of the appraisal. This information will also be
-              used to calculate the value of the business. Enter data as you
-              would on a spreadsheet, using the [tab] key to switch quickly
-              between cells. This page can be left open for longer than most
-              other pages, but it is recommended that you manually save
-              regularly to ensure that you don`t lose any work. This is done by
-              clicking the [Save] button at the bottom of this page.
+              The data you enter on this page will be used on the `Financial Analysis` page of the appraisal. This
+              information will also be used to calculate the value of the business. Enter data as you would on a
+              spreadsheet, using the [tab] key to switch quickly between cells. This page can be left open for longer
+              than most other pages, but it is recommended that you manually save regularly to ensure that you don`t
+              lose any work. This is done by clicking the [Save] button at the bottom of this page.
             </p>
           </Message>
         </Step.Group>
         <Grid celled="internally" divided>
-          <FinancialAnalysisForm financialYear={this.state.financialYear} />
+          <FinancialAnalysisForm financialYear={this.state.financialYear} appraisalObject={appraisalObject} />
           <Grid.Row>
             <CustomColumn>
-              <Header
-                style={{ marginTop: '10px', marginBottom: '10px' }}
-                as="h3"
-                textAlign="center"
-                color="blue"
-              >
+              <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
                 Addbacks and Adjustments
               </Header>
             </CustomColumn>
           </Grid.Row>
-          <AddbacksAndAdjustmentsForm
-            financialYear={this.state.financialYear}
-          />
+          <AddbacksAndAdjustmentsForm financialYear={this.state.financialYear} />
           <TotalAdjustmentsForm />
         </Grid>
         <Grid>
@@ -138,10 +134,16 @@ FinancialAnalysisPage.propTypes = {
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
   isSubmitting: PropTypes.bool,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  updateAppraisal: PropTypes.func,
+  appraisalObject: PropTypes.object,
+  business: PropTypes.object
 }
 
-const mapPropsToValues = props => ({})
+const mapPropsToValues = props => ({
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : ''
+})
 
 const validationSchema = Yup.object().shape({})
 
@@ -152,7 +154,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch)
+  return bindActionCreators({ updateAppraisal }, dispatch)
 }
 
 export default connect(
