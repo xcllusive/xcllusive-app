@@ -8,7 +8,6 @@ import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
 import FinancialAnalysisForm from './FinancialAnalysisForm'
-import TotalAdjustmentsForm from './TotalAdjustmentsForm'
 import moment from 'moment'
 import OwnersMarketWagesForm from './OwnersMarketWagesForm'
 import StockForm from './StockForm'
@@ -20,7 +19,9 @@ import CustomColumn from '../../../../components/content/CustomGridColumn'
 class FinancialAnalysisPage extends Component {
   constructor (props) {
     super(props)
-    this.state = { financialYear: null }
+    this.state = {
+      financialYear: null
+    }
   }
 
   componentDidMount () {
@@ -49,22 +50,14 @@ class FinancialAnalysisPage extends Component {
     return (
       <Wrapper>
         <Step.Group size="large">
-          <Step
-            active
-            icon="chart line"
-            title="Step 4"
-            description="Financial Analysis"
-          />
+          <Step active icon="chart line" title="Step 4" description="Financial Analysis" />
           <Message info size="large">
             <p>
-              The data you enter on this page will be used on the `Financial
-              Analysis` page of the appraisal. This information will also be
-              used to calculate the value of the business. Enter data as you
-              would on a spreadsheet, using the [tab] key to switch quickly
-              between cells. This page can be left open for longer than most
-              other pages, but it is recommended that you manually save
-              regularly to ensure that you don`t lose any work. This is done by
-              clicking the [Save] button at the bottom of this page.
+              The data you enter on this page will be used on the `Financial Analysis` page of the appraisal. This
+              information will also be used to calculate the value of the business. Enter data as you would on a
+              spreadsheet, using the [tab] key to switch quickly between cells. This page can be left open for longer
+              than most other pages, but it is recommended that you manually save regularly to ensure that you don`t
+              lose any work. This is done by clicking the [Save] button at the bottom of this page.
             </p>
           </Message>
         </Step.Group>
@@ -72,20 +65,16 @@ class FinancialAnalysisPage extends Component {
           <FinancialAnalysisForm financialYear={this.state.financialYear} />
           <Grid.Row>
             <CustomColumn>
-              <Header
-                style={{ marginTop: '10px', marginBottom: '10px' }}
-                as="h3"
-                textAlign="center"
-                color="blue"
-              >
+              <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
                 Addbacks and Adjustments
               </Header>
             </CustomColumn>
           </Grid.Row>
           <AddbacksAndAdjustmentsForm
             financialYear={this.state.financialYear}
+            business={this.props.business}
+            appraisalObject={this.props.appraisalObject}
           />
-          <TotalAdjustmentsForm />
         </Grid>
         <Grid>
           <Grid.Row columns={2}>
@@ -138,7 +127,9 @@ FinancialAnalysisPage.propTypes = {
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
   isSubmitting: PropTypes.bool,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
+  appraisalObject: PropTypes.object,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = props => ({})

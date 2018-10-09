@@ -19,7 +19,7 @@ class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Comparable Data',
+      activeItem: 'Financial Analysis',
       percent: 75,
       colorProgress: null
     }
@@ -160,7 +160,7 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Financial Analysis' ? (
           <Segment>
-            <FinancialAnalysis business={business} />
+            <FinancialAnalysis business={business} appraisalObject={appraisal} />
           </Segment>
         ) : null}
         {this.state.activeItem === 'Comparable Data' ? (
