@@ -81,7 +81,7 @@ class FinancialAnalysisPage extends Component {
             </CustomColumn>
           </Grid.Row>
           <AddbacksAndAdjustmentsForm financialYear={this.state.financialYear} />
-          <TotalAdjustmentsForm />
+          <TotalAdjustmentsForm appraisalObject={appraisalObject} />
         </Grid>
         <Grid>
           <Grid.Row columns={2}>
