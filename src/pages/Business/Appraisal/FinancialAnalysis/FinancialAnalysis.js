@@ -15,6 +15,7 @@ import PhysicalAssetValueForm from './PhysicalAssetValueForm'
 import FinancialInformationSourceForm from './FinancialInformationSourceForm'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
+import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
 class FinancialAnalysisPage extends Component {
   constructor (props) {
@@ -25,14 +26,18 @@ class FinancialAnalysisPage extends Component {
   }
 
   componentDidMount () {
-    this._calculateFinancialYear()
+    if (this.props.appraisalObject && this.props.appraisalObject.year6 === 0) this._calculateFinancialYear()
+  }
+
+  componentWillUnmount () {
+    this.props.updateAppraisal(this.props.values)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _calculateFinancialYear = () => {
+  _calculateFinancialYear = async () => {
     const dateChangeFinancialYear = moment('30/06', 'DD/MM')
     const currentDayMonth = moment()
     let financialYear = null
@@ -42,11 +47,17 @@ class FinancialAnalysisPage extends Component {
         .format('YYYY')
     } else financialYear = moment().format('YYYY')
 
-    this.setState({ financialYear })
+    await this.setState({ financialYear })
+    this.props.setFieldValue('year1', this.state.financialYear - 5)
+    this.props.setFieldValue('year2', this.state.financialYear - 4)
+    this.props.setFieldValue('year3', this.state.financialYear - 3)
+    this.props.setFieldValue('year4', this.state.financialYear - 2)
+    this.props.setFieldValue('year5', this.state.financialYear - 1)
+    this.props.setFieldValue('year6', this.state.financialYear)
   }
 
   render () {
-    const { values } = this.props
+    const { values, appraisalObject } = this.props
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -62,7 +73,7 @@ class FinancialAnalysisPage extends Component {
           </Message>
         </Step.Group>
         <Grid celled="internally" divided>
-          <FinancialAnalysisForm financialYear={this.state.financialYear} />
+          <FinancialAnalysisForm financialYear={this.state.financialYear} appraisalObject={appraisalObject} />
           <Grid.Row>
             <CustomColumn>
               <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
@@ -70,11 +81,16 @@ class FinancialAnalysisPage extends Component {
               </Header>
             </CustomColumn>
           </Grid.Row>
+<<<<<<< HEAD
           <AddbacksAndAdjustmentsForm
             financialYear={this.state.financialYear}
             business={this.props.business}
             appraisalObject={this.props.appraisalObject}
           />
+=======
+          <AddbacksAndAdjustmentsForm financialYear={this.state.financialYear} />
+          <TotalAdjustmentsForm />
+>>>>>>> afb40801aae6a8c10e6e313fb041e33294b1f0ff
         </Grid>
         <Grid>
           <Grid.Row columns={2}>
@@ -128,11 +144,18 @@ FinancialAnalysisPage.propTypes = {
   setFieldValue: PropTypes.func,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
+<<<<<<< HEAD
+=======
+  updateAppraisal: PropTypes.func,
+>>>>>>> afb40801aae6a8c10e6e313fb041e33294b1f0ff
   appraisalObject: PropTypes.object,
   business: PropTypes.object
 }
 
-const mapPropsToValues = props => ({})
+const mapPropsToValues = props => ({
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : ''
+})
 
 const validationSchema = Yup.object().shape({})
 
@@ -143,7 +166,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch)
+  return bindActionCreators({ updateAppraisal }, dispatch)
 }
 
 export default connect(
