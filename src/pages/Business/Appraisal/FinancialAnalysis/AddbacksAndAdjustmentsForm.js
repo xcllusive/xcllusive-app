@@ -5,8 +5,11 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Form, Label, Grid, Input } from 'semantic-ui-react'
 import * as Yup from 'yup'
+import numeral from 'numeral'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
+
+import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
@@ -14,12 +17,25 @@ class AddbacksAndAdjustmentsForm extends Component {
     this.state = {}
   }
 
+  componentWillUnmount () {
+    this.props.updateAppraisal(this.props.values)
+  }
+
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
+  _calcTotal = column => {
+    let total = 0
+    for (let i = 1; i < 30; i++) {
+      total = total + numeral(this.props.values[`aaRow${i}Year${column}`]).value()
+    }
+    return numeral(total).value()
+  }
+
   render () {
     const { values, handleChange, handleBlur, errors, touched, financialYear } = this.props
+
     return (
       <Fragment>
         <Grid.Row style={{ backgroundColor: 'lightyellow', celledPadding: '.3em' }} columns={9}>
@@ -56,91 +72,91 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={64}
-              name="aaRow01"
-              autoComplete="aaRow01"
-              value={values.aaRow01}
+              name="aaRow1"
+              autoComplete="aaRow1"
+              value={values.aaRow1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow01 && touched.aaRow01 && <Label basic color="red" pointing content={errors.aaRow01} />}
+            {errors.aaRow1 && touched.aaRow1 && <Label basic color="red" pointing content={errors.aaRow1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={92}
-              name="aaRow01Year1"
-              autoComplete="aaRow01Year1"
-              value={values.aaRow01Year1}
+              name="aaRow1Year1"
+              autoComplete="aaRow1Year1"
+              value={values.aaRow1Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow01Year1 &&
-              touched.aaRow01Year1 && <Label basic color="red" pointing content={errors.aaRow01Year1} />}
+            {errors.aaRow1Year1 &&
+              touched.aaRow1Year1 && <Label basic color="red" pointing content={errors.aaRow1Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={121}
-              name="aaRow01Year2"
-              autoComplete="aaRow01Year2"
-              value={values.aaRow01Year2}
+              name="aaRow1Year2"
+              autoComplete="aaRow1Year2"
+              value={values.aaRow1Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow01Year2 &&
-              touched.aaRow01Year2 && <Label basic color="red" pointing content={errors.aaRow01Year2} />}
+            {errors.aaRow1Year2 &&
+              touched.aaRow1Year2 && <Label basic color="red" pointing content={errors.aaRow1Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={151}
-              name="aaRow01Year3"
-              autoComplete="aaRow01Year3"
-              value={values.aaRow01Year3}
+              name="aaRow1Year3"
+              autoComplete="aaRow1Year3"
+              value={values.aaRow1Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow01Year3 &&
-              touched.aaRow01Year3 && <Label basic color="red" pointing content={errors.aaRow01Year3} />}
+            {errors.aaRow1Year3 &&
+              touched.aaRow1Year3 && <Label basic color="red" pointing content={errors.aaRow1Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={181}
-              name="aaRow01Year4"
-              autoComplete="aaRow01Year4"
-              value={values.aaRow01Year4}
+              name="aaRow1Year4"
+              autoComplete="aaRow1Year4"
+              value={values.aaRow1Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow01Year4 &&
-              touched.aaRow01Year4 && <Label basic color="red" pointing content={errors.aaRow01Year4} />}
+            {errors.aaRow1Year4 &&
+              touched.aaRow1Year4 && <Label basic color="red" pointing content={errors.aaRow1Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={211}
-              name="aaRow01Year5"
-              autoComplete="aaRow01Year5"
-              value={values.aaRow01Year5}
+              name="aaRow1Year5"
+              autoComplete="aaRow1Year5"
+              value={values.aaRow1Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow01Year5 &&
-              touched.aaRow01Year5 && <Label basic color="red" pointing content={errors.aaRow01Year5} />}
+            {errors.aaRow1Year5 &&
+              touched.aaRow1Year5 && <Label basic color="red" pointing content={errors.aaRow1Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={241}
-              name="aaRow01Year6"
-              autoComplete="aaRow01Year6"
-              value={values.aaRow01Year6}
+              name="aaRow1Year6"
+              autoComplete="aaRow1Year6"
+              value={values.aaRow1Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow01Year6 &&
-              touched.aaRow01Year6 && <Label basic color="red" pointing content={errors.aaRow01Year6} />}
+            {errors.aaRow1Year6 &&
+              touched.aaRow1Year6 && <Label basic color="red" pointing content={errors.aaRow1Year6} />}
           </CustomColumn>
           <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
             0
@@ -149,9 +165,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow01YesNo"
+                  name="aaRow1YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow01YesNo}
+                  checked={values.aaRow1YesNo}
                 />
               </Form.Field>
             </Form>
@@ -162,100 +178,101 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={65}
-              name="aaRow02"
-              autoComplete="aaRow02"
-              value={values.aaRow02}
+              name="aaRow2"
+              autoComplete="aaRow2"
+              value={values.aaRow2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow02 && touched.aaRow02 && <Label basic color="red" pointing content={errors.aaRow02} />}
+            {errors.aaRow2 && touched.aaRow2 && <Label basic color="red" pointing content={errors.aaRow2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={93}
-              name="aaRow02Year1"
-              autoComplete="aaRow02Year1"
-              value={values.aaRow02Year1}
+              name="aaRow2Year1"
+              autoComplete="aaRow2Year1"
+              value={values.aaRow2Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow02Year1 &&
-              touched.aaRow02Year1 && <Label basic color="red" pointing content={errors.aaRow02Year1} />}
+            {errors.aaRow2Year1 &&
+              touched.aaRow2Year1 && <Label basic color="red" pointing content={errors.aaRow2Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={122}
-              name="aaRow02Year2"
-              autoComplete="aaRow02Year2"
-              value={values.aaRow02Year2}
+              name="aaRow2Year2"
+              autoComplete="aaRow2Year2"
+              value={values.aaRow2Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow02Year2 &&
-              touched.aaRow02Year2 && <Label basic color="red" pointing content={errors.aaRow02Year2} />}
+            {errors.aaRow2Year2 &&
+              touched.aaRow2Year2 && <Label basic color="red" pointing content={errors.aaRow2Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={152}
-              name="aaRow02Year3"
-              autoComplete="aaRow02Year3"
-              value={values.aaRow02Year3}
+              name="aaRow2Year3"
+              autoComplete="aaRow2Year3"
+              value={values.aaRow2Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow02Year3 &&
-              touched.aaRow02Year3 && <Label basic color="red" pointing content={errors.aaRow02Year3} />}
+            {errors.aaRow2Year3 &&
+              touched.aaRow2Year3 && <Label basic color="red" pointing content={errors.aaRow2Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={182}
-              name="aaRow02Year4"
-              autoComplete="aaRow02Year4"
-              value={values.aaRow02Year4}
+              name="aaRow2Year4"
+              autoComplete="aaRow2Year4"
+              value={values.aaRow2Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow02Year4 &&
-              touched.aaRow02Year4 && <Label basic color="red" pointing content={errors.aaRow02Year4} />}
+            {errors.aaRow2Year4 &&
+              touched.aaRow2Year4 && <Label basic color="red" pointing content={errors.aaRow2Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={212}
-              name="aaRow02Year5"
-              autoComplete="aaRow02Year5"
-              value={values.aaRow02Year5}
+              name="aaRow2Year5"
+              autoComplete="aaRow2Year5"
+              value={values.aaRow2Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow02Year5 &&
-              touched.aaRow02Year5 && <Label basic color="red" pointing content={errors.aaRow02Year5} />}
+            {errors.aaRow2Year5 &&
+              touched.aaRow2Year5 && <Label basic color="red" pointing content={errors.aaRow2Year5} />}
           </CustomColumn>
           <CustomColumn>
             <Input
               fluid
+              type="number"
               tabIndex={242}
-              name="aaRow02Year6"
-              autoComplete="aaRow02Year6"
-              value={values.aaRow02Year6}
+              name="aaRow2Year6"
+              autoComplete="aaRow2Year6"
+              value={values.aaRow2Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow02Year6 &&
-              touched.aaRow02Year6 && <Label basic color="red" pointing content={errors.aaRow02Year6} />}
+            {errors.aaRow2Year6 &&
+              touched.aaRow2Year6 && <Label basic color="red" pointing content={errors.aaRow2Year6} />}
           </CustomColumn>
           <CustomColumn textAlign="center">0</CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow02YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow02YesNo}
+                  name="aaRow2YesNo"
+                  onChange={handleChange}
+                  checked={values.aaRow2YesNo}
                 />
               </Form.Field>
             </Form>
@@ -266,91 +283,91 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={66}
-              name="aaRow03"
-              autoComplete="aaRow03"
-              value={values.aaRow03}
+              name="aaRow3"
+              autoComplete="aaRow3"
+              value={values.aaRow3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow03 && touched.aaRow03 && <Label basic color="red" pointing content={errors.aaRow03} />}
+            {errors.aaRow3 && touched.aaRow3 && <Label basic color="red" pointing content={errors.aaRow3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={94}
-              name="aaRow03Year1"
-              autoComplete="aaRow03Year1"
-              value={values.aaRow03Year1}
+              name="aaRow3Year1"
+              autoComplete="aaRow3Year1"
+              value={values.aaRow3Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow03Year1 &&
-              touched.aaRow03Year1 && <Label basic color="red" pointing content={errors.aaRow03Year1} />}
+            {errors.aaRow3Year1 &&
+              touched.aaRow3Year1 && <Label basic color="red" pointing content={errors.aaRow3Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={123}
-              name="aaRow03Year2"
-              autoComplete="aaRow03Year2"
-              value={values.aaRow03Year2}
+              name="aaRow3Year2"
+              autoComplete="aaRow3Year2"
+              value={values.aaRow3Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow03Year2 &&
-              touched.aaRow03Year2 && <Label basic color="red" pointing content={errors.aaRow03Year2} />}
+            {errors.aaRow3Year2 &&
+              touched.aaRow3Year2 && <Label basic color="red" pointing content={errors.aaRow3Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={153}
-              name="aaRow03Year3"
-              autoComplete="aaRow03Year3"
-              value={values.aaRow03Year3}
+              name="aaRow3Year3"
+              autoComplete="aaRow3Year3"
+              value={values.aaRow3Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow03Year3 &&
-              touched.aaRow03Year3 && <Label basic color="red" pointing content={errors.aaRow03Year3} />}
+            {errors.aaRow3Year3 &&
+              touched.aaRow3Year3 && <Label basic color="red" pointing content={errors.aaRow3Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={183}
-              name="aaRow03Year4"
-              autoComplete="aaRow03Year4"
-              value={values.aaRow03Year4}
+              name="aaRow3Year4"
+              autoComplete="aaRow3Year4"
+              value={values.aaRow3Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow03Year4 &&
-              touched.aaRow03Year4 && <Label basic color="red" pointing content={errors.aaRow03Year4} />}
+            {errors.aaRow3Year4 &&
+              touched.aaRow3Year4 && <Label basic color="red" pointing content={errors.aaRow3Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={213}
-              name="aaRow03Year5"
-              autoComplete="aaRow03Year5"
-              value={values.aaRow03Year5}
+              name="aaRow3Year5"
+              autoComplete="aaRow3Year5"
+              value={values.aaRow3Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow03Year5 &&
-              touched.aaRow03Year5 && <Label basic color="red" pointing content={errors.aaRow03Year5} />}
+            {errors.aaRow3Year5 &&
+              touched.aaRow3Year5 && <Label basic color="red" pointing content={errors.aaRow3Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={243}
-              name="aaRow03Year6"
-              autoComplete="aaRow03Year6"
-              value={values.aaRow03Year6}
+              name="aaRow3Year6"
+              autoComplete="aaRow3Year6"
+              value={values.aaRow3Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow03Year6 &&
-              touched.aaRow03Year6 && <Label basic color="red" pointing content={errors.aaRow03Year6} />}
+            {errors.aaRow3Year6 &&
+              touched.aaRow3Year6 && <Label basic color="red" pointing content={errors.aaRow3Year6} />}
           </CustomColumn>
           <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
             0
@@ -359,9 +376,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow03YesNo"
+                  name="aaRow3YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow03YesNo}
+                  checked={values.aaRow3YesNo}
                 />
               </Form.Field>
             </Form>
@@ -372,100 +389,100 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={67}
-              name="aaRow04"
-              autoComplete="aaRow04"
-              value={values.aaRow04}
+              name="aaRow4"
+              autoComplete="aaRow4"
+              value={values.aaRow4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow04 && touched.aaRow04 && <Label basic color="red" pointing content={errors.aaRow04} />}
+            {errors.aaRow4 && touched.aaRow4 && <Label basic color="red" pointing content={errors.aaRow4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={95}
-              name="aaRow04Year1"
-              autoComplete="aaRow04Year1"
-              value={values.aaRow04Year1}
+              name="aaRow4Year1"
+              autoComplete="aaRow4Year1"
+              value={values.aaRow4Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow04Year1 &&
-              touched.aaRow04Year1 && <Label basic color="red" pointing content={errors.aaRow04Year1} />}
+            {errors.aaRow4Year1 &&
+              touched.aaRow4Year1 && <Label basic color="red" pointing content={errors.aaRow4Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={124}
-              name="aaRow04Year2"
-              autoComplete="aaRow04Year2"
-              value={values.aaRow04Year2}
+              name="aaRow4Year2"
+              autoComplete="aaRow4Year2"
+              value={values.aaRow4Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow04Year2 &&
-              touched.aaRow04Year2 && <Label basic color="red" pointing content={errors.aaRow04Year2} />}
+            {errors.aaRow4Year2 &&
+              touched.aaRow4Year2 && <Label basic color="red" pointing content={errors.aaRow4Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={154}
-              name="aaRow04Year3"
-              autoComplete="aaRow04Year3"
-              value={values.aaRow04Year3}
+              name="aaRow4Year3"
+              autoComplete="aaRow4Year3"
+              value={values.aaRow4Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow04Year3 &&
-              touched.aaRow04Year3 && <Label basic color="red" pointing content={errors.aaRow04Year3} />}
+            {errors.aaRow4Year3 &&
+              touched.aaRow4Year3 && <Label basic color="red" pointing content={errors.aaRow4Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={184}
-              name="aaRow04Year4"
-              autoComplete="aaRow04Year4"
-              value={values.aaRow04Year4}
+              name="aaRow4Year4"
+              autoComplete="aaRow4Year4"
+              value={values.aaRow4Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow04Year4 &&
-              touched.aaRow04Year4 && <Label basic color="red" pointing content={errors.aaRow04Year4} />}
+            {errors.aaRow4Year4 &&
+              touched.aaRow4Year4 && <Label basic color="red" pointing content={errors.aaRow4Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={214}
-              name="aaRow04Year5"
-              autoComplete="aaRow04Year5"
-              value={values.aaRow04Year5}
+              name="aaRow4Year5"
+              autoComplete="aaRow4Year5"
+              value={values.aaRow4Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow04Year5 &&
-              touched.aaRow04Year5 && <Label basic color="red" pointing content={errors.aaRow04Year5} />}
+            {errors.aaRow4Year5 &&
+              touched.aaRow4Year5 && <Label basic color="red" pointing content={errors.aaRow4Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={244}
-              name="aaRow04Year6"
-              autoComplete="aaRow04Year6"
-              value={values.aaRow04Year6}
+              name="aaRow4Year6"
+              autoComplete="aaRow4Year6"
+              value={values.aaRow4Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow04Year6 &&
-              touched.aaRow04Year6 && <Label basic color="red" pointing content={errors.aaRow04Year6} />}
+            {errors.aaRow4Year6 &&
+              touched.aaRow4Year6 && <Label basic color="red" pointing content={errors.aaRow4Year6} />}
           </CustomColumn>
           <CustomColumn textAlign="center">0</CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow04YesNo"
+                  name="aaRow4YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow04YesNo}
+                  checked={values.aaRow4YesNo}
                 />
               </Form.Field>
             </Form>
@@ -476,91 +493,91 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={68}
-              name="aaRow05"
-              autoComplete="aaRow05"
-              value={values.aaRow05}
+              name="aaRow5"
+              autoComplete="aaRow5"
+              value={values.aaRow5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow05 && touched.aaRow05 && <Label basic color="red" pointing content={errors.aaRow05} />}
+            {errors.aaRow5 && touched.aaRow5 && <Label basic color="red" pointing content={errors.aaRow5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={95}
-              name="aaRow05Year1"
-              autoComplete="aaRow05Year1"
-              value={values.aaRow05Year1}
+              name="aaRow5Year1"
+              autoComplete="aaRow5Year1"
+              value={values.aaRow5Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow05Year1 &&
-              touched.aaRow05Year1 && <Label basic color="red" pointing content={errors.aaRow05Year1} />}
+            {errors.aaRow5Year1 &&
+              touched.aaRow5Year1 && <Label basic color="red" pointing content={errors.aaRow5Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={125}
-              name="aaRow05Year2"
-              autoComplete="aaRow05Year2"
-              value={values.aaRow05Year2}
+              name="aaRow5Year2"
+              autoComplete="aaRow5Year2"
+              value={values.aaRow5Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow05Year2 &&
-              touched.aaRow05Year2 && <Label basic color="red" pointing content={errors.aaRow05Year2} />}
+            {errors.aaRow5Year2 &&
+              touched.aaRow5Year2 && <Label basic color="red" pointing content={errors.aaRow5Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={155}
-              name="aaRow05Year3"
-              autoComplete="aaRow05Year3"
-              value={values.aaRow05Year3}
+              name="aaRow5Year3"
+              autoComplete="aaRow5Year3"
+              value={values.aaRow5Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow05Year3 &&
-              touched.aaRow05Year3 && <Label basic color="red" pointing content={errors.aaRow05Year3} />}
+            {errors.aaRow5Year3 &&
+              touched.aaRow5Year3 && <Label basic color="red" pointing content={errors.aaRow5Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={185}
-              name="aaRow05Year4"
-              autoComplete="aaRow05Year4"
-              value={values.aaRow05Year4}
+              name="aaRow5Year4"
+              autoComplete="aaRow5Year4"
+              value={values.aaRow5Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow05Year4 &&
-              touched.aaRow05Year4 && <Label basic color="red" pointing content={errors.aaRow05Year4} />}
+            {errors.aaRow5Year4 &&
+              touched.aaRow5Year4 && <Label basic color="red" pointing content={errors.aaRow5Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={215}
-              name="aaRow05Year5"
-              autoComplete="aaRow05Year5"
-              value={values.aaRow05Year5}
+              name="aaRow5Year5"
+              autoComplete="aaRow5Year5"
+              value={values.aaRow5Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow05Year5 &&
-              touched.aaRow05Year5 && <Label basic color="red" pointing content={errors.aaRow05Year5} />}
+            {errors.aaRow5Year5 &&
+              touched.aaRow5Year5 && <Label basic color="red" pointing content={errors.aaRow5Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={245}
-              name="aaRow05Year6"
-              autoComplete="aaRow05Year6"
-              value={values.aaRow05Year6}
+              name="aaRow5Year6"
+              autoComplete="aaRow5Year6"
+              value={values.aaRow5Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow05Year6 &&
-              touched.aaRow05Year6 && <Label basic color="red" pointing content={errors.aaRow05Year6} />}
+            {errors.aaRow5Year6 &&
+              touched.aaRow5Year6 && <Label basic color="red" pointing content={errors.aaRow5Year6} />}
           </CustomColumn>
           <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
             0
@@ -569,9 +586,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow05YesNo"
+                  name="aaRow5YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow05YesNo}
+                  checked={values.aaRow5YesNo}
                 />
               </Form.Field>
             </Form>
@@ -582,100 +599,100 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={69}
-              name="aaRow06"
-              autoComplete="aaRow06"
-              value={values.aaRow06}
+              name="aaRow6"
+              autoComplete="aaRow6"
+              value={values.aaRow6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow06 && touched.aaRow06 && <Label basic color="red" pointing content={errors.aaRow05} />}
+            {errors.aaRow6 && touched.aaRow6 && <Label basic color="red" pointing content={errors.aaRow5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={96}
-              name="aaRow06Year1"
-              autoComplete="aaRow06Year1"
-              value={values.aaRow06Year1}
+              name="aaRow6Year1"
+              autoComplete="aaRow6Year1"
+              value={values.aaRow6Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow06Year1 &&
-              touched.aaRow06Year1 && <Label basic color="red" pointing content={errors.aaRow06Year1} />}
+            {errors.aaRow6Year1 &&
+              touched.aaRow6Year1 && <Label basic color="red" pointing content={errors.aaRow6Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={126}
-              name="aaRow06Year2"
-              autoComplete="aaRow06Year2"
-              value={values.aaRow06Year2}
+              name="aaRow6Year2"
+              autoComplete="aaRow6Year2"
+              value={values.aaRow6Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow06Year2 &&
-              touched.aaRow06Year2 && <Label basic color="red" pointing content={errors.aaRow06Year2} />}
+            {errors.aaRow6Year2 &&
+              touched.aaRow6Year2 && <Label basic color="red" pointing content={errors.aaRow6Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={156}
-              name="aaRow06Year3"
-              autoComplete="aaRow06Year3"
-              value={values.aaRow06Year3}
+              name="aaRow6Year3"
+              autoComplete="aaRow6Year3"
+              value={values.aaRow6Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow06Year3 &&
-              touched.aaRow06Year3 && <Label basic color="red" pointing content={errors.aaRow06Year3} />}
+            {errors.aaRow6Year3 &&
+              touched.aaRow6Year3 && <Label basic color="red" pointing content={errors.aaRow6Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={186}
-              name="aaRow06Year4"
-              autoComplete="aaRow06Year4"
-              value={values.aaRow06Year4}
+              name="aaRow6Year4"
+              autoComplete="aaRow6Year4"
+              value={values.aaRow6Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow06Year4 &&
-              touched.aaRow06Year4 && <Label basic color="red" pointing content={errors.aaRow06Year4} />}
+            {errors.aaRow6Year4 &&
+              touched.aaRow6Year4 && <Label basic color="red" pointing content={errors.aaRow6Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={216}
-              name="aaRow06Year5"
-              autoComplete="aaRow06Year5"
-              value={values.aaRow06Year5}
+              name="aaRow6Year5"
+              autoComplete="aaRow6Year5"
+              value={values.aaRow6Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow06Year5 &&
-              touched.aaRow06Year5 && <Label basic color="red" pointing content={errors.aaRow06Year5} />}
+            {errors.aaRow6Year5 &&
+              touched.aaRow6Year5 && <Label basic color="red" pointing content={errors.aaRow6Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={246}
-              name="aaRow06Year6"
-              autoComplete="aaRow06Year6"
-              value={values.aaRow06Year6}
+              name="aaRow6Year6"
+              autoComplete="aaRow6Year6"
+              value={values.aaRow6Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow06Year6 &&
-              touched.aaRow06Year6 && <Label basic color="red" pointing content={errors.aaRow06Year6} />}
+            {errors.aaRow6Year6 &&
+              touched.aaRow6Year6 && <Label basic color="red" pointing content={errors.aaRow6Year6} />}
           </CustomColumn>
           <CustomColumn textAlign="center">0</CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow06YesNo"
+                  name="aaRow6YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow06YesNo}
+                  checked={values.aaRow6YesNo}
                 />
               </Form.Field>
             </Form>
@@ -686,91 +703,91 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={70}
-              name="aaRow07"
-              autoComplete="aaRow07"
-              value={values.aaRow07}
+              name="aaRow7"
+              autoComplete="aaRow7"
+              value={values.aaRow7}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow07 && touched.aaRow07 && <Label basic color="red" pointing content={errors.aaRow07} />}
+            {errors.aaRow7 && touched.aaRow7 && <Label basic color="red" pointing content={errors.aaRow7} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={97}
-              name="aaRow07Year1"
-              autoComplete="aaRow07Year1"
-              value={values.aaRow07Year1}
+              name="aaRow7Year1"
+              autoComplete="aaRow7Year1"
+              value={values.aaRow7Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow07Year1 &&
-              touched.aaRow07Year1 && <Label basic color="red" pointing content={errors.aaRow07Year1} />}
+            {errors.aaRow7Year1 &&
+              touched.aaRow7Year1 && <Label basic color="red" pointing content={errors.aaRow7Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={127}
-              name="aaRow07Year2"
-              autoComplete="aaRow07Year2"
-              value={values.aaRow07Year2}
+              name="aaRow7Year2"
+              autoComplete="aaRow7Year2"
+              value={values.aaRow7Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow07Year2 &&
-              touched.aaRow07Year2 && <Label basic color="red" pointing content={errors.aaRow07Year2} />}
+            {errors.aaRow7Year2 &&
+              touched.aaRow7Year2 && <Label basic color="red" pointing content={errors.aaRow7Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={157}
-              name="aaRow07Year3"
-              autoComplete="aaRow07Year3"
-              value={values.aaRow07Year3}
+              name="aaRow7Year3"
+              autoComplete="aaRow7Year3"
+              value={values.aaRow7Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow07Year3 &&
-              touched.aaRow07Year3 && <Label basic color="red" pointing content={errors.aaRow07Year3} />}
+            {errors.aaRow7Year3 &&
+              touched.aaRow7Year3 && <Label basic color="red" pointing content={errors.aaRow7Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={187}
-              name="aaRow07Year4"
-              autoComplete="aaRow07Year4"
-              value={values.aaRow07Year4}
+              name="aaRow7Year4"
+              autoComplete="aaRow7Year4"
+              value={values.aaRow7Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow07Year4 &&
-              touched.aaRow07Year4 && <Label basic color="red" pointing content={errors.aaRow07Year4} />}
+            {errors.aaRow7Year4 &&
+              touched.aaRow7Year4 && <Label basic color="red" pointing content={errors.aaRow7Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={217}
-              name="aaRow07Year5"
-              autoComplete="aaRow07Year5"
-              value={values.aaRow07Year5}
+              name="aaRow7Year5"
+              autoComplete="aaRow7Year5"
+              value={values.aaRow7Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow07Year5 &&
-              touched.aaRow07Year5 && <Label basic color="red" pointing content={errors.aaRow07Year5} />}
+            {errors.aaRow7Year5 &&
+              touched.aaRow7Year5 && <Label basic color="red" pointing content={errors.aaRow7Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={247}
-              name="aaRow07Year6"
-              autoComplete="aaRow07Year6"
-              value={values.aaRow07Year6}
+              name="aaRow7Year6"
+              autoComplete="aaRow7Year6"
+              value={values.aaRow7Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow07Year6 &&
-              touched.aaRow07Year6 && <Label basic color="red" pointing content={errors.aaRow07Year6} />}
+            {errors.aaRow7Year6 &&
+              touched.aaRow7Year6 && <Label basic color="red" pointing content={errors.aaRow7Year6} />}
           </CustomColumn>
           <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
             0
@@ -779,9 +796,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow07YesNo"
+                  name="aaRow7YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow07YesNo}
+                  checked={values.aaRow7YesNo}
                 />
               </Form.Field>
             </Form>
@@ -792,100 +809,100 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={71}
-              name="aaRow08"
-              autoComplete="aaRow08"
-              value={values.aaRow08}
+              name="aaRow8"
+              autoComplete="aaRow8"
+              value={values.aaRow8}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow08 && touched.aaRow08 && <Label basic color="red" pointing content={errors.aaRow08} />}
+            {errors.aaRow8 && touched.aaRow8 && <Label basic color="red" pointing content={errors.aaRow8} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={98}
-              name="aaRow08Year1"
-              autoComplete="aaRow08Year1"
-              value={values.aaRow08Year1}
+              name="aaRow8Year1"
+              autoComplete="aaRow8Year1"
+              value={values.aaRow8Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow08Year1 &&
-              touched.aaRow08Year1 && <Label basic color="red" pointing content={errors.aaRow08Year1} />}
+            {errors.aaRow8Year1 &&
+              touched.aaRow8Year1 && <Label basic color="red" pointing content={errors.aaRow8Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={128}
-              name="aaRow08Year2"
-              autoComplete="aaRow08Year2"
-              value={values.aaRow08Year2}
+              name="aaRow8Year2"
+              autoComplete="aaRow8Year2"
+              value={values.aaRow8Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow08Year2 &&
-              touched.aaRow08Year2 && <Label basic color="red" pointing content={errors.aaRow08Year2} />}
+            {errors.aaRow8Year2 &&
+              touched.aaRow8Year2 && <Label basic color="red" pointing content={errors.aaRow8Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={158}
-              name="aaRow08Year3"
-              autoComplete="aaRow08Year3"
-              value={values.aaRow08Year3}
+              name="aaRow8Year3"
+              autoComplete="aaRow8Year3"
+              value={values.aaRow8Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow08Year3 &&
-              touched.aaRow08Year3 && <Label basic color="red" pointing content={errors.aaRow08Year3} />}
+            {errors.aaRow8Year3 &&
+              touched.aaRow8Year3 && <Label basic color="red" pointing content={errors.aaRow8Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={188}
-              name="aaRow08Year4"
-              autoComplete="aaRow08Year4"
-              value={values.aaRow08Year4}
+              name="aaRow8Year4"
+              autoComplete="aaRow8Year4"
+              value={values.aaRow8Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow08Year4 &&
-              touched.aaRow08Year4 && <Label basic color="red" pointing content={errors.aaRow08Year4} />}
+            {errors.aaRow8Year4 &&
+              touched.aaRow8Year4 && <Label basic color="red" pointing content={errors.aaRow8Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={218}
-              name="aaRow08Year5"
-              autoComplete="aaRow08Year5"
-              value={values.aaRow08Year5}
+              name="aaRow8Year5"
+              autoComplete="aaRow8Year5"
+              value={values.aaRow8Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow08Year5 &&
-              touched.aaRow08Year5 && <Label basic color="red" pointing content={errors.aaRow08Year5} />}
+            {errors.aaRow8Year5 &&
+              touched.aaRow8Year5 && <Label basic color="red" pointing content={errors.aaRow8Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={248}
-              name="aaRow08Year6"
-              autoComplete="aaRow08Year6"
-              value={values.aaRow08Year6}
+              name="aaRow8Year6"
+              autoComplete="aaRow8Year6"
+              value={values.aaRow8Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow08Year6 &&
-              touched.aaRow08Year6 && <Label basic color="red" pointing content={errors.aaRow08Year6} />}
+            {errors.aaRow8Year6 &&
+              touched.aaRow8Year6 && <Label basic color="red" pointing content={errors.aaRow8Year6} />}
           </CustomColumn>
           <CustomColumn textAlign="center">0</CustomColumn>
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow08YesNo"
+                  name="aaRow8YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow08YesNo}
+                  checked={values.aaRow8YesNo}
                 />
               </Form.Field>
             </Form>
@@ -896,91 +913,91 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Input
               fluid
               tabIndex={72}
-              name="aaRow09"
-              autoComplete="aaRow09"
-              value={values.aaRow09}
+              name="aaRow9"
+              autoComplete="aaRow9"
+              value={values.aaRow9}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow09 && touched.aaRow09 && <Label basic color="red" pointing content={errors.aaRow09} />}
+            {errors.aaRow9 && touched.aaRow9 && <Label basic color="red" pointing content={errors.aaRow9} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={99}
-              name="aaRow09Year1"
-              autoComplete="aaRow09Year1"
-              value={values.aaRow09Year1}
+              name="aaRow9Year1"
+              autoComplete="aaRow9Year1"
+              value={values.aaRow9Year1}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow09Year1 &&
-              touched.aaRow09Year1 && <Label basic color="red" pointing content={errors.aaRow09Year1} />}
+            {errors.aaRow9Year1 &&
+              touched.aaRow9Year1 && <Label basic color="red" pointing content={errors.aaRow9Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={129}
-              name="aaRow09Year2"
-              autoComplete="aaRow09Year2"
-              value={values.aaRow09Year2}
+              name="aaRow9Year2"
+              autoComplete="aaRow9Year2"
+              value={values.aaRow9Year2}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow09Year2 &&
-              touched.aaRow09Year2 && <Label basic color="red" pointing content={errors.aaRow09Year2} />}
+            {errors.aaRow9Year2 &&
+              touched.aaRow9Year2 && <Label basic color="red" pointing content={errors.aaRow9Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={159}
-              name="aaRow09Year3"
-              autoComplete="aaRow09Year3"
-              value={values.aaRow09Year3}
+              name="aaRow9Year3"
+              autoComplete="aaRow9Year3"
+              value={values.aaRow9Year3}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow09Year3 &&
-              touched.aaRow09Year3 && <Label basic color="red" pointing content={errors.aaRow09Year3} />}
+            {errors.aaRow9Year3 &&
+              touched.aaRow9Year3 && <Label basic color="red" pointing content={errors.aaRow9Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={189}
-              name="aaRow09Year4"
-              autoComplete="aaRow09Year4"
-              value={values.aaRow09Year4}
+              name="aaRow9Year4"
+              autoComplete="aaRow9Year4"
+              value={values.aaRow9Year4}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow09Year4 &&
-              touched.aaRow09Year4 && <Label basic color="red" pointing content={errors.aaRow09Year4} />}
+            {errors.aaRow9Year4 &&
+              touched.aaRow9Year4 && <Label basic color="red" pointing content={errors.aaRow9Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={219}
-              name="aaRow09Year5"
-              autoComplete="aaRow09Year5"
-              value={values.aaRow09Year5}
+              name="aaRow9Year5"
+              autoComplete="aaRow9Year5"
+              value={values.aaRow9Year5}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow09Year5 &&
-              touched.aaRow09Year5 && <Label basic color="red" pointing content={errors.aaRow09Year5} />}
+            {errors.aaRow9Year5 &&
+              touched.aaRow9Year5 && <Label basic color="red" pointing content={errors.aaRow9Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={249}
-              name="aaRow09Year6"
-              autoComplete="aaRow09Year6"
-              value={values.aaRow09Year6}
+              name="aaRow9Year6"
+              autoComplete="aaRow9Year6"
+              value={values.aaRow9Year6}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.aaRow09Year6 &&
-              touched.aaRow09Year6 && <Label basic color="red" pointing content={errors.aaRow09Year6} />}
+            {errors.aaRow9Year6 &&
+              touched.aaRow9Year6 && <Label basic color="red" pointing content={errors.aaRow9Year6} />}
           </CustomColumn>
           <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
             0
@@ -989,9 +1006,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
                 <Form.Checkbox
-                  name="aaRow09YesNo"
+                  name="aaRow9YesNo"
                   onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow09YesNo}
+                  checked={values.aaRow9YesNo}
                 />
               </Form.Field>
             </Form>
@@ -1011,7 +1028,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow10 && touched.aaRow10 && <Label basic color="red" pointing content={errors.aaRow10} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={100}
               name="aaRow10Year1"
@@ -1024,7 +1041,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year1 && <Label basic color="red" pointing content={errors.aaRow10Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={130}
               name="aaRow10Year2"
@@ -1037,7 +1054,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year2 && <Label basic color="red" pointing content={errors.aaRow10Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={160}
               name="aaRow10Year3"
@@ -1050,7 +1067,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year3 && <Label basic color="red" pointing content={errors.aaRow10Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={190}
               name="aaRow10Year4"
@@ -1063,7 +1080,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year4 && <Label basic color="red" pointing content={errors.aaRow10Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={220}
               name="aaRow10Year5"
@@ -1076,7 +1093,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year5 && <Label basic color="red" pointing content={errors.aaRow10Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={250}
               name="aaRow10Year6"
@@ -1115,7 +1132,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow11 && touched.aaRow11 && <Label basic color="red" pointing content={errors.aaRow11} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={101}
               name="aaRow11Year1"
@@ -1128,7 +1145,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year1 && <Label basic color="red" pointing content={errors.aaRow11Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={131}
               name="aaRow11Year2"
@@ -1141,7 +1158,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year2 && <Label basic color="red" pointing content={errors.aaRow11Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={161}
               name="aaRow11Year3"
@@ -1154,7 +1171,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year3 && <Label basic color="red" pointing content={errors.aaRow11Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={191}
               name="aaRow11Year4"
@@ -1167,7 +1184,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year4 && <Label basic color="red" pointing content={errors.aaRow11Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={221}
               name="aaRow11Year5"
@@ -1180,7 +1197,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year5 && <Label basic color="red" pointing content={errors.aaRow11Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={251}
               name="aaRow11Year6"
@@ -1221,9 +1238,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow12 && touched.aaRow12 && <Label basic color="red" pointing content={errors.aaRow12} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
-              tabIndex={102}
+              tabIndex={12}
               name="aaRow12Year1"
               autoComplete="aaRow12Year1"
               value={values.aaRow12Year1}
@@ -1234,7 +1251,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year1 && <Label basic color="red" pointing content={errors.aaRow12Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={132}
               name="aaRow12Year2"
@@ -1247,7 +1264,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year2 && <Label basic color="red" pointing content={errors.aaRow12Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={162}
               name="aaRow12Year3"
@@ -1260,7 +1277,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year3 && <Label basic color="red" pointing content={errors.aaRow12Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={192}
               name="aaRow12Year4"
@@ -1273,7 +1290,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year4 && <Label basic color="red" pointing content={errors.aaRow12Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={222}
               name="aaRow12Year5"
@@ -1286,7 +1303,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year5 && <Label basic color="red" pointing content={errors.aaRow12Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={252}
               name="aaRow12Year6"
@@ -1325,9 +1342,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow13 && touched.aaRow13 && <Label basic color="red" pointing content={errors.aaRow13} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
-              tabIndex={103}
+              tabIndex={13}
               name="aaRow13Year1"
               autoComplete="aaRow13Year1"
               value={values.aaRow13Year1}
@@ -1338,7 +1355,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year1 && <Label basic color="red" pointing content={errors.aaRow13Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={133}
               name="aaRow13Year2"
@@ -1351,7 +1368,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year2 && <Label basic color="red" pointing content={errors.aaRow13Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={163}
               name="aaRow13Year3"
@@ -1364,7 +1381,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year3 && <Label basic color="red" pointing content={errors.aaRow13Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={193}
               name="aaRow13Year4"
@@ -1377,7 +1394,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year4 && <Label basic color="red" pointing content={errors.aaRow13Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={223}
               name="aaRow13Year5"
@@ -1390,7 +1407,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year5 && <Label basic color="red" pointing content={errors.aaRow13Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={253}
               name="aaRow13Year6"
@@ -1431,9 +1448,9 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow14 && touched.aaRow14 && <Label basic color="red" pointing content={errors.aaRow14} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
-              tabIndex={104}
+              tabIndex={14}
               name="aaRow14Year1"
               autoComplete="aaRow14Year1"
               value={values.aaRow14Year1}
@@ -1444,7 +1461,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year1 && <Label basic color="red" pointing content={errors.aaRow14Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={134}
               name="aaRow14Year2"
@@ -1457,7 +1474,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year2 && <Label basic color="red" pointing content={errors.aaRow14Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={164}
               name="aaRow14Year3"
@@ -1470,7 +1487,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year3 && <Label basic color="red" pointing content={errors.aaRow14Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={194}
               name="aaRow14Year4"
@@ -1483,7 +1500,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year4 && <Label basic color="red" pointing content={errors.aaRow14Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={224}
               name="aaRow14Year5"
@@ -1496,7 +1513,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year5 && <Label basic color="red" pointing content={errors.aaRow14Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={254}
               name="aaRow14Year6"
@@ -1535,7 +1552,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow15 && touched.aaRow15 && <Label basic color="red" pointing content={errors.aaRow15} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={105}
               name="aaRow15Year1"
@@ -1548,7 +1565,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year1 && <Label basic color="red" pointing content={errors.aaRow15Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={135}
               name="aaRow15Year2"
@@ -1561,7 +1578,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year2 && <Label basic color="red" pointing content={errors.aaRow15Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={165}
               name="aaRow15Year3"
@@ -1574,7 +1591,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year3 && <Label basic color="red" pointing content={errors.aaRow15Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={195}
               name="aaRow15Year4"
@@ -1587,7 +1604,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year4 && <Label basic color="red" pointing content={errors.aaRow15Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={225}
               name="aaRow15Year5"
@@ -1600,7 +1617,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year5 && <Label basic color="red" pointing content={errors.aaRow15Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={255}
               name="aaRow15Year6"
@@ -1641,7 +1658,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow16 && touched.aaRow16 && <Label basic color="red" pointing content={errors.aaRow16} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={106}
               name="aaRow16Year1"
@@ -1654,7 +1671,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year1 && <Label basic color="red" pointing content={errors.aaRow16Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={136}
               name="aaRow16Year2"
@@ -1667,7 +1684,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year2 && <Label basic color="red" pointing content={errors.aaRow16Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={166}
               name="aaRow16Year3"
@@ -1680,7 +1697,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year3 && <Label basic color="red" pointing content={errors.aaRow16Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={196}
               name="aaRow16Year4"
@@ -1693,7 +1710,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year4 && <Label basic color="red" pointing content={errors.aaRow16Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={226}
               name="aaRow16Year5"
@@ -1706,7 +1723,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year5 && <Label basic color="red" pointing content={errors.aaRow16Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={256}
               name="aaRow16Year6"
@@ -1745,7 +1762,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow17 && touched.aaRow17 && <Label basic color="red" pointing content={errors.aaRow17} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={107}
               name="aaRow17Year1"
@@ -1758,7 +1775,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year1 && <Label basic color="red" pointing content={errors.aaRow17Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={137}
               name="aaRow17Year2"
@@ -1771,7 +1788,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year2 && <Label basic color="red" pointing content={errors.aaRow17Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={167}
               name="aaRow17Year3"
@@ -1784,7 +1801,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year3 && <Label basic color="red" pointing content={errors.aaRow17Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={197}
               name="aaRow17Year4"
@@ -1797,7 +1814,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year4 && <Label basic color="red" pointing content={errors.aaRow17Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={227}
               name="aaRow17Year5"
@@ -1810,7 +1827,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year5 && <Label basic color="red" pointing content={errors.aaRow17Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={257}
               name="aaRow17Year6"
@@ -1851,7 +1868,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow18 && touched.aaRow18 && <Label basic color="red" pointing content={errors.aaRow18} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={108}
               name="aaRow18Year1"
@@ -1864,7 +1881,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year1 && <Label basic color="red" pointing content={errors.aaRow18Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={138}
               name="aaRow18Year2"
@@ -1877,7 +1894,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year2 && <Label basic color="red" pointing content={errors.aaRow18Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={168}
               name="aaRow18Year3"
@@ -1890,7 +1907,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year3 && <Label basic color="red" pointing content={errors.aaRow18Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={198}
               name="aaRow18Year4"
@@ -1903,7 +1920,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year4 && <Label basic color="red" pointing content={errors.aaRow18Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={228}
               name="aaRow18Year5"
@@ -1916,7 +1933,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year5 && <Label basic color="red" pointing content={errors.aaRow18Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={258}
               name="aaRow18Year6"
@@ -1955,7 +1972,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow19 && touched.aaRow19 && <Label basic color="red" pointing content={errors.aaRow19} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={109}
               name="aaRow19Year1"
@@ -1968,7 +1985,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year1 && <Label basic color="red" pointing content={errors.aaRow19Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={139}
               name="aaRow19Year2"
@@ -1981,7 +1998,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year2 && <Label basic color="red" pointing content={errors.aaRow19Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={169}
               name="aaRow19Year3"
@@ -1994,7 +2011,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year3 && <Label basic color="red" pointing content={errors.aaRow19Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={199}
               name="aaRow19Year4"
@@ -2007,7 +2024,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year4 && <Label basic color="red" pointing content={errors.aaRow19Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={229}
               name="aaRow19Year5"
@@ -2020,7 +2037,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year5 && <Label basic color="red" pointing content={errors.aaRow19Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={259}
               name="aaRow19Year6"
@@ -2061,7 +2078,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow20 && touched.aaRow20 && <Label basic color="red" pointing content={errors.aaRow20} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={110}
               name="aaRow20Year1"
@@ -2074,7 +2091,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year1 && <Label basic color="red" pointing content={errors.aaRow20Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={140}
               name="aaRow20Year2"
@@ -2087,7 +2104,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year2 && <Label basic color="red" pointing content={errors.aaRow20Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={170}
               name="aaRow20Year3"
@@ -2100,7 +2117,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year3 && <Label basic color="red" pointing content={errors.aaRow20Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={200}
               name="aaRow20Year4"
@@ -2113,7 +2130,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year4 && <Label basic color="red" pointing content={errors.aaRow20Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={230}
               name="aaRow20Year5"
@@ -2126,7 +2143,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year5 && <Label basic color="red" pointing content={errors.aaRow20Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={260}
               name="aaRow20Year6"
@@ -2165,7 +2182,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow21 && touched.aaRow21 && <Label basic color="red" pointing content={errors.aaRow21} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={111}
               name="aaRow21Year1"
@@ -2178,7 +2195,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year1 && <Label basic color="red" pointing content={errors.aaRow21Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={141}
               name="aaRow21Year2"
@@ -2191,7 +2208,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year2 && <Label basic color="red" pointing content={errors.aaRow21Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={171}
               name="aaRow21Year3"
@@ -2204,7 +2221,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year3 && <Label basic color="red" pointing content={errors.aaRow21Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={201}
               name="aaRow21Year4"
@@ -2217,7 +2234,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year4 && <Label basic color="red" pointing content={errors.aaRow21Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={231}
               name="aaRow21Year5"
@@ -2230,7 +2247,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year5 && <Label basic color="red" pointing content={errors.aaRow21Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={261}
               name="aaRow21Year6"
@@ -2271,7 +2288,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow22 && touched.aaRow22 && <Label basic color="red" pointing content={errors.aaRow22} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={112}
               name="aaRow22Year1"
@@ -2284,7 +2301,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year1 && <Label basic color="red" pointing content={errors.aaRow22Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={142}
               name="aaRow22Year2"
@@ -2297,7 +2314,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year2 && <Label basic color="red" pointing content={errors.aaRow22Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={172}
               name="aaRow22Year3"
@@ -2310,9 +2327,9 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year3 && <Label basic color="red" pointing content={errors.aaRow22Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
-              tabIndex={202}
+              tabIndex={22}
               name="aaRow22Year4"
               autoComplete="aaRow22Year4"
               value={values.aaRow22Year4}
@@ -2323,7 +2340,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year4 && <Label basic color="red" pointing content={errors.aaRow22Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={232}
               name="aaRow22Year5"
@@ -2336,7 +2353,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year5 && <Label basic color="red" pointing content={errors.aaRow22Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={262}
               name="aaRow22Year6"
@@ -2375,7 +2392,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow23 && touched.aaRow23 && <Label basic color="red" pointing content={errors.aaRow23} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={113}
               name="aaRow23Year1"
@@ -2388,7 +2405,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year1 && <Label basic color="red" pointing content={errors.aaRow23Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={143}
               name="aaRow23Year2"
@@ -2401,7 +2418,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year2 && <Label basic color="red" pointing content={errors.aaRow23Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={173}
               name="aaRow23Year3"
@@ -2414,9 +2431,9 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year3 && <Label basic color="red" pointing content={errors.aaRow23Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
-              tabIndex={203}
+              tabIndex={23}
               name="aaRow23Year4"
               autoComplete="aaRow23Year4"
               value={values.aaRow23Year4}
@@ -2427,7 +2444,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year4 && <Label basic color="red" pointing content={errors.aaRow23Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={233}
               name="aaRow23Year5"
@@ -2440,7 +2457,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year5 && <Label basic color="red" pointing content={errors.aaRow23Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={263}
               name="aaRow23Year6"
@@ -2481,7 +2498,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow24 && touched.aaRow24 && <Label basic color="red" pointing content={errors.aaRow24} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={114}
               name="aaRow24Year1"
@@ -2494,7 +2511,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year1 && <Label basic color="red" pointing content={errors.aaRow24Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={144}
               name="aaRow24Year2"
@@ -2507,7 +2524,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year2 && <Label basic color="red" pointing content={errors.aaRow24Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={174}
               name="aaRow24Year3"
@@ -2520,9 +2537,9 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year3 && <Label basic color="red" pointing content={errors.aaRow24Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
-              tabIndex={204}
+              tabIndex={24}
               name="aaRow24Year4"
               autoComplete="aaRow24Year4"
               value={values.aaRow24Year4}
@@ -2533,7 +2550,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year4 && <Label basic color="red" pointing content={errors.aaRow24Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={234}
               name="aaRow24Year5"
@@ -2546,7 +2563,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year5 && <Label basic color="red" pointing content={errors.aaRow24Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={264}
               name="aaRow24Year6"
@@ -2585,7 +2602,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow25 && touched.aaRow25 && <Label basic color="red" pointing content={errors.aaRow25} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={115}
               name="aaRow25Year1"
@@ -2598,7 +2615,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year1 && <Label basic color="red" pointing content={errors.aaRow25Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={145}
               name="aaRow25Year2"
@@ -2611,7 +2628,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year2 && <Label basic color="red" pointing content={errors.aaRow25Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={175}
               name="aaRow25Year3"
@@ -2624,7 +2641,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year3 && <Label basic color="red" pointing content={errors.aaRow25Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={205}
               name="aaRow25Year4"
@@ -2637,7 +2654,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year4 && <Label basic color="red" pointing content={errors.aaRow25Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={235}
               name="aaRow25Year5"
@@ -2650,7 +2667,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year5 && <Label basic color="red" pointing content={errors.aaRow25Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={265}
               name="aaRow25Year6"
@@ -2691,7 +2708,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow26 && touched.aaRow26 && <Label basic color="red" pointing content={errors.aaRow26} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={116}
               name="aaRow26Year1"
@@ -2704,7 +2721,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year1 && <Label basic color="red" pointing content={errors.aaRow26Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={146}
               name="aaRow26Year2"
@@ -2717,7 +2734,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year2 && <Label basic color="red" pointing content={errors.aaRow26Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={176}
               name="aaRow26Year3"
@@ -2730,7 +2747,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year3 && <Label basic color="red" pointing content={errors.aaRow26Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={206}
               name="aaRow26Year4"
@@ -2743,7 +2760,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year4 && <Label basic color="red" pointing content={errors.aaRow26Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={236}
               name="aaRow26Year5"
@@ -2756,7 +2773,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year5 && <Label basic color="red" pointing content={errors.aaRow26Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={266}
               name="aaRow26Year6"
@@ -2795,7 +2812,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow27 && touched.aaRow27 && <Label basic color="red" pointing content={errors.aaRow27} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={117}
               name="aaRow27Year1"
@@ -2808,7 +2825,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year1 && <Label basic color="red" pointing content={errors.aaRow27Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={147}
               name="aaRow27Year2"
@@ -2821,7 +2838,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year2 && <Label basic color="red" pointing content={errors.aaRow27Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={177}
               name="aaRow27Year3"
@@ -2834,7 +2851,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year3 && <Label basic color="red" pointing content={errors.aaRow27Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={207}
               name="aaRow27Year4"
@@ -2847,7 +2864,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year4 && <Label basic color="red" pointing content={errors.aaRow27Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={237}
               name="aaRow27Year5"
@@ -2860,7 +2877,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year5 && <Label basic color="red" pointing content={errors.aaRow27Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={267}
               name="aaRow27Year6"
@@ -2901,7 +2918,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow28 && touched.aaRow28 && <Label basic color="red" pointing content={errors.aaRow28} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={118}
               name="aaRow28Year1"
@@ -2914,7 +2931,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year1 && <Label basic color="red" pointing content={errors.aaRow28Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={148}
               name="aaRow28Year2"
@@ -2927,7 +2944,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year2 && <Label basic color="red" pointing content={errors.aaRow28Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={178}
               name="aaRow28Year3"
@@ -2940,7 +2957,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year3 && <Label basic color="red" pointing content={errors.aaRow28Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={208}
               name="aaRow28Year4"
@@ -2953,7 +2970,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year4 && <Label basic color="red" pointing content={errors.aaRow28Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={238}
               name="aaRow28Year5"
@@ -2966,7 +2983,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year5 && <Label basic color="red" pointing content={errors.aaRow28Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={268}
               name="aaRow28Year6"
@@ -3005,7 +3022,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow29 && touched.aaRow29 && <Label basic color="red" pointing content={errors.aaRow29} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={119}
               name="aaRow29Year1"
@@ -3018,7 +3035,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year1 && <Label basic color="red" pointing content={errors.aaRow29Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={149}
               name="aaRow29Year2"
@@ -3031,7 +3048,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year2 && <Label basic color="red" pointing content={errors.aaRow29Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={179}
               name="aaRow29Year3"
@@ -3044,7 +3061,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year3 && <Label basic color="red" pointing content={errors.aaRow29Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={209}
               name="aaRow29Year4"
@@ -3057,7 +3074,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year4 && <Label basic color="red" pointing content={errors.aaRow29Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={239}
               name="aaRow29Year5"
@@ -3070,7 +3087,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year5 && <Label basic color="red" pointing content={errors.aaRow29Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={269}
               name="aaRow29Year6"
@@ -3111,7 +3128,7 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow30 && touched.aaRow30 && <Label basic color="red" pointing content={errors.aaRow30} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={120}
               name="aaRow30Year1"
@@ -3124,7 +3141,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year1 && <Label basic color="red" pointing content={errors.aaRow30Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={150}
               name="aaRow30Year2"
@@ -3137,7 +3154,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year2 && <Label basic color="red" pointing content={errors.aaRow30Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={180}
               name="aaRow30Year3"
@@ -3150,7 +3167,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year3 && <Label basic color="red" pointing content={errors.aaRow30Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={210}
               name="aaRow30Year4"
@@ -3163,7 +3180,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year4 && <Label basic color="red" pointing content={errors.aaRow30Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={240}
               name="aaRow30Year5"
@@ -3176,7 +3193,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year5 && <Label basic color="red" pointing content={errors.aaRow30Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input
+            <Input type="number"
               fluid
               tabIndex={270}
               name="aaRow30Year6"
@@ -3201,6 +3218,43 @@ class AddbacksAndAdjustmentsForm extends Component {
             </Form>
           </CustomColumn>
         </Grid.Row>
+
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <b>Total Adjustments</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotal(1)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotal(2)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotal(3)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotal(4)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotal(5)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotal(6)}</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <b>Total Adjusted Profit INCL. Owners Wages</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
+        </Grid.Row>
+        <Grid.Row columns={9}>
+          <CustomColumn>
+            <b>Adjusted Profit % </b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">0 %</CustomColumn>
+        </Grid.Row>
       </Fragment>
     )
   }
@@ -3214,19 +3268,234 @@ AddbacksAndAdjustmentsForm.propTypes = {
   touched: PropTypes.object,
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
-  financialYear: PropTypes.string
+  financialYear: PropTypes.string,
+  setCalcTotalAddbacksAndAdjustments: PropTypes.func,
+  updateAppraisal: PropTypes.func,
+  appraisalObject: PropTypes.object
 }
 
-const mapPropsToValues = props => ({})
+const mapPropsToValues = props => (
+  { aaRow1Year1: props.appraisalObject ? props.appraisalObject.aaRow11Year1 : 0,
+    aaRow1: props.appraisalObject ? props.appraisalObject.aaRow1 : '',
+    aaRow2Year1: props.appraisalObject ? props.appraisalObject.aaRow2Year1 : 0,
+    aaRow2: props.appraisalObject ? props.appraisalObject.aaRow2 : '',
+    aaRow3Year1: 0,
+    aaRow3: props.appraisalObject ? props.appraisalObject.aaRow3 : '',
+    aaRow4Year1: 0,
+    aaRow4: props.appraisalObject ? props.appraisalObject.aaRow4 : '',
+    aaRow5Year1: 0,
+    aaRow5: props.appraisalObject ? props.appraisalObject.aaRow5 : '',
+    aaRow6Year1: 0,
+    aaRow6: props.appraisalObject ? props.appraisalObject.aaRow6 : '',
+    aaRow7Year1: 0,
+    aaRow7: props.appraisalObject ? props.appraisalObject.aaRow7 : '',
+    aaRow8Year1: 0,
+    aaRow8: props.appraisalObject ? props.appraisalObject.aaRow8 : '',
+    aaRow9Year1: 0,
+    aaRow9: props.appraisalObject ? props.appraisalObject.aaRow9 : '',
+    aaRow10Year1: 0,
+    aaRow10: props.appraisalObject ? props.appraisalObject.aaRow10 : '',
+    aaRow11Year1: 0,
+    aaRow11: props.appraisalObject ? props.appraisalObject.aaRow11 : '',
+    aaRow12Year1: 0,
+    aaRow12: props.appraisalObject ? props.appraisalObject.aaRow12 : '',
+    aaRow13Year1: 0,
+    aaRow13: props.appraisalObject ? props.appraisalObject.aaRow13 : '',
+    aaRow14Year1: 0,
+    aaRow14: props.appraisalObject ? props.appraisalObject.aaRow14 : '',
+    aaRow15Year1: 0,
+    aaRow15: props.appraisalObject ? props.appraisalObject.aaRow15 : '',
+    aaRow16Year1: 0,
+    aaRow16: props.appraisalObject ? props.appraisalObject.aaRow16 : '',
+    aaRow17Year1: 0,
+    aaRow17: props.appraisalObject ? props.appraisalObject.aaRow17 : '',
+    aaRow18Year1: 0,
+    aaRow18: props.appraisalObject ? props.appraisalObject.aaRow18 : '',
+    aaRow19Year1: 0,
+    aaRow19: props.appraisalObject ? props.appraisalObject.aaRow19 : '',
+    aaRow20Year1: 0,
+    aaRow20: props.appraisalObject ? props.appraisalObject.aaRow20 : '',
+    aaRow21Year1: 0,
+    aaRow21: props.appraisalObject ? props.appraisalObject.aaRow21 : '',
+    aaRow22Year1: 0,
+    aaRow22: props.appraisalObject ? props.appraisalObject.aaRow22 : '',
+    aaRow23Year1: 0,
+    aaRow23: props.appraisalObject ? props.appraisalObject.aaRow23 : '',
+    aaRow24Year1: 0,
+    aaRow24: props.appraisalObject ? props.appraisalObject.aaRow24 : '',
+    aaRow25Year1: 0,
+    aaRow25: props.appraisalObject ? props.appraisalObject.aaRow25 : '',
+    aaRow26Year1: 0,
+    aaRow26: props.appraisalObject ? props.appraisalObject.aaRow26 : '',
+    aaRow27Year1: 0,
+    aaRow27: props.appraisalObject ? props.appraisalObject.aaRow27 : '',
+    aaRow28Year1: 0,
+    aaRow28: props.appraisalObject ? props.appraisalObject.aaRow28 : '',
+    aaRow29Year1: 0,
+    aaRow29: props.appraisalObject ? props.appraisalObject.aaRow29 : '',
+    aaRow30Year1: 0,
+    aaRow30: props.appraisalObject ? props.appraisalObject.aaRow30 : '',
+    aaRow1Year2: 0,
+    aaRow2Year2: 0,
+    aaRow3Year2: 0,
+    aaRow4Year2: 0,
+    aaRow5Year2: 0,
+    aaRow6Year2: 0,
+    aaRow7Year2: 0,
+    aaRow8Year2: 0,
+    aaRow9Year2: 0,
+    aaRow10Year2: 0,
+    aaRow11Year2: 0,
+    aaRow12Year2: 0,
+    aaRow13Year2: 0,
+    aaRow14Year2: 0,
+    aaRow15Year2: 0,
+    aaRow16Year2: 0,
+    aaRow17Year2: 0,
+    aaRow18Year2: 0,
+    aaRow19Year2: 0,
+    aaRow20Year2: 0,
+    aaRow21Year2: 0,
+    aaRow22Year2: 0,
+    aaRow23Year2: 0,
+    aaRow24Year2: 0,
+    aaRow25Year2: 0,
+    aaRow26Year2: 0,
+    aaRow27Year2: 0,
+    aaRow28Year2: 0,
+    aaRow29Year2: 0,
+    aaRow30Year2: 0,
+    aaRow1Year3: 0,
+    aaRow2Year3: 0,
+    aaRow3Year3: 0,
+    aaRow4Year3: 0,
+    aaRow5Year3: 0,
+    aaRow6Year3: 0,
+    aaRow7Year3: 0,
+    aaRow8Year3: 0,
+    aaRow9Year3: 0,
+    aaRow10Year3: 0,
+    aaRow11Year3: 0,
+    aaRow12Year3: 0,
+    aaRow13Year3: 0,
+    aaRow14Year3: 0,
+    aaRow15Year3: 0,
+    aaRow16Year3: 0,
+    aaRow17Year3: 0,
+    aaRow18Year3: 0,
+    aaRow19Year3: 0,
+    aaRow20Year3: 0,
+    aaRow21Year3: 0,
+    aaRow22Year3: 0,
+    aaRow23Year3: 0,
+    aaRow24Year3: 0,
+    aaRow25Year3: 0,
+    aaRow26Year3: 0,
+    aaRow27Year3: 0,
+    aaRow28Year3: 0,
+    aaRow29Year3: 0,
+    aaRow30Year3: 0,
+    aaRow1Year4: 0,
+    aaRow2Year4: 0,
+    aaRow3Year4: 0,
+    aaRow4Year4: 0,
+    aaRow5Year4: 0,
+    aaRow6Year4: 0,
+    aaRow7Year4: 0,
+    aaRow8Year4: 0,
+    aaRow9Year4: 0,
+    aaRow10Year4: 0,
+    aaRow11Year4: 0,
+    aaRow12Year4: 0,
+    aaRow13Year4: 0,
+    aaRow14Year4: 0,
+    aaRow15Year4: 0,
+    aaRow16Year4: 0,
+    aaRow17Year4: 0,
+    aaRow18Year4: 0,
+    aaRow19Year4: 0,
+    aaRow20Year4: 0,
+    aaRow21Year4: 0,
+    aaRow22Year4: 0,
+    aaRow23Year4: 0,
+    aaRow24Year4: 0,
+    aaRow25Year4: 0,
+    aaRow26Year4: 0,
+    aaRow27Year4: 0,
+    aaRow28Year4: 0,
+    aaRow29Year4: 0,
+    aaRow30Year4: 0,
+    aaRow1Year5: 0,
+    aaRow2Year5: 0,
+    aaRow3Year5: 0,
+    aaRow4Year5: 0,
+    aaRow5Year5: 0,
+    aaRow6Year5: 0,
+    aaRow7Year5: 0,
+    aaRow8Year5: 0,
+    aaRow9Year5: 0,
+    aaRow10Year5: 0,
+    aaRow11Year5: 0,
+    aaRow12Year5: 0,
+    aaRow13Year5: 0,
+    aaRow14Year5: 0,
+    aaRow15Year5: 0,
+    aaRow16Year5: 0,
+    aaRow17Year5: 0,
+    aaRow18Year5: 0,
+    aaRow19Year5: 0,
+    aaRow20Year5: 0,
+    aaRow21Year5: 0,
+    aaRow22Year5: 0,
+    aaRow23Year5: 0,
+    aaRow24Year5: 0,
+    aaRow25Year5: 0,
+    aaRow26Year5: 0,
+    aaRow27Year5: 0,
+    aaRow28Year5: 0,
+    aaRow29Year5: 0,
+    aaRow30Year5: 0,
+    aaRow1Year6: 0,
+    aaRow2Year6: 0,
+    aaRow3Year6: 0,
+    aaRow4Year6: 0,
+    aaRow5Year6: 0,
+    aaRow6Year6: 0,
+    aaRow7Year6: 0,
+    aaRow8Year6: 0,
+    aaRow9Year6: 0,
+    aaRow10Year6: 0,
+    aaRow11Year6: 0,
+    aaRow12Year6: 0,
+    aaRow13Year6: 0,
+    aaRow14Year6: 0,
+    aaRow15Year6: 0,
+    aaRow16Year6: 0,
+    aaRow17Year6: 0,
+    aaRow18Year6: 0,
+    aaRow19Year6: 0,
+    aaRow20Year6: 0,
+    aaRow21Year6: 0,
+    aaRow22Year6: 0,
+    aaRow23Year6: 0,
+    aaRow24Year6: 0,
+    aaRow25Year6: 0,
+    aaRow26Year6: 0,
+    aaRow27Year6: 0,
+    aaRow28Year6: 0,
+    aaRow29Year6: 0,
+    aaRow30Year6: 0,
+    business_id: props.business ? props.business.id : '',
+    id: props.appraisalObject ? props.appraisalObject.id : ''
+  }
+)
 
-const mapStateToProps = state => {
-  return {}
-}
+const mapStateToProps = state => ({})
 
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch)
+  return bindActionCreators({updateAppraisal}, dispatch)
 }
 
 export default connect(

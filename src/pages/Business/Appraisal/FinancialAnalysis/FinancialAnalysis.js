@@ -8,7 +8,6 @@ import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
 import FinancialAnalysisForm from './FinancialAnalysisForm'
-import TotalAdjustmentsForm from './TotalAdjustmentsForm'
 import moment from 'moment'
 import OwnersMarketWagesForm from './OwnersMarketWagesForm'
 import StockForm from './StockForm'
@@ -21,7 +20,9 @@ import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 class FinancialAnalysisPage extends Component {
   constructor (props) {
     super(props)
-    this.state = { financialYear: null }
+    this.state = {
+      financialYear: null
+    }
   }
 
   componentDidMount () {
@@ -80,8 +81,11 @@ class FinancialAnalysisPage extends Component {
               </Header>
             </CustomColumn>
           </Grid.Row>
-          <AddbacksAndAdjustmentsForm financialYear={this.state.financialYear} />
-          <TotalAdjustmentsForm appraisalObject={appraisalObject} />
+          <AddbacksAndAdjustmentsForm
+            financialYear={this.state.financialYear}
+            business={this.props.business}
+            appraisalObject={this.props.appraisalObject}
+          />
         </Grid>
         <Grid>
           <Grid.Row columns={2}>
