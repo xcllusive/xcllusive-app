@@ -81,16 +81,11 @@ class FinancialAnalysisPage extends Component {
               </Header>
             </CustomColumn>
           </Grid.Row>
-<<<<<<< HEAD
           <AddbacksAndAdjustmentsForm
             financialYear={this.state.financialYear}
             business={this.props.business}
             appraisalObject={this.props.appraisalObject}
           />
-=======
-          <AddbacksAndAdjustmentsForm financialYear={this.state.financialYear} />
-          <TotalAdjustmentsForm />
->>>>>>> afb40801aae6a8c10e6e313fb041e33294b1f0ff
         </Grid>
         <Grid>
           <Grid.Row columns={2}>
@@ -144,10 +139,7 @@ FinancialAnalysisPage.propTypes = {
   setFieldValue: PropTypes.func,
   isSubmitting: PropTypes.bool,
   isValid: PropTypes.bool,
-<<<<<<< HEAD
-=======
   updateAppraisal: PropTypes.func,
->>>>>>> afb40801aae6a8c10e6e313fb041e33294b1f0ff
   appraisalObject: PropTypes.object,
   business: PropTypes.object
 }
