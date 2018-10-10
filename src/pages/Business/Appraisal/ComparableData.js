@@ -57,13 +57,164 @@ class ComparableDataPage extends Component {
       inputSearch: '',
       selectedList: [],
       nameArrow: '',
-      colorArrow: 'green'
+      colorArrow: 'green',
+      isLoadingListSelected: false,
+      sumTO: null,
+      sumAvgEbita: null,
+      sumLastYearEbita: null,
+      sumSoldPrice: null,
+      sumStockValue: null,
+      sumAssetsValue: null,
+      sumPriceStock: null,
+      sumTOAvgYX: null,
+      sumLastYX: null,
+      sumLastStockX: null,
+      sumAvgEbitaX: null,
+      sumAvgEbitaXStockX: null
     }
   }
 
   componentDidMount () {
     this.props.getBusinessesSold(this.props.values)
     this.props.getSelectedList(this.props.appraisalObject.id)
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.listSelected && nextProps.listSelected !== prevState.isLoadingListSelected) {
+      var tempTO = 0
+      var tempAvgEbita = 0
+      var tempLastYearEbita = 0
+      var tempSoldPrice = 0
+      var tempStockValue = 0
+      var tempAssetsValue = 0
+      var tempPriceStock = 0
+      var tempTOAvgYX = 0
+      var tempLastYX = 0
+      var tempLastYXAdd = 0
+      var tempLastStockX = 0
+      var tempLastStockXAdd = 0
+      var tempAvgEbitaX = 0
+      var tempAvgEbitaXStockX = 0
+      nextProps.listSelected.forEach(function (item) {
+        /* T/O */
+        tempTO = item.latestFullYearTotalRevenue + tempTO
+
+        /* Average Ebita */
+        var count = 0
+        var totalYear = 0
+        if (item.year4 > 0) {
+          count = count + 1
+          totalYear = totalYear + item.year4
+        }
+        if (item.year3 > 0) {
+          count = count + 1
+          totalYear = totalYear + item.year3
+        }
+        if (item.year2 > 0) {
+          count = count + 1
+          totalYear = totalYear + item.year2
+        }
+        if (item.year1 > 0) {
+          totalYear = totalYear + item.year1
+          count = count + 1
+        }
+        var avgEbita = 0
+        avgEbita = totalYear / count
+        tempAvgEbita = avgEbita + tempAvgEbita
+
+        /* Avg EBITA X */
+        var avgEbitaX = item.soldPrice / (totalYear / count)
+        tempAvgEbitaX = avgEbitaX + tempAvgEbitaX
+
+        /* Avg EBITA X + Stock X */
+        var avgEbitaXStockX = (item.soldPrice + item.stockValue) / (totalYear / count)
+        tempAvgEbitaXStockX = avgEbitaXStockX + tempAvgEbitaXStockX
+
+        /* Last Year Ebita */
+        var went = false
+        if (item.year4 > 0) {
+          tempLastYearEbita = item.year4 + tempLastYearEbita
+
+          /* Last Y X */
+          tempLastYXAdd = item.soldPrice / item.year4
+
+          /* Last + Stock X */
+          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year4
+
+          went = true
+        }
+        if (item.year3 > 0 && !went) {
+          tempLastYearEbita = item.year3 + tempLastYearEbita
+
+          /* Last Y X */
+          tempLastYXAdd = item.soldPrice / item.year3
+
+          /* Last + Stock X */
+          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year3
+
+          went = true
+        }
+        if (item.year2 > 0 && !went) {
+          tempLastYearEbita = item.year2 + tempLastYearEbita
+
+          /* Last Y X */
+          tempLastYXAdd = item.soldPrice / item.year2
+
+          /* Last + Stock X */
+          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year2
+
+          went = true
+        }
+        if (item.year1 > 0 && !went) {
+          tempLastYearEbita = item.year1 + tempLastYearEbita
+
+          /* Last Y X */
+          tempLastYXAdd = item.soldPrice / item.year1
+
+          /* Last + Stock X */
+          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year1
+
+          went = true
+        }
+
+        /* Sold Price */
+        tempSoldPrice = item.soldPrice + tempSoldPrice
+
+        /* Stock Value */
+        tempStockValue = item.stockValue + tempStockValue
+
+        /* Assets Value */
+        tempAssetsValue = item.assetValue + tempAssetsValue
+
+        /* Price inc. Stock */
+        tempPriceStock = item.soldPrice + item.stockValue + tempPriceStock
+
+        /* T/O AVG Y X */
+        tempTOAvgYX = item.soldPrice / item.latestFullYearTotalRevenue + tempTOAvgYX
+
+        /* Last Y X */
+        tempLastYX = tempLastYXAdd + tempLastYX
+
+        /* Last + Stock X */
+        tempLastStockX = tempLastStockXAdd + tempLastStockX
+      })
+
+      return {
+        sumTO: tempTO,
+        sumAvgEbita: tempAvgEbita,
+        sumLastYearEbita: tempLastYearEbita,
+        sumSoldPrice: tempSoldPrice,
+        sumStockValue: tempStockValue,
+        sumAssetsValue: tempAssetsValue,
+        sumPriceStock: tempPriceStock,
+        sumTOAvgYX: tempTOAvgYX,
+        sumLastYX: tempLastYX,
+        sumLastStockX: tempLastStockX,
+        sumAvgEbitaX: tempAvgEbitaX,
+        sumAvgEbitaXStockX: tempAvgEbitaXStockX
+      }
+    }
+    return null
   }
 
   componentWillUnmount () {
@@ -118,17 +269,12 @@ class ComparableDataPage extends Component {
 
   _addToSelectedList = objectBusinessSold => {
     if (this.props.listSelected.length === 0) {
-      // this.setState(prevState => ({
-      //   selectedList: [this.props.listSelected, objectBusinessSold]
-      // }))
       this.props.addSelectedList(objectBusinessSold)
     } else {
       if (!_.find(this.props.listSelected, o => o.id === objectBusinessSold.id)) {
         this.props.addSelectedList(objectBusinessSold)
       } else this._showMsg()
     }
-
-    // var res = Object.entries(this.state.selectedList).map(value => value)
   }
 
   _toggleModalConfirmDelete = idSelected => {
@@ -394,6 +540,77 @@ class ComparableDataPage extends Component {
                 </Table.Row>
               ))}
             </Table.Body>
+            <Table.Footer>
+              <Table.Row active>
+                <Table.Cell>
+                  <b>SUMMARY</b>
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumTO ? (
+                    <b>{numeral(this.state.sumTO / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumAvgEbita ? (
+                    <b>{numeral(this.state.sumAvgEbita / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumLastYearEbita ? (
+                    <b>{numeral(this.state.sumLastYearEbita / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell />
+                <Table.Cell>
+                  {this.state.sumSoldPrice ? (
+                    <b>{numeral(this.state.sumSoldPrice / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumStockValue ? (
+                    <b>{numeral(this.state.sumStockValue / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumAssetsValue ? (
+                    <b>{numeral(this.state.sumAssetsValue / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumPriceStock ? (
+                    <b>{numeral(this.state.sumPriceStock / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumTOAvgYX ? (
+                    <b>{numeral(this.state.sumTOAvgYX / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumLastYX ? (
+                    <b>{numeral(this.state.sumLastYX / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumLastStockX ? (
+                    <b>{numeral(this.state.sumLastStockX / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumAvgEbitaX ? (
+                    <b>{numeral(this.state.sumAvgEbitaX / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumAvgEbitaXStockX ? (
+                    <b>{numeral(this.state.sumAvgEbitaXStockX / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+              </Table.Row>
+            </Table.Footer>
           </Table>
         </Segment>
         <Segment style={{ backgroundColor: 'linen' }}>
@@ -494,7 +711,8 @@ ComparableDataPage.propTypes = {
   getSelectedList: PropTypes.func,
   listSelected: PropTypes.array,
   addSelectedList: PropTypes.func,
-  removeSelectedList: PropTypes.func
+  removeSelectedList: PropTypes.func,
+  isLoadingListSelected: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -511,7 +729,8 @@ const mapStateToProps = state => {
   return {
     listBusinessesSold: state.businessSold.getAll.array,
     isLoadingBusinessesSold: state.businessSold.getAll.isLoading,
-    listSelected: state.businessSold.getList.array
+    listSelected: state.businessSold.getList.array,
+    isLoadingListSelected: state.businessSold.getList.isLoading
   }
 }
 
