@@ -14,13 +14,13 @@ import { getBusiness } from '../../../redux/ducks/business'
 import { getAppraisal } from '../../../redux/ducks/appraisal'
 import BusinessAnalysis from './BusinessAnalysis'
 import ComparableData from './ComparableData'
-import Pricing from './Pricing'
+import Pricing from './Pricing/Pricing'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Comparable Data',
+      activeItem: 'Pricing',
       percent: 75,
       colorProgress: null
     }
