@@ -9,7 +9,7 @@ import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, Legend } from 'recharts'
 import numeral from 'numeral'
 
-class PricingPage extends Component {
+class ChartsPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -176,7 +176,7 @@ class PricingPage extends Component {
   }
 }
 
-PricingPage.propTypes = {
+ChartsPage.propTypes = {
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -219,5 +219,5 @@ export default connect(
     mapPropsToValues,
     validationSchema,
     enableReinitialize: true
-  })(PricingPage)
+  })(ChartsPage)
 )
