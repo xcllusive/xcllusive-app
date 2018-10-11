@@ -21,7 +21,23 @@ class FinancialAnalysisPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      financialYear: null
+      financialYear: null,
+      operatingProfit: {
+        operatingProfit1: 0,
+        operatingProfit2: 0,
+        operatingProfit3: 0,
+        operatingProfit4: 0,
+        operatingProfit5: 0,
+        operatingProfit6: 0
+      },
+      sales: {
+        sales1: 0,
+        sales2: 0,
+        sales3: 0,
+        sales4: 0,
+        sales5: 0,
+        sales6: 0
+      }
     }
   }
 
@@ -56,6 +72,17 @@ class FinancialAnalysisPage extends Component {
     this.props.setFieldValue('year6', this.state.financialYear)
   }
 
+  getCalcs = obj => {
+    if (!obj.year || !obj.field) return
+    this.setState(prevState => {
+      prevState[obj.field] = {
+        ...prevState[obj.field],
+        [`${obj.field}${obj.year}`]: obj.calc
+      }
+    })
+    this.props.setFieldValue(`${obj.field}${obj.year}`, obj.calc)
+  }
+
   render () {
     const { values, appraisalObject } = this.props
     return (
@@ -73,7 +100,12 @@ class FinancialAnalysisPage extends Component {
           </Message>
         </Step.Group>
         <Grid celled="internally" divided>
-          <FinancialAnalysisForm financialYear={this.state.financialYear} appraisalObject={appraisalObject} />
+          <FinancialAnalysisForm
+            financialYear={this.state.financialYear}
+            business={this.props.business}
+            appraisalObject={appraisalObject}
+            sendCalcs={this.getCalcs}
+          />
           <Grid.Row>
             <CustomColumn>
               <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
@@ -85,6 +117,8 @@ class FinancialAnalysisPage extends Component {
             financialYear={this.state.financialYear}
             business={this.props.business}
             appraisalObject={this.props.appraisalObject}
+            operatingProfit={this.state.operatingProfit}
+            sales={this.state.sales}
           />
         </Grid>
         <Grid>

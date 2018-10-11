@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -11,7 +11,7 @@ import CustomColumn from '../../../../components/content/CustomGridColumn'
 
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
-class AddbacksAndAdjustmentsForm extends Component {
+class AddbacksAndAdjustmentsForm extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {}
@@ -30,6 +30,19 @@ class AddbacksAndAdjustmentsForm extends Component {
     for (let i = 1; i < 30; i++) {
       total = total + numeral(this.props.values[`aaRow${i}Year${column}`]).value()
     }
+    const result = numeral(total).value()
+    return result
+  }
+
+  _calcTotalAdjustedProfit = column => {
+    const total = this._calcTotal(column) + this.props.operatingProfit[`operatingProfit${column}`]
+    return numeral(total).value()
+  }
+
+  _calcAdjustedProfit = column => {
+    const totalAdjustedProfit = this._calcTotal(column) + this.props.operatingProfit[`operatingProfit${column}`]
+    const total = (totalAdjustedProfit / this.props.sales[`sales${column}`]) * 100
+
     return numeral(total).value()
   }
 
@@ -3378,25 +3391,25 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <b>Total Adjusted Profit INCL. Owners Wages</b>
           </CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(1)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(2)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(3)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(4)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(5)}</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(6)}</CustomColumn>
           <CustomColumn textAlign="center">0</CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
             <b>Adjusted Profit % </b>
           </CustomColumn>
-          <CustomColumn textAlign="center">0 %</CustomColumn>
-          <CustomColumn textAlign="center">0 %</CustomColumn>
-          <CustomColumn textAlign="center">0 %</CustomColumn>
-          <CustomColumn textAlign="center">0 %</CustomColumn>
-          <CustomColumn textAlign="center">0 %</CustomColumn>
-          <CustomColumn textAlign="center">0 %</CustomColumn>
-          <CustomColumn textAlign="center">0 %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcAdjustedProfit(1)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcAdjustedProfit(2)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcAdjustedProfit(3)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcAdjustedProfit(4)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcAdjustedProfit(5)} %</CustomColumn>
+          <CustomColumn textAlign="center">{this._calcAdjustedProfit(6)} %</CustomColumn>
+          <CustomColumn textAlign="center">0</CustomColumn>
         </Grid.Row>
       </Fragment>
     )
@@ -3414,7 +3427,9 @@ AddbacksAndAdjustmentsForm.propTypes = {
   financialYear: PropTypes.string,
   setCalcTotalAddbacksAndAdjustments: PropTypes.func,
   updateAppraisal: PropTypes.func,
-  appraisalObject: PropTypes.object
+  appraisalObject: PropTypes.object,
+  operatingProfit: PropTypes.object,
+  sales: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
