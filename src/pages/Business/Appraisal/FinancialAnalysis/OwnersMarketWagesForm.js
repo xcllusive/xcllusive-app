@@ -352,6 +352,58 @@ class AddbacksAndAdjustmentsForm extends Component {
               </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={4}>
+              <CustomColumn>Owner 7</CustomColumn>
+              <CustomColumn textAlign="center">
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Input
+                      name="owner7Position"
+                      autoComplete="owner7Position"
+                      value={values.owner7Position}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.owner7Position &&
+                      touched.owner7Position && <Label basic color="red" pointing content={errors.owner7Position} />}
+                  </Form.Field>
+                </Form>
+              </CustomColumn>
+              <CustomColumn textAlign="center">
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Input
+                      name="owner7HoursPWeek"
+                      autoComplete="owner7HoursPWeek"
+                      value={values.owner7HoursPWeek}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.owner7HoursPWeek &&
+                      touched.owner7HoursPWeek && (
+                      <Label basic color="red" pointing content={errors.owner7HoursPWeek} />
+                    )}
+                  </Form.Field>
+                </Form>
+              </CustomColumn>
+              <CustomColumn textAlign="center">
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Input
+                      name="owner7AnnualWage"
+                      autoComplete="owner7AnnualWage"
+                      value={values.owner7AnnualWage}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.owner7AnnualWage &&
+                      touched.owner7AnnualWage && (
+                      <Label basic color="red" pointing content={errors.owner7AnnualWage} />
+                    )}
+                  </Form.Field>
+                </Form>
+              </CustomColumn>
+            </Grid.Row>
+            <Grid.Row columns={4}>
               <CustomColumn>Total Wages</CustomColumn>
               <CustomColumn />
               <CustomColumn />

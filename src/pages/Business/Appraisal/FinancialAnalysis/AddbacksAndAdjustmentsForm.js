@@ -81,7 +81,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow1 && touched.aaRow1 && <Label basic color="red" pointing content={errors.aaRow1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={92}
               name="aaRow1Year1"
@@ -94,7 +95,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow1Year1 && <Label basic color="red" pointing content={errors.aaRow1Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={121}
               name="aaRow1Year2"
@@ -107,7 +109,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow1Year2 && <Label basic color="red" pointing content={errors.aaRow1Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={151}
               name="aaRow1Year3"
@@ -120,7 +123,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow1Year3 && <Label basic color="red" pointing content={errors.aaRow1Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={181}
               name="aaRow1Year4"
@@ -133,7 +137,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow1Year4 && <Label basic color="red" pointing content={errors.aaRow1Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={211}
               name="aaRow1Year5"
@@ -146,7 +151,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow1Year5 && <Label basic color="red" pointing content={errors.aaRow1Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={241}
               name="aaRow1Year6"
@@ -164,11 +170,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow1YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow1YesNo}
-                />
+                <Form.Checkbox name="aaRow1YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow1YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -187,7 +189,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow2 && touched.aaRow2 && <Label basic color="red" pointing content={errors.aaRow2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={93}
               name="aaRow2Year1"
@@ -200,7 +203,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow2Year1 && <Label basic color="red" pointing content={errors.aaRow2Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={122}
               name="aaRow2Year2"
@@ -213,7 +217,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow2Year2 && <Label basic color="red" pointing content={errors.aaRow2Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={152}
               name="aaRow2Year3"
@@ -226,7 +231,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow2Year3 && <Label basic color="red" pointing content={errors.aaRow2Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={182}
               name="aaRow2Year4"
@@ -239,7 +245,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow2Year4 && <Label basic color="red" pointing content={errors.aaRow2Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={212}
               name="aaRow2Year5"
@@ -269,11 +276,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow2YesNo"
-                  onChange={handleChange}
-                  checked={values.aaRow2YesNo}
-                />
+                <Form.Checkbox name="aaRow2YesNo" onChange={handleChange} checked={values.aaRow2YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -292,7 +295,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow3 && touched.aaRow3 && <Label basic color="red" pointing content={errors.aaRow3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={94}
               name="aaRow3Year1"
@@ -305,7 +309,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow3Year1 && <Label basic color="red" pointing content={errors.aaRow3Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={123}
               name="aaRow3Year2"
@@ -318,7 +323,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow3Year2 && <Label basic color="red" pointing content={errors.aaRow3Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={153}
               name="aaRow3Year3"
@@ -331,7 +337,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow3Year3 && <Label basic color="red" pointing content={errors.aaRow3Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={183}
               name="aaRow3Year4"
@@ -344,7 +351,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow3Year4 && <Label basic color="red" pointing content={errors.aaRow3Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={213}
               name="aaRow3Year5"
@@ -357,7 +365,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow3Year5 && <Label basic color="red" pointing content={errors.aaRow3Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={243}
               name="aaRow3Year6"
@@ -375,11 +384,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow3YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow3YesNo}
-                />
+                <Form.Checkbox name="aaRow3YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow3YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -398,7 +403,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow4 && touched.aaRow4 && <Label basic color="red" pointing content={errors.aaRow4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={95}
               name="aaRow4Year1"
@@ -411,7 +417,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow4Year1 && <Label basic color="red" pointing content={errors.aaRow4Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={124}
               name="aaRow4Year2"
@@ -424,7 +431,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow4Year2 && <Label basic color="red" pointing content={errors.aaRow4Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={154}
               name="aaRow4Year3"
@@ -437,7 +445,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow4Year3 && <Label basic color="red" pointing content={errors.aaRow4Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={184}
               name="aaRow4Year4"
@@ -450,7 +459,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow4Year4 && <Label basic color="red" pointing content={errors.aaRow4Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={214}
               name="aaRow4Year5"
@@ -463,7 +473,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow4Year5 && <Label basic color="red" pointing content={errors.aaRow4Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={244}
               name="aaRow4Year6"
@@ -479,11 +490,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow4YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow4YesNo}
-                />
+                <Form.Checkbox name="aaRow4YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow4YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -502,7 +509,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow5 && touched.aaRow5 && <Label basic color="red" pointing content={errors.aaRow5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={95}
               name="aaRow5Year1"
@@ -515,7 +523,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow5Year1 && <Label basic color="red" pointing content={errors.aaRow5Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={125}
               name="aaRow5Year2"
@@ -528,7 +537,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow5Year2 && <Label basic color="red" pointing content={errors.aaRow5Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={155}
               name="aaRow5Year3"
@@ -541,7 +551,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow5Year3 && <Label basic color="red" pointing content={errors.aaRow5Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={185}
               name="aaRow5Year4"
@@ -554,7 +565,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow5Year4 && <Label basic color="red" pointing content={errors.aaRow5Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={215}
               name="aaRow5Year5"
@@ -567,7 +579,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow5Year5 && <Label basic color="red" pointing content={errors.aaRow5Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={245}
               name="aaRow5Year6"
@@ -585,11 +598,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow5YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow5YesNo}
-                />
+                <Form.Checkbox name="aaRow5YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow5YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -608,7 +617,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow6 && touched.aaRow6 && <Label basic color="red" pointing content={errors.aaRow5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={96}
               name="aaRow6Year1"
@@ -621,7 +631,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow6Year1 && <Label basic color="red" pointing content={errors.aaRow6Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={126}
               name="aaRow6Year2"
@@ -634,7 +645,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow6Year2 && <Label basic color="red" pointing content={errors.aaRow6Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={156}
               name="aaRow6Year3"
@@ -647,7 +659,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow6Year3 && <Label basic color="red" pointing content={errors.aaRow6Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={186}
               name="aaRow6Year4"
@@ -660,7 +673,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow6Year4 && <Label basic color="red" pointing content={errors.aaRow6Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={216}
               name="aaRow6Year5"
@@ -673,7 +687,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow6Year5 && <Label basic color="red" pointing content={errors.aaRow6Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={246}
               name="aaRow6Year6"
@@ -689,11 +704,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow6YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow6YesNo}
-                />
+                <Form.Checkbox name="aaRow6YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow6YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -712,7 +723,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow7 && touched.aaRow7 && <Label basic color="red" pointing content={errors.aaRow7} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={97}
               name="aaRow7Year1"
@@ -725,7 +737,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow7Year1 && <Label basic color="red" pointing content={errors.aaRow7Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={127}
               name="aaRow7Year2"
@@ -738,7 +751,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow7Year2 && <Label basic color="red" pointing content={errors.aaRow7Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={157}
               name="aaRow7Year3"
@@ -751,7 +765,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow7Year3 && <Label basic color="red" pointing content={errors.aaRow7Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={187}
               name="aaRow7Year4"
@@ -764,7 +779,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow7Year4 && <Label basic color="red" pointing content={errors.aaRow7Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={217}
               name="aaRow7Year5"
@@ -777,7 +793,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow7Year5 && <Label basic color="red" pointing content={errors.aaRow7Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={247}
               name="aaRow7Year6"
@@ -795,11 +812,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow7YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow7YesNo}
-                />
+                <Form.Checkbox name="aaRow7YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow7YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -818,7 +831,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow8 && touched.aaRow8 && <Label basic color="red" pointing content={errors.aaRow8} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={98}
               name="aaRow8Year1"
@@ -831,7 +845,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow8Year1 && <Label basic color="red" pointing content={errors.aaRow8Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={128}
               name="aaRow8Year2"
@@ -844,7 +859,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow8Year2 && <Label basic color="red" pointing content={errors.aaRow8Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={158}
               name="aaRow8Year3"
@@ -857,7 +873,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow8Year3 && <Label basic color="red" pointing content={errors.aaRow8Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={188}
               name="aaRow8Year4"
@@ -870,7 +887,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow8Year4 && <Label basic color="red" pointing content={errors.aaRow8Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={218}
               name="aaRow8Year5"
@@ -883,7 +901,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow8Year5 && <Label basic color="red" pointing content={errors.aaRow8Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={248}
               name="aaRow8Year6"
@@ -899,11 +918,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow8YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow8YesNo}
-                />
+                <Form.Checkbox name="aaRow8YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow8YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -922,7 +937,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow9 && touched.aaRow9 && <Label basic color="red" pointing content={errors.aaRow9} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={99}
               name="aaRow9Year1"
@@ -935,7 +951,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow9Year1 && <Label basic color="red" pointing content={errors.aaRow9Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={129}
               name="aaRow9Year2"
@@ -948,7 +965,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow9Year2 && <Label basic color="red" pointing content={errors.aaRow9Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={159}
               name="aaRow9Year3"
@@ -961,7 +979,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow9Year3 && <Label basic color="red" pointing content={errors.aaRow9Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={189}
               name="aaRow9Year4"
@@ -974,7 +993,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow9Year4 && <Label basic color="red" pointing content={errors.aaRow9Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={219}
               name="aaRow9Year5"
@@ -987,7 +1007,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow9Year5 && <Label basic color="red" pointing content={errors.aaRow9Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={249}
               name="aaRow9Year6"
@@ -1005,11 +1026,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn textAlign="center">
             <Form size="tiny">
               <Form.Field style={{ marginTop: '10px' }}>
-                <Form.Checkbox
-                  name="aaRow9YesNo"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.aaRow9YesNo}
-                />
+                <Form.Checkbox name="aaRow9YesNo" onChange={this._handleChangeCheckBox} checked={values.aaRow9YesNo} />
               </Form.Field>
             </Form>
           </CustomColumn>
@@ -1028,7 +1045,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow10 && touched.aaRow10 && <Label basic color="red" pointing content={errors.aaRow10} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={100}
               name="aaRow10Year1"
@@ -1041,7 +1059,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year1 && <Label basic color="red" pointing content={errors.aaRow10Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={130}
               name="aaRow10Year2"
@@ -1054,7 +1073,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year2 && <Label basic color="red" pointing content={errors.aaRow10Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={160}
               name="aaRow10Year3"
@@ -1067,7 +1087,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year3 && <Label basic color="red" pointing content={errors.aaRow10Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={190}
               name="aaRow10Year4"
@@ -1080,7 +1101,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year4 && <Label basic color="red" pointing content={errors.aaRow10Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={220}
               name="aaRow10Year5"
@@ -1093,7 +1115,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow10Year5 && <Label basic color="red" pointing content={errors.aaRow10Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={250}
               name="aaRow10Year6"
@@ -1132,7 +1155,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow11 && touched.aaRow11 && <Label basic color="red" pointing content={errors.aaRow11} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={101}
               name="aaRow11Year1"
@@ -1145,7 +1169,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year1 && <Label basic color="red" pointing content={errors.aaRow11Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={131}
               name="aaRow11Year2"
@@ -1158,7 +1183,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year2 && <Label basic color="red" pointing content={errors.aaRow11Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={161}
               name="aaRow11Year3"
@@ -1171,7 +1197,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year3 && <Label basic color="red" pointing content={errors.aaRow11Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={191}
               name="aaRow11Year4"
@@ -1184,7 +1211,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year4 && <Label basic color="red" pointing content={errors.aaRow11Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={221}
               name="aaRow11Year5"
@@ -1197,7 +1225,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow11Year5 && <Label basic color="red" pointing content={errors.aaRow11Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={251}
               name="aaRow11Year6"
@@ -1238,7 +1267,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow12 && touched.aaRow12 && <Label basic color="red" pointing content={errors.aaRow12} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={12}
               name="aaRow12Year1"
@@ -1251,7 +1281,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year1 && <Label basic color="red" pointing content={errors.aaRow12Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={132}
               name="aaRow12Year2"
@@ -1264,7 +1295,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year2 && <Label basic color="red" pointing content={errors.aaRow12Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={162}
               name="aaRow12Year3"
@@ -1277,7 +1309,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year3 && <Label basic color="red" pointing content={errors.aaRow12Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={192}
               name="aaRow12Year4"
@@ -1290,7 +1323,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year4 && <Label basic color="red" pointing content={errors.aaRow12Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={222}
               name="aaRow12Year5"
@@ -1303,7 +1337,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow12Year5 && <Label basic color="red" pointing content={errors.aaRow12Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={252}
               name="aaRow12Year6"
@@ -1342,7 +1377,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow13 && touched.aaRow13 && <Label basic color="red" pointing content={errors.aaRow13} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={13}
               name="aaRow13Year1"
@@ -1355,7 +1391,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year1 && <Label basic color="red" pointing content={errors.aaRow13Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={133}
               name="aaRow13Year2"
@@ -1368,7 +1405,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year2 && <Label basic color="red" pointing content={errors.aaRow13Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={163}
               name="aaRow13Year3"
@@ -1381,7 +1419,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year3 && <Label basic color="red" pointing content={errors.aaRow13Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={193}
               name="aaRow13Year4"
@@ -1394,7 +1433,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year4 && <Label basic color="red" pointing content={errors.aaRow13Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={223}
               name="aaRow13Year5"
@@ -1407,7 +1447,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow13Year5 && <Label basic color="red" pointing content={errors.aaRow13Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={253}
               name="aaRow13Year6"
@@ -1448,7 +1489,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow14 && touched.aaRow14 && <Label basic color="red" pointing content={errors.aaRow14} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={14}
               name="aaRow14Year1"
@@ -1461,7 +1503,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year1 && <Label basic color="red" pointing content={errors.aaRow14Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={134}
               name="aaRow14Year2"
@@ -1474,7 +1517,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year2 && <Label basic color="red" pointing content={errors.aaRow14Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={164}
               name="aaRow14Year3"
@@ -1487,7 +1531,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year3 && <Label basic color="red" pointing content={errors.aaRow14Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={194}
               name="aaRow14Year4"
@@ -1500,7 +1545,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year4 && <Label basic color="red" pointing content={errors.aaRow14Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={224}
               name="aaRow14Year5"
@@ -1513,7 +1559,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow14Year5 && <Label basic color="red" pointing content={errors.aaRow14Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={254}
               name="aaRow14Year6"
@@ -1552,7 +1599,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow15 && touched.aaRow15 && <Label basic color="red" pointing content={errors.aaRow15} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={105}
               name="aaRow15Year1"
@@ -1565,7 +1613,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year1 && <Label basic color="red" pointing content={errors.aaRow15Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={135}
               name="aaRow15Year2"
@@ -1578,7 +1627,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year2 && <Label basic color="red" pointing content={errors.aaRow15Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={165}
               name="aaRow15Year3"
@@ -1591,7 +1641,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year3 && <Label basic color="red" pointing content={errors.aaRow15Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={195}
               name="aaRow15Year4"
@@ -1604,7 +1655,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year4 && <Label basic color="red" pointing content={errors.aaRow15Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={225}
               name="aaRow15Year5"
@@ -1617,7 +1669,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow15Year5 && <Label basic color="red" pointing content={errors.aaRow15Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={255}
               name="aaRow15Year6"
@@ -1658,7 +1711,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow16 && touched.aaRow16 && <Label basic color="red" pointing content={errors.aaRow16} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={106}
               name="aaRow16Year1"
@@ -1671,7 +1725,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year1 && <Label basic color="red" pointing content={errors.aaRow16Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={136}
               name="aaRow16Year2"
@@ -1684,7 +1739,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year2 && <Label basic color="red" pointing content={errors.aaRow16Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={166}
               name="aaRow16Year3"
@@ -1697,7 +1753,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year3 && <Label basic color="red" pointing content={errors.aaRow16Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={196}
               name="aaRow16Year4"
@@ -1710,7 +1767,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year4 && <Label basic color="red" pointing content={errors.aaRow16Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={226}
               name="aaRow16Year5"
@@ -1723,7 +1781,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow16Year5 && <Label basic color="red" pointing content={errors.aaRow16Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={256}
               name="aaRow16Year6"
@@ -1762,7 +1821,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow17 && touched.aaRow17 && <Label basic color="red" pointing content={errors.aaRow17} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={107}
               name="aaRow17Year1"
@@ -1775,7 +1835,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year1 && <Label basic color="red" pointing content={errors.aaRow17Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={137}
               name="aaRow17Year2"
@@ -1788,7 +1849,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year2 && <Label basic color="red" pointing content={errors.aaRow17Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={167}
               name="aaRow17Year3"
@@ -1801,7 +1863,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year3 && <Label basic color="red" pointing content={errors.aaRow17Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={197}
               name="aaRow17Year4"
@@ -1814,7 +1877,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year4 && <Label basic color="red" pointing content={errors.aaRow17Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={227}
               name="aaRow17Year5"
@@ -1827,7 +1891,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow17Year5 && <Label basic color="red" pointing content={errors.aaRow17Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={257}
               name="aaRow17Year6"
@@ -1868,7 +1933,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow18 && touched.aaRow18 && <Label basic color="red" pointing content={errors.aaRow18} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={108}
               name="aaRow18Year1"
@@ -1881,7 +1947,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year1 && <Label basic color="red" pointing content={errors.aaRow18Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={138}
               name="aaRow18Year2"
@@ -1894,7 +1961,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year2 && <Label basic color="red" pointing content={errors.aaRow18Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={168}
               name="aaRow18Year3"
@@ -1907,7 +1975,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year3 && <Label basic color="red" pointing content={errors.aaRow18Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={198}
               name="aaRow18Year4"
@@ -1920,7 +1989,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year4 && <Label basic color="red" pointing content={errors.aaRow18Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={228}
               name="aaRow18Year5"
@@ -1933,7 +2003,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow18Year5 && <Label basic color="red" pointing content={errors.aaRow18Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={258}
               name="aaRow18Year6"
@@ -1972,7 +2043,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow19 && touched.aaRow19 && <Label basic color="red" pointing content={errors.aaRow19} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={109}
               name="aaRow19Year1"
@@ -1985,7 +2057,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year1 && <Label basic color="red" pointing content={errors.aaRow19Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={139}
               name="aaRow19Year2"
@@ -1998,7 +2071,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year2 && <Label basic color="red" pointing content={errors.aaRow19Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={169}
               name="aaRow19Year3"
@@ -2011,7 +2085,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year3 && <Label basic color="red" pointing content={errors.aaRow19Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={199}
               name="aaRow19Year4"
@@ -2024,7 +2099,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year4 && <Label basic color="red" pointing content={errors.aaRow19Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={229}
               name="aaRow19Year5"
@@ -2037,7 +2113,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow19Year5 && <Label basic color="red" pointing content={errors.aaRow19Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={259}
               name="aaRow19Year6"
@@ -2078,7 +2155,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow20 && touched.aaRow20 && <Label basic color="red" pointing content={errors.aaRow20} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={110}
               name="aaRow20Year1"
@@ -2091,7 +2169,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year1 && <Label basic color="red" pointing content={errors.aaRow20Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={140}
               name="aaRow20Year2"
@@ -2104,7 +2183,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year2 && <Label basic color="red" pointing content={errors.aaRow20Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={170}
               name="aaRow20Year3"
@@ -2117,7 +2197,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year3 && <Label basic color="red" pointing content={errors.aaRow20Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={200}
               name="aaRow20Year4"
@@ -2130,7 +2211,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year4 && <Label basic color="red" pointing content={errors.aaRow20Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={230}
               name="aaRow20Year5"
@@ -2143,7 +2225,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow20Year5 && <Label basic color="red" pointing content={errors.aaRow20Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={260}
               name="aaRow20Year6"
@@ -2182,7 +2265,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow21 && touched.aaRow21 && <Label basic color="red" pointing content={errors.aaRow21} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={111}
               name="aaRow21Year1"
@@ -2195,7 +2279,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year1 && <Label basic color="red" pointing content={errors.aaRow21Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={141}
               name="aaRow21Year2"
@@ -2208,7 +2293,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year2 && <Label basic color="red" pointing content={errors.aaRow21Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={171}
               name="aaRow21Year3"
@@ -2221,7 +2307,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year3 && <Label basic color="red" pointing content={errors.aaRow21Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={201}
               name="aaRow21Year4"
@@ -2234,7 +2321,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year4 && <Label basic color="red" pointing content={errors.aaRow21Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={231}
               name="aaRow21Year5"
@@ -2247,7 +2335,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow21Year5 && <Label basic color="red" pointing content={errors.aaRow21Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={261}
               name="aaRow21Year6"
@@ -2288,7 +2377,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow22 && touched.aaRow22 && <Label basic color="red" pointing content={errors.aaRow22} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={112}
               name="aaRow22Year1"
@@ -2301,7 +2391,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year1 && <Label basic color="red" pointing content={errors.aaRow22Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={142}
               name="aaRow22Year2"
@@ -2314,7 +2405,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year2 && <Label basic color="red" pointing content={errors.aaRow22Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={172}
               name="aaRow22Year3"
@@ -2327,7 +2419,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year3 && <Label basic color="red" pointing content={errors.aaRow22Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={22}
               name="aaRow22Year4"
@@ -2340,7 +2433,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year4 && <Label basic color="red" pointing content={errors.aaRow22Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={232}
               name="aaRow22Year5"
@@ -2353,7 +2447,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow22Year5 && <Label basic color="red" pointing content={errors.aaRow22Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={262}
               name="aaRow22Year6"
@@ -2392,7 +2487,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow23 && touched.aaRow23 && <Label basic color="red" pointing content={errors.aaRow23} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={113}
               name="aaRow23Year1"
@@ -2405,7 +2501,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year1 && <Label basic color="red" pointing content={errors.aaRow23Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={143}
               name="aaRow23Year2"
@@ -2418,7 +2515,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year2 && <Label basic color="red" pointing content={errors.aaRow23Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={173}
               name="aaRow23Year3"
@@ -2431,7 +2529,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year3 && <Label basic color="red" pointing content={errors.aaRow23Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={23}
               name="aaRow23Year4"
@@ -2444,7 +2543,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year4 && <Label basic color="red" pointing content={errors.aaRow23Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={233}
               name="aaRow23Year5"
@@ -2457,7 +2557,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow23Year5 && <Label basic color="red" pointing content={errors.aaRow23Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={263}
               name="aaRow23Year6"
@@ -2498,7 +2599,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow24 && touched.aaRow24 && <Label basic color="red" pointing content={errors.aaRow24} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={114}
               name="aaRow24Year1"
@@ -2511,7 +2613,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year1 && <Label basic color="red" pointing content={errors.aaRow24Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={144}
               name="aaRow24Year2"
@@ -2524,7 +2627,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year2 && <Label basic color="red" pointing content={errors.aaRow24Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={174}
               name="aaRow24Year3"
@@ -2537,7 +2641,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year3 && <Label basic color="red" pointing content={errors.aaRow24Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={24}
               name="aaRow24Year4"
@@ -2550,7 +2655,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year4 && <Label basic color="red" pointing content={errors.aaRow24Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={234}
               name="aaRow24Year5"
@@ -2563,7 +2669,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow24Year5 && <Label basic color="red" pointing content={errors.aaRow24Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={264}
               name="aaRow24Year6"
@@ -2602,7 +2709,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow25 && touched.aaRow25 && <Label basic color="red" pointing content={errors.aaRow25} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={115}
               name="aaRow25Year1"
@@ -2615,7 +2723,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year1 && <Label basic color="red" pointing content={errors.aaRow25Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={145}
               name="aaRow25Year2"
@@ -2628,7 +2737,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year2 && <Label basic color="red" pointing content={errors.aaRow25Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={175}
               name="aaRow25Year3"
@@ -2641,7 +2751,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year3 && <Label basic color="red" pointing content={errors.aaRow25Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={205}
               name="aaRow25Year4"
@@ -2654,7 +2765,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year4 && <Label basic color="red" pointing content={errors.aaRow25Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={235}
               name="aaRow25Year5"
@@ -2667,7 +2779,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow25Year5 && <Label basic color="red" pointing content={errors.aaRow25Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={265}
               name="aaRow25Year6"
@@ -2708,7 +2821,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow26 && touched.aaRow26 && <Label basic color="red" pointing content={errors.aaRow26} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={116}
               name="aaRow26Year1"
@@ -2721,7 +2835,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year1 && <Label basic color="red" pointing content={errors.aaRow26Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={146}
               name="aaRow26Year2"
@@ -2734,7 +2849,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year2 && <Label basic color="red" pointing content={errors.aaRow26Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={176}
               name="aaRow26Year3"
@@ -2747,7 +2863,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year3 && <Label basic color="red" pointing content={errors.aaRow26Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={206}
               name="aaRow26Year4"
@@ -2760,7 +2877,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year4 && <Label basic color="red" pointing content={errors.aaRow26Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={236}
               name="aaRow26Year5"
@@ -2773,7 +2891,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow26Year5 && <Label basic color="red" pointing content={errors.aaRow26Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={266}
               name="aaRow26Year6"
@@ -2812,7 +2931,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow27 && touched.aaRow27 && <Label basic color="red" pointing content={errors.aaRow27} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={117}
               name="aaRow27Year1"
@@ -2825,7 +2945,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year1 && <Label basic color="red" pointing content={errors.aaRow27Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={147}
               name="aaRow27Year2"
@@ -2838,7 +2959,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year2 && <Label basic color="red" pointing content={errors.aaRow27Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={177}
               name="aaRow27Year3"
@@ -2851,7 +2973,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year3 && <Label basic color="red" pointing content={errors.aaRow27Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={207}
               name="aaRow27Year4"
@@ -2864,7 +2987,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year4 && <Label basic color="red" pointing content={errors.aaRow27Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={237}
               name="aaRow27Year5"
@@ -2877,7 +3001,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow27Year5 && <Label basic color="red" pointing content={errors.aaRow27Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={267}
               name="aaRow27Year6"
@@ -2918,7 +3043,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow28 && touched.aaRow28 && <Label basic color="red" pointing content={errors.aaRow28} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={118}
               name="aaRow28Year1"
@@ -2931,7 +3057,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year1 && <Label basic color="red" pointing content={errors.aaRow28Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={148}
               name="aaRow28Year2"
@@ -2944,7 +3071,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year2 && <Label basic color="red" pointing content={errors.aaRow28Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={178}
               name="aaRow28Year3"
@@ -2957,7 +3085,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year3 && <Label basic color="red" pointing content={errors.aaRow28Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={208}
               name="aaRow28Year4"
@@ -2970,7 +3099,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year4 && <Label basic color="red" pointing content={errors.aaRow28Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={238}
               name="aaRow28Year5"
@@ -2983,7 +3113,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow28Year5 && <Label basic color="red" pointing content={errors.aaRow28Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={268}
               name="aaRow28Year6"
@@ -3022,7 +3153,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow29 && touched.aaRow29 && <Label basic color="red" pointing content={errors.aaRow29} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={119}
               name="aaRow29Year1"
@@ -3035,7 +3167,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year1 && <Label basic color="red" pointing content={errors.aaRow29Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={149}
               name="aaRow29Year2"
@@ -3048,7 +3181,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year2 && <Label basic color="red" pointing content={errors.aaRow29Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={179}
               name="aaRow29Year3"
@@ -3061,7 +3195,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year3 && <Label basic color="red" pointing content={errors.aaRow29Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={209}
               name="aaRow29Year4"
@@ -3074,7 +3209,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year4 && <Label basic color="red" pointing content={errors.aaRow29Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={239}
               name="aaRow29Year5"
@@ -3087,7 +3223,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow29Year5 && <Label basic color="red" pointing content={errors.aaRow29Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={269}
               name="aaRow29Year6"
@@ -3128,7 +3265,8 @@ class AddbacksAndAdjustmentsForm extends Component {
             {errors.aaRow30 && touched.aaRow30 && <Label basic color="red" pointing content={errors.aaRow30} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={120}
               name="aaRow30Year1"
@@ -3141,7 +3279,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year1 && <Label basic color="red" pointing content={errors.aaRow30Year1} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={150}
               name="aaRow30Year2"
@@ -3154,7 +3293,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year2 && <Label basic color="red" pointing content={errors.aaRow30Year2} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={180}
               name="aaRow30Year3"
@@ -3167,7 +3307,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year3 && <Label basic color="red" pointing content={errors.aaRow30Year3} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={210}
               name="aaRow30Year4"
@@ -3180,7 +3321,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year4 && <Label basic color="red" pointing content={errors.aaRow30Year4} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={240}
               name="aaRow30Year5"
@@ -3193,7 +3335,8 @@ class AddbacksAndAdjustmentsForm extends Component {
               touched.aaRow30Year5 && <Label basic color="red" pointing content={errors.aaRow30Year5} />}
           </CustomColumn>
           <CustomColumn>
-            <Input type="number"
+            <Input
+              type="number"
               fluid
               tabIndex={270}
               name="aaRow30Year6"
@@ -3274,228 +3417,227 @@ AddbacksAndAdjustmentsForm.propTypes = {
   appraisalObject: PropTypes.object
 }
 
-const mapPropsToValues = props => (
-  { aaRow1Year1: props.appraisalObject ? props.appraisalObject.aaRow11Year1 : 0,
-    aaRow1: props.appraisalObject ? props.appraisalObject.aaRow1 : '',
-    aaRow2Year1: props.appraisalObject ? props.appraisalObject.aaRow2Year1 : 0,
-    aaRow2: props.appraisalObject ? props.appraisalObject.aaRow2 : '',
-    aaRow3Year1: 0,
-    aaRow3: props.appraisalObject ? props.appraisalObject.aaRow3 : '',
-    aaRow4Year1: 0,
-    aaRow4: props.appraisalObject ? props.appraisalObject.aaRow4 : '',
-    aaRow5Year1: 0,
-    aaRow5: props.appraisalObject ? props.appraisalObject.aaRow5 : '',
-    aaRow6Year1: 0,
-    aaRow6: props.appraisalObject ? props.appraisalObject.aaRow6 : '',
-    aaRow7Year1: 0,
-    aaRow7: props.appraisalObject ? props.appraisalObject.aaRow7 : '',
-    aaRow8Year1: 0,
-    aaRow8: props.appraisalObject ? props.appraisalObject.aaRow8 : '',
-    aaRow9Year1: 0,
-    aaRow9: props.appraisalObject ? props.appraisalObject.aaRow9 : '',
-    aaRow10Year1: 0,
-    aaRow10: props.appraisalObject ? props.appraisalObject.aaRow10 : '',
-    aaRow11Year1: 0,
-    aaRow11: props.appraisalObject ? props.appraisalObject.aaRow11 : '',
-    aaRow12Year1: 0,
-    aaRow12: props.appraisalObject ? props.appraisalObject.aaRow12 : '',
-    aaRow13Year1: 0,
-    aaRow13: props.appraisalObject ? props.appraisalObject.aaRow13 : '',
-    aaRow14Year1: 0,
-    aaRow14: props.appraisalObject ? props.appraisalObject.aaRow14 : '',
-    aaRow15Year1: 0,
-    aaRow15: props.appraisalObject ? props.appraisalObject.aaRow15 : '',
-    aaRow16Year1: 0,
-    aaRow16: props.appraisalObject ? props.appraisalObject.aaRow16 : '',
-    aaRow17Year1: 0,
-    aaRow17: props.appraisalObject ? props.appraisalObject.aaRow17 : '',
-    aaRow18Year1: 0,
-    aaRow18: props.appraisalObject ? props.appraisalObject.aaRow18 : '',
-    aaRow19Year1: 0,
-    aaRow19: props.appraisalObject ? props.appraisalObject.aaRow19 : '',
-    aaRow20Year1: 0,
-    aaRow20: props.appraisalObject ? props.appraisalObject.aaRow20 : '',
-    aaRow21Year1: 0,
-    aaRow21: props.appraisalObject ? props.appraisalObject.aaRow21 : '',
-    aaRow22Year1: 0,
-    aaRow22: props.appraisalObject ? props.appraisalObject.aaRow22 : '',
-    aaRow23Year1: 0,
-    aaRow23: props.appraisalObject ? props.appraisalObject.aaRow23 : '',
-    aaRow24Year1: 0,
-    aaRow24: props.appraisalObject ? props.appraisalObject.aaRow24 : '',
-    aaRow25Year1: 0,
-    aaRow25: props.appraisalObject ? props.appraisalObject.aaRow25 : '',
-    aaRow26Year1: 0,
-    aaRow26: props.appraisalObject ? props.appraisalObject.aaRow26 : '',
-    aaRow27Year1: 0,
-    aaRow27: props.appraisalObject ? props.appraisalObject.aaRow27 : '',
-    aaRow28Year1: 0,
-    aaRow28: props.appraisalObject ? props.appraisalObject.aaRow28 : '',
-    aaRow29Year1: 0,
-    aaRow29: props.appraisalObject ? props.appraisalObject.aaRow29 : '',
-    aaRow30Year1: 0,
-    aaRow30: props.appraisalObject ? props.appraisalObject.aaRow30 : '',
-    aaRow1Year2: 0,
-    aaRow2Year2: 0,
-    aaRow3Year2: 0,
-    aaRow4Year2: 0,
-    aaRow5Year2: 0,
-    aaRow6Year2: 0,
-    aaRow7Year2: 0,
-    aaRow8Year2: 0,
-    aaRow9Year2: 0,
-    aaRow10Year2: 0,
-    aaRow11Year2: 0,
-    aaRow12Year2: 0,
-    aaRow13Year2: 0,
-    aaRow14Year2: 0,
-    aaRow15Year2: 0,
-    aaRow16Year2: 0,
-    aaRow17Year2: 0,
-    aaRow18Year2: 0,
-    aaRow19Year2: 0,
-    aaRow20Year2: 0,
-    aaRow21Year2: 0,
-    aaRow22Year2: 0,
-    aaRow23Year2: 0,
-    aaRow24Year2: 0,
-    aaRow25Year2: 0,
-    aaRow26Year2: 0,
-    aaRow27Year2: 0,
-    aaRow28Year2: 0,
-    aaRow29Year2: 0,
-    aaRow30Year2: 0,
-    aaRow1Year3: 0,
-    aaRow2Year3: 0,
-    aaRow3Year3: 0,
-    aaRow4Year3: 0,
-    aaRow5Year3: 0,
-    aaRow6Year3: 0,
-    aaRow7Year3: 0,
-    aaRow8Year3: 0,
-    aaRow9Year3: 0,
-    aaRow10Year3: 0,
-    aaRow11Year3: 0,
-    aaRow12Year3: 0,
-    aaRow13Year3: 0,
-    aaRow14Year3: 0,
-    aaRow15Year3: 0,
-    aaRow16Year3: 0,
-    aaRow17Year3: 0,
-    aaRow18Year3: 0,
-    aaRow19Year3: 0,
-    aaRow20Year3: 0,
-    aaRow21Year3: 0,
-    aaRow22Year3: 0,
-    aaRow23Year3: 0,
-    aaRow24Year3: 0,
-    aaRow25Year3: 0,
-    aaRow26Year3: 0,
-    aaRow27Year3: 0,
-    aaRow28Year3: 0,
-    aaRow29Year3: 0,
-    aaRow30Year3: 0,
-    aaRow1Year4: 0,
-    aaRow2Year4: 0,
-    aaRow3Year4: 0,
-    aaRow4Year4: 0,
-    aaRow5Year4: 0,
-    aaRow6Year4: 0,
-    aaRow7Year4: 0,
-    aaRow8Year4: 0,
-    aaRow9Year4: 0,
-    aaRow10Year4: 0,
-    aaRow11Year4: 0,
-    aaRow12Year4: 0,
-    aaRow13Year4: 0,
-    aaRow14Year4: 0,
-    aaRow15Year4: 0,
-    aaRow16Year4: 0,
-    aaRow17Year4: 0,
-    aaRow18Year4: 0,
-    aaRow19Year4: 0,
-    aaRow20Year4: 0,
-    aaRow21Year4: 0,
-    aaRow22Year4: 0,
-    aaRow23Year4: 0,
-    aaRow24Year4: 0,
-    aaRow25Year4: 0,
-    aaRow26Year4: 0,
-    aaRow27Year4: 0,
-    aaRow28Year4: 0,
-    aaRow29Year4: 0,
-    aaRow30Year4: 0,
-    aaRow1Year5: 0,
-    aaRow2Year5: 0,
-    aaRow3Year5: 0,
-    aaRow4Year5: 0,
-    aaRow5Year5: 0,
-    aaRow6Year5: 0,
-    aaRow7Year5: 0,
-    aaRow8Year5: 0,
-    aaRow9Year5: 0,
-    aaRow10Year5: 0,
-    aaRow11Year5: 0,
-    aaRow12Year5: 0,
-    aaRow13Year5: 0,
-    aaRow14Year5: 0,
-    aaRow15Year5: 0,
-    aaRow16Year5: 0,
-    aaRow17Year5: 0,
-    aaRow18Year5: 0,
-    aaRow19Year5: 0,
-    aaRow20Year5: 0,
-    aaRow21Year5: 0,
-    aaRow22Year5: 0,
-    aaRow23Year5: 0,
-    aaRow24Year5: 0,
-    aaRow25Year5: 0,
-    aaRow26Year5: 0,
-    aaRow27Year5: 0,
-    aaRow28Year5: 0,
-    aaRow29Year5: 0,
-    aaRow30Year5: 0,
-    aaRow1Year6: 0,
-    aaRow2Year6: 0,
-    aaRow3Year6: 0,
-    aaRow4Year6: 0,
-    aaRow5Year6: 0,
-    aaRow6Year6: 0,
-    aaRow7Year6: 0,
-    aaRow8Year6: 0,
-    aaRow9Year6: 0,
-    aaRow10Year6: 0,
-    aaRow11Year6: 0,
-    aaRow12Year6: 0,
-    aaRow13Year6: 0,
-    aaRow14Year6: 0,
-    aaRow15Year6: 0,
-    aaRow16Year6: 0,
-    aaRow17Year6: 0,
-    aaRow18Year6: 0,
-    aaRow19Year6: 0,
-    aaRow20Year6: 0,
-    aaRow21Year6: 0,
-    aaRow22Year6: 0,
-    aaRow23Year6: 0,
-    aaRow24Year6: 0,
-    aaRow25Year6: 0,
-    aaRow26Year6: 0,
-    aaRow27Year6: 0,
-    aaRow28Year6: 0,
-    aaRow29Year6: 0,
-    aaRow30Year6: 0,
-    business_id: props.business ? props.business.id : '',
-    id: props.appraisalObject ? props.appraisalObject.id : ''
-  }
-)
+const mapPropsToValues = props => ({
+  aaRow1Year1: props.appraisalObject ? props.appraisalObject.aaRow11Year1 : 0,
+  aaRow1: props.appraisalObject ? props.appraisalObject.aaRow1 : '',
+  aaRow2Year1: props.appraisalObject ? props.appraisalObject.aaRow2Year1 : 0,
+  aaRow2: props.appraisalObject ? props.appraisalObject.aaRow2 : '',
+  aaRow3Year1: 0,
+  aaRow3: props.appraisalObject ? props.appraisalObject.aaRow3 : '',
+  aaRow4Year1: 0,
+  aaRow4: props.appraisalObject ? props.appraisalObject.aaRow4 : '',
+  aaRow5Year1: 0,
+  aaRow5: props.appraisalObject ? props.appraisalObject.aaRow5 : '',
+  aaRow6Year1: 0,
+  aaRow6: props.appraisalObject ? props.appraisalObject.aaRow6 : '',
+  aaRow7Year1: 0,
+  aaRow7: props.appraisalObject ? props.appraisalObject.aaRow7 : '',
+  aaRow8Year1: 0,
+  aaRow8: props.appraisalObject ? props.appraisalObject.aaRow8 : '',
+  aaRow9Year1: 0,
+  aaRow9: props.appraisalObject ? props.appraisalObject.aaRow9 : '',
+  aaRow10Year1: 0,
+  aaRow10: props.appraisalObject ? props.appraisalObject.aaRow10 : '',
+  aaRow11Year1: 0,
+  aaRow11: props.appraisalObject ? props.appraisalObject.aaRow11 : '',
+  aaRow12Year1: 0,
+  aaRow12: props.appraisalObject ? props.appraisalObject.aaRow12 : '',
+  aaRow13Year1: 0,
+  aaRow13: props.appraisalObject ? props.appraisalObject.aaRow13 : '',
+  aaRow14Year1: 0,
+  aaRow14: props.appraisalObject ? props.appraisalObject.aaRow14 : '',
+  aaRow15Year1: 0,
+  aaRow15: props.appraisalObject ? props.appraisalObject.aaRow15 : '',
+  aaRow16Year1: 0,
+  aaRow16: props.appraisalObject ? props.appraisalObject.aaRow16 : '',
+  aaRow17Year1: 0,
+  aaRow17: props.appraisalObject ? props.appraisalObject.aaRow17 : '',
+  aaRow18Year1: 0,
+  aaRow18: props.appraisalObject ? props.appraisalObject.aaRow18 : '',
+  aaRow19Year1: 0,
+  aaRow19: props.appraisalObject ? props.appraisalObject.aaRow19 : '',
+  aaRow20Year1: 0,
+  aaRow20: props.appraisalObject ? props.appraisalObject.aaRow20 : '',
+  aaRow21Year1: 0,
+  aaRow21: props.appraisalObject ? props.appraisalObject.aaRow21 : '',
+  aaRow22Year1: 0,
+  aaRow22: props.appraisalObject ? props.appraisalObject.aaRow22 : '',
+  aaRow23Year1: 0,
+  aaRow23: props.appraisalObject ? props.appraisalObject.aaRow23 : '',
+  aaRow24Year1: 0,
+  aaRow24: props.appraisalObject ? props.appraisalObject.aaRow24 : '',
+  aaRow25Year1: 0,
+  aaRow25: props.appraisalObject ? props.appraisalObject.aaRow25 : '',
+  aaRow26Year1: 0,
+  aaRow26: props.appraisalObject ? props.appraisalObject.aaRow26 : '',
+  aaRow27Year1: 0,
+  aaRow27: props.appraisalObject ? props.appraisalObject.aaRow27 : '',
+  aaRow28Year1: 0,
+  aaRow28: props.appraisalObject ? props.appraisalObject.aaRow28 : '',
+  aaRow29Year1: 0,
+  aaRow29: props.appraisalObject ? props.appraisalObject.aaRow29 : '',
+  aaRow30Year1: 0,
+  aaRow30: props.appraisalObject ? props.appraisalObject.aaRow30 : '',
+  aaRow1Year2: 0,
+  aaRow2Year2: 0,
+  aaRow3Year2: 0,
+  aaRow4Year2: 0,
+  aaRow5Year2: 0,
+  aaRow6Year2: 0,
+  aaRow7Year2: 0,
+  aaRow8Year2: 0,
+  aaRow9Year2: 0,
+  aaRow10Year2: 0,
+  aaRow11Year2: 0,
+  aaRow12Year2: 0,
+  aaRow13Year2: 0,
+  aaRow14Year2: 0,
+  aaRow15Year2: 0,
+  aaRow16Year2: 0,
+  aaRow17Year2: 0,
+  aaRow18Year2: 0,
+  aaRow19Year2: 0,
+  aaRow20Year2: 0,
+  aaRow21Year2: 0,
+  aaRow22Year2: 0,
+  aaRow23Year2: 0,
+  aaRow24Year2: 0,
+  aaRow25Year2: 0,
+  aaRow26Year2: 0,
+  aaRow27Year2: 0,
+  aaRow28Year2: 0,
+  aaRow29Year2: 0,
+  aaRow30Year2: 0,
+  aaRow1Year3: 0,
+  aaRow2Year3: 0,
+  aaRow3Year3: 0,
+  aaRow4Year3: 0,
+  aaRow5Year3: 0,
+  aaRow6Year3: 0,
+  aaRow7Year3: 0,
+  aaRow8Year3: 0,
+  aaRow9Year3: 0,
+  aaRow10Year3: 0,
+  aaRow11Year3: 0,
+  aaRow12Year3: 0,
+  aaRow13Year3: 0,
+  aaRow14Year3: 0,
+  aaRow15Year3: 0,
+  aaRow16Year3: 0,
+  aaRow17Year3: 0,
+  aaRow18Year3: 0,
+  aaRow19Year3: 0,
+  aaRow20Year3: 0,
+  aaRow21Year3: 0,
+  aaRow22Year3: 0,
+  aaRow23Year3: 0,
+  aaRow24Year3: 0,
+  aaRow25Year3: 0,
+  aaRow26Year3: 0,
+  aaRow27Year3: 0,
+  aaRow28Year3: 0,
+  aaRow29Year3: 0,
+  aaRow30Year3: 0,
+  aaRow1Year4: 0,
+  aaRow2Year4: 0,
+  aaRow3Year4: 0,
+  aaRow4Year4: 0,
+  aaRow5Year4: 0,
+  aaRow6Year4: 0,
+  aaRow7Year4: 0,
+  aaRow8Year4: 0,
+  aaRow9Year4: 0,
+  aaRow10Year4: 0,
+  aaRow11Year4: 0,
+  aaRow12Year4: 0,
+  aaRow13Year4: 0,
+  aaRow14Year4: 0,
+  aaRow15Year4: 0,
+  aaRow16Year4: 0,
+  aaRow17Year4: 0,
+  aaRow18Year4: 0,
+  aaRow19Year4: 0,
+  aaRow20Year4: 0,
+  aaRow21Year4: 0,
+  aaRow22Year4: 0,
+  aaRow23Year4: 0,
+  aaRow24Year4: 0,
+  aaRow25Year4: 0,
+  aaRow26Year4: 0,
+  aaRow27Year4: 0,
+  aaRow28Year4: 0,
+  aaRow29Year4: 0,
+  aaRow30Year4: 0,
+  aaRow1Year5: 0,
+  aaRow2Year5: 0,
+  aaRow3Year5: 0,
+  aaRow4Year5: 0,
+  aaRow5Year5: 0,
+  aaRow6Year5: 0,
+  aaRow7Year5: 0,
+  aaRow8Year5: 0,
+  aaRow9Year5: 0,
+  aaRow10Year5: 0,
+  aaRow11Year5: 0,
+  aaRow12Year5: 0,
+  aaRow13Year5: 0,
+  aaRow14Year5: 0,
+  aaRow15Year5: 0,
+  aaRow16Year5: 0,
+  aaRow17Year5: 0,
+  aaRow18Year5: 0,
+  aaRow19Year5: 0,
+  aaRow20Year5: 0,
+  aaRow21Year5: 0,
+  aaRow22Year5: 0,
+  aaRow23Year5: 0,
+  aaRow24Year5: 0,
+  aaRow25Year5: 0,
+  aaRow26Year5: 0,
+  aaRow27Year5: 0,
+  aaRow28Year5: 0,
+  aaRow29Year5: 0,
+  aaRow30Year5: 0,
+  aaRow1Year6: 0,
+  aaRow2Year6: 0,
+  aaRow3Year6: 0,
+  aaRow4Year6: 0,
+  aaRow5Year6: 0,
+  aaRow6Year6: 0,
+  aaRow7Year6: 0,
+  aaRow8Year6: 0,
+  aaRow9Year6: 0,
+  aaRow10Year6: 0,
+  aaRow11Year6: 0,
+  aaRow12Year6: 0,
+  aaRow13Year6: 0,
+  aaRow14Year6: 0,
+  aaRow15Year6: 0,
+  aaRow16Year6: 0,
+  aaRow17Year6: 0,
+  aaRow18Year6: 0,
+  aaRow19Year6: 0,
+  aaRow20Year6: 0,
+  aaRow21Year6: 0,
+  aaRow22Year6: 0,
+  aaRow23Year6: 0,
+  aaRow24Year6: 0,
+  aaRow25Year6: 0,
+  aaRow26Year6: 0,
+  aaRow27Year6: 0,
+  aaRow28Year6: 0,
+  aaRow29Year6: 0,
+  aaRow30Year6: 0,
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : ''
+})
 
 const mapStateToProps = state => ({})
 
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({updateAppraisal}, dispatch)
+  return bindActionCreators({ updateAppraisal }, dispatch)
 }
 
 export default connect(
