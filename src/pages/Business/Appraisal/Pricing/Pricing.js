@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Message, Step, Segment, Grid } from 'semantic-ui-react'
+import { Message, Step, Segment, Grid, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
@@ -18,8 +18,12 @@ class PricingPage extends Component {
     this.state = {}
   }
 
+  _handleChangeCheckBox = (name, value) => {
+    this.props.setFieldValue(name, value)
+  }
+
   render () {
-    const { appraisalObject } = this.props
+    const { appraisalObject, values } = this.props
     // const {} = this.state
     return (
       <Wrapper>
@@ -48,6 +52,115 @@ class PricingPage extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Segment style={{ backgroundColor: '#d4d4d53b' }}>
+          <Grid celled="internally" divided>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="Multiplier EBITA last year"
+                      name="pricingMethod"
+                      onChange={() => this._handleChangeCheckBox('pricingMethod', 1)}
+                      checked={values.pricingMethod === 1}
+                    />
+                  </Form.Field>
+                </Form>
+              </Grid.Column>
+              <Grid.Column>test</Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="Multiplier EBITA AVG"
+                      name="pricingMethod"
+                      onChange={() => this._handleChangeCheckBox('pricingMethod', 2)}
+                      checked={values.pricingMethod === 2}
+                    />
+                  </Form.Field>
+                </Form>
+              </Grid.Column>
+              <Grid.Column>test</Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="PEBITA last year"
+                      name="pricingMethod"
+                      onChange={() => this._handleChangeCheckBox('pricingMethod', 3)}
+                      checked={values.pricingMethod === 3}
+                    />
+                  </Form.Field>
+                </Form>
+              </Grid.Column>
+              <Grid.Column>test</Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="PEBITA Multiplier"
+                      name="pricingMethod"
+                      onChange={() => this._handleChangeCheckBox('pricingMethod', 4)}
+                      checked={values.pricingMethod === 4}
+                    />
+                  </Form.Field>
+                </Form>
+              </Grid.Column>
+              <Grid.Column>test</Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="T/O Multiplier"
+                      name="pricingMethod"
+                      onChange={() => this._handleChangeCheckBox('pricingMethod', 5)}
+                      checked={values.pricingMethod === 5}
+                    />
+                  </Form.Field>
+                </Form>
+              </Grid.Column>
+              <Grid.Column>test</Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="Assets Value"
+                      name="pricingMethod"
+                      onChange={() => this._handleChangeCheckBox('pricingMethod', 6)}
+                      checked={values.pricingMethod === 6}
+                    />
+                  </Form.Field>
+                </Form>
+              </Grid.Column>
+              <Grid.Column>test</Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Form size="tiny">
+                  <Form.Field>
+                    <Form.Checkbox
+                      label="Agreed Value"
+                      name="pricingMethod"
+                      onChange={() => this._handleChangeCheckBox('pricingMethod', 7)}
+                      checked={values.pricingMethod === 7}
+                    />
+                  </Form.Field>
+                </Form>
+              </Grid.Column>
+              <Grid.Column>test</Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
       </Wrapper>
     )
   }
@@ -70,7 +183,8 @@ PricingPage.propTypes = {
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
-  id: props.appraisalObject ? props.appraisalObject.id : ''
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  pricingMethod: props.appraisalObject ? props.appraisalObject.pricingMethod : 1
 })
 
 const mapStateToProps = state => {
