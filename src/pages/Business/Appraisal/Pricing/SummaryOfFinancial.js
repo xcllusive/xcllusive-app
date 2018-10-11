@@ -15,13 +15,13 @@ class SummaryOfFinancialPage extends Component {
   }
 
   _lastYearProfit = appraisalObject => {
-    if (appraisalObject && appraisalObject.totalAdjusments7 > 0) return appraisalObject.totalAdjusments7
-    if (appraisalObject && appraisalObject.totalAdjusments6 > 0) return appraisalObject.totalAdjusments6
-    if (appraisalObject && appraisalObject.totalAdjusments5 > 0) return appraisalObject.totalAdjusments5
-    if (appraisalObject && appraisalObject.totalAdjusments4 > 0) return appraisalObject.totalAdjusments4
-    if (appraisalObject && appraisalObject.totalAdjusments3 > 0) return appraisalObject.totalAdjusments3
-    if (appraisalObject && appraisalObject.totalAdjusments2 > 0) return appraisalObject.totalAdjusments2
-    if (appraisalObject && appraisalObject.totalAdjusments1 > 0) return appraisalObject.totalAdjusments1
+    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0) return appraisalObject.totalAdjustedProfit7
+    if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) return appraisalObject.totalAdjustedProfit6
+    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0) return appraisalObject.totalAdjustedProfit5
+    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0) return appraisalObject.totalAdjustedProfit4
+    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0) return appraisalObject.totalAdjustedProfit3
+    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0) return appraisalObject.totalAdjustedProfit2
+    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0) return appraisalObject.totalAdjustedProfit1
   }
 
   _averageProfits = appraisalObject => {
