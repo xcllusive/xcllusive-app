@@ -60,8 +60,8 @@ class ComparableDataPage extends Component {
       colorArrow: 'green',
       isLoadingListSelected: false,
       sumTO: null,
-      sumAvgEbita: null,
-      sumLastYearEbita: null,
+      sumAvgEbitda: null,
+      sumLastYearEbitda: null,
       sumSoldPrice: null,
       sumStockValue: null,
       sumAssetsValue: null,
@@ -69,8 +69,8 @@ class ComparableDataPage extends Component {
       sumTOAvgYX: null,
       sumLastYX: null,
       sumLastStockX: null,
-      sumAvgEbitaX: null,
-      sumAvgEbitaXStockX: null
+      sumAvgEbitdaX: null,
+      sumAvgEbitdaXStockX: null
     }
   }
 
@@ -82,8 +82,8 @@ class ComparableDataPage extends Component {
   static getDerivedStateFromProps (nextProps, prevState) {
     if (nextProps.listSelected && nextProps.listSelected !== prevState.isLoadingListSelected) {
       var tempTO = 0
-      var tempAvgEbita = 0
-      var tempLastYearEbita = 0
+      var tempAvgEbitda = 0
+      var tempLastYearEbitda = 0
       var tempSoldPrice = 0
       var tempStockValue = 0
       var tempAssetsValue = 0
@@ -93,13 +93,13 @@ class ComparableDataPage extends Component {
       var tempLastYXAdd = 0
       var tempLastStockX = 0
       var tempLastStockXAdd = 0
-      var tempAvgEbitaX = 0
-      var tempAvgEbitaXStockX = 0
+      var tempAvgEbitdaX = 0
+      var tempAvgEbitdaXStockX = 0
       nextProps.listSelected.forEach(function (item) {
         /* T/O */
         tempTO = item.latestFullYearTotalRevenue + tempTO
 
-        /* Average Ebita */
+        /* Average Ebitda */
         var count = 0
         var totalYear = 0
         if (item.year4 > 0) {
@@ -118,22 +118,22 @@ class ComparableDataPage extends Component {
           totalYear = totalYear + item.year1
           count = count + 1
         }
-        var avgEbita = 0
-        avgEbita = totalYear / count
-        tempAvgEbita = avgEbita + tempAvgEbita
+        var avgEbitda = 0
+        avgEbitda = totalYear / count
+        tempAvgEbitda = avgEbitda + tempAvgEbitda
 
-        /* Avg EBITA X */
-        var avgEbitaX = item.soldPrice / (totalYear / count)
-        tempAvgEbitaX = avgEbitaX + tempAvgEbitaX
+        /* Avg Ebitda X */
+        var avgEbitdaX = item.soldPrice / (totalYear / count)
+        tempAvgEbitdaX = avgEbitdaX + tempAvgEbitdaX
 
-        /* Avg EBITA X + Stock X */
-        var avgEbitaXStockX = (item.soldPrice + item.stockValue) / (totalYear / count)
-        tempAvgEbitaXStockX = avgEbitaXStockX + tempAvgEbitaXStockX
+        /* Avg Ebitda X + Stock X */
+        var avgEbitdaXStockX = (item.soldPrice + item.stockValue) / (totalYear / count)
+        tempAvgEbitdaXStockX = avgEbitdaXStockX + tempAvgEbitdaXStockX
 
-        /* Last Year Ebita */
+        /* Last Year Ebitda */
         var went = false
         if (item.year4 > 0) {
-          tempLastYearEbita = item.year4 + tempLastYearEbita
+          tempLastYearEbitda = item.year4 + tempLastYearEbitda
 
           /* Last Y X */
           tempLastYXAdd = item.soldPrice / item.year4
@@ -144,7 +144,7 @@ class ComparableDataPage extends Component {
           went = true
         }
         if (item.year3 > 0 && !went) {
-          tempLastYearEbita = item.year3 + tempLastYearEbita
+          tempLastYearEbitda = item.year3 + tempLastYearEbitda
 
           /* Last Y X */
           tempLastYXAdd = item.soldPrice / item.year3
@@ -155,7 +155,7 @@ class ComparableDataPage extends Component {
           went = true
         }
         if (item.year2 > 0 && !went) {
-          tempLastYearEbita = item.year2 + tempLastYearEbita
+          tempLastYearEbitda = item.year2 + tempLastYearEbitda
 
           /* Last Y X */
           tempLastYXAdd = item.soldPrice / item.year2
@@ -166,7 +166,7 @@ class ComparableDataPage extends Component {
           went = true
         }
         if (item.year1 > 0 && !went) {
-          tempLastYearEbita = item.year1 + tempLastYearEbita
+          tempLastYearEbitda = item.year1 + tempLastYearEbitda
 
           /* Last Y X */
           tempLastYXAdd = item.soldPrice / item.year1
@@ -201,8 +201,8 @@ class ComparableDataPage extends Component {
 
       return {
         sumTO: tempTO,
-        sumAvgEbita: tempAvgEbita,
-        sumLastYearEbita: tempLastYearEbita,
+        sumAvgEbitda: tempAvgEbitda,
+        sumLastYearEbitda: tempLastYearEbitda,
         sumSoldPrice: tempSoldPrice,
         sumStockValue: tempStockValue,
         sumAssetsValue: tempAssetsValue,
@@ -210,8 +210,8 @@ class ComparableDataPage extends Component {
         sumTOAvgYX: tempTOAvgYX,
         sumLastYX: tempLastYX,
         sumLastStockX: tempLastStockX,
-        sumAvgEbitaX: tempAvgEbitaX,
-        sumAvgEbitaXStockX: tempAvgEbitaXStockX
+        sumAvgEbitdaX: tempAvgEbitdaX,
+        sumAvgEbitdaXStockX: tempAvgEbitdaXStockX
       }
     }
     return null
@@ -304,16 +304,18 @@ class ComparableDataPage extends Component {
     })
   }
 
-  _lastYearEbita = businessSold => {
-    if (businessSold.year4 > 0) return businessSold.year4
-    if (businessSold.year3 > 0) return businessSold.year3
-    if (businessSold.year2 > 0) return businessSold.year2
-    if (businessSold.year1 > 0) return businessSold.year1
+  _lastYearEbitda = businessSold => {
+    if (businessSold.year4 > 0) return businessSold.year4 - businessSold.agreedWageForWorkingOwners
+    if (businessSold.year3 > 0) return businessSold.year3 - businessSold.agreedWageForWorkingOwners
+    if (businessSold.year2 > 0) return businessSold.year2 - businessSold.agreedWageForWorkingOwners
+    if (businessSold.year1 > 0) return businessSold.year1 - businessSold.agreedWageForWorkingOwners
   }
 
-  _averageEbita = businessSold => {
+  _averageEbitda = businessSold => {
     let count = 0
     let totalYear = 0
+
+    /* MINUS (Agreed Wage For Working Owners) <- business stage sold */
 
     if (businessSold.year4 > 0) {
       count = count + 1
@@ -332,7 +334,7 @@ class ComparableDataPage extends Component {
       count = count + 1
     }
 
-    return totalYear / count
+    return totalYear / count - businessSold.agreedWageForWorkingOwners
   }
 
   _colorArrow = businessSold => {
@@ -357,6 +359,38 @@ class ComparableDataPage extends Component {
     if (businessSold.trend === 'steady') {
       return 'arrow right'
     }
+  }
+
+  _pEbitdaLastYear = businessSold => {
+    if (businessSold.year4 > 0) {
+      return businessSold.year4 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+    if (businessSold.year3 > 0) {
+      return businessSold.year3 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+    if (businessSold.year2 > 0) {
+      return businessSold.year2 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+    if (businessSold.year1 > 0) {
+      return businessSold.year1 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+  }
+
+  _pEbitdaAvg = businessSold => {
+    if (businessSold.business_id === 20) console.log(businessSold)
+    return (
+      this._averageEbitda(businessSold) -
+      (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner) +
+      businessSold.agreedWageForMainOwner
+    )
+  }
+
+  _pEbitdaLastYearStock = businessSold => {
+    return this._pEbitdaLastYear(businessSold) + businessSold.stockValue
+  }
+
+  _pEbitdaAvgStock = businessSold => {
+    return this._pEbitdaAvg(businessSold) + businessSold.stockValue
   }
 
   render () {
@@ -478,8 +512,8 @@ class ComparableDataPage extends Component {
               <Table.Row>
                 <Table.HeaderCell>Business Type</Table.HeaderCell>
                 <Table.HeaderCell>T/O</Table.HeaderCell>
-                <Table.HeaderCell>Average EBITA</Table.HeaderCell>
-                <Table.HeaderCell>Last year EBITA</Table.HeaderCell>
+                <Table.HeaderCell>Average Ebitda</Table.HeaderCell>
+                <Table.HeaderCell>Last year Ebitda</Table.HeaderCell>
                 <Table.HeaderCell>Trend</Table.HeaderCell>
                 <Table.HeaderCell>Sold Price</Table.HeaderCell>
                 <Table.HeaderCell>Stock Value</Table.HeaderCell>
@@ -488,8 +522,8 @@ class ComparableDataPage extends Component {
                 <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
                 <Table.HeaderCell>Last Y X</Table.HeaderCell>
                 <Table.HeaderCell>Last + Stock X</Table.HeaderCell>
-                <Table.HeaderCell>Avg EBITA X</Table.HeaderCell>
-                <Table.HeaderCell>Avg EBITA + Stock X</Table.HeaderCell>
+                <Table.HeaderCell>Avg Ebitda X</Table.HeaderCell>
+                <Table.HeaderCell>Avg Ebitda + Stock X</Table.HeaderCell>
                 <Table.HeaderCell>Terms Of Deal</Table.HeaderCell>
                 <Table.HeaderCell>Special Notes</Table.HeaderCell>
                 <Table.HeaderCell>Remove</Table.HeaderCell>
@@ -500,8 +534,8 @@ class ComparableDataPage extends Component {
                 <Table.Row active key={selectedList.id}>
                   <Table.Cell>{selectedList.businessType}</Table.Cell>
                   <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._averageEbita(selectedList)).format('$0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._lastYearEbita(selectedList)).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._averageEbitda(selectedList)).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._lastYearEbitda(selectedList)).format('$0,0.[99]')}</Table.Cell>
                   <Table.Cell>
                     <Icon color={this._colorArrow(selectedList)} name={this._nameArrow(selectedList)} />
                   </Table.Cell>
@@ -515,19 +549,19 @@ class ComparableDataPage extends Component {
                     {numeral(selectedList.soldPrice / selectedList.latestFullYearTotalRevenue).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>
-                    {numeral(selectedList.soldPrice / this._lastYearEbita(selectedList)).format('0,0.[99]')}
+                    {numeral(selectedList.soldPrice / this._lastYearEbitda(selectedList)).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>
                     {numeral(
-                      (selectedList.soldPrice + selectedList.stockValue) / this._lastYearEbita(selectedList)
+                      (selectedList.soldPrice + selectedList.stockValue) / this._lastYearEbitda(selectedList)
                     ).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>
-                    {numeral(selectedList.soldPrice / this._averageEbita(selectedList)).format('0,0.[99]')}
+                    {numeral(selectedList.soldPrice / this._averageEbitda(selectedList)).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>
                     {numeral(
-                      (selectedList.soldPrice + selectedList.stockValue) / this._averageEbita(selectedList)
+                      (selectedList.soldPrice + selectedList.stockValue) / this._averageEbitda(selectedList)
                     ).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>{selectedList.termsOfDeal} </Table.Cell>
@@ -551,13 +585,13 @@ class ComparableDataPage extends Component {
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumAvgEbita ? (
-                    <b>{numeral(this.state.sumAvgEbita / listSelected.length).format('$0,0.[99]')}</b>
+                  {this.state.sumAvgEbitda ? (
+                    <b>{numeral(this.state.sumAvgEbitda / listSelected.length).format('$0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumLastYearEbita ? (
-                    <b>{numeral(this.state.sumLastYearEbita / listSelected.length).format('$0,0.[99]')}</b>
+                  {this.state.sumLastYearEbitda ? (
+                    <b>{numeral(this.state.sumLastYearEbitda / listSelected.length).format('$0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell />
@@ -597,13 +631,13 @@ class ComparableDataPage extends Component {
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumAvgEbitaX ? (
-                    <b>{numeral(this.state.sumAvgEbitaX / listSelected.length).format('0,0.[99]')}</b>
+                  {this.state.sumAvgEbitdaX ? (
+                    <b>{numeral(this.state.sumAvgEbitdaX / listSelected.length).format('0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumAvgEbitaXStockX ? (
-                    <b>{numeral(this.state.sumAvgEbitaXStockX / listSelected.length).format('0,0.[99]')}</b>
+                  {this.state.sumAvgEbitdaXStockX ? (
+                    <b>{numeral(this.state.sumAvgEbitdaXStockX / listSelected.length).format('0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell />
@@ -621,34 +655,56 @@ class ComparableDataPage extends Component {
             <Dimmer inverted active={isLoadingBusinessesSold}>
               <Loader>Loading</Loader>
             </Dimmer>
-            <Table color="blue" celled inverted size="small" compact selectable>
+            <Table color="blue" celled inverted size="small" compact selectable structured>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Business Type</Table.HeaderCell>
-                  <Table.HeaderCell>T/O</Table.HeaderCell>
-                  <Table.HeaderCell>Average EBITA</Table.HeaderCell>
-                  <Table.HeaderCell>Last year EBITA</Table.HeaderCell>
-                  <Table.HeaderCell>Trend</Table.HeaderCell>
-                  <Table.HeaderCell>Sold Price</Table.HeaderCell>
-                  <Table.HeaderCell>Stock Value</Table.HeaderCell>
-                  <Table.HeaderCell>Assets Value</Table.HeaderCell>
-                  <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
-                  <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
-                  <Table.HeaderCell>Last Y X</Table.HeaderCell>
-                  <Table.HeaderCell>Last + Stock X</Table.HeaderCell>
-                  <Table.HeaderCell>Avg EBITA X</Table.HeaderCell>
-                  <Table.HeaderCell>Avg EBITA + Stock X</Table.HeaderCell>
-                  <Table.HeaderCell>Terms Of Deal</Table.HeaderCell>
-                  <Table.HeaderCell>Special Notes</Table.HeaderCell>
+                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="9">
+                    Sold Business Information
+                  </Table.HeaderCell>
+                  <Table.HeaderCell color="red" textAlign="center" colSpan="4">
+                    Multiplier
+                  </Table.HeaderCell>
+                  <Table.HeaderCell color="red" textAlign="center" colSpan="5">
+                    Values
+                  </Table.HeaderCell>
+                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="2">
+                    Notes
+                  </Table.HeaderCell>
                 </Table.Row>
+                <Table.Row>
+                  <Table.HeaderCell rowSpan="1">Business Type</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">T/O</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Average EBITDA</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Last year EBITDA</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">Average PEBITDA</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">Last Year PEBITDA</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Trend</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Sold Price</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Stock Value</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Assets Value</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Price inc. Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">T/O</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Last Year EBITDA</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Last Year EBITDA Inc. Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Avg EBITDA X</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Avg EBITDA + Stock X</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">M. PEBITDA Last Year + Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">PEBITDA Average + Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="4">Terms Of Deal</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="4">Special Notes</Table.HeaderCell>
+                </Table.Row>
+                <Table.Row />
+                <Table.Row />
               </Table.Header>
               <Table.Body>
                 {listBusinessesSold.map(businessSold => (
                   <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
                     <Table.Cell>{businessSold.businessType}</Table.Cell>
                     <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._averageEbita(businessSold)).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._lastYearEbita(businessSold)).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._averageEbitda(businessSold)).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._lastYearEbitda(businessSold)).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._pEbitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._pEbitdaLastYear(businessSold)).format('0,0.[99]')}</Table.Cell>
                     <Table.Cell>
                       <Icon color={this._colorArrow(businessSold)} name={this._nameArrow(businessSold)} />
                     </Table.Cell>
@@ -662,21 +718,23 @@ class ComparableDataPage extends Component {
                       {numeral(businessSold.soldPrice / businessSold.latestFullYearTotalRevenue).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(businessSold.soldPrice / this._lastYearEbita(businessSold)).format('0,0.[99]')}
+                      {numeral(businessSold.soldPrice / this._lastYearEbitda(businessSold)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
                       {numeral(
-                        (businessSold.soldPrice + businessSold.stockValue) / this._lastYearEbita(businessSold)
+                        (businessSold.soldPrice + businessSold.stockValue) / this._lastYearEbitda(businessSold)
                       ).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(businessSold.soldPrice / this._averageEbita(businessSold)).format('0,0.[99]')}
+                      {numeral(businessSold.soldPrice / this._averageEbitda(businessSold)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
                       {numeral(
-                        (businessSold.soldPrice + businessSold.stockValue) / this._averageEbita(businessSold)
+                        (businessSold.soldPrice + businessSold.stockValue) / this._averageEbitda(businessSold)
                       ).format('0,0.[99]')}
                     </Table.Cell>
+                    <Table.Cell>{numeral(this._pEbitdaLastYearStock(businessSold)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._pEbitdaAvgStock(businessSold)).format('0,0.[99]')}</Table.Cell>
                     <Table.Cell>{businessSold.termsOfDeal} </Table.Cell>
                     <Table.Cell>{businessSold.specialNotes} </Table.Cell>
                   </Table.Row>

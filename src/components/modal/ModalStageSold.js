@@ -34,6 +34,7 @@ class StageSoldForm extends Component {
       year3: 0,
       year4: 0,
       agreedWageForWorkingOwners: 0,
+      agreedWageForMainOwner: 0,
       latestFullYearTotalRevenue: 0
     }
   }
@@ -78,6 +79,9 @@ class StageSoldForm extends Component {
     ) {
       var agreedWageForWorkingOwners = numeral(nextProps.values.agreedWageForWorkingOwners).format('$0,0.[99]')
     }
+    if (nextProps.businessSold && nextProps.businessSold.agreedWageForMainOwner !== prevState.agreedWageForMainOwner) {
+      var agreedWageForMainOwner = numeral(nextProps.values.agreedWageForMainOwner).format('$0,0.[99]')
+    }
     if (
       nextProps.businessSold &&
       nextProps.businessSold.latestFullYearTotalRevenue !== prevState.latestFullYearTotalRevenue
@@ -95,6 +99,7 @@ class StageSoldForm extends Component {
       year3: year3 || prevState.year3,
       year4: year4 || prevState.year4,
       agreedWageForWorkingOwners: agreedWageForWorkingOwners || prevState.agreedWageForWorkingOwners,
+      agreedWageForMainOwner: agreedWageForMainOwner || prevState.agreedWageForMainOwner,
       latestFullYearTotalRevenue: latestFullYearTotalRevenue || prevState.latestFullYearTotalRevenue
     }
   }
@@ -381,7 +386,7 @@ class StageSoldForm extends Component {
                 <Icon name="arrow right" color="yellow" />
               </Form.Group>
               <Form.Group>
-                <Form.Field>
+                <Form.Field width={4}>
                   <Form.Input
                     label="N. of Working Owners"
                     name="nOfWorkingOwners"
@@ -393,7 +398,7 @@ class StageSoldForm extends Component {
                   {errors.nOfWorkingOwners &&
                     touched.nOfWorkingOwners && <Label basic color="red" pointing content={errors.nOfWorkingOwners} />}
                 </Form.Field>
-                <Form.Field>
+                <Form.Field width={4}>
                   <Form.Input
                     label="Agreed Wage For Working Owners"
                     name="agreedWageForWorkingOwners"
@@ -407,7 +412,21 @@ class StageSoldForm extends Component {
                     <Label basic color="red" pointing content={errors.agreedWageForWorkingOwners} />
                   )}
                 </Form.Field>
-                <Form.Field>
+                <Form.Field width={4}>
+                  <Form.Input
+                    label="Agreed Wage For Main Owner"
+                    name="agreedWageForMainOwner"
+                    autoComplete="agreedWageForMainOwner"
+                    value={this.state.agreedWageForMainOwner}
+                    onChange={this._numberFormat}
+                    onBlur={handleBlur}
+                  />
+                  {errors.agreedWageForMainOwner &&
+                    touched.agreedWageForMainOwner && (
+                    <Label basic color="red" pointing content={errors.agreedWageForMainOwner} />
+                  )}
+                </Form.Field>
+                <Form.Field width={4}>
                   <Form.Input
                     label="Latest Full Year Total Revenue"
                     name="latestFullYearTotalRevenue"
@@ -526,6 +545,7 @@ const mapPropsToValues = props => ({
   year4: props.businessSold ? props.businessSold.year4 : 0,
   nOfWorkingOwners: props.businessSold ? props.businessSold.nOfWorkingOwners : 0,
   agreedWageForWorkingOwners: props.businessSold ? props.businessSold.agreedWageForWorkingOwners : 0,
+  agreedWageForMainOwner: props.businessSold ? props.businessSold.agreedWageForMainOwner : 0,
   latestFullYearTotalRevenue: props.businessSold ? props.businessSold.latestFullYearTotalRevenue : 0,
   termsOfDeal: props.businessSold ? props.businessSold.termsOfDeal : '',
   specialNotes: props.businessSold ? props.businessSold.specialNotes : '',
