@@ -60,17 +60,18 @@ class ComparableDataPage extends Component {
       colorArrow: 'green',
       isLoadingListSelected: false,
       sumTO: null,
-      sumAvgEbitda: null,
       sumLastYearEbitda: null,
+      sumPebitdaLastYear: null,
       sumSoldPrice: null,
       sumStockValue: null,
       sumAssetsValue: null,
       sumPriceStock: null,
       sumTOAvgYX: null,
-      sumLastYX: null,
-      sumLastStockX: null,
-      sumAvgEbitdaX: null,
-      sumAvgEbitdaXStockX: null
+      sumMEbitdaLastYear: null,
+      sumMEbitdaAvg: null,
+      sumMPebitdaLastYear: null,
+      sumMPebitdaAvg: null,
+      sumMEbitdaAvgWithStock: null
     }
   }
 
@@ -82,24 +83,35 @@ class ComparableDataPage extends Component {
   static getDerivedStateFromProps (nextProps, prevState) {
     if (nextProps.listSelected && nextProps.listSelected !== prevState.isLoadingListSelected) {
       var tempTO = 0
-      var tempAvgEbitda = 0
-      var tempLastYearEbitda = 0
+      var tempEbitdaAvg = 0
+      var tempEbitdaLastYear = 0
+      var tempEbitdaLastYearAdd = 0
+      var tempPebitdaAvg = 0
       var tempSoldPrice = 0
       var tempStockValue = 0
       var tempAssetsValue = 0
       var tempPriceStock = 0
       var tempTOAvgYX = 0
-      var tempLastYX = 0
-      var tempLastYXAdd = 0
-      var tempLastStockX = 0
-      var tempLastStockXAdd = 0
-      var tempAvgEbitdaX = 0
-      var tempAvgEbitdaXStockX = 0
+      var tempMEbitdaLastYear = 0
+      var tempMEbitdaLastYearAdd = 0
+      var tempMEbitdaAvg = 0
+      var tempMPebitdaLastYearAdd = 0
+      var tempMPebitdaLastYear = 0
+      var tempMPebitdaAvg = 0
+      var tempMEbitdaLastYearWithStockAdd = 0
+      var tempMEbitdaLastYearWithStock = 0
+      var tempMEbitdaAvgWithStock = 0
+      var tempMPebitdaLastYearWithStockAdd = 0
+      var tempMPebitdaLastYearWithStock = 0
+      var tempMPebitdaAvgWithStock = 0
+      var tempPebitdaLastYearAdd = 0
+      var tempPebitdaLastYear = 0
+
       nextProps.listSelected.forEach(function (item) {
         /* T/O */
         tempTO = item.latestFullYearTotalRevenue + tempTO
 
-        /* Average Ebitda */
+        /* EBITDA Avg */
         var count = 0
         var totalYear = 0
         if (item.year4 > 0) {
@@ -118,61 +130,125 @@ class ComparableDataPage extends Component {
           totalYear = totalYear + item.year1
           count = count + 1
         }
-        var avgEbitda = 0
-        avgEbitda = totalYear / count
-        tempAvgEbitda = avgEbitda + tempAvgEbitda
+        var ebitdaAvg = 0
+        ebitdaAvg = totalYear / count
+        tempEbitdaAvg = ebitdaAvg - item.agreedWageForWorkingOwners + tempEbitdaAvg
 
-        /* Avg Ebitda X */
-        var avgEbitdaX = item.soldPrice / (totalYear / count)
-        tempAvgEbitdaX = avgEbitdaX + tempAvgEbitdaX
+        /* PEBITDA Avg */
+        tempPebitdaAvg = ebitdaAvg - item.agreedWageForWorkingOwners + item.agreedWageForMainOwner + tempPebitdaAvg
 
-        /* Avg Ebitda X + Stock X */
-        var avgEbitdaXStockX = (item.soldPrice + item.stockValue) / (totalYear / count)
-        tempAvgEbitdaXStockX = avgEbitdaXStockX + tempAvgEbitdaXStockX
+        /* Multiplier EBITDA Avg */
+        tempMEbitdaAvg = item.soldPrice / (ebitdaAvg - item.agreedWageForWorkingOwners) + tempMEbitdaAvg
 
-        /* Last Year Ebitda */
+        /* Multiplier PEBITDA Avg */
+        tempMPebitdaAvg =
+          item.soldPrice / (ebitdaAvg - item.agreedWageForWorkingOwners + item.agreedWageForMainOwner) + tempMPebitdaAvg
+
+        /* Multiplier EBITDA Avg with Stock */
+        tempMEbitdaAvgWithStock =
+          (item.soldPrice + item.stockValue) / (ebitdaAvg - item.agreedWageForWorkingOwners) + tempMEbitdaAvgWithStock
+
+        /* Multiplier PEBITDA Avg with Stock */
+        tempMPebitdaAvgWithStock =
+          item.soldPrice /
+            (ebitdaAvg - item.agreedWageForWorkingOwners + item.agreedWageForMainOwner + item.stockValue) +
+          tempMPebitdaAvgWithStock
+
+        /* EBITDA Last Year */
         var went = false
         if (item.year4 > 0) {
-          tempLastYearEbitda = item.year4 + tempLastYearEbitda
+          tempEbitdaLastYearAdd = item.year4 - item.agreedWageForWorkingOwners
 
-          /* Last Y X */
-          tempLastYXAdd = item.soldPrice / item.year4
+          /* PEBITDA Last Year */
+          tempPebitdaLastYearAdd = item.year4 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner)
 
-          /* Last + Stock X */
-          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year4
+          /* Multiplier EBITDA Last Year */
+          tempMEbitdaLastYearAdd = item.soldPrice / (item.year4 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year */
+          tempMPebitdaLastYearAdd =
+            item.soldPrice / (item.year4 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner))
+
+          /* Multiplier EBITDA Last Year With Stock */
+          tempMEbitdaLastYearWithStockAdd =
+            (item.soldPrice + item.stockValue) / (item.year4 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year with Stock */
+          tempMPebitdaLastYearWithStockAdd =
+            item.soldPrice /
+            (item.year4 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner) + item.stockValue)
 
           went = true
         }
         if (item.year3 > 0 && !went) {
-          tempLastYearEbitda = item.year3 + tempLastYearEbitda
+          tempEbitdaLastYearAdd = item.year3 - item.agreedWageForWorkingOwners
 
-          /* Last Y X */
-          tempLastYXAdd = item.soldPrice / item.year3
+          /* PEBITDA Last Year */
+          tempPebitdaLastYearAdd = item.year3 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner)
 
-          /* Last + Stock X */
-          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year3
+          /* Multiplier EBITDA Last Year */
+          tempMEbitdaLastYearAdd = item.soldPrice / (item.year3 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year */
+          tempMPebitdaLastYearAdd =
+            item.soldPrice / (item.year3 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner))
+
+          /* Multiplier EBITDA Last Year With Stock */
+          tempMEbitdaLastYearWithStockAdd =
+            (item.soldPrice + item.stockValue) / (item.year3 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year with Stock */
+          tempMPebitdaLastYearWithStockAdd =
+            item.soldPrice /
+            (item.year3 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner) + item.stockValue)
 
           went = true
         }
         if (item.year2 > 0 && !went) {
-          tempLastYearEbitda = item.year2 + tempLastYearEbitda
+          tempEbitdaLastYearAdd = item.year2 - item.agreedWageForWorkingOwners
 
-          /* Last Y X */
-          tempLastYXAdd = item.soldPrice / item.year2
+          /* PEBITDA Last Year */
+          tempPebitdaLastYearAdd = item.year2 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner)
 
-          /* Last + Stock X */
-          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year2
+          /* Multiplier EBITDA Last Year */
+          tempMEbitdaLastYearAdd = item.soldPrice / (item.year2 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year */
+          tempMPebitdaLastYearAdd =
+            item.soldPrice / (item.year2 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner))
+
+          /* Multiplier EBITDA Last Year With Stock */
+          tempMEbitdaLastYearWithStockAdd =
+            (item.soldPrice + item.stockValue) / (item.year2 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year with Stock */
+          tempMPebitdaLastYearWithStockAdd =
+            item.soldPrice /
+            (item.year2 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner) + item.stockValue)
 
           went = true
         }
         if (item.year1 > 0 && !went) {
-          tempLastYearEbitda = item.year1 + tempLastYearEbitda
+          tempEbitdaLastYearAdd = item.year1 - item.agreedWageForWorkingOwners
 
-          /* Last Y X */
-          tempLastYXAdd = item.soldPrice / item.year1
+          /* PEBITDA Last Year */
+          tempPebitdaLastYearAdd = item.year1 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner)
 
-          /* Last + Stock X */
-          tempLastStockXAdd = (item.soldPrice + item.stockValue) / item.year1
+          /* Multiplier EBITDA Last Year */
+          tempMEbitdaLastYearAdd = item.soldPrice / (item.year1 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year */
+          tempMPebitdaLastYearAdd =
+            item.soldPrice / (item.year1 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner))
+
+          /* Multiplier EBITDA Last Year With Stock */
+          tempMEbitdaLastYearWithStockAdd =
+            (item.soldPrice + item.stockValue) / (item.year1 - item.agreedWageForWorkingOwners)
+
+          /* Multiplier PEBITDA Last Year with Stock */
+          tempMPebitdaLastYearWithStockAdd =
+            item.soldPrice /
+            (item.year1 - (item.agreedWageForWorkingOwners - item.agreedWageForMainOwner) + item.stockValue)
 
           went = true
         }
@@ -192,26 +268,44 @@ class ComparableDataPage extends Component {
         /* T/O AVG Y X */
         tempTOAvgYX = item.soldPrice / item.latestFullYearTotalRevenue + tempTOAvgYX
 
-        /* Last Y X */
-        tempLastYX = tempLastYXAdd + tempLastYX
+        /* EBITDA Last Year */
+        tempEbitdaLastYear = tempEbitdaLastYear + tempEbitdaLastYearAdd
 
-        /* Last + Stock X */
-        tempLastStockX = tempLastStockXAdd + tempLastStockX
+        /* PEBITDA Last Year */
+        tempPebitdaLastYear = tempPebitdaLastYearAdd + tempPebitdaLastYear
+
+        /* Multiplier EBITDA Last Year */
+        tempMEbitdaLastYear = tempMEbitdaLastYearAdd + tempMEbitdaLastYear
+
+        /* Multiplier PEBITDA Last Year */
+        tempMPebitdaLastYear = tempMPebitdaLastYearAdd + tempMPebitdaLastYear
+
+        /* Multiplier EBITDA Last Year With Stock */
+        tempMEbitdaLastYearWithStock = tempMEbitdaLastYearWithStockAdd + tempMEbitdaLastYearWithStock
+
+        /* Multiplier PEBITDA Last Year With Stock */
+        tempMPebitdaLastYearWithStock = tempMPebitdaLastYearWithStockAdd + tempMPebitdaLastYearWithStock
       })
 
       return {
         sumTO: tempTO,
-        sumAvgEbitda: tempAvgEbitda,
-        sumLastYearEbitda: tempLastYearEbitda,
+        sumEbitdaLastYear: tempEbitdaLastYear,
+        sumEbitdaAvg: tempEbitdaAvg,
+        sumPebitdaLastYear: tempPebitdaLastYear,
+        sumPebitdaAvg: tempPebitdaAvg,
         sumSoldPrice: tempSoldPrice,
         sumStockValue: tempStockValue,
         sumAssetsValue: tempAssetsValue,
         sumPriceStock: tempPriceStock,
         sumTOAvgYX: tempTOAvgYX,
-        sumLastYX: tempLastYX,
-        sumLastStockX: tempLastStockX,
-        sumAvgEbitdaX: tempAvgEbitdaX,
-        sumAvgEbitdaXStockX: tempAvgEbitdaXStockX
+        sumMEbitdaLastYear: tempMEbitdaLastYear,
+        sumMEbitdaAvg: tempMEbitdaAvg,
+        sumMPebitdaLastYear: tempMPebitdaLastYear,
+        sumMPebitdaAvg: tempMPebitdaAvg,
+        sumMEbitdaLastYearWithStock: tempMEbitdaLastYearWithStock,
+        sumMEbitdaAvgWithStock: tempMEbitdaAvgWithStock,
+        sumMPebitdaLastYearWithStock: tempMPebitdaLastYearWithStock,
+        sumMPebitdaAvgWithStock: tempMPebitdaAvgWithStock
       }
     }
     return null
@@ -268,12 +362,16 @@ class ComparableDataPage extends Component {
   }
 
   _addToSelectedList = objectBusinessSold => {
+    if (this.props.listSelected.length > 9) {
+      this._showMsg('10Business')
+      return
+    }
     if (this.props.listSelected.length === 0) {
       this.props.addSelectedList(objectBusinessSold)
     } else {
       if (!_.find(this.props.listSelected, o => o.id === objectBusinessSold.id)) {
         this.props.addSelectedList(objectBusinessSold)
-      } else this._showMsg()
+      } else this._showMsg('added')
     }
   }
 
@@ -285,37 +383,39 @@ class ComparableDataPage extends Component {
       },
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          // this.setState(prevState => ({
-          //   selectedList: [..._.remove(this.state.selectedList, item => item.id === idSelected)]
-          // }))
           this.props.removeSelectedList(idSelected)
         }
       }
     })
   }
 
-  _showMsg = () => {
+  _showMsg = message => {
     this.props.openModal(TypesModal.MODAL_TYPE_SHOW_MSG, {
       options: {
         title: 'Alert:',
         content: 'Got it!',
-        text: 'You have already added this business to the list!'
+        text:
+          message === 'added'
+            ? 'You have already added this business to the list!'
+            : 'You can only add 10 businesses in this list!'
       }
     })
   }
 
-  _lastYearEbitda = businessSold => {
+  _turnOver = businessSold => {
+    return businessSold.soldPrice / businessSold.latestFullYearTotalRevenue
+  }
+
+  _ebitdaLastYear = businessSold => {
     if (businessSold.year4 > 0) return businessSold.year4 - businessSold.agreedWageForWorkingOwners
     if (businessSold.year3 > 0) return businessSold.year3 - businessSold.agreedWageForWorkingOwners
     if (businessSold.year2 > 0) return businessSold.year2 - businessSold.agreedWageForWorkingOwners
     if (businessSold.year1 > 0) return businessSold.year1 - businessSold.agreedWageForWorkingOwners
   }
 
-  _averageEbitda = businessSold => {
+  _ebitdaAvg = businessSold => {
     let count = 0
     let totalYear = 0
-
-    /* MINUS (Agreed Wage For Working Owners) <- business stage sold */
 
     if (businessSold.year4 > 0) {
       count = count + 1
@@ -361,7 +461,7 @@ class ComparableDataPage extends Component {
     }
   }
 
-  _pEbitdaLastYear = businessSold => {
+  _pebitdaLastYear = businessSold => {
     if (businessSold.year4 > 0) {
       return businessSold.year4 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
     }
@@ -376,21 +476,40 @@ class ComparableDataPage extends Component {
     }
   }
 
-  _pEbitdaAvg = businessSold => {
-    if (businessSold.business_id === 20) console.log(businessSold)
-    return (
-      this._averageEbitda(businessSold) -
-      (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner) +
-      businessSold.agreedWageForMainOwner
-    )
+  _pebitdaAvg = businessSold => {
+    return this._ebitdaAvg(businessSold) + businessSold.agreedWageForMainOwner
   }
 
-  _pEbitdaLastYearStock = businessSold => {
-    return this._pEbitdaLastYear(businessSold) + businessSold.stockValue
+  _multiplierEbitdaLastYear = businessSold => {
+    return businessSold.soldPrice / this._ebitdaLastYear(businessSold)
   }
 
-  _pEbitdaAvgStock = businessSold => {
-    return this._pEbitdaAvg(businessSold) + businessSold.stockValue
+  _multiplierEbitdaAvg = businessSold => {
+    return businessSold.soldPrice / this._ebitdaAvg(businessSold)
+  }
+
+  _multiplierPebitdaLastYear = businessSold => {
+    return businessSold.soldPrice / this._pebitdaLastYear(businessSold)
+  }
+
+  _multiplierPebitdaAvg = businessSold => {
+    return businessSold.soldPrice / this._pebitdaAvg(businessSold)
+  }
+
+  _multiplierEbitdaLastYearWithStock = businessSold => {
+    return (businessSold.soldPrice + businessSold.stockValue) / this._ebitdaLastYear(businessSold)
+  }
+
+  _multiplierEbitdaAvgWithStock = businessSold => {
+    return (businessSold.soldPrice + businessSold.stockValue) / this._ebitdaAvg(businessSold)
+  }
+
+  _multiplierPebitdaLastYearWithStock = businessSold => {
+    return businessSold.soldPrice / (this._pebitdaLastYear(businessSold) + businessSold.stockValue)
+  }
+
+  _multiplierPebitdaAvgWithStock = businessSold => {
+    return businessSold.soldPrice / (this._pebitdaAvg(businessSold) + businessSold.stockValue)
   }
 
   render () {
@@ -507,62 +626,80 @@ class ComparableDataPage extends Component {
           <Header as="h3" textAlign="center">
             Your Selected List
           </Header>
-          <Table color="blue" celled inverted size="small" compact>
+          <Table color="blue" celled size="small" compact inverted striped>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Business Type</Table.HeaderCell>
-                <Table.HeaderCell>T/O</Table.HeaderCell>
-                <Table.HeaderCell>Average Ebitda</Table.HeaderCell>
-                <Table.HeaderCell>Last year Ebitda</Table.HeaderCell>
-                <Table.HeaderCell>Trend</Table.HeaderCell>
-                <Table.HeaderCell>Sold Price</Table.HeaderCell>
-                <Table.HeaderCell>Stock Value</Table.HeaderCell>
-                <Table.HeaderCell>Assets Value</Table.HeaderCell>
-                <Table.HeaderCell>Price inc. Stock</Table.HeaderCell>
-                <Table.HeaderCell>T/O Avr Y X</Table.HeaderCell>
-                <Table.HeaderCell>Last Y X</Table.HeaderCell>
-                <Table.HeaderCell>Last + Stock X</Table.HeaderCell>
-                <Table.HeaderCell>Avg Ebitda X</Table.HeaderCell>
-                <Table.HeaderCell>Avg Ebitda + Stock X</Table.HeaderCell>
-                <Table.HeaderCell>Terms Of Deal</Table.HeaderCell>
-                <Table.HeaderCell>Special Notes</Table.HeaderCell>
-                <Table.HeaderCell>Remove</Table.HeaderCell>
+                <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="11">
+                  Sold Business Information
+                </Table.HeaderCell>
+                <Table.HeaderCell color="red" textAlign="center" colSpan="5">
+                  Multiplier
+                </Table.HeaderCell>
+                <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} color="red" textAlign="center" colSpan="4">
+                  Multiplier with Stock
+                </Table.HeaderCell>
+                <Table.HeaderCell textAlign="center" colSpan="3">
+                  Notes
+                </Table.HeaderCell>
+              </Table.Row>
+              <Table.Row>
+                <Table.HeaderCell rowSpan="1">Business Type</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">T/O</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">EBITDA Last year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">EBITDA Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">PEBITDA Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">PEBITDA Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">Trend</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">Sold Price</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">Stock Value</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">Assets Value</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">Price with Stock</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">T/O</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">EBITDA Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">EBITDA Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">PEBITDA Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">PEBITDA Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">EBITDA Last Year with Stock</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">EBITDA Avg with Stock</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">PEBITDA Last Year with Stock</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">PEBITDA Avg with Stock</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="4">Terms of Deal</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="4">Special Notes</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="4">Delete</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
               {listSelected.map(selectedList => (
                 <Table.Row active key={selectedList.id}>
                   <Table.Cell>{selectedList.businessType}</Table.Cell>
-                  <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._averageEbitda(selectedList)).format('$0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._lastYearEbitda(selectedList)).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(this._ebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(this._ebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(this._pebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(this._pebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
                   <Table.Cell>
                     <Icon color={this._colorArrow(selectedList)} name={this._nameArrow(selectedList)} />
                   </Table.Cell>
-                  <Table.Cell>{numeral(selectedList.soldPrice).format('$0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(selectedList.stockValue).format('$0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(selectedList.assetValue).format('$0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.soldPrice).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.stockValue).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.assetValue).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(selectedList.soldPrice + selectedList.stockValue).format('$0,0')}</Table.Cell>
+                  <Table.Cell>{numeral(this._turnOver(selectedList)).format('0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._multiplierEbitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._multiplierEbitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._multiplierPebitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
+                  <Table.Cell>{numeral(this._multiplierPebitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
                   <Table.Cell>
-                    {numeral(selectedList.soldPrice + selectedList.stockValue).format('$0,0.[99]')}
+                    {numeral(this._multiplierEbitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>
-                    {numeral(selectedList.soldPrice / selectedList.latestFullYearTotalRevenue).format('0,0.[99]')}
+                    {numeral(this._multiplierEbitdaAvgWithStock(selectedList)).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>
-                    {numeral(selectedList.soldPrice / this._lastYearEbitda(selectedList)).format('0,0.[99]')}
+                    {numeral(this._multiplierPebitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>
-                    {numeral(
-                      (selectedList.soldPrice + selectedList.stockValue) / this._lastYearEbitda(selectedList)
-                    ).format('0,0.[99]')}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {numeral(selectedList.soldPrice / this._averageEbitda(selectedList)).format('0,0.[99]')}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {numeral(
-                      (selectedList.soldPrice + selectedList.stockValue) / this._averageEbitda(selectedList)
-                    ).format('0,0.[99]')}
+                    {numeral(this._multiplierPebitdaAvgWithStock(selectedList)).format('0,0.[99]')}
                   </Table.Cell>
                   <Table.Cell>{selectedList.termsOfDeal} </Table.Cell>
                   <Table.Cell>{selectedList.specialNotes} </Table.Cell>
@@ -585,13 +722,23 @@ class ComparableDataPage extends Component {
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumAvgEbitda ? (
-                    <b>{numeral(this.state.sumAvgEbitda / listSelected.length).format('$0,0.[99]')}</b>
+                  {this.state.sumEbitdaLastYear ? (
+                    <b>{numeral(this.state.sumEbitdaLastYear / listSelected.length).format('$0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumLastYearEbitda ? (
-                    <b>{numeral(this.state.sumLastYearEbitda / listSelected.length).format('$0,0.[99]')}</b>
+                  {this.state.sumEbitdaAvg ? (
+                    <b>{numeral(this.state.sumEbitdaAvg / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumPebitdaLastYear ? (
+                    <b>{numeral(this.state.sumPebitdaLastYear / listSelected.length).format('$0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumPebitdaAvg ? (
+                    <b>{numeral(this.state.sumPebitdaAvg / listSelected.length).format('$0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell />
@@ -621,23 +768,43 @@ class ComparableDataPage extends Component {
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumLastYX ? (
-                    <b>{numeral(this.state.sumLastYX / listSelected.length).format('0,0.[99]')}</b>
+                  {this.state.sumMEbitdaLastYear ? (
+                    <b>{numeral(this.state.sumMEbitdaLastYear / listSelected.length).format('0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumLastStockX ? (
-                    <b>{numeral(this.state.sumLastStockX / listSelected.length).format('0,0.[99]')}</b>
+                  {this.state.sumMEbitdaAvg ? (
+                    <b>{numeral(this.state.sumMEbitdaAvg / listSelected.length).format('0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumAvgEbitdaX ? (
-                    <b>{numeral(this.state.sumAvgEbitdaX / listSelected.length).format('0,0.[99]')}</b>
+                  {this.state.sumMPebitdaLastYear ? (
+                    <b>{numeral(this.state.sumMPebitdaLastYear / listSelected.length).format('0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumAvgEbitdaXStockX ? (
-                    <b>{numeral(this.state.sumAvgEbitdaXStockX / listSelected.length).format('0,0.[99]')}</b>
+                  {this.state.sumMPebitdaAvg ? (
+                    <b>{numeral(this.state.sumMPebitdaAvg / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumMEbitdaLastYearWithStock ? (
+                    <b>{numeral(this.state.sumMEbitdaLastYearWithStock / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumMEbitdaAvgWithStock ? (
+                    <b>{numeral(this.state.sumMEbitdaAvgWithStock / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumMPebitdaLastYearWithStock ? (
+                    <b>{numeral(this.state.sumMPebitdaLastYearWithStock / listSelected.length).format('0,0.[99]')}</b>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell>
+                  {this.state.sumMPebitdaAvgWithStock ? (
+                    <b>{numeral(this.state.sumMPebitdaAvgWithStock / listSelected.length).format('0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell />
@@ -655,86 +822,80 @@ class ComparableDataPage extends Component {
             <Dimmer inverted active={isLoadingBusinessesSold}>
               <Loader>Loading</Loader>
             </Dimmer>
-            <Table color="blue" celled inverted size="small" compact selectable structured>
+            <Table color="blue" celled inverted size="small" compact selectable structured collapsing>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="9">
+                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="11">
                     Sold Business Information
                   </Table.HeaderCell>
-                  <Table.HeaderCell color="red" textAlign="center" colSpan="4">
+                  <Table.HeaderCell color="red" textAlign="center" colSpan="5">
                     Multiplier
                   </Table.HeaderCell>
-                  <Table.HeaderCell color="red" textAlign="center" colSpan="5">
-                    Values
+                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} color="red" textAlign="center" colSpan="4">
+                    Multiplier with Stock
                   </Table.HeaderCell>
-                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="2">
+                  <Table.HeaderCell textAlign="center" colSpan="2">
                     Notes
                   </Table.HeaderCell>
                 </Table.Row>
                 <Table.Row>
                   <Table.HeaderCell rowSpan="1">Business Type</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">T/O</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">Average EBITDA</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">Last year EBITDA</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">Average PEBITDA</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">Last Year PEBITDA</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">EBITDA Last year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">EBITDA Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">PEBITDA Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">PEBITDA Avg</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">Trend</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">Sold Price</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">Stock Value</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">Assets Value</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">Price inc. Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Assets Value</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Price with Stock</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="2">T/O</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">Last Year EBITDA</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">Last Year EBITDA Inc. Stock</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">Avg EBITDA X</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">Avg EBITDA + Stock X</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">M. PEBITDA Last Year + Stock</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">PEBITDA Average + Stock</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="4">Terms Of Deal</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">EBITDA Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">EBITDA Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">PEBITDA Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">PEBITDA Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">EBITDA Last Year with Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">EBITDA Avg with Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">PEBITDA Last Year with Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">PEBITDA Avg with Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="4">Terms of Deal</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="4">Special Notes</Table.HeaderCell>
                 </Table.Row>
-                <Table.Row />
-                <Table.Row />
               </Table.Header>
               <Table.Body>
                 {listBusinessesSold.map(businessSold => (
                   <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
                     <Table.Cell>{businessSold.businessType}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._averageEbitda(businessSold)).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._lastYearEbitda(businessSold)).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._pEbitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._pEbitdaLastYear(businessSold)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._ebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._ebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._pebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._pebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
                     <Table.Cell>
                       <Icon color={this._colorArrow(businessSold)} name={this._nameArrow(businessSold)} />
                     </Table.Cell>
-                    <Table.Cell>{numeral(businessSold.soldPrice).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.stockValue).format('$0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.assetValue).format('$0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.soldPrice).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.stockValue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.assetValue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(businessSold.soldPrice + businessSold.stockValue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._turnOver(businessSold)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierEbitdaLastYear(businessSold)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierEbitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierPebitdaLastYear(businessSold)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierPebitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
                     <Table.Cell>
-                      {numeral(businessSold.soldPrice + businessSold.stockValue).format('$0,0.[99]')}
+                      {numeral(this._multiplierEbitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(businessSold.soldPrice / businessSold.latestFullYearTotalRevenue).format('0,0.[99]')}
+                      {numeral(this._multiplierEbitdaAvgWithStock(businessSold)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(businessSold.soldPrice / this._lastYearEbitda(businessSold)).format('0,0.[99]')}
+                      {numeral(this._multiplierPebitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(
-                        (businessSold.soldPrice + businessSold.stockValue) / this._lastYearEbitda(businessSold)
-                      ).format('0,0.[99]')}
+                      {numeral(this._multiplierPebitdaAvgWithStock(businessSold)).format('0,0.[99]')}
                     </Table.Cell>
-                    <Table.Cell>
-                      {numeral(businessSold.soldPrice / this._averageEbitda(businessSold)).format('0,0.[99]')}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {numeral(
-                        (businessSold.soldPrice + businessSold.stockValue) / this._averageEbitda(businessSold)
-                      ).format('0,0.[99]')}
-                    </Table.Cell>
-                    <Table.Cell>{numeral(this._pEbitdaLastYearStock(businessSold)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._pEbitdaAvgStock(businessSold)).format('0,0.[99]')}</Table.Cell>
                     <Table.Cell>{businessSold.termsOfDeal} </Table.Cell>
                     <Table.Cell>{businessSold.specialNotes} </Table.Cell>
                   </Table.Row>
