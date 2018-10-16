@@ -66,7 +66,7 @@ class ComparableDataPage extends Component {
       sumStockValue: null,
       sumAssetsValue: null,
       sumPriceStock: null,
-      sumTOAvgYX: null,
+      sumMTO: null,
       sumMEbitdaLastYear: null,
       sumMEbitdaAvg: null,
       sumMPebitdaLastYear: null,
@@ -91,7 +91,7 @@ class ComparableDataPage extends Component {
       var tempStockValue = 0
       var tempAssetsValue = 0
       var tempPriceStock = 0
-      var tempTOAvgYX = 0
+      var tempMTO = 0
       var tempMEbitdaLastYear = 0
       var tempMEbitdaLastYearAdd = 0
       var tempMEbitdaAvg = 0
@@ -265,8 +265,8 @@ class ComparableDataPage extends Component {
         /* Price inc. Stock */
         tempPriceStock = item.soldPrice + item.stockValue + tempPriceStock
 
-        /* T/O AVG Y X */
-        tempTOAvgYX = item.soldPrice / item.latestFullYearTotalRevenue + tempTOAvgYX
+        /* MULTIPLIER T/O */
+        tempMTO = item.soldPrice / item.latestFullYearTotalRevenue + tempMTO
 
         /* EBITDA Last Year */
         tempEbitdaLastYear = tempEbitdaLastYear + tempEbitdaLastYearAdd
@@ -297,7 +297,7 @@ class ComparableDataPage extends Component {
         sumStockValue: tempStockValue,
         sumAssetsValue: tempAssetsValue,
         sumPriceStock: tempPriceStock,
-        sumTOAvgYX: tempTOAvgYX,
+        sumMTO: tempMTO,
         sumMEbitdaLastYear: tempMEbitdaLastYear,
         sumMEbitdaAvg: tempMEbitdaAvg,
         sumMPebitdaLastYear: tempMPebitdaLastYear,
@@ -312,8 +312,14 @@ class ComparableDataPage extends Component {
   }
 
   componentWillUnmount () {
+    // this._saveSummary()
+    // console.log(this.props.values)
     this.props.updateAppraisal(this.props.values)
     this.props.saveSelectedList(this.props.listSelected, this.props.appraisalObject.id)
+  }
+
+  componentDidUpdate () {
+    // this._saveSummary()
   }
 
   async _handleSelectChange (data) {
@@ -512,6 +518,18 @@ class ComparableDataPage extends Component {
     return businessSold.soldPrice / (this._pebitdaAvg(businessSold) + businessSold.stockValue)
   }
 
+  async _saveSummary () {
+    console.log('oi')
+    await this.props.setFieldValue('sumMEbitdaLastYear', this.state.sumMEbitdaLastYear)
+    this.props.setFieldValue('sumMEbitdaAvg', this.state.sumMEbitdaAvg)
+    this.props.setFieldValue('sumMPebitdaLastYear', this.state.sumMPebitdaLastYear)
+    this.props.setFieldValue('sumMPebitdaAvg', this.state.sumMPebitdaAvg)
+    this.props.setFieldValue('sumMEbitdaLastYearWithStock', this.state.sumMEbitdaLastYearWithStock)
+    this.props.setFieldValue('sumMEbitdaAvgWithStock', this.state.sumMEbitdaAvgWithStock)
+    this.props.setFieldValue('sumMPebitdaLastYearWithStock', this.state.sumMPebitdaLastYearWithStock)
+    this.props.setFieldValue('sumMPebitdaAvgWithStock', this.state.sumMPebitdaAvgWithStock)
+  }
+
   render () {
     const { values, errors, touched, listBusinessesSold, isLoadingBusinessesSold, listSelected } = this.props
     const { priceOptions, lastBusinessOptions } = this.state
@@ -622,7 +640,7 @@ class ComparableDataPage extends Component {
             </Form.Group>
           </Segment>
         </Form>
-        <Segment style={{ backgroundColor: 'darkgrey' }}>
+        <Segment style={{ backgroundColor: 'darkgrey' }} size="tiny">
           <Header as="h3" textAlign="center">
             Your Selected List
           </Header>
@@ -763,8 +781,8 @@ class ComparableDataPage extends Component {
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
-                  {this.state.sumTOAvgYX ? (
-                    <b>{numeral(this.state.sumTOAvgYX / listSelected.length).format('0,0.[99]')}</b>
+                  {this.state.sumMTO ? (
+                    <b>{numeral(this.state.sumMTO / listSelected.length).format('0,0.[99]')}</b>
                   ) : null}
                 </Table.Cell>
                 <Table.Cell>
@@ -814,7 +832,7 @@ class ComparableDataPage extends Component {
             </Table.Footer>
           </Table>
         </Segment>
-        <Segment style={{ backgroundColor: 'linen' }}>
+        <Segment style={{ backgroundColor: 'linen' }} size="tiny">
           <Header as="h3" textAlign="center">
             Database`s List
           </Header>
@@ -904,6 +922,17 @@ class ComparableDataPage extends Component {
             </Table>
           </Dimmer.Dimmable>
         </Segment>
+        <Form.Group>
+          <Form.Field>
+            <Form.Checkbox
+              label="Please confirm that you have completed the above information"
+              name="confirmComparableData"
+              onChange={this._handleChangeCheckBox}
+              disabled={this.props.listSelected.length === 0}
+              checked={values.confirmComparableData}
+            />
+          </Form.Field>
+        </Form.Group>
       </Wrapper>
     )
   }
@@ -941,7 +970,8 @@ const mapPropsToValues = props => ({
   businessType: '',
   priceFrom: 0,
   priceTo: 0,
-  trend: ['up', 'down', 'steady']
+  trend: ['up', 'down', 'steady'],
+  sumMEbitdaLastYear: 0
 })
 
 const mapStateToProps = state => {
