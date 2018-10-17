@@ -17,6 +17,7 @@ class AddbacksAndAdjustmentsForm extends Component {
   }
 
   componentWillUnmount () {
+    console.log(this.props.values)
     this.props.updateAppraisal(this.props.values)
   }
 
@@ -33,8 +34,8 @@ class AddbacksAndAdjustmentsForm extends Component {
   _calcOperatingProfit = (sales, cogs, other, expense, year) => {
     const calc = this._calcGrossProfit(this._calcGrossMargin(sales, cogs), other) - expense || 0
 
-    this.props.sendCalcs({year, calc, field: 'operatingProfit'})
-    this.props.sendCalcs({year, calc: numeral(sales).value() || 0, field: 'sales'})
+    this.props.sendCalcs({ year, calc, field: 'operatingProfit' })
+    this.props.sendCalcs({ year, calc: numeral(sales).value() || 0, field: 'sales' })
     return calc
   }
 
@@ -65,7 +66,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     value={values.monthsCovered}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    tabIndex={-1}
+                    tabIndex={-2}
                   />
                   {errors.monthsCovered &&
                     touched.monthsCovered && <Label basic color="red" pointing content={errors.monthsCovered} />}
@@ -132,7 +133,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={10}
+              tabIndex={1}
               name="sales1"
               autoComplete="sales1"
               value={values.sales1}
@@ -144,7 +145,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={20}
+              type="number"
+              tabIndex={10}
               name="sales2"
               autoComplete="sales2"
               value={values.sales2}
@@ -156,7 +158,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={30}
+              type="number"
+              tabIndex={20}
               name="sales3"
               autoComplete="sales3"
               value={values.sales3}
@@ -168,7 +171,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={40}
+              type="number"
+              tabIndex={30}
               name="sales4"
               autoComplete="sales4"
               value={values.sales4}
@@ -180,7 +184,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={50}
+              type="number"
+              tabIndex={40}
               name="sales5"
               autoComplete="sales5"
               value={values.sales5}
@@ -192,7 +197,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={60}
+              type="number"
+              tabIndex={50}
               name="sales6"
               autoComplete="sales6"
               value={values.sales6}
@@ -223,7 +229,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={11}
+              type="number"
+              tabIndex={2}
               name="cogs1"
               autoComplete="cogs1"
               value={values.cogs1}
@@ -235,7 +242,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={21}
+              type="number"
+              tabIndex={11}
               name="cogs2"
               autoComplete="cogs2"
               value={values.cogs2}
@@ -247,7 +255,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={31}
+              type="number"
+              tabIndex={21}
               name="cogs3"
               autoComplete="cogs3"
               value={values.cogs3}
@@ -259,7 +268,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={41}
+              type="number"
+              tabIndex={31}
               name="cogs4"
               autoComplete="cogs4"
               value={values.cogs4}
@@ -271,7 +281,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={51}
+              type="number"
+              tabIndex={41}
               name="cogs5"
               autoComplete="cogs5"
               value={values.cogs5}
@@ -283,7 +294,8 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={61}
+              type="number"
+              tabIndex={51}
               name="cogs6"
               autoComplete="cogs6"
               value={values.cogs6}
@@ -364,7 +376,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={12}
+              tabIndex={3}
               name="otherIncome1"
               autoComplete="otherIncome1"
               value={values.otherIncome1}
@@ -377,7 +389,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={22}
+              tabIndex={12}
               name="otherIncome2"
               autoComplete="otherIncome2"
               value={values.otherIncome2}
@@ -390,7 +402,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={32}
+              tabIndex={22}
               name="otherIncome3"
               autoComplete="otherIncome3"
               value={values.otherIncome3}
@@ -403,7 +415,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={42}
+              tabIndex={32}
               name="otherIncome4"
               autoComplete="otherIncome4"
               value={values.otherIncome4}
@@ -416,7 +428,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={52}
+              tabIndex={42}
               name="otherIncome5"
               autoComplete="otherIncome5"
               value={values.otherIncome5}
@@ -429,7 +441,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={62}
+              tabIndex={52}
               name="otherIncome6"
               autoComplete="otherIncome6"
               value={values.otherIncome6}
@@ -508,7 +520,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={13}
+              tabIndex={4}
               name="expenses1"
               autoComplete="expenses1"
               value={values.expenses1}
@@ -520,7 +532,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={23}
+              tabIndex={13}
               name="expenses2"
               autoComplete="expenses2"
               value={values.expenses2}
@@ -532,7 +544,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={33}
+              tabIndex={23}
               name="expenses3"
               autoComplete="expenses3"
               value={values.expenses3}
@@ -544,7 +556,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={43}
+              tabIndex={33}
               name="expenses4"
               autoComplete="expenses4"
               value={values.expenses4}
@@ -556,7 +568,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={53}
+              tabIndex={43}
               name="expenses5"
               autoComplete="expenses5"
               value={values.expenses5}
@@ -568,7 +580,7 @@ class AddbacksAndAdjustmentsForm extends Component {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={63}
+              tabIndex={53}
               name="expenses6"
               autoComplete="expenses6"
               value={values.expenses6}
@@ -740,32 +752,32 @@ AddbacksAndAdjustmentsForm.propTypes = {
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  monthsCovered: props.monthsCovered || 0,
-  seasonalAdjustment: props.seasonalAdjustment || 0,
-  sales1: props.sales1 || 0,
-  sales2: props.sales2 || 0,
-  sales3: props.sales3 || 0,
-  sales4: props.sales4 || 0,
-  sales5: props.sales5 || 0,
-  sales6: props.sales6 || 0,
-  cogs1: props.cogs1 || 0,
-  cogs2: props.cogs2 || 0,
-  cogs3: props.cogs3 || 0,
-  cogs4: props.cogs4 || 0,
-  cogs5: props.cogs5 || 0,
-  cogs6: props.cogs6 || 0,
-  otherIncome1: props.otherIncome1 || 0,
-  otherIncome2: props.otherIncome2 || 0,
-  otherIncome3: props.otherIncome3 || 0,
-  otherIncome4: props.otherIncome4 || 0,
-  otherIncome5: props.otherIncome5 || 0,
-  otherIncome6: props.otherIncome6 || 0,
-  expenses1: props.expenses1 || 0,
-  expenses2: props.expenses2 || 0,
-  expenses3: props.expenses3 || 0,
-  expenses4: props.expenses4 || 0,
-  expenses5: props.expenses5 || 0,
-  expenses6: props.expenses6 || 0
+  monthsCovered: props.appraisalObject ? props.appraisalObject.monthsCovered : 0,
+  seasonalAdjustment: props.appraisalObject ? props.appraisalObject.seasonalAdjustment : 0,
+  sales1: props.appraisalObject ? props.appraisalObject.sales1 : 0,
+  sales2: props.appraisalObject ? props.appraisalObject.sales2 : 0,
+  sales3: props.appraisalObject ? props.appraisalObject.sales3 : 0,
+  sales4: props.appraisalObject ? props.appraisalObject.sales4 : 0,
+  sales5: props.appraisalObject ? props.appraisalObject.sales5 : 0,
+  sales6: props.appraisalObject ? props.appraisalObject.sales6 : 0,
+  cogs1: props.appraisalObject ? props.appraisalObject.cogs1 : 0,
+  cogs2: props.appraisalObject ? props.appraisalObject.cogs1 : 0,
+  cogs3: props.appraisalObject ? props.appraisalObject.cogs3 : 0,
+  cogs4: props.appraisalObject ? props.appraisalObject.cogs4 : 0,
+  cogs5: props.appraisalObject ? props.appraisalObject.cogs5 : 0,
+  cogs6: props.appraisalObject ? props.appraisalObject.cogs6 : 0,
+  otherIncome1: props.appraisalObject ? props.appraisalObject.otherIncome1 : 0,
+  otherIncome2: props.appraisalObject ? props.appraisalObject.otherIncome2 : 0,
+  otherIncome3: props.appraisalObject ? props.appraisalObject.otherIncome3 : 0,
+  otherIncome4: props.appraisalObject ? props.appraisalObject.otherIncome4 : 0,
+  otherIncome5: props.appraisalObject ? props.appraisalObject.otherIncome5 : 0,
+  otherIncome6: props.appraisalObject ? props.appraisalObject.otherIncome6 : 0,
+  expenses1: props.appraisalObject ? props.appraisalObject.expenses1 : 0,
+  expenses2: props.appraisalObject ? props.appraisalObject.expenses2 : 0,
+  expenses3: props.appraisalObject ? props.appraisalObject.expenses3 : 0,
+  expenses4: props.appraisalObject ? props.appraisalObject.expenses4 : 0,
+  expenses5: props.appraisalObject ? props.appraisalObject.expenses5 : 0,
+  expenses6: props.appraisalObject ? props.appraisalObject.expenses6 : 0
 })
 
 const mapStateToProps = state => {
