@@ -171,7 +171,7 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Pricing' ? (
           <Segment>
-            <Pricing business={business} appraisalObject={appraisal} />
+            {appraisal && appraisal.id ? <Pricing business={business} appraisalObject={appraisal} /> : null}
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Message, Step, Segment, Grid, Form } from 'semantic-ui-react'
+import { Message, Step, Segment, Grid, Form, Header, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
@@ -12,6 +12,7 @@ import Charts from './Charts'
 import SummaryOfFinancial from './SummaryOfFinancial'
 import OwnersMarketWages from './OwnersMarketWages'
 import numeral from 'numeral'
+import { Slider } from 'react-semantic-ui-range'
 
 class PricingPage extends Component {
   constructor (props) {
@@ -184,6 +185,68 @@ class PricingPage extends Component {
     if (appraisalObject && appraisalObject.sales1 > 0) return appraisalObject.sales1
   }
 
+  _handleChangeSlider = (value, name) => {
+    this.props.setFieldValue(name, value)
+  }
+
+  _labelPricingMethod = pricingMethod => {
+    if (pricingMethod === 1 || pricingMethod === 5) return 'Multiplier EBITDA Last Year'
+    if (pricingMethod === 2 || pricingMethod === 6) return 'Multiplier EBITDA Avg'
+    if (pricingMethod === 3 || pricingMethod === 7) return 'Multiplier PEBITDA Last Year'
+    if (pricingMethod === 4 || pricingMethod === 8) return 'Multiplier PEBITDA Avg'
+  }
+
+  _pricingMethod = (pricingMethod, appraisalObject) => {
+    if (pricingMethod === 1 || pricingMethod === 5) return this._ebitdaLastYear(appraisalObject)
+    if (pricingMethod === 2 || pricingMethod === 6) return this._ebitdaAvg(appraisalObject)
+    if (pricingMethod === 3 || pricingMethod === 7) return this._pebitdaLastYear(appraisalObject)
+    if (pricingMethod === 4 || pricingMethod === 8) return this._pebitdaAvg(appraisalObject)
+
+    // if (value === 9) return this._ebitdaAvg(appraisalObject)
+    // if (value === 10) return this._ebitdaAvg(appraisalObject)
+    // if (value === 11) return this._ebitdaAvg(appraisalObject)
+  }
+
+  _comparableMultiplier = (pricingMethod, appraisalObject) => {
+    if (pricingMethod === 1) return appraisalObject.sumMEbitdaLastYear
+    if (pricingMethod === 2) return appraisalObject.sumMEbitdaAvg
+    if (pricingMethod === 3) return appraisalObject.sumMPebitdaLastYear
+    if (pricingMethod === 4) return appraisalObject.sumMPebitdaAvg
+    if (pricingMethod === 5) return appraisalObject.sumMEbitdaLastYearWithStock
+    if (pricingMethod === 6) return appraisalObject.sumMEbitdaAvgWithStock
+    if (pricingMethod === 7) return appraisalObject.sumMPebitdaLastYearWithStock
+    if (pricingMethod === 8) return appraisalObject.sumMPebitdaAvgWithStock
+    if (pricingMethod === 9) return appraisalObject.sumMTO
+  }
+
+  _priceBasedOnComparable = (pricingMethod, appraisalObject) => {
+    return (
+      this._pricingMethod(pricingMethod, appraisalObject) * this._comparableMultiplier(pricingMethod, appraisalObject)
+    )
+  }
+
+  _riskPremium = (values, appraisalObject) => {
+    const calc = this._priceBasedOnComparable(values.pricingMethod, appraisalObject)
+    return (calc * values.sliderPremium) / 100
+  }
+
+  _riskNegotiation = (values, appraisalObject) => {
+    const calc = this._priceBasedOnComparable(values.pricingMethod, appraisalObject)
+    return (calc * values.sliderNegotiation) / 100
+  }
+
+  _askingPrice = (values, appraisalObject) => {
+    return (
+      this._priceBasedOnComparable(values.pricingMethod, appraisalObject) +
+      this._riskPremium(values, appraisalObject) +
+      this._riskNegotiation(values, appraisalObject)
+    )
+  }
+
+  _askingPriceMultiplo = (values, appraisalObject) => {
+    return this._askingPrice(values, appraisalObject) / this._pricingMethod(values.pricingMethod, appraisalObject)
+  }
+
   render () {
     const { appraisalObject, values } = this.props
     // const {} = this.state
@@ -226,60 +289,40 @@ class PricingPage extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Segment style={{ backgroundColor: '#ecf4fb' }} size="tiny">
-          <Grid celled="internally" divided>
-            <Grid.Row columns={11}>
-              <Grid.Column />
-              <Grid.Column textAlign="center">Multiplier EBITA Last Year</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier EBITA Avg</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier PEBITA Last Year</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier PEBITA AVG</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier EBITA Last Year with Stock</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier EBITA Avg with Stock</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier PEBITA Last Year with Stock</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier PEBITA AVG with Stock</Grid.Column>
-              <Grid.Column textAlign="center">Multiplier T/O</Grid.Column>
-              <Grid.Column textAlign="center">Assets Value</Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={11}>
-              <Grid.Column>
-                <b>Summary</b>
-              </Grid.Column>
-              <Grid.Column textAlign="center">{appraisalObject ? appraisalObject.sumMEbitdaLastYear : 0}</Grid.Column>
-              <Grid.Column textAlign="center">{appraisalObject ? appraisalObject.sumMEbitdaAvg : 0}</Grid.Column>
-              <Grid.Column textAlign="center">{appraisalObject ? appraisalObject.sumMPebitdaLastYear : 0}</Grid.Column>
-              <Grid.Column textAlign="center">{appraisalObject ? appraisalObject.sumMPebitdaAvg : 0}</Grid.Column>
-              <Grid.Column textAlign="center">
-                {appraisalObject ? appraisalObject.sumMEbitdaLastYearWithStock : 0}
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                {appraisalObject ? appraisalObject.sumMEbitdaAvgWithStock : 0}
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                {appraisalObject ? appraisalObject.sumMPebitdaLastYearWithStock : 0}
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                {appraisalObject ? appraisalObject.sumMPebitdaAvgWithStock : 0}
-              </Grid.Column>
-              <Grid.Column textAlign="center">{appraisalObject ? appraisalObject.sumMTO : 0}</Grid.Column>
-              <Grid.Column textAlign="center">{appraisalObject ? appraisalObject.sumAssetsValue : 0}</Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
         <Segment style={{ backgroundColor: '#d4d4d53b' }} size="tiny">
           <Grid celled="internally" divided>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
+              <Grid.Column>
+                <Header as="h4" textAlign="center" color="blue">
+                  Select Pricing Method
+                </Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h4" textAlign="center" color="blue">
+                  Multipliers
+                </Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h4" textAlign="center" color="blue">
+                  Pricing Method Previews
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier EBITA Last Year"
+                      label="Multiplier EBITDA Last Year"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 1)}
                       checked={values.pricingMethod === 1}
                     />
                   </Form.Field>
                 </Form>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMEbitdaLastYear).format('0,0.[99]') : 0}
               </Grid.Column>
               <Grid.Column>
                 {appraisalObject
@@ -289,12 +332,12 @@ class PricingPage extends Component {
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier EBITA Avg"
+                      label="Multiplier EBITDA Avg"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 2)}
                       checked={values.pricingMethod === 2}
@@ -302,24 +345,30 @@ class PricingPage extends Component {
                   </Form.Field>
                 </Form>
               </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMEbitdaAvg).format('0,0.[99]') : 0}
+              </Grid.Column>
               <Grid.Column>
                 {appraisalObject
                   ? numeral(this._ebitdaAvg(appraisalObject) * appraisalObject.sumMEbitdaAvg).format('$0,0.[99]')
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier PEBITA Last Year"
+                      label="Multiplier PEBITDA Last Year"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 3)}
                       checked={values.pricingMethod === 3}
                     />
                   </Form.Field>
                 </Form>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMPebitdaLastYear).format('0,0.[99]') : 0}
               </Grid.Column>
               <Grid.Column>
                 {appraisalObject
@@ -329,12 +378,12 @@ class PricingPage extends Component {
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier PEBITA Avg"
+                      label="Multiplier PEBITDA Avg"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 4)}
                       checked={values.pricingMethod === 4}
@@ -342,24 +391,30 @@ class PricingPage extends Component {
                   </Form.Field>
                 </Form>
               </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMPebitdaAvg).format('0,0.[99]') : 0}
+              </Grid.Column>
               <Grid.Column>
                 {appraisalObject
                   ? numeral(this._pebitdaAvg(appraisalObject) * appraisalObject.sumMPebitdaAvg).format('$0,0.[99]')
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier EBITA Last Year with Stock"
+                      label="Multiplier EBITDA Last Year with Stock"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 5)}
                       checked={values.pricingMethod === 5}
                     />
                   </Form.Field>
                 </Form>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMEbitdaLastYearWithStock).format('0,0.[99]') : 0}
               </Grid.Column>
               <Grid.Column>
                 {appraisalObject
@@ -369,18 +424,21 @@ class PricingPage extends Component {
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier EBITA Avg with Stock"
+                      label="Multiplier EBITDA Avg with Stock"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 6)}
                       checked={values.pricingMethod === 6}
                     />
                   </Form.Field>
                 </Form>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMEbitdaAvgWithStock).format('0,0.[99]') : 0}
               </Grid.Column>
               <Grid.Column>
                 {appraisalObject
@@ -390,18 +448,21 @@ class PricingPage extends Component {
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier PEBITA Last Year with Stock"
+                      label="Multiplier PEBITDA Last Year with Stock"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 7)}
                       checked={values.pricingMethod === 7}
                     />
                   </Form.Field>
                 </Form>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMPebitdaLastYearWithStock).format('0,0.[99]') : 0}
               </Grid.Column>
               <Grid.Column>
                 {appraisalObject
@@ -411,18 +472,21 @@ class PricingPage extends Component {
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Checkbox
-                      label="Multiplier PEBITA Avg with Stock"
+                      label="Multiplier PEBITDA Avg with Stock"
                       name="pricingMethod"
                       onChange={() => this._handleChangeCheckBox('pricingMethod', 8)}
                       checked={values.pricingMethod === 8}
                     />
                   </Form.Field>
                 </Form>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMPebitdaAvgWithStock).format('0,0.[99]') : 0}
               </Grid.Column>
               <Grid.Column>
                 {appraisalObject
@@ -432,7 +496,7 @@ class PricingPage extends Component {
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
@@ -445,13 +509,16 @@ class PricingPage extends Component {
                   </Form.Field>
                 </Form>
               </Grid.Column>
+              <Grid.Column textAlign="center">
+                {appraisalObject ? numeral(appraisalObject.sumMTO).format('0,0.[99]') : 0}
+              </Grid.Column>
               <Grid.Column>
                 {appraisalObject
                   ? numeral(this._turnOver(appraisalObject) * appraisalObject.sumMTO).format('$0,0.[99]')
                   : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
@@ -464,13 +531,12 @@ class PricingPage extends Component {
                   </Form.Field>
                 </Form>
               </Grid.Column>
+              <Grid.Column textAlign="center" />
               <Grid.Column>
-                {appraisalObject
-                  ? numeral(this._assetsValue(appraisalObject) * appraisalObject.sumAssetsValue).format('$0,0.[99]')
-                  : 0}
+                {appraisalObject ? numeral(this._assetsValue(appraisalObject)).format('$0,0.[99]') : 0}
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={3}>
               <Grid.Column>
                 <Form size="tiny">
                   <Form.Field>
@@ -483,10 +549,114 @@ class PricingPage extends Component {
                   </Form.Field>
                 </Form>
               </Grid.Column>
-              <Grid.Column>test</Grid.Column>
+              <Grid.Column />
+              <Grid.Column>
+                <Form>
+                  <Form.Group>
+                    <Form.Field width={5}>
+                      <Form.Input
+                        name="agreedValue"
+                        // value={this.state.inputSearch}
+                      />
+                    </Form.Field>
+                  </Form.Group>
+                </Form>
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </Segment>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={16}>
+              <Segment style={{ backgroundColor: '#ecf4fb' }}>
+                <Grid celled="internally" divided>
+                  <Grid.Row columns={14}>
+                    <Grid.Column>{this._labelPricingMethod(values.pricingMethod)}</Grid.Column>
+                    <Grid.Column />
+                    <Grid.Column>Comparable Multiplier</Grid.Column>
+                    <Grid.Column />
+                    <Grid.Column>Price Based on Comparable</Grid.Column>
+                    <Grid.Column />
+                    <Grid.Column>Risk Premium</Grid.Column>
+                    <Grid.Column />
+                    <Grid.Column>Market Premium</Grid.Column>
+                    <Grid.Column />
+                    <Grid.Column>Negotiation Premium</Grid.Column>
+                    <Grid.Column />
+                    <Grid.Column>Asking Price</Grid.Column>
+                    <Grid.Column>Asking Price Multiplo</Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row columns={14}>
+                    <Grid.Column>
+                      {numeral(this._pricingMethod(values.pricingMethod, appraisalObject)).format('$0,0.[99]')}
+                    </Grid.Column>
+                    <Grid.Column>x</Grid.Column>
+                    <Grid.Column>
+                      {numeral(this._comparableMultiplier(values.pricingMethod, appraisalObject)).format('0,0.[99]')}
+                    </Grid.Column>
+                    <Grid.Column>=</Grid.Column>
+                    <Grid.Column>
+                      {numeral(this._priceBasedOnComparable(values.pricingMethod, appraisalObject)).format('$0,0.[99]')}
+                    </Grid.Column>
+                    <Grid.Column>+</Grid.Column>
+                    <Grid.Column>{numeral(this._riskPremium(values, appraisalObject)).format('$0,0.[99]')}</Grid.Column>
+                    <Grid.Column>+</Grid.Column>
+                    <Grid.Column>needs to make</Grid.Column>
+                    <Grid.Column>+</Grid.Column>
+                    <Grid.Column>
+                      {numeral(this._riskNegotiation(values, appraisalObject)).format('$0,0.[99]')}
+                    </Grid.Column>
+                    <Grid.Column>=</Grid.Column>
+                    <Grid.Column>{numeral(this._askingPrice(values, appraisalObject)).format('$0,0.[99]')}</Grid.Column>
+                    <Grid.Column>
+                      {numeral(this._askingPriceMultiplo(values, appraisalObject)).format('0,0.[99]')}
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+                <Grid>
+                  <Grid.Row columns={2}>
+                    <Grid.Column width={8}>
+                      <h3>Premium</h3>
+                      <Slider
+                        color={'blue'}
+                        inverted={false}
+                        value={values.sliderPremium}
+                        settings={{
+                          start: values.sliderPremium,
+                          min: -20,
+                          max: 20,
+                          step: 1,
+                          onChange: value => this._handleChangeSlider(value, 'sliderPremium')
+                        }}
+                      />
+                      <Label style={{ marginTop: '5px' }} color={'red'}>
+                        {values.sliderPremium}%
+                      </Label>
+                    </Grid.Column>
+                    <Grid.Column width={8}>
+                      <h3>Negotiation</h3>
+                      <Slider
+                        color={'blue'}
+                        inverted={false}
+                        value={values.sliderNegotiation}
+                        settings={{
+                          start: values.sliderNegotiation,
+                          min: -20,
+                          max: 20,
+                          step: 1,
+                          onChange: value => this._handleChangeSlider(value, 'sliderNegotiation')
+                        }}
+                      />
+                      <Label style={{ marginTop: '5px' }} color={'red'}>
+                        {values.sliderNegotiation}%
+                      </Label>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Wrapper>
     )
   }
@@ -510,7 +680,9 @@ PricingPage.propTypes = {
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  pricingMethod: props.appraisalObject ? props.appraisalObject.pricingMethod : 1
+  pricingMethod: props.appraisalObject ? props.appraisalObject.pricingMethod : 1,
+  sliderPremium: 0,
+  sliderNegotiation: 0
 })
 
 const mapStateToProps = state => {

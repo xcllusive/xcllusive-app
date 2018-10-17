@@ -312,14 +312,45 @@ class ComparableDataPage extends Component {
   }
 
   componentWillUnmount () {
-    // this._saveSummary()
-    // console.log(this.props.values)
-    this.props.updateAppraisal(this.props.values)
+    const mergeObjects = this._assignObject()
+    this.props.updateAppraisal(mergeObjects)
     this.props.saveSelectedList(this.props.listSelected, this.props.appraisalObject.id)
   }
 
-  componentDidUpdate () {
-    // this._saveSummary()
+  _assignObject () {
+    const objectSum = {
+      sumMEbitdaLastYear: numeral(this.state.sumMEbitdaLastYear / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMEbitdaAvg: numeral(this.state.sumMEbitdaAvg / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMPebitdaLastYear: numeral(this.state.sumMPebitdaLastYear / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMPebitdaAvg: numeral(this.state.sumMPebitdaAvg / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMEbitdaLastYearWithStock: numeral(this.state.sumMEbitdaLastYearWithStock / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMEbitdaAvgWithStock: numeral(this.state.sumMEbitdaAvgWithStock / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMPebitdaLastYearWithStock: numeral(this.state.sumMPebitdaLastYearWithStock / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMPebitdaAvgWithStock: numeral(this.state.sumMPebitdaAvgWithStock / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumMTO: numeral(this.state.sumMTO / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', ''),
+      sumAssetsValue: numeral(this.state.sumAssetsValue / this.props.listSelected.length)
+        .format('0,0.[99]')
+        .replace(',', '')
+    }
+    return Object.assign(this.props.values, objectSum)
   }
 
   async _handleSelectChange (data) {
@@ -516,18 +547,6 @@ class ComparableDataPage extends Component {
 
   _multiplierPebitdaAvgWithStock = businessSold => {
     return businessSold.soldPrice / (this._pebitdaAvg(businessSold) + businessSold.stockValue)
-  }
-
-  async _saveSummary () {
-    console.log('oi')
-    await this.props.setFieldValue('sumMEbitdaLastYear', this.state.sumMEbitdaLastYear)
-    this.props.setFieldValue('sumMEbitdaAvg', this.state.sumMEbitdaAvg)
-    this.props.setFieldValue('sumMPebitdaLastYear', this.state.sumMPebitdaLastYear)
-    this.props.setFieldValue('sumMPebitdaAvg', this.state.sumMPebitdaAvg)
-    this.props.setFieldValue('sumMEbitdaLastYearWithStock', this.state.sumMEbitdaLastYearWithStock)
-    this.props.setFieldValue('sumMEbitdaAvgWithStock', this.state.sumMEbitdaAvgWithStock)
-    this.props.setFieldValue('sumMPebitdaLastYearWithStock', this.state.sumMPebitdaLastYearWithStock)
-    this.props.setFieldValue('sumMPebitdaAvgWithStock', this.state.sumMPebitdaAvgWithStock)
   }
 
   render () {
