@@ -42,7 +42,7 @@ class FinancialAnalysisPage extends Component {
   }
 
   componentDidMount () {
-    if (this.props.appraisalObject && this.props.appraisalObject.year6 === 0) this._calculateFinancialYear()
+    if (this.props.appraisalObject && !this.props.appraisalObject.year6) this._calculateFinancialYear()
   }
 
   componentWillUnmount () {
@@ -85,6 +85,7 @@ class FinancialAnalysisPage extends Component {
 
   render () {
     const { values, appraisalObject } = this.props
+
     return (
       <Wrapper>
         <Step.Group size="large">

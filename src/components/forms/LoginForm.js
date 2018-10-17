@@ -61,17 +61,11 @@ const LoginForm = ({
     </Form.Field>
     <Message
       error
-      visible={
-        (errors.email && touched.email) ||
-        (errors.password && touched.password) ||
-        errorApi !== null
-      }
+      visible={(errors.email && touched.email) || (errors.password && touched.password) || errorApi !== null}
     >
       <Message.List>
-        {errors.email &&
-          touched.email && <Message.Item>{errors.email}</Message.Item>}
-        {errors.password &&
-          touched.password && <Message.Item>{errors.password}</Message.Item>}
+        {errors.email && touched.email && <Message.Item>{errors.email}</Message.Item>}
+        {errors.password && touched.password && <Message.Item>{errors.password}</Message.Item>}
         {errorApi && <Message.Item>{errorApi}</Message.Item>}
       </Message.List>
     </Message>
@@ -92,7 +86,7 @@ LoginForm.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  email: '',
+  email: 'admin@xcllusive.com',
   password: ''
 })
 
@@ -109,6 +103,4 @@ const validationSchema = Yup.object().shape({
 const handleSubmit = ({ email, password }, { props, setSubmitting }) =>
   props.submit(email, password).then(setSubmitting(false))
 
-export default withFormik({ mapPropsToValues, validationSchema, handleSubmit })(
-  LoginForm
-)
+export default withFormik({ mapPropsToValues, validationSchema, handleSubmit })(LoginForm)

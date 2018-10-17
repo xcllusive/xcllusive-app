@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Grid, Input } from 'semantic-ui-react'
+import { Grid, Input, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import numeral from 'numeral'
 
@@ -14,11 +14,104 @@ import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 class AddbacksAndAdjustmentsForm extends PureComponent {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      rows: [
+        {
+          name: 'aaRow1',
+          tabIndex: 100,
+          columns: [
+            {
+              name: 'aaRow1Year1',
+              tabIndex: 200
+            },
+            {
+              name: 'aaRow1Year2',
+              tabIndex: 300
+            },
+            {
+              name: 'aaRow1Year3',
+              tabIndex: 400
+            },
+            {
+              name: 'aaRow1Year4',
+              tabIndex: 500
+            },
+            {
+              name: 'aaRow1Year5',
+              tabIndex: 600
+            },
+            {
+              name: 'aaRow1Year6',
+              tabIndex: 700
+            }
+          ]
+        },
+        {
+          name: 'aaRow2',
+          tabIndex: 101,
+          columns: [
+            {
+              name: 'aaRow2Year1',
+              tabIndex: 201
+            },
+            {
+              name: 'aaRow2Year2',
+              tabIndex: 301
+            },
+            {
+              name: 'aaRow2Year3',
+              tabIndex: 401
+            },
+            {
+              name: 'aaRow2Year4',
+              tabIndex: 501
+            },
+            {
+              name: 'aaRow2Year5',
+              tabIndex: 601
+            },
+            {
+              name: 'aaRow2Year6',
+              tabIndex: 701
+            }
+          ]
+        },
+        {
+          name: 'aaRow3',
+          tabIndex: 102,
+          columns: [
+            {
+              name: 'aaRow3Year1',
+              tabIndex: 202
+            },
+            {
+              name: 'aaRow3Year2',
+              tabIndex: 302
+            },
+            {
+              name: 'aaRow3Year3',
+              tabIndex: 402
+            },
+            {
+              name: 'aaRow3Year4',
+              tabIndex: 502
+            },
+            {
+              name: 'aaRow3Year5',
+              tabIndex: 602
+            },
+            {
+              name: 'aaRow3Year6',
+              tabIndex: 702
+            }
+          ]
+        }
+      ]
+    }
   }
 
   componentWillUnmount () {
-    // this.props.updateAppraisal(this.props.values)
+    this.props.updateAppraisal(this.props.values)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -47,11 +140,83 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   render () {
-    const { values, handleChange, handleBlur, errors, touched, financialYear } = this.props
+    const { values, handleChange, handleBlur, financialYear, appraisalObject } = this.props
 
     return (
       <Fragment>
         <Grid.Row style={{ backgroundColor: 'lightyellow', celledPadding: '.3em' }} columns={9}>
+          <CustomColumn>
+            <b>Financial Year</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>{appraisalObject && appraisalObject.year1 > 0 ? appraisalObject.year1 : financialYear - 5}</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>{appraisalObject && appraisalObject.year2 > 0 ? appraisalObject.year2 : financialYear - 4}</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>{appraisalObject && appraisalObject.year3 > 0 ? appraisalObject.year3 : financialYear - 3}</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>{appraisalObject && appraisalObject.year4 > 0 ? appraisalObject.year4 : financialYear - 2}</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>{appraisalObject && appraisalObject.year5 > 0 ? appraisalObject.year5 : financialYear - 1}</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>{appraisalObject && appraisalObject.year6 > 0 ? appraisalObject.year6 : financialYear} YTD</b>{' '}
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>{financialYear} Annualised</b>
+          </CustomColumn>
+          <CustomColumn textAlign="center">
+            <b>Annualised Yes/No</b>
+          </CustomColumn>
+        </Grid.Row>
+
+        {this.state.rows.map((item, key) => (
+          <Grid.Row columns={9} key={key}>
+            <CustomColumn>
+              <Input
+                fluid
+                tabIndex={item.tabIndex}
+                name={item.name}
+                autoComplete={item.name}
+                value={values[item.name]}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </CustomColumn>
+            {item.columns.map((subItem, subKey) => (
+              <CustomColumn key={subKey}>
+                <Input
+                  fluid
+                  type="number"
+                  tabIndex={item.tabIndex}
+                  name={subItem.name}
+                  autoComplete={subItem.name}
+                  value={values[subItem.name]}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </CustomColumn>
+            ))}
+            <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
+              0
+            </CustomColumn>
+            <CustomColumn textAlign="center">
+              <Form.Field style={{ marginTop: '10px' }}>
+                <Form.Checkbox
+                  name={`${item.name}YesNo`}
+                  checked={values[`${item.name}YesNo`]}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+            </CustomColumn>
+          </Grid.Row>
+        ))}
+
+        {/* <Grid.Row style={{ backgroundColor: 'lightyellow', celledPadding: '.3em' }} columns={9}>
           <CustomColumn>
             <b>Financial Year</b>
           </CustomColumn>
@@ -84,7 +249,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={64}
+              tabIndex={100}
               name="aaRow1"
               autoComplete="aaRow1"
               value={values.aaRow1}
@@ -97,7 +262,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={92}
+              tabIndex={200}
               name="aaRow1Year1"
               autoComplete="aaRow1Year1"
               value={values.aaRow1Year1}
@@ -111,7 +276,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={121}
+              tabIndex={300}
               name="aaRow1Year2"
               autoComplete="aaRow1Year2"
               value={values.aaRow1Year2}
@@ -125,7 +290,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={151}
+              tabIndex={400}
               name="aaRow1Year3"
               autoComplete="aaRow1Year3"
               value={values.aaRow1Year3}
@@ -139,7 +304,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={181}
+              tabIndex={500}
               name="aaRow1Year4"
               autoComplete="aaRow1Year4"
               value={values.aaRow1Year4}
@@ -153,7 +318,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={211}
+              tabIndex={600}
               name="aaRow1Year5"
               autoComplete="aaRow1Year5"
               value={values.aaRow1Year5}
@@ -167,7 +332,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={241}
+              tabIndex={700}
               name="aaRow1Year6"
               autoComplete="aaRow1Year6"
               value={values.aaRow1Year6}
@@ -192,7 +357,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={65}
+              tabIndex={101}
               name="aaRow2"
               autoComplete="aaRow2"
               value={values.aaRow2}
@@ -205,7 +370,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={93}
+              tabIndex={201}
               name="aaRow2Year1"
               autoComplete="aaRow2Year1"
               value={values.aaRow2Year1}
@@ -219,7 +384,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={122}
+              tabIndex={301}
               name="aaRow2Year2"
               autoComplete="aaRow2Year2"
               value={values.aaRow2Year2}
@@ -233,7 +398,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={152}
+              tabIndex={401}
               name="aaRow2Year3"
               autoComplete="aaRow2Year3"
               value={values.aaRow2Year3}
@@ -247,7 +412,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={182}
+              tabIndex={501}
               name="aaRow2Year4"
               autoComplete="aaRow2Year4"
               value={values.aaRow2Year4}
@@ -261,7 +426,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={212}
+              tabIndex={601}
               name="aaRow2Year5"
               autoComplete="aaRow2Year5"
               value={values.aaRow2Year5}
@@ -275,7 +440,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               fluid
               type="number"
-              tabIndex={242}
+              tabIndex={701}
               name="aaRow2Year6"
               autoComplete="aaRow2Year6"
               value={values.aaRow2Year6}
@@ -298,7 +463,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={66}
+              tabIndex={103}
               name="aaRow3"
               autoComplete="aaRow3"
               value={values.aaRow3}
@@ -311,7 +476,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={94}
+              tabIndex={203}
               name="aaRow3Year1"
               autoComplete="aaRow3Year1"
               value={values.aaRow3Year1}
@@ -325,7 +490,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={123}
+              tabIndex={303}
               name="aaRow3Year2"
               autoComplete="aaRow3Year2"
               value={values.aaRow3Year2}
@@ -339,7 +504,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={153}
+              tabIndex={403}
               name="aaRow3Year3"
               autoComplete="aaRow3Year3"
               value={values.aaRow3Year3}
@@ -353,7 +518,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={183}
+              tabIndex={503}
               name="aaRow3Year4"
               autoComplete="aaRow3Year4"
               value={values.aaRow3Year4}
@@ -367,7 +532,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={213}
+              tabIndex={603}
               name="aaRow3Year5"
               autoComplete="aaRow3Year5"
               value={values.aaRow3Year5}
@@ -381,7 +546,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={243}
+              tabIndex={703}
               name="aaRow3Year6"
               autoComplete="aaRow3Year6"
               value={values.aaRow3Year6}
@@ -406,7 +571,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={67}
+              tabIndex={8}
               name="aaRow4"
               autoComplete="aaRow4"
               value={values.aaRow4}
@@ -512,7 +677,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={68}
+              tabIndex={9}
               name="aaRow5"
               autoComplete="aaRow5"
               value={values.aaRow5}
@@ -620,7 +785,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={69}
+              tabIndex={10}
               name="aaRow6"
               autoComplete="aaRow6"
               value={values.aaRow6}
@@ -726,7 +891,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={70}
+              tabIndex={11}
               name="aaRow7"
               autoComplete="aaRow7"
               value={values.aaRow7}
@@ -834,7 +999,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={71}
+              tabIndex={12}
               name="aaRow8"
               autoComplete="aaRow8"
               value={values.aaRow8}
@@ -940,7 +1105,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={72}
+              tabIndex={13}
               name="aaRow9"
               autoComplete="aaRow9"
               value={values.aaRow9}
@@ -953,7 +1118,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <Input
               type="number"
               fluid
-              tabIndex={99}
+              tabIndex={1412}
               name="aaRow9Year1"
               autoComplete="aaRow9Year1"
               value={values.aaRow9Year1}
@@ -1048,7 +1213,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={72}
+              tabIndex={14}
               name="aaRow10"
               autoComplete="aaRow10"
               value={values.aaRow10}
@@ -1158,7 +1323,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={72}
+              tabIndex={15}
               name="aaRow11"
               autoComplete="aaRow11"
               value={values.aaRow11}
@@ -1270,7 +1435,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={73}
+              tabIndex={16}
               name="aaRow12"
               autoComplete="aaRow12"
               value={values.aaRow12}
@@ -1380,7 +1545,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={74}
+              tabIndex={17}
               name="aaRow13"
               autoComplete="aaRow13"
               value={values.aaRow13}
@@ -1492,7 +1657,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={75}
+              tabIndex={18}
               name="aaRow14"
               autoComplete="aaRow14"
               value={values.aaRow14}
@@ -1602,7 +1767,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={76}
+              tabIndex={19}
               name="aaRow15"
               autoComplete="aaRow15"
               value={values.aaRow15}
@@ -1714,7 +1879,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={77}
+              tabIndex={20}
               name="aaRow16"
               autoComplete="aaRow16"
               value={values.aaRow16}
@@ -1824,7 +1989,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={78}
+              tabIndex={21}
               name="aaRow17"
               autoComplete="aaRow17"
               value={values.aaRow17}
@@ -1936,7 +2101,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={79}
+              tabIndex={22}
               name="aaRow18"
               autoComplete="aaRow18"
               value={values.aaRow18}
@@ -2046,7 +2211,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={80}
+              tabIndex={23}
               name="aaRow19"
               autoComplete="aaRow19"
               value={values.aaRow19}
@@ -2158,7 +2323,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={81}
+              tabIndex={24}
               name="aaRow20"
               autoComplete="aaRow20"
               value={values.aaRow20}
@@ -2268,7 +2433,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={82}
+              tabIndex={25}
               name="aaRow21"
               autoComplete="aaRow21"
               value={values.aaRow21}
@@ -2380,7 +2545,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={83}
+              tabIndex={26}
               name="aaRow22"
               autoComplete="aaRow22"
               value={values.aaRow22}
@@ -2490,7 +2655,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={84}
+              tabIndex={27}
               name="aaRow23"
               autoComplete="aaRow23"
               value={values.aaRow23}
@@ -2602,7 +2767,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={85}
+              tabIndex={28}
               name="aaRow24"
               autoComplete="aaRow24"
               value={values.aaRow24}
@@ -2712,7 +2877,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={86}
+              tabIndex={29}
               name="aaRow25"
               autoComplete="aaRow25"
               value={values.aaRow25}
@@ -2824,7 +2989,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={87}
+              tabIndex={30}
               name="aaRow26"
               autoComplete="aaRow26"
               value={values.aaRow26}
@@ -2934,7 +3099,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={88}
+              tabIndex={31}
               name="aaRow27"
               autoComplete="aaRow27"
               value={values.aaRow27}
@@ -3046,7 +3211,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={89}
+              tabIndex={32}
               name="aaRow28"
               autoComplete="aaRow28"
               value={values.aaRow28}
@@ -3156,7 +3321,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={90}
+              tabIndex={33}
               name="aaRow29"
               autoComplete="aaRow29"
               value={values.aaRow29}
@@ -3268,7 +3433,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <Input
               fluid
-              tabIndex={91}
+              tabIndex={34}
               name="aaRow30"
               autoComplete="aaRow30"
               value={values.aaRow30}
@@ -3373,7 +3538,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
               </Form.Field>
             </Form>
           </CustomColumn>
-        </Grid.Row>
+        </Grid.Row> */}
 
         <Grid.Row columns={9}>
           <CustomColumn>
@@ -3433,7 +3598,7 @@ AddbacksAndAdjustmentsForm.propTypes = {
 }
 
 const mapPropsToValues = props => ({
-  aaRow1Year1: props.appraisalObject ? props.appraisalObject.aaRow11Year1 : 0,
+  aaRow1Year1: props.appraisalObject ? props.appraisalObject.aaRow1Year1 : 0,
   aaRow1: props.appraisalObject ? props.appraisalObject.aaRow1 : '',
   aaRow2Year1: props.appraisalObject ? props.appraisalObject.aaRow2Year1 : 0,
   aaRow2: props.appraisalObject ? props.appraisalObject.aaRow2 : '',
@@ -3493,9 +3658,9 @@ const mapPropsToValues = props => ({
   aaRow29: props.appraisalObject ? props.appraisalObject.aaRow29 : '',
   aaRow30Year1: 0,
   aaRow30: props.appraisalObject ? props.appraisalObject.aaRow30 : '',
-  aaRow1Year2: 0,
-  aaRow2Year2: 0,
-  aaRow3Year2: 0,
+  aaRow1Year2: props.appraisalObject ? props.appraisalObject.aaRow1Year2 : '',
+  aaRow2Year2: props.appraisalObject ? props.appraisalObject.aaRow1Year2 : '',
+  aaRow3Year2: props.appraisalObject ? props.appraisalObject.aaRow3Year2 : '',
   aaRow4Year2: 0,
   aaRow5Year2: 0,
   aaRow6Year2: 0,
@@ -3523,9 +3688,9 @@ const mapPropsToValues = props => ({
   aaRow28Year2: 0,
   aaRow29Year2: 0,
   aaRow30Year2: 0,
-  aaRow1Year3: 0,
-  aaRow2Year3: 0,
-  aaRow3Year3: 0,
+  aaRow1Year3: props.appraisalObject ? props.appraisalObject.aaRow1Year3 : '',
+  aaRow2Year3: props.appraisalObject ? props.appraisalObject.aaRow2Year3 : '',
+  aaRow3Year3: props.appraisalObject ? props.appraisalObject.aaRow3Year3 : '',
   aaRow4Year3: 0,
   aaRow5Year3: 0,
   aaRow6Year3: 0,
@@ -3553,9 +3718,9 @@ const mapPropsToValues = props => ({
   aaRow28Year3: 0,
   aaRow29Year3: 0,
   aaRow30Year3: 0,
-  aaRow1Year4: 0,
-  aaRow2Year4: 0,
-  aaRow3Year4: 0,
+  aaRow1Year4: props.appraisalObject ? props.appraisalObject.aaRow1Year4 : '',
+  aaRow2Year4: props.appraisalObject ? props.appraisalObject.aaRow2Year4 : '',
+  aaRow3Year4: props.appraisalObject ? props.appraisalObject.aaRow3Year4 : '',
   aaRow4Year4: 0,
   aaRow5Year4: 0,
   aaRow6Year4: 0,
@@ -3583,9 +3748,9 @@ const mapPropsToValues = props => ({
   aaRow28Year4: 0,
   aaRow29Year4: 0,
   aaRow30Year4: 0,
-  aaRow1Year5: 0,
-  aaRow2Year5: 0,
-  aaRow3Year5: 0,
+  aaRow1Year5: props.appraisalObject ? props.appraisalObject.aaRow1Year5 : '',
+  aaRow2Year5: props.appraisalObject ? props.appraisalObject.aaRow2Year5 : '',
+  aaRow3Year5: props.appraisalObject ? props.appraisalObject.aaRow3Year5 : '',
   aaRow4Year5: 0,
   aaRow5Year5: 0,
   aaRow6Year5: 0,
@@ -3613,9 +3778,9 @@ const mapPropsToValues = props => ({
   aaRow28Year5: 0,
   aaRow29Year5: 0,
   aaRow30Year5: 0,
-  aaRow1Year6: 0,
-  aaRow2Year6: 0,
-  aaRow3Year6: 0,
+  aaRow1Year6: props.appraisalObject ? props.appraisalObject.aaRow1Year6 : '',
+  aaRow2Year6: props.appraisalObject ? props.appraisalObject.aaRow2Year6 : '',
+  aaRow3Year6: props.appraisalObject ? props.appraisalObject.aaRow3Year6 : '',
   aaRow4Year6: 0,
   aaRow5Year6: 0,
   aaRow6Year6: 0,
