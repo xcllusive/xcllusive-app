@@ -92,8 +92,8 @@ LoginForm.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  email: '',
-  password: ''
+  email: 'admin@xcllusive.com',
+  password: 'admin'
 })
 
 const validationSchema = Yup.object().shape({
