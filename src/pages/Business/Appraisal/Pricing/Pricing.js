@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Message, Step, Segment, Grid, Form, Header, Label } from 'semantic-ui-react'
+import { Message, Step, Segment, Grid, Form, Header, Label, Checkbox } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
@@ -18,6 +18,20 @@ class PricingPage extends Component {
   constructor (props) {
     super(props)
     this.state = {}
+  }
+
+  componentWillUnmount () {
+    const obj = {
+      agreedValue: this._replaceDollarAndComma(this.props.values.agreedValue)
+    }
+    Object.assign(this.props.values, obj)
+    this.props.updateAppraisal(this.props.values)
+  }
+
+  _replaceDollarAndComma (replace) {
+    replace = replace.replace('$', ',')
+    replace = replace.replace(/,/g, '')
+    return replace
   }
 
   _handleChangeCheckBox = (name, value) => {
@@ -194,6 +208,7 @@ class PricingPage extends Component {
     if (pricingMethod === 2 || pricingMethod === 6) return 'Multiplier EBITDA Avg'
     if (pricingMethod === 3 || pricingMethod === 7) return 'Multiplier PEBITDA Last Year'
     if (pricingMethod === 4 || pricingMethod === 8) return 'Multiplier PEBITDA Avg'
+    if (pricingMethod === 9) return 'T/O Multiplier'
   }
 
   _pricingMethod = (pricingMethod, appraisalObject) => {
@@ -201,10 +216,9 @@ class PricingPage extends Component {
     if (pricingMethod === 2 || pricingMethod === 6) return this._ebitdaAvg(appraisalObject)
     if (pricingMethod === 3 || pricingMethod === 7) return this._pebitdaLastYear(appraisalObject)
     if (pricingMethod === 4 || pricingMethod === 8) return this._pebitdaAvg(appraisalObject)
-
-    // if (value === 9) return this._ebitdaAvg(appraisalObject)
-    // if (value === 10) return this._ebitdaAvg(appraisalObject)
-    // if (value === 11) return this._ebitdaAvg(appraisalObject)
+    if (pricingMethod === 9) return this._turnOver(appraisalObject)
+    // if (pricingMethod === 10) return this._ebitdaAvg(appraisalObject)
+    // if (pricingMethod === 11) return this._ebitdaAvg(appraisalObject)
   }
 
   _comparableMultiplier = (pricingMethod, appraisalObject) => {
@@ -220,6 +234,13 @@ class PricingPage extends Component {
   }
 
   _priceBasedOnComparable = (pricingMethod, appraisalObject) => {
+    if (pricingMethod === 10) {
+      return this._assetsValue(appraisalObject)
+    }
+    if (pricingMethod === 11) {
+      const agreedValueFormated = parseInt(this._replaceDollarAndComma(this.props.values.agreedValue))
+      return agreedValueFormated
+    }
     return (
       this._pricingMethod(pricingMethod, appraisalObject) * this._comparableMultiplier(pricingMethod, appraisalObject)
     )
@@ -227,28 +248,56 @@ class PricingPage extends Component {
 
   _riskPremium = (values, appraisalObject) => {
     const calc = this._priceBasedOnComparable(values.pricingMethod, appraisalObject)
-    return (calc * values.sliderPremium) / 100
+    return (calc * values.sliderRiskPremium) / 100
   }
 
-  _riskNegotiation = (values, appraisalObject) => {
+  _marketPremium = (values, appraisalObject) => {
     const calc = this._priceBasedOnComparable(values.pricingMethod, appraisalObject)
-    return (calc * values.sliderNegotiation) / 100
+    return (calc * values.sliderMarketPremium) / 100
+  }
+
+  _negotiationPremium = (values, appraisalObject) => {
+    const calc = this._priceBasedOnComparable(values.pricingMethod, appraisalObject)
+    return (calc * values.sliderNegotiationPremium) / 100
   }
 
   _askingPrice = (values, appraisalObject) => {
     return (
       this._priceBasedOnComparable(values.pricingMethod, appraisalObject) +
       this._riskPremium(values, appraisalObject) +
-      this._riskNegotiation(values, appraisalObject)
+      this._marketPremium(values, appraisalObject) +
+      this._negotiationPremium(values, appraisalObject)
     )
   }
 
-  _askingPriceMultiplo = (values, appraisalObject) => {
+  _askingPriceMultipler = (values, appraisalObject) => {
     return this._askingPrice(values, appraisalObject) / this._pricingMethod(values.pricingMethod, appraisalObject)
   }
 
+  _labelSliderRiskAndMarket = (type, value) => {
+    if (value >= 0 && value <= 20) {
+      return type === 'businessRisk' ? 'Unsustainable Risk' : 'Weak'
+    }
+    if (value >= 21 && value <= 40) {
+      return type === 'businessRisk' ? 'Challenge Risk' : 'Challenging'
+    }
+    if (value >= 41 && value <= 60) {
+      return type === 'businessRisk' ? 'Acceptable Risk' : 'Fair'
+    }
+    if (value >= 61 && value <= 80) {
+      return type === 'businessRisk' ? 'Attractive' : 'Good'
+    }
+    if (value >= 81 && value <= 100) {
+      return type === 'businessRisk' ? 'Highly Attractive' : 'Bullish'
+    }
+  }
+
+  _handleChangeCheckBoxStock = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
+  }
+
   render () {
-    const { appraisalObject, values } = this.props
+    const { appraisalObject, values, handleChange, handleBlur, errors, touched } = this.props
     // const {} = this.state
     return (
       <Wrapper>
@@ -556,8 +605,13 @@ class PricingPage extends Component {
                     <Form.Field width={5}>
                       <Form.Input
                         name="agreedValue"
-                        // value={this.state.inputSearch}
+                        value={numeral(values.agreedValue).format('$0,0.[99]')}
+                        autoComplete="agreedValue"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
+                      {errors.agreedValue &&
+                        touched.agreedValue && <Label basic color="red" pointing content={errors.agreedValue} />}
                     </Form.Field>
                   </Form.Group>
                 </Form>
@@ -567,13 +621,15 @@ class PricingPage extends Component {
         </Segment>
         <Grid>
           <Grid.Row>
-            <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={16}>
+            <Grid.Column style={{ margin: '0 auto' }} textAlign="center">
               <Segment style={{ backgroundColor: '#ecf4fb' }}>
                 <Grid celled="internally" divided>
                   <Grid.Row columns={14}>
                     <Grid.Column>{this._labelPricingMethod(values.pricingMethod)}</Grid.Column>
                     <Grid.Column />
-                    <Grid.Column>Comparable Multiplier</Grid.Column>
+                    <Grid.Column>
+                      {values.pricingMethod === 10 || values.pricingMethod === 11 ? '' : 'Comparable Multiplier'}
+                    </Grid.Column>
                     <Grid.Column />
                     <Grid.Column>Price Based on Comparable</Grid.Column>
                     <Grid.Column />
@@ -584,71 +640,97 @@ class PricingPage extends Component {
                     <Grid.Column>Negotiation Premium</Grid.Column>
                     <Grid.Column />
                     <Grid.Column>Asking Price</Grid.Column>
-                    <Grid.Column>Asking Price Multiplo</Grid.Column>
+                    <Grid.Column>Asking Price Multipler</Grid.Column>
                   </Grid.Row>
                   <Grid.Row columns={14}>
-                    <Grid.Column>
+                    <Grid.Column textAlign="left">
                       {numeral(this._pricingMethod(values.pricingMethod, appraisalObject)).format('$0,0.[99]')}
                     </Grid.Column>
                     <Grid.Column>x</Grid.Column>
-                    <Grid.Column>
+                    <Grid.Column textAlign="left">
                       {numeral(this._comparableMultiplier(values.pricingMethod, appraisalObject)).format('0,0.[99]')}
                     </Grid.Column>
                     <Grid.Column>=</Grid.Column>
-                    <Grid.Column>
+                    <Grid.Column textAlign="left">
                       {numeral(this._priceBasedOnComparable(values.pricingMethod, appraisalObject)).format('$0,0.[99]')}
                     </Grid.Column>
                     <Grid.Column>+</Grid.Column>
-                    <Grid.Column>{numeral(this._riskPremium(values, appraisalObject)).format('$0,0.[99]')}</Grid.Column>
+                    <Grid.Column textAlign="left">
+                      {numeral(this._riskPremium(values, appraisalObject)).format('$0,0.[99]')}
+                    </Grid.Column>
                     <Grid.Column>+</Grid.Column>
-                    <Grid.Column>needs to make</Grid.Column>
+                    <Grid.Column textAlign="left">
+                      {numeral(this._marketPremium(values, appraisalObject)).format('$0,0.[99]')}
+                    </Grid.Column>
                     <Grid.Column>+</Grid.Column>
-                    <Grid.Column>
-                      {numeral(this._riskNegotiation(values, appraisalObject)).format('$0,0.[99]')}
+                    <Grid.Column textAlign="left">
+                      {numeral(this._negotiationPremium(values, appraisalObject)).format('$0,0.[99]')}
                     </Grid.Column>
                     <Grid.Column>=</Grid.Column>
-                    <Grid.Column>{numeral(this._askingPrice(values, appraisalObject)).format('$0,0.[99]')}</Grid.Column>
-                    <Grid.Column>
-                      {numeral(this._askingPriceMultiplo(values, appraisalObject)).format('0,0.[99]')}
+                    <Grid.Column textAlign="left">
+                      {numeral(this._askingPrice(values, appraisalObject)).format('$0,0.[99]')}
+                    </Grid.Column>
+                    <Grid.Column textAlign="left">
+                      {numeral(this._askingPriceMultipler(values, appraisalObject)).format('0,0.[99]')}
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
                 <Grid>
-                  <Grid.Row columns={2}>
-                    <Grid.Column width={8}>
-                      <h3>Premium</h3>
+                  <Grid.Row columns={3}>
+                    <Grid.Column width={5} textAlign="center">
+                      <h3>Risk Premium</h3>
                       <Slider
                         color={'blue'}
                         inverted={false}
-                        value={values.sliderPremium}
+                        value={values.sliderRiskPremium}
                         settings={{
-                          start: values.sliderPremium,
+                          start: values.sliderRiskPremium,
                           min: -20,
                           max: 20,
                           step: 1,
-                          onChange: value => this._handleChangeSlider(value, 'sliderPremium')
+                          onChange: value => this._handleChangeSlider(value, 'sliderRiskPremium')
                         }}
                       />
                       <Label style={{ marginTop: '5px' }} color={'red'}>
-                        {values.sliderPremium}%
+                        {values.sliderRiskPremium}%
                       </Label>
+                      <h4>{this._labelSliderRiskAndMarket('businessRisk', appraisalObject.valueSliderBR)}</h4>
                     </Grid.Column>
-                    <Grid.Column width={8}>
-                      <h3>Negotiation</h3>
+                    <Grid.Column width={5} textAlign="center">
+                      <h3>Market Premium</h3>
                       <Slider
                         color={'blue'}
                         inverted={false}
-                        value={values.sliderNegotiation}
+                        value={values.sliderMarketPremium}
                         settings={{
-                          start: values.sliderNegotiation,
+                          start: values.sliderMarketPremium,
                           min: -20,
                           max: 20,
                           step: 1,
-                          onChange: value => this._handleChangeSlider(value, 'sliderNegotiation')
+                          onChange: value => this._handleChangeSlider(value, 'sliderMarketPremium')
                         }}
                       />
                       <Label style={{ marginTop: '5px' }} color={'red'}>
-                        {values.sliderNegotiation}%
+                        {values.sliderMarketPremium}%
+                      </Label>
+                      <h4>{this._labelSliderRiskAndMarket('market', appraisalObject.valueSliderMarket)}</h4>
+                    </Grid.Column>
+                    <Grid.Column width={5} textAlign="center">
+                      <h3>Negotiation Premium</h3>
+                      <Slider
+                        color={'blue'}
+                        inverted={false}
+                        value={values.sliderNegotiationPremium}
+                        settings={{
+                          start: values.sliderNegotiationPremium,
+                          min: -20,
+                          max: 20,
+                          step: 1,
+                          onChange: value => this._handleChangeSlider(value, 'sliderNegotiationPremium')
+                        }}
+                      />
+                      <Label style={{ marginTop: '5px' }} color={'red'}>
+                        {values.sliderNegotiationPremium}%
                       </Label>
                     </Grid.Column>
                   </Grid.Row>
@@ -657,6 +739,88 @@ class PricingPage extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Segment style={{ backgroundColor: '#d4d4d53b' }}>
+          <Grid>
+            <Grid.Row textAlign="center" columns={6}>
+              <Grid.Column>
+                <h4>Price Range Between: </h4>
+              </Grid.Column>
+              <Grid.Column>
+                <h5>
+                  <u>
+                    {values.reducePriceForStockValue
+                      ? numeral(
+                        (this._askingPrice(values, appraisalObject) * values.sliderLowRange) / 100 -
+                            this._stockValue(appraisalObject)
+                      ).format('$0,0.[99]')
+                      : numeral((this._askingPrice(values, appraisalObject) * values.sliderLowRange) / 100).format(
+                        '$0,0.[99]'
+                      )}
+                  </u>
+                </h5>
+              </Grid.Column>
+              <Grid.Column>
+                <h4>and</h4>
+              </Grid.Column>
+              <Grid.Column>
+                <h5>
+                  <u>
+                    {values.reducePriceForStockValue
+                      ? numeral(this._askingPrice(values, appraisalObject) - this._stockValue(appraisalObject)).format(
+                        '$0,0.[99]'
+                      )
+                      : numeral(this._askingPrice(values, appraisalObject)).format('$0,0.[99]')}
+                  </u>
+                </h5>
+              </Grid.Column>
+              <Grid.Column>
+                <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
+              </Grid.Column>
+              <Grid.Column>
+                <h5>
+                  <u>{numeral(this._stockValue(appraisalObject)).format('$0,0.[99]')}</u>
+                </h5>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column width={5} style={{ margin: '0 auto' }} textAlign="center">
+                <h3>Low Range</h3>
+                <Slider
+                  color={'blue'}
+                  inverted={false}
+                  value={values.sliderLowRange}
+                  settings={{
+                    start: values.sliderLowRange,
+                    min: -30,
+                    max: -10,
+                    step: 1,
+                    onChange: value => this._handleChangeSlider(value, 'sliderLowRange')
+                  }}
+                />
+                <Label style={{ marginTop: '5px' }} color={'red'}>
+                  {values.sliderLowRange}%
+                </Label>
+              </Grid.Column>
+              <Grid.Column style={{ marginTop: '5px' }} verticalAlign="middle">
+                <Checkbox
+                  label="Incl. Stock"
+                  name="inclStock"
+                  value="inclStock"
+                  checked={values.inclStock}
+                  onChange={this._handleChangeCheckBoxStock}
+                />
+                <Checkbox
+                  style={{ marginLeft: '20px' }}
+                  label="Reduce Price For Stock Value"
+                  name="reducePriceForStockValue"
+                  value="reducePriceForStockValue"
+                  checked={values.reducePriceForStockValue}
+                  onChange={this._handleChangeCheckBoxStock}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
       </Wrapper>
     )
   }
@@ -681,8 +845,13 @@ const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
   pricingMethod: props.appraisalObject ? props.appraisalObject.pricingMethod : 1,
-  sliderPremium: 0,
-  sliderNegotiation: 0
+  sliderRiskPremium: props.appraisalObject ? props.appraisalObject.sliderRiskPremium : 0,
+  sliderMarketPremium: props.appraisalObject ? props.appraisalObject.sliderMarketPremium : 0,
+  sliderNegotiationPremium: props.appraisalObject ? props.appraisalObject.sliderNegotiationPremium : 0,
+  agreedValue: props.appraisalObject ? numeral(props.appraisalObject.agreedValue).format('0,0.[99]') : 0,
+  sliderLowRange: -10,
+  inclStock: true,
+  reducePriceForStockValue: true
 })
 
 const mapStateToProps = state => {
