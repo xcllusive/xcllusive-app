@@ -1,23 +1,24 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Message, Step, Grid, Header, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
+// import moment from 'moment'
+
+import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+
 import Wrapper from '../../../../components/content/Wrapper'
 import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
 import FinancialAnalysisForm from './FinancialAnalysisForm'
-import moment from 'moment'
 import OwnersMarketWagesForm from './OwnersMarketWagesForm'
 import StockForm from './StockForm'
 import PhysicalAssetValueForm from './PhysicalAssetValueForm'
 import FinancialInformationSourceForm from './FinancialInformationSourceForm'
-
 import CustomColumn from '../../../../components/content/CustomGridColumn'
-import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
-class FinancialAnalysisPage extends Component {
+class FinancialAnalysisPage extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
@@ -41,9 +42,9 @@ class FinancialAnalysisPage extends Component {
     }
   }
 
-  componentDidMount () {
-    if (this.props.appraisalObject && !this.props.appraisalObject.year6) this._calculateFinancialYear()
-  }
+  // componentDidMount () {
+  //   if (this.props.appraisalObject && !this.props.appraisalObject.year6) this._calculateFinancialYear()
+  // }
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
@@ -53,26 +54,26 @@ class FinancialAnalysisPage extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _calculateFinancialYear = async () => {
-    const dateChangeFinancialYear = moment('30/06', 'DD/MM')
-    const currentDayMonth = moment()
-    let financialYear = null
-    if (currentDayMonth > dateChangeFinancialYear) {
-      financialYear = moment()
-        .add(1, 'year')
-        .format('YYYY')
-    } else financialYear = moment().format('YYYY')
+  // _calculateFinancialYear = async () => {
+  //   const dateChangeFinancialYear = moment('30/06', 'DD/MM')
+  //   const currentDayMonth = moment()
+  //   let financialYear = null
+  //   if (currentDayMonth > dateChangeFinancialYear) {
+  //     financialYear = moment()
+  //       .add(1, 'year')
+  //       .format('YYYY')
+  //   } else financialYear = moment().format('YYYY')
 
-    await this.setState({ financialYear })
-    this.props.setFieldValue('year1', this.state.financialYear - 5)
-    this.props.setFieldValue('year2', this.state.financialYear - 4)
-    this.props.setFieldValue('year3', this.state.financialYear - 3)
-    this.props.setFieldValue('year4', this.state.financialYear - 2)
-    this.props.setFieldValue('year5', this.state.financialYear - 1)
-    this.props.setFieldValue('year6', this.state.financialYear)
-  }
+  //   await this.setState({ financialYear })
+  //   this.props.setFieldValue('year1', this.state.financialYear - 5)
+  //   this.props.setFieldValue('year2', this.state.financialYear - 4)
+  //   this.props.setFieldValue('year3', this.state.financialYear - 3)
+  //   this.props.setFieldValue('year4', this.state.financialYear - 2)
+  //   this.props.setFieldValue('year5', this.state.financialYear - 1)
+  //   this.props.setFieldValue('year6', this.state.financialYear)
+  // }
 
-  getCalcs = obj => {
+  _getCalcs = obj => {
     if (!obj.year || !obj.field) return
     this.setState(prevState => {
       prevState[obj.field] = {
@@ -102,10 +103,16 @@ class FinancialAnalysisPage extends Component {
         </Step.Group>
         <Grid celled="internally" divided>
           <FinancialAnalysisForm
-            financialYear={this.state.financialYear}
-            business={this.props.business}
+            handleChangeCheckBox={this._handleChangeCheckBox}
+            values={values}
+            handleChange={this.props.handleChange}
+            handleBlur={this.props.handleBlur}
+            errors={this.props.errors}
+            touched={this.props.touched}
+            financialYear={null}
             appraisalObject={appraisalObject}
-            sendCalcs={this.getCalcs}
+            sendCalcs={this._getCalcs}
+            setFieldValue={this.props.setFieldValue}
           />
           <Grid.Row>
             <CustomColumn>
@@ -115,7 +122,7 @@ class FinancialAnalysisPage extends Component {
             </CustomColumn>
           </Grid.Row>
           <AddbacksAndAdjustmentsForm
-            financialYear={this.state.financialYear}
+            financialYear={null}
             business={this.props.business}
             appraisalObject={this.props.appraisalObject}
             operatingProfit={this.state.operatingProfit}
@@ -181,7 +188,64 @@ FinancialAnalysisPage.propTypes = {
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
-  id: props.appraisalObject ? props.appraisalObject.id : ''
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  monthsCovered: props.appraisalObject ? props.appraisalObject.monthsCovered : 0,
+  seasonalAdjustment: props.appraisalObject ? props.appraisalObject.seasonalAdjustment : 0,
+  sales1: props.appraisalObject ? props.appraisalObject.sales1 : 0,
+  sales2: props.appraisalObject ? props.appraisalObject.sales2 : 0,
+  sales3: props.appraisalObject ? props.appraisalObject.sales3 : 0,
+  sales4: props.appraisalObject ? props.appraisalObject.sales4 : 0,
+  sales5: props.appraisalObject ? props.appraisalObject.sales5 : 0,
+  sales6: props.appraisalObject ? props.appraisalObject.sales6 : 0,
+  cogs1: props.appraisalObject ? props.appraisalObject.cogs1 : 0,
+  cogs2: props.appraisalObject ? props.appraisalObject.cogs1 : 0,
+  cogs3: props.appraisalObject ? props.appraisalObject.cogs3 : 0,
+  cogs4: props.appraisalObject ? props.appraisalObject.cogs4 : 0,
+  cogs5: props.appraisalObject ? props.appraisalObject.cogs5 : 0,
+  cogs6: props.appraisalObject ? props.appraisalObject.cogs6 : 0,
+  otherIncome1: props.appraisalObject ? props.appraisalObject.otherIncome1 : 0,
+  otherIncome2: props.appraisalObject ? props.appraisalObject.otherIncome2 : 0,
+  otherIncome3: props.appraisalObject ? props.appraisalObject.otherIncome3 : 0,
+  otherIncome4: props.appraisalObject ? props.appraisalObject.otherIncome4 : 0,
+  otherIncome5: props.appraisalObject ? props.appraisalObject.otherIncome5 : 0,
+  otherIncome6: props.appraisalObject ? props.appraisalObject.otherIncome6 : 0,
+  expenses1: props.appraisalObject ? props.appraisalObject.expenses1 : 0,
+  expenses2: props.appraisalObject ? props.appraisalObject.expenses2 : 0,
+  expenses3: props.appraisalObject ? props.appraisalObject.expenses3 : 0,
+  expenses4: props.appraisalObject ? props.appraisalObject.expenses4 : 0,
+  expenses5: props.appraisalObject ? props.appraisalObject.expenses5 : 0,
+  expenses6: props.appraisalObject ? props.appraisalObject.expenses6 : 0,
+  calcAnnualised: 0,
+  calcGrossMargin1: 0,
+  calcGrossMargin2: 0,
+  calcGrossMargin3: 0,
+  calcGrossMargin4: 0,
+  calcGrossMargin5: 0,
+  calcGrossMargin6: 0,
+  calcGrossMarginPerc1: 0,
+  calcGrossMarginPerc2: 0,
+  calcGrossMarginPerc3: 0,
+  calcGrossMarginPerc4: 0,
+  calcGrossMarginPerc5: 0,
+  calcGrossMarginPerc6: 0,
+  calcGrossProfit1: 0,
+  calcGrossProfit2: 0,
+  calcGrossProfit3: 0,
+  calcGrossProfit4: 0,
+  calcGrossProfit5: 0,
+  calcGrossProfit6: 0,
+  calcOperatingProfit1: 0,
+  calcOperatingProfit2: 0,
+  calcOperatingProfit3: 0,
+  calcOperatingProfit4: 0,
+  calcOperatingProfit5: 0,
+  calcOperatingProfit6: 0,
+  calcOperatingProfitPerc1: 0,
+  calcOperatingProfitPerc2: 0,
+  calcOperatingProfitPerc3: 0,
+  calcOperatingProfitPerc4: 0,
+  calcOperatingProfitPerc5: 0,
+  calcOperatingProfitPerc6: 0
 })
 
 const validationSchema = Yup.object().shape({})
