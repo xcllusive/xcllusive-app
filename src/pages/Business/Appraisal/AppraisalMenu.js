@@ -15,6 +15,7 @@ import { getAppraisal } from '../../../redux/ducks/appraisal'
 import BusinessAnalysis from './BusinessAnalysis'
 import ComparableData from './ComparableData'
 import Pricing from './Pricing/Pricing'
+import Recommendations from './Recommendations'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
@@ -172,6 +173,11 @@ class AppraisalMenuPage extends Component {
         {this.state.activeItem === 'Pricing' ? (
           <Segment>
             {appraisal && appraisal.id ? <Pricing business={business} appraisalObject={appraisal} /> : null}
+          </Segment>
+        ) : null}
+        {this.state.activeItem === 'Recommendations' ? (
+          <Segment>
+            {appraisal && appraisal.id ? <Recommendations business={business} appraisalObject={appraisal} /> : null}
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>

@@ -13,11 +13,22 @@ import SummaryOfFinancial from './SummaryOfFinancial'
 import OwnersMarketWages from './OwnersMarketWages'
 import numeral from 'numeral'
 import { Slider } from 'react-semantic-ui-range'
+import { LineChart, Line, XAxis, Tooltip, CartesianGrid, YAxis, Legend, ReferenceLine } from 'recharts'
 
 class PricingPage extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      data: [
+        { name: '1', uv: 1, pv: 3.6, amt: 3.6 },
+        { name: '90% Chance of Selling', uv: 2.5, pv: 3, amt: 3 },
+        { name: 'Avg Multiplier', uv: 3, pv: 4, amt: 4 },
+        { name: 'Risk Premium', uv: 3.2, pv: 5, amt: 5 },
+        { name: 'Market Premium', uv: 2.7, pv: 3, amt: 3 },
+        { name: 'Asking Price', uv: 4, pv: 3, amt: 3 },
+        { name: 'Less than 5% Chance of Selling', uv: 5, pv: 3.6, amt: 3.6 }
+      ]
+    }
   }
 
   componentWillUnmount () {
@@ -294,6 +305,10 @@ class PricingPage extends Component {
 
   _handleChangeCheckBoxStock = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
+  }
+
+  _percLowRange = (values, appraisalObject) => {
+    return (this._askingPrice(values, appraisalObject) * values.sliderLowRange) / 100
   }
 
   render () {
@@ -723,7 +738,7 @@ class PricingPage extends Component {
                         value={values.sliderNegotiationPremium}
                         settings={{
                           start: values.sliderNegotiationPremium,
-                          min: -20,
+                          min: 0,
                           max: 20,
                           step: 1,
                           onChange: value => this._handleChangeSlider(value, 'sliderNegotiationPremium')
@@ -741,7 +756,7 @@ class PricingPage extends Component {
         </Grid>
         <Segment style={{ backgroundColor: '#d4d4d53b' }}>
           <Grid>
-            <Grid.Row textAlign="center" columns={6}>
+            <Grid.Row textAlign="left" columns={6}>
               <Grid.Column>
                 <h4>Price Range Between: </h4>
               </Grid.Column>
@@ -750,12 +765,15 @@ class PricingPage extends Component {
                   <u>
                     {values.reducePriceForStockValue
                       ? numeral(
-                        (this._askingPrice(values, appraisalObject) * values.sliderLowRange) / 100 -
-                            this._stockValue(appraisalObject)
+                        this._askingPrice(values, appraisalObject) -
+                            this._stockValue(appraisalObject) +
+                            ((this._askingPrice(values, appraisalObject) - this._stockValue(appraisalObject)) *
+                              values.sliderLowRange) /
+                              100
                       ).format('$0,0.[99]')
-                      : numeral((this._askingPrice(values, appraisalObject) * values.sliderLowRange) / 100).format(
-                        '$0,0.[99]'
-                      )}
+                      : numeral(
+                        this._askingPrice(values, appraisalObject) + this._percLowRange(values, appraisalObject)
+                      ).format('$0,0.[99]')}
                   </u>
                 </h5>
               </Grid.Column>
@@ -817,6 +835,35 @@ class PricingPage extends Component {
                   checked={values.reducePriceForStockValue}
                   onChange={this._handleChangeCheckBoxStock}
                 />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+        <Segment style={{ backgroundColor: '#d4d4d53b' }}>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column>
+                <LineChart
+                  width={700}
+                  height={400}
+                  data={this.state.data}
+                  layout="vertical"
+                  margin={{ top: 20, right: 50, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" domain={['dataMin', 'dataMax']} />
+                  <YAxis dataKey="name" type="category" />
+                  <Tooltip />
+                  <Legend />
+                  <ReferenceLine y="25%" stroke="red" label="Test" />
+                  <ReferenceLine x={2.5} label="2.5" stroke="red" />
+                  <ReferenceLine x={3} label="3" stroke="blue" />
+                  <ReferenceLine x={2.7} label="3.5" stroke="orange" />
+                  <ReferenceLine x={3.7} label="3.7" stroke="green" />
+                  <ReferenceLine x={4} label="4" stroke="purple" />
+                  <ReferenceLine x={5} label="5" stroke="black" />
+                  <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                </LineChart>
               </Grid.Column>
             </Grid.Row>
           </Grid>
