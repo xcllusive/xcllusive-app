@@ -31,7 +31,8 @@ export const Types = {
   GET_SELECTED_LIST_SUCCESS: 'GET_SELECTED_LIST_SUCCESS',
   GET_SELECTED_LIST_FAILURE: 'GET_SELECTED_LIST_FAILURE',
   ADD_SELECTED_LIST: 'ADD_SELECTED_LIST',
-  REMOVE_SELECTED_LIST: 'REMOVE_SELECTED_LIST'
+  REMOVE_SELECTED_LIST: 'REMOVE_SELECTED_LIST',
+  CALC_MIN_MAX_CHART: 'CALC_MIN_MAX_CHART'
 }
 
 // Reducer
@@ -76,7 +77,13 @@ const initialState = {
   getList: {
     isLoading: true,
     array: [],
-    error: null
+    error: null,
+    smallestMultiplier: 0,
+    biggestMultiplier: 0
+  },
+  getCalcMinMax: {
+    smallestMultiplier: 0,
+    biggestMultiplier: 0
   }
 }
 
@@ -312,6 +319,15 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CALC_MIN_MAX_CHART:
+      return {
+        ...state,
+        getCalcMinMax: {
+          ...state.getCalcMinMax,
+          smallestMultiplier: action.minValue,
+          biggestMultiplier: action.maxValue
+        }
+      }
     case Types.ADD_SELECTED_LIST:
       return {
         ...state,
@@ -455,6 +471,34 @@ export const getBusinessesSold = objectValues => async dispatch => {
   }
 }
 
+const _ebitdaLastYearChart = businessSold => {
+  if (businessSold && businessSold.year4 > 0) {
+    return businessSold.soldPrice / (businessSold.year4 - businessSold.agreedWageForWorkingOwners)
+  }
+  if (businessSold && businessSold.year3 > 0) {
+    return businessSold.soldPrice / (businessSold.year3 - businessSold.agreedWageForWorkingOwners)
+  }
+  if (businessSold && businessSold.year2 > 0) {
+    return businessSold.soldPrice / (businessSold.year2 - businessSold.agreedWageForWorkingOwners)
+  }
+  if (businessSold && businessSold.year1 > 0) {
+    return businessSold.soldPrice / (businessSold.year1 - businessSold.agreedWageForWorkingOwners)
+  }
+}
+
+export const calcMinMaxChart = (selectedList, func) => dispatch => {
+  if (!func) func = _ebitdaLastYearChart
+  const newArray = selectedList.map(item => func(item))
+  const minValue = Math.min(...newArray)
+  const maxValue = Math.max(...newArray)
+
+  dispatch({
+    type: Types.CALC_MIN_MAX_CHART,
+    minValue,
+    maxValue
+  })
+}
+
 export const saveSelectedList = (list, appraisalId) => async dispatch => {
   dispatch({
     type: Types.SAVE_SELECTED_LIST_LOADING,
@@ -481,6 +525,7 @@ export const getSelectedList = appraisalId => async dispatch => {
   })
   try {
     const selectedList = await getList(appraisalId)
+    calcMinMaxChart(selectedList.data)
     dispatch({
       type: Types.GET_SELECTED_LIST_SUCCESS,
       payload: selectedList
