@@ -21,7 +21,6 @@ class PricingPage extends Component {
     super(props)
     this.state = {
       data: [
-        { name: '1', value: 1 },
         { name: '90% Chance of Selling', value: 2.5 },
         { name: 'Avg Multiplier', value: 3 },
         { name: 'Risk Premium', value: 3.2 },
@@ -29,13 +28,37 @@ class PricingPage extends Component {
         { name: 'Asking Price', value: 4 },
         { name: 'Less than 5% Chance of Selling', value: 12 }
       ],
-      showHide: true
+      showHide: true,
+      isCalculated: true
     }
   }
 
   componentDidMount () {
     this.props.getSelectedList(this.props.appraisalObject.id)
+
+    if (this.props.appraisalObject.pricingMethod > 0) {
+      this.setState({
+        data: [
+          { name: '90% Chance of Selling', value: this._chart('90% Chance of Selling') },
+          { name: 'Avg Multiplier', value: this._chart('Avg Multiplier') },
+          { name: 'Risk Premium', value: this._chart('Risk Premium') },
+          { name: 'Market Premium', value: this._chart('Market Premium') },
+          { name: 'Asking Price', value: this._chart('Asking Price') },
+          { name: 'Less than 5% Chance of Selling', value: this._chart('Less than 5% Chance of Selling') }
+        ]
+      })
+    }
   }
+
+  // static getDerivedStateFromProps (nextProps, prevState) {
+  //   if (nextProps && nextProps.isCalculated && prevState.isCalculated) {
+  //     console.log('test')
+  //     return {
+  //       data:
+  //     }
+  //   }
+  //   return null
+  // }
 
   componentWillUnmount () {
     const obj = {
@@ -67,27 +90,7 @@ class PricingPage extends Component {
   }
 
   _multiplierEbitdaAvgChart = businessSold => {
-    let count = 0
-    let totalYear = 0
-
-    if (businessSold.year4 > 0) {
-      count = count + 1
-      totalYear = totalYear + businessSold.year4
-    }
-    if (businessSold.year3 > 0) {
-      count = count + 1
-      totalYear = totalYear + businessSold.year3
-    }
-    if (businessSold.year2 > 0) {
-      count = count + 1
-      totalYear = totalYear + businessSold.year2
-    }
-    if (businessSold.year1 > 0) {
-      totalYear = totalYear + businessSold.year1
-      count = count + 1
-    }
-
-    return businessSold.soldPrice / (totalYear / count - businessSold.agreedWageForWorkingOwners)
+    return businessSold.soldPrice / this._ebitdaAvgChart(businessSold)
   }
 
   _multiplierPebitdaLastYearChart = businessSold => {
@@ -117,17 +120,119 @@ class PricingPage extends Component {
     }
   }
 
-  _handleChangeCheckBox = (name, value) => {
-    this.props.setFieldValue(name, value)
+  _ebitdaLastYearChart = businessSold => {
+    if (businessSold.year4 > 0) return businessSold.year4 - businessSold.agreedWageForWorkingOwners
+    if (businessSold.year3 > 0) return businessSold.year3 - businessSold.agreedWageForWorkingOwners
+    if (businessSold.year2 > 0) return businessSold.year2 - businessSold.agreedWageForWorkingOwners
+    if (businessSold.year1 > 0) return businessSold.year1 - businessSold.agreedWageForWorkingOwners
+  }
+
+  _ebitdaAvgChart = businessSold => {
+    let count = 0
+    let totalYear = 0
+
+    if (businessSold.year4 > 0) {
+      count = count + 1
+      totalYear = totalYear + businessSold.year4
+    }
+    if (businessSold.year3 > 0) {
+      count = count + 1
+      totalYear = totalYear + businessSold.year3
+    }
+    if (businessSold.year2 > 0) {
+      count = count + 1
+      totalYear = totalYear + businessSold.year2
+    }
+    if (businessSold.year1 > 0) {
+      totalYear = totalYear + businessSold.year1
+      count = count + 1
+    }
+
+    return totalYear / count - businessSold.agreedWageForWorkingOwners
+  }
+
+  _pebitdaLastYearChart = businessSold => {
+    if (businessSold.year4 > 0) {
+      return businessSold.year4 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+    if (businessSold.year3 > 0) {
+      return businessSold.year3 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+    if (businessSold.year2 > 0) {
+      return businessSold.year2 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+    if (businessSold.year1 > 0) {
+      return businessSold.year1 - (businessSold.agreedWageForWorkingOwners - businessSold.agreedWageForMainOwner)
+    }
+  }
+
+  _pebitdaAvgChart = businessSold => {
+    return this._ebitdaAvgChart(businessSold) + businessSold.agreedWageForMainOwner
+  }
+
+  _multiplierPebitdaAvgChart = businessSold => {
+    return businessSold.soldPrice / (this._ebitdaAvgChart(businessSold) + businessSold.agreedWageForMainOwner)
+  }
+
+  _multiplierEbitdaLastYearWithStockChart = businessSold => {
+    return (businessSold.soldPrice + businessSold.stockValue) / this._ebitdaLastYearChart(businessSold)
+  }
+
+  _multiplierEbitdaAvgWithStockChart = businessSold => {
+    return (businessSold.soldPrice + businessSold.stockValue) / this._ebitdaAvgChart(businessSold)
+  }
+
+  _multiplierPebitdaLastYearWithStockChart = businessSold => {
+    return businessSold.soldPrice / (this._pebitdaLastYearChart(businessSold) + businessSold.stockValue)
+  }
+
+  _multiplierPebitdaAvgWithStockChart = businessSold => {
+    return businessSold.soldPrice / (this._pebitdaAvgChart(businessSold) + businessSold.stockValue)
+  }
+
+  _multiplierTurnOverChart = businessSold => {
+    return businessSold.soldPrice / businessSold.latestFullYearTotalRevenue
+  }
+
+  _handleChangeCheckBox = async (name, value) => {
+    await this.props.setFieldValue(name, value)
     if (value === 1) {
-      this.props.calcMinMaxChart(this.props.listSelected, this._multiplierEbitdaLastYearChart)
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierEbitdaLastYearChart)
     }
     if (value === 2) {
-      this.props.calcMinMaxChart(this.props.listSelected, this._multiplierEbitdaAvgChart)
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierEbitdaAvgChart)
     }
     if (value === 3) {
-      this.props.calcMinMaxChart(this.props.listSelected, this._multiplierPebitdaLastYearChart)
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierPebitdaLastYearChart)
     }
+    if (value === 4) {
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierPebitdaAvgChart)
+    }
+    if (value === 5) {
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierEbitdaLastYearWithStockChart)
+    }
+    if (value === 6) {
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierEbitdaAvgWithStockChart)
+    }
+    if (value === 7) {
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierPebitdaLastYearWithStockChart)
+    }
+    if (value === 8) {
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierPebitdaAvgWithStockChart)
+    }
+    if (value === 9) {
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierTurnOverChart)
+    }
+    this.setState({
+      data: [
+        { name: '90% Chance of Selling', value: this._chart('90% Chance of Selling') },
+        { name: 'Avg Multiplier', value: this._chart('Avg Multiplier') },
+        { name: 'Risk Premium', value: this._chart('Risk Premium') },
+        { name: 'Market Premium', value: this._chart('Market Premium') },
+        { name: 'Asking Price', value: this._chart('Asking Price') },
+        { name: 'Less than 5% Chance of Selling', value: this._chart('Less than 5% Chance of Selling') }
+      ]
+    })
   }
 
   _ebitdaLastYear = appraisalObject => {
@@ -291,8 +396,18 @@ class PricingPage extends Component {
     if (appraisalObject && appraisalObject.sales1 > 0) return appraisalObject.sales1
   }
 
-  _handleChangeSlider = (value, name) => {
-    this.props.setFieldValue(name, value)
+  _handleChangeSlider = async (value, name) => {
+    await this.props.setFieldValue(name, value)
+    this.setState({
+      data: [
+        { name: '90% Chance of Selling', value: this._chart('90% Chance of Selling') },
+        { name: 'Avg Multiplier', value: this._chart('Avg Multiplier') },
+        { name: 'Risk Premium', value: this._chart('Risk Premium') },
+        { name: 'Market Premium', value: this._chart('Market Premium') },
+        { name: 'Asking Price', value: this._chart('Asking Price') },
+        { name: 'Less than 5% Chance of Selling', value: this._chart('Less than 5% Chance of Selling') }
+      ]
+    })
   }
 
   _labelPricingMethod = pricingMethod => {
@@ -1077,13 +1192,14 @@ PricingPage.propTypes = {
   smallestMultiplier: PropTypes.number,
   biggestMultiplier: PropTypes.number,
   listSelected: PropTypes.array,
-  calcMinMaxChart: PropTypes.func
+  calcMinMaxChart: PropTypes.func,
+  isCalculated: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  pricingMethod: props.appraisalObject ? props.appraisalObject.pricingMethod : 1,
+  pricingMethod: props.appraisalObject ? props.appraisalObject.pricingMethod : 0,
   sliderRiskPremium: props.appraisalObject ? props.appraisalObject.sliderRiskPremium : 0,
   sliderMarketPremium: props.appraisalObject ? props.appraisalObject.sliderMarketPremium : 0,
   sliderNegotiationPremium: props.appraisalObject ? props.appraisalObject.sliderNegotiationPremium : 0,
@@ -1097,6 +1213,7 @@ const mapStateToProps = state => {
   return {
     smallestMultiplier: state.businessSold.getCalcMinMax.smallestMultiplier,
     biggestMultiplier: state.businessSold.getCalcMinMax.biggestMultiplier,
+    isCalculated: state.businessSold.getCalcMinMax.isCalculated,
     listSelected: state.businessSold.getList.array
   }
 }

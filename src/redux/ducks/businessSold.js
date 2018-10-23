@@ -325,7 +325,8 @@ export default function reducer (state = initialState, action) {
         getCalcMinMax: {
           ...state.getCalcMinMax,
           smallestMultiplier: action.minValue,
-          biggestMultiplier: action.maxValue
+          biggestMultiplier: action.maxValue,
+          isCalculated: true
         }
       }
     case Types.ADD_SELECTED_LIST:
