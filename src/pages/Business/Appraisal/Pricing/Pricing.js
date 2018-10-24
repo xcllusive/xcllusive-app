@@ -36,7 +36,7 @@ class PricingPage extends Component {
   componentDidMount () {
     this.props.getSelectedList(this.props.appraisalObject.id)
 
-    if (this.props.appraisalObject.pricingMethod > 0) {
+    if (this.props.appraisalObject && this.props.appraisalObject.pricingMethod > 0) {
       this.setState({
         data: [
           { name: '90% Chance of Selling', value: this._chart('90% Chance of Selling') },
@@ -49,16 +49,6 @@ class PricingPage extends Component {
       })
     }
   }
-
-  // static getDerivedStateFromProps (nextProps, prevState) {
-  //   if (nextProps && nextProps.isCalculated && prevState.isCalculated) {
-  //     console.log('test')
-  //     return {
-  //       data:
-  //     }
-  //   }
-  //   return null
-  // }
 
   componentWillUnmount () {
     const obj = {
@@ -1170,6 +1160,17 @@ class PricingPage extends Component {
             </Grid.Row>
           </Grid>
         </Segment>
+        <Form.Group>
+          <Form.Field>
+            <Form.Checkbox
+              label="Please confirm that you have completed the above information"
+              name="confirmPricing"
+              onChange={this._handleChangeCheckBox}
+              disabled={this.props.listSelected.length === 0}
+              checked={values.confirmPricing}
+            />
+          </Form.Field>
+        </Form.Group>
       </Wrapper>
     )
   }
@@ -1206,7 +1207,8 @@ const mapPropsToValues = props => ({
   agreedValue: props.appraisalObject ? numeral(props.appraisalObject.agreedValue).format('0,0.[99]') : 0,
   sliderLowRange: -10,
   inclStock: true,
-  reducePriceForStockValue: true
+  reducePriceForStockValue: true,
+  confirmPricing: props.appraisalObject ? props.appraisalObject.confirmPricing : false
 })
 
 const mapStateToProps = state => {

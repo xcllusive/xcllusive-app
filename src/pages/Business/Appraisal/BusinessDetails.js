@@ -12,6 +12,7 @@ import { updateAppraisal } from '../../../redux/ducks/appraisal'
 class BusinessDetailsPage extends Component {
   constructor (props) {
     super(props)
+    this.showCirculares = this.showCirculares.bind(this)
     this.state = {
       state: [
         { key: '1', text: 'ACT', value: 'ACT' },
@@ -24,6 +25,10 @@ class BusinessDetailsPage extends Component {
         { key: '8', text: 'WA', value: 'WA' }
       ]
     }
+  }
+
+  showCirculares (confirmBusinessDetail) {
+    this.props.showView(confirmBusinessDetail)
   }
 
   componentWillUnmount () {
@@ -55,36 +60,20 @@ class BusinessDetailsPage extends Component {
   }
 
   render () {
-    const {
-      values,
-      handleChange,
-      handleBlur,
-      errors,
-      touched,
-      isLoadingCreating
-    } = this.props
+    const { values, handleChange, handleBlur, errors, touched, isLoadingCreating } = this.props
     const { state } = this.state
     return (
       <Wrapper loading={isLoadingCreating}>
         <Step.Group size="large">
-          <Step
-            active
-            icon="address card"
-            title="Step 1"
-            description="Please Confirm the Business Details"
-          />
+          <Step active icon="address card" title="Step 1" description="Please Confirm the Business Details" />
           <Message info size="large">
             <p>
-              From this section of the database you can enter all of the
-              information necessary to complete a business appraisal. The
-              process will take place over 7 steps. If at any time you wish to
-              save your work and come back later, you can click{' '}
-              <b>`Save and Complete Later`</b>. To quickly save your work,
-              simply hit the [Enter] or [Return] key on your keyboard. Once you
-              have completed a step, review your work then click the
-              confirmation check box with the red text next to it. Then, simply
-              click the [Next Stage] button to advance through the appraisal
-              process.
+              From this section of the database you can enter all of the information necessary to complete a business
+              appraisal. The process will take place over 7 steps. If at any time you wish to save your work and come
+              back later, you can click <b>`Save and Complete Later`</b>. To quickly save your work, simply hit the
+              [Enter] or [Return] key on your keyboard. Once you have completed a step, review your work then click the
+              confirmation check box with the red text next to it. Then, simply click the [Next Stage] button to advance
+              through the appraisal process.
             </p>
           </Message>
         </Step.Group>
@@ -100,14 +89,7 @@ class BusinessDetailsPage extends Component {
                 onBlur={handleBlur}
               />
               {errors.businessName &&
-                touched.businessName && (
-                <Label
-                  basic
-                  color="red"
-                  pointing
-                  content={errors.businessName}
-                />
-              )}
+                touched.businessName && <Label basic color="red" pointing content={errors.businessName} />}
             </Form.Field>
             <Form.Field width={7}>
               <Form.Input
@@ -119,14 +101,7 @@ class BusinessDetailsPage extends Component {
                 onBlur={handleBlur}
               />
               {errors.businessABN &&
-                touched.businessABN && (
-                <Label
-                  basic
-                  color="red"
-                  pointing
-                  content={errors.businessABN}
-                />
-              )}
+                touched.businessABN && <Label basic color="red" pointing content={errors.businessABN} />}
             </Form.Field>
             <Form.Field width={2}>
               <label>ABN LOOKUP</label>
@@ -151,14 +126,7 @@ class BusinessDetailsPage extends Component {
                 onBlur={handleBlur}
               />
               {errors.firstNameV &&
-                touched.firstNameV && (
-                <Label
-                  basic
-                  color="red"
-                  pointing
-                  content={errors.firstNameV}
-                />
-              )}
+                touched.firstNameV && <Label basic color="red" pointing content={errors.firstNameV} />}
             </Form.Field>
             <Form.Field>
               <Form.Input
@@ -169,15 +137,7 @@ class BusinessDetailsPage extends Component {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.lastNameV &&
-                touched.lastNameV && (
-                <Label
-                  basic
-                  color="red"
-                  pointing
-                  content={errors.lastNameV}
-                />
-              )}
+              {errors.lastNameV && touched.lastNameV && <Label basic color="red" pointing content={errors.lastNameV} />}
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
@@ -190,10 +150,7 @@ class BusinessDetailsPage extends Component {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.address1 &&
-                touched.address1 && (
-                <Label basic color="red" pointing content={errors.address1} />
-              )}
+              {errors.address1 && touched.address1 && <Label basic color="red" pointing content={errors.address1} />}
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
@@ -206,10 +163,7 @@ class BusinessDetailsPage extends Component {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.suburb &&
-                touched.suburb && (
-                <Label basic color="red" pointing content={errors.suburb} />
-              )}
+              {errors.suburb && touched.suburb && <Label basic color="red" pointing content={errors.suburb} />}
             </Form.Field>
             <Form.Field>
               <Form.Select
@@ -220,10 +174,7 @@ class BusinessDetailsPage extends Component {
                 value={values.state}
                 onChange={this._handleSelectChange}
               />
-              {errors.state &&
-                touched.state && (
-                <Label basic color="red" pointing content={errors.state} />
-              )}
+              {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
             </Form.Field>
             <Form.Field>
               <Form.Input
@@ -234,10 +185,7 @@ class BusinessDetailsPage extends Component {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.postCode &&
-                touched.postCode && (
-                <Label basic color="red" pointing content={errors.postCode} />
-              )}
+              {errors.postCode && touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
             </Form.Field>
           </Form.Group>
           <Form.Group>
@@ -247,6 +195,7 @@ class BusinessDetailsPage extends Component {
                 name="confirmBusinessDetail"
                 onChange={this._handleChangeCheckBox}
                 checked={values.confirmBusinessDetail}
+                onClick={this.showCirculares(values.confirmBusinessDetail)}
               />
             </Form.Field>
           </Form.Group>
@@ -270,7 +219,8 @@ BusinessDetailsPage.propTypes = {
   updateBusiness: PropTypes.func,
   updateAppraisal: PropTypes.func,
   isLoadingCreating: PropTypes.bool,
-  appraisalObject: PropTypes.object
+  appraisalObject: PropTypes.object,
+  showView: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -284,9 +234,7 @@ const mapPropsToValues = props => ({
   suburb: props.business ? props.business.suburb : '',
   state: props.business ? props.business.state : '',
   postCode: props.business ? props.business.postCode : '',
-  confirmBusinessDetail: props.appraisalObject
-    ? props.appraisalObject.confirmBusinessDetail
-    : false
+  confirmBusinessDetail: props.appraisalObject ? props.appraisalObject.confirmBusinessDetail : false
 })
 
 const validationSchema = Yup.object().shape({
@@ -309,9 +257,7 @@ const validationSchema = Yup.object().shape({
     .max(4, 'Post Code require max 4 integers.')
 })
 
-const mapStateToProps = state => ({
-
-})
+const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({ updateBusiness, updateAppraisal }, dispatch)
