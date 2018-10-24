@@ -105,6 +105,36 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
               tabIndex: 702
             }
           ]
+        },
+        {
+          name: 'aaRow4',
+          tabIndex: 103,
+          columns: [
+            {
+              name: 'aaRow4Year1',
+              tabIndex: 203
+            },
+            {
+              name: 'aaRow4Year2',
+              tabIndex: 303
+            },
+            {
+              name: 'aaRow4Year3',
+              tabIndex: 403
+            },
+            {
+              name: 'aaRow4Year4',
+              tabIndex: 503
+            },
+            {
+              name: 'aaRow4Year5',
+              tabIndex: 603
+            },
+            {
+              name: 'aaRow4Year6',
+              tabIndex: 703
+            }
+          ]
         }
       ]
     }

@@ -34,13 +34,60 @@ const FinancialAnalysisForm = ({
   const _calcOperatingProfitPerc = (sales, cogs, other, expense) =>
     ((_calcOperatingProfit(sales, cogs, other, expense) / sales) * 100).toFixed(2) || 0
 
-  // const _calcAnnualised = (yearValue, monthsCoveredValue, seasonalAdjustmentValue) => {
-  //   const year = numeral(yearValue).value()
-  //   const monthsCovered = numeral(monthsCoveredValue).value()
-  //   const seasonalAdjustment = numeral(seasonalAdjustmentValue).value() / 100
+  const _calcAnnualised = (yearValue, monthsCoveredValue, seasonalAdjustmentValue) => {
+    const year = numeral(yearValue).value()
+    const monthsCovered = numeral(monthsCoveredValue).value()
+    const seasonalAdjustment = numeral(seasonalAdjustmentValue).value() / 100
 
-  //   return (year / monthsCovered) * 12 + ((year / monthsCovered) * 12 - year) * seasonalAdjustment || 0
-  // }
+    return (year / monthsCovered) * 12 + ((year / monthsCovered) * 12 - year) * seasonalAdjustment
+  }
+
+  const _handleChangeCheckBox = (e, { name, row, checked }) => {
+    handleChangeCheckBox(e, { name })
+
+    if (row === 1) {
+      if (checked) {
+        setFieldValue(
+          `calcAnnualised${row}`,
+          _calcAnnualised(values.sales6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${row}`, 0)
+      }
+    }
+
+    if (row === 2) {
+      if (checked) {
+        setFieldValue(
+          `calcAnnualised${row}`,
+          _calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${row}`, 0)
+      }
+    }
+
+    if (row === 5) {
+      if (checked) {
+        setFieldValue(
+          `calcAnnualised${row}`,
+          _calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${row}`, 0)
+      }
+    }
+    if (row === 7) {
+      if (checked) {
+        setFieldValue(
+          `calcAnnualised${row}`,
+          _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${row}`, 0)
+      }
+    }
+  }
 
   const _handleChangeSales = (e, { name, value, column }) => {
     const sales = value
@@ -251,10 +298,10 @@ const FinancialAnalysisForm = ({
         </CustomColumn>
         <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
           {/* {_calcAnnualised(values.sales6, values.monthsCovered, values.seasonalAdjustment)} */}
-          {values.calcAnnualised6}
+          {values.calcAnnualised1}
         </CustomColumn>
         <CustomColumn textAlign="center">
-          <Checkbox name="salesYesNo" onChange={handleChangeCheckBox} checked={values.salesYesNo} />
+          <Checkbox name="salesYesNo" onChange={_handleChangeCheckBox} row={1} checked={values.salesYesNo} />
         </CustomColumn>
       </Grid.Row>
       <Grid.Row style={{ backgroundColor: '#dae4ef' }} columns={9}>
@@ -347,9 +394,10 @@ const FinancialAnalysisForm = ({
         </CustomColumn>
         <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
           {/* {_calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment)} */}
+          {values.calcAnnualised2}
         </CustomColumn>
         <CustomColumn textAlign="center">
-          <Checkbox name="cogsYesNo" onChange={handleChangeCheckBox} checked={values.cogsYesNo} />
+          <Checkbox name="cogsYesNo" onChange={_handleChangeCheckBox} row={2} checked={values.cogsYesNo} />
         </CustomColumn>
       </Grid.Row>
       <Grid.Row columns={9}>
@@ -477,9 +525,15 @@ const FinancialAnalysisForm = ({
         </CustomColumn>
         <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
           {/* {_calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)} */}
+          {values.calcAnnualised5}
         </CustomColumn>
         <CustomColumn textAlign="center">
-          <Checkbox name="otherIncomeYesNo" onChange={handleChangeCheckBox} checked={values.otherIncomeYesNo} />
+          <Checkbox
+            name="otherIncomeYesNo"
+            onChange={_handleChangeCheckBox}
+            row={5}
+            checked={values.otherIncomeYesNo}
+          />
         </CustomColumn>
       </Grid.Row>
       <Grid.Row columns={9}>
@@ -588,9 +642,10 @@ const FinancialAnalysisForm = ({
         </CustomColumn>
         <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
           {/* {_calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)} */}
+          {values.calcAnnualised7}
         </CustomColumn>
         <CustomColumn textAlign="center">
-          <Checkbox name="expensesYesNo" onChange={handleChangeCheckBox} checked={values.expensesYesNo} />
+          <Checkbox name="expensesYesNo" onChange={_handleChangeCheckBox} row={7} checked={values.expensesYesNo} />
         </CustomColumn>
       </Grid.Row>
       <Grid.Row columns={9}>

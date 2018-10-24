@@ -215,7 +215,10 @@ const mapPropsToValues = props => ({
   expenses4: props.appraisalObject ? props.appraisalObject.expenses4 : 0,
   expenses5: props.appraisalObject ? props.appraisalObject.expenses5 : 0,
   expenses6: props.appraisalObject ? props.appraisalObject.expenses6 : 0,
-  calcAnnualised: 0,
+  calcAnnualised1: 0,
+  calcAnnualised2: 0,
+  calcAnnualised5: 0,
+  calcAnnualised7: 0,
   calcGrossMargin1: 0,
   calcGrossMargin2: 0,
   calcGrossMargin3: 0,
@@ -245,7 +248,11 @@ const mapPropsToValues = props => ({
   calcOperatingProfitPerc3: 0,
   calcOperatingProfitPerc4: 0,
   calcOperatingProfitPerc5: 0,
-  calcOperatingProfitPerc6: 0
+  calcOperatingProfitPerc6: 0,
+  salesYesNo: false,
+  cogsYesNo: false,
+  otherIncomeYesNo: false,
+  expensesYesNo: false
 })
 
 const validationSchema = Yup.object().shape({})
