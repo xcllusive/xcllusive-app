@@ -20,16 +20,15 @@ import NotesAndAssumptions from './NotesAndAssumptions'
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
-    this.showViewAction = this.showViewAction.bind(this)
     this.state = {
       activeItem: 'NotesAndAssumptions',
       percent: 75,
       colorProgress: null,
-      confirmBusinessDetail: false
+      confirmBusinessDetail: null
     }
   }
 
-  showViewAction (viewToShow) {
+  showViewAction = viewToShow => {
     this.setState({ confirmBusinessDetail: viewToShow })
   }
 
