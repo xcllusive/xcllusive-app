@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Menu, Segment, Grid, Button, Icon, Header, Progress } from 'semantic-ui-react'
+import { Menu, Segment, Grid, Button, Icon, Header, Progress, Label } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import BusinessDetails from './BusinessDetails'
 import About from './About/About'
@@ -15,16 +15,22 @@ import { getAppraisal } from '../../../redux/ducks/appraisal'
 import BusinessAnalysis from './BusinessAnalysis'
 import ComparableData from './ComparableData'
 import Pricing from './Pricing/Pricing'
-import Recommendations from './Recommendations'
+import NotesAndAssumptions from './NotesAndAssumptions'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
+    this.showViewAction = this.showViewAction.bind(this)
     this.state = {
-      activeItem: 'Pricing',
+      activeItem: 'NotesAndAssumptions',
       percent: 75,
-      colorProgress: null
+      colorProgress: null,
+      confirmBusinessDetail: false
     }
+  }
+
+  showViewAction (viewToShow) {
+    this.setState({ confirmBusinessDetail: viewToShow })
   }
 
   componentDidMount () {
@@ -34,6 +40,8 @@ class AppraisalMenuPage extends Component {
     if (!this.props.business.id) {
       this.props.getBusiness(this.props.location.state.business.id)
     }
+
+    this.setState({ confirmBusinessDetail: this.props.location.state.appraisalObject.confirmBusinessDetail })
   }
 
   _handleItemClick = (e, { name }) => {
@@ -57,9 +65,9 @@ class AppraisalMenuPage extends Component {
       this.setState({ activeItem: 'Pricing' })
     }
     if (this.state.activeItem === 'Pricing') {
-      this.setState({ activeItem: 'Recommendations' })
+      this.setState({ activeItem: 'NotesAndAssumptions' })
     }
-    if (this.state.activeItem === 'Recommendations') {
+    if (this.state.activeItem === 'NotesAndAssumptions') {
       this.setState({ activeItem: 'Confirm and Send' })
     }
   }
@@ -80,11 +88,11 @@ class AppraisalMenuPage extends Component {
     if (this.state.activeItem === 'Pricing') {
       this.setState({ activeItem: 'Comparable Data' })
     }
-    if (this.state.activeItem === 'Recommendations') {
+    if (this.state.activeItem === 'NotesAndAssumptions') {
       this.setState({ activeItem: 'Pricing' })
     }
     if (this.state.activeItem === 'Confirm and Send') {
-      this.setState({ activeItem: 'Recommendations' })
+      this.setState({ activeItem: 'NotesAndAssumptions' })
     }
   }
 
@@ -120,12 +128,17 @@ class AppraisalMenuPage extends Component {
           </Grid>
         </Segment>
         <Menu pointing horizontal="true" color="blue" fixed="top">
-          <Menu.Item
-            name="Business Details"
-            active={activeItem === 'Business Details'}
-            onClick={this._handleItemClick}
-          />
-          <Menu.Item name="About" active={activeItem === 'About'} onClick={this._handleItemClick} />
+          <Menu.Item name="Business Details" active={activeItem === 'Business Details'} onClick={this._handleItemClick}>
+            Business Details
+            {this.state.confirmBusinessDetail ? (
+              <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
+            ) : (
+              <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
+            )}
+          </Menu.Item>
+          <Menu.Item name="About" active={activeItem === 'About'} onClick={this._handleItemClick}>
+            About
+          </Menu.Item>
           <Menu.Item
             name="Business Analysis"
             active={activeItem === 'Business Analysis'}
@@ -138,7 +151,11 @@ class AppraisalMenuPage extends Component {
           />
           <Menu.Item name="Comparable Data" active={activeItem === 'Comparable Data'} onClick={this._handleItemClick} />
           <Menu.Item name="Pricing" active={activeItem === 'Pricing'} onClick={this._handleItemClick} />
-          <Menu.Item name="Recommendations" active={activeItem === 'Recommendations'} onClick={this._handleItemClick} />
+          <Menu.Item
+            name="Notes And Assumptions"
+            active={activeItem === 'Notes And Assumptions'}
+            onClick={this._handleItemClick}
+          />
           <Menu.Item
             name="Confirm and Send"
             active={activeItem === 'Confirm and Send'}
@@ -147,7 +164,12 @@ class AppraisalMenuPage extends Component {
         </Menu>
         {this.state.activeItem === 'Business Details' ? (
           <Segment>
-            <BusinessDetails business={business} isLoadingCreating={isLoadingCreating} appraisalObject={appraisal} />
+            <BusinessDetails
+              business={business}
+              isLoadingCreating={isLoadingCreating}
+              appraisalObject={appraisal}
+              showView={this.showViewAction}
+            />
           </Segment>
         ) : null}
         {this.state.activeItem === 'About' ? (
@@ -175,9 +197,9 @@ class AppraisalMenuPage extends Component {
             {appraisal && appraisal.id ? <Pricing business={business} appraisalObject={appraisal} /> : null}
           </Segment>
         ) : null}
-        {this.state.activeItem === 'Recommendations' ? (
+        {this.state.activeItem === 'NotesAndAssumptions' ? (
           <Segment>
-            {appraisal && appraisal.id ? <Recommendations business={business} appraisalObject={appraisal} /> : null}
+            {appraisal && appraisal.id ? <NotesAndAssumptions business={business} appraisalObject={appraisal} /> : null}
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>
