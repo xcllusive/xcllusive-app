@@ -489,7 +489,7 @@ class PricingPage extends Component {
     }
   }
 
-  _handleChangeCheckBoxStock = (e, { name }) => {
+  _handleCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
@@ -1093,7 +1093,7 @@ class PricingPage extends Component {
                   name="inclStock"
                   value="inclStock"
                   checked={values.inclStock}
-                  onChange={this._handleChangeCheckBoxStock}
+                  onChange={this._handleCheckBox}
                 />
                 <Checkbox
                   style={{ marginLeft: '20px' }}
@@ -1101,7 +1101,7 @@ class PricingPage extends Component {
                   name="reducePriceForStockValue"
                   value="reducePriceForStockValue"
                   checked={values.reducePriceForStockValue}
-                  onChange={this._handleChangeCheckBoxStock}
+                  onChange={this._handleCheckBox}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -1165,9 +1165,10 @@ class PricingPage extends Component {
             <Form.Checkbox
               label="Please confirm that you have completed the above information"
               name="confirmPricing"
-              onChange={this._handleChangeCheckBox}
+              onChange={this._handleCheckBox}
               disabled={this.props.listSelected.length === 0}
               checked={values.confirmPricing}
+              onClick={() => this.props.confirmsCompleteSteps('confirmPricing', !values.confirmPricing)}
             />
           </Form.Field>
         </Form.Group>
@@ -1194,7 +1195,8 @@ PricingPage.propTypes = {
   biggestMultiplier: PropTypes.number,
   listSelected: PropTypes.array,
   calcMinMaxChart: PropTypes.func,
-  isCalculated: PropTypes.bool
+  isCalculated: PropTypes.bool,
+  confirmsCompleteSteps: PropTypes.func
 }
 
 const mapPropsToValues = props => ({

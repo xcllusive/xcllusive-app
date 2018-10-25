@@ -317,6 +317,10 @@ class ComparableDataPage extends Component {
     this.props.saveSelectedList(this.props.listSelected, this.props.appraisalObject.id)
   }
 
+  _handleCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
+  }
+
   _assignObject () {
     const objectSum = {
       sumMEbitdaLastYear: numeral(this.state.sumMEbitdaLastYear / this.props.listSelected.length)
@@ -946,9 +950,10 @@ class ComparableDataPage extends Component {
             <Form.Checkbox
               label="Please confirm that you have completed the above information"
               name="confirmComparableData"
-              onChange={this._handleChangeCheckBox}
+              onChange={this._handleCheckBox}
               disabled={this.props.listSelected.length === 0}
               checked={values.confirmComparableData}
+              onClick={() => this.props.confirmsCompleteSteps('confirmComparableData', !values.confirmComparableData)}
             />
           </Form.Field>
         </Form.Group>
@@ -979,7 +984,8 @@ ComparableDataPage.propTypes = {
   listSelected: PropTypes.array,
   addSelectedList: PropTypes.func,
   removeSelectedList: PropTypes.func,
-  isLoadingListSelected: PropTypes.bool
+  isLoadingListSelected: PropTypes.bool,
+  confirmsCompleteSteps: PropTypes.func
 }
 
 const mapPropsToValues = props => ({

@@ -4,15 +4,7 @@ import { Form, Label, Radio } from 'semantic-ui-react'
 
 import { OptionsLargestClient5TO } from '../../../../constants/OptionsLargestClient5TO'
 
-const CustomersSuppliersForm = ({
-  values,
-  handleChange,
-  handleBlur,
-  errors,
-  touched,
-  isValid,
-  setFieldValue
-}) => {
+const CustomersSuppliersForm = ({ values, handleChange, handleBlur, errors, touched, isValid, setFieldValue }) => {
   const state = {
     largestClient5TOOptions: OptionsLargestClient5TO,
     owners1sHoursOptions: [
@@ -44,14 +36,7 @@ const CustomersSuppliersForm = ({
             onBlur={handleBlur}
           />
           {errors.descriptionCustomers &&
-            touched.descriptionCustomers && (
-            <Label
-              basic
-              color="red"
-              pointing
-              content={errors.descriptionCustomers}
-            />
-          )}
+            touched.descriptionCustomers && <Label basic color="red" pointing content={errors.descriptionCustomers} />}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -72,9 +57,7 @@ const CustomersSuppliersForm = ({
           onChange={_handleChangeCheckBox}
           checked={!values.clientDatabaseAvailable}
         />
-        <label>
-          Are there any clients taking up greater than 10% of the T/O?
-        </label>
+        <label>Are there any clients taking up greater than 10% of the T/O?</label>
         <Form.Field
           width={2}
           control={Radio}
@@ -105,12 +88,7 @@ const CustomersSuppliersForm = ({
             />
             {errors.descriptionClient10TO &&
               touched.descriptionClient10TO && (
-              <Label
-                basic
-                color="red"
-                pointing
-                content={errors.descriptionClient10TO}
-              />
+              <Label basic color="red" pointing content={errors.descriptionClient10TO} />
             )}
           </Form.Field>
         </Form.Group>
@@ -125,10 +103,7 @@ const CustomersSuppliersForm = ({
             value={values.client5TO}
             onChange={_handleSelectChange}
           />
-          {errors.client5TO &&
-            touched.client5TO && (
-            <Label basic color="red" pointing content={errors.client5TO} />
-          )}
+          {errors.client5TO && touched.client5TO && <Label basic color="red" pointing content={errors.client5TO} />}
         </Form.Field>
         <Form.Field width={10}>
           <Form.TextArea
@@ -140,14 +115,7 @@ const CustomersSuppliersForm = ({
             onBlur={handleBlur}
           />
           {errors.descriptionSuppliers &&
-            touched.descriptionSuppliers && (
-            <Label
-              basic
-              color="red"
-              pointing
-              content={errors.descriptionSuppliers}
-            />
-          )}
+            touched.descriptionSuppliers && <Label basic color="red" pointing content={errors.descriptionSuppliers} />}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -157,10 +125,11 @@ const CustomersSuppliersForm = ({
             name="confirmCustomersSuppliers"
             onChange={_handleChangeCheckBox}
             checked={values.confirmCustomersSuppliers}
+            onClick={() =>
+              this.props.confirmsCompleteSteps('confirmCustomersSuppliers', !values.confirmCustomersSuppliers)
+            }
             disabled={
-              values.descriptionCustomers === '' ||
-              values.client5TO === '' ||
-              values.descriptionSuppliers === ''
+              values.descriptionCustomers === '' || values.client5TO === '' || values.descriptionSuppliers === ''
             }
           />
         </Form.Field>
@@ -180,7 +149,8 @@ CustomersSuppliersForm.propTypes = {
   appraisalObject: PropTypes.object,
   updateAppraisal: PropTypes.func,
   business: PropTypes.object,
-  sendValuesToAbout: PropTypes.func
+  sendValuesToAbout: PropTypes.func,
+  confirmsCompleteSteps: PropTypes.func
 }
 
 export default CustomersSuppliersForm

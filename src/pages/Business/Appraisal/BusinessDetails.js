@@ -190,7 +190,7 @@ class BusinessDetailsPage extends Component {
                 name="confirmBusinessDetail"
                 onChange={this._handleChangeCheckBox}
                 checked={values.confirmBusinessDetail}
-                onClick={() => this.props.showView(values.confirmBusinessDetail)}
+                onClick={() => this.props.confirmsCompleteSteps('confirmBusinessDetail', !values.confirmBusinessDetail)}
               />
             </Form.Field>
           </Form.Group>
@@ -215,7 +215,7 @@ BusinessDetailsPage.propTypes = {
   updateAppraisal: PropTypes.func,
   isLoadingCreating: PropTypes.bool,
   appraisalObject: PropTypes.object,
-  showView: PropTypes.func
+  confirmsCompleteSteps: PropTypes.func
 }
 
 const mapPropsToValues = props => ({

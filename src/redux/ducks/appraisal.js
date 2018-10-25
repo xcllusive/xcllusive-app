@@ -1,14 +1,6 @@
 import { toast } from 'react-toastify'
 import download from '../../utils/file-download'
-import {
-  create,
-  getAll,
-  get,
-  update,
-  downloadAppr,
-  send,
-  remove
-} from '../../services/api/appraisal'
+import { create, getAll, get, update, downloadAppr, send, remove } from '../../services/api/appraisal'
 
 // Action Types
 
@@ -34,7 +26,8 @@ export const Types = {
   SEND_APPRAISAL_FAILURE: 'SEND_APPRAISAL_FAILURE',
   REMOVE_APPRAISAL_LOADING: 'REMOVE_APPRAISAL_LOADING',
   REMOVE_APPRAISAL_SUCCESS: 'REMOVE_APPRAISAL_SUCCESS',
-  REMOVE_APPRAISAL_FAILURE: 'REMOVE_APPRAISAL_FAILURE'
+  REMOVE_APPRAISAL_FAILURE: 'REMOVE_APPRAISAL_FAILURE',
+  CALC_COMPLETE_STEPS: 'CALC_COMPLETE_STEPS'
 }
 
 // Reducer
@@ -75,6 +68,21 @@ const initialState = {
     isLoading: false,
     isDeleted: false,
     error: null
+  },
+  getCalcCompleteSteps: {
+    confirm: {
+      confirmBusinessDetail: { isConfirm: false, completedPerc: 0 },
+      confirmAbout: { isConfirm: false, completedPerc: 0 },
+      confirmCustomersSuppliers: { isConfirm: false, completedPerc: 0 },
+      confirmPremisesEnployees: { isConfirm: false, completedPerc: 0 },
+      confirmOwnershipFinalNotes: { isConfirm: false, completedPerc: 0 },
+      confirmBusinessAnalysis: { isConfirm: false, completedPerc: 0 },
+      confirmFinancialAnalysis: { isConfirm: false, completedPerc: 0 },
+      confirmComparableData: { isConfirm: false, completedPerc: 0 },
+      confirmPricing: { isConfirm: false, completedPerc: 0 },
+      confirmNotesAndAssumptions: { isConfirm: false, completedPerc: 0 }
+    },
+    isCalculated: false
   }
 }
 
@@ -285,6 +293,21 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CALC_COMPLETE_STEPS:
+      return {
+        ...state,
+        getCalcCompleteSteps: {
+          ...state.getCalcCompleteSteps,
+          confirm: {
+            ...state.getCalcCompleteSteps.confirm,
+            ...(state.getCalcCompleteSteps.confirm[action.confirmName] = {
+              isConfirm: action.isConfirm,
+              completedPerc: action.completedPerc
+            })
+          },
+          isCalculated: true
+        }
+      }
     case Types.CLEAR_APPRAISAL:
       return initialState
     default:
@@ -344,6 +367,16 @@ export const getAppraisal = id => async dispatch => {
   })
   try {
     const appraisal = await get(id)
+    dispatch(addTodo('confirmBusinessDetail', appraisal.data.confirmBusinessDetail))
+    dispatch(addTodo('confirmAbout', appraisal.data.confirmAbout))
+    dispatch(addTodo('confirmCustomersSuppliers', appraisal.data.confirmCustomersSuppliers))
+    dispatch(addTodo('confirmPremisesEnployees', appraisal.data.confirmPremisesEnployees))
+    dispatch(addTodo('confirmOwnershipFinalNotes', appraisal.data.confirmOwnershipFinalNotes))
+    dispatch(addTodo('confirmBusinessAnalysis', appraisal.data.confirmBusinessAnalysis))
+    dispatch(addTodo('confirmFinancialAnalysis', appraisal.data.confirmFinancialAnalysis))
+    dispatch(addTodo('confirmComparableData', appraisal.data.confirmComparableData))
+    dispatch(addTodo('confirmPricing', appraisal.data.confirmPricing))
+    dispatch(addTodo('confirmNotesAndAssumptions', appraisal.data.confirmNotesAndAssumptions))
     dispatch({
       type: Types.GET_APPRAISAL_SUCCESS,
       payload: appraisal.data
@@ -443,4 +476,20 @@ export const clearAppraisal = () => async dispatch => {
   dispatch({
     type: Types.CLEAR_APPRAISAL
   })
+}
+
+export const calcCompleteSteps = (confirmName, confirm) => async dispatch => {
+  dispatch(addTodo(confirmName, confirm))
+}
+
+const addTodo = (confirmName, confirm) => {
+  let completedPerc = null
+  if (confirm) completedPerc = 10
+  if (!confirm) completedPerc = 0
+  return {
+    type: Types.CALC_COMPLETE_STEPS,
+    isConfirm: confirm,
+    completedPerc,
+    confirmName
+  }
 }
