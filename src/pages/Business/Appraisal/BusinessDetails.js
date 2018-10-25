@@ -12,7 +12,6 @@ import { updateAppraisal } from '../../../redux/ducks/appraisal'
 class BusinessDetailsPage extends Component {
   constructor (props) {
     super(props)
-    this.showCirculares = this.showCirculares.bind(this)
     this.state = {
       state: [
         { key: '1', text: 'ACT', value: 'ACT' },
@@ -25,10 +24,6 @@ class BusinessDetailsPage extends Component {
         { key: '8', text: 'WA', value: 'WA' }
       ]
     }
-  }
-
-  showCirculares (confirmBusinessDetail) {
-    this.props.showView(confirmBusinessDetail)
   }
 
   componentWillUnmount () {
@@ -195,7 +190,7 @@ class BusinessDetailsPage extends Component {
                 name="confirmBusinessDetail"
                 onChange={this._handleChangeCheckBox}
                 checked={values.confirmBusinessDetail}
-                onClick={this.showCirculares(values.confirmBusinessDetail)}
+                onClick={() => this.props.showView(values.confirmBusinessDetail)}
               />
             </Form.Field>
           </Form.Group>
