@@ -234,7 +234,28 @@ class AboutPage extends Component {
                   <Header as="h3" textAlign="center" color="blue">
                     Customers and Suppliers
                   </Header>
-                  <CustomersSuppliersForm {...this.props} confirmsCompleteSteps={this.updateCompleteSteps} />
+                  <CustomersSuppliersForm {...this.props} />
+                  <Form.Group>
+                    <Form.Field>
+                      <Form.Checkbox
+                        label="Please confirm that you have completed the above information"
+                        name="confirmCustomersSuppliers"
+                        onChange={this._handleChangeCheckBox}
+                        checked={values.confirmCustomersSuppliers}
+                        onClick={() =>
+                          this.props.confirmsCompleteSteps(
+                            'confirmCustomersSuppliers',
+                            !values.confirmCustomersSuppliers
+                          )
+                        }
+                        disabled={
+                          values.descriptionCustomers === '' ||
+                          values.client5TO === '' ||
+                          values.descriptionSuppliers === ''
+                        }
+                      />
+                    </Form.Field>
+                  </Form.Group>
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -245,6 +266,27 @@ class AboutPage extends Component {
                     Premises and Employees
                   </Header>
                   <PremisesAndEmployeesForm {...this.props} />
+                  <Form.Group>
+                    <Form.Field>
+                      <Form.Checkbox
+                        label="Please confirm that you have completed the above information"
+                        name="confirmPremisesEnployees"
+                        onChange={this._handleChangeCheckBox}
+                        checked={values.confirmPremisesEnployees}
+                        onClick={() =>
+                          this.props.confirmsCompleteSteps('confirmPremisesEnployees', !values.confirmPremisesEnployees)
+                        }
+                        disabled={
+                          values.premisesOwnedRented === '' ||
+                          values.premisesNotes === '' ||
+                          values.fullTime === '' ||
+                          values.partTime === '' ||
+                          values.subContractors === '' ||
+                          values.casuals === ''
+                        }
+                      />
+                    </Form.Field>
+                  </Form.Group>
                 </Segment>
               </Grid.Column>
               <Grid.Column>
@@ -253,6 +295,27 @@ class AboutPage extends Component {
                     Ownership and Final Notes
                   </Header>
                   <OwnershipAndFinalNotesForm {...this.props} />
+                  <Form.Group>
+                    <Form.Field>
+                      <Form.Checkbox
+                        label="Please confirm that you have completed the above information"
+                        name="confirmOwnershipFinalNotes"
+                        onChange={this._handleChangeCheckBox}
+                        checked={values.confirmOwnershipFinalNotes}
+                        onClick={() =>
+                          this.props.confirmsCompleteSteps(
+                            'confirmOwnershipFinalNotes',
+                            !values.confirmOwnershipFinalNotes
+                          )
+                        }
+                        disabled={
+                          parseInt(values.numberOwners) === 0 ||
+                          values.numberOwners === '' ||
+                          values.owners1sHours === ''
+                        }
+                      />
+                    </Form.Field>
+                  </Form.Group>
                 </Segment>
               </Grid.Column>
             </Grid.Row>

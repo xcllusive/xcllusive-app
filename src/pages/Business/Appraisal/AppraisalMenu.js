@@ -94,6 +94,9 @@ class AppraisalMenuPage extends Component {
     return (
       props.percBusinessDetail +
       props.percAbout +
+      props.percCustomersSuppliers +
+      props.percPremisesEnployees +
+      props.percOwnershipFinalNotes +
       props.percBusinessAnalysis +
       props.percFinancialAnalysis +
       props.percComparableData +
@@ -120,6 +123,9 @@ class AppraisalMenuPage extends Component {
       isLoadingAppraisal,
       isConfirmBusinessDetail,
       isConfirmAbout,
+      isConfirmCustomersSuppliers,
+      isConfirmPremisesEnployees,
+      isConfirmOwnershipFinalNotes,
       isConfirmBusinessAnalysis,
       isConfirmFinancialAnalysis,
       isConfirmComparableData,
@@ -162,11 +168,14 @@ class AppraisalMenuPage extends Component {
           </Menu.Item>
           <Menu.Item name="About" active={activeItem === 'About'} onClick={this._handleItemClick}>
             About
-            {isConfirmAbout ? (
-              <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
-            ) : (
-              <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
-            )}
+            {isConfirmAbout &&
+            isConfirmCustomersSuppliers &&
+            isConfirmPremisesEnployees &&
+            isConfirmOwnershipFinalNotes ? (
+                <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
+              ) : (
+                <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
+              )}
           </Menu.Item>
           <Menu.Item
             name="Business Analysis"
@@ -330,6 +339,9 @@ AppraisalMenuPage.propTypes = {
   calcCompleteSteps: PropTypes.func,
   isConfirmBusinessDetail: PropTypes.bool,
   isConfirmAbout: PropTypes.bool,
+  isConfirmCustomersSuppliers: PropTypes.bool,
+  isConfirmPremisesEnployees: PropTypes.bool,
+  isConfirmOwnershipFinalNotes: PropTypes.bool,
   isConfirmBusinessAnalysis: PropTypes.bool,
   isConfirmFinancialAnalysis: PropTypes.bool,
   isConfirmComparableData: PropTypes.bool,
@@ -337,8 +349,11 @@ AppraisalMenuPage.propTypes = {
   isConfirmNotesAndAssumptions: PropTypes.bool,
   percBusinessDetail: PropTypes.number,
   percAbout: PropTypes.number,
-  percFinancialAnalysis: PropTypes.number,
+  percCustomersSuppliers: PropTypes.number,
+  percPremisesEnployees: PropTypes.number,
+  percOwnershipFinalNotes: PropTypes.number,
   percBusinessAnalysis: PropTypes.number,
+  percFinancialAnalysis: PropTypes.number,
   percComparableData: PropTypes.number,
   percPricing: PropTypes.number,
   percNotesAndAssumptions: PropTypes.number
@@ -360,6 +375,9 @@ const mapStateToProps = state => ({
   isConfirmNotesAndAssumptions: state.appraisal.getCalcCompleteSteps.confirm.confirmNotesAndAssumptions.isConfirm,
   percBusinessDetail: state.appraisal.getCalcCompleteSteps.confirm.confirmBusinessDetail.completedPerc,
   percAbout: state.appraisal.getCalcCompleteSteps.confirm.confirmAbout.completedPerc,
+  percCustomersSuppliers: state.appraisal.getCalcCompleteSteps.confirm.confirmCustomersSuppliers.completedPerc,
+  percPremisesEnployees: state.appraisal.getCalcCompleteSteps.confirm.confirmPremisesEnployees.completedPerc,
+  percOwnershipFinalNotes: state.appraisal.getCalcCompleteSteps.confirm.confirmOwnershipFinalNotes.completedPerc,
   percBusinessAnalysis: state.appraisal.getCalcCompleteSteps.confirm.confirmBusinessAnalysis.completedPerc,
   percFinancialAnalysis: state.appraisal.getCalcCompleteSteps.confirm.confirmFinancialAnalysis.completedPerc,
   percComparableData: state.appraisal.getCalcCompleteSteps.confirm.confirmComparableData.completedPerc,

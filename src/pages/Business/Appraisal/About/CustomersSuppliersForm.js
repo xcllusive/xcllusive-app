@@ -22,7 +22,6 @@ const CustomersSuppliersForm = ({ values, handleChange, handleBlur, errors, touc
   const _handleSelectChange = (e, { name, value }) => {
     setFieldValue(name, value)
   }
-
   return (
     <Fragment>
       <Form.Group widths="equal">
@@ -118,22 +117,6 @@ const CustomersSuppliersForm = ({ values, handleChange, handleBlur, errors, touc
             touched.descriptionSuppliers && <Label basic color="red" pointing content={errors.descriptionSuppliers} />}
         </Form.Field>
       </Form.Group>
-      <Form.Group>
-        <Form.Field>
-          <Form.Checkbox
-            label="Please confirm that you have completed the above information"
-            name="confirmCustomersSuppliers"
-            onChange={_handleChangeCheckBox}
-            checked={values.confirmCustomersSuppliers}
-            onClick={() =>
-              this.props.confirmsCompleteSteps('confirmCustomersSuppliers', !values.confirmCustomersSuppliers)
-            }
-            disabled={
-              values.descriptionCustomers === '' || values.client5TO === '' || values.descriptionSuppliers === ''
-            }
-          />
-        </Form.Field>
-      </Form.Group>
     </Fragment>
   )
 }
@@ -149,8 +132,7 @@ CustomersSuppliersForm.propTypes = {
   appraisalObject: PropTypes.object,
   updateAppraisal: PropTypes.func,
   business: PropTypes.object,
-  sendValuesToAbout: PropTypes.func,
-  confirmsCompleteSteps: PropTypes.func
+  sendValuesToAbout: PropTypes.func
 }
 
 export default CustomersSuppliersForm

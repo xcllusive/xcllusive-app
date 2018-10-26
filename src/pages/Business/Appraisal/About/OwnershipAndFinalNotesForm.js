@@ -2,15 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Label } from 'semantic-ui-react'
 
-const OwnershipAndFinalNotesForm = ({
-  values,
-  handleChange,
-  handleBlur,
-  errors,
-  touched,
-  isValid,
-  setFieldValue
-}) => {
+const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, touched, isValid, setFieldValue }) => {
   const state = {
     owners1sHoursOptions: [
       { key: '1', text: '< 5 days', value: '< 5 days' },
@@ -19,10 +11,6 @@ const OwnershipAndFinalNotesForm = ({
       { key: '4', text: '7 days', value: '7 days' },
       { key: '5', text: 'Under Management', value: 'Under Management' }
     ]
-  }
-
-  const _handleChangeCheckBox = (e, { name }) => {
-    setFieldValue(name, !values[name])
   }
 
   const _handleSelectChange = (e, { name, value }) => {
@@ -41,9 +29,7 @@ const OwnershipAndFinalNotesForm = ({
             onBlur={handleBlur}
           />
           {errors.numberOwners &&
-            touched.numberOwners && (
-            <Label basic color="red" pointing content={errors.numberOwners} />
-          )}
+            touched.numberOwners && <Label basic color="red" pointing content={errors.numberOwners} />}
         </Form.Field>
         <Form.Field width={10}>
           <Form.Select
@@ -55,14 +41,7 @@ const OwnershipAndFinalNotesForm = ({
             onChange={_handleSelectChange}
           />
           {errors.owners1sHours &&
-            touched.owners1sHours && (
-            <Label
-              basic
-              color="red"
-              pointing
-              content={errors.owners1sHours}
-            />
-          )}
+            touched.owners1sHours && <Label basic color="red" pointing content={errors.owners1sHours} />}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -76,9 +55,7 @@ const OwnershipAndFinalNotesForm = ({
             onBlur={handleBlur}
           />
           {errors.owners1sRole &&
-            touched.owners1sRole && (
-            <Label basic color="red" pointing content={errors.owners1sRole} />
-          )}
+            touched.owners1sRole && <Label basic color="red" pointing content={errors.owners1sRole} />}
         </Form.Field>
         <Form.Field width={6}>
           <Form.Select
@@ -87,17 +64,10 @@ const OwnershipAndFinalNotesForm = ({
             name="otherOwnersHours"
             autoComplete="otherOwnersHours"
             value={values.otherOwnersHours}
-            onChange={this._handleSelectChange}
+            onChange={_handleSelectChange}
           />
           {errors.otherOwnersHours &&
-            touched.otherOwnersHours && (
-            <Label
-              basic
-              color="red"
-              pointing
-              content={errors.otherOwnersHours}
-            />
-          )}
+            touched.otherOwnersHours && <Label basic color="red" pointing content={errors.otherOwnersHours} />}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -111,14 +81,7 @@ const OwnershipAndFinalNotesForm = ({
             onBlur={handleBlur}
           />
           {errors.otherOwnersRole &&
-            touched.otherOwnersRole && (
-            <Label
-              basic
-              color="red"
-              pointing
-              content={errors.otherOwnersRole}
-            />
-          )}
+            touched.otherOwnersRole && <Label basic color="red" pointing content={errors.otherOwnersRole} />}
         </Form.Field>
         <Form.Field width={10}>
           <Form.TextArea
@@ -130,29 +93,7 @@ const OwnershipAndFinalNotesForm = ({
             onBlur={handleBlur}
           />
           {errors.otherRelevantNotes &&
-            touched.otherRelevantNotes && (
-            <Label
-              basic
-              color="red"
-              pointing
-              content={errors.otherRelevantNotes}
-            />
-          )}
-        </Form.Field>
-      </Form.Group>
-      <Form.Group>
-        <Form.Field>
-          <Form.Checkbox
-            label="Please confirm that you have completed the above information"
-            name="confirmAbout"
-            onChange={_handleChangeCheckBox}
-            checked={values.confirmOwnershipFinalNotes}
-            disabled={
-              parseInt(values.numberOwners) === 0 ||
-              values.numberOwners === '' ||
-              values.owners1sHours === ''
-            }
-          />
+            touched.otherRelevantNotes && <Label basic color="red" pointing content={errors.otherRelevantNotes} />}
         </Form.Field>
       </Form.Group>
     </Fragment>
