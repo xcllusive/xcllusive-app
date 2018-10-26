@@ -498,6 +498,9 @@ class NotesAndAssumptionsPage extends Component {
               name="confirmNotesAndAssumptions"
               onChange={this._handleChangeCheckBox}
               checked={values.confirmNotesAndAssumptions}
+              onClick={() =>
+                this.props.confirmsCompleteSteps('confirmNotesAndAssumptions', !values.confirmNotesAndAssumptions)
+              }
             />
           </Form.Field>
         </Form.Group>
@@ -518,7 +521,8 @@ NotesAndAssumptionsPage.propTypes = {
   isValid: PropTypes.bool,
   business: PropTypes.object,
   appraisalObject: PropTypes.object,
-  updateAppraisal: PropTypes.func
+  updateAppraisal: PropTypes.func,
+  confirmsCompleteSteps: PropTypes.func
 }
 
 const mapPropsToValues = props => ({

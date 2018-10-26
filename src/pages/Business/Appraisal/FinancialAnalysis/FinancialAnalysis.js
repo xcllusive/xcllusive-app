@@ -158,7 +158,9 @@ class FinancialAnalysisPage extends PureComponent {
                       name="confirmAbout"
                       onChange={this._handleChangeCheckBox}
                       checked={values.confirmFinancialAnalysis}
-                      // disabled={!isValid}
+                      onClick={() =>
+                        this.props.confirmsCompleteSteps('confirmFinancialAnalysis', !values.confirmFinancialAnalysis)
+                      }
                     />
                   </Form.Field>
                 </Form.Group>
@@ -183,7 +185,8 @@ FinancialAnalysisPage.propTypes = {
   isValid: PropTypes.bool,
   updateAppraisal: PropTypes.func,
   appraisalObject: PropTypes.object,
-  business: PropTypes.object
+  business: PropTypes.object,
+  confirmsCompleteSteps: PropTypes.func
 }
 
 const mapPropsToValues = props => ({

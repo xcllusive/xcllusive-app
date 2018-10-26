@@ -247,6 +247,9 @@ class BusinessAnalysisPage extends Component {
                   name="confirmBusinessAnalysis"
                   onChange={this._handleChangeCheckBox}
                   checked={values.confirmBusinessAnalysis}
+                  onClick={() =>
+                    this.props.confirmsCompleteSteps('confirmBusinessAnalysis', !values.confirmBusinessAnalysis)
+                  }
                 />
               </Form.Field>
             </Form.Group>
@@ -276,7 +279,8 @@ BusinessAnalysisPage.propTypes = {
   valueDriversOptions: PropTypes.object,
   criticalIssuesOptions: PropTypes.object,
   descriptionBusinessRiskArray: PropTypes.array,
-  descriptionMarketArray: PropTypes.array
+  descriptionMarketArray: PropTypes.array,
+  confirmsCompleteSteps: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
