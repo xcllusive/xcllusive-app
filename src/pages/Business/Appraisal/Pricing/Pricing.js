@@ -21,7 +21,7 @@ class PricingPage extends Component {
     super(props)
     this.state = {
       data: [
-        { name: '90% Chance of Selling', value: 2.5 },
+        { name: '90% Chance of Selling', value: 0 },
         { name: 'Avg Multiplier', value: 3 },
         { name: 'Risk Premium', value: 3.2 },
         { name: 'Market Premium', value: 2.7 },
@@ -33,21 +33,9 @@ class PricingPage extends Component {
     }
   }
 
-  componentDidMount () {
-    this.props.getSelectedList(this.props.appraisalObject.id)
-
-    if (this.props.appraisalObject && this.props.appraisalObject.pricingMethod > 0) {
-      this.setState({
-        data: [
-          { name: '90% Chance of Selling', value: this._chart('90% Chance of Selling') },
-          { name: 'Avg Multiplier', value: this._chart('Avg Multiplier') },
-          { name: 'Risk Premium', value: this._chart('Risk Premium') },
-          { name: 'Market Premium', value: this._chart('Market Premium') },
-          { name: 'Asking Price', value: this._chart('Asking Price') },
-          { name: 'Less than 5% Chance of Selling', value: this._chart('Less than 5% Chance of Selling') }
-        ]
-      })
-    }
+  async componentDidMount () {
+    await this.props.getSelectedList(this.props.appraisalObject.id)
+    this._handleChangeCheckBox('pricingMethod', this.props.appraisalObject.pricingMethod)
   }
 
   componentWillUnmount () {
@@ -1110,13 +1098,13 @@ class PricingPage extends Component {
         <Segment style={{ backgroundColor: '#ecf4fb' }}>
           <Grid>
             <Grid.Row columns={1}>
-              <Grid.Column width={12} style={{ margin: '0 auto' }} textAlign="center">
+              <Grid.Column>
                 <LineChart
-                  width={900}
-                  height={400}
+                  width={1000}
+                  height={500}
                   data={this.state.data}
                   layout="vertical"
-                  // margin={{ top: 20, right: 50, left: 20, bottom: 5 }}
+                  margin={{ top: 20, right: 50, left: 20, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" domain={['dataMin', 'dataMax']} />
@@ -1127,34 +1115,34 @@ class PricingPage extends Component {
                   <ReferenceLine
                     x={this._chart('90% Chance of Selling')}
                     label={this._chart('90% Chance of Selling').toString()}
-                    stroke="red"
+                    stroke="blue"
                   />
                   <ReferenceLine
                     x={this._chart('Avg Multiplier')}
                     label={this._chart('Avg Multiplier').toString()}
-                    stroke="blue"
+                    stroke="black"
                   />
                   <ReferenceLine
                     x={this._chart('Risk Premium')}
                     label={this._chart('Risk Premium').toString()}
-                    stroke="orange"
+                    stroke="purple"
                   />
                   <ReferenceLine
                     x={this._chart('Market Premium')}
                     label={this._chart('Market Premium').toString()}
-                    stroke="green"
+                    stroke="orange"
                   />
                   <ReferenceLine
                     x={this._chart('Asking Price')}
                     label={this._chart('Asking Price').toString()}
-                    stroke="purple"
+                    stroke="green"
                   />
                   <ReferenceLine
                     x={this._chart('Less than 5% Chance of Selling')}
                     label={this._chart('Less than 5% Chance of Selling').toString()}
-                    stroke="black"
+                    stroke="violet"
                   />
-                  <Line type="monotone" dataKey="value" stroke="#82ca9d" />
+                  <Line type="monotone" dataKey="value" stroke="red" />
                 </LineChart>
               </Grid.Column>
             </Grid.Row>

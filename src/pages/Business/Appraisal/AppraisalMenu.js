@@ -21,8 +21,7 @@ class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Notes And Assumptions',
-      percent: 75
+      activeItem: 'Pricing'
     }
   }
 
