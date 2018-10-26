@@ -16,6 +16,7 @@ import BusinessAnalysis from './BusinessAnalysis'
 import ComparableData from './ComparableData'
 import Pricing from './Pricing/Pricing'
 import NotesAndAssumptions from './NotesAndAssumptions'
+import GenerateAndSend from './GenerateAndSend'
 
 class AppraisalMenuPage extends Component {
   constructor (props) {
@@ -61,7 +62,7 @@ class AppraisalMenuPage extends Component {
       this.setState({ activeItem: 'Notes And Assumptions' })
     }
     if (this.state.activeItem === 'Notes And Assumptions') {
-      this.setState({ activeItem: 'Confirm and Send' })
+      this.setState({ activeItem: 'Generate And Send' })
     }
   }
 
@@ -84,7 +85,7 @@ class AppraisalMenuPage extends Component {
     if (this.state.activeItem === 'Notes And Assumptions') {
       this.setState({ activeItem: 'Pricing' })
     }
-    if (this.state.activeItem === 'Confirm and Send') {
+    if (this.state.activeItem === 'Generate And Send') {
       this.setState({ activeItem: 'Notes And Assumptions' })
     }
   }
@@ -229,8 +230,8 @@ class AppraisalMenuPage extends Component {
             )}
           </Menu.Item>
           <Menu.Item
-            name="Confirm and Send"
-            active={activeItem === 'Confirm and Send'}
+            name="Generate And Send"
+            active={activeItem === 'Generate And Send'}
             onClick={this._handleItemClick}
           />
         </Menu>
@@ -298,6 +299,11 @@ class AppraisalMenuPage extends Component {
                 confirmsCompleteSteps={this.updateCompleteSteps}
               />
             ) : null}
+          </Segment>
+        ) : null}
+        {this.state.activeItem === 'Generate And Send' ? (
+          <Segment>
+            {appraisal && appraisal.id ? <GenerateAndSend business={business} appraisalObject={appraisal} /> : null}
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>
