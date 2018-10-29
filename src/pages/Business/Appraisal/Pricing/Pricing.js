@@ -546,7 +546,7 @@ class PricingPage extends Component {
     return (
       <Wrapper>
         <Step.Group size="large">
-          <Step active icon="calculator" title="Step 5" description="Pricing" />
+          <Step active icon="calculator" title="Step 6" description="Pricing" />
           <Message info size="large">
             <p>
               On this page you can assess the results of your financial inputs and Financial Analysis in order to

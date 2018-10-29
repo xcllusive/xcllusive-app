@@ -22,7 +22,7 @@ class AppraisalMenuPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeItem: 'Pricing'
+      activeItem: 'Generate And Send'
     }
   }
 
@@ -38,7 +38,7 @@ class AppraisalMenuPage extends Component {
     this.props.calcCompleteSteps(name, confirm)
   }
 
-  _handleItemClick = (e, { name }) => {
+  _handleItemClick = name => {
     this.setState({ activeItem: name })
   }
 
@@ -158,7 +158,11 @@ class AppraisalMenuPage extends Component {
           </Grid>
         </Segment>
         <Menu pointing horizontal="true" color="blue" fixed="top">
-          <Menu.Item name="Business Details" active={activeItem === 'Business Details'} onClick={this._handleItemClick}>
+          <Menu.Item
+            name="Business Details"
+            active={activeItem === 'Business Details'}
+            onClick={() => this._handleItemClick('Business Details')}
+          >
             Business Details
             {isConfirmBusinessDetail ? (
               <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
@@ -166,7 +170,7 @@ class AppraisalMenuPage extends Component {
               <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
             )}
           </Menu.Item>
-          <Menu.Item name="About" active={activeItem === 'About'} onClick={this._handleItemClick}>
+          <Menu.Item name="About" active={activeItem === 'About'} onClick={() => this._handleItemClick('About')}>
             About
             {isConfirmAbout &&
             isConfirmCustomersSuppliers &&
@@ -180,7 +184,7 @@ class AppraisalMenuPage extends Component {
           <Menu.Item
             name="Business Analysis"
             active={activeItem === 'Business Analysis'}
-            onClick={this._handleItemClick}
+            onClick={() => this._handleItemClick('Business Analysis')}
           >
             Business Analysis
             {isConfirmBusinessAnalysis ? (
@@ -192,7 +196,7 @@ class AppraisalMenuPage extends Component {
           <Menu.Item
             name="Financial Analysis"
             active={activeItem === 'Financial Analysis'}
-            onClick={this._handleItemClick}
+            onClick={() => this._handleItemClick('Financial Analysis')}
           >
             Financial Analysis
             {isConfirmFinancialAnalysis ? (
@@ -201,7 +205,11 @@ class AppraisalMenuPage extends Component {
               <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
             )}
           </Menu.Item>
-          <Menu.Item name="Comparable Data" active={activeItem === 'Comparable Data'} onClick={this._handleItemClick}>
+          <Menu.Item
+            name="Comparable Data"
+            active={activeItem === 'Comparable Data'}
+            onClick={() => this._handleItemClick('Comparable Data')}
+          >
             Comparable Data
             {isConfirmComparableData ? (
               <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
@@ -209,7 +217,7 @@ class AppraisalMenuPage extends Component {
               <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
             )}
           </Menu.Item>
-          <Menu.Item name="Pricing" active={activeItem === 'Pricing'} onClick={this._handleItemClick}>
+          <Menu.Item name="Pricing" active={activeItem === 'Pricing'} onClick={() => this._handleItemClick('Pricing')}>
             Pricing
             {isConfirmPricing ? (
               <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
@@ -220,7 +228,7 @@ class AppraisalMenuPage extends Component {
           <Menu.Item
             name="Notes And Assumptions"
             active={activeItem === 'Notes And Assumptions'}
-            onClick={this._handleItemClick}
+            onClick={() => this._handleItemClick('Notes And Assumptions')}
           >
             Notes And Assumptions
             {isConfirmNotesAndAssumptions ? (
@@ -232,7 +240,7 @@ class AppraisalMenuPage extends Component {
           <Menu.Item
             name="Generate And Send"
             active={activeItem === 'Generate And Send'}
-            onClick={this._handleItemClick}
+            onClick={() => this._handleItemClick('Generate And Send')}
           />
         </Menu>
         {this.state.activeItem === 'Business Details' ? (
@@ -303,7 +311,13 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Generate And Send' ? (
           <Segment>
-            {appraisal && appraisal.id ? <GenerateAndSend business={business} appraisalObject={appraisal} /> : null}
+            {appraisal && appraisal.id ? (
+              <GenerateAndSend
+                business={business}
+                appraisalObject={appraisal}
+                handleItemClick={this._handleItemClick}
+              />
+            ) : null}
           </Segment>
         ) : null}
         <Grid style={{ marginTop: 0 }}>

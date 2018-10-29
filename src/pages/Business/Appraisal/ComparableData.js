@@ -559,7 +559,7 @@ class ComparableDataPage extends Component {
     return (
       <Wrapper>
         <Step.Group size="large">
-          <Step active icon="balance scale" title="Step 4" description="Comparable Data" />
+          <Step active icon="balance scale" title="Step 5" description="Comparable Data" />
           <Message info size="large">
             <p>We need to write some instructions here for comparable data</p>
           </Message>

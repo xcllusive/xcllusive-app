@@ -28,7 +28,7 @@ class NotesAndAssumptionsPage extends Component {
     return (
       <Wrapper>
         <Step.Group size="large">
-          <Step active icon="comment alternate outline" title="Step 6" description="Notes And Assumptions" />
+          <Step active icon="comment alternate outline" title="Step 7" description="Notes And Assumptions" />
           <Message info size="large">
             <p>Now that the value has been established, you need to complete the final step of information entry.</p>
           </Message>
