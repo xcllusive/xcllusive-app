@@ -4,15 +4,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import {
-  Modal,
-  Form,
-  Label,
-  Checkbox,
-  Icon,
-  Button,
-  Radio
-} from 'semantic-ui-react'
+import { Modal, Form, Label, Checkbox, Icon, Button, Radio } from 'semantic-ui-react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -111,10 +103,7 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.email &&
-                  touched.email && (
-                  <Label basic color="red" pointing content={errors.email} />
-                )}
+                {errors.email && touched.email && <Label basic color="red" pointing content={errors.email} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -138,22 +127,11 @@ class ModalNewUser extends Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      <Button
-                        onClick={this._canChangePassword}
-                        content="Change Password"
-                      />
+                      <Button onClick={this._canChangePassword} content="Change Password" />
                     </div>
                   ) : null}
                 </Form.Input>
-                {errors.password &&
-                  touched.password && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.password}
-                  />
-                )}
+                {errors.password && touched.password && <Label basic color="red" pointing content={errors.password} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -168,14 +146,7 @@ class ModalNewUser extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.firstName &&
-                  touched.firstName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.firstName}
-                  />
-                )}
+                  touched.firstName && <Label basic color="red" pointing content={errors.firstName} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -187,15 +158,7 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.lastName &&
-                  touched.lastName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.lastName}
-                  />
-                )}
+                {errors.lastName && touched.lastName && <Label basic color="red" pointing content={errors.lastName} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -209,14 +172,7 @@ class ModalNewUser extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.phoneHome &&
-                  touched.phoneHome && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.phoneHome}
-                  />
-                )}
+                  touched.phoneHome && <Label basic color="red" pointing content={errors.phoneHome} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -228,14 +184,7 @@ class ModalNewUser extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.phoneWork &&
-                  touched.phoneWork && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.phoneWork}
-                  />
-                )}
+                  touched.phoneWork && <Label basic color="red" pointing content={errors.phoneWork} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -247,14 +196,7 @@ class ModalNewUser extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.phoneMobile &&
-                  touched.phoneMobile && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.phoneMobile}
-                  />
-                )}
+                  touched.phoneMobile && <Label basic color="red" pointing content={errors.phoneMobile} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -276,10 +218,7 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.suburb &&
-                  touched.suburb && (
-                  <Label basic color="red" pointing content={errors.suburb} />
-                )}
+                {errors.suburb && touched.suburb && <Label basic color="red" pointing content={errors.suburb} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -290,10 +229,7 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.street &&
-                  touched.street && (
-                  <Label basic color="red" pointing content={errors.street} />
-                )}
+                {errors.street && touched.street && <Label basic color="red" pointing content={errors.street} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -304,15 +240,7 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.postCode &&
-                  touched.postCode && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.postCode}
-                  />
-                )}
+                {errors.postCode && touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -326,14 +254,7 @@ class ModalNewUser extends Component {
                   onChange={this._handleSelectChange}
                 />
                 {errors.dataRegion &&
-                  touched.dataRegion && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.dataRegion}
-                  />
-                )}
+                  touched.dataRegion && <Label basic color="red" pointing content={errors.dataRegion} />}
               </Form.Field>
               <Form.Field>
                 <Form.Select
@@ -344,15 +265,7 @@ class ModalNewUser extends Component {
                   value={values.userType}
                   onChange={this._handleSelectChange}
                 />
-                {errors.userType &&
-                  touched.userType && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.userType}
-                  />
-                )}
+                {errors.userType && touched.userType && <Label basic color="red" pointing content={errors.userType} />}
               </Form.Field>
               <Form.Field>
                 <label>Listing Agent</label>
@@ -370,23 +283,6 @@ class ModalNewUser extends Component {
                   onChange={this._handleChangeCheckBox}
                   checked={!values.listingAgent}
                 />
-                {/* <Form.Select
-                  required
-                  label="Listing Agent"
-                  name="listingAgent"
-                  options={listingAgent}
-                  value={values.listingAgent}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.listingAgent &&
-                  touched.listingAgent && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.listingAgent}
-                  />
-                )} */}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -465,9 +361,7 @@ class ModalNewUser extends Component {
             onClick={handleSubmit}
           >
             <Icon name="save" />
-            {this.props.user && this.props.user.id
-              ? 'Edit User'
-              : 'Create User'}
+            {this.props.user && this.props.user.id ? 'Edit User' : 'Create User'}
           </Button>
           <Button color="red" onClick={closeModal}>
             <Icon name="cancel" />

@@ -4,16 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import styled from 'styled-components'
-import {
-  Table,
-  Input,
-  Checkbox,
-  Grid,
-  Button,
-  Icon,
-  Dimmer,
-  Loader
-} from 'semantic-ui-react'
+import { Table, Input, Checkbox, Grid, Button, Icon, Dimmer, Loader } from 'semantic-ui-react'
 import { getUsers, createUser, updateUser } from '../../redux/ducks/user'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
@@ -48,8 +39,7 @@ class UserList extends React.Component {
           [value]: !this.state.optionsSearch[value]
         }
       },
-      () =>
-        this.props.getUsers(this.state.optionsSearch, this.state.inputSearch)
+      () => this.props.getUsers(this.state.optionsSearch, this.state.inputSearch)
     )
   }
 
@@ -60,16 +50,13 @@ class UserList extends React.Component {
       inputSearch: value
     })
 
-    this.timer = setTimeout(
-      () => this.props.getUsers(this.state.optionsSearch, value),
-      1000
-    )
+    this.timer = setTimeout(() => this.props.getUsers(this.state.optionsSearch, value), 1000)
   }
 
   _newUser = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_USER, {
       title: 'New User',
-      onConfirm: async (values) => {
+      onConfirm: async values => {
         if (values) {
           await this.props.createUser(values)
         }
@@ -81,7 +68,7 @@ class UserList extends React.Component {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_USER, {
       title: 'Edit User',
       user,
-      onConfirm: async (values) => {
+      onConfirm: async values => {
         if (values) {
           await this.props.updateUser(values)
         }
@@ -154,44 +141,19 @@ class UserList extends React.Component {
               </Table.Header>
               <Table.Body>
                 {this.props.users.map(user => {
-                  let roles =
-                    user.roles.length > 0 ? JSON.parse(user.roles) : []
+                  let roles = user.roles.length > 0 ? JSON.parse(user.roles) : []
                   return (
-                    <Table.Row
-                      active
-                      onClick={() => this._editUser(user)}
-                      key={user.id}
-                    >
+                    <Table.Row active onClick={() => this._editUser(user)} key={user.id}>
                       <Table.Cell>{user.id}</Table.Cell>
-                      <Table.Cell>{`${user.firstName} ${
-                        user.lastName
-                      }`}</Table.Cell>
+                      <Table.Cell>{`${user.firstName} ${user.lastName}`}</Table.Cell>
                       <Table.Cell>{user.userType}</Table.Cell>
-                      <Table.Cell>
-                        {user.listingAgent === 1 ? 'Yes' : 'No'}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {_.includes(roles, 'BUYER_MENU') ? 'Yes' : 'No'}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {_.includes(roles, 'BUSINESS_MENU') ? 'Yes' : 'No'}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {_.includes(roles, 'PRESALE_MENU') ? 'Yes' : 'No'}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {_.includes(roles, 'RESOURCES_MENU') ? 'Yes' : 'No'}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {_.includes(roles, 'CLIENT_MANAGER_MENU')
-                          ? 'Yes'
-                          : 'No'}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {_.includes(roles, 'SYSTEM_SETTINGS_MENU')
-                          ? 'Yes'
-                          : 'No'}
-                      </Table.Cell>
+                      <Table.Cell>{user.listingAgent ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{_.includes(roles, 'BUYER_MENU') ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{_.includes(roles, 'BUSINESS_MENU') ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{_.includes(roles, 'PRESALE_MENU') ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{_.includes(roles, 'RESOURCES_MENU') ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{_.includes(roles, 'CLIENT_MANAGER_MENU') ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{_.includes(roles, 'SYSTEM_SETTINGS_MENU') ? 'Yes' : 'No'}</Table.Cell>
                     </Table.Row>
                   )
                 })}
