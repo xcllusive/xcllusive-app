@@ -42,6 +42,10 @@ class ModalGroupEmail extends Component {
     this.setState({ controleMsg: true })
   }
 
+  componentDidUpdate () {
+    if (this.props.isSentEmail) this.props.closeModal()
+  }
+
   _handleConfirm = isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
@@ -70,9 +74,7 @@ class ModalGroupEmail extends Component {
     this.setState(prevState => ({
       checkboxMarkAll: !prevState.checkboxMarkAll
     }))
-    return checked
-      ? this.setState({ array: this.props.listGroupEmail })
-      : this.setState({ array: [] })
+    return checked ? this.setState({ array: this.props.listGroupEmail }) : this.setState({ array: [] })
   }
 
   _checkBoxArray = (e, { values }) => {
@@ -131,9 +133,7 @@ class ModalGroupEmail extends Component {
                         <Table.Row key={index}>
                           <Table.Cell collapsing>
                             <Checkbox
-                              checked={this.state.array.some(
-                                item => item.id === groupEmail.id
-                              )}
+                              checked={this.state.array.some(item => item.id === groupEmail.id)}
                               values={groupEmail}
                               onChange={this._checkBoxArray}
                             />
@@ -143,9 +143,7 @@ class ModalGroupEmail extends Component {
                           </Table.Cell>
                           <Table.Cell>{groupEmail.email}</Table.Cell>
                           <Table.Cell>
-                            <Label
-                              color={groupEmail.isPending ? 'red' : 'green'}
-                            >
+                            <Label color={groupEmail.isPending ? 'red' : 'green'}>
                               {groupEmail.isPending ? 'Pending' : 'Done'}
                             </Label>
                           </Table.Cell>
@@ -164,15 +162,7 @@ class ModalGroupEmail extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.subject &&
-                      touched.subject && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.subject}
-                      />
-                    )}
+                    {errors.subject && touched.subject && <Label basic color="red" pointing content={errors.subject} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group>
@@ -197,15 +187,7 @@ class ModalGroupEmail extends Component {
                         www.xcllusive.com.au | (02) 9817 3331
                       </Header>
                     </Segment>
-                    {errors.text &&
-                      touched.text && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.text}
-                      />
-                    )}
+                    {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group>
@@ -221,21 +203,10 @@ class ModalGroupEmail extends Component {
                     ) : null}
 
                     {errors.attachment &&
-                      touched.attachment && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.attachment}
-                      />
-                    )}
+                      touched.attachment && <Label basic color="red" pointing content={errors.attachment} />}
                   </Form.Field>
                   <Form.Field width={5} style={{ alignSelf: 'flex-end' }}>
-                    <Form.Button
-                      floated="right"
-                      color="yellow"
-                      onClick={e => this._removeFileUploaded(e)}
-                    >
+                    <Form.Button floated="right" color="yellow" onClick={e => this._removeFileUploaded(e)}>
                       <Icon name="remove" />
                       Remove
                     </Form.Button>
@@ -243,17 +214,12 @@ class ModalGroupEmail extends Component {
                 </Form.Group>
                 <Form.Group>
                   <Message info size="small">
-                    <p>
-                      You can attach one file. To send multiple files you can
-                      compress the files and attach.
-                    </p>
+                    <p>You can attach one file. To send multiple files you can compress the files and attach.</p>
                   </Message>
                 </Form.Group>
                 <Form.Group>
                   <b>
-                    <label>
-                      Who would you like the recipients to reply to?
-                    </label>
+                    <label>Who would you like the recipients to reply to?</label>
                   </b>
                   <Form.Field
                     control={Radio}
@@ -272,9 +238,7 @@ class ModalGroupEmail extends Component {
                 </Form.Group>
                 <Form.Group>
                   <b>
-                    <label>
-                      Total email(s) to be generated: {this.state.array.length}
-                    </label>
+                    <label>Total email(s) to be generated: {this.state.array.length}</label>
                   </b>
                 </Form.Group>
               </Form>
@@ -287,11 +251,7 @@ class ModalGroupEmail extends Component {
           </Dimmer.Dimmable>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            negative
-            content="Cancel"
-            onClick={() => this._handleConfirm(false)}
-          />
+          <Button negative content="Cancel" onClick={() => this._handleConfirm(false)} />
           <Button
             positive
             icon="mail"
@@ -324,13 +284,15 @@ ModalGroupEmail.propTypes = {
   listGroupEmail: PropTypes.array,
   isLoadingGroupEmail: PropTypes.bool,
   sendGroupEmail: PropTypes.func,
-  isLoadingSendEmail: PropTypes.bool
+  isLoadingSendEmail: PropTypes.bool,
+  isSentEmail: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   listGroupEmail: state.business.getBuyersGroupEmail.array,
   isLoadingGroupEmail: state.business.getBuyersGroupEmail.isLoading,
-  isLoadingSendEmail: state.buyer.sendGroupEmail.isLoading
+  isLoadingSendEmail: state.buyer.sendGroupEmail.isLoading,
+  isSentEmail: state.buyer.sendGroupEmail.isSent
 })
 
 const mapPropsToValues = () => ({
