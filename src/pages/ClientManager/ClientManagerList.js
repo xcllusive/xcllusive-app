@@ -3,28 +3,14 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import numeral from 'numeral'
 
-import {
-  Table,
-  Icon,
-  Button,
-  Input,
-  Grid,
-  Dimmer,
-  Loader,
-  Pagination,
-  Message
-} from 'semantic-ui-react'
+import { Table, Icon, Button, Input, Grid, Dimmer, Loader, Pagination, Message } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
-import {
-  getBusinesses,
-  getBusiness,
-  createBusiness
-} from '../../redux/ducks/business'
+import { getBusinesses, getBusiness, createBusiness } from '../../redux/ducks/business'
 import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
 
 import {
@@ -69,8 +55,8 @@ class ClientManagerList extends Component {
   }
 
   componentDidMount () {
-    this.props.getBuyers()
-    this.props.getBusinesses(false, [4, 5])
+    // this.props.getBuyers()
+    // this.props.getBusinesses(false, [4, 5])
     //  this.props.getLog()
   }
 
@@ -110,10 +96,7 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.sendEnquiryToOwner(
-            this.state.buyer.id,
-            this.state.business.id
-          )
+          this.props.sendEnquiryToOwner(this.state.buyer.id, this.state.business.id)
         }
       }
     })
@@ -141,10 +124,7 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.enquiryBusiness(
-            this.state.buyer.id,
-            this.state.business.id
-          )
+          this.props.enquiryBusiness(this.state.buyer.id, this.state.business.id)
         }
       }
     })
@@ -162,9 +142,7 @@ class ClientManagerList extends Component {
           if (this.props.objectEmailTemplate) {
             window.location.href = `mailto:${this.state.buyer.email} ?subject=${
               this.props.objectEmailTemplate.subject
-            } &body=${this._convertHtmlToRightText(
-              this.props.objectEmailTemplate.body
-            )}`
+            } &body=${this._convertHtmlToRightText(this.props.objectEmailTemplate.body)}`
           }
         }
       }
@@ -175,9 +153,7 @@ class ClientManagerList extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Send CA',
-        text: caSent
-          ? 'CA already sent. Do you want to send again?'
-          : 'Are you sure you want to send the CA?'
+        text: caSent ? 'CA already sent. Do you want to send again?' : 'Are you sure you want to send the CA?'
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
@@ -208,18 +184,21 @@ class ClientManagerList extends Component {
       inputSearchBuyer: value,
       buyer: null
     })
-    this.timer = setTimeout(() => this.props.getBuyers(value), 1000)
+    if (value !== '') {
+      this.timer = setTimeout(() => this.props.getBuyers(value), 1000)
+    }
   }
 
   _onSearchBusiness = (e, { value }) => {
     this.setState({ showMsgBusiness: false })
     if (this.timer) clearTimeout(this.timer)
-
     this.setState({
       inputSearchBusiness: value,
       business: null
     })
-    this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5]), 1000)
+    if (value !== '') {
+      this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5]), 1000)
+    }
   }
 
   _toggleModal = (modal, buyer) => {
@@ -244,11 +223,7 @@ class ClientManagerList extends Component {
               },
               onConfirm: isConfirmed => {
                 if (isConfirmed) {
-                  this.props.caReceived(
-                    this.state.file,
-                    this.state.buyer.id,
-                    this.state.business.id
-                  )
+                  this.props.caReceived(this.state.file, this.state.buyer.id, this.state.business.id)
                 }
               },
               handleFileUpload: e => {
@@ -266,11 +241,7 @@ class ClientManagerList extends Component {
         },
         onConfirm: isConfirmed => {
           if (isConfirmed) {
-            this.props.caReceived(
-              this.state.file,
-              this.state.buyer.id,
-              this.state.business.id
-            )
+            this.props.caReceived(this.state.file, this.state.buyer.id, this.state.business.id)
           }
         },
         handleFileUpload: e => {
@@ -392,33 +363,22 @@ class ClientManagerList extends Component {
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column>
-              {!this.state.buyer ? (
+              {!this.state.buyer && listBuyerList.length > 0 ? (
                 <Dimmer.Dimmable dimmed>
                   <Dimmer inverted active={isLoadingBuyerList}>
                     <Loader>Loading</Loader>
                   </Dimmer>
-                  <Table
-                    size="small"
-                    compact
-                    color="blue"
-                    celled
-                    inverted
-                    selectable
-                  >
+                  <Table size="small" compact color="blue" celled inverted selectable>
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell>Name</Table.HeaderCell>
+                        <Table.HeaderCell>Name tst</Table.HeaderCell>
                         <Table.HeaderCell>Phone</Table.HeaderCell>
                         <Table.HeaderCell>Email</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
                       {listBuyerList.map(buyer => (
-                        <Table.Row
-                          active
-                          key={buyer.id}
-                          onClick={() => this._renderBuyer(buyer)}
-                        >
+                        <Table.Row active key={buyer.id} onClick={() => this._renderBuyer(buyer)}>
                           <Table.Cell>
                             {buyer.firstName} {buyer.surname}
                           </Table.Cell>
@@ -430,21 +390,13 @@ class ClientManagerList extends Component {
                   </Table>
                 </Dimmer.Dimmable>
               ) : null}
-              {this.state.buyer ? (
+              {this.state.buyer && listBuyerList.length > 0 ? (
                 <Fragment>
-                  <Table
-                    style={{ paddingRight: '300px' }}
-                    size="small"
-                    basic="very"
-                    compact
-                  >
+                  <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
                     <Table.Body>
                       <Table.Row>
                         <Table.HeaderCell>BuyerID</Table.HeaderCell>
-                        <Table.Cell
-                          onClick={() => this._editBuyer(this.state.buyer)}
-                          selectable
-                        >
+                        <Table.Cell onClick={() => this._editBuyer(this.state.buyer)} selectable>
                           <Icon link name="search" />
                           {`B${this.state.buyer.id}`}
                         </Table.Cell>
@@ -452,15 +404,13 @@ class ClientManagerList extends Component {
                       <Table.Row>
                         <Table.HeaderCell color="red">Name</Table.HeaderCell>
                         <Table.Cell>
-                          {this.state.buyer.firstName}{' '}
-                          {this.state.buyer.surname}
+                          {this.state.buyer.firstName} {this.state.buyer.surname}
                         </Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Address</Table.HeaderCell>
                         <Table.Cell>
-                          {this.state.buyer.streetName},{' '}
-                          {this.state.buyer.suburb} {this.state.buyer.state}{' '}
+                          {this.state.buyer.streetName}, {this.state.buyer.suburb} {this.state.buyer.state}{' '}
                           {this.state.buyer.postCode}
                         </Table.Cell>
                       </Table.Row>
@@ -474,15 +424,11 @@ class ClientManagerList extends Component {
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>CA sent</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.buyer.caSent ? 'Yes' : 'No'}
-                        </Table.Cell>
+                        <Table.Cell>{this.state.buyer.caSent ? 'Yes' : 'No'}</Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>CA returned</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.buyer.caReceived ? 'Yes' : 'No'}
-                        </Table.Cell>
+                        <Table.Cell>{this.state.buyer.caReceived ? 'Yes' : 'No'}</Table.Cell>
                       </Table.Row>
                     </Table.Body>
                   </Table>
@@ -491,9 +437,7 @@ class ClientManagerList extends Component {
                       size="small"
                       color="grey"
                       disabled={!this.state.buyer.attachmentUrl}
-                      onClick={() =>
-                        this._openFile(this.state.buyer.attachmentUrl)
-                      }
+                      onClick={() => this._openFile(this.state.buyer.attachmentUrl)}
                     >
                       <Icon name="folder open outline" />
                       Open CA
@@ -513,9 +457,7 @@ class ClientManagerList extends Component {
                       color="blue"
                       disabled={!this.state.business || isLoadingSendCa}
                       loading={isLoadingSendCa}
-                      onClick={() =>
-                        this._toggleModalSendCa(this.state.buyer.caSent)
-                      }
+                      onClick={() => this._toggleModalSendCa(this.state.buyer.caSent)}
                     >
                       <Icon name="send" />
                       Send CA
@@ -536,11 +478,7 @@ class ClientManagerList extends Component {
                       <Icon name="send" />
                       Send IM
                     </Button>
-                    <Button
-                      size="small"
-                      color="green"
-                      onClick={() => this._backToSearch()}
-                    >
+                    <Button size="small" color="green" onClick={() => this._backToSearch()}>
                       <Icon name="backward" />
                       Back to Search
                     </Button>
@@ -549,19 +487,12 @@ class ClientManagerList extends Component {
               ) : null}
             </Grid.Column>
             <Grid.Column>
-              {!this.state.business ? (
+              {!this.state.business && listBusinessList.length > 0 ? (
                 <Dimmer.Dimmable dimmed>
                   <Dimmer inverted active={isLoadingBusinessList}>
                     <Loader>Loading</Loader>
                   </Dimmer>
-                  <Table
-                    size="small"
-                    compact
-                    color="blue"
-                    celled
-                    inverted
-                    selectable
-                  >
+                  <Table size="small" compact color="blue" celled inverted selectable>
                     <Table.Header>
                       <Table.Row>
                         <Table.HeaderCell>ID</Table.HeaderCell>
@@ -572,16 +503,10 @@ class ClientManagerList extends Component {
                     </Table.Header>
                     <Table.Body>
                       {listBusinessList.map(business => (
-                        <Table.Row
-                          active
-                          key={business.id}
-                          onClick={() => this._renderBusiness(business)}
-                        >
+                        <Table.Row active key={business.id} onClick={() => this._renderBusiness(business)}>
                           <Table.Cell>{`BS${business.id}`}</Table.Cell>
                           <Table.Cell>{business.businessName}</Table.Cell>
-                          <Table.Cell>
-                            {numeral(business.listedPrice).format('0,0.00')}
-                          </Table.Cell>
+                          <Table.Cell>{numeral(business.listedPrice).format('0,0.00')}</Table.Cell>
                           <Table.Cell>{business.description}</Table.Cell>
                         </Table.Row>
                       ))}
@@ -591,73 +516,47 @@ class ClientManagerList extends Component {
               ) : null}
               {listBusinessList.length === 0 && this.state.showMsgBusiness ? (
                 <Message warning>
-                  <Message.Header>
-                    Sorry! this business is not `Under Offer` neither `For Sale`
-                  </Message.Header>
+                  <Message.Header>Sorry! this business is not `Under Offer` neither `For Sale`</Message.Header>
                 </Message>
               ) : null}
-              {this.state.business && this.state.business.id ? (
+              {this.state.business && this.state.business.id && listBusinessList.length > 0 ? (
                 <Fragment>
-                  <Table
-                    style={{ paddingRight: '300px' }}
-                    size="small"
-                    basic="very"
-                    compact
-                  >
+                  <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
                     <Table.Body>
                       <Table.Row>
                         <Table.HeaderCell>BusinessID</Table.HeaderCell>
-                        <Table.Cell
-                          onClick={() =>
-                            history.push(`business/${this.state.business.id}`)
-                          }
-                          selectable
-                        >
+                        <Table.Cell onClick={() => history.push(`business/${this.state.business.id}`)} selectable>
                           <Icon link name="search" />
                           {`BS${this.state.business.id}`}
                         </Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell color="red">Name</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.business.businessName}
-                        </Table.Cell>
+                        <Table.Cell>{this.state.business.businessName}</Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Address</Table.HeaderCell>
                         <Table.Cell>
-                          {this.state.business.address1} {','}{' '}
-                          {this.state.business.suburb}{' '}
-                          {this.state.business.state}{' '}
+                          {this.state.business.address1} {','} {this.state.business.suburb} {this.state.business.state}{' '}
                           {this.state.business.postCode}
                         </Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Industry</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.business.industryId}
-                        </Table.Cell>
+                        <Table.Cell>{this.state.business.industryId}</Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Price</Table.HeaderCell>
-                        <Table.Cell>
-                          {numeral(this.state.business.listedPrice).format(
-                            '0,0.00'
-                          )}
-                        </Table.Cell>
+                        <Table.Cell>{numeral(this.state.business.listedPrice).format('0,0.00')}</Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>Notes</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.business.description}
-                        </Table.Cell>
+                        <Table.Cell>{this.state.business.description}</Table.Cell>
                       </Table.Row>
                       {this.state.business.BusinessStage ? (
                         <Table.Row>
                           <Table.HeaderCell>Stage</Table.HeaderCell>
-                          <Table.Cell>
-                            {this.state.business.BusinessStage.label}
-                          </Table.Cell>
+                          <Table.Cell>{this.state.business.BusinessStage.label}</Table.Cell>
                         </Table.Row>
                       ) : null}
                       {this.state.business.productId === 2 ? (
@@ -686,8 +585,7 @@ class ClientManagerList extends Component {
                       disabled={
                         !this.state.buyer ||
                         isLoadingRequestOwnersApproval ||
-                        (!this.state.buyer.caReceived &&
-                          !this.state.business.notifyOwner)
+                        (!this.state.buyer.caReceived && !this.state.business.notifyOwner)
                       }
                       loading={isLoadingRequestOwnersApproval}
                     >
@@ -713,22 +611,14 @@ class ClientManagerList extends Component {
                     <Button
                       size="small"
                       color="blue"
-                      disabled={
-                        !this.state.buyer ||
-                        isLoadingEmailBuyer ||
-                        this.state.business.stageId !== 5
-                      }
+                      disabled={!this.state.buyer || isLoadingEmailBuyer || this.state.business.stageId !== 5}
                       onClick={() => this._toggleModalEmailBuyer()}
                       loading={isLoadingEmailBuyer}
                     >
                       <Icon name="mail" />
                       Email Buyer
                     </Button>
-                    <Button
-                      size="small"
-                      color="green"
-                      onClick={() => this._renderBusiness(null)}
-                    >
+                    <Button size="small" color="green" onClick={() => this._renderBusiness(null)}>
                       <Icon name="backward" />
                       Back to Search
                     </Button>
@@ -743,11 +633,7 @@ class ClientManagerList extends Component {
         <Grid.Column floated="left" width={2}>
           {this.state.buyer ? (
             <Fragment>
-              <Button
-                size="small"
-                color="blue"
-                onClick={() => this._renderBuyerLog(this.state.buyer)}
-              >
+              <Button size="small" color="blue" onClick={() => this._renderBuyerLog(this.state.buyer)}>
                 <Icon name="talk" />
                 Show Log
               </Button>
@@ -771,14 +657,7 @@ class ClientManagerList extends Component {
               <Dimmer inverted active={isLoadingBuyerLog}>
                 <Loader>Loading</Loader>
               </Dimmer>
-              <Table
-                size="small"
-                compact
-                color="blue"
-                celled
-                inverted
-                selectable
-              >
+              <Table size="small" compact color="blue" celled inverted selectable>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>ID</Table.HeaderCell>
@@ -789,28 +668,18 @@ class ClientManagerList extends Component {
                 </Table.Header>
                 <Table.Body>
                   {listBuyerLogList.array.map(buyerLog => (
-                    <Table.Row
-                      active
-                      key={buyerLog.id}
-                      onClick={() =>
-                        this._getBusinessObject(buyerLog.business_id)
-                      }
-                    >
+                    <Table.Row active key={buyerLog.id} onClick={() => this._getBusinessObject(buyerLog.business_id)}>
                       <Table.Cell>{`BS${buyerLog.business_id}`}</Table.Cell>
                       <Table.Cell>{buyerLog.Business.businessName}</Table.Cell>
                       <Table.Cell>{buyerLog.text}</Table.Cell>
-                      <Table.Cell>
-                        {moment(buyerLog.followUp).format('DD/MM/YYYY - HH:mm')}
-                      </Table.Cell>
+                      <Table.Cell>{moment(buyerLog.followUp).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
               </Table>
               <Pagination
                 size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data)
-                }
+                onPageChange={(e, data) => this._handlePaginationChange(e, data)}
                 defaultActivePage={this.props.listBuyerLogList.activePage}
                 totalPages={this.props.listBuyerLogList.pages}
                 firstItem={null}
@@ -879,8 +748,7 @@ const mapStateToProps = state => ({
   isLoadingCaReceived: state.clientManager.caReceived.isLoading,
   isLoadingEmailBuyer: state.clientManager.emailBuyer.isLoading,
   isLoadingEnquiryBusiness: state.clientManager.enquired.isLoading,
-  isLoadingRequestOwnersApproval:
-    state.clientManager.requestOwnersApproval.isLoading,
+  isLoadingRequestOwnersApproval: state.clientManager.requestOwnersApproval.isLoading,
   isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading,
   businessObject: state.business.get.object,
   objectEmailTemplate: state.emailTemplates.get.object

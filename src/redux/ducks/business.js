@@ -48,7 +48,7 @@ export const Types = {
 
 const initialState = {
   getAll: {
-    isLoading: true,
+    isLoading: false,
     array: [],
     error: null
   },
@@ -182,9 +182,7 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           object: action.payload.business,
           totalEnquiry: action.payload.countAllEnquiry,
-          totalLastScore: action.payload.lastScore
-            ? action.payload.lastScore.total
-            : null,
+          totalLastScore: action.payload.lastScore ? action.payload.lastScore.total : null,
           stageOptions: action.payload.stageList,
           sourceOptions: action.payload.sourceList,
           ratingOptions: action.payload.ratingList,
@@ -238,9 +236,7 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           object: action.payload.business,
           totalEnquiry: action.payload.countAllEnquiry,
-          totalLastScore: action.payload.lastScore
-            ? action.payload.lastScore.total
-            : null,
+          totalLastScore: action.payload.lastScore ? action.payload.lastScore.total : null,
           stageOptions: action.payload.stageList,
           sourceOptions: action.payload.sourceList,
           ratingOptions: action.payload.ratingList,
@@ -464,11 +460,7 @@ export const cleanBusiness = () => dispatch =>
     type: Types.CLEAN_BUSINESS
   })
 
-export const getBusinesses = (
-  search = false,
-  stageId = false,
-  filterLog = false
-) => async dispatch => {
+export const getBusinesses = (search = false, stageId = false, filterLog = false) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_LOADING,
     payload: true
@@ -506,9 +498,7 @@ export const updateBusiness = business => async dispatch => {
       type: Types.UPDATE_BUSINESS_FAILURE,
       payload: error
     })
-    toast.error(
-      'Error trying to upload the business. Please get in contact with IT department.'
-    )
+    toast.error('Error trying to upload the business. Please get in contact with IT department.')
   }
 }
 
@@ -571,10 +561,7 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
   }
 }
 
-export const getBuyersFromBusiness = (
-  businessId,
-  showAll = false
-) => async dispatch => {
+export const getBuyersFromBusiness = (businessId, showAll = false) => async dispatch => {
   dispatch({
     type: Types.GET_BUYERS_FROM_BUSINESS_LOADING,
     payload: true
