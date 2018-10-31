@@ -85,3 +85,10 @@ export const getBuyersGroupEmail = businessId => {
     url: `/business/${businessId}/group-email`
   })
 }
+
+export const getQtdeBusinessEachStagePerUser = userId => {
+  return request({
+    url: '/business/qtde-business-stage-user',
+    params: { userId }
+  })
+}

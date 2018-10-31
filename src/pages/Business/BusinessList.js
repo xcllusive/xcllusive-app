@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Table, Icon, Button, Input, Grid, Statistic, Dimmer, Loader, Header } from 'semantic-ui-react'
 
-import { getBusinesses, createBusiness } from '../../redux/ducks/business'
+import { getBusinesses, createBusiness, getQtdeBusinessEachStagePerUser } from '../../redux/ducks/business'
 
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 
@@ -24,6 +24,7 @@ class BusinessListPage extends Component {
 
   async componentDidMount () {
     await this.props.getBusinesses(false, this.state.stageSelected, false)
+    this.props.getQtdeBusinessEachStagePerUser(8)
   }
 
   // static async getDerivedStateFromProps (nextProps) {
@@ -162,10 +163,12 @@ BusinessListPage.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   openModal: PropTypes.func,
-  createBusiness: PropTypes.func
+  createBusiness: PropTypes.func,
+  getQtdeBusinessEachStagePerUser: PropTypes.func
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBusinesses, openModal, createBusiness }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getBusinesses, openModal, createBusiness, getQtdeBusinessEachStagePerUser }, dispatch)
 
 const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,

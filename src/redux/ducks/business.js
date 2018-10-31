@@ -8,7 +8,8 @@ import {
   updateStageSalesMemo as updateStageSalesMemoAPI,
   updateStageLost as updateStageLostAPI,
   getBuyersFromBusiness as getBuyersFromBusinessAPI,
-  getBuyersGroupEmail as getBuyersGroupEmailAPI
+  getBuyersGroupEmail as getBuyersGroupEmailAPI,
+  getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI
 } from '../../services/api/business'
 
 // Action Types
@@ -41,7 +42,10 @@ export const Types = {
   GET_BUYERS_FROM_BUSINESS_FAILURE: 'GET_BUYERS_FROM_BUSINESS_FAILURE',
   GET_BUYERS_GROUP_EMAIL_LOADING: 'GET_BUYERS_GROUP_EMAIL_LOADING',
   GET_BUYERS_GROUP_EMAIL_SUCCESS: 'GET_BUYERS_GROUP_EMAIL_SUCCESS',
-  GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE'
+  GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE',
+  GET_QTDE_BUSINESS_STAGE_USER_LOADING: 'GET_QTDE_BUSINESS_STAGE_USER_LOADING',
+  GET_QTDE_BUSINESS_STAGE_USER_SUCCESS: 'GET_QTDE_BUSINESS_STAGE_USER_SUCCESS',
+  GET_QTDE_BUSINESS_STAGE_USER_FAILURE: 'GET_QTDE_BUSINESS_STAGE_USER_FAILURE'
 }
 
 // Reducer
@@ -99,6 +103,11 @@ const initialState = {
     error: null
   },
   getBuyersGroupEmail: {
+    isLoading: true,
+    array: [],
+    error: null
+  },
+  getQtdeBusinessStageUser: {
     isLoading: true,
     array: [],
     error: null
@@ -406,6 +415,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_QTDE_BUSINESS_STAGE_USER_LOADING:
+      return {
+        ...state,
+        getQtdeBusinessStageUser: {
+          ...state.getQtdeBusinessStageUser,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_QTDE_BUSINESS_STAGE_USER_SUCCESS:
+      return {
+        ...state,
+        getQtdeBusinessStageUser: {
+          ...state.getQtdeBusinessStageUser,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_QTDE_BUSINESS_STAGE_USER_FAILURE:
+      return {
+        ...state,
+        getQtdeBusinessStageUser: {
+          ...state.getQtdeBusinessStageUser,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -595,6 +632,26 @@ export const getBuyersGroupEmail = businessId => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_BUYERS_GROUP_EMAIL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getQtdeBusinessEachStagePerUser = userId => async dispatch => {
+  dispatch({
+    type: Types.GET_QTDE_BUSINESS_STAGE_USER_LOADING,
+    payload: true
+  })
+  try {
+    const buyers = await getQtdeBusinessEachStagePerUserAPI(userId)
+    dispatch({
+      type: Types.GET_QTDE_BUSINESS_STAGE_USER_SUCCESS,
+      payload: buyers.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_QTDE_BUSINESS_STAGE_USER_FAILURE,
       payload: error
     })
     toast.error(error)
