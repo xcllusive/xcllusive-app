@@ -63,13 +63,7 @@ class BuyerPage extends Component {
   }
 
   render () {
-    const {
-      history,
-      businessesForSale,
-      businessesUnderOffer,
-      isLoadingForSale,
-      isLoadingUnderOffer
-    } = this.props
+    const { history, businessesForSale, businessesUnderOffer, isLoadingForSale, isLoadingUnderOffer } = this.props
 
     return (
       <Wrapper>
@@ -82,14 +76,11 @@ class BuyerPage extends Component {
             </h2>
           </Grid.Row>
           <Grid.Row style={{ paddingTop: 0 }}>
-            <Dimmer.Dimmable
-              dimmed={isLoadingForSale}
-              style={{ width: '100%' }}
-            >
+            <Dimmer.Dimmable dimmed={isLoadingForSale} style={{ width: '100%' }}>
               <Dimmer inverted active={isLoadingForSale}>
                 <Loader>Loading</Loader>
               </Dimmer>
-              <Table color="blue" celled inverted size="small" compact>
+              <Table color="blue" celled inverted size="small" compact textAlign="center">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Business ID</Table.HeaderCell>
@@ -115,13 +106,21 @@ class BuyerPage extends Component {
                           item.lastScore.dateTimeCreated &&
                           this._diffDays(item.lastScore.dateTimeCreated) >= 30
                             ? () => this._showMsg()
-                            : () =>
-                              history.push(
-                                `buyer/business/${item.business.id}`
-                              )
+                            : () => history.push(`buyer/business/${item.business.id}`)
                         }
                       >
-                        {item.business.businessName}
+                        <Icon
+                          style={{
+                            fontSize: '1.2em',
+                            width: 'auto',
+                            paddingLeft: '5px',
+                            fontFamily: 'lato',
+                            color: 'blue'
+                          }}
+                          link
+                        >
+                          {item.business.businessName}
+                        </Icon>
                       </Table.Cell>
                       <Table.Cell>{item.countFollowUpTask}</Table.Cell>
                       <Table.Cell>
@@ -129,16 +128,12 @@ class BuyerPage extends Component {
                           icon
                           size="small"
                           color="instagram"
-                          onClick={() =>
-                            this._toggleModalGroupEmail(item.business.id)
-                          }
+                          onClick={() => this._toggleModalGroupEmail(item.business.id)}
                         >
                           <Icon name="mail" />
                         </Button>
                       </Table.Cell>
-                      <Table.Cell>
-                        {this._diffDays(item.business.daysOnTheMarket)}
-                      </Table.Cell>
+                      <Table.Cell>{this._diffDays(item.business.daysOnTheMarket)}</Table.Cell>
                       <Table.Cell
                         style={
                           item.lastScore &&
@@ -152,9 +147,7 @@ class BuyerPage extends Component {
                           ? this._diffDays(item.lastScore.dateTimeCreated)
                           : '-'}
                       </Table.Cell>
-                      <Table.Cell>
-                        {item.lastScore ? item.lastScore.total : '-'}
-                      </Table.Cell>
+                      <Table.Cell>{item.lastScore ? item.lastScore.total : '-'}</Table.Cell>
                       <Table.Cell>
                         {item.lastScore && item.lastScore.dateSent
                           ? moment(item.lastScore.dateSent).format('DD/MM/YYYY')
@@ -165,11 +158,7 @@ class BuyerPage extends Component {
                           icon
                           size="small"
                           color="instagram"
-                          onClick={() =>
-                            history.push(
-                              `buyer/business/${item.business.id}/score-list`
-                            )
-                          }
+                          onClick={() => history.push(`buyer/business/${item.business.id}/score-list`)}
                         >
                           <Icon name="star" />
                         </Button>
@@ -184,9 +173,7 @@ class BuyerPage extends Component {
                             : null
                         }
                       >
-                        {item.lastScore &&
-                        item.lastScore.dateSent &&
-                        item.lastScore.dateTimeCreated
+                        {item.lastScore && item.lastScore.dateSent && item.lastScore.dateTimeCreated
                           ? this._locked(item.lastScore.dateTimeCreated)
                           : '-'}
                       </Table.Cell>
@@ -204,14 +191,11 @@ class BuyerPage extends Component {
             </h2>
           </Grid.Row>
           <Grid.Row style={{ paddingTop: 0 }}>
-            <Dimmer.Dimmable
-              dimmed={isLoadingUnderOffer}
-              style={{ width: '100%' }}
-            >
+            <Dimmer.Dimmable dimmed={isLoadingUnderOffer} style={{ width: '100%' }}>
               <Dimmer inverted active={isLoadingUnderOffer}>
                 <Loader>Loading</Loader>
               </Dimmer>
-              <Table color="blue" celled inverted size="small" compact>
+              <Table color="blue" celled inverted size="small" compact textAlign="center">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Business ID</Table.HeaderCell>
@@ -225,13 +209,19 @@ class BuyerPage extends Component {
                   {businessesUnderOffer.map(item => (
                     <Table.Row active key={item.business.id}>
                       <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
-                      <Table.Cell
-                        selectable
-                        onClick={() =>
-                          history.push(`buyer/business/${item.business.id}`)
-                        }
-                      >
-                        {item.business.businessName}
+                      <Table.Cell selectable onClick={() => history.push(`buyer/business/${item.business.id}`)}>
+                        <Icon
+                          style={{
+                            fontSize: '1.2em',
+                            width: 'auto',
+                            paddingLeft: '5px',
+                            fontFamily: 'lato',
+                            color: 'blue'
+                          }}
+                          link
+                        >
+                          {item.business.businessName}
+                        </Icon>
                       </Table.Cell>
                       <Table.Cell>{item.countFollowUpTask}</Table.Cell>
                       <Table.Cell>
@@ -239,16 +229,12 @@ class BuyerPage extends Component {
                           icon
                           size="small"
                           color="instagram"
-                          onClick={() =>
-                            this._toggleModalGroupEmail(item.business.id)
-                          }
+                          onClick={() => this._toggleModalGroupEmail(item.business.id)}
                         >
                           <Icon name="mail" />
                         </Button>
                       </Table.Cell>
-                      <Table.Cell>
-                        {this._diffDays(item.business.daysOnTheMarket)}
-                      </Table.Cell>
+                      <Table.Cell>{this._diffDays(item.business.daysOnTheMarket)}</Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -261,8 +247,7 @@ class BuyerPage extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBuyerBusinesses, openModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBuyerBusinesses, openModal }, dispatch)
 
 BuyerPage.propTypes = {
   history: PropTypes.object,

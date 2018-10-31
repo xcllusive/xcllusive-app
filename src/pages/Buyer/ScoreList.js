@@ -2,14 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {
-  Table,
-  Grid,
-  Header,
-  Button,
-  Icon,
-  Pagination
-} from 'semantic-ui-react'
+import { Table, Grid, Header, Button, Icon, Pagination, Form } from 'semantic-ui-react'
 
 import { getBusiness } from '../../redux/ducks/business'
 import { listScore, removeScore } from '../../redux/ducks/score'
@@ -55,19 +48,23 @@ class ScoreListPage extends Component {
       <Wrapper loading={isLoadingBusiness}>
         <Grid style={{ marginTop: 0 }}>
           <Grid.Row columns={2}>
-            <Grid.Column>
-              <Header
-                as="h2"
-                color="blue"
-                content={`Sellability Score Log: ${business.businessName}`}
-              />
+            <Grid.Column textAlign="left">
+              <Form>
+                <Form.Group style={{ marginBottom: '0px' }}>
+                  <Form.Field>
+                    <h2>Sellability Score Log:</h2>
+                  </Form.Field>
+                  <Form.Field>
+                    {/* <h2 style={{ color: 'blue' }}>{business.businessName}</h2> */}
+                    <Header style={{ marginTop: '0px' }} as="h2" color="blue" content={business.businessName} />
+                  </Form.Field>
+                </Form.Group>
+              </Form>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column textAlign="right">
               <Button
                 color="facebook"
-                onClick={() =>
-                  history.push(`/buyer/business/${business.id}/make-new-score`)
-                }
+                onClick={() => history.push(`/buyer/business/${business.id}/make-new-score`)}
                 size="small"
                 floated="right"
               >
@@ -80,14 +77,7 @@ class ScoreListPage extends Component {
         {listScoreList.array.length > 0 ? (
           <Grid padded="horizontally" style={{ marginTop: 0 }}>
             <Grid.Row>
-              <Table
-                color="blue"
-                celled
-                inverted
-                selectable
-                size="small"
-                compact
-              >
+              <Table color="blue" celled inverted selectable size="small" compact>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Created</Table.HeaderCell>
@@ -100,35 +90,21 @@ class ScoreListPage extends Component {
                 <Table.Body>
                   {listScoreList.array.map((listScore, key) => (
                     <Table.Row active key={listScore.id}>
-                      <Table.Cell>
-                        {moment(listScore.dateTimeCreated).format(
-                          'DD/MM/YYYY - HH:mm'
-                        )}
-                      </Table.Cell>
+                      <Table.Cell>{moment(listScore.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
                       <Table.Cell>Score Version {listScore.version}</Table.Cell>
                       <Table.Cell>{listScore.total}</Table.Cell>
-                      <Table.Cell>
-                        {listScore.dateSent ? 'Yes' : 'No'}
-                      </Table.Cell>
+                      <Table.Cell>{listScore.dateSent ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>
                         <Button
                           icon
-                          onClick={() =>
-                            history.push(
-                              `/buyer/business/${business.id}/make-new-score/${
-                                listScore.id
-                              }`
-                            )
-                          }
+                          onClick={() => history.push(`/buyer/business/${business.id}/make-new-score/${listScore.id}`)}
                         >
                           <Icon link name="edit" size="large" />
                         </Button>
                         <Button
                           icon
                           disabled={listScore.dateSent !== null}
-                          onClick={() =>
-                            this._toggleModalConfirmDelete(listScore.id)
-                          }
+                          onClick={() => this._toggleModalConfirmDelete(listScore.id)}
                         >
                           <Icon link color="red" size="large" name="trash" />
                         </Button>
@@ -139,9 +115,7 @@ class ScoreListPage extends Component {
               </Table>
               <Pagination
                 size="mini"
-                onPageChange={(e, data) =>
-                  this._handlePaginationChange(e, data)
-                }
+                onPageChange={(e, data) => this._handlePaginationChange(e, data)}
                 defaultActivePage={this.props.listScoreList.activePage}
                 totalPages={this.props.listScoreList.pages}
                 firstItem={null}
@@ -152,12 +126,7 @@ class ScoreListPage extends Component {
         ) : null}
         <Grid style={{ marginTop: 0 }}>
           <Grid.Column>
-            <Button
-              color="green"
-              onClick={() => history.push('/buyer')}
-              size="small"
-              floated="left"
-            >
+            <Button color="green" onClick={() => history.push('/buyer')} size="small" floated="left">
               <Icon name="backward" />
               Return to Business
             </Button>
@@ -181,11 +150,7 @@ ScoreListPage.propTypes = {
   openModal: PropTypes.func
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    { getBusiness, listScore, removeScore, openModal },
-    dispatch
-  )
+const mapDispatchToProps = dispatch => bindActionCreators({ getBusiness, listScore, removeScore, openModal }, dispatch)
 
 const mapStateToProps = state => ({
   listScoreList: state.score.listScore,
