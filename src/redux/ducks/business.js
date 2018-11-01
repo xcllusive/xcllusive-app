@@ -9,7 +9,8 @@ import {
   updateStageLost as updateStageLostAPI,
   getBuyersFromBusiness as getBuyersFromBusinessAPI,
   getBuyersGroupEmail as getBuyersGroupEmailAPI,
-  getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI
+  getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI,
+  getAllPerUser
 } from '../../services/api/business'
 
 // Action Types
@@ -45,7 +46,10 @@ export const Types = {
   GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE',
   GET_QTDE_BUSINESS_STAGE_USER_LOADING: 'GET_QTDE_BUSINESS_STAGE_USER_LOADING',
   GET_QTDE_BUSINESS_STAGE_USER_SUCCESS: 'GET_QTDE_BUSINESS_STAGE_USER_SUCCESS',
-  GET_QTDE_BUSINESS_STAGE_USER_FAILURE: 'GET_QTDE_BUSINESS_STAGE_USER_FAILURE'
+  GET_QTDE_BUSINESS_STAGE_USER_FAILURE: 'GET_QTDE_BUSINESS_STAGE_USER_FAILURE',
+  GET_BUSINESSES_PER_USER_LOADING: 'GET_BUSINESSES_PER_USER_LOADING',
+  GET_BUSINESSES_PER_USER_SUCCESS: 'GET_BUSINESSES_PER_USER_SUCCESS',
+  GET_BUSINESSES_PER_USER_FAILURE: 'GET_BUSINESSES_PER_USER_FAILURE'
 }
 
 // Reducer
@@ -109,6 +113,11 @@ const initialState = {
   },
   getQtdeBusinessStageUser: {
     isLoading: true,
+    object: {},
+    error: null
+  },
+  getAllPerUser: {
+    isLoading: false,
     array: [],
     error: null
   }
@@ -430,7 +439,7 @@ export default function reducer (state = initialState, action) {
         getQtdeBusinessStageUser: {
           ...state.getQtdeBusinessStageUser,
           isLoading: false,
-          array: action.payload,
+          object: action.payload,
           error: null
         }
       }
@@ -439,6 +448,34 @@ export default function reducer (state = initialState, action) {
         ...state,
         getQtdeBusinessStageUser: {
           ...state.getQtdeBusinessStageUser,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_BUSINESSES_PER_USER_LOADING:
+      return {
+        ...state,
+        getAllPerUser: {
+          ...state.getAllPerUser,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_PER_USER_SUCCESS:
+      return {
+        ...state,
+        getAllPerUser: {
+          ...state.getAllPerUser,
+          isLoading: false,
+          array: action.payload.data,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_PER_USER_FAILURE:
+      return {
+        ...state,
+        getAllPerUser: {
+          ...state.getAllPerUser,
           isLoading: false,
           error: action.payload
         }
@@ -638,13 +675,13 @@ export const getBuyersGroupEmail = businessId => async dispatch => {
   }
 }
 
-export const getQtdeBusinessEachStagePerUser = userId => async dispatch => {
+export const getQtdeBusinessEachStagePerUser = () => async dispatch => {
   dispatch({
     type: Types.GET_QTDE_BUSINESS_STAGE_USER_LOADING,
     payload: true
   })
   try {
-    const buyers = await getQtdeBusinessEachStagePerUserAPI(userId)
+    const buyers = await getQtdeBusinessEachStagePerUserAPI()
     dispatch({
       type: Types.GET_QTDE_BUSINESS_STAGE_USER_SUCCESS,
       payload: buyers.data
@@ -652,6 +689,26 @@ export const getQtdeBusinessEachStagePerUser = userId => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_QTDE_BUSINESS_STAGE_USER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getBusinessesPerUser = (search = false, stageId = false, filterLog = false) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESSES_PER_USER_LOADING,
+    payload: true
+  })
+  try {
+    const businesses = await getAllPerUser(search, stageId, filterLog)
+    dispatch({
+      type: Types.GET_BUSINESSES_PER_USER_SUCCESS,
+      payload: businesses
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESSES_PER_USER_FAILURE,
       payload: error
     })
     toast.error(error)

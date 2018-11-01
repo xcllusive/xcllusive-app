@@ -86,9 +86,28 @@ export const getBuyersGroupEmail = businessId => {
   })
 }
 
-export const getQtdeBusinessEachStagePerUser = userId => {
+export const getQtdeBusinessEachStagePerUser = () => {
   return request({
-    url: '/business/qtde-business-stage-user',
-    params: { userId }
+    url: '/business/qtde-business-stage-user'
+  })
+}
+
+export const getAllPerUser = (search, stageId, filterLog) => {
+  const params = {}
+
+  if (search && search.length > 0) params.search = search
+  if (stageId && stageId.length > 0) {
+    params.stageId = JSON.stringify(stageId)
+  }
+  if (stageId && stageId > 0) {
+    params.stageId = stageId
+  }
+  if (filterLog) {
+    params.filterLog = filterLog
+  }
+
+  return request({
+    url: '/business/businesses-user',
+    params
   })
 }

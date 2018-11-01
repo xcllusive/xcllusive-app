@@ -11,7 +11,6 @@ import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
-import { getBuyerBusinesses } from '../../redux/ducks/buyer'
 
 class BusinessEditPage extends Component {
   constructor (props) {
@@ -283,14 +282,13 @@ BusinessEditPage.propTypes = {
   arrayLogsFromBusiness: PropTypes.array,
   getLogFromBusiness: PropTypes.func,
   businessesForSale: PropTypes.array,
-  getBuyerBusinesses: PropTypes.func,
   totalEnquiry: PropTypes.number,
   totalLastScore: PropTypes.number,
   isUpdated: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, cleanBusiness, getLogFromBusiness, getBuyerBusinesses }, dispatch)
+  return bindActionCreators({ getBusiness, cleanBusiness, getLogFromBusiness }, dispatch)
 }
 
 const mapStateToProps = state => {
