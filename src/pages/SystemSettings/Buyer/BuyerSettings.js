@@ -6,10 +6,7 @@ import { withFormik } from 'formik'
 import { Form, Label, Icon } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import * as Yup from 'yup'
-import {
-  getSystemSettings,
-  updateSystemSettings
-} from '../../../redux/ducks/systemSettings'
+import { getSystemSettings, updateSystemSettings } from '../../../redux/ducks/systemSettings'
 
 class EmailTemplates extends Component {
   constructor (props) {
@@ -22,16 +19,7 @@ class EmailTemplates extends Component {
   }
 
   render () {
-    const {
-      values,
-      touched,
-      errors,
-      handleChange,
-      handleBlur,
-      isSubmitting,
-      handleSubmit,
-      isValid
-    } = this.props
+    const { values, touched, errors, handleChange, handleBlur, isSubmitting, handleSubmit, isValid } = this.props
     return (
       <Wrapper>
         <Form>
@@ -61,14 +49,7 @@ class EmailTemplates extends Component {
                 onBlur={handleBlur}
               />
               {errors.emailOffice &&
-                touched.emailOffice && (
-                <Label
-                  basic
-                  color="red"
-                  pointing
-                  content={errors.emailOffice}
-                />
-              )}
+                touched.emailOffice && <Label basic color="red" pointing content={errors.emailOffice} />}
             </Form.Field>
           </Form.Group>
         </Form>
@@ -107,7 +88,7 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 }
 
 const mapStateToProps = state => ({
-  emailOffice: state.systemSettings.get.object.emailOffice
+  emailOffice: state.systemSettings.get.object ? state.systemSettings.get.object.emailOffice : ''
 })
 
 const mapDispatchToProps = dispatch =>
