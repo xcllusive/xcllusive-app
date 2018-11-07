@@ -288,6 +288,7 @@ class ClientManagerList extends Component {
       onConfirm: async values => {
         if (values) {
           await this.props.createBusiness(values)
+          this.props.closeModal()
         }
       }
     })

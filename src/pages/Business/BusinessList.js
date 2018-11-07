@@ -11,7 +11,7 @@ import {
   getBusinessesPerUser
 } from '../../redux/ducks/business'
 
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 
 import Wrapper from '../../components/content/Wrapper'
 import GridBusinessStage from '../../components/content/GridBusinessStage'
@@ -55,6 +55,9 @@ class BusinessListPage extends Component {
       onConfirm: async values => {
         if (values) {
           await this.props.createBusiness(values)
+          this.props.closeModal()
+          await this.props.getBusinessesPerUser(false, this.state.stageSelected, false)
+          this.props.getQtdeBusinessEachStagePerUser()
         }
       }
     })
@@ -179,12 +182,13 @@ BusinessListPage.propTypes = {
   createBusiness: PropTypes.func,
   getQtdeBusinessEachStagePerUser: PropTypes.func,
   objectQtdeBusinessStage: PropTypes.object,
-  getBusinessesPerUser: PropTypes.func
+  getBusinessesPerUser: PropTypes.func,
+  closeModal: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { getBusinesses, openModal, createBusiness, getQtdeBusinessEachStagePerUser, getBusinessesPerUser },
+    { getBusinesses, openModal, createBusiness, getQtdeBusinessEachStagePerUser, getBusinessesPerUser, closeModal },
     dispatch
   )
 
