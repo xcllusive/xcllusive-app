@@ -35,12 +35,12 @@ class ModalReassignBusiness extends Component {
     return [{ key: 1, text: 'No users found', value: null }]
   }
 
-  _handleConfirm = isConfirmed => {
+  _handleConfirm = async isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       return
     }
-    this.props.reassignBusiness({
+    await this.props.reassignBusiness({
       businessId: this.props.businessId,
       listingAgentName: this.props.values.listingAgent
     })
@@ -48,24 +48,16 @@ class ModalReassignBusiness extends Component {
   }
 
   render () {
-    const {
-      values,
-      touched,
-      errors,
-      isValid,
-      createLoading,
-      options
-    } = this.props
+    const { values, touched, errors, isValid, createLoading, options } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content>
           <Message warning>
             <Message.Header>IMPORTANT:</Message.Header>
-            You are able to reassign the LISTING agent- not the sales agent.
-            Once this is done, the responsibility of listing this business will
-            be transferred to the allocated Listing Agent. Only do this if this
-            is your intention.
+            You are able to reassign the LISTING agent- not the sales agent. Once this is done, the responsibility of
+            listing this business will be transferred to the allocated Listing Agent. Only do this if this is your
+            intention.
           </Message>
           <Form>
             <Form.Group>
@@ -80,14 +72,7 @@ class ModalReassignBusiness extends Component {
                   onChange={this._handleSelectChange}
                 />
                 {errors.listingAgent &&
-                  touched.listingAgent && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.listingAgent}
-                  />
-                )}
+                  touched.listingAgent && <Label basic color="red" pointing content={errors.listingAgent} />}
               </Form.Field>
             </Form.Group>
           </Form>
