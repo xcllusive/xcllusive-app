@@ -70,7 +70,6 @@ class ModalNewBusiness extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  required
                   label="Last name"
                   name="lastName"
                   autoComplete="lastName"
@@ -164,7 +163,6 @@ class ModalNewBusiness extends Component {
             <Form.Group widths="equal">
               <Form.Field>
                 <Form.TextArea
-                  required
                   label="Notes"
                   name="description"
                   autoComplete="description"
@@ -237,20 +235,16 @@ const validationSchema = Yup.object().shape({
   firstName: Yup.string()
     .required('First name is required.')
     .max(40, 'First name require max 40 characters.'),
-  lastName: Yup.string()
-    .required('Last name is required.')
-    .max(40, 'Last name require max 40 characters.'),
-  vendorPhone1: Yup.string().max(15, 'Telephone 1 require max 15 characters.'),
-  vendorPhone2: Yup.string().max(15, 'Telephone 2 require max 15 characters.'),
-  vendorPhone3: Yup.string().max(15, 'Telephone 3 require max 15 characters.'),
+  lastName: Yup.string().max(40, 'Last name require max 40 characters.'),
+  vendorPhone1: Yup.string().max(30, 'Telephone 1 require max 30 characters.'),
+  vendorPhone2: Yup.string().max(30, 'Telephone 2 require max 30 characters.'),
+  vendorPhone3: Yup.string().max(30, 'Telephone 3 require max 30 characters.'),
   vendorEmail: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
   businessSource: Yup.number().required('Source is required.'),
   sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
-  description: Yup.string()
-    .required('Notes is required.')
-    .max(2000, 'Source Notes require max 2000 characters.')
+  description: Yup.string().max(2000, 'Source Notes require max 2000 characters.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

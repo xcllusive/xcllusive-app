@@ -68,18 +68,10 @@ class ModalNewBuyer extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.firstName &&
-                  touched.firstName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.firstName}
-                  />
-                )}
+                  touched.firstName && <Label basic color="red" pointing content={errors.firstName} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  required
                   label="Last name"
                   name="surname"
                   autoComplete="surname"
@@ -87,15 +79,7 @@ class ModalNewBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.surname &&
-                  touched.surname && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.surname}
-                  />
-                )}
+                {errors.surname && touched.surname && <Label basic color="red" pointing content={errors.surname} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -109,10 +93,7 @@ class ModalNewBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.email &&
-                  touched.email && (
-                  <Label basic color="red" pointing content={errors.email} />
-                )}
+                {errors.email && touched.email && <Label basic color="red" pointing content={errors.email} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -124,14 +105,7 @@ class ModalNewBuyer extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.streetName &&
-                  touched.streetName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.streetName}
-                  />
-                )}
+                  touched.streetName && <Label basic color="red" pointing content={errors.streetName} />}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -142,10 +116,7 @@ class ModalNewBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.suburb &&
-                  touched.suburb && (
-                  <Label basic color="red" pointing content={errors.suburb} />
-                )}
+                {errors.suburb && touched.suburb && <Label basic color="red" pointing content={errors.suburb} />}
               </Form.Field>
             </Form.Group>
 
@@ -168,15 +139,7 @@ class ModalNewBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.postCode &&
-                  touched.postCode && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.postCode}
-                  />
-                )}
+                {errors.postCode && touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
               </Form.Field>
               <Form.Field width={4}>
                 <Form.Input
@@ -188,14 +151,7 @@ class ModalNewBuyer extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.telephone1 &&
-                  touched.telephone1 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.telephone1}
-                  />
-                )}
+                  touched.telephone1 && <Label basic color="red" pointing content={errors.telephone1} />}
               </Form.Field>
               <Form.Field width={4}>
                 <Form.Input
@@ -207,14 +163,7 @@ class ModalNewBuyer extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.telephone2 &&
-                  touched.telephone2 && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.telephone2}
-                  />
-                )}
+                  touched.telephone2 && <Label basic color="red" pointing content={errors.telephone2} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -230,15 +179,7 @@ class ModalNewBuyer extends Component {
                   value={values.sourceId}
                   onChange={this._handleSelectChange}
                 />
-                {errors.sourceId &&
-                  touched.sourceId && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.sourceId}
-                  />
-                )}
+                {errors.sourceId && touched.sourceId && <Label basic color="red" pointing content={errors.sourceId} />}
               </Form.Field>
               <Form.Field>
                 <Form.Select
@@ -313,36 +254,31 @@ const mapPropsToValues = () => ({
   postCode: '',
   telephone1: '',
   telephone2: '',
-  priceFrom: '',
-  priceTo: ''
+  priceFrom: 0,
+  priceTo: 0
 })
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
     .required('First name is required.')
     .max(40, 'First name require max 40 characters.'),
-  surname: Yup.string()
-    .required('Last name is required.')
-    .max(40, 'Last name require max 40 characters.'),
+  surname: Yup.string().max(40, 'Last name require max 40 characters.'),
   email: Yup.string()
     .email('Invalid email address.')
     .required('Email is required.'),
   sourceId: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
-  telephone1: Yup.number().typeError('You must type only number here!'),
-  telephone2: Yup.number().typeError('You must type only number here!'),
-  priceTo: Yup.string().test('field-match', 'Fields do not match', function (
-    value
-  ) {
-    const { priceFrom } = this.parent
-    return parseInt(priceFrom) === parseInt(value)
-  })
+  telephone1: Yup.string().max(30, 'Telephone 1 require max 30 characters.'),
+  telephone2: Yup.string().max(30, 'Telephone 1 require max 30 characters.')
+  // priceTo: Yup.string().test('field-match', 'Fields do not match', function (value) {
+  //   const { priceFrom } = this.parent
+  //   return parseInt(priceFrom) === parseInt(value)
+  // })
   // priceFrom: Yup.number().typeError('You must type only number here!'),
   // priceTo: Yup.number().typeError('You must type only number here!')
 })
 
-const handleSubmit = (values, { props, setSubmitting }) =>
-  props.onConfirm(values)
+const handleSubmit = (values, { props, setSubmitting }) => props.onConfirm(values)
 
 const mapStateToProps = state => ({
   isLoading: state.buyer.update.isLoading,
@@ -350,8 +286,7 @@ const mapStateToProps = state => ({
   dropDownLoading: state.businessRegister.get.source.isLoading
 })
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBusinessRegister, closeModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBusinessRegister, closeModal }, dispatch)
 
 export default connect(
   mapStateToProps,

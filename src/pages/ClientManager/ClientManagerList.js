@@ -264,6 +264,7 @@ class ClientManagerList extends Component {
       onConfirm: async values => {
         if (values) {
           await this.props.createBuyer(values)
+          this.props.closeModal()
         }
       }
     })
@@ -277,6 +278,7 @@ class ClientManagerList extends Component {
         if (values) {
           await this.props.updateBuyer(values)
           this.setState({ buyer: values })
+          this.props.closeModal()
         }
       }
     })
