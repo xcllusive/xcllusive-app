@@ -49,6 +49,7 @@ class ModalReassignBusiness extends Component {
 
   render () {
     const { values, touched, errors, isValid, createLoading, options } = this.props
+    console.log(values.listingAgent)
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -71,8 +72,9 @@ class ModalReassignBusiness extends Component {
                   value={values.listingAgent}
                   onChange={this._handleSelectChange}
                 />
-                {errors.listingAgent &&
-                  touched.listingAgent && <Label basic color="red" pointing content={errors.listingAgent} />}
+                {errors.listingAgent && touched.listingAgent && (
+                  <Label basic color="red" pointing content={errors.listingAgent} />
+                )}
               </Form.Field>
             </Form.Group>
           </Form>

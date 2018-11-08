@@ -22,8 +22,8 @@ class BusinessListPage extends Component {
     this.timer = null
     this.state = {
       inputSearch: '',
-      stageSelected: 4,
-      stageSelectedName: 'For Sale'
+      stageSelected: 1,
+      stageSelectedName: 'Potential Listing'
     }
   }
 
