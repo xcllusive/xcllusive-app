@@ -497,10 +497,11 @@ export const createBusiness = business => async dispatch => {
     payload: true
   })
   try {
-    await create(business)
+    const response = await create(business)
     dispatch({
       type: Types.CREATE_BUSINESS_SUCCESS
     })
+    toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.CREATE_BUSINESS_FAILURE,
