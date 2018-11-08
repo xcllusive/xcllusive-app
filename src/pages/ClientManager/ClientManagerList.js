@@ -287,6 +287,7 @@ class ClientManagerList extends Component {
   _newBusiness = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
       title: 'New Business',
+      where: 'ClientManager',
       onConfirm: async values => {
         if (values) {
           await this.props.createBusiness(values)

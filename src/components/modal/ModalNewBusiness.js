@@ -8,16 +8,29 @@ import * as Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
+import { getUsers } from '../../redux/ducks/user'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class ModalNewBusiness extends Component {
   componentDidMount () {
     this.props.getBusinessRegister(1)
+    this.props.getUsers()
   }
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+  }
+
+  _mapValuesToArray = array => {
+    if (array.length > 0) {
+      return array.map((item, index) => ({
+        key: index,
+        text: `${item.firstName} ${item.lastName}`,
+        value: item.id
+      }))
+    }
+    return [{ key: 1, text: 'No users found', value: null }]
   }
 
   render () {
@@ -52,8 +65,9 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.businessName &&
-                  touched.businessName && <Label basic color="red" pointing content={errors.businessName} />}
+                {errors.businessName && touched.businessName && (
+                  <Label basic color="red" pointing content={errors.businessName} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -65,8 +79,9 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.firstName &&
-                  touched.firstName && <Label basic color="red" pointing content={errors.firstName} />}
+                {errors.firstName && touched.firstName && (
+                  <Label basic color="red" pointing content={errors.firstName} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -90,8 +105,9 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorPhone1 &&
-                  touched.vendorPhone1 && <Label basic color="red" pointing content={errors.vendorPhone1} />}
+                {errors.vendorPhone1 && touched.vendorPhone1 && (
+                  <Label basic color="red" pointing content={errors.vendorPhone1} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -102,8 +118,9 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorPhone2 &&
-                  touched.vendorPhone2 && <Label basic color="red" pointing content={errors.vendorPhone2} />}
+                {errors.vendorPhone2 && touched.vendorPhone2 && (
+                  <Label basic color="red" pointing content={errors.vendorPhone2} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -114,8 +131,9 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorPhone3 &&
-                  touched.vendorPhone3 && <Label basic color="red" pointing content={errors.vendorPhone3} />}
+                {errors.vendorPhone3 && touched.vendorPhone3 && (
+                  <Label basic color="red" pointing content={errors.vendorPhone3} />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -129,8 +147,9 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.vendorEmail &&
-                  touched.vendorEmail && <Label basic color="red" pointing content={errors.vendorEmail} />}
+                {errors.vendorEmail && touched.vendorEmail && (
+                  <Label basic color="red" pointing content={errors.vendorEmail} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Select
@@ -144,8 +163,9 @@ class ModalNewBusiness extends Component {
                   value={values.businessSource}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessSource &&
-                  touched.businessSource && <Label basic color="red" pointing content={errors.businessSource} />}
+                {errors.businessSource && touched.businessSource && (
+                  <Label basic color="red" pointing content={errors.businessSource} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -156,8 +176,9 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.sourceNotes &&
-                  touched.sourceNotes && <Label basic color="red" pointing content={errors.sourceNotes} />}
+                {errors.sourceNotes && touched.sourceNotes && (
+                  <Label basic color="red" pointing content={errors.sourceNotes} />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -170,10 +191,29 @@ class ModalNewBusiness extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.description &&
-                  touched.description && <Label basic color="red" pointing content={errors.description} />}
+                {errors.description && touched.description && (
+                  <Label basic color="red" pointing content={errors.description} />
+                )}
               </Form.Field>
             </Form.Group>
+            {this.props.values.where === 'ClientManager' ? (
+              <Form.Group>
+                <Form.Field width={8}>
+                  <Form.Select
+                    required
+                    label="Listing Agent"
+                    name="listingAgent"
+                    options={this._mapValuesToArray(this.props.users)}
+                    autoComplete="listingAgent"
+                    value={values.listingAgent}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.listingAgent && touched.listingAgent && (
+                    <Label basic color="red" pointing content={errors.listingAgent} />
+                  )}
+                </Form.Field>
+              </Form.Group>
+            ) : null}
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -212,10 +252,13 @@ ModalNewBusiness.propTypes = {
   getBusinessRegister: PropTypes.func,
   dropDownLoading: PropTypes.bool,
   title: PropTypes.string,
-  closeModal: PropTypes.func
+  where: PropTypes.string,
+  closeModal: PropTypes.func,
+  getUsers: PropTypes.func,
+  users: PropTypes.array
 }
 
-const mapPropsToValues = () => ({
+const mapPropsToValues = props => ({
   businessName: '',
   firstName: '',
   lastName: '',
@@ -225,7 +268,9 @@ const mapPropsToValues = () => ({
   vendorEmail: '',
   businessSource: '',
   sourceNotes: '',
-  description: ''
+  description: '',
+  listingAgent: '',
+  where: props.where ? props.where : null
 })
 
 const validationSchema = Yup.object().shape({
@@ -244,7 +289,15 @@ const validationSchema = Yup.object().shape({
     .required('Email is required.'),
   businessSource: Yup.number().required('Source is required.'),
   sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
-  description: Yup.string().max(2000, 'Source Notes require max 2000 characters.')
+  description: Yup.string().max(2000, 'Source Notes require max 2000 characters.'),
+  where: Yup.string(),
+  listingAgent: Yup.number()
+    .notRequired()
+    .when('where', {
+      is: 'ClientManager',
+      then: Yup.number().required('Listing Agent is required'),
+      otherwise: Yup.number().notRequired()
+    })
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
@@ -255,12 +308,13 @@ const mapStateToProps = state => {
   return {
     isLoading: state.business.create.isLoading,
     sourceOptions: state.businessRegister.get.source.array,
-    dropDownLoading: state.businessRegister.get.source.isLoading
+    dropDownLoading: state.businessRegister.get.source.isLoading,
+    users: state.user.get.array
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusinessRegister, closeModal }, dispatch)
+  return bindActionCreators({ getBusinessRegister, closeModal, getUsers }, dispatch)
 }
 
 export default connect(

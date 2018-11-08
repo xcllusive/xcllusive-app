@@ -323,7 +323,11 @@ class EditBusinessDetailForm extends Component {
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
-                  <Form.Input label="Listing Agent" placeholder={values.listingAgent} readOnly />
+                  <Form.Input
+                    label="Listing Agent"
+                    placeholder={`${values.listingAgent.firstName} ${values.listingAgent.lastName}`}
+                    readOnly
+                  />
                   <Button
                     primary
                     size="small"
@@ -742,7 +746,7 @@ const mapPropsToValues = props => {
     postCode: '0000',
     data120DayGuarantee: false,
     notifyOwner: true,
-    listingAgent: '',
+    listingAgent: 0,
     businessSource: '',
     businessRating: '',
     businessProduct: '',

@@ -28,8 +28,8 @@ class ModalReassignBusiness extends Component {
     if (array.length > 0) {
       return array.map((item, index) => ({
         key: index,
-        text: item.firstName,
-        value: item.firstName
+        text: `${item.firstName} ${item.lastName}`,
+        value: item.id
       }))
     }
     return [{ key: 1, text: 'No users found', value: null }]
@@ -42,7 +42,7 @@ class ModalReassignBusiness extends Component {
     }
     await this.props.reassignBusiness({
       businessId: this.props.businessId,
-      listingAgentName: this.props.values.listingAgent
+      listingAgentId: this.props.values.listingAgent
     })
     this.props.closeModal()
   }
@@ -112,7 +112,7 @@ ModalReassignBusiness.propTypes = {
   }).isRequired,
   reassignBusiness: PropTypes.func,
   businessId: PropTypes.number.isRequired,
-  listingAgent: PropTypes.string.isRequired
+  listingAgent: PropTypes.number.isRequired
 }
 
 const mapPropsToValues = props => {
@@ -122,12 +122,12 @@ const mapPropsToValues = props => {
     }
   }
   return {
-    listingAgent: ''
+    listingAgent: 0
   }
 }
 
 const validationSchema = Yup.object().shape({
-  listingAgent: Yup.string().required('Listing Agent is required.')
+  listingAgent: Yup.number().required('Listing Agent is required.')
 })
 
 const mapStateToProps = state => ({
