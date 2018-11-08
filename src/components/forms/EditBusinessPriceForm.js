@@ -180,9 +180,7 @@ const EditBusinessPriceForm = ({
           </Form.Group>
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row
-        style={{ justifyContent: 'flex-end', padding: '0 15px 15px 0' }}
-      >
+      <Grid.Row style={{ justifyContent: 'flex-end', padding: '0 15px 15px 0' }}>
         <Form.Button
           floated="right"
           type="submit"
@@ -213,52 +211,22 @@ const mapPropsToValues = props => {
   if (props.business) {
     return {
       ...props.business,
-      listedPrice: props.business.listedPrice
-        ? numeral(props.business.listedPrice).format('0,0.00')
-        : 0,
-      currentPrice: props.business.currentPrice
-        ? numeral(props.business.currentPrice).format('0,0.00')
-        : 0,
-      engagementFee: props.business.engagementFee
-        ? numeral(props.business.engagementFee).format('0,0.00')
-        : 0,
-      commissionPerc: props.business.commissionPerc
-        ? numeral(props.business.commissionPerc).format('0,0.00')
-        : 0,
-      minimumCharge: props.business.minimumCharge
-        ? numeral(props.business.minimumCharge).format('0,0.00')
-        : 0,
-      appraisalHigh: props.business.appraisalHigh
-        ? numeral(props.business.appraisalHigh).format('0,0.00')
-        : 0,
-      appraisalLow: props.business.appraisalLow
-        ? numeral(props.business.appraisalLow).format('0,0.00')
-        : 0,
-      depositeTaken: props.business.depositeTaken
-        ? numeral(props.business.depositeTaken).format('0,0.00')
-        : 0,
-      depositeTakenDate: props.business.depositeTakenDate
-        ? props.business.depositeTakenDate
-        : '',
-      commissionSold: props.business.commissionSold
-        ? numeral(props.business.commissionSold).format('0,0.00')
-        : 0,
-      settlementDate: props.business.settlementDate
-        ? props.business.settlementDate
-        : '',
-      soldPrice: props.business.soldPrice
-        ? numeral(props.business.soldPrice).format('0,0.00')
-        : 0,
-      attachedPurchaser: props.business.attachedPurchaser
-        ? props.business.attachedPurchaser
-        : 0,
+      listedPrice: props.business.listedPrice ? numeral(props.business.listedPrice).format('0,0.00') : 0,
+      currentPrice: props.business.currentPrice ? numeral(props.business.currentPrice).format('0,0.00') : 0,
+      engagementFee: props.business.engagementFee ? numeral(props.business.engagementFee).format('0,0.00') : 0,
+      commissionPerc: props.business.commissionPerc ? numeral(props.business.commissionPerc).format('0,0.00') : 0,
+      minimumCharge: props.business.minimumCharge ? numeral(props.business.minimumCharge).format('0,0.00') : 0,
+      appraisalHigh: props.business.appraisalHigh ? numeral(props.business.appraisalHigh).format('0,0.00') : 0,
+      appraisalLow: props.business.appraisalLow ? numeral(props.business.appraisalLow).format('0,0.00') : 0,
+      depositeTaken: props.business.depositeTaken ? numeral(props.business.depositeTaken).format('0,0.00') : 0,
+      depositeTakenDate: props.business.depositeTakenDate ? props.business.depositeTakenDate : '',
+      commissionSold: props.business.commissionSold ? numeral(props.business.commissionSold).format('0,0.00') : 0,
+      settlementDate: props.business.settlementDate ? props.business.settlementDate : '',
+      soldPrice: props.business.soldPrice ? numeral(props.business.soldPrice).format('0,0.00') : 0,
+      attachedPurchaser: props.business.attachedPurchaser ? props.business.attachedPurchaser : 0,
       searchNote: props.business.searchNote ? props.business.searchNote : '',
-      afterSalesNotes: props.business.afterSalesNotes
-        ? props.business.afterSalesNotes
-        : '',
-      conclusionNote: props.business.conclusionNote
-        ? props.business.conclusionNote
-        : ''
+      afterSalesNotes: props.business.afterSalesNotes ? props.business.afterSalesNotes : '',
+      conclusionNote: props.business.conclusionNote ? props.business.conclusionNote : ''
     }
   }
   return {
@@ -290,8 +258,7 @@ const mapStateToProps = state => ({
   isLoadingUpdate: state.business.update.isLoading
 })
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ updateBusiness }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ updateBusiness }, dispatch)
 
 export default connect(
   mapStateToProps,
