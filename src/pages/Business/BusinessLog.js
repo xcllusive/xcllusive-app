@@ -16,16 +16,7 @@ import {
   finaliseBusinessLog
 } from '../../redux/ducks/businessLog'
 
-import {
-  Statistic,
-  Grid,
-  Input,
-  Table,
-  Form,
-  Label,
-  Button,
-  Icon
-} from 'semantic-ui-react'
+import { Statistic, Grid, Input, Table, Form, Label, Button, Icon } from 'semantic-ui-react'
 
 class BusinessLogPage extends Component {
   constructor (props) {
@@ -52,10 +43,7 @@ class BusinessLogPage extends Component {
   // }
 
   static getDerivedStateFromProps (nextProps) {
-    if (
-      nextProps.arrayLogBusiness.length &&
-      !nextProps.isLoadingarrayLogBusiness
-    ) {
+    if (nextProps.arrayLogBusiness.length && !nextProps.isLoadingarrayLogBusiness) {
       const { newLog, id, followUp, text } = nextProps.arrayLogBusiness[0]
 
       return {
@@ -87,10 +75,11 @@ class BusinessLogPage extends Component {
   }
 
   _handleSearch = () => {
-    this.props.getLogFromBusiness(
-      this.props.match.params.id,
-      this.state.inputSearch
-    )
+    this.props.getLogFromBusiness(this.props.match.params.id, this.state.inputSearch)
+  }
+
+  _handleDateChange = date => {
+    this.props.setFieldValue('businessLog_followUp', date)
   }
 
   _selectLog = businessLog => {
@@ -145,13 +134,7 @@ class BusinessLogPage extends Component {
             </Statistic>
             <Statistic color="blue">
               <Statistic.Value>
-                <Icon
-                  link
-                  name="mail"
-                  onClick={() =>
-                    (window.location.href = `mailto:${business.vendorEmail}`)
-                  }
-                />
+                <Icon link name="mail" onClick={() => (window.location.href = `mailto:${business.vendorEmail}`)} />
               </Statistic.Value>
               <Statistic.Label>{business.vendorEmail}</Statistic.Label>
             </Statistic>
@@ -189,20 +172,10 @@ class BusinessLogPage extends Component {
             <Table.Body>
               {arrayLogBusiness.map(logBusiness => {
                 return (
-                  <Table.Row
-                    active
-                    key={logBusiness.id}
-                    onClick={() => this._selectLog(logBusiness)}
-                  >
-                    <Table.Cell>
-                      {moment(logBusiness.dateTimeCreated).format(
-                        'DD/MM/YYYY - HH:mm'
-                      )}
-                    </Table.Cell>
+                  <Table.Row active key={logBusiness.id} onClick={() => this._selectLog(logBusiness)}>
+                    <Table.Cell>{moment(logBusiness.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
                     <Table.Cell>{logBusiness.text}</Table.Cell>
-                    <Table.Cell>
-                      {moment(logBusiness.followUp).format('DD/MM/YYYY')}
-                    </Table.Cell>
+                    <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
                     <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
                   </Table.Row>
                 )
@@ -219,6 +192,7 @@ class BusinessLogPage extends Component {
                       ? moment(values.businessLog_followUp)
                       : moment(this.state.businessLog_followUp)
                   }
+                  startDate={moment().subtract(10, 'days')}
                   onChange={this._handleDateChange}
                   popperPlacement="top-end"
                   form
@@ -233,10 +207,7 @@ class BusinessLogPage extends Component {
                   value={values.businessLog_text}
                   onChange={handleChange}
                 />
-                {errors.text &&
-                  touched.text && (
-                  <Label basic color="red" pointing content={errors.text} />
-                )}
+                {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
               </Form.Field>
             </Form.Group>
             <Grid>
@@ -257,28 +228,15 @@ class BusinessLogPage extends Component {
                     <Icon name="commenting" />
                     New Communication
                   </Button>
-                  <Button
-                    color="yellow"
-                    loading={loadingUpdateStatus}
-                    onClick={() => this.props.updateBusinessLog()}
-                  >
+                  <Button color="yellow" loading={loadingUpdateStatus} onClick={() => this.props.updateBusinessLog()}>
                     <Icon name="save" />
                     Save Communication
                   </Button>
-                  <Button
-                    color="red"
-                    loading={loadingFinaliseStatus}
-                    onClick={() => this.props.finaliseBusinessLog()}
-                  >
+                  <Button color="red" loading={loadingFinaliseStatus} onClick={() => this.props.finaliseBusinessLog()}>
                     <Icon name="save" />
                     Finalise Communication
                   </Button>
-                  <Button
-                    color="green"
-                    onClick={() =>
-                      history.push(`/business/${this.props.match.params.id}`)
-                    }
-                  >
+                  <Button color="green" onClick={() => history.push(`/business/${this.props.match.params.id}`)}>
                     <Icon name="backward" />
                     Return to Business
                   </Button>
@@ -293,36 +251,28 @@ class BusinessLogPage extends Component {
                   label="Created By"
                   placeholder={
                     this.state.businessLog.CreatedBy
-                      ? `${this.state.businessLog.CreatedBy.firstName} ${
-                        this.state.businessLog.CreatedBy.lastName
-                      }`
+                      ? `${this.state.businessLog.CreatedBy.firstName} ${this.state.businessLog.CreatedBy.lastName}`
                       : ''
                   }
                   readOnly
                 />
                 <Form.Input
                   label="Creation Date"
-                  placeholder={moment(
-                    this.state.businessLog.dateTimeCreated
-                  ).format('DD/MM/YYYY - HH:mm')}
+                  placeholder={moment(this.state.businessLog.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}
                   readOnly
                 />
                 <Form.Input
                   label="Modified By"
                   placeholder={
                     this.state.businessLog.ModifiedB
-                      ? `${this.state.businessLog.ModifiedBy.firstName} ${
-                        this.state.businessLog.ModifiedBy.lastName
-                      }`
+                      ? `${this.state.businessLog.ModifiedBy.firstName} ${this.state.businessLog.ModifiedBy.lastName}`
                       : ''
                   }
                   readOnly
                 />
                 <Form.Input
                   label="Modified Date"
-                  placeholder={moment(
-                    this.state.businessLog.dateTimeModified
-                  ).format('DD/MM/YYYY - HH:mm')}
+                  placeholder={moment(this.state.businessLog.dateTimeModified).format('DD/MM/YYYY - HH:mm')}
                   readOnly
                 />
               </Form.Group>
