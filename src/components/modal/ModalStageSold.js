@@ -222,8 +222,9 @@ class StageSoldForm extends Component {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.businessType &&
-                    touched.businessType && <Label basic color="red" pointing content={errors.businessType} />}
+                  {errors.businessType && touched.businessType && (
+                    <Label basic color="red" pointing content={errors.businessType} />
+                  )}
                 </Form.Field>
               </Form.Group>
               <label style={{ fontSize: '.92857143em', color: 'rgba(0,0,0,.87)', fontWeight: '700' }}>
@@ -245,8 +246,9 @@ class StageSoldForm extends Component {
                     selection
                     options={this._mapArrayToValuesForDropdown(listBuyersFromBusiness)}
                   />
-                  {errors.buyerName &&
-                    touched.buyerName && <Label basic color="red" pointing content={errors.buyerName} />}
+                  {errors.buyerName && touched.buyerName && (
+                    <Label basic color="red" pointing content={errors.buyerName} />
+                  )}
                 </Form.Field>
               </Form.Group>
               <Divider horizontal>Sold Details</Divider>
@@ -260,8 +262,9 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.soldPrice &&
-                    touched.soldPrice && <Label basic color="red" pointing content={errors.soldPrice} />}
+                  {errors.soldPrice && touched.soldPrice && (
+                    <Label basic color="red" pointing content={errors.soldPrice} />
+                  )}
                 </Form.Field>
                 <Form.Field>
                   <Form.Input
@@ -272,8 +275,9 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.stockValue &&
-                    touched.stockValue && <Label basic color="red" pointing content={errors.stockValue} />}
+                  {errors.stockValue && touched.stockValue && (
+                    <Label basic color="red" pointing content={errors.stockValue} />
+                  )}
                 </Form.Field>
               </Form.Group>
               <Form.Group>
@@ -286,8 +290,9 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.assetValue &&
-                    touched.assetValue && <Label basic color="red" pointing content={errors.assetValue} />}
+                  {errors.assetValue && touched.assetValue && (
+                    <Label basic color="red" pointing content={errors.assetValue} />
+                  )}
                 </Form.Field>
                 <Form.Field>
                   <Form.Input
@@ -298,8 +303,7 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.workingCapitalReq &&
-                    touched.workingCapitalReq && (
+                  {errors.workingCapitalReq && touched.workingCapitalReq && (
                     <Label basic color="red" pointing content={errors.workingCapitalReq} />
                   )}
                 </Form.Field>
@@ -312,8 +316,9 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.propertyValue &&
-                    touched.propertyValue && <Label basic color="red" pointing content={errors.propertyValue} />}
+                  {errors.propertyValue && touched.propertyValue && (
+                    <Label basic color="red" pointing content={errors.propertyValue} />
+                  )}
                 </Form.Field>
               </Form.Group>
               <Form.Group>
@@ -395,8 +400,9 @@ class StageSoldForm extends Component {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.nOfWorkingOwners &&
-                    touched.nOfWorkingOwners && <Label basic color="red" pointing content={errors.nOfWorkingOwners} />}
+                  {errors.nOfWorkingOwners && touched.nOfWorkingOwners && (
+                    <Label basic color="red" pointing content={errors.nOfWorkingOwners} />
+                  )}
                 </Form.Field>
                 <Form.Field width={4}>
                   <Form.Input
@@ -407,8 +413,7 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.agreedWageForWorkingOwners &&
-                    touched.agreedWageForWorkingOwners && (
+                  {errors.agreedWageForWorkingOwners && touched.agreedWageForWorkingOwners && (
                     <Label basic color="red" pointing content={errors.agreedWageForWorkingOwners} />
                   )}
                 </Form.Field>
@@ -421,8 +426,7 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.agreedWageForMainOwner &&
-                    touched.agreedWageForMainOwner && (
+                  {errors.agreedWageForMainOwner && touched.agreedWageForMainOwner && (
                     <Label basic color="red" pointing content={errors.agreedWageForMainOwner} />
                   )}
                 </Form.Field>
@@ -435,8 +439,7 @@ class StageSoldForm extends Component {
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
                   />
-                  {errors.latestFullYearTotalRevenue &&
-                    touched.latestFullYearTotalRevenue && (
+                  {errors.latestFullYearTotalRevenue && touched.latestFullYearTotalRevenue && (
                     <Label basic color="red" pointing content={errors.latestFullYearTotalRevenue} />
                   )}
                 </Form.Field>
@@ -451,8 +454,9 @@ class StageSoldForm extends Component {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.termsOfDeal &&
-                    touched.termsOfDeal && <Label basic color="red" pointing content={errors.termsOfDeal} />}
+                  {errors.termsOfDeal && touched.termsOfDeal && (
+                    <Label basic color="red" pointing content={errors.termsOfDeal} />
+                  )}
                 </Form.Field>
                 <Form.Field width={8}>
                   <Form.TextArea
@@ -463,8 +467,9 @@ class StageSoldForm extends Component {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.specialNotes &&
-                    touched.specialNotes && <Label basic color="red" pointing content={errors.specialNotes} />}
+                  {errors.specialNotes && touched.specialNotes && (
+                    <Label basic color="red" pointing content={errors.specialNotes} />
+                  )}
                 </Form.Field>
               </Form.Group>
             </Form>

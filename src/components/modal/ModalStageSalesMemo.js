@@ -6,19 +6,19 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageSalesMemo } from '../../redux/ducks/business'
 import { closeModal } from '../../redux/ducks/modal'
-import {
-  Modal,
-  Form,
-  Label,
-  Icon,
-  Button,
-  Radio,
-  Divider,
-  Message
-} from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Radio, Divider, Message } from 'semantic-ui-react'
 import * as Yup from 'yup'
+import numeral from 'numeral'
 
 class ModalStageSalesMemo extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      listedPrice: 0,
+      engagementFee: 0
+    }
+  }
+
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
@@ -38,13 +38,34 @@ class ModalStageSalesMemo extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _handleConfirm = isConfirmed => {
+  _handleConfirm = async isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       this.props.callBack(isConfirmed)
       return
     }
-    this.props.updateStageSalesMemo(this.props.values)
+    await this.props.updateStageSalesMemo(this.props.values)
+    this.props.closeModal()
+  }
+
+  _numberFormat = (e, { name, value }) => {
+    const myNumeral = numeral(value)
+    const numberFormated = myNumeral.format('$0,0.[99]')
+    this.props.setFieldValue(name, myNumeral.value())
+    this.setState({ [name]: numberFormated })
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.business && nextProps.business.listedPrice !== prevState.listedPrice) {
+      var listedPrice = numeral(nextProps.values.listedPrice).format('$0,0.[99]')
+    }
+    if (nextProps.business && nextProps.business.engagementFee !== prevState.engagementFee) {
+      var engagementFee = numeral(nextProps.values.engagementFee).format('$0,0.[99]')
+    }
+    return {
+      listedPrice: listedPrice || prevState.listedPrice,
+      engagementFee: engagementFee || prevState.engagementFee
+    }
   }
 
   render () {
@@ -69,8 +90,8 @@ class ModalStageSalesMemo extends Component {
         <Modal.Content>
           <Message warning>
             <Message.Header>IMPORTANT:</Message.Header>
-            Once you click `Save and Return` you will no longer be able to edit
-            the `Stage` unless you contact the main office.
+            Once you click `Save and Return` you will no longer be able to edit the `Stage` unless you contact the main
+            office.
           </Message>
           <Form>
             <Form.Group>
@@ -84,14 +105,8 @@ class ModalStageSalesMemo extends Component {
                   value={values.businessProduct}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessProduct &&
-                  touched.businessProduct && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessProduct}
-                  />
+                {errors.businessProduct && touched.businessProduct && (
+                  <Label basic color="red" pointing content={errors.businessProduct} />
                 )}
               </Form.Field>
               <Form.Field width={5}>
@@ -104,22 +119,14 @@ class ModalStageSalesMemo extends Component {
                   value={values.brokerAccountName}
                   onChange={this._handleSelectChange}
                 />
-                {errors.brokerAccountName &&
-                  touched.brokerAccountName && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.brokerAccountName}
-                  />
+                {errors.brokerAccountName && touched.brokerAccountName && (
+                  <Label basic color="red" pointing content={errors.brokerAccountName} />
                 )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
               <b>
-                <label>
-                  Is this business eligible for the 120 Day Guarantee?
-                </label>
+                <label>Is this business eligible for the 120 Day Guarantee?</label>
               </b>
               <Form.Field
                 control={Radio}
@@ -147,14 +154,8 @@ class ModalStageSalesMemo extends Component {
                   value={values.businessType}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessType &&
-                  touched.businessType && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessType}
-                  />
+                {errors.businessType && touched.businessType && (
+                  <Label basic color="red" pointing content={errors.businessType} />
                 )}
               </Form.Field>
               <Form.Field width={5}>
@@ -167,14 +168,8 @@ class ModalStageSalesMemo extends Component {
                   value={values.businessIndustry}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessIndustry &&
-                  touched.businessIndustry && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessIndustry}
-                  />
+                {errors.businessIndustry && touched.businessIndustry && (
+                  <Label basic color="red" pointing content={errors.businessIndustry} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -189,14 +184,8 @@ class ModalStageSalesMemo extends Component {
                   value={values.businessRating}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessRating &&
-                  touched.businessRating && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessRating}
-                  />
+                {errors.businessRating && touched.businessRating && (
+                  <Label basic color="red" pointing content={errors.businessRating} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -208,18 +197,12 @@ class ModalStageSalesMemo extends Component {
                   label="Listed Price"
                   name="listedPrice"
                   autoComplete="listedPrice"
-                  value={values.listedPrice}
-                  onChange={handleChange}
+                  value={this.state.listedPrice}
+                  onChange={this._numberFormat}
                   onBlur={handleBlur}
                 />
-                {errors.listedPrice &&
-                  touched.listedPrice && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.listedPrice}
-                  />
+                {errors.listedPrice && touched.listedPrice && (
+                  <Label basic color="red" pointing content={errors.listedPrice} />
                 )}
               </Form.Field>
               <Form.Field>
@@ -228,18 +211,12 @@ class ModalStageSalesMemo extends Component {
                   label="Engagement Fee"
                   name="engagementFee"
                   autoComplete="engagementFee"
-                  value={values.engagementFee}
-                  onChange={handleChange}
+                  value={this.state.engagementFee}
+                  onChange={this._numberFormat}
                   onBlur={handleBlur}
                 />
-                {errors.engagementFee &&
-                  touched.engagementFee && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.engagementFee}
-                  />
+                {errors.engagementFee && touched.engagementFee && (
+                  <Label basic color="red" pointing content={errors.engagementFee} />
                 )}
               </Form.Field>
               <Form.Field>
@@ -252,14 +229,8 @@ class ModalStageSalesMemo extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.commissionPerc &&
-                  touched.commissionPerc && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.commissionPerc}
-                  />
+                {errors.commissionPerc && touched.commissionPerc && (
+                  <Label basic color="red" pointing content={errors.commissionPerc} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -274,12 +245,7 @@ class ModalStageSalesMemo extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            color="blue"
-            disabled={!isValid}
-            loading={updateLoading}
-            onClick={this._handleConfirm}
-          >
+          <Button color="blue" disabled={!isValid} loading={updateLoading} onClick={this._handleConfirm}>
             <Icon name="save" />
             Save and Return
           </Button>
@@ -318,6 +284,7 @@ ModalStageSalesMemo.propTypes = {
 const mapPropsToValues = props => {
   if (props.business) {
     const {
+      id,
       productId,
       data120DayGuarantee,
       typeId,
@@ -330,6 +297,7 @@ const mapPropsToValues = props => {
     } = props.business
 
     const business = {
+      business_id: id,
       businessProduct: productId,
       data120DayGuarantee,
       businessType: typeId,

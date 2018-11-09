@@ -35,9 +35,9 @@ class EditBusinessDetailForm extends Component {
     }
   }
 
-  componentWillUnmount () {
-    this.props.updateBusiness(this.props.values)
-  }
+  // componentWillUnmount () {
+  //   this.props.updateBusiness(this.props.values)
+  // }
 
   componentDidUpdate (nextProps) {
     if (this.props.reassignedBusiness && nextProps.reassignedBusiness !== this.props.reassignedBusiness) {
@@ -200,8 +200,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.businessName &&
-                      touched.businessName && <Label basic color="red" pointing content={errors.businessName} />}
+                    {errors.businessName && touched.businessName && (
+                      <Label basic color="red" pointing content={errors.businessName} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -213,8 +214,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.firstNameV &&
-                      touched.firstNameV && <Label basic color="red" pointing content={errors.firstNameV} />}
+                    {errors.firstNameV && touched.firstNameV && (
+                      <Label basic color="red" pointing content={errors.firstNameV} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -226,8 +228,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.lastNameV &&
-                      touched.lastNameV && <Label basic color="red" pointing content={errors.lastNameV} />}
+                    {errors.lastNameV && touched.lastNameV && (
+                      <Label basic color="red" pointing content={errors.lastNameV} />
+                    )}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -240,8 +243,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.vendorPhone1 &&
-                      touched.vendorPhone1 && <Label basic color="red" pointing content={errors.vendorPhone1} />}
+                    {errors.vendorPhone1 && touched.vendorPhone1 && (
+                      <Label basic color="red" pointing content={errors.vendorPhone1} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -252,8 +256,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.vendorPhone2 &&
-                      touched.vendorPhone2 && <Label basic color="red" pointing content={errors.vendorPhone2} />}
+                    {errors.vendorPhone2 && touched.vendorPhone2 && (
+                      <Label basic color="red" pointing content={errors.vendorPhone2} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -264,8 +269,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.vendorPhone3 &&
-                      touched.vendorPhone3 && <Label basic color="red" pointing content={errors.vendorPhone3} />}
+                    {errors.vendorPhone3 && touched.vendorPhone3 && (
+                      <Label basic color="red" pointing content={errors.vendorPhone3} />
+                    )}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -288,8 +294,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.vendorEmail &&
-                      touched.vendorEmail && <Label basic color="red" pointing content={errors.vendorEmail} />}
+                    {errors.vendorEmail && touched.vendorEmail && (
+                      <Label basic color="red" pointing content={errors.vendorEmail} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -301,8 +308,9 @@ class EditBusinessDetailForm extends Component {
                       value={values.businessSource}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.businessSource &&
-                      touched.businessSource && <Label basic color="red" pointing content={errors.businessSource} />}
+                    {errors.businessSource && touched.businessSource && (
+                      <Label basic color="red" pointing content={errors.businessSource} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -313,8 +321,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.sourceNotes &&
-                      touched.sourceNotes && <Label basic color="red" pointing content={errors.sourceNotes} />}
+                    {errors.sourceNotes && touched.sourceNotes && (
+                      <Label basic color="red" pointing content={errors.sourceNotes} />
+                    )}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -327,8 +336,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.description &&
-                      touched.description && <Label basic color="red" pointing content={errors.description} />}
+                    {errors.description && touched.description && (
+                      <Label basic color="red" pointing content={errors.description} />
+                    )}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
@@ -428,8 +438,7 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.businessNameSecondary &&
-                      touched.businessNameSecondary && (
+                    {errors.businessNameSecondary && touched.businessNameSecondary && (
                       <Label basic color="red" pointing content={errors.businessNameSecondary} />
                     )}
                   </Form.Field>
@@ -442,8 +451,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.businessABN &&
-                      touched.businessABN && <Label basic color="red" pointing content={errors.businessABN} />}
+                    {errors.businessABN && touched.businessABN && (
+                      <Label basic color="red" pointing content={errors.businessABN} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -463,8 +473,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.businessURL &&
-                      touched.businessURL && <Label basic color="red" pointing content={errors.businessURL} />}
+                    {errors.businessURL && touched.businessURL && (
+                      <Label basic color="red" pointing content={errors.businessURL} />
+                    )}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -477,8 +488,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.address1 &&
-                      touched.address1 && <Label basic color="red" pointing content={errors.address1} />}
+                    {errors.address1 && touched.address1 && (
+                      <Label basic color="red" pointing content={errors.address1} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
@@ -513,8 +525,9 @@ class EditBusinessDetailForm extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.postCode &&
-                      touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
+                    {errors.postCode && touched.postCode && (
+                      <Label basic color="red" pointing content={errors.postCode} />
+                    )}
                   </Form.Field>
                   <label>Eligible for 120 Day Guarantee? </label>
                   <Form.Field
@@ -548,8 +561,9 @@ class EditBusinessDetailForm extends Component {
                       value={values.businessRating}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.businessRating &&
-                      touched.businessRating && <Label basic color="red" pointing content={errors.businessRating} />}
+                    {errors.businessRating && touched.businessRating && (
+                      <Label basic color="red" pointing content={errors.businessRating} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -561,8 +575,9 @@ class EditBusinessDetailForm extends Component {
                       value={values.businessProduct}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.businessProduct &&
-                      touched.businessProduct && <Label basic color="red" pointing content={errors.businessProduct} />}
+                    {errors.businessProduct && touched.businessProduct && (
+                      <Label basic color="red" pointing content={errors.businessProduct} />
+                    )}
                   </Form.Field>
                   <Form.Field>
                     <Form.Select
@@ -573,8 +588,7 @@ class EditBusinessDetailForm extends Component {
                       value={values.brokerAccountName}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.brokerAccountName &&
-                      touched.brokerAccountName && (
+                    {errors.brokerAccountName && touched.brokerAccountName && (
                       <Label basic color="red" pointing content={errors.brokerAccountName} />
                     )}
                   </Form.Field>
@@ -589,8 +603,7 @@ class EditBusinessDetailForm extends Component {
                       value={values.businessIndustry}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.businessIndustry &&
-                      touched.businessIndustry && (
+                    {errors.businessIndustry && touched.businessIndustry && (
                       <Label basic color="red" pointing content={errors.businessIndustry} />
                     )}
                   </Form.Field>
@@ -603,8 +616,9 @@ class EditBusinessDetailForm extends Component {
                       value={values.businessType}
                       onChange={this._handleSelectChange}
                     />
-                    {errors.businessType &&
-                      touched.businessType && <Label basic color="red" pointing content={errors.businessType} />}
+                    {errors.businessType && touched.businessType && (
+                      <Label basic color="red" pointing content={errors.businessType} />
+                    )}
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
@@ -631,6 +645,15 @@ class EditBusinessDetailForm extends Component {
                   >
                     <Icon name="save" />
                     Save
+                  </Form.Button>
+                  <Form.Button
+                    // disabled={isSubmitting || !isValid}
+                    // loading={isLoadingUpdate}
+                    color="yellow"
+                    // onClick={handleSubmit}
+                  >
+                    <Icon name="save" />
+                    Upload IM
                   </Form.Button>
                 </Form.Group>
               </Form>
@@ -788,9 +811,9 @@ const validationSchema = Yup.object().shape({
     .required('Notes is required.')
     .max(2000, 'Source Notes require max 2000 characters.'),
   businessNameSecondary: Yup.string().max(120, 'Source Notes require max 120 characters.'),
-  businessABN: Yup.string()
-    .min(11, 'ABN require min 11 integers.')
-    .max(11, 'ABN require max 11 integers.'),
+  // businessABN: Yup.string()
+  //   .min(11, 'ABN require min 11 integers.')
+  //   .max(11, 'ABN require max 11 integers.'),
   // businessURL: Yup.string().url('You must type a valid URL (http://website.com.au).'),
   address1: Yup.string().max(100, 'Street require max 100 characters.'),
   suburb: Yup.string().max(100, 'Suburb require max 100 characters.'),

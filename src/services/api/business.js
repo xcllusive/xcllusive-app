@@ -60,7 +60,7 @@ export const getBusinessRegister = id => {
 export const updateStageSalesMemo = stageSalesMemo => {
   return request({
     method: 'put',
-    url: `/business/${stageSalesMemo.businessId}/stage-salesmemo`,
+    url: `/business/${stageSalesMemo.business_id}/stage-sales-memo`,
     data: stageSalesMemo
   })
 }
