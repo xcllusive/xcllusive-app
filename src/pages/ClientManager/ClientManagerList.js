@@ -301,6 +301,20 @@ class ClientManagerList extends Component {
     this.props.getLog(this.state.buyer.id, 10, activePage)
   }
 
+  _ownersApprovalReceived () {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Owners Approval Received',
+        text: 'Are you sure you want to send the IM?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.sendIm(this.state.buyer.id, this.state.business.id)
+        }
+      }
+    })
+  }
+
   render () {
     const {
       listBuyerList,
@@ -470,13 +484,13 @@ class ClientManagerList extends Component {
                       size="small"
                       color="blue"
                       onClick={() => this._toggleModalSendIm()}
-                      // disabled={
-                      //   !this.state.buyer.caReceived ||
-                      //   !this.state.business ||
-                      //   !this.state.business.notifyOwner ||
-                      //   this.state.business.stageId === 5 || // Under Offer
-                      //   this.state.business.productId === 2 // Seller Assist
-                      // }
+                      disabled={
+                        !this.state.buyer.caReceived ||
+                        !this.state.business ||
+                        !this.state.business.notifyOwner ||
+                        this.state.business.stageId === 5 || // Under Offer
+                        this.state.business.productId === 2 // Seller Assist
+                      }
                       loading={isLoadingSendIm}
                     >
                       <Icon name="send" />
@@ -611,6 +625,15 @@ class ClientManagerList extends Component {
                     >
                       <Icon name="send" />
                       Send Enquiry to Owner
+                    </Button>
+                    <Button
+                      size="small"
+                      color="blue"
+                      onClick={() => this._ownersApprovalReceived()}
+                      loading={isLoadingEmailBuyer}
+                    >
+                      <Icon name="mail" />
+                      Owners Approval Received
                     </Button>
                     <Button
                       size="small"
