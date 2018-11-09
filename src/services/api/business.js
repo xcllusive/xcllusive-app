@@ -111,3 +111,15 @@ export const getAllPerUser = (search, stageId, filterLog) => {
     params
   })
 }
+
+export const uploadIM = (imFile, businessId) => {
+  const data = new FormData()
+  data.append('imFile', imFile)
+  data.append('businessId', businessId)
+  return request({
+    method: 'post',
+    url: '/business/upload-im',
+    data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}

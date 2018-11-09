@@ -470,13 +470,13 @@ class ClientManagerList extends Component {
                       size="small"
                       color="blue"
                       onClick={() => this._toggleModalSendIm()}
-                      disabled={
-                        !this.state.buyer.caReceived ||
-                        !this.state.business ||
-                        !this.state.business.notifyOwner ||
-                        this.state.business.stageId === 5 || // Under Offer
-                        this.state.business.productId === 2 // Seller Assist
-                      }
+                      // disabled={
+                      //   !this.state.buyer.caReceived ||
+                      //   !this.state.business ||
+                      //   !this.state.business.notifyOwner ||
+                      //   this.state.business.stageId === 5 || // Under Offer
+                      //   this.state.business.productId === 2 // Seller Assist
+                      // }
                       loading={isLoadingSendIm}
                     >
                       <Icon name="send" />

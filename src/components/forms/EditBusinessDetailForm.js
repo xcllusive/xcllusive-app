@@ -8,7 +8,7 @@ import { Form, Icon, Grid, Radio, Label, Dimmer, Loader, Button } from 'semantic
 import * as Yup from 'yup'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
-import { updateBusiness, getBusiness } from '../../redux/ducks/business'
+import { updateBusiness, getBusiness, uploadIM } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import { theme } from '../../styles'
 
@@ -140,6 +140,10 @@ class EditBusinessDetailForm extends Component {
     return _.includes(this.props.userRoles, 'PRESALE_MENU')
   }
 
+  _isUserClientManager = () => {
+    return _.includes(this.props.userRoles, 'CLIENT_MANAGER_MENU')
+  }
+
   _openModalListAgreement = state => {
     this.props.openModal(TypesModal.MODAL_TYPE_LIST_AGREEMENTS, {
       options: {
@@ -157,6 +161,65 @@ class EditBusinessDetailForm extends Component {
   _urlReplace (businessURL) {
     const replacedURL = businessURL.replace('www.', 'http://')
     window.open(`${replacedURL}`, '_blank')
+  }
+
+  _uploadIM () {
+    if (this.props.business.imUploaded) {
+      this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+        options: {
+          title: 'IM Uploaded',
+          text: 'IM already uploaded. Do you want to upload again?'
+        },
+        onConfirm: isConfirmed => {
+          if (isConfirmed) {
+            this.props.openModal(TypesModal.MODAL_TYPE_UPLOAD_FILE, {
+              options: {
+                title: 'Upload IM'
+              },
+              onConfirm: isConfirmed => {
+                if (isConfirmed) {
+                  this.props.uploadIM(this.state.file, this.props.business.id)
+                }
+              },
+              handleFileUpload: e => {
+                const file = e.target.files[0]
+                this.setState({ file })
+              }
+            })
+          }
+        }
+      })
+    } else {
+      this.props.openModal(TypesModal.MODAL_TYPE_UPLOAD_FILE, {
+        options: {
+          title: 'Upload IM'
+        },
+        onConfirm: isConfirmed => {
+          if (isConfirmed) {
+            this.props.uploadIM(this.state.file, this.state.business.id)
+          }
+        },
+        handleFileUpload: e => {
+          const file = e.target.files[0]
+          this.setState({ file })
+        }
+      })
+    }
+  }
+
+  _downloadIM () {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Download IM',
+        text: 'Are you sure you want to download the IM?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          // this.props.downloadIM(this.props.business.id)
+          window.open(`${this.props.business.imUrl}`, '_blank')
+        }
+      }
+    })
   }
 
   render () {
@@ -177,7 +240,8 @@ class EditBusinessDetailForm extends Component {
       industryOptions,
       typeOptions,
       stageOptions,
-      usersBroker
+      usersBroker,
+      isLoadingIM
     } = this.props
     const { state } = this.state
     return (
@@ -646,16 +710,30 @@ class EditBusinessDetailForm extends Component {
                     <Icon name="save" />
                     Save
                   </Form.Button>
-                  <Form.Button
-                    // disabled={isSubmitting || !isValid}
-                    // loading={isLoadingUpdate}
-                    color="yellow"
-                    // onClick={handleSubmit}
-                  >
-                    <Icon name="save" />
-                    Upload IM
-                  </Form.Button>
                 </Form.Group>
+                {this._isUserClientManager() ? (
+                  <Form.Group>
+                    <Form.Button
+                      // disabled={isSubmitting || !isValid}
+                      loading={isLoadingIM}
+                      color="yellow"
+                      size="small"
+                      onClick={() => this._uploadIM()}
+                    >
+                      <Icon name="upload" />
+                      Upload IM
+                    </Form.Button>
+                    <Form.Button
+                      disabled={!this.props.business.imUrl}
+                      color="grey"
+                      size="small"
+                      onClick={() => this._downloadIM()}
+                    >
+                      <Icon name="download" />
+                      Download IM
+                    </Form.Button>
+                  </Form.Group>
+                ) : null}
               </Form>
             </Grid.Column>
           </Grid.Row>
@@ -693,7 +771,10 @@ EditBusinessDetailForm.propTypes = {
   openModal: PropTypes.func,
   userRoles: PropTypes.array,
   history: PropTypes.object,
-  updateBusiness: PropTypes.func
+  updateBusiness: PropTypes.func,
+  uploadIM: PropTypes.func,
+  isUploadedIM: PropTypes.bool,
+  isLoadingIM: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -840,12 +921,14 @@ const mapStateToProps = state => {
     usersBroker: state.business.get.usersBroker,
     updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated,
     updateStageLost: state.business.updateStageLost.isUpdated,
-    userRoles: state.auth.user.roles
+    userRoles: state.auth.user.roles,
+    isUploadedIM: state.business.uploadIM.isUploaded,
+    isLoadingIM: state.business.uploadIM.isLoading
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness, getBusiness, getLogFromBusiness, openModal }, dispatch)
+  return bindActionCreators({ updateBusiness, getBusiness, getLogFromBusiness, openModal, uploadIM }, dispatch)
 }
 
 export default connect(

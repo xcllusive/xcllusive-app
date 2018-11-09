@@ -10,7 +10,8 @@ import {
   getBuyersFromBusiness as getBuyersFromBusinessAPI,
   getBuyersGroupEmail as getBuyersGroupEmailAPI,
   getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI,
-  getAllPerUser
+  getAllPerUser,
+  uploadIM as uploadIMAPI
 } from '../../services/api/business'
 
 // Action Types
@@ -49,7 +50,10 @@ export const Types = {
   GET_QTDE_BUSINESS_STAGE_USER_FAILURE: 'GET_QTDE_BUSINESS_STAGE_USER_FAILURE',
   GET_BUSINESSES_PER_USER_LOADING: 'GET_BUSINESSES_PER_USER_LOADING',
   GET_BUSINESSES_PER_USER_SUCCESS: 'GET_BUSINESSES_PER_USER_SUCCESS',
-  GET_BUSINESSES_PER_USER_FAILURE: 'GET_BUSINESSES_PER_USER_FAILURE'
+  GET_BUSINESSES_PER_USER_FAILURE: 'GET_BUSINESSES_PER_USER_FAILURE',
+  UPLOAD_IM_LOADING: 'UPLOAD_IM_LOADING',
+  UPLOAD_IM_SUCCESS: 'UPLOAD_IM_SUCCESS',
+  UPLOAD_IM_FAILURE: 'UPLOAD_IM_FAILURE'
 }
 
 // Reducer
@@ -119,6 +123,11 @@ const initialState = {
   getAllPerUser: {
     isLoading: false,
     array: [],
+    error: null
+  },
+  uploadIM: {
+    isLoading: false,
+    isUploaded: false,
     error: null
   }
 }
@@ -480,6 +489,36 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.UPLOAD_IM_LOADING:
+      return {
+        ...state,
+        uploadIM: {
+          ...state.uploadIM,
+          isLoading: action.payload,
+          isUploaded: false,
+          error: null
+        }
+      }
+    case Types.UPLOAD_IM_SUCCESS:
+      return {
+        ...state,
+        uploadIM: {
+          ...state.uploadIM,
+          isLoading: false,
+          isUploaded: true,
+          error: null
+        }
+      }
+    case Types.UPLOAD_IM_FAILURE:
+      return {
+        ...state,
+        uploadIM: {
+          ...state.uploadIM,
+          isLoading: false,
+          isUploaded: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -710,6 +749,27 @@ export const getBusinessesPerUser = (search = false, stageId = false, filterLog 
   } catch (error) {
     dispatch({
       type: Types.GET_BUSINESSES_PER_USER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const uploadIM = (file, businessId) => async dispatch => {
+  dispatch({
+    type: Types.UPLOAD_IM_LOADING,
+    payload: true
+  })
+  try {
+    const businesses = await uploadIMAPI(file, businessId)
+    dispatch({
+      type: Types.UPLOAD_IM_SUCCESS,
+      payload: businesses
+    })
+    toast.success(businesses.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPLOAD_IM_FAILURE,
       payload: error
     })
     toast.error(error)
