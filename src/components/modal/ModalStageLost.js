@@ -56,13 +56,14 @@ class StageLostForm extends Component {
     }
   }
 
-  _handleConfirm = isConfirmed => {
+  _handleConfirm = async isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       this.props.callBack(isConfirmed)
       return
     }
-    this.props.updateStageLost(this.props.values)
+    await this.props.updateStageLost(this.props.values)
+    this.props.closeModal()
   }
 
   render () {

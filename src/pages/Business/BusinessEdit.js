@@ -25,9 +25,10 @@ class BusinessEditPage extends Component {
     if (nextProps.error && nextProps.error !== prevState.error) {
       nextProps.history.goBack()
     }
-    if (nextProps.isUpdated && !prevState.isUpdated) {
-      nextProps.getBusiness(nextProps.match.params.id)
-    }
+    // if (nextProps.isUpdated) {
+    //   console.log(nextProps)
+    //   // nextProps.getBusiness(nextProps.match.params.id)
+    // }
 
     return {
       error: nextProps.error,

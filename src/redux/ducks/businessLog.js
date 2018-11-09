@@ -1,8 +1,4 @@
-import {
-  getAllFromBusiness,
-  update,
-  finalise
-} from '../../services/api/businessLog'
+import { getAllFromBusiness, update, finalise } from '../../services/api/businessLog'
 import { toast } from 'react-toastify'
 
 // Action Types
@@ -135,10 +131,7 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getLogFromBusiness = (
-  businessId,
-  search = false
-) => async dispatch => {
+export const getLogFromBusiness = (businessId, search = false) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESS_LOG_LOADING
   })
@@ -200,5 +193,12 @@ export const finaliseBusinessLog = businessLog => async dispatch => {
       payload: error
     })
     toast.error(error)
+  }
+}
+
+export const setBusinessLogReducer = logs => {
+  return {
+    type: Types.GET_BUSINESS_LOG_SUCCESS,
+    payload: logs
   }
 }

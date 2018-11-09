@@ -13,6 +13,14 @@ import {
   getAllPerUser
 } from '../../services/api/business'
 
+import {
+  getAllFromBusiness
+} from '../../services/api/businessLog'
+
+import {
+  setBusinessLogReducer
+} from './businessLog'
+
 // Action Types
 
 export const Types = {
@@ -211,6 +219,10 @@ export default function reducer (state = initialState, action) {
           stageNotSignedOptions: action.payload.stageNotSignedList,
           stageNotWantOptions: action.payload.stageNotWantList,
           error: null
+        },
+        update: {
+          ...state.update,
+          isUpdated: false
         }
       }
     case Types.GET_BUSINESS_FAILURE:
@@ -237,7 +249,8 @@ export default function reducer (state = initialState, action) {
         update: {
           ...state.update,
           isLoading: action.payload,
-          error: null
+          error: null,
+          isUpdated: false
         }
       }
     case Types.UPDATE_BUSINESS_SUCCESS:
@@ -325,6 +338,10 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           isUpdated: true,
           error: null
+        },
+        update: {
+          ...state.update,
+          isUpdated: true
         }
       }
     case Types.UPDATE_STAGE_SALES_MEMO_FAILURE:
@@ -603,9 +620,13 @@ export const updateStageLost = stageLost => async dispatch => {
   })
   try {
     const response = await updateStageLostAPI(stageLost)
+    const business = await get(stageLost.businessId)
+    const logs = await getAllFromBusiness(stageLost.businessId)
     dispatch({
       type: Types.UPDATE_STAGE_LOST_SUCCESS
     })
+    dispatch(setGetBusinessReducer(business))
+    dispatch(setBusinessLogReducer(logs.data))
     toast.success(response.message)
   } catch (error) {
     dispatch({
@@ -622,10 +643,12 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
     payload: true
   })
   try {
+    const business = await get(stageSalesMemo.business_id)
     const response = await updateStageSalesMemoAPI(stageSalesMemo)
     dispatch({
       type: Types.UPDATE_STAGE_SALES_MEMO_SUCCESS
     })
+    dispatch(setGetBusinessReducer(business))
     toast.success(response.message)
   } catch (error) {
     dispatch({
@@ -713,5 +736,12 @@ export const getBusinessesPerUser = (search = false, stageId = false, filterLog 
       payload: error
     })
     toast.error(error)
+  }
+}
+
+const setGetBusinessReducer = business => {
+  return {
+    type: Types.GET_BUSINESS_SUCCESS,
+    payload: business
   }
 }
