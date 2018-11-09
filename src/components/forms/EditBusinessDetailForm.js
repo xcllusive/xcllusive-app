@@ -10,6 +10,7 @@ import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness, uploadIM } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+
 import { theme } from '../../styles'
 
 class EditBusinessDetailForm extends Component {
@@ -46,13 +47,13 @@ class EditBusinessDetailForm extends Component {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    if (nextProps.updateStageSalesMemo && prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo) {
-      nextProps.getBusiness(nextProps.business.id)
-    }
-    if (nextProps.updateStageLost && prevState.updateStageLost !== nextProps.updateStageLost) {
-      nextProps.getBusiness(nextProps.business.id)
-      nextProps.getLogFromBusiness(nextProps.business.id)
-    }
+    // if (nextProps.updateStageSalesMemo && prevState.updateStageSalesMemo !== nextProps.updateStageSalesMemo) {
+    //   nextProps.getBusiness(nextProps.business.id)
+    // }
+    // if (nextProps.updateStageLost && prevState.updateStageLost !== nextProps.updateStageLost) {
+    //   nextProps.getBusiness(nextProps.business.id)
+    //   nextProps.getLogFromBusiness(nextProps.business.id)
+    // }
     // if (nextProps.values.stage === 8 && prevState.stage !== nextProps.values.stage) {
     //   this._openModalStageLost()
     // }
