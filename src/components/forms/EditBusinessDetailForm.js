@@ -197,7 +197,7 @@ class EditBusinessDetailForm extends Component {
         },
         onConfirm: isConfirmed => {
           if (isConfirmed) {
-            this.props.uploadIM(this.state.file, this.state.business.id)
+            this.props.uploadIM(this.state.file, this.props.business.id)
           }
         },
         handleFileUpload: e => {
