@@ -25,6 +25,7 @@ import ModalShowMsg from './ModalShowMsg'
 import ModalNewAppraisalRegister from './ModalNewAppraisalRegister'
 import ModalStageSold from './ModalStageSold'
 import ModalSendAppraisal from './ModalSendAppraisal'
+import ModalOwnersApprovalConfirm from './ModalOwnersApprovalConfirm'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -52,7 +53,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_NEW_APPRAISAL_REGISTER]: ModalNewAppraisalRegister,
   [TypesModal.MODAL_TYPE_EDIT_APPRAISAL_REGISTER]: ModalNewAppraisalRegister,
   [TypesModal.MODAL_TYPE_STAGE_SOLD]: ModalStageSold,
-  [TypesModal.MODAL_TYPE_SEND_APPRAISAL]: ModalSendAppraisal
+  [TypesModal.MODAL_TYPE_SEND_APPRAISAL]: ModalSendAppraisal,
+  [TypesModal.MODAL_TYPE_OWNERS_APPRAISAL_CONFIRM]: ModalOwnersApprovalConfirm
 }
 
 const ModalRoot = ({ type, props }) => {

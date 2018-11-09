@@ -301,16 +301,24 @@ class ClientManagerList extends Component {
     this.props.getLog(this.state.buyer.id, 10, activePage)
   }
 
-  _ownersApprovalReceived () {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
-      options: {
-        title: 'Owners Approval Received',
-        text: 'Are you sure you want to send the IM?'
-      },
-      onConfirm: isConfirmed => {
-        if (isConfirmed) {
-          this.props.sendIm(this.state.buyer.id, this.state.business.id)
+  _ownersApprovalReceived = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_OWNERS_APPRAISAL_CONFIRM, {
+      title: 'Owners Approval Received',
+      onConfirm: value => {
+        if (value.confirmYes && value.confirmYes !== 'YES') {
+          this._showMsgOwnersApproval()
+          this.props.closeModal()
         }
+        this.props.closeModal()
+      }
+    })
+  }
+  _showMsgOwnersApproval = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_SHOW_MSG, {
+      options: {
+        title: 'Alert:',
+        content: 'Got it!',
+        text: 'You must type YES'
       }
     })
   }

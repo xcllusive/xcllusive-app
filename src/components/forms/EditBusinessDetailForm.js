@@ -44,6 +44,9 @@ class EditBusinessDetailForm extends Component {
     if (this.props.reassignedBusiness && nextProps.reassignedBusiness !== this.props.reassignedBusiness) {
       this.props.getBusiness(this.props.business.id)
     }
+    if (this.props.isUploadedIM && nextProps.isUploadedIM !== this.props.isUploadedIM) {
+      this.props.getBusiness(this.props.business.id)
+    }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -712,8 +715,8 @@ class EditBusinessDetailForm extends Component {
                     Save
                   </Form.Button>
                 </Form.Group>
-                {this._isUserClientManager() ? (
-                  <Form.Group>
+                <Form.Group>
+                  {this._isUserClientManager() ? (
                     <Form.Button
                       // disabled={isSubmitting || !isValid}
                       loading={isLoadingIM}
@@ -724,17 +727,17 @@ class EditBusinessDetailForm extends Component {
                       <Icon name="upload" />
                       Upload IM
                     </Form.Button>
-                    <Form.Button
-                      disabled={!this.props.business.imUrl}
-                      color="grey"
-                      size="small"
-                      onClick={() => this._downloadIM()}
-                    >
-                      <Icon name="download" />
-                      Download IM
-                    </Form.Button>
-                  </Form.Group>
-                ) : null}
+                  ) : null}
+                  <Form.Button
+                    disabled={!this.props.business.imUrl}
+                    color="grey"
+                    size="small"
+                    onClick={() => this._downloadIM()}
+                  >
+                    <Icon name="download" />
+                    Download IM
+                  </Form.Button>
+                </Form.Group>
               </Form>
             </Grid.Column>
           </Grid.Row>
@@ -840,7 +843,7 @@ const mapPropsToValues = props => {
       stage: stageId
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
-    business.notifyOwner = business.notifyOwner === '1'
+    business.notifyOwner = business.notifyOwner === true
     return _.mapValues(business, value => (value == null ? '' : value))
   }
   return {
@@ -860,7 +863,7 @@ const mapPropsToValues = props => {
     suburb: '',
     postCode: '0000',
     data120DayGuarantee: false,
-    notifyOwner: true,
+    notifyOwner: false,
     listingAgent: 0,
     businessSource: '',
     businessRating: '',
@@ -905,6 +908,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
+  console.log(values)
   props.updateBusiness(values).then(setSubmitting(false))
 }
 

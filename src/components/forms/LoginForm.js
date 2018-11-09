@@ -86,7 +86,7 @@ LoginForm.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  email: 'admin@xcllusive.com',
+  email: '',
   password: ''
 })
 
