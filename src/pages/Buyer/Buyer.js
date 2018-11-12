@@ -22,6 +22,7 @@ class BuyerPage extends Component {
   componentDidMount () {
     this.props.getBuyerBusinesses(false, 4)
     this.props.getBuyerBusinesses(false, 5)
+    this.props.getBuyerBusinesses(false, 3)
   }
 
   _toggleModalGroupEmail = businessId => {
@@ -63,7 +64,15 @@ class BuyerPage extends Component {
   }
 
   render () {
-    const { history, businessesForSale, businessesUnderOffer, isLoadingForSale, isLoadingUnderOffer } = this.props
+    const {
+      history,
+      businessesForSale,
+      businessesUnderOffer,
+      isLoadingForSale,
+      isLoadingUnderOffer,
+      isLoadingSalesMemo,
+      businessesSalesMemo
+    } = this.props
 
     return (
       <Wrapper>
@@ -241,6 +250,55 @@ class BuyerPage extends Component {
               </Table>
             </Dimmer.Dimmable>
           </Grid.Row>
+          <Grid.Row style={{ paddingBottom: 0 }}>
+            <h2>
+              <b>
+                <div align="left"> Businesses Sales Memo </div>
+              </b>
+            </h2>
+          </Grid.Row>
+          <Grid.Row style={{ paddingTop: 0 }}>
+            <Dimmer.Dimmable dimmed={isLoadingSalesMemo} style={{ width: '100%' }}>
+              <Dimmer inverted active={isLoadingSalesMemo}>
+                <Loader>Loading</Loader>
+              </Dimmer>
+              <Table color="blue" celled inverted size="small" compact textAlign="center">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Business ID</Table.HeaderCell>
+                    <Table.HeaderCell>Business Name</Table.HeaderCell>
+                    <Table.HeaderCell>Owners</Table.HeaderCell>
+                    <Table.HeaderCell>Phone</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {businessesSalesMemo.map(item => (
+                    <Table.Row active key={item.business.id}>
+                      <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
+                      <Table.Cell selectable onClick={() => history.push(`/business/${item.business.id}`)}>
+                        <Icon
+                          style={{
+                            fontSize: '1.2em',
+                            width: 'auto',
+                            paddingLeft: '5px',
+                            fontFamily: 'lato',
+                            color: 'blue'
+                          }}
+                          link
+                        >
+                          {item.business.businessName}
+                        </Icon>
+                      </Table.Cell>
+                      <Table.Cell>
+                        {item.business.firstNameV} {item.business.lastNameV}
+                      </Table.Cell>
+                      <Table.Cell>{item.business.vendorPhone1}</Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Dimmer.Dimmable>
+          </Grid.Row>
         </Grid>
       </Wrapper>
     )
@@ -257,14 +315,18 @@ BuyerPage.propTypes = {
   businessesUnderOffer: PropTypes.array,
   openModal: PropTypes.func,
   isLoadingUnderOffer: PropTypes.bool,
-  isLoadingForSale: PropTypes.bool
+  isLoadingForSale: PropTypes.bool,
+  businessesSalesMemo: PropTypes.array,
+  isLoadingSalesMemo: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   businessesForSale: state.buyer.getBuyerBusinessesForSale.array,
   isLoadingForSale: state.buyer.getBuyerBusinessesForSale.isLoading,
   businessesUnderOffer: state.buyer.getBuyerBusinessesUnderOffer.array,
-  isLoadingUnderOffer: state.buyer.getBuyerBusinessesUnderOffer.isLoading
+  isLoadingUnderOffer: state.buyer.getBuyerBusinessesUnderOffer.isLoading,
+  businessesSalesMemo: state.buyer.getBuyerBusinessesSalesMemo.array,
+  isLoadingSalesMemo: state.buyer.getBuyerBusinessesSalesMemo.isLoading
 })
 
 export default connect(

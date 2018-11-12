@@ -2,15 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {
-  Table,
-  Grid,
-  Header,
-  Dimmer,
-  Loader,
-  Button,
-  Icon
-} from 'semantic-ui-react'
+import { Table, Grid, Header, Dimmer, Loader, Button, Icon } from 'semantic-ui-react'
 
 import { getBuyersFromBusiness, getBusiness } from '../../redux/ducks/business'
 import moment from 'moment'
@@ -41,13 +33,7 @@ class BuyerListPage extends Component {
   }
 
   render () {
-    const {
-      listBuyersList,
-      history,
-      business,
-      isLoadingBusiness,
-      countAll
-    } = this.props
+    const { listBuyersList, history, business, isLoadingBusiness, countAll } = this.props
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -60,9 +46,7 @@ class BuyerListPage extends Component {
                 {listBuyersList ? (
                   <Header
                     as="h2"
-                    content={`${business.businessName} / ${
-                      listBuyersList.length
-                    } records of ${countAll}`}
+                    content={`${business.businessName} / ${listBuyersList.length} records of ${countAll}`}
                   />
                 ) : (
                   <Header as="h2" content={'0 records'} />
@@ -70,22 +54,12 @@ class BuyerListPage extends Component {
               </Grid.Column>
               <Grid.Column>
                 {this.state.showAll ? (
-                  <Button
-                    color="facebook"
-                    onClick={() => this._showAll()}
-                    size="small"
-                    floated="right"
-                  >
+                  <Button color="facebook" onClick={() => this._showAll()} size="small" floated="right">
                     <Icon name="zoom" />
                     Show all
                   </Button>
                 ) : (
-                  <Button
-                    color="twitter"
-                    onClick={() => this._showLess()}
-                    size="small"
-                    floated="right"
-                  >
+                  <Button color="twitter" onClick={() => this._showLess()} size="small" floated="right">
                     <Icon name="cut" />
                     Show less
                   </Button>
@@ -96,18 +70,11 @@ class BuyerListPage extends Component {
           {listBuyersList && listBuyersList.length > 0 ? (
             <Grid padded="horizontally" style={{ marginTop: 0 }}>
               <Grid.Row>
-                <Table
-                  color="blue"
-                  celled
-                  inverted
-                  selectable
-                  size="small"
-                  compact
-                >
+                <Table color="blue" celled inverted selectable size="small" compact>
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Buyer</Table.HeaderCell>
-                      <Table.HeaderCell>Notes</Table.HeaderCell>
+                      <Table.HeaderCell>Log</Table.HeaderCell>
                       <Table.HeaderCell>Date Created</Table.HeaderCell>
                       <Table.HeaderCell>Follow up Date</Table.HeaderCell>
                     </Table.Row>
@@ -118,33 +85,18 @@ class BuyerListPage extends Component {
                         active
                         key={buyersList.enquiry.Buyer.id}
                         onClick={() =>
-                          history.push(
-                            `/buyer/${buyersList.enquiry.Buyer.id}/business/${
-                              this.props.match.params.id
-                            }`
-                          )
+                          history.push(`/buyer/${buyersList.enquiry.Buyer.id}/business/${this.props.match.params.id}`)
                         }
                       >
                         <Table.Cell>
-                          {buyersList.enquiry.Buyer.firstName}{' '}
-                          {buyersList.enquiry.Buyer.surname}
+                          {buyersList.enquiry.Buyer.firstName} {buyersList.enquiry.Buyer.surname}
+                        </Table.Cell>
+                        <Table.Cell>{buyersList.lastLog.text}</Table.Cell>
+                        <Table.Cell>
+                          {buyersList.lastLog ? moment(buyersList.lastLog.dateTimeCreated).format('DD/MM/YYYY') : ''}
                         </Table.Cell>
                         <Table.Cell>
-                          {buyersList.enquiry.Buyer.buyerNotes}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {buyersList.lastLog
-                            ? moment(buyersList.lastLog.dateTimeCreated).format(
-                              'DD/MM/YYYY'
-                            )
-                            : ''}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {buyersList.lastLog
-                            ? moment(buyersList.lastLog.followUp).format(
-                              'DD/MM/YYYY'
-                            )
-                            : ''}
+                          {buyersList.lastLog ? moment(buyersList.lastLog.followUp).format('DD/MM/YYYY') : ''}
                         </Table.Cell>
                       </Table.Row>
                     ))}
@@ -155,12 +107,7 @@ class BuyerListPage extends Component {
           ) : null}
           <Grid style={{ marginTop: 0 }}>
             <Grid.Column>
-              <Button
-                color="green"
-                onClick={() => history.push('/buyer')}
-                size="small"
-                floated="left"
-              >
+              <Button color="green" onClick={() => history.push('/buyer')} size="small" floated="left">
                 <Icon name="backward" />
                 Return to Business
               </Button>
@@ -183,8 +130,7 @@ BuyerListPage.propTypes = {
   countAll: PropTypes.number
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBuyersFromBusiness, getBusiness }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBuyersFromBusiness, getBusiness }, dispatch)
 
 const mapStateToProps = state => ({
   listBuyersList: state.business.getBuyersFromBusiness.array,

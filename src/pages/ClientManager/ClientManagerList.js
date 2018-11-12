@@ -706,7 +706,7 @@ class ClientManagerList extends Component {
                     <Table.HeaderCell>ID</Table.HeaderCell>
                     <Table.HeaderCell>Business</Table.HeaderCell>
                     <Table.HeaderCell>Log</Table.HeaderCell>
-                    <Table.HeaderCell>Date</Table.HeaderCell>
+                    <Table.HeaderCell>Created Date</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -715,7 +715,7 @@ class ClientManagerList extends Component {
                       <Table.Cell>{`BS${buyerLog.business_id}`}</Table.Cell>
                       <Table.Cell>{buyerLog.Business.businessName}</Table.Cell>
                       <Table.Cell>{buyerLog.text}</Table.Cell>
-                      <Table.Cell>{moment(buyerLog.followUp).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
+                      <Table.Cell>{moment(buyerLog.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>

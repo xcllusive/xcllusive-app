@@ -29,21 +29,17 @@ export const Types = {
   GET_BUSINESSES_FROM_BUYER_LOADING: 'GET_BUSINESSES_FROM_BUYER_LOADING',
   GET_BUSINESSES_FROM_BUYER_SUCCESS: 'GET_BUSINESSES_FROM_BUYER_SUCCESS',
   GET_BUSINESSES_FROM_BUYER_FAILURE: 'GET_BUSINESSES_FROM_BUYER_FAILURE',
-  SEND_EMAIL_BUYER_BROKERS_EMAIL_LOADING:
-    'SEND_EMAIL_BUYER_BROKERS_EMAIL_LOADING',
-  SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS:
-    'SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS',
-  SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE:
-    'SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE',
+  SEND_EMAIL_BUYER_BROKERS_EMAIL_LOADING: 'SEND_EMAIL_BUYER_BROKERS_EMAIL_LOADING',
+  SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS: 'SEND_EMAIL_BUYER_BROKERS_EMAIL_SUCCESS',
+  SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE: 'SEND_EMAIL_BUYER_BROKERS_EMAIL_FAILURE',
   SEND_GROUP_EMAIL_LOADING: 'SEND_GROUP_EMAIL_LOADING',
   SEND_GROUP_EMAIL_SUCCESS: 'SEND_GROUP_EMAIL_SUCCESS',
   SEND_GROUP_EMAIL_FAILURE: 'SEND_GROUP_EMAIL_FAILURE',
   GET_BUYER_BUSINESSES_LOADING: 'GET_BUYER_BUSINESSES_LOADING',
-  GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS:
-    'GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS',
-  GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS:
-    'GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS',
-  GET_BUYER_BUSINESSES_FAILURE: 'GET_BUYER_BUSINESSES_FAILURE'
+  GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS: 'GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS',
+  GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS: 'GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS',
+  GET_BUYER_BUSINESSES_FAILURE: 'GET_BUYER_BUSINESSES_FAILURE',
+  GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS: 'GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS'
 }
 
 // Reducer
@@ -91,6 +87,11 @@ const initialState = {
     error: null
   },
   getBuyerBusinessesUnderOffer: {
+    isLoading: true,
+    array: [],
+    error: null
+  },
+  getBuyerBusinessesSalesMemo: {
     isLoading: true,
     array: [],
     error: null
@@ -337,6 +338,16 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS:
+      return {
+        ...state,
+        getBuyerBusinessesSalesMemo: {
+          ...state.getBuyerBusinessesSalesMemo,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
     default:
       return state
   }
@@ -482,10 +493,7 @@ export const sendGroupEmail = (sendGroupEmail, array) => async dispatch => {
   }
 }
 
-export const getBuyerBusinesses = (
-  search = false,
-  stageId = false
-) => async dispatch => {
+export const getBuyerBusinesses = (search = false, stageId = false) => async dispatch => {
   dispatch({
     type: Types.GET_BUYER_BUSINESSES_LOADING,
     payload: true
@@ -504,6 +512,14 @@ export const getBuyerBusinesses = (
       const buyerBusiness = await getBuyerBusinessesAPI(search, stageId)
       dispatch({
         type: Types.GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS,
+        payload: buyerBusiness
+      })
+    }
+    if (stageId === 3) {
+      /* Sales Memo */
+      const buyerBusiness = await getBuyerBusinessesAPI(search, stageId)
+      dispatch({
+        type: Types.GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS,
         payload: buyerBusiness
       })
     }

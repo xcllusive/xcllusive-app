@@ -42,16 +42,13 @@ class ModalGroupEmail extends Component {
     this.setState({ controleMsg: true })
   }
 
-  componentDidUpdate () {
-    if (this.props.isSentEmail) this.props.closeModal()
-  }
-
-  _handleConfirm = isConfirmed => {
+  _handleConfirm = async isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       return
     }
-    this.props.sendGroupEmail(this.props.values, this.state.array)
+    await this.props.sendGroupEmail(this.props.values, this.state.array)
+    this.props.closeModal()
   }
 
   _removeFileUploaded = e => {
@@ -202,8 +199,9 @@ class ModalGroupEmail extends Component {
                       />
                     ) : null}
 
-                    {errors.attachment &&
-                      touched.attachment && <Label basic color="red" pointing content={errors.attachment} />}
+                    {errors.attachment && touched.attachment && (
+                      <Label basic color="red" pointing content={errors.attachment} />
+                    )}
                   </Form.Field>
                   <Form.Field width={5} style={{ alignSelf: 'flex-end' }}>
                     <Form.Button floated="right" color="yellow" onClick={e => this._removeFileUploaded(e)}>
