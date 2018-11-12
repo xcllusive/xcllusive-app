@@ -908,7 +908,6 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  console.log(values)
   props.updateBusiness(values).then(setSubmitting(false))
 }
 

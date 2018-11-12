@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux'
 
 import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
-import { getBusinesses, getBusiness, createBusiness } from '../../redux/ducks/business'
+import { getBusinesses, getBusiness, createBusiness, updateBusiness } from '../../redux/ducks/business'
 import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
 
 import {
@@ -36,7 +36,8 @@ class ClientManagerList extends Component {
       buyerLog: null,
       inputSearchBuyer: '',
       inputSearchBusiness: '',
-      showMsgBusiness: false
+      showMsgBusiness: false,
+      ownersApprovalReceived: false
     }
   }
 
@@ -142,7 +143,16 @@ class ClientManagerList extends Component {
           if (this.props.objectEmailTemplate) {
             window.location.href = `mailto:${this.state.buyer.email} ?subject=${
               this.props.objectEmailTemplate.subject
-            } &body=${this._convertHtmlToRightText(this.props.objectEmailTemplate.body)}`
+            } &body=Dear ${
+              this.state.business.firstNameV
+            }, %0D%0A %0D%0A we have a new enquiry for your business. %0D%0A %0D%0A Details are: %0D%0A %0D%0A ${
+              this.state.buyer.firstName
+            } %0D%0A ${this.state.buyer.streetName}, ${this.state.buyer.suburb} ${this.state.buyer.state} ${
+              this.state.buyer.postCode
+            } %0D%0A ${this.state.buyer.telephone1} %0D%0A ${
+              this.state.buyer.email
+            } %0D%0A %0D%0A ${this._convertHtmlToRightText(this.props.objectEmailTemplate.body)}
+            `
           }
         }
       }
@@ -305,20 +315,10 @@ class ClientManagerList extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_OWNERS_APPRAISAL_CONFIRM, {
       title: 'Owners Approval Received',
       onConfirm: value => {
-        if (value.confirmYes && value.confirmYes !== 'YES') {
-          this._showMsgOwnersApproval()
-          this.props.closeModal()
+        if (value.confirmYes && value.confirmYes === 'YES') {
+          this.setState({ ownersApprovalReceived: true })
         }
         this.props.closeModal()
-      }
-    })
-  }
-  _showMsgOwnersApproval = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_SHOW_MSG, {
-      options: {
-        title: 'Alert:',
-        content: 'Got it!',
-        text: 'You must type YES'
       }
     })
   }
@@ -397,7 +397,7 @@ class ClientManagerList extends Component {
                   <Table size="small" compact color="blue" celled inverted selectable>
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell>Name tst</Table.HeaderCell>
+                        <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Phone</Table.HeaderCell>
                         <Table.HeaderCell>Email</Table.HeaderCell>
                       </Table.Row>
@@ -495,7 +495,7 @@ class ClientManagerList extends Component {
                       disabled={
                         !this.state.buyer.caReceived ||
                         !this.state.business ||
-                        !this.state.business.notifyOwner ||
+                        (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
                         this.state.business.stageId === 5 || // Under Offer
                         this.state.business.productId === 2 // Seller Assist
                       }
@@ -593,6 +593,13 @@ class ClientManagerList extends Component {
                       ) : null}
                     </Table.Body>
                   </Table>
+                  {this.state.business.notifyOwner ? (
+                    <Message>
+                      <p style={{ color: 'red' }}>
+                        <b>Owners must approve buyers before IM is send to them!</b>
+                      </p>
+                    </Message>
+                  ) : null}
                   <Grid.Column floated="left" width={2}>
                     <Button
                       size="small"
@@ -639,6 +646,7 @@ class ClientManagerList extends Component {
                       color="blue"
                       onClick={() => this._ownersApprovalReceived()}
                       loading={isLoadingEmailBuyer}
+                      disabled={!this.state.business.notifyOwner}
                     >
                       <Icon name="mail" />
                       Owners Approval Received
@@ -765,7 +773,8 @@ ClientManagerList.propTypes = {
   createBuyer: PropTypes.func,
   updateBuyer: PropTypes.func,
   createBusiness: PropTypes.func,
-  closeModal: PropTypes.func
+  closeModal: PropTypes.func,
+  updateBusiness: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -809,7 +818,8 @@ const mapDispatchToProps = dispatch =>
       createBuyer,
       updateBuyer,
       createBusiness,
-      closeModal
+      closeModal,
+      updateBusiness
     },
     dispatch
   )
