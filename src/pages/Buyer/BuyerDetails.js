@@ -23,11 +23,7 @@ import {
   Pagination
 } from 'semantic-ui-react'
 
-import {
-  getBuyer,
-  getBusinessesFromBuyer,
-  updateBuyer
-} from '../../redux/ducks/buyer'
+import { getBuyer, getBusinessesFromBuyer, updateBuyer } from '../../redux/ducks/buyer'
 import {
   createNewLog,
   updateBuyerLog,
@@ -67,11 +63,7 @@ class BuyerDetails extends Component {
   componentDidMount () {
     this.props.getBuyer(this.props.match.params.idBuyer)
     this.props.getBusiness(this.props.match.params.idBusiness)
-    this.props.getBusinessBuyerLog(
-      this.props.match.params.idBuyer,
-      this.props.match.params.idBusiness,
-      5
-    )
+    this.props.getBusinessBuyerLog(this.props.match.params.idBuyer, this.props.match.params.idBusiness, 5)
     this.props.getBusinessesFromBuyer(this.props.match.params.idBuyer)
     this.props.getBuyerRegister(1)
   }
@@ -91,16 +83,8 @@ class BuyerDetails extends Component {
   // }
 
   static getDerivedStateFromProps (nextProps) {
-    if (
-      nextProps.listBusinessBuyerLogList.length &&
-      !nextProps.isLoadingBusinessBuyerLogList
-    ) {
-      const {
-        newLog,
-        id,
-        followUp,
-        text
-      } = nextProps.listBusinessBuyerLogList[0]
+    if (nextProps.listBusinessBuyerLogList.length && !nextProps.isLoadingBusinessBuyerLogList) {
+      const { newLog, id, followUp, text } = nextProps.listBusinessBuyerLogList[0]
 
       return {
         newLog: !!newLog,
@@ -112,8 +96,41 @@ class BuyerDetails extends Component {
     return null
   }
 
-  componentWillUnmount () {
+  async componentWillUnmount () {
     this.props.clearBuyerLog()
+    if (this.state.buyerLog_id) {
+      this.props.setFieldValue('buyerLog_id', this.state.buyerLog_id)
+      if (this.props.values.buyerLog_followUp === '') {
+        this.props.setFieldValue('buyerLog_followUp', this.state.buyerLog_followUp)
+      }
+      if (this.props.values.buyerLog_text === '') {
+        this.props.setFieldValue('buyerLog_text', this.state.buyerLog_text)
+      }
+    }
+    const updateBuyer = {
+      ...this.props.values,
+      id: this.props.match.params.idBuyer
+    }
+
+    if (this.props.values.newLog) {
+      const newLog = {
+        ...this.props.values,
+        buyer_id: this.props.match.params.idBuyer,
+        business_id: this.props.match.params.idBusiness
+      }
+      await this.props.createNewLog(newLog)
+      await this.props.updateBuyer(updateBuyer)
+    } else {
+      await this.props.updateBuyer(updateBuyer)
+      await this.props.updateBuyerLog(this.props.values)
+    }
+
+    this.props.getBusinessBuyerLog(
+      this.props.match.params.idBuyer,
+      this.props.match.params.idBusiness,
+      5,
+      this.state.activePage
+    )
   }
 
   _selectLog = buyerLog => {
@@ -148,22 +165,14 @@ class BuyerDetails extends Component {
 
   _handlePaginationChange = (e, { activePage }) => {
     this.setState({ activePage })
-    this.props.getBusinessBuyerLog(
-      this.props.match.params.idBuyer,
-      this.props.match.params.idBusiness,
-      5,
-      activePage
-    )
+    this.props.getBusinessBuyerLog(this.props.match.params.idBuyer, this.props.match.params.idBusiness, 5, activePage)
   }
 
   _handleSubmit = async () => {
     if (this.state.buyerLog_id) {
       this.props.setFieldValue('buyerLog_id', this.state.buyerLog_id)
       if (this.props.values.buyerLog_followUp === '') {
-        this.props.setFieldValue(
-          'buyerLog_followUp',
-          this.state.buyerLog_followUp
-        )
+        this.props.setFieldValue('buyerLog_followUp', this.state.buyerLog_followUp)
       }
       if (this.props.values.buyerLog_text === '') {
         this.props.setFieldValue('buyerLog_text', this.state.buyerLog_text)
@@ -196,10 +205,7 @@ class BuyerDetails extends Component {
   }
 
   _finaliseLog = () => {
-    this.props.finaliseBuyerLog(
-      this.props.match.params.idBusiness,
-      this.props.match.params.idBuyer
-    )
+    this.props.finaliseBuyerLog(this.props.match.params.idBusiness, this.props.match.params.idBuyer)
     this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
       this.props.match.params.idBusiness,
@@ -249,9 +255,7 @@ class BuyerDetails extends Component {
                           style={{ padding: 5 }}
                           link
                           name="mail"
-                          onClick={() =>
-                            (window.location.href = `mailto:${buyer.email}`)
-                          }
+                          onClick={() => (window.location.href = `mailto:${buyer.email}`)}
                         />
                       </Statistic.Value>
                     </Statistic>
@@ -260,15 +264,11 @@ class BuyerDetails extends Component {
                 <Grid.Column width={4}>
                   <Statistic.Group horizontal widths={7} size="mini">
                     <Statistic color="blue">
-                      <Statistic.Label style={{ padding: 5 }}>
-                        Phone 1:
-                      </Statistic.Label>
+                      <Statistic.Label style={{ padding: 5 }}>Phone 1:</Statistic.Label>
                       <Statistic.Value> {buyer.telephone1}</Statistic.Value>
                     </Statistic>
                     <Statistic color="blue">
-                      <Statistic.Label style={{ padding: 5 }}>
-                        Phone 2:
-                      </Statistic.Label>
+                      <Statistic.Label style={{ padding: 5 }}>Phone 2:</Statistic.Label>
                       <Statistic.Value>{buyer.telephone2}</Statistic.Value>
                     </Statistic>
                   </Statistic.Group>
@@ -276,12 +276,9 @@ class BuyerDetails extends Component {
                 <Grid.Column width={5}>
                   <Statistic.Group widths={1} size="mini">
                     <Statistic color="blue">
-                      <Statistic.Label style={{ padding: 5 }}>
-                        Address:
-                      </Statistic.Label>
+                      <Statistic.Label style={{ padding: 5 }}>Address:</Statistic.Label>
                       <Statistic.Value>
-                        {buyer.streetName}, {buyer.suburb} {buyer.postCode}{' '}
-                        {buyer.state}
+                        {buyer.streetName}, {buyer.suburb} {buyer.postCode} {buyer.state}
                       </Statistic.Value>
                     </Statistic>
                   </Statistic.Group>
@@ -296,9 +293,63 @@ class BuyerDetails extends Component {
               {business.businessName}
             </Header>
           </Segment>
-          <Grid celled="internally" divided centered>
-            <Grid.Row>
-              <Grid.Column width={16} textAlign="right">
+          <Segment style={{ height: '300px', backgroundColor: '#d4d4d53b' }}>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column>
+                  <Dimmer.Dimmable dimmed={isLoadingLogTable} style={{ height: '100%' }}>
+                    <Dimmer inverted active={isLoadingLogTable}>
+                      <Loader>Loading</Loader>
+                    </Dimmer>
+                    {values.buyerLog_id || this.state.buyerLog_id ? (
+                      <Form>
+                        <Form.Group>
+                          <Form.Field width={16}>
+                            <Form.TextArea
+                              style={{ height: '150px' }}
+                              label="Communication text"
+                              name="buyerLog_text"
+                              autoComplete="buyerLog_text"
+                              value={values.buyerLog_text ? values.buyerLog_text : this.state.buyerLog_text}
+                              onChange={handleChange}
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.Field style={{ marginLeft: '90%' }}>
+                            <h5>Follow Up Date</h5>
+                            <DatePicker
+                              selected={
+                                values.buyerLog_followUp
+                                  ? moment(values.buyerLog_followUp)
+                                  : moment(this.state.buyerLog_followUp)
+                              }
+                              onChange={this._handleDateChange}
+                              popperPlacement="top-end"
+                              form
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                      </Form>
+                    ) : null}
+                  </Dimmer.Dimmable>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+          <Grid>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Button icon color="orange" onClick={() => this._finaliseLog()} size="small">
+                  <Icon name="cut" />
+                  Finalise Log
+                </Button>
+              </Grid.Column>
+              <Grid.Column textAlign="right">
+                <Button icon color="yellow" onClick={() => this._toggleModalEmailTemplates()} size="small">
+                  <Icon name="mail" />
+                  Send Email
+                </Button>
                 <Button
                   icon
                   color="twitter"
@@ -327,258 +378,171 @@ class BuyerDetails extends Component {
                   <Icon name="save" />
                   Save
                 </Button>
-                <Button
-                  icon
-                  color="orange"
-                  // disabled={isSubmitting || !isValid}
-                  // loading={}
-                  onClick={() => this._finaliseLog()}
-                  size="small"
-                >
-                  <Icon name="cut" />
-                  Finalise Log
-                </Button>
-                <Button
-                  icon
-                  color="yellow"
-                  // disabled={isSubmitting || !isValid}
-                  // loading={}
-                  onClick={() => this._toggleModalEmailTemplates()}
-                  size="small"
-                >
-                  <Icon name="mail" />
-                  Send Email
-                </Button>
-                <Button
-                  icon
-                  color="green"
-                  onClick={() => history.push(`/buyer/business/${business.id}`)}
-                  size="small"
-                >
+                <Button icon color="green" onClick={() => history.push(`/buyer/business/${business.id}`)} size="small">
                   <Icon name="backward" />
                   Return to list
                 </Button>
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          <Grid style={{ marginTop: 0 }}>
-            <Grid.Row style={{ padding: 0 }}>
-              <Grid.Column width={5}>
-                <Segment style={{ height: '226px' }}>
-                  <Dimmer.Dimmable
-                    dimmed={isLoadingLogTable}
-                    style={{ height: '100%' }}
-                  >
+          <Segment style={{ height: '300px', backgroundColor: '#ecf4fb' }}>
+            <Grid style={{ marginTop: 0 }}>
+              <Grid.Row style={{ padding: 0 }}>
+                <Grid.Column>
+                  <Dimmer.Dimmable dimmed={isLoadingLogTable}>
                     <Dimmer inverted active={isLoadingLogTable}>
                       <Loader>Loading</Loader>
                     </Dimmer>
-                    {values.buyerLog_id || this.state.buyerLog_id ? (
-                      <Form>
-                        <Form.Group>
-                          <Form.Field width={16}>
+                    <Table celled selectable compact striped size="small">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell>Log</Table.HeaderCell>
+                          <Table.HeaderCell>Date</Table.HeaderCell>
+                          <Table.HeaderCell>Status</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {listBusinessBuyerLogList.map(businessBuyerLog => (
+                          <Table.Row key={businessBuyerLog.id} onClick={() => this._selectLog(businessBuyerLog)}>
+                            <Table.Cell>{businessBuyerLog.text}</Table.Cell>
+                            <Table.Cell>{moment(businessBuyerLog.followUp).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
+                            <Table.Cell>{businessBuyerLog.followUpStatus}</Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table>
+                    <Pagination
+                      prevItem={null}
+                      nextItem={null}
+                      size="mini"
+                      onPageChange={this._handlePaginationChange}
+                      defaultActivePage={activePageBusinessBuyerLogList}
+                      totalPages={pagesBusinessBuyerLogList}
+                    />
+                  </Dimmer.Dimmable>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+        </Fragment>
+        <Segment style={{ backgroundColor: '#d4d4d53b' }}>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={4}>
+                <Segment style={{ height: '100%' }}>
+                  <Dimmer.Dimmable dimmed={isLoadingBuyer} style={{ height: '100%' }}>
+                    <Dimmer inverted active={isLoadingBuyer}>
+                      <Loader>Loading</Loader>
+                    </Dimmer>
+                    {buyer ? (
+                      <Fragment>
+                        <Header style={{ margin: 0 }} as="h4" content="Brokers Notes" />
+                        <Form style={{ height: '100%' }}>
+                          <Form.Group style={{ height: '100%' }}>
                             <Form.TextArea
-                              label="Communication text"
-                              name="buyerLog_text"
-                              autoComplete="buyerLog_text"
-                              value={
-                                values.buyerLog_text
-                                  ? values.buyerLog_text
-                                  : this.state.buyerLog_text
-                              }
+                              style={{ height: '90%' }}
+                              rows={0}
+                              width={16}
+                              name="buyerNotes"
+                              value={values.buyerNotes}
                               onChange={handleChange}
                             />
-                          </Form.Field>
-                        </Form.Group>
-                        <Form.Group>
-                          <Form.Field width={11}>
-                            <h5>Follow Up Date</h5>
-                            <DatePicker
-                              selected={
-                                values.buyerLog_followUp
-                                  ? moment(values.buyerLog_followUp)
-                                  : moment(this.state.buyerLog_followUp)
-                              }
-                              onChange={this._handleDateChange}
-                              popperPlacement="top-end"
-                              form
-                            />
-                          </Form.Field>
-                        </Form.Group>
-                      </Form>
+                          </Form.Group>
+                        </Form>
+                      </Fragment>
                     ) : null}
                   </Dimmer.Dimmable>
                 </Segment>
               </Grid.Column>
-              <Grid.Column width={11}>
-                <Dimmer.Dimmable dimmed={isLoadingLogTable}>
-                  <Dimmer inverted active={isLoadingLogTable}>
+              <Grid.Column width={8}>
+                <Segment>
+                  <Dimmer.Dimmable dimmed={isLoadingBuyer}>
+                    <Dimmer inverted active={isLoadingBuyer}>
+                      <Loader>Loading</Loader>
+                    </Dimmer>
+                    <Form>
+                      <Form.Group>
+                        <Form.Field width={16}>
+                          <Form.TextArea
+                            label="Buyer Profile"
+                            name="profile"
+                            autoComplete="profile"
+                            value={values.profile}
+                            onChange={handleChange}
+                          />
+                        </Form.Field>
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Field width={16}>
+                          <Form.TextArea
+                            label="Business Type"
+                            name="businessType"
+                            autoComplete="businessType"
+                            value={values.businessType}
+                            onChange={handleChange}
+                          />
+                        </Form.Field>
+                        <Form.Field>
+                          <Form.Select
+                            label="Buyer Type"
+                            options={mapArrayToValuesForDropdown(typeOptions)}
+                            name="typeId"
+                            autoComplete="typeId"
+                            value={values.typeId}
+                            onChange={this._handleSelectChange}
+                          />
+                        </Form.Field>
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Field>
+                          <Form.Select
+                            label="Price From"
+                            options={priceOptions}
+                            name="priceFrom"
+                            autoComplete="priceFrom"
+                            value={values.priceFrom}
+                            onChange={this._handleSelectChange}
+                          />
+                        </Form.Field>
+                        <Form.Field>
+                          <Form.Select
+                            label="Price To"
+                            options={priceOptions}
+                            name="priceTo"
+                            autoComplete="priceTo"
+                            value={values.priceTo}
+                            onChange={this._handleSelectChange}
+                          />
+                        </Form.Field>
+                      </Form.Group>
+                    </Form>
+                  </Dimmer.Dimmable>
+                </Segment>
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <Dimmer.Dimmable dimmed={isLoadingPreviousBusiness}>
+                  <Dimmer inverted active={isLoadingPreviousBusiness}>
                     <Loader>Loading</Loader>
                   </Dimmer>
                   <Table celled selectable compact striped size="small">
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell>Log</Table.HeaderCell>
-                        <Table.HeaderCell>Date</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
+                        <Table.HeaderCell>Previous Businesses</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                      {listBusinessBuyerLogList.map(businessBuyerLog => (
-                        <Table.Row
-                          key={businessBuyerLog.id}
-                          onClick={() => this._selectLog(businessBuyerLog)}
-                        >
-                          <Table.Cell>{businessBuyerLog.text}</Table.Cell>
-                          <Table.Cell>
-                            {moment(businessBuyerLog.followUp).format(
-                              'DD/MM/YYYY - HH:mm'
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {businessBuyerLog.followUpStatus}
-                          </Table.Cell>
+                      {listBusinessesFromBuyer.map(businessesFromBuyer => (
+                        <Table.Row key={businessesFromBuyer.business_id}>
+                          <Table.Cell>{businessesFromBuyer.Business.businessName}</Table.Cell>
                         </Table.Row>
                       ))}
                     </Table.Body>
                   </Table>
-                  <Pagination
-                    prevItem={null}
-                    nextItem={null}
-                    size="mini"
-                    onPageChange={this._handlePaginationChange}
-                    defaultActivePage={activePageBusinessBuyerLogList}
-                    totalPages={pagesBusinessBuyerLogList}
-                  />
                 </Dimmer.Dimmable>
               </Grid.Column>
             </Grid.Row>
           </Grid>
-        </Fragment>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={4}>
-              <Dimmer.Dimmable dimmed={isLoadingPreviousBusiness}>
-                <Dimmer inverted active={isLoadingPreviousBusiness}>
-                  <Loader>Loading</Loader>
-                </Dimmer>
-                <Table celled selectable compact striped size="small">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Previous Businesses</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {listBusinessesFromBuyer.map(businessesFromBuyer => (
-                      <Table.Row key={businessesFromBuyer.business_id}>
-                        <Table.Cell>
-                          {businessesFromBuyer.Business.businessName}
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table>
-              </Dimmer.Dimmable>
-            </Grid.Column>
-            <Grid.Column width={4}>
-              <Segment style={{ height: '100%' }}>
-                <Dimmer.Dimmable
-                  dimmed={isLoadingBuyer}
-                  style={{ height: '100%' }}
-                >
-                  <Dimmer inverted active={isLoadingBuyer}>
-                    <Loader>Loading</Loader>
-                  </Dimmer>
-                  {buyer ? (
-                    <Fragment>
-                      <Header
-                        style={{ margin: 0 }}
-                        as="h4"
-                        content="Brokers Notes"
-                      />
-                      <Form style={{ height: '100%' }}>
-                        <Form.Group style={{ height: '100%' }}>
-                          <Form.TextArea
-                            style={{ height: '90%' }}
-                            rows={0}
-                            width={16}
-                            name="buyerNotes"
-                            value={values.buyerNotes}
-                            onChange={handleChange}
-                          />
-                        </Form.Group>
-                      </Form>
-                    </Fragment>
-                  ) : null}
-                </Dimmer.Dimmable>
-              </Segment>
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <Segment>
-                <Dimmer.Dimmable dimmed={isLoadingBuyer}>
-                  <Dimmer inverted active={isLoadingBuyer}>
-                    <Loader>Loading</Loader>
-                  </Dimmer>
-                  <Form>
-                    <Form.Group>
-                      <Form.Field width={16}>
-                        <Form.TextArea
-                          label="Buyer Profile"
-                          name="profile"
-                          autoComplete="profile"
-                          value={values.profile}
-                          onChange={handleChange}
-                        />
-                      </Form.Field>
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Field width={16}>
-                        <Form.TextArea
-                          label="Business Type"
-                          name="businessType"
-                          autoComplete="businessType"
-                          value={values.businessType}
-                          onChange={handleChange}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <Form.Select
-                          label="Buyer Type"
-                          options={mapArrayToValuesForDropdown(typeOptions)}
-                          name="typeId"
-                          autoComplete="typeId"
-                          value={values.typeId}
-                          onChange={this._handleSelectChange}
-                        />
-                      </Form.Field>
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Field>
-                        <Form.Select
-                          label="Price From"
-                          options={priceOptions}
-                          name="priceFrom"
-                          autoComplete="priceFrom"
-                          value={values.priceFrom}
-                          onChange={this._handleSelectChange}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <Form.Select
-                          label="Price To"
-                          options={priceOptions}
-                          name="priceTo"
-                          autoComplete="priceTo"
-                          value={values.priceTo}
-                          onChange={this._handleSelectChange}
-                        />
-                      </Form.Field>
-                    </Form.Group>
-                  </Form>
-                </Dimmer.Dimmable>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        </Segment>
       </Wrapper>
     )
   }
@@ -643,8 +607,8 @@ const mapPropsToValues = props => {
     profile: props.buyer ? props.buyer.profile : '',
     businessType: props.buyer ? props.buyer.businessType : '',
     typeId: props.buyer ? props.buyer.typeId : null,
-    priceFrom: props.buyer ? props.buyer.priceFrom : '',
-    priceTo: props.buyer ? props.buyer.priceTo : '',
+    priceFrom: props.buyer ? props.buyer.priceFrom : 0,
+    priceTo: props.buyer ? props.buyer.priceTo : 0,
     buyerLog_id: '',
     buyerLog_followUp: '',
     buyerLog_text: '',
