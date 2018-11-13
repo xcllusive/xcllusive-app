@@ -9,11 +9,7 @@ import 'react-quill/dist/quill.snow.css'
 import { Form, Grid, Button, Icon } from 'semantic-ui-react'
 
 import { previewAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
-import {
-  downloadAgreement,
-  sendAgreement,
-  getAgreementBody
-} from '../../../redux/ducks/agreement'
+import { downloadAgreement, sendAgreement, getAgreementBody } from '../../../redux/ducks/agreement'
 import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
 import { getLastInvoice } from '../../../redux/ducks/invoice'
 
@@ -28,12 +24,7 @@ class PreviewAgreement extends Component {
         toolbar: [
           [{ header: [1, 2, false] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' }
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
           ['link', 'image'],
           ['clean']
         ]
@@ -81,11 +72,7 @@ class PreviewAgreement extends Component {
   }
 
   static getDerivedStateFromProps (props, state) {
-    if (
-      props.agreementExisted &&
-      !state.bodyUpdate &&
-      props.location.state.editAgreement
-    ) {
+    if (props.agreementExisted && !state.bodyUpdate && props.location.state.editAgreement) {
       return {
         body: props.agreementExisted.body,
         bodyUpdate: true
@@ -115,10 +102,7 @@ class PreviewAgreement extends Component {
 
   _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (
-      !this.reactQuillRef ||
-      typeof this.reactQuillRef.getEditor !== 'function'
-    ) {
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
       return false
     }
     // Skip if Quill reference is defined:
@@ -138,10 +122,9 @@ class PreviewAgreement extends Component {
         if (isConfirmed) {
           this.props.downloadAgreement({
             businessId: this.props.location.state.business.id,
-            fileName: `agreement_${this.props.location.state.business.businessName.substring(
-              0,
-              10
-            )}_${moment().format('DD_MM_YYYY')}.pdf`,
+            fileName: `agreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
+              'DD_MM_YYYY'
+            )}.pdf`,
             body: this.state.body
           })
         }
@@ -160,9 +143,7 @@ class PreviewAgreement extends Component {
         0,
         10
       )}_${moment().format('DD_MM_YYYY')}.pdf`,
-      fileNameInvoice: this.props.objectLastInvoice
-        ? `${this.props.objectLastInvoice.ref}.pdf`
-        : '',
+      fileNameInvoice: this.props.objectLastInvoice ? `${this.props.objectLastInvoice.ref}.pdf` : '',
       fromAgreement: true,
       onConfirm: object => {
         if (object) {
@@ -182,11 +163,7 @@ class PreviewAgreement extends Component {
       <Wrapper loading={isLoading}>
         <Grid padded>
           <Grid.Row>
-            <Grid.Column
-              floated="left"
-              width={16}
-              style={{ paddingLeft: '0px', paddingRight: 0 }}
-            >
+            <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
               <Form.Field>
                 <ReactQuill
                   ref={el => {
@@ -204,12 +181,19 @@ class PreviewAgreement extends Component {
           <Grid.Row>
             <Grid.Column style={{ marginTop: '50px' }}>
               <Button
+                color="green"
+                onClick={() => this.props.history.push(`/business/${this.props.location.state.business.id}`)}
+                size="small"
+                floated="left"
+              >
+                <Icon name="backward" />
+                Return to Business
+              </Button>
+              <Button
                 color="grey"
                 onClick={() =>
                   this.props.history.push({
-                    pathname: `/business/${
-                      this.props.location.state.business.id
-                    }/invoice`,
+                    pathname: `/business/${this.props.location.state.business.id}/invoice`,
                     state: { business: this.props.location.state.business }
                   })
                 }

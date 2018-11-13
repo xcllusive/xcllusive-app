@@ -211,13 +211,13 @@ const mapPropsToValues = props => {
   if (props.business) {
     return {
       ...props.business,
-      listedPrice: props.business.listedPrice ? numeral(props.business.listedPrice).format('0,0.00') : 0,
+      listedPrice: props.business.listedPrice ? numeral(props.business.listedPrice).format('0,0.[99]') : 0,
       currentPrice: props.business.currentPrice ? numeral(props.business.currentPrice).format('0,0.00') : 0,
       engagementFee: props.business.engagementFee ? numeral(props.business.engagementFee).format('0,0.00') : 0,
       commissionPerc: props.business.commissionPerc ? numeral(props.business.commissionPerc).format('0,0.00') : 0,
-      minimumCharge: props.business.minimumCharge ? numeral(props.business.minimumCharge).format('0,0.00') : 0,
-      appraisalHigh: props.business.appraisalHigh ? numeral(props.business.appraisalHigh).format('0,0.00') : 0,
-      appraisalLow: props.business.appraisalLow ? numeral(props.business.appraisalLow).format('0,0.00') : 0,
+      minimumCharge: props.business.minimumCharge ? numeral(props.business.minimumCharge).format('0,0.[99]') : 0,
+      appraisalHigh: props.business.appraisalHigh ? numeral(props.business.appraisalHigh).format('0,0.[99]') : 0,
+      appraisalLow: props.business.appraisalLow ? numeral(props.business.appraisalLow).format('0,0.[99]') : 0,
       depositeTaken: props.business.depositeTaken ? numeral(props.business.depositeTaken).format('0,0.00') : 0,
       depositeTakenDate: props.business.depositeTakenDate ? props.business.depositeTakenDate : '',
       commissionSold: props.business.commissionSold ? numeral(props.business.commissionSold).format('0,0.00') : 0,

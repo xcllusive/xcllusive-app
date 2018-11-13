@@ -1,13 +1,6 @@
 import { toast } from 'react-toastify'
 import download from '../../utils/file-download'
-import {
-  get,
-  update,
-  send,
-  downloadAgree,
-  getEmailTemplate,
-  sendAgreeInvo
-} from '../../services/api/agreement'
+import { get, update, send, downloadAgree, getEmailTemplate, sendAgreeInvo } from '../../services/api/agreement'
 
 // Action Types
 
@@ -332,10 +325,7 @@ export const sendAgreement = agreement => async dispatch => {
   }
 }
 
-export const getEmailTemplateAgreement = (
-  idAgreement,
-  idBusiness
-) => async dispatch => {
+export const getEmailTemplateAgreement = (idAgreement, idBusiness) => async dispatch => {
   dispatch({
     type: Types.GET_EMAIL_TEMPLATE_AGREEMENT_LOADING,
     payload: true

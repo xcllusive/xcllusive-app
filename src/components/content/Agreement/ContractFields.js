@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Segment, Form, Label } from 'semantic-ui-react'
+import numeral from 'numeral'
 
 class ContractFields extends Component {
   render () {
@@ -14,70 +15,24 @@ class ContractFields extends Component {
                 label="Listed Price $"
                 name="listedPrice"
                 autoComplete="listedPrice"
-                value={values.listedPrice}
+                value={numeral(values.listedPrice).format('$0,0.[99]')}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.listedPrice &&
-                touched.listedPrice && (
-                <Label
-                  basic
-                  pointing
-                  color="red"
-                  content={errors.listedPrice}
-                />
+              {errors.listedPrice && touched.listedPrice && (
+                <Label basic pointing color="red" content={errors.listedPrice} />
               )}
             </Form.Field>
-            <Form.Input
-              label="Appraisal High $"
-              name="appraisalHigh"
-              autoComplete="appraisalHigh"
-              value={values.appraisalHigh}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.appraisalHigh &&
-              touched.appraisalHigh && (
-              <Label
-                basic
-                pointing
-                color="red"
-                content={errors.appraisalHigh}
-              />
-            )}
-            <Form.Input
-              label="Appraisal Low $"
-              name="appraisalLow"
-              autoComplete="appraisalLow"
-              value={values.appraisalLow}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.appraisalLow &&
-              touched.appraisalLow && (
-              <Label
-                basic
-                pointing
-                color="red"
-                content={errors.appraisalLow}
-              />
-            )}
             <Form.Input
               label="Engagement Fee $"
               name="engagementFee"
               autoComplete="engagementFee"
-              value={values.engagementFee}
+              value={numeral(values.engagementFee).format('$0,0.[99]')}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.engagementFee &&
-              touched.engagementFee && (
-              <Label
-                basic
-                pointing
-                color="red"
-                content={errors.engagementFee}
-              />
+            {errors.engagementFee && touched.engagementFee && (
+              <Label basic pointing color="red" content={errors.engagementFee} />
             )}
             <Form.Input
               label="Commission %"
@@ -87,14 +42,41 @@ class ContractFields extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {errors.commissionPerc &&
-              touched.commissionPerc && (
-              <Label
-                basic
-                pointing
-                color="red"
-                content={errors.commissionPerc}
-              />
+            {errors.commissionPerc && touched.commissionPerc && (
+              <Label basic pointing color="red" content={errors.commissionPerc} />
+            )}
+            <Form.Input
+              label="Minimum Commission $"
+              name="minimumCommission"
+              autoComplete="minimumCommission"
+              value={numeral(values.minimumCommission).format('$0,0.[99]')}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.minimumCommission && touched.minimumCommission && (
+              <Label basic pointing color="red" content={errors.minimumCommission} />
+            )}
+            <Form.Input
+              label="Appraisal High $"
+              name="appraisalHigh"
+              autoComplete="appraisalHigh"
+              value={numeral(values.appraisalHigh).format('$0,0')}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.appraisalHigh && touched.appraisalHigh && (
+              <Label basic pointing color="red" content={errors.appraisalHigh} />
+            )}
+            <Form.Input
+              label="Appraisal Low $"
+              name="appraisalLow"
+              autoComplete="appraisalLow"
+              value={numeral(values.appraisalLow).format('$0,0.[99]')}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.appraisalLow && touched.appraisalLow && (
+              <Label basic pointing color="red" content={errors.appraisalLow} />
             )}
           </Form.Group>
         </Segment>

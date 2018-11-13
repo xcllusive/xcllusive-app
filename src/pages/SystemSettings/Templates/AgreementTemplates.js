@@ -3,17 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import {
-  Form,
-  Label,
-  Icon,
-  Grid,
-  Segment,
-  Dimmer,
-  Loader,
-  Header,
-  Button
-} from 'semantic-ui-react'
+import { Form, Label, Icon, Grid, Segment, Dimmer, Loader, Header, Button } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -28,7 +18,7 @@ import {
 } from '../../../redux/ducks/agreementTemplates'
 import { mapArrayToValuesForDropdownTemplates } from '../../../utils/sharedFunctionArray'
 import OptionIntroductionBuyer from '../../../components/content/Agreement/OptionIntroductionBuyer'
-import PropertyOption from '../../../components/content/Agreement/PropertyOption'
+// import PropertyOption from '../../../components/content/Agreement/PropertyOption'
 
 class AgreementTemplates extends Component {
   constructor (props) {
@@ -49,12 +39,7 @@ class AgreementTemplates extends Component {
         toolbar: [
           [{ header: [1, 2, false] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' }
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
           ['link', 'image'],
           ['clean']
         ]
@@ -71,7 +56,8 @@ class AgreementTemplates extends Component {
         'indent',
         'link',
         'image'
-      ]
+      ],
+      engagementFee: 0
     }
     this.quillRef = null
     this.reactQuillRef = null
@@ -85,6 +71,39 @@ class AgreementTemplates extends Component {
 
   componentDidUpdate () {
     this._attachQuillRefs()
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (
+      nextProps.objectAgreementTemplate &&
+      nextProps.objectAgreementTemplate.engagementFee !== prevState.engagementFee
+    ) {
+      var engagementFee = numeral(nextProps.values.engagementFee).format('$0,0.[99]')
+    }
+    if (
+      nextProps.objectAgreementTemplate &&
+      nextProps.objectAgreementTemplate.priceProperty !== prevState.priceProperty
+    ) {
+      var priceProperty = numeral(nextProps.values.priceProperty).format('$0,0.[99]')
+    }
+    if (
+      nextProps.objectAgreementTemplate &&
+      nextProps.objectAgreementTemplate.minimumCommission !== prevState.minimumCommission
+    ) {
+      var minimumCommission = numeral(nextProps.values.minimumCommission).format('$0,0.[99]')
+    }
+    return {
+      engagementFee: engagementFee || prevState.engagementFee,
+      priceProperty: priceProperty || prevState.priceProperty,
+      minimumCommission: minimumCommission || prevState.minimumCommission
+    }
+  }
+
+  _numberFormat = (e, { name, value }) => {
+    const myNumeral = numeral(value)
+    const numberFormated = myNumeral.format('$0,0.[99]')
+    this.props.setFieldValue(name, myNumeral.value())
+    this.setState({ [name]: numberFormated })
   }
 
   _handleChangeHeader = value => {
@@ -109,10 +128,7 @@ class AgreementTemplates extends Component {
 
   _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (
-      !this.reactQuillRef ||
-      typeof this.reactQuillRef.getEditor !== 'function'
-    ) {
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
       return false
     }
     // Skip if Quill reference is defined:
@@ -169,44 +185,25 @@ class AgreementTemplates extends Component {
                 style={{ zIndex: 1000 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
-                options={mapArrayToValuesForDropdownTemplates(
-                  listAgreementTemplates
-                )}
+                options={mapArrayToValuesForDropdownTemplates(listAgreementTemplates)}
                 name="title"
                 autoComplete="title"
                 value={values.title}
                 loading={isLoadingAllTemplate}
                 onChange={this._handleSelectChange}
               />
-              {errors.title &&
-                touched.title && (
-                <Label basic color="red" pointing content={errors.title} />
-              )}
+              {errors.title && touched.title && <Label basic color="red" pointing content={errors.title} />}
             </Form.Field>
             <Form.Field style={{ width: '100%', alignSelf: 'flex-end' }}>
-              <Button
-                onClick={() => this._openModalNewAgreementTemplate()}
-                color="facebook"
-                floated="right"
-              >
+              <Button onClick={() => this._openModalNewAgreementTemplate()} color="facebook" floated="right">
                 <Icon name="add" />
                 New Template
               </Button>
             </Form.Field>
           </Form.Group>
-          <Dimmer.Dimmable
-            style={{ zIndex: 999 }}
-            dimmed={!objectAgreementTemplate || isLoadingTemplate}
-          >
-            <Dimmer
-              inverted
-              active={!objectAgreementTemplate || isLoadingTemplate}
-            >
-              {isLoadingTemplate ? (
-                <Loader inverted />
-              ) : (
-                <Header as="h2">Please, select one template!</Header>
-              )}
+          <Dimmer.Dimmable style={{ zIndex: 999 }} dimmed={!objectAgreementTemplate || isLoadingTemplate}>
+            <Dimmer inverted active={!objectAgreementTemplate || isLoadingTemplate}>
+              {isLoadingTemplate ? <Loader inverted /> : <Header as="h2">Please, select one template!</Header>}
             </Dimmer>
             <Form.Group>
               <Form.Field>
@@ -218,10 +215,7 @@ class AgreementTemplates extends Component {
                   value={values.state}
                   onChange={this._handleSelectChangeState}
                 />
-                {errors.state &&
-                  touched.state && (
-                  <Label basic color="red" pointing content={errors.state} />
-                )}
+                {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
               </Form.Field>
             </Form.Group>
             {objectAgreementTemplate &&
@@ -238,18 +232,12 @@ class AgreementTemplates extends Component {
                               label="Engagement Fee $"
                               name="engagementFee"
                               autoComplete="engagementFee"
-                              value={values.engagementFee}
-                              onChange={handleChange}
+                              value={this.state.engagementFee}
+                              onChange={this._numberFormat}
                               onBlur={handleBlur}
                             />
-                            {errors.engagementFee &&
-                            touched.engagementFee && (
-                              <Label
-                                basic
-                                pointing
-                                color="red"
-                                content={errors.engagementFee}
-                              />
+                            {errors.engagementFee && touched.engagementFee && (
+                              <Label basic pointing color="red" content={errors.engagementFee} />
                             )}
                             <Form.Input
                               label="Commission %"
@@ -259,14 +247,19 @@ class AgreementTemplates extends Component {
                               onChange={handleChange}
                               onBlur={handleBlur}
                             />
-                            {errors.commissionPerc &&
-                            touched.commissionPerc && (
-                              <Label
-                                basic
-                                pointing
-                                color="red"
-                                content={errors.commissionPerc}
-                              />
+                            {errors.commissionPerc && touched.commissionPerc && (
+                              <Label basic pointing color="red" content={errors.commissionPerc} />
+                            )}
+                            <Form.Input
+                              label="Minimum Commission $"
+                              name="minimumCommission"
+                              autoComplete="minimumCommission"
+                              value={this.state.minimumCommission}
+                              onChange={this._numberFormat}
+                              onBlur={handleBlur}
+                            />
+                            {errors.minimumCommission && touched.minimumCommission && (
+                              <Label basic pointing color="red" content={errors.minimumCommission} />
                             )}
                           </Form.Group>
                         </Segment>
@@ -275,10 +268,7 @@ class AgreementTemplates extends Component {
                   </Grid.Row>
                   <Grid.Row>
                     <Grid.Column width={5}>
-                      <Header
-                        as="h4"
-                        content="Option For Principal Introduction Of Buyer"
-                      />
+                      <Header as="h4" content="Option For Principal Introduction Of Buyer" />
                     </Grid.Column>
                     <Grid.Column width={2} floated="right">
                       <Header as="h4" floated="right">
@@ -319,13 +309,41 @@ class AgreementTemplates extends Component {
                   </Grid.Row>
                   <Grid.Row style={{ paddingTop: '0px' }}>
                     <Grid.Column>
-                      <PropertyOption
+                      {/* <PropertyOption
                         values={values}
                         handleChange={handleChange}
                         handleBlur={handleBlur}
                         errors={errors}
                         touched={touched}
-                      />
+                      /> */}
+                      <Segment>
+                        <Form.Group widths="equal">
+                          <Form.Input
+                            label="Commission %"
+                            name="commissionProperty"
+                            autoComplete="commission"
+                            value={values.commissionProperty}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled={values.propertyOptions}
+                          />
+                          {errors.commissionProperty && touched.commissionProperty && (
+                            <Label basic pointing color="red" content={errors.commissionProperty} />
+                          )}
+                          <Form.Input
+                            label="Price $"
+                            name="priceProperty"
+                            autoComplete="priceProperty"
+                            value={this.state.priceProperty}
+                            onChange={this._numberFormat}
+                            onBlur={handleBlur}
+                            disabled={values.propertyOptions}
+                          />
+                          {errors.priceProperty && touched.priceProperty && (
+                            <Label basic pointing color="red" content={errors.priceProperty} />
+                          )}
+                        </Form.Group>
+                      </Segment>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
@@ -335,11 +353,7 @@ class AgreementTemplates extends Component {
                 <h4>Header</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
-                <Grid.Column
-                  floated="left"
-                  width={16}
-                  style={{ paddingLeft: '0px', paddingRight: 0 }}
-                >
+                <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
                     <ReactQuill
                       value={values.header}
@@ -366,11 +380,7 @@ class AgreementTemplates extends Component {
                 {objectAgreementTemplate &&
                   objectAgreementTemplate.handlebars.map((item, key) => {
                     return (
-                      <Label
-                        horizontal
-                        key={key}
-                        onClick={() => this.insertTextQuill(item)}
-                      >
+                      <Label horizontal key={key} onClick={() => this.insertTextQuill(item)}>
                         {'{{'}
                         {item}
                         {'}}'}
@@ -384,11 +394,7 @@ class AgreementTemplates extends Component {
                 <h4>Body</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
-                <Grid.Column
-                  floated="left"
-                  width={16}
-                  style={{ paddingLeft: '0px', paddingRight: 0 }}
-                >
+                <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
                     <ReactQuill
                       ref={el => {
@@ -415,11 +421,7 @@ class AgreementTemplates extends Component {
                 <h4>Footer</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
-                <Grid.Column
-                  floated="left"
-                  width={16}
-                  style={{ paddingLeft: '0px', paddingRight: 0 }}
-                >
+                <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
                     <ReactQuill
                       value={values.footer}
@@ -478,44 +480,22 @@ AgreementTemplates.propTypes = {
 }
 
 const mapPropsToValues = props => ({
-  state: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.state
-    : '',
-  header: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.header
-    : '',
+  state: props.objectAgreementTemplate ? props.objectAgreementTemplate.state : '',
+  header: props.objectAgreementTemplate ? props.objectAgreementTemplate.header : '',
   body: props.objectAgreementTemplate ? props.objectAgreementTemplate.body : '',
-  footer: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.footer
-    : '',
+  footer: props.objectAgreementTemplate ? props.objectAgreementTemplate.footer : '',
   id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : '',
-  engagementFee: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.engagementFee).format('0,0.00')
-    : 0,
-  commissionPerc: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionPerc).format('0,0.00')
-    : 0,
-  commissionDiscount: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionDiscount).format('0,0.00')
-    : 0,
-  introductionParties: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.introductionParties
-    : '',
-  commissionProperty: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionProperty).format('0,0.00')
-    : 0,
-  addressProperty: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.addressProperty
-    : '',
-  priceProperty: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.priceProperty).format('0,0.00')
-    : 0,
-  propertyOptions: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.propertyOptions
-    : false,
+  engagementFee: props.objectAgreementTemplate ? props.objectAgreementTemplate.engagementFee : 0,
+  commissionPerc: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionPerc : 0,
+  commissionDiscount: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionDiscount : 0,
+  introductionParties: props.objectAgreementTemplate ? props.objectAgreementTemplate.introductionParties : '',
+  commissionProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionProperty : 0,
+  priceProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.priceProperty : 0,
+  propertyOptions: props.objectAgreementTemplate ? props.objectAgreementTemplate.propertyOptions : false,
   optionIntroductionBuyer: props.objectAgreementTemplate
     ? props.objectAgreementTemplate.optionIntroductionBuyer
-    : false
+    : false,
+  minimumCommission: props.objectAgreementTemplate ? props.objectAgreementTemplate.minimumCommission : 0
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

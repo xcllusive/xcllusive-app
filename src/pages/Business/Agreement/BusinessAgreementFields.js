@@ -4,19 +4,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import numeral from 'numeral'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import {
-  Form,
-  Header,
-  Grid,
-  Segment,
-  Label,
-  Message,
-  Button,
-  Icon
-} from 'semantic-ui-react'
+import { Form, Header, Grid, Segment, Label, Message, Button, Icon } from 'semantic-ui-react'
 
 import { getBusiness } from '../../../redux/ducks/business'
 import { getAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
@@ -24,6 +14,8 @@ import { getAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 import ContractFields from '../../../components/content/Agreement/ContractFields'
 import OptionIntroductionBuyer from '../../../components/content/Agreement/OptionIntroductionBuyer'
 import PropertyOption from '../../../components/content/Agreement/PropertyOption'
+
+import numeral from 'numeral'
 
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -36,6 +28,23 @@ class BusinessAgreementFields extends Component {
   componentDidMount () {
     this.props.getBusiness(this.props.match.params.id)
     this.props.getAgreementTemplate(this.props.match.params.idAgreement)
+  }
+
+  _previewAgreement () {
+    const obj = {
+      listedPrice: numeral(this.props.values.listedPrice).format('$0,0.[99]'),
+      appraisalHigh: numeral(this.props.values.appraisalHigh).format('$0,0.[99]'),
+      appraisalLow: numeral(this.props.values.appraisalLow).format('$0,0.[99]'),
+      engagementFee: numeral(this.props.values.engagementFee).format('$0,0.[99]'),
+      minimumCommission: numeral(this.props.values.minimumCommission).format('$0,0.[99]'),
+      priceProperty: numeral(this.props.values.priceProperty).format('$0,0.[99]')
+    }
+    Object.assign(this.props.values, obj)
+
+    this.props.history.push({
+      pathname: `/business/${this.props.objectBusiness.id}/agreement/${this.props.objectAgreementTemplate.id}/preview`,
+      state: { business: this.props.objectBusiness, values: this.props.values }
+    })
   }
 
   render () {
@@ -56,11 +65,7 @@ class BusinessAgreementFields extends Component {
         <Form>
           <Grid celled="internally" divided>
             {objectAgreementTemplate ? (
-              <Header
-                style={{ paddingTop: '1rem' }}
-                as="h2"
-                content={`${objectAgreementTemplate.title}`}
-              />
+              <Header style={{ paddingTop: '1rem' }} as="h2" content={`${objectAgreementTemplate.title}`} />
             ) : null}
             <Grid.Row>
               <Grid.Column>
@@ -68,39 +73,25 @@ class BusinessAgreementFields extends Component {
                 <Segment>
                   <Form.Group widths="equal">
                     <Form.Input
-                      label="First Name"
+                      label="Principal"
                       name="firstNameV"
                       autoComplete="firstNameV"
                       value={values.firstNameV}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.firstNameV &&
-                      touched.firstNameV && (
-                      <Label
-                        basic
-                        pointing
-                        color="red"
-                        content={errors.firstNameV}
-                      />
+                    {errors.firstNameV && touched.firstNameV && (
+                      <Label basic pointing color="red" content={errors.firstNameV} />
                     )}
                     <Form.Input
-                      label="Last Name"
-                      name="lastNameV"
-                      autoComplete="lastNameV"
-                      value={values.lastNameV}
+                      label="Address"
+                      name="address"
+                      autoComplete="address"
+                      value={values.address}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.lastNameV &&
-                      touched.lastNameV && (
-                      <Label
-                        basic
-                        pointing
-                        color="red"
-                        content={errors.lastNameV}
-                      />
-                    )}
+                    {errors.address && touched.address && <Label basic pointing color="red" content={errors.address} />}
                     <Form.Input
                       label="Phone"
                       name="vendorPhone1"
@@ -109,14 +100,32 @@ class BusinessAgreementFields extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.vendorPhone1 &&
-                      touched.vendorPhone1 && (
-                      <Label
-                        basic
-                        pointing
-                        color="red"
-                        content={errors.vendorPhone1}
-                      />
+                    {errors.vendorPhone1 && touched.vendorPhone1 && (
+                      <Label basic pointing color="red" content={errors.vendorPhone1} />
+                    )}
+                  </Form.Group>
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      label="For sale of the businesses known as"
+                      name="businessKnownAs"
+                      autoComplete="businessKnownAs"
+                      value={values.businessKnownAs}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.businessKnownAs && touched.businessKnownAs && (
+                      <Label basic pointing color="red" content={errors.businessKnownAs} />
+                    )}
+                    <Form.Input
+                      label="Conducted at"
+                      name="conductedAt"
+                      autoComplete="conductedAt"
+                      value={values.conductedAt}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.conductedAt && touched.conductedAt && (
+                      <Label basic pointing color="red" content={errors.conductedAt} />
                     )}
                     <Form.Input
                       label="ABN/ACN"
@@ -126,42 +135,9 @@ class BusinessAgreementFields extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.businessABN &&
-                      touched.businessABN && (
-                      <Label
-                        basic
-                        pointing
-                        color="red"
-                        content={errors.businessABN}
-                      />
+                    {errors.businessABN && touched.businessABN && (
+                      <Label basic pointing color="red" content={errors.businessABN} />
                     )}
-                  </Form.Group>
-                  <Form.Group widths="equal">
-                    <Form.Input
-                      label="Address"
-                      name="address"
-                      autoComplete="address"
-                      value={values.address}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    {errors.address &&
-                      touched.address && (
-                      <Label
-                        basic
-                        pointing
-                        color="red"
-                        content={errors.address}
-                      />
-                    )}
-                    <Form.Input
-                      label="For sale of the businesses known as"
-                      // value={this.props.buyer.surname}
-                    />
-                    <Form.Input
-                      label="Conducted at"
-                      // value={this.props.buyer.surname}
-                    />
                   </Form.Group>
                 </Segment>
               </Grid.Column>
@@ -181,19 +157,14 @@ class BusinessAgreementFields extends Component {
             {values.optionIntroductionBuyer ? (
               <Grid.Row>
                 <Grid.Column>
-                  <Header
-                    as="h3"
-                    content="Option For Principal Introduction Of Buyer"
-                  />
+                  <Header as="h3" content="Option For Principal Introduction Of Buyer" />
                   <Message info>
                     <Message.Header>
-                      This section has been disabled by the office for this
-                      specific agreement.
+                      This section has been disabled by the office for this specific agreement.
                     </Message.Header>
                     <p>
-                      If you wish to use these fields in the agreement, please
-                      get in contact with the office or just choose another
-                      agreement template.
+                      If you wish to use these fields in the agreement, please get in contact with the office or just
+                      choose another agreement template.
                     </p>
                   </Message>
                 </Grid.Column>
@@ -201,10 +172,7 @@ class BusinessAgreementFields extends Component {
             ) : (
               <Grid.Row>
                 <Grid.Column>
-                  <Header
-                    as="h3"
-                    content="Option For Principal Introduction Of Buyer"
-                  />
+                  <Header as="h3" content="Option For Principal Introduction Of Buyer" />
                   <OptionIntroductionBuyer
                     values={values}
                     handleChange={handleChange}
@@ -221,13 +189,11 @@ class BusinessAgreementFields extends Component {
                   <Header as="h3" content="Property Option" />
                   <Message info>
                     <Message.Header>
-                      This section has been disabled by the office for this
-                      specific agreement.
+                      This section has been disabled by the office for this specific agreement.
                     </Message.Header>
                     <p>
-                      If you wish to use these fields in the agreement, please
-                      get in contact with the office or just try choose
-                      agreement template.
+                      If you wish to use these fields in the agreement, please get in contact with the office or just
+                      try choose agreement template.
                     </p>
                   </Message>
                 </Grid.Column>
@@ -257,19 +223,7 @@ class BusinessAgreementFields extends Component {
                   <Icon name="backward" />
                   Back to Business
                 </Button>
-                <Button
-                  color="red"
-                  onClick={() =>
-                    history.push({
-                      pathname: `/business/${objectBusiness.id}/agreement/${
-                        objectAgreementTemplate.id
-                      }/preview`,
-                      state: { business: objectBusiness, values }
-                    })
-                  }
-                  size="small"
-                  floated="right"
-                >
+                <Button color="red" onClick={() => this._previewAgreement()} size="small" floated="right">
                   <Icon name="edit" />
                   Preview Agreement
                 </Button>
@@ -305,13 +259,14 @@ const validationSchema = Yup.object().shape({
   vendorPhone1: Yup.string().required('Phone is required!'),
   businessABN: Yup.string().required('ABN/ACN is required!'),
   address: Yup.string().required('Address is required!'),
-  listedPrice: Yup.number('Number')
-    .min(0)
-    .integer()
-    .required('Listed Price is required!'),
-  appraisalHigh: Yup.number().required('Appraisal High is required!'),
-  appraisalLow: Yup.number().required('Appraisal Low is required!'),
-  engagementFee: Yup.number().required('Engagement Fee is required!'),
+  // businessKnownAs: Yup.string().required('Address is required!'),
+  // listedPrice: Yup.number('Number')
+  //   .min(0)
+  //   .integer()
+  //   .required('Listed Price is required!'),
+  // appraisalHigh: Yup.number().required('Appraisal High is required!'),
+  // appraisalLow: Yup.number().required('Appraisal Low is required!'),
+  // engagementFee: Yup.number().required('Engagement Fee is required!'),
   commissionPerc: Yup.number().required('Commission Perc is required!'),
   commissionDiscount: Yup.number().required('Commission Discount is required!'),
   introductionParties: Yup.string()
@@ -326,65 +281,49 @@ const validationSchema = Yup.object().shape({
 
 const mapPropsToValues = props => ({
   firstNameV: props.objectBusiness.firstNameV
-    ? props.objectBusiness.firstNameV
+    ? `${props.objectBusiness.firstNameV} ${props.objectBusiness.lastNameV}`
     : '',
-  lastNameV: props.objectBusiness.lastNameV
-    ? props.objectBusiness.lastNameV
-    : '',
-  vendorPhone1: props.objectBusiness.vendorPhone1
-    ? props.objectBusiness.vendorPhone1
-    : '',
-  businessABN: props.objectBusiness.businessABN
-    ? props.objectBusiness.businessABN
-    : '',
+  vendorPhone1: props.objectBusiness.vendorPhone1 ? props.objectBusiness.vendorPhone1 : '',
+  businessKnownAs: props.objectBusiness.businessKnownAs
+    ? props.objectBusiness.businessKnownAs
+    : props.objectBusiness.businessName,
+  conductedAt: props.objectBusiness.conductedAt
+    ? props.objectBusiness.conductedAt
+    : `${props.objectBusiness.address1} ${props.objectBusiness.suburb} ${props.objectBusiness.state} ${
+      props.objectBusiness.postCode
+    }`,
+  businessABN: props.objectBusiness.businessABN ? props.objectBusiness.businessABN : '',
   address:
     props.objectBusiness.address1 &&
     props.objectBusiness.suburb &&
     props.objectBusiness.state &&
     props.objectBusiness.postCode
-      ? `${props.objectBusiness.address1} ${props.objectBusiness.suburb} ${
-        props.objectBusiness.state
-      } ${props.objectBusiness.postCode}`
+      ? `${props.objectBusiness.address1} ${props.objectBusiness.suburb} ${props.objectBusiness.state} ${
+        props.objectBusiness.postCode
+      }`
       : '',
-  forSaleBusinessKnown: '',
-  conductedAt: '',
   id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : null,
-  listedPrice: props.objectBusiness.listedPrice
-    ? numeral(props.objectBusiness.listedPrice).format('0,0.00')
-    : 0,
+  listedPrice: props.objectBusiness.listedPrice ? numeral(props.objectBusiness.listedPrice).format('$0,0.[99]') : 0,
   appraisalHigh: props.objectBusiness.appraisalHigh
-    ? numeral(props.objectBusiness.appraisalHigh).format('0,0.00')
+    ? numeral(props.objectBusiness.appraisalHigh).format('$0,0[.]00')
     : 0,
-  appraisalLow: props.objectBusiness.appraisalLow
-    ? numeral(props.objectBusiness.appraisalLow).format('0,0.00')
-    : 0,
+  appraisalLow: props.objectBusiness.appraisalLow ? numeral(props.objectBusiness.appraisalLow).format('$0,0.[99]') : 0,
   engagementFee: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.engagementFee).format('0,0.00')
+    ? numeral(props.objectAgreementTemplate.engagementFee).format('$0,0.[99]')
     : 0,
-  commissionPerc: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionPerc).format('0,0.00')
+  minimumCommission: props.objectAgreementTemplate
+    ? numeral(props.objectAgreementTemplate.minimumCommission).format('$0,0.[99]')
     : 0,
-  commissionDiscount: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionDiscount).format('0,0.00')
-    : 0,
-  introductionParties: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.introductionParties
-    : '',
-  commissionProperty: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.commissionProperty).format('0,0.00')
-    : 0,
-  addressProperty: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.addressProperty
-    : '',
+  commissionPerc: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionPerc : 0,
+  commissionDiscount: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionDiscount : 0,
+  introductionParties: props.objectAgreementTemplate ? props.objectAgreementTemplate.introductionParties : '',
+  commissionProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionProperty : 0,
+  addressProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.addressProperty : '',
   priceProperty: props.objectAgreementTemplate
-    ? numeral(props.objectAgreementTemplate.priceProperty).format('0,0.00')
+    ? numeral(props.objectAgreementTemplate.priceProperty).format('$0,0.[99]')
     : 0,
-  propertyOptions: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.propertyOptions
-    : 0,
-  optionIntroductionBuyer: props.objectAgreementTemplate
-    ? props.objectAgreementTemplate.optionIntroductionBuyer
-    : 0
+  propertyOptions: props.objectAgreementTemplate ? props.objectAgreementTemplate.propertyOptions : 0,
+  optionIntroductionBuyer: props.objectAgreementTemplate ? props.objectAgreementTemplate.optionIntroductionBuyer : 0
 })
 
 const mapStateToProps = state => ({

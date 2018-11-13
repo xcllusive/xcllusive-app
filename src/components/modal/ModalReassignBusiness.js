@@ -49,7 +49,6 @@ class ModalReassignBusiness extends Component {
 
   render () {
     const { values, touched, errors, isValid, createLoading, options } = this.props
-    console.log(values.listingAgent)
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
