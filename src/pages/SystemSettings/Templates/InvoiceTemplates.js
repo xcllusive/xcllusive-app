@@ -3,16 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import {
-  Form,
-  Label,
-  Icon,
-  Grid,
-  Dimmer,
-  Loader,
-  Header,
-  Button
-} from 'semantic-ui-react'
+import { Form, Label, Icon, Grid, Dimmer, Loader, Header, Button } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -45,12 +36,7 @@ class InvoiceTemplates extends Component {
         toolbar: [
           [{ header: [1, 2, false] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' }
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
           ['link', 'image'],
           ['clean']
         ]
@@ -105,10 +91,7 @@ class InvoiceTemplates extends Component {
 
   _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (
-      !this.reactQuillRef ||
-      typeof this.reactQuillRef.getEditor !== 'function'
-    ) {
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
       return false
     }
     // Skip if Quill reference is defined:
@@ -165,44 +148,25 @@ class InvoiceTemplates extends Component {
                 style={{ zIndex: 1000 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
-                options={mapArrayToValuesForDropdownTemplates(
-                  listInvoiceTemplates
-                )}
+                options={mapArrayToValuesForDropdownTemplates(listInvoiceTemplates)}
                 name="title"
                 autoComplete="title"
                 value={values.title}
                 loading={isLoadingAllTemplate}
                 onChange={this._handleSelectChange}
               />
-              {errors.title &&
-                touched.title && (
-                <Label basic color="red" pointing content={errors.title} />
-              )}
+              {errors.title && touched.title && <Label basic color="red" pointing content={errors.title} />}
             </Form.Field>
             <Form.Field style={{ width: '100%', alignSelf: 'flex-end' }}>
-              <Button
-                onClick={() => this._openModalNewInvoiceTemplate()}
-                color="facebook"
-                floated="right"
-              >
+              <Button onClick={() => this._openModalNewInvoiceTemplate()} color="facebook" floated="right">
                 <Icon name="add" />
                 New Template
               </Button>
             </Form.Field>
           </Form.Group>
-          <Dimmer.Dimmable
-            style={{ zIndex: 999 }}
-            dimmed={!objectInvoiceTemplate || isLoadingTemplate}
-          >
-            <Dimmer
-              inverted
-              active={!objectInvoiceTemplate || isLoadingTemplate}
-            >
-              {isLoadingTemplate ? (
-                <Loader inverted />
-              ) : (
-                <Header as="h2">Please, select one template!</Header>
-              )}
+          <Dimmer.Dimmable style={{ zIndex: 999 }} dimmed={!objectInvoiceTemplate || isLoadingTemplate}>
+            <Dimmer inverted active={!objectInvoiceTemplate || isLoadingTemplate}>
+              {isLoadingTemplate ? <Loader inverted /> : <Header as="h2">Please, select one template!</Header>}
             </Dimmer>
             <Form.Group>
               <Form.Field>
@@ -214,10 +178,7 @@ class InvoiceTemplates extends Component {
                   value={values.state}
                   onChange={this._handleSelectChangeState}
                 />
-                {errors.state &&
-                  touched.state && (
-                  <Label basic color="red" pointing content={errors.state} />
-                )}
+                {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
               </Form.Field>
             </Form.Group>
             <Grid padded="horizontally">
@@ -225,11 +186,7 @@ class InvoiceTemplates extends Component {
                 <h4 style={{ fontSize: '.92857143em' }}>Office Details</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
-                <Grid.Column
-                  floated="left"
-                  width={16}
-                  style={{ paddingLeft: '0px', paddingRight: 0 }}
-                >
+                <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
                     <ReactQuill
                       value={values.officeDetails}
@@ -243,9 +200,31 @@ class InvoiceTemplates extends Component {
               </Grid.Row>
             </Grid>
             <Grid padded="horizontally">
+              <Grid.Row columns={1}>
+                <Grid.Column
+                  floated="left"
+                  width={16}
+                  style={{ paddingTop: '25px', paddingLeft: '0px', paddingRight: 0, paddingBottom: '0px' }}
+                >
+                  <Form.Field>
+                    <Form.Input
+                      label="From Office Description"
+                      name="fromOfficeDescription"
+                      autoComplete="fromOfficeDescription"
+                      value={values.fromOfficeDescription}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.fromOfficeDescription && touched.fromOfficeDescription && (
+                      <Label basic pointing color="red" content={errors.fromOfficeDescription} />
+                    )}
+                  </Form.Field>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+            <Grid padded="horizontally">
               <Grid.Row
                 style={{
-                  marginTop: '30px',
                   paddingBottom: 0,
                   paddingLeft: '0px'
                 }}
@@ -253,11 +232,7 @@ class InvoiceTemplates extends Component {
                 <h4 style={{ fontSize: '.92857143em' }}>Description</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
-                <Grid.Column
-                  floated="left"
-                  width={16}
-                  style={{ paddingLeft: '0px', paddingRight: 0 }}
-                >
+                <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
                     <ReactQuill
                       value={values.description}
@@ -296,11 +271,7 @@ class InvoiceTemplates extends Component {
                 <h4 style={{ fontSize: '.92857143em' }}>Bank Details</h4>
               </Grid.Row>
               <Grid.Row columns={1}>
-                <Grid.Column
-                  floated="left"
-                  width={16}
-                  style={{ paddingLeft: '0px', paddingRight: 0 }}
-                >
+                <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
                     <ReactQuill
                       value={values.bankDetails}
@@ -360,18 +331,11 @@ InvoiceTemplates.propTypes = {
 
 const mapPropsToValues = props => ({
   state: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.state : '',
-  officeDetails: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.officeDetails
-    : '',
-  description: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.description
-    : '',
-  paymentTerms: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.paymentTerms
-    : '',
-  bankDetails: props.objectInvoiceTemplate
-    ? props.objectInvoiceTemplate.bankDetails
-    : '',
+  officeDetails: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.officeDetails : '',
+  fromOfficeDescription: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.fromOfficeDescription : '',
+  description: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.description : '',
+  paymentTerms: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.paymentTerms : '',
+  bankDetails: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.bankDetails : '',
   id: props.objectInvoiceTemplate ? props.objectInvoiceTemplate.id : ''
 })
 
