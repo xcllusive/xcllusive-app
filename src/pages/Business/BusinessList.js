@@ -87,38 +87,22 @@ class BusinessListPage extends Component {
     return (
       <Wrapper>
         <GridBusinessStage>
-          <Statistic.Group size="mini" color="blue" widths={6}>
+          <Statistic.Group size="mini" color="blue" widths={3}>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(1, 'Potential Listing')}>
               <Statistic.Value>
                 {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessPotentialListing : 0}
               </Statistic.Value>
               <Statistic.Label>Potential Listing</Statistic.Label>
             </Statistic>
-            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(2, 'Listing Negotiation')}>
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(9, 'Appraisal')}>
               <Statistic.Value>
-                {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessListingNegotiation : 0}
+                {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessAppraisal : 0}
               </Statistic.Value>
-              <Statistic.Label>Listing Negotiation</Statistic.Label>
-            </Statistic>
-            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(3, 'Sales Memo')}>
-              <Statistic.Value>
-                {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessSalesMemo : 0}
-              </Statistic.Value>
-              <Statistic.Label>Sales Memo</Statistic.Label>
+              <Statistic.Label>Appraisal</Statistic.Label>
             </Statistic>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(4, 'For Sale')}>
               <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessForSale : 0}</Statistic.Value>
               <Statistic.Label>For Sale</Statistic.Label>
-            </Statistic>
-            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(6, 'Sold')}>
-              <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessSold : 0}</Statistic.Value>
-              <Statistic.Label>Sold</Statistic.Label>
-            </Statistic>
-            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(7, 'Withdrawn')}>
-              <Statistic.Value>
-                {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessWithdrawn : 0}
-              </Statistic.Value>
-              <Statistic.Label>Withdrawn</Statistic.Label>
             </Statistic>
           </Statistic.Group>
         </GridBusinessStage>
