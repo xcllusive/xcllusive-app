@@ -145,6 +145,10 @@ class MakeTaxInvoice extends Component {
     this.props.setFieldValue('description', value)
   }
 
+  _handleChangeTo = value => {
+    this.props.setFieldValue('to', value)
+  }
+
   _calculateTotal = (e, { name, value }) => {
     const myNumeral = numeral(value)
     const numberFormated = myNumeral.format('$0,0.[99]')
@@ -172,9 +176,11 @@ class MakeTaxInvoice extends Component {
         this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
         this.props.setFieldValue(
           'to',
-          `${this.props.location.state.business.businessName} \n${this.props.location.state.business.address1} ${
-            this.props.location.state.business.suburb
-          } \n${this.props.location.state.business.state}, ${this.props.location.state.business.postCode}`
+          `${this.props.location.state.business.businessName} <br/>${
+            this.props.location.state.business.address1
+          } <br/>${this.props.location.state.business.suburb} ${this.props.location.state.business.state}, ${
+            this.props.location.state.business.postCode
+          }`
         )
         this.props.setFieldValue('description', this.props.objectInvoiceTemplate.description)
         this.props.setFieldValue('paymentTerms', this.props.objectInvoiceTemplate.paymentTerms)
@@ -280,7 +286,7 @@ class MakeTaxInvoice extends Component {
         title: 'Download Invoice',
         text: 'Are you sure you want to download the invoice?'
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
           this.props.downloadInvoice({
             id: this.props.values.id,
@@ -363,15 +369,25 @@ class MakeTaxInvoice extends Component {
                     </Form.Field>
                   </Form.Group>
                   <Form.Group widths="equal">
-                    <Form.TextArea
-                      label="To"
-                      name="to"
-                      autoComplete="to"
-                      disabled={!!(currentInvoice && currentInvoice.dateSent && !newInvoice)}
-                      value={values.to}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
+                    <Form.Field
+                      style={{
+                        height: '13.5vh',
+                        backgroundColor: 'white',
+                        paddingLeft: '0px',
+                        paddingRight: '0px',
+                        marginLeft: '7px',
+                        marginRight: '7px'
+                      }}
+                    >
+                      <ReactQuill
+                        style={{ height: '9vh' }}
+                        value={values.to}
+                        onChange={this._handleChangeTo}
+                        modules={this.state.modules}
+                        formats={this.state.formats}
+                        readOnly={!!(currentInvoice && currentInvoice.dateSent && !newInvoice)}
+                      />
+                    </Form.Field>
                   </Form.Group>
                 </Segment>
               </Grid.Column>
@@ -695,9 +711,9 @@ const mapPropsToValues = props => {
       /* Details */
       dateCreated: moment().format('DD/MM/YYYY'),
       to: props.location.state.business
-        ? `${props.location.state.business.businessName} \n${props.location.state.business.address1} ${
+        ? `${props.location.state.business.businessName} <br/>${props.location.state.business.address1} <br/>${
           props.location.state.business.suburb
-        } \n${props.location.state.business.state}, ${props.location.state.business.postCode}`
+        } ${props.location.state.business.state}, ${props.location.state.business.postCode}`
         : '',
 
       /* Description */
