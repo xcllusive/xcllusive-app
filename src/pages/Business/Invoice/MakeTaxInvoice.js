@@ -9,7 +9,6 @@ import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import RichTextEditor from 'react-rte'
 
 import { Form, Header, Grid, Segment, Button, Icon, Label, Table, Message } from 'semantic-ui-react'
 
@@ -73,7 +72,7 @@ class MakeTaxInvoice extends Component {
       formatsDetails: [],
       newInvoice: false,
       currentInvoice: null,
-      value: RichTextEditor.createEmptyValue()
+      amount: 0
     }
     this.quillRef = null
     this.reactQuillRef = null
@@ -100,6 +99,12 @@ class MakeTaxInvoice extends Component {
     if (nextProps.objectLastInvoice && !prevState.currentInvoice) {
       return {
         currentInvoice: nextProps.objectLastInvoice
+      }
+    }
+    if (nextProps.objectLastInvoice && nextProps.objectLastInvoice.amount !== prevState.listedPrice) {
+      var amount = numeral(nextProps.values.amount).format('$0,0.[99]')
+      return {
+        amount: amount || prevState.amount
       }
     }
     return null
@@ -141,6 +146,11 @@ class MakeTaxInvoice extends Component {
   }
 
   _calculateTotal = (e, { name, value }) => {
+    const myNumeral = numeral(value)
+    const numberFormated = myNumeral.format('$0,0.[99]')
+    this.props.setFieldValue(name, myNumeral.value())
+    this.setState({ [name]: numberFormated })
+
     const total = numeral(numeral(value).value() + (numeral(value).value() * 10) / 100).format('0,0.00')
 
     this.props.setFieldValue(name, value)
@@ -162,9 +172,9 @@ class MakeTaxInvoice extends Component {
         this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
         this.props.setFieldValue(
           'to',
-          `${this.props.location.state.business.businessName} - ${this.props.location.state.business.address1} - ${
+          `${this.props.location.state.business.businessName} \n${this.props.location.state.business.address1} ${
             this.props.location.state.business.suburb
-          } - ${this.props.location.state.business.state} - ${this.props.location.state.business.postCode}`
+          } \n${this.props.location.state.business.state}, ${this.props.location.state.business.postCode}`
         )
         this.props.setFieldValue('description', this.props.objectInvoiceTemplate.description)
         this.props.setFieldValue('paymentTerms', this.props.objectInvoiceTemplate.paymentTerms)
@@ -177,15 +187,26 @@ class MakeTaxInvoice extends Component {
     })
   }
 
+  _replaceDollarAndComma (replace) {
+    replace = replace.replace('$', ',')
+    replace = replace.replace(/,/g, '')
+    return replace
+  }
+
   _saveInvoice = async () => {
-    if (this.props.values.amount.toString().search(',') !== -1) {
-      const amountComma = this.props.values.amount.replace(',', '.')
-      const amountFormated = amountComma.replace('.', '')
-      await this.props.setFieldValue('amount', amountFormated)
-      const totalComma = this.props.values.total.replace(',', '.')
-      const totalFormated = totalComma.replace('.', '')
-      await this.props.setFieldValue('total', totalFormated)
+    // if (this.props.values.amount.toString().search(',') !== -1) {
+    //   const obj = {
+    //     amount: await this._replaceDollarAndComma(this.props.values.amount),
+    //     total: await this._replaceDollarAndComma(this.props.values.total)
+    //   }
+    //   Object.assign(this.props.values, obj)
+    // }
+
+    const obj = {
+      amount: await this._replaceDollarAndComma(this.props.values.amount),
+      total: await this._replaceDollarAndComma(this.props.values.total)
     }
+    Object.assign(this.props.values, obj)
 
     if (this.state.newInvoice || this.props.listInvoices.length === 0) {
       await this.props.createInvoice(this.props.values, this.props.location.state.business.id)
@@ -300,14 +321,8 @@ class MakeTaxInvoice extends Component {
                         readOnly
                         label="From"
                         name="fromOfficeDescription"
-                        autoComplete="fromOfficeDescription"
                         value={values.fromOfficeDescription}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
                       />
-                      {errors.fromOfficeDescription && touched.fromOfficeDescription && (
-                        <Label basic pointing color="red" content={errors.fromOfficeDescription} />
-                      )}
                     </Form.Field>
                   </Form.Group>
                 </Segment>
@@ -349,7 +364,6 @@ class MakeTaxInvoice extends Component {
                   </Form.Group>
                   <Form.Group widths="equal">
                     <Form.TextArea
-                      // className="editable"
                       label="To"
                       name="to"
                       autoComplete="to"
@@ -406,7 +420,7 @@ class MakeTaxInvoice extends Component {
                             label="Amount $"
                             name="amount"
                             autoComplete="amount"
-                            value={numeral(values.amount).format('0,0.00')}
+                            value={this.state.amount}
                             onChange={this._calculateTotal}
                             onBlur={handleBlur}
                             disabled={!!(currentInvoice && currentInvoice.dateSent && !newInvoice)}
@@ -424,7 +438,7 @@ class MakeTaxInvoice extends Component {
                             label="Total $"
                             name="total"
                             autoComplete="total"
-                            value={numeral(values.total).format('0,0.00')}
+                            value={numeral(values.total).format('$0,0.00')}
                           />
                         </Form.Field>
                       </Form.Group>
@@ -611,8 +625,7 @@ MakeTaxInvoice.propTypes = {
 const validationSchema = Yup.object().shape({
   to: Yup.string().required('To is required'),
   description: Yup.string().required('Description is required!'),
-  paymentTerms: Yup.string().required('Description is required!'),
-  amount: Yup.number('Only numbers, please!')
+  paymentTerms: Yup.string().required('Description is required!')
 })
 
 const mapPropsToValues = props => {
@@ -682,9 +695,9 @@ const mapPropsToValues = props => {
       /* Details */
       dateCreated: moment().format('DD/MM/YYYY'),
       to: props.location.state.business
-        ? `${props.location.state.business.businessName} - ${props.location.state.business.address1} - ${
+        ? `${props.location.state.business.businessName} \n${props.location.state.business.address1} ${
           props.location.state.business.suburb
-        } - ${props.location.state.business.state} - ${props.location.state.business.postCode}`
+        } \n${props.location.state.business.state}, ${props.location.state.business.postCode}`
         : '',
 
       /* Description */
