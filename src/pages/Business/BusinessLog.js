@@ -228,11 +228,11 @@ class BusinessLogPage extends Component {
                     <Icon name="commenting" />
                     New Communication
                   </Button>
-                  <Button color="yellow" loading={loadingUpdateStatus} onClick={() => this.props.updateBusinessLog()}>
+                  <Button color="yellow" loading={loadingUpdateStatus} onClick={() => this.props.updateBusinessLog(values)}>
                     <Icon name="save" />
                     Save Communication
                   </Button>
-                  <Button color="red" loading={loadingFinaliseStatus} onClick={() => this.props.finaliseBusinessLog()}>
+                  <Button color="red" loading={loadingFinaliseStatus} onClick={() => this.props.finaliseBusinessLog(values)}>
                     <Icon name="save" />
                     Finalise Communication
                   </Button>
@@ -305,8 +305,9 @@ BusinessLogPage.propTypes = {
   loadingFinaliseStatus: PropTypes.bool
 }
 
-const mapPropsToValues = () => {
+const mapPropsToValues = props => {
   return {
+    businessId: props.match ? props.match.params.id : null,
     textLog: '',
     businessLog_id: '',
     businessLog_followUp: moment(),
