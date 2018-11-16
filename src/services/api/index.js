@@ -2,7 +2,8 @@ import axios from 'axios'
 
 const client = axios.create({
   // baseURL: 'http://xcllusive-com-au.umbler.net'
-  baseURL: 'http://localhost:5000'
+  baseURL: 'http://xcllusive-api.ap-southeast-2.elasticbeanstalk.com/'
+  // baseURL: 'http://localhost:5000'
 })
 
 const request = async options => {
