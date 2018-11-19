@@ -115,6 +115,7 @@ class BusinessLogPage extends Component {
       loadingFinaliseStatus,
       history
     } = this.props
+    if (arrayLogBusiness.dateTimeCreated === null) console.log('HEYy')
     return (
       <Wrapper>
         <div>
@@ -165,7 +166,7 @@ class BusinessLogPage extends Component {
               <Table.Row>
                 <Table.HeaderCell>Date Created</Table.HeaderCell>
                 <Table.HeaderCell>Text</Table.HeaderCell>
-                <Table.HeaderCell>Follow Up date</Table.HeaderCell>
+                <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -173,7 +174,11 @@ class BusinessLogPage extends Component {
               {arrayLogBusiness.map(logBusiness => {
                 return (
                   <Table.Row active key={logBusiness.id} onClick={() => this._selectLog(logBusiness)}>
-                    <Table.Cell>{moment(logBusiness.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}</Table.Cell>
+                    <Table.Cell>
+                      {logBusiness.dateTimeCreated === null
+                        ? moment(logBusiness.dateTimeModified).format('DD/MM/YYYY - HH:mm')
+                        : moment(logBusiness.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}
+                    </Table.Cell>
                     <Table.Cell>{logBusiness.text}</Table.Cell>
                     <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
                     <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
@@ -228,11 +233,19 @@ class BusinessLogPage extends Component {
                     <Icon name="commenting" />
                     New Communication
                   </Button>
-                  <Button color="yellow" loading={loadingUpdateStatus} onClick={() => this.props.updateBusinessLog(values)}>
+                  <Button
+                    color="yellow"
+                    loading={loadingUpdateStatus}
+                    onClick={() => this.props.updateBusinessLog(values)}
+                  >
                     <Icon name="save" />
                     Save Communication
                   </Button>
-                  <Button color="red" loading={loadingFinaliseStatus} onClick={() => this.props.finaliseBusinessLog(values)}>
+                  <Button
+                    color="red"
+                    loading={loadingFinaliseStatus}
+                    onClick={() => this.props.finaliseBusinessLog(values)}
+                  >
                     <Icon name="save" />
                     Finalise Communication
                   </Button>

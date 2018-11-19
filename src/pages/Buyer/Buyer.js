@@ -80,7 +80,7 @@ class BuyerPage extends Component {
           <Grid.Row style={{ paddingBottom: 0 }}>
             <h2>
               <b>
-                <div align="left"> Businesses For Sale </div>
+                <div align="left"> For Sale </div>
               </b>
             </h2>
           </Grid.Row>
@@ -195,7 +195,7 @@ class BuyerPage extends Component {
           <Grid.Row style={{ paddingBottom: 0 }}>
             <h2>
               <b>
-                <div align="left"> Businesses Under Offer </div>
+                <div align="left"> Under Offer </div>
               </b>
             </h2>
           </Grid.Row>
@@ -253,7 +253,7 @@ class BuyerPage extends Component {
           <Grid.Row style={{ paddingBottom: 0 }}>
             <h2>
               <b>
-                <div align="left"> Businesses Sales Memo </div>
+                <div align="left"> Sales Memo </div>
               </b>
             </h2>
           </Grid.Row>
