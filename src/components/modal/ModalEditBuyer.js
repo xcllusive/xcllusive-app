@@ -33,6 +33,19 @@ class ModalEditBuyer extends Component {
     this.props.setFieldValue(name, value)
   }
 
+  _handleChangeTelephone = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+    const onlyNumbers = value
+    let replaced = onlyNumbers.replace(/-/gi, '')
+    replaced = replaced.replace(/ /gi, '')
+    replaced = replaced.replace(/;/gi, '')
+    replaced = replaced.replace(/<[^>]+>/gi, '')
+    replaced = replaced.replace(/<[^>]>/gi, '')
+    replaced = replaced.replace(/[.*+?^${}()|[\]\\]/g, '')
+    const toString = parseInt(replaced)
+    this.props.setFieldValue('telephone1Number', toString.toString())
+  }
+
   render () {
     const { state, priceOptions } = this.state
     const {
@@ -66,8 +79,9 @@ class ModalEditBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.firstName &&
-                  touched.firstName && <Label basic color="red" pointing content={errors.firstName} />}
+                {errors.firstName && touched.firstName && (
+                  <Label basic color="red" pointing content={errors.firstName} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -104,8 +118,9 @@ class ModalEditBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.emailOptional &&
-                  touched.emailOptional && <Label basic color="red" pointing content={errors.emailOptional} />}
+                {errors.emailOptional && touched.emailOptional && (
+                  <Label basic color="red" pointing content={errors.emailOptional} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -116,8 +131,9 @@ class ModalEditBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.streetName &&
-                  touched.streetName && <Label basic color="red" pointing content={errors.streetName} />}
+                {errors.streetName && touched.streetName && (
+                  <Label basic color="red" pointing content={errors.streetName} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -158,11 +174,12 @@ class ModalEditBuyer extends Component {
                   name="telephone1"
                   autoComplete="telephone1"
                   value={values.telephone1}
-                  onChange={handleChange}
+                  onChange={this._handleChangeTelephone}
                   onBlur={handleBlur}
                 />
-                {errors.telephone1 &&
-                  touched.telephone1 && <Label basic color="red" pointing content={errors.telephone1} />}
+                {errors.telephone1 && touched.telephone1 && (
+                  <Label basic color="red" pointing content={errors.telephone1} />
+                )}
               </Form.Field>
               <Form.Field width={4}>
                 <Form.Input
@@ -173,8 +190,9 @@ class ModalEditBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.telephone2 &&
-                  touched.telephone2 && <Label basic color="red" pointing content={errors.telephone2} />}
+                {errors.telephone2 && touched.telephone2 && (
+                  <Label basic color="red" pointing content={errors.telephone2} />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -190,8 +208,9 @@ class ModalEditBuyer extends Component {
                   value={values.source_id}
                   onChange={this._handleSelectChange}
                 />
-                {errors.source_id &&
-                  touched.source_id && <Label basic color="red" pointing content={errors.source_id} />}
+                {errors.source_id && touched.source_id && (
+                  <Label basic color="red" pointing content={errors.source_id} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Select
@@ -271,7 +290,8 @@ const mapPropsToValues = props => {
     telephone2: props.buyer.telephone2 ? props.buyer.telephone2 : '',
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
-    emailOptional: props.buyer && props.buyer.emailOptional ? props.buyer.emailOptional : ''
+    emailOptional: props.buyer && props.buyer.emailOptional ? props.buyer.emailOptional : '',
+    telephone1Number: props.buyer ? props.buyer.telephone1Number : ''
   }
 }
 

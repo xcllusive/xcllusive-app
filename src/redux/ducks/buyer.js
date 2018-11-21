@@ -48,7 +48,8 @@ const initialState = {
   create: {
     isLoading: false,
     isCreated: false,
-    error: null
+    error: null,
+    newBuyer: null
   },
   update: {
     isLoading: false,
@@ -116,7 +117,8 @@ export default function reducer (state = initialState, action) {
           ...state.create,
           isLoading: false,
           isCreated: true,
-          error: null
+          error: null,
+          newBuyer: action.payload
         }
       }
     case Types.CREATE_BUYER_FAILURE:
@@ -365,9 +367,10 @@ export const createBuyer = buyer => async dispatch => {
     payload: true
   })
   try {
-    await create(buyer)
+    const buyers = await create(buyer)
     dispatch({
-      type: Types.CREATE_BUYER_SUCCESS
+      type: Types.CREATE_BUYER_SUCCESS,
+      payload: buyers.data
     })
   } catch (error) {
     dispatch({

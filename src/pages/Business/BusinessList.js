@@ -74,11 +74,18 @@ class BusinessListPage extends Component {
   }
 
   render () {
-    const { isLoading, history, match, businesses, objectQtdeBusinessStage } = this.props
+    const {
+      isLoadingBusinesses,
+      isLoadingQtdeBusinesses,
+      history,
+      match,
+      businesses,
+      objectQtdeBusinessStage
+    } = this.props
 
-    if (isLoading) {
+    if (isLoadingBusinesses || isLoadingQtdeBusinesses) {
       return (
-        <Dimmer inverted active={isLoading}>
+        <Dimmer inverted active={isLoadingBusinesses || isLoadingQtdeBusinesses}>
           <Loader inverted />
         </Dimmer>
       )
@@ -125,31 +132,36 @@ class BusinessListPage extends Component {
               </Button>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row>
-            <Header>{this.state.stageSelectedName}</Header>
-            <Table color="blue" celled inverted selectable compact size="small">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Business ID</Table.HeaderCell>
-                  <Table.HeaderCell>Business Name</Table.HeaderCell>
-                  <Table.HeaderCell>Contact Name</Table.HeaderCell>
-                  <Table.HeaderCell>Log Text</Table.HeaderCell>
-                  <Table.HeaderCell>Follow Up date</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {businesses.map(business => (
-                  <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
-                    <Table.Cell>{`BS${business.id}`}</Table.Cell>
-                    <Table.Cell>{business.businessName}</Table.Cell>
-                    <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
-                    <Table.Cell>{''}</Table.Cell>
-                    <Table.Cell>{''}</Table.Cell>
+          <Dimmer.Dimmable dimmed={isLoadingBusinesses} style={{ width: '100%' }}>
+            <Dimmer inverted active={isLoadingBusinesses}>
+              <Loader>Loading</Loader>
+            </Dimmer>
+            <Grid.Row>
+              <Header style={{ paddingTop: '10px' }}>{this.state.stageSelectedName}</Header>
+              <Table color="blue" celled inverted selectable compact size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Business ID</Table.HeaderCell>
+                    <Table.HeaderCell>Business Name</Table.HeaderCell>
+                    <Table.HeaderCell>Contact Name</Table.HeaderCell>
+                    <Table.HeaderCell>Log Text</Table.HeaderCell>
+                    <Table.HeaderCell>Follow Up date</Table.HeaderCell>
                   </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
-          </Grid.Row>
+                </Table.Header>
+                <Table.Body>
+                  {businesses.map(business => (
+                    <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
+                      <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                      <Table.Cell>{business.businessName}</Table.Cell>
+                      <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
+                      <Table.Cell>{''}</Table.Cell>
+                      <Table.Cell>{''}</Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Grid.Row>
+          </Dimmer.Dimmable>
         </Grid>
       </Wrapper>
     )
@@ -159,7 +171,7 @@ class BusinessListPage extends Component {
 BusinessListPage.propTypes = {
   businesses: PropTypes.array,
   isCreated: PropTypes.bool,
-  isLoading: PropTypes.bool,
+  isLoadingBusinesses: PropTypes.bool,
   getBusinesses: PropTypes.func,
   history: PropTypes.object,
   match: PropTypes.object,
@@ -168,7 +180,8 @@ BusinessListPage.propTypes = {
   getQtdeBusinessEachStagePerUser: PropTypes.func,
   objectQtdeBusinessStage: PropTypes.object,
   getBusinessesPerUser: PropTypes.func,
-  closeModal: PropTypes.func
+  closeModal: PropTypes.func,
+  isLoadingQtdeBusinesses: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch =>
@@ -179,9 +192,10 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,
-  isLoading: state.business.getAll.isLoading,
   // businesses: state.business.getAll.array,
   businesses: state.business.getAllPerUser.array,
+  isLoadingBusinesses: state.business.getAllPerUser.isLoading,
+  isLoadingQtdeBusinesses: state.business.getQtdeBusinessStageUser.isLoading,
   objectQtdeBusinessStage: state.business.getQtdeBusinessStageUser.object
 })
 

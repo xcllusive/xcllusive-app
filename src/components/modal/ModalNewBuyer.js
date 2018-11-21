@@ -34,6 +34,19 @@ class ModalNewBuyer extends Component {
     this.props.setFieldValue(name, value)
   }
 
+  _handleChangeTelephone = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+    const onlyNumbers = value
+    let replaced = onlyNumbers.replace(/-/gi, '')
+    replaced = replaced.replace(/ /gi, '')
+    replaced = replaced.replace(/;/gi, '')
+    replaced = replaced.replace(/<[^>]+>/gi, '')
+    replaced = replaced.replace(/<[^>]>/gi, '')
+    replaced = replaced.replace(/[.*+?^${}()|[\]\\]/g, '')
+    const toString = parseInt(replaced)
+    this.props.setFieldValue('telephone1Number', toString.toString())
+  }
+
   render () {
     const { state, priceOptions } = this.state
     const {
@@ -67,8 +80,9 @@ class ModalNewBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.firstName &&
-                  touched.firstName && <Label basic color="red" pointing content={errors.firstName} />}
+                {errors.firstName && touched.firstName && (
+                  <Label basic color="red" pointing content={errors.firstName} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -104,8 +118,9 @@ class ModalNewBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.streetName &&
-                  touched.streetName && <Label basic color="red" pointing content={errors.streetName} />}
+                {errors.streetName && touched.streetName && (
+                  <Label basic color="red" pointing content={errors.streetName} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -147,11 +162,12 @@ class ModalNewBuyer extends Component {
                   name="telephone1"
                   autoComplete="telephone1"
                   value={values.telephone1}
-                  onChange={handleChange}
+                  onChange={this._handleChangeTelephone}
                   onBlur={handleBlur}
                 />
-                {errors.telephone1 &&
-                  touched.telephone1 && <Label basic color="red" pointing content={errors.telephone1} />}
+                {errors.telephone1 && touched.telephone1 && (
+                  <Label basic color="red" pointing content={errors.telephone1} />
+                )}
               </Form.Field>
               <Form.Field width={4}>
                 <Form.Input
@@ -162,8 +178,9 @@ class ModalNewBuyer extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.telephone2 &&
-                  touched.telephone2 && <Label basic color="red" pointing content={errors.telephone2} />}
+                {errors.telephone2 && touched.telephone2 && (
+                  <Label basic color="red" pointing content={errors.telephone2} />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -255,7 +272,8 @@ const mapPropsToValues = () => ({
   telephone1: '',
   telephone2: '',
   priceFrom: 0,
-  priceTo: 0
+  priceTo: 0,
+  telephone1Number: ''
 })
 
 const validationSchema = Yup.object().shape({

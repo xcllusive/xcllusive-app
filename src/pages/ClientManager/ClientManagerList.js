@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import numeral from 'numeral'
 
-import { Table, Icon, Button, Input, Grid, Dimmer, Loader, Pagination, Message } from 'semantic-ui-react'
+import { Table, Icon, Button, Input, Grid, Dimmer, Loader, Pagination, Message, Form } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { withFormik } from 'formik'
 
 import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
@@ -37,7 +38,8 @@ class ClientManagerList extends Component {
       inputSearchBuyer: '',
       inputSearchBusiness: '',
       showMsgBusiness: false,
-      ownersApprovalReceived: false
+      ownersApprovalReceived: false,
+      createdBuyer: false
     }
   }
 
@@ -61,10 +63,25 @@ class ClientManagerList extends Component {
     //  this.props.getLog()
   }
 
+  componentDidUpdate () {
+    if (this.props.isCreatedBuyer && !this.state.createdBuyer) {
+      if (this.timer) clearTimeout(this.timer)
+
+      this.setState({
+        inputSearchBuyer: `B${this.props.newBuyerObject.id}`,
+        buyer: null,
+        createdBuyer: true
+      })
+      if (this.props.newBuyerObject.id !== '') {
+        this.timer = setTimeout(() => this.props.getBuyers(`B${this.props.newBuyerObject.id}`), 100)
+      }
+    }
+  }
+
   _backToSearch = async () => {
     this._renderBuyer(null)
     this._renderBuyerLog(null)
-    await this.props.getBuyers()
+    // await this.props.getBuyers()
     this.props.clearBuyerLog()
   }
 
@@ -207,7 +224,8 @@ class ClientManagerList extends Component {
       business: null
     })
     if (value !== '') {
-      this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5]), 1000)
+      if (this.props.values.searchAllBusinesses) this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
+      else this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5]), 1000)
     }
   }
 
@@ -287,7 +305,7 @@ class ClientManagerList extends Component {
       onConfirm: async values => {
         if (values) {
           await this.props.updateBuyer(values)
-          this.setState({ buyer: values })
+          this.setState({ buyer: values, createdBuyer: false })
           this.props.closeModal()
         }
       }
@@ -323,6 +341,21 @@ class ClientManagerList extends Component {
     })
   }
 
+  _handleChangeCheckBox = async (e, { name }) => {
+    await this.props.setFieldValue(name, !this.props.values[name])
+    this.setState({ showMsgBusiness: false })
+    if (this.timer) clearTimeout(this.timer)
+    this.setState({
+      inputSearchBusiness: this.state.inputSearchBusiness,
+      business: null
+    })
+    if (this.state.inputSearchBusiness !== '') {
+      if (this.props.values.searchAllBusinesses) {
+        this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness), 1000)
+      } else this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5]), 1000)
+    }
+  }
+
   render () {
     const {
       listBuyerList,
@@ -338,7 +371,8 @@ class ClientManagerList extends Component {
       isLoadingEmailBuyer,
       isLoadingEnquiryBusiness,
       isLoadingRequestOwnersApproval,
-      isLoadingSendEnquiryToOwner
+      isLoadingSendEnquiryToOwner,
+      values
     } = this.props
     return (
       <Wrapper>
@@ -371,6 +405,18 @@ class ClientManagerList extends Component {
                   <div align="left"> Business </div>
                 </b>
               </h2>
+              <Grid style={{ paddingTop: '0px', paddingBottom: '0px' }}>
+                <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
+                  <Grid.Column textAlign="right">
+                    <Form.Checkbox
+                      label="Search all businesses"
+                      name="searchAllBusinesses"
+                      onChange={this._handleChangeCheckBox}
+                      checked={values.searchAllBusinesses}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
               <Input
                 fluid
                 icon="search"
@@ -774,8 +820,15 @@ ClientManagerList.propTypes = {
   updateBuyer: PropTypes.func,
   createBusiness: PropTypes.func,
   closeModal: PropTypes.func,
-  updateBusiness: PropTypes.func
+  updateBusiness: PropTypes.func,
+  setFieldValue: PropTypes.func,
+  values: PropTypes.object,
+  newBuyerObject: PropTypes.object
 }
+
+const mapPropsToValues = () => ({
+  searchAllBusinesses: false
+})
 
 const mapStateToProps = state => ({
   isLoadingBuyerList: state.buyer.getAll.isLoading,
@@ -795,7 +848,8 @@ const mapStateToProps = state => ({
   isLoadingRequestOwnersApproval: state.clientManager.requestOwnersApproval.isLoading,
   isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading,
   businessObject: state.business.get.object,
-  objectEmailTemplate: state.emailTemplates.get.object
+  objectEmailTemplate: state.emailTemplates.get.object,
+  newBuyerObject: state.buyer.create.newBuyer
 })
 
 const mapDispatchToProps = dispatch =>
@@ -827,4 +881,8 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ClientManagerList)
+)(
+  withFormik({
+    mapPropsToValues
+  })(ClientManagerList)
+)
