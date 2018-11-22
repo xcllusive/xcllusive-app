@@ -1,44 +1,48 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-// import { bindActionCreators } from 'redux'
-// import PropTypes from 'prop-types'
-// import { getUsers } from '../../redux/ducks/user'
+import { bindActionCreators } from 'redux'
+import { getUserLogged } from '../../redux/ducks/user'
+import { Grid } from 'semantic-ui-react'
 
 class DashBoardPage extends Component {
-  // componentDidMount = () => {
-  //   this.props.getUsers()
-  // }
+  componentDidMount () {
+    this.props.getUserLogged()
+  }
 
   render () {
     return (
-      <div>
-        {/* <h1>Hello {this.props.users.firstName}</h1>
-        <h1>Welcome to Mercury!</h1> */}
-        <h1>DashBoard</h1>
-      </div>
+      <Grid>
+        <Grid.Row style={{ marginTop: '200px' }}>
+          <Grid.Column textAlign="center">
+            <h1 style={{ color: 'rgb(7, 85, 148)' }}>Hello {this.props.user ? this.props.user.firstName : null},</h1>
+            <h1 style={{ color: 'rgb(7, 85, 148)' }}>Welcome to Mercury!</h1>
+          </Grid.Column>
+        </Grid.Row>
+        {/* <h1>DashBoard</h1> */}
+      </Grid>
     )
   }
 }
 
-// DashBoardPage.propTypes = {
-//   getUsers: PropTypes.func,
-//   users: PropTypes.object
-// }
+DashBoardPage.propTypes = {
+  getUserLogged: PropTypes.func,
+  user: PropTypes.object
+}
 
 const mapStateToProps = state => ({
-  // users: state.user.get.array
+  user: state.user.getLogged.object
 })
 
-// const mapDispatchToProps = dispatch =>
-//   bindActionCreators(
-//     {
-//       getUsers
-//     },
-//     dispatch
-//   )
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getUserLogged
+    },
+    dispatch
+  )
 
 export default connect(
-  mapStateToProps
-  // mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(DashBoardPage)

@@ -500,7 +500,9 @@ class ClientManagerList extends Component {
                       </Table.Row>
                       <Table.Row>
                         <Table.HeaderCell>CA returned</Table.HeaderCell>
-                        <Table.Cell>{this.state.buyer.caReceived ? 'Yes' : 'No'}</Table.Cell>
+                        <Table.Cell>
+                          {this.state.buyer.caReceived || this.state.buyer.scanfilePath !== '' ? 'Yes' : 'No'}
+                        </Table.Cell>
                       </Table.Row>
                     </Table.Body>
                   </Table>

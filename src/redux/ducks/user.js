@@ -1,4 +1,4 @@
-import { getAll, create, update } from '../../services/api/user'
+import { getAll, create, update, getLogged } from '../../services/api/user'
 import { toast } from 'react-toastify'
 
 import { Types as TypesModal } from './modal'
@@ -14,7 +14,10 @@ export const Types = {
   CREATE_USER_FAILURE: 'CREATE_USER_FAILURE',
   UPDATE_USER_LOADING: 'UPDATE_USER_LOADING',
   UPDATE_USER_SUCCESS: 'UPDATE_USER_SUCCESS',
-  UPDATE_USER_FAILURE: 'UPDATE_USER_FAILURE'
+  UPDATE_USER_FAILURE: 'UPDATE_USER_FAILURE',
+  GET_USER_LOGGED_LOADING: 'GET_USER_LOGGED_LOADING',
+  GET_USER_LOGGED_SUCCESS: 'GET_USER_LOGGED_SUCCESS',
+  GET_USER_LOGGED_FAILURE: 'GET_USER_LOGGED_FAILURE'
 }
 
 // Reducer
@@ -33,6 +36,11 @@ const initialState = {
   update: {
     isLoading: false,
     isUpdated: false,
+    error: null
+  },
+  getLogged: {
+    isLoading: false,
+    object: null,
     error: null
   }
 }
@@ -127,6 +135,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_USER_LOGGED_LOADING:
+      return {
+        ...state,
+        getLogged: {
+          ...state.getLogged,
+          isLoading: action.payload,
+          error: false
+        }
+      }
+    case Types.GET_USER_LOGGED_SUCCESS:
+      return {
+        ...state,
+        getLogged: {
+          ...state.getLogged,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_USER_LOGGED_FAILURE:
+      return {
+        ...state,
+        getLogged: {
+          ...state.getLogged,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -164,7 +200,7 @@ export const updateUser = user => async dispatch => {
   })
   try {
     await update(user)
-    dispatch({ type: Types.UPDATE_USER_SUCCESS})
+    dispatch({ type: Types.UPDATE_USER_SUCCESS })
     dispatch({ type: TypesModal.MODAL_CLOSE })
     toast.success('User updated with success')
   } catch (error) {
@@ -187,6 +223,25 @@ export const getUsers = (options = false, search = false) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_USER_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const getUserLogged = () => async dispatch => {
+  dispatch({
+    type: Types.GET_USER_LOGGED_LOADING,
+    payload: true
+  })
+  try {
+    const user = await getLogged()
+    dispatch({
+      type: Types.GET_USER_LOGGED_SUCCESS,
+      payload: user.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_USER_LOGGED_FAILURE,
       payload: error
     })
   }

@@ -30,3 +30,9 @@ export const update = user => {
     data: user
   })
 }
+
+export const getLogged = () => {
+  return request({
+    url: '/user/user-logged'
+  })
+}
