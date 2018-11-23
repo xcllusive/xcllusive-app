@@ -102,6 +102,12 @@ class BusinessLogPage extends Component {
     this.props.setFieldValue('businessLog_text', text)
   }
 
+  _saveAndReturnToBusiness = values => {
+    this.props.updateBusinessLog(values)
+
+    this.props.history.push(`/business/${this.props.match.params.id}`)
+  }
+
   render () {
     const {
       values,
@@ -111,11 +117,8 @@ class BusinessLogPage extends Component {
       arrayLogBusiness,
       business,
       isLoadingarrayLogBusiness,
-      loadingUpdateStatus,
-      loadingFinaliseStatus,
-      history
+      loadingFinaliseStatus
     } = this.props
-    if (arrayLogBusiness.dateTimeCreated === null) console.log('HEYy')
     return (
       <Wrapper>
         <div>
@@ -233,25 +236,25 @@ class BusinessLogPage extends Component {
                     <Icon name="commenting" />
                     New Communication
                   </Button>
-                  <Button
+                  {/* <Button
                     color="yellow"
                     loading={loadingUpdateStatus}
                     onClick={() => this.props.updateBusinessLog(values)}
                   >
                     <Icon name="save" />
                     Save Communication
-                  </Button>
+                  </Button> */}
                   <Button
-                    color="red"
+                    color="orange"
                     loading={loadingFinaliseStatus}
                     onClick={() => this.props.finaliseBusinessLog(values)}
                   >
-                    <Icon name="save" />
+                    <Icon name="cut" />
                     Finalise Communication
                   </Button>
-                  <Button color="green" onClick={() => history.push(`/business/${this.props.match.params.id}`)}>
+                  <Button color="green" onClick={() => this._saveAndReturnToBusiness(values)}>
                     <Icon name="backward" />
-                    Return to Business
+                    Save and Return to Business
                   </Button>
                 </Form.Group>
               </Grid.Row>

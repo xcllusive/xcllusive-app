@@ -24,7 +24,8 @@ class ModalNewUser extends Component {
           { key: 2, text: 'Melbourne Office', value: 'Melbourne Office' },
           { key: 3, text: 'Gosford Office', value: 'Gosford Office' },
           { key: 4, text: 'Cowra Office', value: 'Cowra Office' },
-          { key: 5, text: 'Camberra Office', value: 'Camberra Office' }
+          { key: 5, text: 'Camberra Office', value: 'Camberra Office' },
+          { key: 5, text: 'Adelaide Office', value: 'Adelaide Office' }
         ],
         userType: [
           { key: 1, text: 'Admin', value: 'Admin' },
@@ -37,7 +38,8 @@ class ModalNewUser extends Component {
           { key: 3, text: 'SA', value: 'SA' },
           { key: 4, text: 'TAS', value: 'TAS' },
           { key: 5, text: 'VIC', value: 'VIC' },
-          { key: 6, text: 'WA', value: 'WA' }
+          { key: 6, text: 'WA', value: 'WA' },
+          { key: 7, text: 'ACT', value: 'ACT' }
         ]
       },
       inputPasswordShow: true

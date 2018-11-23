@@ -218,9 +218,6 @@ class BuyerDetails extends Component {
     const {
       isLoadingBuyer,
       business,
-      isLoadingUpdate,
-      isSubmitting,
-      isValid,
       listBusinessBuyerLogList,
       history,
       buyer,
@@ -366,7 +363,7 @@ class BuyerDetails extends Component {
                   <Icon name="commenting" />
                   New Log
                 </Button>
-                <Button
+                {/* <Button
                   icon
                   type="submit"
                   color="red"
@@ -377,10 +374,10 @@ class BuyerDetails extends Component {
                 >
                   <Icon name="save" />
                   Save
-                </Button>
+                </Button> */}
                 <Button icon color="green" onClick={() => history.push(`/buyer/business/${business.id}`)} size="small">
                   <Icon name="backward" />
-                  Return to list
+                  Save and Return to list
                 </Button>
               </Grid.Column>
             </Grid.Row>
