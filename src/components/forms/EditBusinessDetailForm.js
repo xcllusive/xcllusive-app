@@ -288,7 +288,6 @@ class EditBusinessDetailForm extends Component {
                   </Form.Field>
                   <Form.Field>
                     <Form.Input
-                      required
                       label="Last name"
                       name="lastNameV"
                       autoComplete="lastNameV"
@@ -881,9 +880,7 @@ const validationSchema = Yup.object().shape({
   firstNameV: Yup.string()
     .required('First name is required.')
     .max(40, 'First name require max 40 characters.'),
-  lastNameV: Yup.string()
-    .required('Last name is required.')
-    .max(40, 'Last name require max 40 characters.'),
+  lastNameV: Yup.string().max(40, 'Last name require max 40 characters.'),
   vendorPhone1: Yup.string().max(15, 'Telephone 1 require max 15 characters.'),
   vendorPhone2: Yup.string().max(15, 'Telephone 2 require max 15 characters.'),
   vendorPhone3: Yup.string().max(15, 'Telephone 3 require max 15 characters.'),
