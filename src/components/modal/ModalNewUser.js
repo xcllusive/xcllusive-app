@@ -25,7 +25,7 @@ class ModalNewUser extends Component {
           { key: 3, text: 'Gosford Office', value: 'Gosford Office' },
           { key: 4, text: 'Cowra Office', value: 'Cowra Office' },
           { key: 5, text: 'Camberra Office', value: 'Camberra Office' },
-          { key: 5, text: 'Adelaide Office', value: 'Adelaide Office' }
+          { key: 6, text: 'Adelaide Office', value: 'Adelaide Office' }
         ],
         userType: [
           { key: 1, text: 'Admin', value: 'Admin' },
@@ -147,8 +147,9 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.firstName &&
-                  touched.firstName && <Label basic color="red" pointing content={errors.firstName} />}
+                {errors.firstName && touched.firstName && (
+                  <Label basic color="red" pointing content={errors.firstName} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -173,8 +174,9 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.phoneHome &&
-                  touched.phoneHome && <Label basic color="red" pointing content={errors.phoneHome} />}
+                {errors.phoneHome && touched.phoneHome && (
+                  <Label basic color="red" pointing content={errors.phoneHome} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -185,8 +187,9 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.phoneWork &&
-                  touched.phoneWork && <Label basic color="red" pointing content={errors.phoneWork} />}
+                {errors.phoneWork && touched.phoneWork && (
+                  <Label basic color="red" pointing content={errors.phoneWork} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Input
@@ -197,8 +200,9 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.phoneMobile &&
-                  touched.phoneMobile && <Label basic color="red" pointing content={errors.phoneMobile} />}
+                {errors.phoneMobile && touched.phoneMobile && (
+                  <Label basic color="red" pointing content={errors.phoneMobile} />
+                )}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -255,8 +259,9 @@ class ModalNewUser extends Component {
                   value={values.dataRegion}
                   onChange={this._handleSelectChange}
                 />
-                {errors.dataRegion &&
-                  touched.dataRegion && <Label basic color="red" pointing content={errors.dataRegion} />}
+                {errors.dataRegion && touched.dataRegion && (
+                  <Label basic color="red" pointing content={errors.dataRegion} />
+                )}
               </Form.Field>
               <Form.Field>
                 <Form.Select

@@ -791,7 +791,8 @@ export const uploadIM = (file, businessId) => async dispatch => {
       type: Types.UPLOAD_IM_FAILURE,
       payload: error
     })
-    toast.error(error)
+    // toast.error(error)
+    toast.error('Error trying to upload the IM. Please get in contact with IT department.')
   }
 }
 

@@ -2,7 +2,9 @@ import axios from 'axios'
 
 const client = axios.create({
   // baseURL: 'http://xcllusive-com-au.umbler.net'
-  baseURL: 'http://xcllusive-api.ap-southeast-2.elasticbeanstalk.com/'
+  // baseURL: 'http://xcllusive-api.ap-southeast-2.elasticbeanstalk.com/'
+  // baseURL: 'http://xcllusive-prod.ap-southeast-2.elasticbeanstalk.com'
+  baseURL: 'http://xcllusive-api-prod.ap-southeast-2.elasticbeanstalk.com'
   // baseURL: 'http://localhost:5000'
 })
 

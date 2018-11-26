@@ -16,7 +16,7 @@ import {
   finaliseBusinessLog
 } from '../../redux/ducks/businessLog'
 
-import { Statistic, Grid, Input, Table, Form, Label, Button, Icon } from 'semantic-ui-react'
+import { Statistic, Grid, Input, Table, Form, Label, Button, Icon, Segment } from 'semantic-ui-react'
 
 class BusinessLogPage extends Component {
   constructor (props) {
@@ -103,7 +103,7 @@ class BusinessLogPage extends Component {
   }
 
   _saveAndReturnToBusiness = values => {
-    this.props.updateBusinessLog(values)
+    if (this.props.values.newLog) this.props.updateBusinessLog(values)
 
     this.props.history.push(`/business/${this.props.match.params.id}`)
   }
@@ -147,23 +147,113 @@ class BusinessLogPage extends Component {
               <Statistic.Label>Telephone</Statistic.Label>
             </Statistic>
           </Statistic.Group>
-          <Grid style={{ marginTop: '10px' }} centered>
-            <Grid.Column textAlign="center" width={5}>
-              <Input
-                fluid
-                action={{
-                  icon: 'search',
-                  onClick: this._handleSearch
-                }}
-                placeholder="Find logs..."
-                iconPosition="left"
-                loading={isLoadingarrayLogBusiness}
-                onChange={this._onSearch}
-                value={this.state.inputSearch}
-              />
-            </Grid.Column>
+          <Segment style={{ height: '300px', backgroundColor: '#d4d4d53b' }}>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column>
+                  <Form>
+                    <Form.Group>
+                      <Form.Field width={16}>
+                        <Form.TextArea
+                          style={{ height: '150px' }}
+                          label="Communication text"
+                          name="businessLog_text"
+                          autoComplete="businessLog_text"
+                          value={values.businessLog_text}
+                          onChange={handleChange}
+                        />
+                        {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
+                      </Form.Field>
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Field style={{ marginLeft: '90%' }}>
+                        <h5>Follow Up Date</h5>
+                        <DatePicker
+                          selected={
+                            values.businessLog_followUp
+                              ? moment(values.businessLog_followUp)
+                              : moment(this.state.businessLog_followUp)
+                          }
+                          startDate={moment().subtract(10, 'days')}
+                          onChange={this._handleDateChange}
+                          popperPlacement="top-end"
+                          form
+                        />
+                      </Form.Field>
+                    </Form.Group>
+                  </Form>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+          <Grid>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Button
+                  color="orange"
+                  size="small"
+                  loading={loadingFinaliseStatus}
+                  onClick={() => this.props.finaliseBusinessLog(values)}
+                >
+                  <Icon name="cut" />
+                  Finalise Communication
+                </Button>
+              </Grid.Column>
+              <Grid.Column textAlign="right">
+                <Form.Group widths="equal">
+                  <Button
+                    color="blue"
+                    size="small"
+                    onClick={() =>
+                      this._selectLog({
+                        newLog: true,
+                        id: 1,
+                        followUp: moment().add(1, 'day'),
+                        text: ' '
+                      })
+                    }
+                  >
+                    <Icon name="commenting" />
+                    New Communication
+                  </Button>
+                  {/* <Button
+                    color="yellow"
+                    loading={loadingUpdateStatus}
+                    onClick={() => this.props.updateBusinessLog(values)}
+                  >
+                    <Icon name="save" />
+                    Save Communication
+                  </Button> */}
+
+                  <Button color="green" size="small" onClick={() => this._saveAndReturnToBusiness(values)}>
+                    <Icon name="backward" />
+                    Save and Return to Business
+                  </Button>
+                </Form.Group>
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
-          <Label size={'big'}>Log History</Label>
+          <Grid>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Label size={'big'}>Log History</Label>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                <Input
+                  fluid
+                  action={{
+                    icon: 'search',
+                    onClick: this._handleSearch
+                  }}
+                  placeholder="Find logs..."
+                  iconPosition="left"
+                  loading={isLoadingarrayLogBusiness}
+                  onChange={this._onSearch}
+                  value={this.state.inputSearch}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
           <Table color="blue" celled inverted selectable compact size="small">
             <Table.Header>
               <Table.Row>
@@ -190,76 +280,6 @@ class BusinessLogPage extends Component {
               })}
             </Table.Body>
           </Table>
-          <Form>
-            <Form.Group>
-              <Form.Field style={{ marginLeft: '35px' }} width={3}>
-                <h5>Follow Up Date</h5>
-                <DatePicker
-                  selected={
-                    values.businessLog_followUp
-                      ? moment(values.businessLog_followUp)
-                      : moment(this.state.businessLog_followUp)
-                  }
-                  startDate={moment().subtract(10, 'days')}
-                  onChange={this._handleDateChange}
-                  popperPlacement="top-end"
-                  form
-                />
-              </Form.Field>
-              <Form.Field width={13}>
-                <Form.TextArea
-                  style={{ height: '15vh' }}
-                  label="Communication text"
-                  name="businessLog_text"
-                  autoComplete="businessLog_text"
-                  value={values.businessLog_text}
-                  onChange={handleChange}
-                />
-                {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
-              </Form.Field>
-            </Form.Group>
-            <Grid>
-              <Grid.Row style={{ justifyContent: 'center' }}>
-                <Form.Group widths="equal">
-                  <Button
-                    color="blue"
-                    size="small"
-                    onClick={() =>
-                      this._selectLog({
-                        newLog: true,
-                        id: 1,
-                        followUp: moment().add(1, 'day'),
-                        text: ' '
-                      })
-                    }
-                  >
-                    <Icon name="commenting" />
-                    New Communication
-                  </Button>
-                  {/* <Button
-                    color="yellow"
-                    loading={loadingUpdateStatus}
-                    onClick={() => this.props.updateBusinessLog(values)}
-                  >
-                    <Icon name="save" />
-                    Save Communication
-                  </Button> */}
-                  <Button
-                    color="orange"
-                    loading={loadingFinaliseStatus}
-                    onClick={() => this.props.finaliseBusinessLog(values)}
-                  >
-                    <Icon name="cut" />
-                    Finalise Communication
-                  </Button>
-                  <Button color="green" onClick={() => this._saveAndReturnToBusiness(values)}>
-                    <Icon name="backward" />
-                    Save and Return to Business
-                  </Button>
-                </Form.Group>
-              </Grid.Row>
-            </Grid>
-          </Form>
           {this.state.businessLog ? (
             <Form>
               <Form.Group inline>
