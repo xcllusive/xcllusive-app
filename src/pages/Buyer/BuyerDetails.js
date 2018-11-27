@@ -99,7 +99,7 @@ class BuyerDetails extends Component {
   async componentWillUnmount () {
     this.props.clearBuyerLog()
     if (this.state.buyerLog_id) {
-      this.props.setFieldValue('buyerLog_id', this.state.buyerLog_id)
+      this.props.setFieldValue('buyerLog_id', parseInt(this.state.buyerLog_id))
       if (this.props.values.buyerLog_followUp === '') {
         this.props.setFieldValue('buyerLog_followUp', this.state.buyerLog_followUp)
       }
@@ -109,20 +109,20 @@ class BuyerDetails extends Component {
     }
     const updateBuyer = {
       ...this.props.values,
-      id: this.props.match.params.idBuyer
+      id: parseInt(this.props.match.params.idBuyer)
     }
 
     if (this.props.values.newLog) {
       const newLog = {
         ...this.props.values,
-        buyer_id: this.props.match.params.idBuyer,
+        buyer_id: parseInt(this.props.match.params.idBuyer),
         business_id: this.props.match.params.idBusiness
       }
       await this.props.createNewLog(newLog)
       await this.props.updateBuyer(updateBuyer)
     } else {
       await this.props.updateBuyer(updateBuyer)
-      await this.props.updateBuyerLog(this.props.values)
+      if (this.props.values && this.props.values.buyerLog_id > 0) await this.props.updateBuyerLog(this.props.values)
     }
 
     this.props.getBusinessBuyerLog(
@@ -170,7 +170,7 @@ class BuyerDetails extends Component {
 
   _handleSubmit = async () => {
     if (this.state.buyerLog_id) {
-      this.props.setFieldValue('buyerLog_id', this.state.buyerLog_id)
+      this.props.setFieldValue('buyerLog_id', parseInt(this.state.buyerLog_id))
       if (this.props.values.buyerLog_followUp === '') {
         this.props.setFieldValue('buyerLog_followUp', this.state.buyerLog_followUp)
       }
@@ -180,13 +180,13 @@ class BuyerDetails extends Component {
     }
     const updateBuyer = {
       ...this.props.values,
-      id: this.props.match.params.idBuyer
+      id: parseInt(this.props.match.params.idBuyer)
     }
 
     if (this.props.values.newLog) {
       const newLog = {
         ...this.props.values,
-        buyer_id: this.props.match.params.idBuyer,
+        buyer_id: parseInt(this.props.match.params.idBuyer),
         business_id: this.props.match.params.idBusiness
       }
       await this.props.createNewLog(newLog)

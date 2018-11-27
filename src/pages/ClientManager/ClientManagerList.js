@@ -39,7 +39,9 @@ class ClientManagerList extends Component {
       inputSearchBusiness: '',
       showMsgBusiness: false,
       ownersApprovalReceived: false,
-      createdBuyer: false
+      createdBuyer: false,
+      isSentCa: false,
+      isReceivedCa: false
     }
   }
 
@@ -76,6 +78,22 @@ class ClientManagerList extends Component {
         this.timer = setTimeout(() => this.props.getBuyers(`B${this.props.newBuyerObject.id}`), 100)
       }
     }
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.isSentCa && prevState.isSentCa !== nextProps.isSentCa) {
+      return {
+        buyer: { ...prevState.buyer, caSent: 1 },
+        isSentCa: true
+      }
+    }
+    if (nextProps.isReceivedCa && prevState.isReceivedCa !== nextProps.isReceivedCa) {
+      return {
+        buyer: { ...prevState.buyer, caReceived: 1 },
+        isReceivedCa: true
+      }
+    }
+    return null
   }
 
   _backToSearch = async () => {
@@ -182,9 +200,10 @@ class ClientManagerList extends Component {
         title: 'Send CA',
         text: caSent ? 'CA already sent. Do you want to send again?' : 'Are you sure you want to send the CA?'
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this.props.sendCa(this.state.buyer.id, this.state.business.id)
+          await this.props.sendCa(this.state.buyer.id, this.state.business.id)
+          this.setState({ isSentCa: false })
         }
       }
     })
@@ -249,9 +268,10 @@ class ClientManagerList extends Component {
               options: {
                 title: 'Upload CA'
               },
-              onConfirm: isConfirmed => {
+              onConfirm: async isConfirmed => {
                 if (isConfirmed) {
-                  this.props.caReceived(this.state.file, this.state.buyer.id, this.state.business.id)
+                  await this.props.caReceived(this.state.file, this.state.buyer.id, this.state.business.id)
+                  this.setState({ isReceivedCa: false })
                 }
               },
               handleFileUpload: e => {
@@ -828,7 +848,9 @@ ClientManagerList.propTypes = {
   updateBusiness: PropTypes.func,
   setFieldValue: PropTypes.func,
   values: PropTypes.object,
-  newBuyerObject: PropTypes.object
+  newBuyerObject: PropTypes.object,
+  isSentCa: PropTypes.bool,
+  isReceivedCa: PropTypes.bool
 }
 
 const mapPropsToValues = () => ({
@@ -846,8 +868,10 @@ const mapStateToProps = state => ({
   isLoadingBuyerLog: state.buyerLog.get.isLoading,
   listBuyerLogList: state.buyerLog.get,
   isLoadingSendCa: state.clientManager.sentCa.isLoading,
+  isSentCa: state.clientManager.sentCa.isSent,
   isLoadingSendIm: state.clientManager.sentIm.isLoading,
   isLoadingCaReceived: state.clientManager.caReceived.isLoading,
+  isReceivedCa: state.clientManager.caReceived.isReceived,
   isLoadingEmailBuyer: state.clientManager.emailBuyer.isLoading,
   isLoadingEnquiryBusiness: state.clientManager.enquired.isLoading,
   isLoadingRequestOwnersApproval: state.clientManager.requestOwnersApproval.isLoading,

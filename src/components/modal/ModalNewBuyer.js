@@ -21,7 +21,8 @@ class ModalNewBuyer extends Component {
         { key: 3, text: 'SA', value: 'SA' },
         { key: 4, text: 'TAS', value: 'TAS' },
         { key: 5, text: 'VIC', value: 'VIC' },
-        { key: 6, text: 'WA', value: 'WA' }
+        { key: 6, text: 'WA', value: 'WA' },
+        { key: 7, text: 'Outside Australia', value: 'Outside Australia' }
       ]
     }
   }
@@ -99,7 +100,6 @@ class ModalNewBuyer extends Component {
             <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
-                  required
                   label="Email"
                   name="email"
                   autoComplete="email"
@@ -281,9 +281,7 @@ const validationSchema = Yup.object().shape({
     .required('First name is required.')
     .max(40, 'First name require max 40 characters.'),
   surname: Yup.string().max(40, 'Last name require max 40 characters.'),
-  email: Yup.string()
-    .email('Invalid email address.')
-    .required('Email is required.'),
+  email: Yup.string().email('Invalid email address.'),
   sourceId: Yup.number().required('Source is required.'),
   postCode: Yup.number().typeError('You must type only number here!'),
   telephone1: Yup.string().max(30, 'Telephone 1 require max 30 characters.'),
