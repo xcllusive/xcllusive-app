@@ -57,7 +57,6 @@ class ModalNewBusiness extends Component {
             <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
-                  required
                   label="Business name"
                   name="businessName"
                   autoComplete="businessName"
@@ -98,6 +97,7 @@ class ModalNewBusiness extends Component {
             <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
+                  required
                   label="Telephone 1"
                   name="vendorPhone1"
                   autoComplete="vendorPhone1"
@@ -139,7 +139,6 @@ class ModalNewBusiness extends Component {
             <Form.Group widths="equal">
               <Form.Field>
                 <Form.Input
-                  required
                   label="Email"
                   name="vendorEmail"
                   autoComplete="vendorEmail"
@@ -274,19 +273,17 @@ const mapPropsToValues = props => ({
 })
 
 const validationSchema = Yup.object().shape({
-  businessName: Yup.string()
-    .required('Business name is required.')
-    .max(120, 'Business name require max 120 characters.'),
+  businessName: Yup.string().max(120, 'Business name require max 120 characters.'),
   firstName: Yup.string()
     .required('First name is required.')
     .max(40, 'First name require max 40 characters.'),
   lastName: Yup.string().max(40, 'Last name require max 40 characters.'),
-  vendorPhone1: Yup.string().max(30, 'Telephone 1 require max 30 characters.'),
+  vendorPhone1: Yup.string()
+    .max(30, 'Telephone 1 require max 30 characters.')
+    .required('Business name is required.'),
   vendorPhone2: Yup.string().max(30, 'Telephone 2 require max 30 characters.'),
   vendorPhone3: Yup.string().max(30, 'Telephone 3 require max 30 characters.'),
-  vendorEmail: Yup.string()
-    .email('Invalid email address.')
-    .required('Email is required.'),
+  vendorEmail: Yup.string().email('Invalid email address.'),
   businessSource: Yup.number().required('Source is required.'),
   sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
   description: Yup.string().max(2000, 'Source Notes require max 2000 characters.'),
