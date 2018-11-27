@@ -47,6 +47,9 @@ class EditBusinessDetailForm extends Component {
     if (this.props.isUploadedIM && nextProps.isUploadedIM !== this.props.isUploadedIM) {
       this.props.getBusiness(this.props.business.id)
     }
+    if (this.props.isUpdatedBusiness && nextProps.isUpdatedBusiness !== this.props.isUpdatedBusiness) {
+      this.props.getBusiness(this.props.business.id)
+    }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -777,7 +780,8 @@ EditBusinessDetailForm.propTypes = {
   updateBusiness: PropTypes.func,
   uploadIM: PropTypes.func,
   isUploadedIM: PropTypes.bool,
-  isLoadingIM: PropTypes.bool
+  isLoadingIM: PropTypes.bool,
+  isUpdatedBusiness: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -912,6 +916,7 @@ const mapStateToProps = state => {
   return {
     isLoadingGet: state.business.get.isLoading,
     isLoadingUpdate: state.business.update.isLoading,
+    isUpdatedBusiness: state.business.update.isUpdated,
     sourceOptions: state.business.get.sourceOptions,
     ratingOptions: state.business.get.ratingOptions,
     productOptions: state.business.get.productOptions,
