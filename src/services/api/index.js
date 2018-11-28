@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { store } from '../../redux/store'
+import { logout } from '../../redux/ducks/auth'
 
 const client = axios.create({
   // baseURL: 'http://docker-xcllusive-test-api.ap-southeast-2.elasticbeanstalk.com'
@@ -16,6 +18,11 @@ const request = async options => {
       // console.error('Status:', error.response.status)
       // console.error('Data:', error.response.data)
       // console.error('Headers:', error.response.headers)
+
+      if (error.response.status === 401) {
+        store.dispatch(logout(error.response.data.message))
+        return Promise.reject(error.response.data)
+      }
 
       return Promise.reject(error.response.data)
     }
