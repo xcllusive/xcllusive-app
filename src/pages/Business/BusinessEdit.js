@@ -209,7 +209,7 @@ class BusinessEditPage extends Component {
           <Grid.Row style={{ justifyContent: 'flex-end', padding: '0 15px' }}>
             <Button color="facebook" onClick={() => this.props.history.push(`${this.props.match.url}/log`)}>
               <Icon name="commenting" />
-              New Communication
+              Open Logs
             </Button>
           </Grid.Row>
           <Grid.Row>

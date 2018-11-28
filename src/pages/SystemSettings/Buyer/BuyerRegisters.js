@@ -4,21 +4,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import {
-  Table,
-  Icon,
-  Button,
-  Grid,
-  Header,
-  Dimmer,
-  Loader,
-  Pagination
-} from 'semantic-ui-react'
+import { Table, Icon, Button, Grid, Header, Dimmer, Loader, Pagination } from 'semantic-ui-react'
 
-import {
-  getBuyerRegister,
-  removeBuyerRegister
-} from '../../../redux/ducks/buyerRegister'
+import { getBuyerRegister, removeBuyerRegister } from '../../../redux/ducks/buyerRegister'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -70,10 +58,7 @@ class BuyerRegisters extends Component {
     const { isLoadingBuyerRegister } = this.props
     return (
       <Wrapper>
-        <Dimmer.Dimmable
-          dimmed={isLoadingBuyerRegister}
-          style={{ height: '80vh' }}
-        >
+        <Dimmer.Dimmable dimmed={isLoadingBuyerRegister} style={{ height: '80vh' }}>
           <Dimmer inverted active={isLoadingBuyerRegister}>
             <Loader>Loading</Loader>
           </Dimmer>
@@ -91,14 +76,7 @@ class BuyerRegisters extends Component {
                 <Header as="h5" attached="top">
                   Buyer Type
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -113,18 +91,12 @@ class BuyerRegisters extends Component {
                           <Table.Cell>{typeOptions.id}</Table.Cell>
                           <Table.Cell>{typeOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() => this._editBuyer(typeOptions, 1)}
-                            />
+                            <Icon link name="edit" onClick={() => this._editBuyer(typeOptions, 1)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(typeOptions.id, 1)
-                              }
+                              onClick={() => this._toggleModalConfirm(typeOptions.id, 1)}
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -134,9 +106,7 @@ class BuyerRegisters extends Component {
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 5)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 1)}
                   defaultActivePage={this.props.typeOptions.activePage}
                   totalPages={this.props.typeOptions.pages}
                   firstItem={null}

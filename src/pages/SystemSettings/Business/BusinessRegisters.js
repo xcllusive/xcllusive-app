@@ -2,20 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {
-  Table,
-  Icon,
-  Button,
-  Grid,
-  Header,
-  Dimmer,
-  Loader,
-  Pagination
-} from 'semantic-ui-react'
-import {
-  getBusinessRegister,
-  removeBusinessRegister
-} from '../../../redux/ducks/businessRegister'
+import { Table, Icon, Button, Grid, Header, Dimmer, Loader, Pagination } from 'semantic-ui-react'
+import { getBusinessRegister, removeBusinessRegister } from '../../../redux/ducks/businessRegister'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
 
@@ -116,11 +104,7 @@ class BusinessRegisters extends Component {
           <Grid padded="horizontally">
             <Grid.Row columns={1}>
               <Grid.Column floated="right" width={2}>
-                <Button
-                  onClick={this._newBusiness}
-                  color="facebook"
-                  size="small"
-                >
+                <Button onClick={this._newBusiness} color="facebook" size="small">
                   <Icon name="add" />
                   New Register
                 </Button>
@@ -131,14 +115,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Business Source
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -153,20 +130,12 @@ class BusinessRegisters extends Component {
                           <Table.Cell>{sourceOptions.id}</Table.Cell>
                           <Table.Cell>{sourceOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editBusiness(sourceOptions, 1)
-                              }
-                            />
+                            <Icon link name="edit" onClick={() => this._editBusiness(sourceOptions, 1)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(sourceOptions.id, 1)
-                              }
+                              onClick={() => this._toggleModalConfirm(sourceOptions.id, 1)}
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -176,9 +145,7 @@ class BusinessRegisters extends Component {
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 1)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 1)}
                   defaultActivePage={this.props.sourceOptions.activePage}
                   totalPages={this.props.sourceOptions.pages}
                   firstItem={null}
@@ -189,14 +156,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Business Rating
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -211,20 +171,12 @@ class BusinessRegisters extends Component {
                           <Table.Cell>{ratingOptions.id}</Table.Cell>
                           <Table.Cell>{ratingOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editBusiness(ratingOptions, 2)
-                              }
-                            />
+                            <Icon link name="edit" onClick={() => this._editBusiness(ratingOptions, 2)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(ratingOptions.id, 2)
-                              }
+                              onClick={() => this._toggleModalConfirm(ratingOptions.id, 2)}
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -234,9 +186,7 @@ class BusinessRegisters extends Component {
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 2)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 2)}
                   defaultActivePage={this.props.ratingOptions.activePage}
                   totalPages={this.props.ratingOptions.pages}
                   firstItem={null}
@@ -248,14 +198,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Business Product
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -270,20 +213,12 @@ class BusinessRegisters extends Component {
                           <Table.Cell>{productOptions.id}</Table.Cell>
                           <Table.Cell>{productOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editBusiness(productOptions, 3)
-                              }
-                            />
+                            <Icon link name="edit" onClick={() => this._editBusiness(productOptions, 3)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(productOptions.id, 3)
-                              }
+                              onClick={() => this._toggleModalConfirm(productOptions.id, 3)}
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -293,9 +228,7 @@ class BusinessRegisters extends Component {
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 3)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 3)}
                   defaultActivePage={this.props.productOptions.activePage}
                   totalPages={this.props.productOptions.pages}
                   firstItem={null}
@@ -309,14 +242,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Business Industry
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -331,20 +257,12 @@ class BusinessRegisters extends Component {
                           <Table.Cell>{industryOptions.id}</Table.Cell>
                           <Table.Cell>{industryOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editBusiness(industryOptions, 4)
-                              }
-                            />
+                            <Icon link name="edit" onClick={() => this._editBusiness(industryOptions, 4)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(industryOptions.id, 4)
-                              }
+                              onClick={() => this._toggleModalConfirm(industryOptions.id, 4)}
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -354,9 +272,7 @@ class BusinessRegisters extends Component {
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 4)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 4)}
                   defaultActivePage={this.props.industryOptions.activePage}
                   totalPages={this.props.industryOptions.pages}
                   firstItem={null}
@@ -367,14 +283,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Business Type
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -389,18 +298,12 @@ class BusinessRegisters extends Component {
                           <Table.Cell>{typeOptions.id}</Table.Cell>
                           <Table.Cell>{typeOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() => this._editBusiness(typeOptions, 5)}
-                            />
+                            <Icon link name="edit" onClick={() => this._editBusiness(typeOptions, 5)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(typeOptions.id, 5)
-                              }
+                              onClick={() => this._toggleModalConfirm(typeOptions.id, 5)}
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -410,9 +313,7 @@ class BusinessRegisters extends Component {
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 5)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 5)}
                   defaultActivePage={this.props.typeOptions.activePage}
                   totalPages={this.props.typeOptions.pages}
                   firstItem={null}
@@ -423,14 +324,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Business Stage
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -445,20 +339,12 @@ class BusinessRegisters extends Component {
                           <Table.Cell>{stageOptions.id}</Table.Cell>
                           <Table.Cell>{stageOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editBusiness(stageOptions, 7)
-                              }
-                            />
+                            <Icon link name="edit" onClick={() => this._editBusiness(stageOptions, 7)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(stageOptions.id, 7)
-                              }
+                              onClick={() => this._toggleModalConfirm(stageOptions.id, 7)}
                             />
                           </Table.Cell>
                         </Table.Row>
@@ -468,9 +354,7 @@ class BusinessRegisters extends Component {
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 7)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 7)}
                   defaultActivePage={this.props.stageOptions.activePage}
                   totalPages={this.props.stageOptions.pages}
                   firstItem={null}
@@ -484,14 +368,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Stage Not Signed
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -500,44 +377,27 @@ class BusinessRegisters extends Component {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {this.props.stageNotSignedOptions.array.map(
-                      stageNotSignedOptions => (
-                        <Table.Row active key={stageNotSignedOptions.id}>
-                          <Table.Cell>{stageNotSignedOptions.id}</Table.Cell>
-                          <Table.Cell>{stageNotSignedOptions.label}</Table.Cell>
-                          <Table.Cell>
-                            <Icon
-                              link
-                              name="edit"
-                              onClick={() =>
-                                this._editBusiness(stageNotSignedOptions, 8)
-                              }
-                            />
-                            <Icon
-                              link
-                              name="trash"
-                              color="red"
-                              onClick={() =>
-                                this._toggleModalConfirm(
-                                  stageNotSignedOptions.id,
-                                  8
-                                )
-                              }
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    )}
+                    {this.props.stageNotSignedOptions.array.map(stageNotSignedOptions => (
+                      <Table.Row active key={stageNotSignedOptions.id}>
+                        <Table.Cell>{stageNotSignedOptions.id}</Table.Cell>
+                        <Table.Cell>{stageNotSignedOptions.label}</Table.Cell>
+                        <Table.Cell>
+                          <Icon link name="edit" onClick={() => this._editBusiness(stageNotSignedOptions, 8)} />
+                          <Icon
+                            link
+                            name="trash"
+                            color="red"
+                            onClick={() => this._toggleModalConfirm(stageNotSignedOptions.id, 8)}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
                   </Table.Body>
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 8)
-                  }
-                  defaultActivePage={
-                    this.props.stageNotSignedOptions.activePage
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 8)}
+                  defaultActivePage={this.props.stageNotSignedOptions.activePage}
                   totalPages={this.props.stageNotSignedOptions.pages}
                   firstItem={null}
                   lastItem={null}
@@ -547,14 +407,7 @@ class BusinessRegisters extends Component {
                 <Header as="h5" attached="top">
                   Stage Not Want
                 </Header>
-                <Table
-                  compact
-                  celled
-                  inverted
-                  selectable
-                  color="blue"
-                  size="small"
-                >
+                <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
@@ -563,43 +416,28 @@ class BusinessRegisters extends Component {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {this.props.stageNotWantOptions.array.map(
-                      stageNotWantOptions => {
-                        return (
-                          <Table.Row active key={stageNotWantOptions.id}>
-                            <Table.Cell>{stageNotWantOptions.id}</Table.Cell>
-                            <Table.Cell>{stageNotWantOptions.label}</Table.Cell>
-                            <Table.Cell>
-                              <Icon
-                                link
-                                name="edit"
-                                onClick={() =>
-                                  this._editBusiness(stageNotWantOptions, 9)
-                                }
-                              />
-                              <Icon
-                                link
-                                name="trash"
-                                color="red"
-                                onClick={() =>
-                                  this._toggleModalConfirm(
-                                    stageNotWantOptions.id,
-                                    9
-                                  )
-                                }
-                              />
-                            </Table.Cell>
-                          </Table.Row>
-                        )
-                      }
-                    )}
+                    {this.props.stageNotWantOptions.array.map(stageNotWantOptions => {
+                      return (
+                        <Table.Row active key={stageNotWantOptions.id}>
+                          <Table.Cell>{stageNotWantOptions.id}</Table.Cell>
+                          <Table.Cell>{stageNotWantOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            <Icon link name="edit" onClick={() => this._editBusiness(stageNotWantOptions, 9)} />
+                            <Icon
+                              link
+                              name="trash"
+                              color="red"
+                              onClick={() => this._toggleModalConfirm(stageNotWantOptions.id, 9)}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      )
+                    })}
                   </Table.Body>
                 </Table>
                 <Pagination
                   size="mini"
-                  onPageChange={(e, data) =>
-                    this._handlePaginationChange(e, data, 9)
-                  }
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 9)}
                   defaultActivePage={this.props.stageNotWantOptions.activePage}
                   totalPages={this.props.stageNotWantOptions.pages}
                   firstItem={null}

@@ -466,6 +466,7 @@ class BuyerDetails extends Component {
                             autoComplete="profile"
                             value={values.profile}
                             onChange={handleChange}
+                            disabled={true}
                           />
                         </Form.Field>
                       </Form.Group>
@@ -477,6 +478,7 @@ class BuyerDetails extends Component {
                             autoComplete="businessType"
                             value={values.businessType}
                             onChange={handleChange}
+                            disabled={true}
                           />
                         </Form.Field>
                         <Form.Field>
