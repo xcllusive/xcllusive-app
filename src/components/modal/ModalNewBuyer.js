@@ -16,13 +16,15 @@ class ModalNewBuyer extends Component {
     this.state = {
       priceOptions: OptionsPriceSelectBuyer,
       state: [
-        { key: 1, text: 'NSW', value: 'NSW' },
-        { key: 2, text: 'QLD', value: 'QLD' },
-        { key: 3, text: 'SA', value: 'SA' },
-        { key: 4, text: 'TAS', value: 'TAS' },
-        { key: 5, text: 'VIC', value: 'VIC' },
-        { key: 6, text: 'WA', value: 'WA' },
-        { key: 7, text: 'Outside Australia', value: 'Outside Australia' }
+        { key: 1, text: 'ACT', value: 'ACT' },
+        { key: 2, text: 'NT', value: 'NT' },
+        { key: 3, text: 'NSW', value: 'NSW' },
+        { key: 4, text: 'QLD', value: 'QLD' },
+        { key: 5, text: 'SA', value: 'SA' },
+        { key: 6, text: 'TAS', value: 'TAS' },
+        { key: 7, text: 'VIC', value: 'VIC' },
+        { key: 8, text: 'WA', value: 'WA' },
+        { key: 9, text: 'Outside Australia', value: 'Outside Australia' }
       ]
     }
   }
