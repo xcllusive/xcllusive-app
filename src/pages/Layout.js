@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Menu, Icon, Header } from 'semantic-ui-react'
 import { ToastContainer } from 'react-toastify'
+import { AuthorizationRoute } from '../components/routes'
 import { logout } from '../redux/ducks/auth'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -67,30 +68,108 @@ const Layout = ({ match, logout, menu }) => (
     <ModalRoot />
     <Switch>
       <Route exact component={DashBoardPage} path={`${match.path}`} />
-      <Route exact component={ListPage} path={`${match.path}business`} />
-      <Route exact component={EditPage} path={`${match.path}business/:id`} />
-      <Route exact component={AgreementPage} path={`${match.path}business/:id/agreement/:idAgreement`} />
-      <Route exact component={PreviewAgreement} path={`${match.path}business/:id/agreement/:idAgreement/preview`} />
-      <Route exact component={MakeTaxInvoice} path={`${match.path}business/:id/invoice`} />
-      <Route exact component={AppraisalList} path={`${match.path}business/:id/appraisalList`} />
-      <Route exact component={AppraisalMenu} path={`${match.path}business/:id/appraisalMenu`} />
+      <AuthorizationRoute exact component={ListPage} path={`${match.path}business`} allowedRoles={['BUSINESS_MENU']} />
+      <AuthorizationRoute
+        exact
+        component={EditPage}
+        path={`${match.path}business/:id`}
+        allowedRoles={['BUSINESS_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={AgreementPage}
+        path={`${match.path}business/:id/agreement/:idAgreement`}
+        allowedRoles={['BUSINESS_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={PreviewAgreement}
+        path={`${match.path}business/:id/agreement/:idAgreement/preview`}
+        allowedRoles={['BUSINESS_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={MakeTaxInvoice}
+        path={`${match.path}business/:id/invoice`}
+        allowedRoles={['BUSINESS_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={AppraisalList}
+        path={`${match.path}business/:id/appraisalList`}
+        allowedRoles={['BUSINESS_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={AppraisalMenu}
+        path={`${match.path}business/:id/appraisalMenu`}
+        allowedRoles={['BUSINESS_MENU']}
+      />
       {/* <Route
         exact
         component={LogPage}
         path={`${match.path}business/:id/log/:logID`}
       /> */}
-      <Route exact component={LogPage} path={`${match.path}business/:id/log`} />
-      <Route exact component={BuyerPage} path={`${match.path}buyer`} />
-      <Route exact component={BuyerDetailsCM} path={`${match.path}clientManager/buyer/:id`} />
-      <Route exact component={BuyerDetails} path={`${match.path}buyer/:idBuyer/business/:idBusiness`} />
-      <Route exact component={BuyerList} path={`${match.path}buyer/business/:id`} />
-      <Route exact component={ScoreList} path={`${match.path}buyer/business/:id/score-list`} />
-      <Route exact component={MakeNewScore} path={`${match.path}buyer/business/:idBusiness/make-new-score`} />
-      <Route exact component={MakeNewScore} path={`${match.path}buyer/business/:idBusiness/make-new-score/:idScore`} />
+      <AuthorizationRoute
+        exact
+        component={LogPage}
+        path={`${match.path}business/:id/log`}
+        allowedRoles={['BUSINESS_MENU']}
+      />
+      <AuthorizationRoute exact component={BuyerPage} path={`${match.path}buyer`} allowedRoles={['BUYER_MENU']} />
+      <AuthorizationRoute
+        exact
+        component={BuyerDetailsCM}
+        path={`${match.path}clientManager/buyer/:id`}
+        allowedRoles={['CLIENT_MANAGER_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={BuyerDetails}
+        path={`${match.path}buyer/:idBuyer/business/:idBusiness`}
+        allowedRoles={['BUYER_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={BuyerList}
+        path={`${match.path}buyer/business/:id`}
+        allowedRoles={['BUYER_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={ScoreList}
+        path={`${match.path}buyer/business/:id/score-list`}
+        allowedRoles={['BUYER_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={MakeNewScore}
+        path={`${match.path}buyer/business/:idBusiness/make-new-score`}
+        allowedRoles={['BUYER_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={MakeNewScore}
+        path={`${match.path}buyer/business/:idBusiness/make-new-score/:idScore`}
+        allowedRoles={['BUYER_MENU']}
+      />
       <Route render={() => <span>presale</span>} path={`${match.path}presale`} />
       <Route render={() => <span>resources</span>} path={`${match.path}resources`} />
-      <Route component={ClientManagerList} path={`${match.path}clientManager`} />
-      <Route exact component={UserPage} path={`${match.path}systemSettings`} />
+      <AuthorizationRoute
+        component={ClientManagerList}
+        path={`${match.path}clientManager`}
+        allowedRoles={['CLIENT_MANAGER_MENU']}
+      />
+      <AuthorizationRoute
+        exact
+        component={UserPage}
+        path={`${match.path}systemSettings`}
+        allowedRoles={['SYSTEM_SETTINGS_MENU']}
+      />
+      <Route
+        render={() => <span>You, don`t have permission to access this page!</span>}
+        path={`${match.path}unathorized`}
+      />
       <Route component={NotFoundPage} />
       <Redirect to={`${match.url}`} />
     </Switch>

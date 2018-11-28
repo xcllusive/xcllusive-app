@@ -578,7 +578,7 @@ export const getBusiness = id => async dispatch => {
       type: Types.GET_BUSINESS_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -603,7 +603,7 @@ export const getBusinesses = (search = false, stageId = false, filterLog = false
       type: Types.GET_BUSINESSES_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -645,7 +645,7 @@ export const reassignBusiness = reassignBusiness => async dispatch => {
       type: Types.CREATE_REASSIGN_BUSINESS_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 export const updateStageLost = stageLost => async dispatch => {
@@ -668,7 +668,7 @@ export const updateStageLost = stageLost => async dispatch => {
       type: Types.UPDATE_STAGE_LOST_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -690,7 +690,7 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
       type: Types.UPDATE_STAGE_SALES_MEMO_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -710,7 +710,7 @@ export const getBuyersFromBusiness = (businessId, showAll = false) => async disp
       type: Types.GET_BUYERS_FROM_BUSINESS_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -730,7 +730,7 @@ export const getBuyersGroupEmail = businessId => async dispatch => {
       type: Types.GET_BUYERS_GROUP_EMAIL_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -750,7 +750,7 @@ export const getQtdeBusinessEachStagePerUser = () => async dispatch => {
       type: Types.GET_QTDE_BUSINESS_STAGE_USER_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -770,7 +770,7 @@ export const getBusinessesPerUser = (search = false, stageId = false, filterLog 
       type: Types.GET_BUSINESSES_PER_USER_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
@@ -791,7 +791,7 @@ export const uploadIM = (file, businessId) => async dispatch => {
       type: Types.UPLOAD_IM_FAILURE,
       payload: error
     })
-    // toast.error(error)
+    // toast.error(error.message)
     toast.error('Error trying to upload the IM. Please get in contact with IT department.')
   }
 }

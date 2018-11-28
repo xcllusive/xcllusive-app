@@ -57,7 +57,7 @@ class BusinessListPage extends Component {
         if (values) {
           await this.props.createBusiness(values)
           this.props.closeModal()
-          await this.props.getBusinessesPerUser(false, this.state.stageSelected, false)
+          await this.props.getBusinessesPerUser(false, this.state.stageSelected, true)
           this.props.getQtdeBusinessEachStagePerUser()
         }
       }
