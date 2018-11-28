@@ -47,7 +47,8 @@ class ModalNewBusiness extends Component {
       sourceOptions,
       dropDownLoading,
       title,
-      closeModal
+      closeModal,
+      isLoadingUser
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
@@ -206,6 +207,8 @@ class ModalNewBusiness extends Component {
                     autoComplete="listingAgent"
                     value={values.listingAgent}
                     onChange={this._handleSelectChange}
+                    loading={isLoadingUser}
+                    disabled={isLoadingUser}
                   />
                   {errors.listingAgent && touched.listingAgent && (
                     <Label basic color="red" pointing content={errors.listingAgent} />
@@ -254,7 +257,8 @@ ModalNewBusiness.propTypes = {
   where: PropTypes.string,
   closeModal: PropTypes.func,
   getUsers: PropTypes.func,
-  users: PropTypes.array
+  users: PropTypes.array,
+  isLoadingUser: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -306,7 +310,8 @@ const mapStateToProps = state => {
     isLoading: state.business.create.isLoading,
     sourceOptions: state.businessRegister.get.source.array,
     dropDownLoading: state.businessRegister.get.source.isLoading,
-    users: state.user.get.array
+    users: state.user.get.array,
+    isLoadingUser: state.user.get.isLoading
   }
 }
 

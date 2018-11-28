@@ -29,7 +29,7 @@ class BusinessListPage extends Component {
 
   async componentDidMount () {
     // await this.props.getBusinesses(false, this.state.stageSelected, false)
-    await this.props.getBusinessesPerUser(false, this.state.stageSelected, false)
+    await this.props.getBusinessesPerUser(false, this.state.stageSelected, true)
     this.props.getQtdeBusinessEachStagePerUser()
   }
 
@@ -65,7 +65,7 @@ class BusinessListPage extends Component {
   }
 
   _getBusinesses = (stage, name) => {
-    this.props.getBusinessesPerUser(false, stage, false)
+    this.props.getBusinessesPerUser(false, stage, true)
     this.setState({
       stageSelected: stage,
       stageSelectedName: name,

@@ -244,7 +244,7 @@ class EditBusinessDetailForm extends Component {
       sourceOptions,
       ratingOptions,
       productOptions,
-      industryOptions,
+      // industryOptions,
       typeOptions,
       stageOptions,
       usersBroker,
@@ -347,7 +347,6 @@ class EditBusinessDetailForm extends Component {
                 <Form.Group widths="equal">
                   <Form.Field>
                     <Form.Input
-                      required
                       label="Email"
                       icon={
                         <Icon
@@ -666,19 +665,6 @@ class EditBusinessDetailForm extends Component {
                 <Form.Group widths="equal">
                   <Form.Field>
                     <Form.Select
-                      label="Industry"
-                      options={industryOptions}
-                      name="businessIndustry"
-                      autoComplete="businessIndustry"
-                      value={values.businessIndustry}
-                      onChange={this._handleSelectChange}
-                    />
-                    {errors.businessIndustry && touched.businessIndustry && (
-                      <Label basic color="red" pointing content={errors.businessIndustry} />
-                    )}
-                  </Form.Field>
-                  <Form.Field>
-                    <Form.Select
                       label="Business Type"
                       options={typeOptions}
                       name="businessType"
@@ -688,6 +674,19 @@ class EditBusinessDetailForm extends Component {
                     />
                     {errors.businessType && touched.businessType && (
                       <Label basic color="red" pointing content={errors.businessType} />
+                    )}
+                  </Form.Field>
+                  <Form.Field>
+                    <Form.Input
+                      label="Industry"
+                      name="industry"
+                      autoComplete="industry"
+                      value={values.industry}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.industry && touched.industry && (
+                      <Label basic color="red" pointing content={errors.industry} />
                     )}
                   </Form.Field>
                 </Form.Group>
@@ -764,7 +763,7 @@ EditBusinessDetailForm.propTypes = {
   sourceOptions: PropTypes.array,
   productOptions: PropTypes.array,
   ratingOptions: PropTypes.array,
-  industryOptions: PropTypes.array,
+  // industryOptions: PropTypes.array,
   typeOptions: PropTypes.array,
   stageOptions: PropTypes.array,
   reassignedBusiness: PropTypes.bool,
@@ -810,10 +809,11 @@ const mapPropsToValues = props => {
       sourceId,
       ratingId,
       productId,
-      industryId,
+      // industryId,
       typeId,
       brokerAccountName,
-      stageId
+      stageId,
+      industry
     } = props.business
 
     const business = {
@@ -840,10 +840,11 @@ const mapPropsToValues = props => {
       businessSource: sourceId,
       businessRating: ratingId,
       businessProduct: productId,
-      businessIndustry: industryId,
+      // businessIndustry: industryId,
       businessType: typeId,
       brokerAccountName,
-      stage: stageId
+      stage: stageId,
+      industry
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     business.notifyOwner = business.notifyOwner === true
@@ -871,9 +872,10 @@ const mapPropsToValues = props => {
     businessSource: '',
     businessRating: '',
     businessProduct: '',
-    businessIndustry: '',
+    // businessIndustry: '',
     businessType: '',
-    stage: ''
+    stage: '',
+    industry: ''
   }
 }
 
@@ -885,17 +887,13 @@ const validationSchema = Yup.object().shape({
     .required('First name is required.')
     .max(40, 'First name require max 40 characters.'),
   lastNameV: Yup.string().max(40, 'Last name require max 40 characters.'),
-  vendorPhone1: Yup.string().max(15, 'Telephone 1 require max 15 characters.'),
-  vendorPhone2: Yup.string().max(15, 'Telephone 2 require max 15 characters.'),
-  vendorPhone3: Yup.string().max(15, 'Telephone 3 require max 15 characters.'),
-  vendorEmail: Yup.string()
-    .email('Invalid email address.')
-    .required('Email is required.'),
+  vendorPhone1: Yup.string().max(40, 'Telephone 1 require max 40 characters.'),
+  vendorPhone2: Yup.string().max(40, 'Telephone 2 require max 40 characters.'),
+  vendorPhone3: Yup.string().max(40, 'Telephone 3 require max 40 characters.'),
+  vendorEmail: Yup.string().email('Invalid email address.'),
   businessSource: Yup.string().required('Source is required.'),
   sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
-  description: Yup.string()
-    .required('Notes is required.')
-    .max(2000, 'Source Notes require max 2000 characters.'),
+  description: Yup.string().max(2000, 'Source Notes require max 2000 characters.'),
   businessNameSecondary: Yup.string().max(120, 'Source Notes require max 120 characters.'),
   // businessABN: Yup.string()
   //   .min(11, 'ABN require min 11 integers.')
@@ -905,7 +903,8 @@ const validationSchema = Yup.object().shape({
   suburb: Yup.string().max(100, 'Suburb require max 100 characters.'),
   postCode: Yup.string()
     .min(4, 'Post Code require min 4 integers.')
-    .max(4, 'Post Code require max 4 integers.')
+    .max(4, 'Post Code require max 4 integers.'),
+  industry: Yup.string().max(50, 'Industry require max 50 characters.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
@@ -920,7 +919,7 @@ const mapStateToProps = state => {
     sourceOptions: state.business.get.sourceOptions,
     ratingOptions: state.business.get.ratingOptions,
     productOptions: state.business.get.productOptions,
-    industryOptions: state.business.get.industryOptions,
+    // industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
     stageOptions: state.business.get.stageOptions,
     reassignedBusiness: state.business.reassignBusiness.isReassigned,
