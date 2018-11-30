@@ -8,7 +8,9 @@ import {
   getBusinessesFromBuyer as getBusinessesFromBuyerAPI,
   sendEmailBuyerBrokersEmail as sendEmailBuyerBrokersEmailAPI,
   sendGroupEmail as sendGroupEmailAPI,
-  getBuyerBusinesses as getBuyerBusinessesAPI
+  getBuyerBusinesses as getBuyerBusinessesAPI,
+  getBuyersFromBusiness as getBuyersFromBusinessAPI,
+  getBusinessFromBuyer as getBusinessFromBuyerAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -39,7 +41,13 @@ export const Types = {
   GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS: 'GET_BUYER_BUSINESSES_FOR_SALE_SUCCESS',
   GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS: 'GET_BUYER_BUSINESSES_UNDER_OFFER_SUCCESS',
   GET_BUYER_BUSINESSES_FAILURE: 'GET_BUYER_BUSINESSES_FAILURE',
-  GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS: 'GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS'
+  GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS: 'GET_BUYER_BUSINESSES_SALES_MEMO_SUCCESS',
+  GET_BUYERS_FROM_BUSINESS_LOADING: 'GET_BUYERS_FROM_BUSINESS_LOADING',
+  GET_BUYERS_FROM_BUSINESS_SUCCESS: 'GET_BUYERS_FROM_BUSINESS_SUCCESS',
+  GET_BUYERS_FROM_BUSINESS_FAILURE: 'GET_BUYERS_FROM_BUSINESS_FAILURE',
+  GET_BUSINESS_FROM_BUYER_LOADING: 'GET_BUSINESS_FROM_BUYER_LOADING',
+  GET_BUSINESS_FROM_BUYER_SUCCESS: 'GET_BUSINESS_FROM_BUYER_SUCCESS',
+  GET_BUSINESS_FROM_BUYER_FAILURE: 'GET_BUSINESS_FROM_BUYER_FAILURE'
 }
 
 // Reducer
@@ -95,6 +103,17 @@ const initialState = {
   getBuyerBusinessesSalesMemo: {
     isLoading: true,
     array: [],
+    error: null
+  },
+  getBuyersFromBusiness: {
+    isLoading: true,
+    array: [],
+    countAll: 0,
+    error: null
+  },
+  getBusinessFromBuyer: {
+    isLoading: true,
+    object: null,
     error: null
   }
 }
@@ -350,6 +369,63 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
+    case Types.GET_BUYERS_FROM_BUSINESS_LOADING:
+      return {
+        ...state,
+        getBuyersFromBusiness: {
+          ...state.getBuyersFromBusiness,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUYERS_FROM_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        getBuyersFromBusiness: {
+          ...state.getBuyersFromBusiness,
+          isLoading: false,
+          array: action.payload.array,
+          countAll: action.payload.countAll,
+          error: null
+        }
+      }
+    case Types.GET_BUYERS_FROM_BUSINESS_FAILURE:
+      return {
+        ...state,
+        getBuyersFromBusiness: {
+          ...state.getBuyersFromBusiness,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_BUSINESS_FROM_BUYER_LOADING:
+      return {
+        ...state,
+        getBusinessFromBuyer: {
+          ...state.getBusinessFromBuyer,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_FROM_BUYER_SUCCESS:
+      return {
+        ...state,
+        getBusinessFromBuyer: {
+          ...state.getBusinessFromBuyer,
+          isLoading: false,
+          object: action.payload.business,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_FROM_BUYER_FAILURE:
+      return {
+        ...state,
+        getBusinessFromBuyer: {
+          ...state.getBusinessFromBuyer,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -532,5 +608,45 @@ export const getBuyerBusinesses = (search = false, stageId = false) => async dis
       payload: error
     })
     toast.error(error)
+  }
+}
+
+export const getBuyersFromBusiness = (businessId, showAll = false) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUYERS_FROM_BUSINESS_LOADING,
+    payload: true
+  })
+  try {
+    const buyers = await getBuyersFromBusinessAPI(businessId, showAll)
+    dispatch({
+      type: Types.GET_BUYERS_FROM_BUSINESS_SUCCESS,
+      payload: buyers.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUYERS_FROM_BUSINESS_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const getBusinessFromBuyer = id => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESS_FROM_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const business = await getBusinessFromBuyerAPI(id)
+    dispatch({
+      type: Types.GET_BUSINESS_FROM_BUYER_SUCCESS,
+      payload: business
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESS_FROM_BUYER_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
   }
 }

@@ -142,7 +142,9 @@ class BuyerPage extends Component {
                           <Icon name="mail" />
                         </Button>
                       </Table.Cell>
-                      <Table.Cell>{this._diffDays(item.business.daysOnTheMarket)}</Table.Cell>
+                      <Table.Cell>
+                        {item.business.daysOnTheMarket ? this._diffDays(item.business.daysOnTheMarket) : '-'}
+                      </Table.Cell>
                       <Table.Cell
                         style={
                           item.lastScore &&

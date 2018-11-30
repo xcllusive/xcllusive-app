@@ -23,7 +23,7 @@ import {
   Pagination
 } from 'semantic-ui-react'
 
-import { getBuyer, getBusinessesFromBuyer, updateBuyer } from '../../redux/ducks/buyer'
+import { getBuyer, getBusinessesFromBuyer, updateBuyer, getBusinessFromBuyer } from '../../redux/ducks/buyer'
 import {
   createNewLog,
   updateBuyerLog,
@@ -31,7 +31,6 @@ import {
   clearBuyerLog,
   finaliseBuyerLog
 } from '../../redux/ducks/buyerLog'
-import { getBusiness } from '../../redux/ducks/business'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 import { getBuyerRegister } from '../../redux/ducks/buyerRegister'
@@ -62,7 +61,7 @@ class BuyerDetails extends Component {
 
   componentDidMount () {
     this.props.getBuyer(this.props.match.params.idBuyer)
-    this.props.getBusiness(this.props.match.params.idBusiness)
+    this.props.getBusinessFromBuyer(this.props.match.params.idBusiness)
     this.props.getBusinessBuyerLog(this.props.match.params.idBuyer, this.props.match.params.idBusiness, 5)
     this.props.getBusinessesFromBuyer(this.props.match.params.idBuyer)
     this.props.getBuyerRegister(1)
@@ -230,7 +229,6 @@ class BuyerDetails extends Component {
       isLoadingLogTable,
       typeOptions
     } = this.props
-
     const { priceOptions } = this.state
     return (
       <Wrapper>
@@ -287,7 +285,7 @@ class BuyerDetails extends Component {
         <Fragment>
           <Segment size="mini" inverted color="grey" style={{ margin: 0 }}>
             <Header inverted textAlign="center" size="large">
-              {business.businessName}
+              {business ? business.businessName : null}
             </Header>
           </Segment>
           <Segment style={{ height: '300px', backgroundColor: '#d4d4d53b' }}>
@@ -551,7 +549,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getBuyer,
-      getBusiness,
+      getBusinessFromBuyer,
       getBusinessBuyerLog,
       clearBuyerLog,
       openModal,
@@ -570,7 +568,7 @@ BuyerDetails.propTypes = {
   match: PropTypes.object,
   buyer: PropTypes.object,
   isLoadingBuyer: PropTypes.bool,
-  getBusiness: PropTypes.func,
+  getBusinessFromBuyer: PropTypes.func,
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
   updateBuyerDetails: PropTypes.func,
@@ -618,7 +616,7 @@ const mapPropsToValues = props => {
 const mapStateToProps = state => ({
   buyer: state.buyer.get.object,
   isLoadingBuyer: state.buyer.get.isLoading,
-  business: state.business.get.object,
+  business: state.buyer.getBusinessFromBuyer.object,
   isLoadingUpdate: state.buyerLog.update.isLoading,
   listBusinessBuyerLogList: state.buyerLog.getBusBuyLog.array,
   isLoadingLogTable: state.buyerLog.getBusBuyLog.isLoading,

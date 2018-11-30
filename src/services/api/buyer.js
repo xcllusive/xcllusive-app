@@ -76,3 +76,16 @@ export const getBuyerBusinesses = (search, stageId) => {
     params
   })
 }
+
+export const getBuyersFromBusiness = (businessId, showAll) => {
+  return request({
+    url: `/buyer/from-business/${businessId}`,
+    params: showAll ? { showAll } : null
+  })
+}
+
+export const getBusinessFromBuyer = id => {
+  return request({
+    url: `/buyer/business-from-buyer/${id}`
+  })
+}

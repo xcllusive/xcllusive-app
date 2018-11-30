@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Table, Icon, Button, Input, Grid, Statistic, Dimmer, Loader, Header } from 'semantic-ui-react'
+import moment from 'moment'
 
 import {
   getBusinesses,
@@ -23,23 +24,15 @@ class BusinessListPage extends Component {
     this.state = {
       inputSearch: '',
       stageSelected: 1,
-      stageSelectedName: 'Potential Listing'
+      stageSelectedName: 'Potential Listing',
+      showAll: true
     }
   }
 
   async componentDidMount () {
-    // await this.props.getBusinesses(false, this.state.stageSelected, false)
     await this.props.getBusinessesPerUser(false, this.state.stageSelected, true)
     this.props.getQtdeBusinessEachStagePerUser()
   }
-
-  // static async getDerivedStateFromProps (nextProps) {
-  //   if (nextProps.isCreated && this.props.isCreated !== nextProps.isCreated) {
-  //     // await this._toggleModal({})
-  //     // must close the new business modal
-  //     this.props.getBusinesses(false, this.state.stageSelected, true)
-  //   }
-  // }
 
   _onSearch = (e, { value }) => {
     if (this.timer) clearTimeout(this.timer)
@@ -65,12 +58,24 @@ class BusinessListPage extends Component {
   }
 
   _getBusinesses = (stage, name) => {
-    this.props.getBusinessesPerUser(false, stage, true)
+    if (stage === 4) this.props.getBusinessesPerUser(false, stage, false)
+    else this.props.getBusinessesPerUser(false, stage, true)
+
     this.setState({
       stageSelected: stage,
       stageSelectedName: name,
       inputSearch: ''
     })
+  }
+
+  _showAll () {
+    this.setState({ showAll: false })
+    this.props.getBusinessesPerUser(false, this.state.stageSelected, false)
+  }
+
+  _showLess () {
+    this.setState({ showAll: true })
+    this.props.getBusinessesPerUser(false, this.state.stageSelected, true)
   }
 
   render () {
@@ -90,20 +95,25 @@ class BusinessListPage extends Component {
         </Dimmer>
       )
     }
-
     return (
       <Wrapper>
         <GridBusinessStage>
           <Statistic.Group size="mini" color="blue" widths={3}>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(1, 'Potential Listing')}>
               <Statistic.Value>
-                {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessPotentialListing : 0}
+                {objectQtdeBusinessStage
+                  ? `${objectQtdeBusinessStage.businessPotentialListingFilter} of ${
+                    objectQtdeBusinessStage.businessPotentialListing
+                  }`
+                  : 0}
               </Statistic.Value>
               <Statistic.Label>Potential Listing</Statistic.Label>
             </Statistic>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(9, 'Appraisal')}>
               <Statistic.Value>
-                {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessAppraisal : 0}
+                {objectQtdeBusinessStage
+                  ? `${objectQtdeBusinessStage.businessAppraisalFilter} of ${objectQtdeBusinessStage.businessAppraisal}`
+                  : 0}
               </Statistic.Value>
               <Statistic.Label>Appraisal</Statistic.Label>
             </Statistic>
@@ -137,29 +147,114 @@ class BusinessListPage extends Component {
               <Loader>Loading</Loader>
             </Dimmer>
             <Grid.Row>
-              <Header style={{ paddingTop: '10px' }}>{this.state.stageSelectedName}</Header>
-              <Table color="blue" celled inverted selectable compact size="small">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Business ID</Table.HeaderCell>
-                    <Table.HeaderCell>Business Name</Table.HeaderCell>
-                    <Table.HeaderCell>Contact Name</Table.HeaderCell>
-                    <Table.HeaderCell>Log Text</Table.HeaderCell>
-                    <Table.HeaderCell>Follow Up date</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {businesses.map(business => (
-                    <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
-                      <Table.Cell>{`BS${business.id}`}</Table.Cell>
-                      <Table.Cell>{business.businessName}</Table.Cell>
-                      <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
-                      <Table.Cell>{''}</Table.Cell>
-                      <Table.Cell>{''}</Table.Cell>
+              <Header>
+                <Header size="small" style={{ paddingTop: '10px' }} floated="left">
+                  {this.state.stageSelectedName}
+                </Header>
+                <Header style={{ paddingTop: '5px' }} floated="right">
+                  {this.state.showAll ? (
+                    <Button color="twitter" onClick={() => this._showAll()} size="small" floated="right">
+                      <Icon name="zoom" />
+                      Show all
+                    </Button>
+                  ) : (
+                    <Button color="orange" onClick={() => this._showLess()} size="small" floated="right">
+                      <Icon name="cut" />
+                      Show less
+                    </Button>
+                  )}
+                </Header>
+              </Header>
+              {businesses ? (
+                <Table color="blue" inverted celled selectable compact size="small">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Business ID</Table.HeaderCell>
+                      <Table.HeaderCell>Business Name</Table.HeaderCell>
+                      <Table.HeaderCell>Contact Name</Table.HeaderCell>
+                      <Table.HeaderCell>Log Text</Table.HeaderCell>
+                      <Table.HeaderCell>Follow Up date</Table.HeaderCell>
                     </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
+                  </Table.Header>
+                  <Table.Body>
+                    {businesses.map(business => (
+                      <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
+                        <Table.Cell
+                          error={
+                            !business.BusinessLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                              )
+                            }, false)
+                          }
+                        >{`BS${business.id}`}</Table.Cell>
+                        <Table.Cell
+                          error={
+                            !business.BusinessLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                              )
+                            }, false)
+                          }
+                        >
+                          {business.businessName}
+                        </Table.Cell>
+                        <Table.Cell
+                          error={
+                            !business.BusinessLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                              )
+                            }, false)
+                          }
+                        >{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
+                        <Table.Cell
+                          error={
+                            !business.BusinessLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                              )
+                            }, false)
+                          }
+                        >
+                          {business.BusinessLog[0].text}
+                        </Table.Cell>
+                        <Table.Cell
+                          error={
+                            !business.BusinessLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                              )
+                            }, false)
+                          }
+                        >
+                          {moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              ) : null}
             </Grid.Row>
           </Dimmer.Dimmable>
         </Grid>
@@ -193,7 +288,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,
   // businesses: state.business.getAll.array,
-  businesses: state.business.getAllPerUser.array,
+  businesses: state.business.getAllPerUser.array.rows,
   isLoadingBusinesses: state.business.getAllPerUser.isLoading,
   isLoadingQtdeBusinesses: state.business.getQtdeBusinessStageUser.isLoading,
   objectQtdeBusinessStage: state.business.getQtdeBusinessStageUser.object

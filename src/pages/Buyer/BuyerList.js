@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Table, Grid, Header, Dimmer, Loader, Button, Icon } from 'semantic-ui-react'
-
-import { getBuyersFromBusiness, getBusiness } from '../../redux/ducks/business'
+import { getBuyersFromBusiness, getBusinessFromBuyer } from '../../redux/ducks/buyer'
 import moment from 'moment'
 
 import Wrapper from '../../components/content/Wrapper'
@@ -19,7 +18,7 @@ class BuyerListPage extends Component {
 
   componentDidMount () {
     this.props.getBuyersFromBusiness(this.props.match.params.id)
-    this.props.getBusiness(this.props.match.params.id)
+    this.props.getBusinessFromBuyer(this.props.match.params.id)
   }
 
   _showAll () {
@@ -43,7 +42,7 @@ class BuyerListPage extends Component {
           <Grid style={{ marginTop: 0 }}>
             <Grid.Row columns={2}>
               <Grid.Column>
-                {listBuyersList ? (
+                {listBuyersList && business ? (
                   <Header
                     as="h2"
                     content={`${business.businessName} / ${listBuyersList.length} records of ${countAll}`}
@@ -124,19 +123,19 @@ BuyerListPage.propTypes = {
   match: PropTypes.object,
   listBuyersList: PropTypes.array,
   history: PropTypes.object,
-  getBusiness: PropTypes.func,
+  getBusinessFromBuyer: PropTypes.func,
   business: PropTypes.object,
   isLoadingBusiness: PropTypes.bool,
   countAll: PropTypes.number
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBuyersFromBusiness, getBusiness }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBuyersFromBusiness, getBusinessFromBuyer }, dispatch)
 
 const mapStateToProps = state => ({
-  listBuyersList: state.business.getBuyersFromBusiness.array,
-  countAll: state.business.getBuyersFromBusiness.countAll,
-  business: state.business.get.object,
-  isLoadingBusiness: state.business.get.isLoading
+  listBuyersList: state.buyer.getBuyersFromBusiness.array,
+  countAll: state.buyer.getBuyersFromBusiness.countAll,
+  business: state.buyer.getBusinessFromBuyer.object,
+  isLoadingBusiness: state.buyer.getBusinessFromBuyer.isLoading
 })
 
 export default connect(

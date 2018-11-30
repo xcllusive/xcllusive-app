@@ -188,11 +188,7 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getBuyerRegister = (
-  buyerRegisterType,
-  limit = 5,
-  page = null
-) => async dispatch => {
+export const getBuyerRegister = (buyerRegisterType, limit = 50, page = null) => async dispatch => {
   dispatch({
     type: Types.GET_BUYER_REGISTER_LOADING
   })

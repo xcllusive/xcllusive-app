@@ -20,12 +20,13 @@ class ModalNewUser extends Component {
     this.state = {
       formOptions: {
         dataRegion: [
-          { key: 1, text: 'Sydney Office', value: 'Sydney Office' },
-          { key: 2, text: 'Melbourne Office', value: 'Melbourne Office' },
-          { key: 3, text: 'Gosford Office', value: 'Gosford Office' },
-          { key: 4, text: 'Cowra Office', value: 'Cowra Office' },
-          { key: 5, text: 'Camberra Office', value: 'Camberra Office' },
-          { key: 6, text: 'Adelaide Office', value: 'Adelaide Office' }
+          { key: 1, text: 'Adelaide Office', value: 'Adelaide Office' },
+          { key: 2, text: 'Camberra Office', value: 'Camberra Office' },
+          { key: 3, text: 'Cowra Office', value: 'Cowra Office' },
+          { key: 4, text: 'Gosford Office', value: 'Gosford Office' },
+          { key: 5, text: 'Melbourne Office', value: 'Melbourne Office' },
+          { key: 6, text: 'Sydney Office', value: 'Sydney Office' },
+          { key: 7, text: 'Queensland Office', value: 'Queensland Office' }
         ],
         userType: [
           { key: 1, text: 'Admin', value: 'Admin' },
