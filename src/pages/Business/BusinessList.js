@@ -160,7 +160,7 @@ class BusinessListPage extends Component {
                   ) : (
                     <Button color="orange" onClick={() => this._showLess()} size="small" floated="right">
                       <Icon name="cut" />
-                      Show less
+                      Show Due Tasks Only
                     </Button>
                   )}
                 </Header>
