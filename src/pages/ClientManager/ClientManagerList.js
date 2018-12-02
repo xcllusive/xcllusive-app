@@ -176,7 +176,7 @@ class ClientManagerList extends Component {
       onConfirm: isConfirmed => {
         if (isConfirmed) {
           if (this.props.objectEmailTemplate) {
-            window.location.href = `mailto:${this.state.buyer.email} ?subject=${
+            window.location.href = `mailto:${this.state.business.vendorEmail} ?subject=${
               this.props.objectEmailTemplate.subject
             } &body=Dear ${
               this.state.business.firstNameV
@@ -394,6 +394,7 @@ class ClientManagerList extends Component {
       isLoadingSendEnquiryToOwner,
       values
     } = this.props
+    if (this.state.business) console.log(this.state.business)
     return (
       <Wrapper>
         <Grid padded="horizontally" style={{ marginTop: 0 }}>

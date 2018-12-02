@@ -284,7 +284,7 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string().max(40, 'Last name require max 40 characters.'),
   vendorPhone1: Yup.string()
     .max(30, 'Telephone 1 require max 30 characters.')
-    .required('Business name is required.'),
+    .required('Telephone 1 is required.'),
   vendorPhone2: Yup.string().max(30, 'Telephone 2 require max 30 characters.'),
   vendorPhone3: Yup.string().max(30, 'Telephone 3 require max 30 characters.'),
   vendorEmail: Yup.string().email('Invalid email address.'),
