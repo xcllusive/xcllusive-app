@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import _ from 'lodash'
 
 import { Table, Icon, Button, Grid, Dimmer, Loader } from 'semantic-ui-react'
 
@@ -63,6 +64,10 @@ class BuyerPage extends Component {
     })
   }
 
+  _isUserBusiness = () => {
+    return _.includes(this.props.userRoles, 'BUSINESS_MENU')
+  }
+
   render () {
     const {
       history,
@@ -73,7 +78,6 @@ class BuyerPage extends Component {
       isLoadingSalesMemo,
       businessesSalesMemo
     } = this.props
-
     return (
       <Wrapper>
         <Grid padded>
@@ -252,55 +256,59 @@ class BuyerPage extends Component {
               </Table>
             </Dimmer.Dimmable>
           </Grid.Row>
-          <Grid.Row style={{ paddingBottom: 0 }}>
-            <h2>
-              <b>
-                <div align="left"> Sales Memo </div>
-              </b>
-            </h2>
-          </Grid.Row>
-          <Grid.Row style={{ paddingTop: 0 }}>
-            <Dimmer.Dimmable dimmed={isLoadingSalesMemo} style={{ width: '100%' }}>
-              <Dimmer inverted active={isLoadingSalesMemo}>
-                <Loader>Loading</Loader>
-              </Dimmer>
-              <Table color="blue" celled inverted size="small" compact textAlign="center">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Business ID</Table.HeaderCell>
-                    <Table.HeaderCell>Business Name</Table.HeaderCell>
-                    <Table.HeaderCell>Owners</Table.HeaderCell>
-                    <Table.HeaderCell>Phone</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {businessesSalesMemo.map(item => (
-                    <Table.Row active key={item.business.id}>
-                      <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
-                      <Table.Cell selectable onClick={() => history.push(`/business/${item.business.id}`)}>
-                        <Icon
-                          style={{
-                            fontSize: '1.2em',
-                            width: 'auto',
-                            paddingLeft: '5px',
-                            fontFamily: 'lato',
-                            color: 'blue'
-                          }}
-                          link
-                        >
-                          {item.business.businessName}
-                        </Icon>
-                      </Table.Cell>
-                      <Table.Cell>
-                        {item.business.firstNameV} {item.business.lastNameV}
-                      </Table.Cell>
-                      <Table.Cell>{item.business.vendorPhone1}</Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
-            </Dimmer.Dimmable>
-          </Grid.Row>
+          {this._isUserBusiness() ? (
+            <Fragment>
+              <Grid.Row style={{ paddingBottom: 0 }}>
+                <h2>
+                  <b>
+                    <div align="left"> Sales Memo </div>
+                  </b>
+                </h2>
+              </Grid.Row>
+              <Grid.Row style={{ paddingTop: 0 }}>
+                <Dimmer.Dimmable dimmed={isLoadingSalesMemo} style={{ width: '100%' }}>
+                  <Dimmer inverted active={isLoadingSalesMemo}>
+                    <Loader>Loading</Loader>
+                  </Dimmer>
+                  <Table color="blue" celled inverted size="small" compact textAlign="center">
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>Business ID</Table.HeaderCell>
+                        <Table.HeaderCell>Business Name</Table.HeaderCell>
+                        <Table.HeaderCell>Owners</Table.HeaderCell>
+                        <Table.HeaderCell>Phone</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      {businessesSalesMemo.map(item => (
+                        <Table.Row active key={item.business.id}>
+                          <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
+                          <Table.Cell selectable onClick={() => history.push(`/business/${item.business.id}`)}>
+                            <Icon
+                              style={{
+                                fontSize: '1.2em',
+                                width: 'auto',
+                                paddingLeft: '5px',
+                                fontFamily: 'lato',
+                                color: 'blue'
+                              }}
+                              link
+                            >
+                              {item.business.businessName}
+                            </Icon>
+                          </Table.Cell>
+                          <Table.Cell>
+                            {item.business.firstNameV} {item.business.lastNameV}
+                          </Table.Cell>
+                          <Table.Cell>{item.business.vendorPhone1}</Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table>
+                </Dimmer.Dimmable>
+              </Grid.Row>
+            </Fragment>
+          ) : null}
         </Grid>
       </Wrapper>
     )
@@ -319,7 +327,8 @@ BuyerPage.propTypes = {
   isLoadingUnderOffer: PropTypes.bool,
   isLoadingForSale: PropTypes.bool,
   businessesSalesMemo: PropTypes.array,
-  isLoadingSalesMemo: PropTypes.bool
+  isLoadingSalesMemo: PropTypes.bool,
+  userRoles: PropTypes.array
 }
 
 const mapStateToProps = state => ({
@@ -328,7 +337,8 @@ const mapStateToProps = state => ({
   businessesUnderOffer: state.buyer.getBuyerBusinessesUnderOffer.array,
   isLoadingUnderOffer: state.buyer.getBuyerBusinessesUnderOffer.isLoading,
   businessesSalesMemo: state.buyer.getBuyerBusinessesSalesMemo.array,
-  isLoadingSalesMemo: state.buyer.getBuyerBusinessesSalesMemo.isLoading
+  isLoadingSalesMemo: state.buyer.getBuyerBusinessesSalesMemo.isLoading,
+  userRoles: state.auth.user.roles
 })
 
 export default connect(
