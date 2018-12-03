@@ -54,7 +54,7 @@ export const sendGroupEmail = (sendGroupEmail, array) => {
 
   return request({
     method: 'post',
-    url: '/business/send-group-email',
+    url: '/buyer/send-group-email',
     data,
     headers: { 'Content-Type': 'multipart/form-data' }
   })
@@ -87,5 +87,11 @@ export const getBuyersFromBusiness = (businessId, showAll) => {
 export const getBusinessFromBuyer = id => {
   return request({
     url: `/buyer/business-from-buyer/${id}`
+  })
+}
+
+export const getBuyersGroupEmail = businessId => {
+  return request({
+    url: `/buyer/${businessId}/group-email`
   })
 }

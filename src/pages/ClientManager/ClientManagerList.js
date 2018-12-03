@@ -394,7 +394,6 @@ class ClientManagerList extends Component {
       isLoadingSendEnquiryToOwner,
       values
     } = this.props
-    if (this.state.business) console.log(this.state.business)
     return (
       <Wrapper>
         <Grid padded="horizontally" style={{ marginTop: 0 }}>

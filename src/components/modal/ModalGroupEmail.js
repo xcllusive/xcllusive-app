@@ -21,8 +21,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { getBuyersGroupEmail } from '../../redux/ducks/business'
-import { sendGroupEmail } from '../../redux/ducks/buyer'
+import { sendGroupEmail, getBuyersGroupEmail } from '../../redux/ducks/buyer'
 
 class ModalGroupEmail extends Component {
   constructor (props) {
