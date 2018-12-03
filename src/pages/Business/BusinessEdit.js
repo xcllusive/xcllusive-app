@@ -7,10 +7,10 @@ import moment from 'moment'
 import numeral from 'numeral'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
-import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+import EditBusinessPriceFormTest from '../../components/forms/EditBusinessPriceFormTest'
 
 class BusinessEditPage extends Component {
   constructor (props) {
@@ -198,7 +198,7 @@ class BusinessEditPage extends Component {
                   menuItem: 'Pricing/Information',
                   render: () => (
                     <Tab.Pane attached={false}>
-                      <EditBusinessPriceForm business={business} />
+                      <EditBusinessPriceFormTest business={business} />
                     </Tab.Pane>
                   )
                 }

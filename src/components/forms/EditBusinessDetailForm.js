@@ -40,6 +40,14 @@ class EditBusinessDetailForm extends Component {
   //   this.props.updateBusiness(this.props.values)
   // }
 
+  async componentWillUnmount () {
+    // console.log(this.props.isSubmitting, this.props.isValid)
+    if (this.props.isSubmitting || this.props.isValid) {
+      await this.props.updateBusiness(this.props.values)
+      this.props.getBusiness(this.props.business.id)
+    }
+  }
+
   componentDidUpdate (nextProps) {
     if (this.props.reassignedBusiness && nextProps.reassignedBusiness !== this.props.reassignedBusiness) {
       this.props.getBusiness(this.props.business.id)
@@ -892,7 +900,7 @@ const validationSchema = Yup.object().shape({
   vendorPhone3: Yup.string().max(40, 'Telephone 3 require max 40 characters.'),
   vendorEmail: Yup.string().email('Invalid email address.'),
   businessSource: Yup.string().required('Source is required.'),
-  sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
+  sourceNotes: Yup.string().max(100, 'Source Notes require max 100 characters.'),
   description: Yup.string().max(2000, 'Source Notes require max 2000 characters.'),
   businessNameSecondary: Yup.string().max(120, 'Source Notes require max 120 characters.'),
   // businessABN: Yup.string()
