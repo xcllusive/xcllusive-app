@@ -53,14 +53,14 @@ class BuyerListPage extends Component {
               </Grid.Column>
               <Grid.Column>
                 {this.state.showAll ? (
-                  <Button color="facebook" onClick={() => this._showAll()} size="small" floated="right">
+                  <Button color="twitter" onClick={() => this._showAll()} size="small" floated="right">
                     <Icon name="zoom" />
                     Show all
                   </Button>
                 ) : (
-                  <Button color="twitter" onClick={() => this._showLess()} size="small" floated="right">
+                  <Button color="orange" onClick={() => this._showLess()} size="small" floated="right">
                     <Icon name="cut" />
-                    Show less
+                    Show Due Tasks Only
                   </Button>
                 )}
               </Grid.Column>
@@ -82,20 +82,74 @@ class BuyerListPage extends Component {
                     {listBuyersList.map(buyersList => (
                       <Table.Row
                         active
-                        key={buyersList.enquiry.Buyer.id}
-                        onClick={() =>
-                          history.push(`/buyer/${buyersList.enquiry.Buyer.id}/business/${this.props.match.params.id}`)
-                        }
+                        key={buyersList.id}
+                        onClick={() => history.push(`/buyer/${buyersList.id}/business/${this.props.match.params.id}`)}
                       >
-                        <Table.Cell>
-                          {buyersList.enquiry.Buyer.firstName} {buyersList.enquiry.Buyer.surname}
+                        <Table.Cell
+                          warning={
+                            !buyersList.BuyerLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD') &&
+                                (buyersList.caReceived || buyersList.scanfilePath !== '')
+                              )
+                            }, false)
+                          }
+                        >
+                          {buyersList.firstName} {buyersList.surname}
                         </Table.Cell>
-                        <Table.Cell>{buyersList.lastLog.text}</Table.Cell>
-                        <Table.Cell>
-                          {buyersList.lastLog ? moment(buyersList.lastLog.dateTimeCreated).format('DD/MM/YYYY') : ''}
+                        <Table.Cell
+                          warning={
+                            !buyersList.BuyerLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD') &&
+                                (buyersList.caReceived || buyersList.scanfilePath !== '')
+                              )
+                            }, false)
+                          }
+                        >
+                          {buyersList.BuyerLog[0].text}
                         </Table.Cell>
-                        <Table.Cell>
-                          {buyersList.lastLog ? moment(buyersList.lastLog.followUp).format('DD/MM/YYYY') : ''}
+                        <Table.Cell
+                          warning={
+                            !buyersList.BuyerLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD') &&
+                                (buyersList.caReceived || buyersList.scanfilePath !== '')
+                              )
+                            }, false)
+                          }
+                        >
+                          {buyersList.BuyerLog[0]
+                            ? moment(buyersList.BuyerLog[0].dateTimeCreated).format('DD/MM/YYYY')
+                            : ''}
+                        </Table.Cell>
+                        <Table.Cell
+                          warning={
+                            !buyersList.BuyerLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD') &&
+                                (buyersList.caReceived || buyersList.scanfilePath !== '')
+                              )
+                            }, false)
+                          }
+                        >
+                          {buyersList.BuyerLog[0] ? moment(buyersList.BuyerLog[0].followUp).format('DD/MM/YYYY') : ''}
                         </Table.Cell>
                       </Table.Row>
                     ))}

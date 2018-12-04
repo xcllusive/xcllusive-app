@@ -180,7 +180,7 @@ class BusinessListPage extends Component {
                     {businesses.map(business => (
                       <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
                         <Table.Cell
-                          error={
+                          warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
                                 return true
@@ -193,7 +193,7 @@ class BusinessListPage extends Component {
                           }
                         >{`BS${business.id}`}</Table.Cell>
                         <Table.Cell
-                          error={
+                          warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
                                 return true
@@ -208,7 +208,7 @@ class BusinessListPage extends Component {
                           {business.businessName}
                         </Table.Cell>
                         <Table.Cell
-                          error={
+                          warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
                                 return true
@@ -221,7 +221,7 @@ class BusinessListPage extends Component {
                           }
                         >{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
                         <Table.Cell
-                          error={
+                          warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
                                 return true
@@ -236,7 +236,7 @@ class BusinessListPage extends Component {
                           {business.BusinessLog[0].text}
                         </Table.Cell>
                         <Table.Cell
-                          error={
+                          warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
                                 return true
