@@ -395,15 +395,9 @@ class ClientManagerList extends Component {
       values
     } = this.props
     // Verify IM Rule
-    // if (this.state.business && this.state.buyer) {
-    //   console.log(
-    //     this.state.buyer.caReceived,
-    //     this.state.ownersApprovalReceived,
-    //     this.state.business.notifyOwner,
-    //     this.state.business.stageId, // Under Offer
-    //     this.state.business.productId // Seller Assist)
-    //   )
-    // }
+    if (this.state.buyer) {
+      console.log(this.state.buyer.caReceived, this.state.ownersApprovalReceived, this.state.buyer.scanfilePath)
+    }
     return (
       <Wrapper>
         <Grid padded="horizontally" style={{ marginTop: 0 }}>
@@ -574,8 +568,7 @@ class ClientManagerList extends Component {
                       color="blue"
                       onClick={() => this._toggleModalSendIm()}
                       disabled={
-                        !this.state.buyer.caReceived ||
-                        this.state.buyer.scanfilePath === '' ||
+                        (!this.state.buyer.caReceived && this.state.buyer.scanfilePath === '') ||
                         !this.state.business ||
                         (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
                         this.state.business.stageId === 5 || // Under Offer

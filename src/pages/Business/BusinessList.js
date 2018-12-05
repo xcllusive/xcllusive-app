@@ -173,7 +173,7 @@ class BusinessListPage extends Component {
                       <Table.HeaderCell>Business Name</Table.HeaderCell>
                       <Table.HeaderCell>Contact Name</Table.HeaderCell>
                       <Table.HeaderCell>Log Text</Table.HeaderCell>
-                      <Table.HeaderCell>Follow Up date</Table.HeaderCell>
+                      <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
