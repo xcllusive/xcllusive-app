@@ -395,9 +395,9 @@ class ClientManagerList extends Component {
       values
     } = this.props
     // Verify IM Rule
-    if (this.state.buyer) {
-      console.log(this.state.buyer.caReceived, this.state.ownersApprovalReceived, this.state.buyer.scanfilePath)
-    }
+    // if (this.state.buyer) {
+    //   console.log(this.state.buyer.caReceived, this.state.ownersApprovalReceived, this.state.buyer.scanfilePath)
+    // }
     return (
       <Wrapper>
         <Grid padded="horizontally" style={{ marginTop: 0 }}>
