@@ -68,6 +68,21 @@ class BuyerPage extends Component {
     return _.includes(this.props.userRoles, 'BUSINESS_MENU')
   }
 
+  _downloadIM (imUrl) {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Download IM',
+        text: 'Are you sure you want to download the IM?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          // this.props.downloadIM(this.props.business.id)
+          window.open(`${imUrl}`, '_blank')
+        }
+      }
+    })
+  }
+
   render () {
     const {
       history,
@@ -106,13 +121,15 @@ class BuyerPage extends Component {
                     <Table.HeaderCell>Sent</Table.HeaderCell>
                     <Table.HeaderCell>Make New Score</Table.HeaderCell>
                     <Table.HeaderCell>Locked</Table.HeaderCell>
+                    <Table.HeaderCell>IM</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
                   {businessesForSale.map(item => (
                     <Table.Row active key={item.business.id}>
-                      <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
+                      <Table.Cell textAlign="left">{`BS${item.business.id}`}</Table.Cell>
                       <Table.Cell
+                        textAlign="left"
                         selectable
                         onClick={
                           item.lastScore &&
@@ -192,6 +209,17 @@ class BuyerPage extends Component {
                           ? this._locked(item.lastScore.dateTimeCreated)
                           : '-'}
                       </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          disabled={!item.business.imUrl}
+                          color="instagram"
+                          size="small"
+                          onClick={() => this._downloadIM(item.business.imUrl)}
+                        >
+                          <Icon name="download" />
+                        </Button>
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -223,8 +251,12 @@ class BuyerPage extends Component {
                 <Table.Body>
                   {businessesUnderOffer.map(item => (
                     <Table.Row active key={item.business.id}>
-                      <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
-                      <Table.Cell selectable onClick={() => history.push(`buyer/business/${item.business.id}`)}>
+                      <Table.Cell textAlign="left">{`BS${item.business.id}`}</Table.Cell>
+                      <Table.Cell
+                        textAlign="left"
+                        selectable
+                        onClick={() => history.push(`buyer/business/${item.business.id}`)}
+                      >
                         <Icon
                           style={{
                             fontSize: '1.2em',
@@ -249,7 +281,9 @@ class BuyerPage extends Component {
                           <Icon name="mail" />
                         </Button>
                       </Table.Cell>
-                      <Table.Cell>{this._diffDays(item.business.daysOnTheMarket)}</Table.Cell>
+                      <Table.Cell>
+                        {item.business.daysOnTheMarket ? this._diffDays(item.business.daysOnTheMarket) : '-'}
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -282,8 +316,12 @@ class BuyerPage extends Component {
                     <Table.Body>
                       {businessesSalesMemo.map(item => (
                         <Table.Row active key={item.business.id}>
-                          <Table.Cell>{`BS${item.business.id}`}</Table.Cell>
-                          <Table.Cell selectable onClick={() => history.push(`/business/${item.business.id}`)}>
+                          <Table.Cell textAlign="left">{`BS${item.business.id}`}</Table.Cell>
+                          <Table.Cell
+                            textAlign="left"
+                            selectable
+                            onClick={() => history.push(`/business/${item.business.id}`)}
+                          >
                             <Icon
                               style={{
                                 fontSize: '1.2em',
