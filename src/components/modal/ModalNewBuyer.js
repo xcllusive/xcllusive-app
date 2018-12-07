@@ -46,8 +46,10 @@ class ModalNewBuyer extends Component {
     replaced = replaced.replace(/<[^>]+>/gi, '')
     replaced = replaced.replace(/<[^>]>/gi, '')
     replaced = replaced.replace(/[.*+?^${}()|[\]\\]/g, '')
+    let zero = ''
+    if (replaced.substring(0, 1) === '0') zero = 0
     const toString = parseInt(replaced)
-    this.props.setFieldValue('telephone1Number', toString.toString())
+    this.props.setFieldValue('telephone1Number', `${zero}${toString.toString()}`)
   }
 
   render () {
