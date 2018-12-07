@@ -568,7 +568,8 @@ class ClientManagerList extends Component {
                       color="blue"
                       onClick={() => this._toggleModalSendIm()}
                       disabled={
-                        (!this.state.buyer.caReceived && this.state.buyer.scanfilePath === '') ||
+                        (!this.state.buyer.caReceived &&
+                          (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
                         !this.state.business ||
                         (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
                         this.state.business.stageId === 5 || // Under Offer
