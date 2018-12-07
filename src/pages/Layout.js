@@ -68,42 +68,37 @@ const Layout = ({ match, logout, menu }) => (
     <ModalRoot />
     <Switch>
       <Route exact component={DashBoardPage} path={`${match.path}`} />
-      <AuthorizationRoute exact component={ListPage} path={`${match.path}business`} allowedRoles={['BUSINESS_MENU']} />
-      <AuthorizationRoute
-        exact
-        component={EditPage}
-        path={`${match.path}business/:id`}
-        allowedRoles={['BUSINESS_MENU']}
-      />
+      <AuthorizationRoute exact component={ListPage} path={`${match.path}business`} allowedRoles="BUSINESS_MENU" />
+      <AuthorizationRoute exact component={EditPage} path={`${match.path}business/:id`} allowedRoles="BUSINESS_MENU" />
       <AuthorizationRoute
         exact
         component={AgreementPage}
         path={`${match.path}business/:id/agreement/:idAgreement`}
-        allowedRoles={['BUSINESS_MENU']}
+        allowedRoles="BUSINESS_MENU"
       />
       <AuthorizationRoute
         exact
         component={PreviewAgreement}
         path={`${match.path}business/:id/agreement/:idAgreement/preview`}
-        allowedRoles={['BUSINESS_MENU']}
+        allowedRoles="BUSINESS_MENU"
       />
       <AuthorizationRoute
         exact
         component={MakeTaxInvoice}
         path={`${match.path}business/:id/invoice`}
-        allowedRoles={['BUSINESS_MENU']}
+        allowedRoles="BUSINESS_MENU"
       />
       <AuthorizationRoute
         exact
         component={AppraisalList}
         path={`${match.path}business/:id/appraisalList`}
-        allowedRoles={['BUSINESS_MENU']}
+        allowedRoles="BUSINESS_MENU"
       />
       <AuthorizationRoute
         exact
         component={AppraisalMenu}
         path={`${match.path}business/:id/appraisalMenu`}
-        allowedRoles={['BUSINESS_MENU']}
+        allowedRoles="BUSINESS_MENU"
       />
       {/* <Route
         exact
@@ -114,57 +109,57 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={LogPage}
         path={`${match.path}business/:id/log`}
-        allowedRoles={['BUSINESS_MENU']}
+        allowedRoles="BUSINESS_MENU"
       />
-      <AuthorizationRoute exact component={BuyerPage} path={`${match.path}buyer`} allowedRoles={['BUYER_MENU']} />
+      <AuthorizationRoute exact component={BuyerPage} path={`${match.path}buyer`} allowedRoles="BUYER_MENU" />
       <AuthorizationRoute
         exact
         component={BuyerDetailsCM}
         path={`${match.path}clientManager/buyer/:id`}
-        allowedRoles={['CLIENT_MANAGER_MENU']}
+        allowedRoles="CLIENT_MANAGER_MENU"
       />
       <AuthorizationRoute
         exact
         component={BuyerDetails}
         path={`${match.path}buyer/:idBuyer/business/:idBusiness`}
-        allowedRoles={['BUYER_MENU']}
+        allowedRoles="BUYER_MENU"
       />
       <AuthorizationRoute
         exact
         component={BuyerList}
         path={`${match.path}buyer/business/:id`}
-        allowedRoles={['BUYER_MENU']}
+        allowedRoles="BUYER_MENU"
       />
       <AuthorizationRoute
         exact
         component={ScoreList}
         path={`${match.path}buyer/business/:id/score-list`}
-        allowedRoles={['BUYER_MENU']}
+        allowedRoles="BUYER_MENU"
       />
       <AuthorizationRoute
         exact
         component={MakeNewScore}
         path={`${match.path}buyer/business/:idBusiness/make-new-score`}
-        allowedRoles={['BUYER_MENU']}
+        allowedRoles="BUYER_MENU"
       />
       <AuthorizationRoute
         exact
         component={MakeNewScore}
         path={`${match.path}buyer/business/:idBusiness/make-new-score/:idScore`}
-        allowedRoles={['BUYER_MENU']}
+        allowedRoles="BUYER_MENU"
       />
       <Route render={() => <span>presale</span>} path={`${match.path}presale`} />
       <Route render={() => <span>resources</span>} path={`${match.path}resources`} />
       <AuthorizationRoute
         component={ClientManagerList}
         path={`${match.path}clientManager`}
-        allowedRoles={['CLIENT_MANAGER_MENU']}
+        allowedRoles="CLIENT_MANAGER_MENU"
       />
       <AuthorizationRoute
         exact
         component={UserPage}
         path={`${match.path}systemSettings`}
-        allowedRoles={['SYSTEM_SETTINGS_MENU']}
+        allowedRoles="SYSTEM_SETTINGS_MENU"
       />
       <Route
         render={() => <span>You, don`t have permission to access this page!</span>}
