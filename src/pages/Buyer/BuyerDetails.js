@@ -153,8 +153,7 @@ class BuyerDetails extends Component {
         title: 'Email to Buyer',
         text: 'Are you sure you want to send an email to buyer?'
       },
-      buyerId: this.props.match.params.idBuyer,
-      email: this.props.buyer.email
+      buyerObject: this.props.buyer
     })
   }
 
