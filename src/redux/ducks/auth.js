@@ -124,7 +124,7 @@ export const loginWithToken = () => async dispatch => {
   }
 }
 
-export const logout = error => dispatch => {
+export const logout = (error = null) => dispatch => {
   window.localStorage.removeItem('xcllusiveJWT')
   setAuthorizationHeader()
   dispatch(userLogout(error))
