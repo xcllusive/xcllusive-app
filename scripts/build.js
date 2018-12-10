@@ -54,21 +54,25 @@ measureFileSizesBeforeBuild(paths.appBuild)
   .then(
     ({ stats, previousFileSizes, warnings }) => {
       if (warnings.length) {
-        chalk.yellow('Compiled with warnings.\n')(warnings.join('\n\n'))(
+        console.log(chalk.yellow('Compiled with warnings.\n'))
+        console.log(warnings.join('\n\n'))
+        console.log(
           '\nSearch for the ' + chalk.underline(chalk.yellow('keywords')) + ' to learn more about each warning.'
-        )('To ignore, add ' + chalk.cyan('// eslint-disable-next-line') + ' to the line before.\n')
+        )
+        console.log('To ignore, add ' + chalk.cyan('// eslint-disable-next-line') + ' to the line before.\n')
       } else {
-        chalk.green('Compiled successfully.\n')
+        console.log(chalk.green('Compiled successfully.\n'))
       }
 
-      ;('File sizes after gzip:\n')
+      console.log('File sizes after gzip:\n')
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
         paths.appBuild,
         WARN_AFTER_BUNDLE_GZIP_SIZE,
         WARN_AFTER_CHUNK_GZIP_SIZE
-      )()
+      )
+      console.log()
 
       const appPackage = require(paths.appPackageJson)
       const publicUrl = paths.publicUrl
@@ -77,15 +81,15 @@ measureFileSizesBeforeBuild(paths.appBuild)
       printHostingInstructions(appPackage, publicUrl, publicPath, buildFolder, useYarn)
     },
     err => {
-      chalk.red('Failed to compile.\n')
+      console.log(chalk.red('Failed to compile.\n'))
       printBuildError(err)
       process.exit(1)
     }
   )
 
 // Create the production build and print the deployment instructions.
-function build(previousFileSizes) {
-  ;('Creating an optimized production build...')
+function build (previousFileSizes) {
+  console.log('Creating an optimized production build...')
 
   let compiler = webpack(config)
   return new Promise((resolve, reject) => {
@@ -107,8 +111,10 @@ function build(previousFileSizes) {
         (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
         messages.warnings.length
       ) {
-        chalk.yellow(
-          '\nTreating warnings as errors because process.env.CI = true.\n' + 'Most CI servers set it automatically.\n'
+        console.log(
+          chalk.yellow(
+            '\nTreating warnings as errors because process.env.CI = true.\n' + 'Most CI servers set it automatically.\n'
+          )
         )
         return reject(new Error(messages.warnings.join('\n\n')))
       }
@@ -121,7 +127,7 @@ function build(previousFileSizes) {
   })
 }
 
-function copyPublicFolder() {
+function copyPublicFolder () {
   fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
     filter: file => file !== paths.appHtml
