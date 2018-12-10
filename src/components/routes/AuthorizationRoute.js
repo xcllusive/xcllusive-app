@@ -5,7 +5,6 @@ import { Route, Redirect } from 'react-router-dom'
 // import _ from 'lodash'
 
 const AuthorizationRoute = ({ allowedRoles, userRoles, component: Component, ...rest }) => {
-  console.log(allowedRoles, userRoles)
   return (
     <Route
       {...rest}

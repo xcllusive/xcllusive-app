@@ -43,10 +43,7 @@ class BuyerListPage extends Component {
             <Grid.Row columns={2}>
               <Grid.Column>
                 {listBuyersList && business ? (
-                  <Header
-                    as="h2"
-                    content={`${business.businessName} / ${listBuyersList.length} records of ${countAll}`}
-                  />
+                  <Header as="h2" content={`${business.businessName} / ${listBuyersList.length} out of ${countAll} `} />
                 ) : (
                   <Header as="h2" content={'0 records'} />
                 )}
