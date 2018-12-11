@@ -182,9 +182,9 @@ class ClientManagerList extends Component {
               this.state.business.firstNameV
             }, %0D%0A %0D%0A we have a new enquiry for your business. %0D%0A %0D%0A Details are: %0D%0A %0D%0A ${
               this.state.buyer.firstName
-            } %0D%0A ${this.state.buyer.streetName}, ${this.state.buyer.suburb} ${this.state.buyer.state} ${
-              this.state.buyer.postCode
-            } %0D%0A ${this.state.buyer.telephone1} %0D%0A ${
+            } ${this.state.buyer.surname} %0D%0A ${this.state.buyer.streetName}, ${this.state.buyer.suburb} ${
+              this.state.buyer.state
+            } ${this.state.buyer.postCode} %0D%0A ${this.state.buyer.telephone1} %0D%0A ${
               this.state.buyer.email
             } %0D%0A %0D%0A ${this._convertHtmlToRightText(this.props.objectEmailTemplate.body)}
             `

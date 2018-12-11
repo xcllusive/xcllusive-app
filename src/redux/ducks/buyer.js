@@ -118,7 +118,8 @@ const initialState = {
   getBusinessFromBuyer: {
     isLoading: true,
     object: null,
-    error: null
+    error: null,
+    countAllEnquiry: 0
   },
   getBuyersGroupEmail: {
     isLoading: true,
@@ -423,6 +424,7 @@ export default function reducer (state = initialState, action) {
           ...state.getBusinessFromBuyer,
           isLoading: false,
           object: action.payload.business,
+          countAllEnquiry: action.payload.countAllEnquiry,
           error: null
         }
       }
