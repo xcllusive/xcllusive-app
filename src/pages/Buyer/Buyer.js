@@ -7,8 +7,9 @@ import _ from 'lodash'
 
 import { Table, Icon, Button, Grid, Dimmer, Loader } from 'semantic-ui-react'
 
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyerBusinesses } from '../../redux/ducks/buyer'
+import { createWeeklyReport } from '../../redux/ducks/broker'
 import Wrapper from '../../components/content/Wrapper'
 import { theme } from '../../styles'
 
@@ -76,8 +77,20 @@ class BuyerPage extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          // this.props.downloadIM(this.props.business.id)
           window.open(`${imUrl}`, '_blank')
+        }
+      }
+    })
+  }
+
+  _brokersWeeklyReport = business => {
+    this.props.openModal(TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT, {
+      title: 'Broker`s Weekly Report',
+      business,
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          await this.props.createWeeklyReport(isConfirmed)
+          this.props.closeModal()
         }
       }
     })
@@ -120,6 +133,7 @@ class BuyerPage extends Component {
                     <Table.HeaderCell>Last Score</Table.HeaderCell>
                     <Table.HeaderCell>Sent</Table.HeaderCell>
                     <Table.HeaderCell>Make New Score</Table.HeaderCell>
+                    <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                     <Table.HeaderCell>Locked</Table.HeaderCell>
                     <Table.HeaderCell>IM</Table.HeaderCell>
                   </Table.Row>
@@ -193,6 +207,16 @@ class BuyerPage extends Component {
                           onClick={() => history.push(`buyer/business/${item.business.id}/score-list`)}
                         >
                           <Icon name="star" />
+                        </Button>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          color="instagram"
+                          size="small"
+                          onClick={() => this._brokersWeeklyReport(item.business)}
+                        >
+                          <Icon name="edit outline" />
                         </Button>
                       </Table.Cell>
                       <Table.Cell
@@ -353,7 +377,8 @@ class BuyerPage extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBuyerBusinesses, openModal }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getBuyerBusinesses, openModal, closeModal, createWeeklyReport }, dispatch)
 
 BuyerPage.propTypes = {
   history: PropTypes.object,
@@ -366,7 +391,9 @@ BuyerPage.propTypes = {
   isLoadingForSale: PropTypes.bool,
   businessesSalesMemo: PropTypes.array,
   isLoadingSalesMemo: PropTypes.bool,
-  userRoles: PropTypes.array
+  userRoles: PropTypes.array,
+  closeModal: PropTypes.func,
+  createWeeklyReport: PropTypes.func
 }
 
 const mapStateToProps = state => ({
