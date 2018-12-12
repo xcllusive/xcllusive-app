@@ -7,3 +7,11 @@ export const createWeeklyReport = create => {
     data: create
   })
 }
+
+export const getLastWeeklyReport = businessId => {
+  return request({
+    method: 'get',
+    url: '/buyer/broker/weekly-report',
+    params: { businessId }
+  })
+}

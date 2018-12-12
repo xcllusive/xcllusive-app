@@ -9,20 +9,47 @@ import { closeModal } from '../../redux/ducks/modal'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
+import { getLastWeeklyReport } from '../../redux/ducks/broker'
+import numeral from 'numeral'
 
 class ModalBrokersWeeklyReport extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      expectedPrice: 0,
+      exchange: false
+    }
   }
-  componentDidMount () {}
+  componentDidMount () {
+    this.props.getLastWeeklyReport(this.props.business.id)
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.lastWeeklyReport && nextProps.lastWeeklyReport.expectedPrice !== prevState.expectedPrice) {
+      var expectedPrice = numeral(nextProps.values.expectedPrice).format('$0,0.[99]')
+    }
+    return {
+      expectedPrice: expectedPrice || prevState.expectedPrice
+    }
+  }
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
   }
 
+  _numberFormat = (e, { name, value }) => {
+    const myNumeral = numeral(value)
+    const numberFormated = myNumeral.format('$0,0.[99]')
+    this.props.setFieldValue(name, myNumeral.value())
+    this.setState({ [name]: numberFormated })
+  }
+
   _handleDateChange = date => {
-    this.props.setFieldValue('settlementDate', date)
+    this.props.setFieldValue('expectedSettlementDate', date)
+  }
+
+  _exchange = () => {
+    this.state.exchange ? this.setState({ exchange: false }) : this.setState({ exchange: true })
   }
 
   render () {
@@ -39,6 +66,7 @@ class ModalBrokersWeeklyReport extends Component {
       title,
       closeModal
     } = this.props
+    // if (lastWeeklyReport) console.log(lastWeeklyReport)
     return (
       <Modal open dimmer={'blurring'}>
         <Modal.Header align="center">{title}</Modal.Header>
@@ -49,16 +77,16 @@ class ModalBrokersWeeklyReport extends Component {
                 <Grid.Column textAlign="right">
                   <label
                     style={{
-                      marginRight: '78px',
+                      marginRight: '148px',
                       fontSize: '.92857143em',
                       color: 'rgba(0,0,0,.87)',
                       fontWeight: '700'
                     }}
                   >
-                    Settlement Date
+                    Date
                   </label>
                   <Form.Field>
-                    <DatePicker disabled={true} selected={values.dateTimeCreated} onChange={this._handleDateChange} />
+                    <DatePicker disabled={true} selected={values.dateTimeCreated} />
                   </Form.Field>
                 </Grid.Column>
               </Grid.Row>
@@ -77,6 +105,40 @@ class ModalBrokersWeeklyReport extends Component {
                 {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
               </Form.Field>
             </Form.Group>
+            {this.state.exchange ? (
+              <Form.Group>
+                <Form.Field>
+                  <Form.Input
+                    label="Expected Price"
+                    name="expectedPrice"
+                    autoComplete="expectedPrice"
+                    value={this.state.expectedPrice}
+                    onChange={this._numberFormat}
+                    onBlur={handleBlur}
+                  />
+                  {errors.expectedPrice && touched.expectedPrice && (
+                    <Label basic color="red" pointing content={errors.expectedPrice} />
+                  )}
+                </Form.Field>
+                <Form.Field>
+                  <label
+                    style={{
+                      marginRight: '78px',
+                      fontSize: '.92857143em',
+                      color: 'rgba(0,0,0,.87)',
+                      fontWeight: '700'
+                    }}
+                  >
+                    Date
+                  </label>
+                  <DatePicker
+                    style={{ marginTop: '5px' }}
+                    selected={values.expectedSettlementDate}
+                    onChange={this._handleDateChange}
+                  />
+                </Form.Field>
+              </Form.Group>
+            ) : null}
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -84,7 +146,7 @@ class ModalBrokersWeeklyReport extends Component {
             <Icon name="archive" />
             Stage
           </Button>
-          <Button floated="left" color="yellow" onClick={closeModal}>
+          <Button floated="left" color="yellow" onClick={() => this._exchange()}>
             <Icon name="exchange" />
             Exchange
           </Button>
@@ -121,15 +183,18 @@ ModalBrokersWeeklyReport.propTypes = {
   setFieldValue: PropTypes.func,
   title: PropTypes.string,
   business: PropTypes.object,
-  closeModal: PropTypes.func
+  closeModal: PropTypes.func,
+  getLastWeeklyReport: PropTypes.func,
+  lastWeeklyReport: PropTypes.object
 }
 
 const mapPropsToValues = props => {
   return {
     business_id: props.business.id,
-    dateTimeCreated: moment(),
-    expectedPrice: 0,
-    expectedSettlementDate: null
+    dateTimeCreated: props.lastWeeklyReport ? moment(props.lastWeeklyReport.dateTimeCreated) : moment(),
+    text: props.lastWeeklyReport ? props.lastWeeklyReport.text : '',
+    expectedPrice: props.lastWeeklyReport ? props.lastWeeklyReport.expectedPrice : 0,
+    expectedSettlementDate: props.lastWeeklyReport ? moment(props.lastWeeklyReport.expectedSettlementDate) : null
   }
 }
 
@@ -143,10 +208,10 @@ const handleSubmit = (values, { props, setSubmitting }) => props.onConfirm(value
 
 const mapStateToProps = state => ({
   isLoading: state.buyer.update.isLoading,
-  sourceOptions: state.businessRegister.get.source.array
+  lastWeeklyReport: state.broker.getLastWeeklyReport.object
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ closeModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ closeModal, getLastWeeklyReport }, dispatch)
 
 export default connect(
   mapStateToProps,
