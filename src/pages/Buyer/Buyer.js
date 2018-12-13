@@ -9,7 +9,6 @@ import { Table, Icon, Button, Grid, Dimmer, Loader } from 'semantic-ui-react'
 
 import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyerBusinesses } from '../../redux/ducks/buyer'
-import { createWeeklyReport } from '../../redux/ducks/broker'
 import Wrapper from '../../components/content/Wrapper'
 import { theme } from '../../styles'
 
@@ -86,13 +85,7 @@ class BuyerPage extends Component {
   _brokersWeeklyReport = business => {
     this.props.openModal(TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT, {
       title: 'Broker`s Weekly Report',
-      business,
-      onConfirm: async isConfirmed => {
-        if (isConfirmed) {
-          await this.props.createWeeklyReport(isConfirmed)
-          this.props.closeModal()
-        }
-      }
+      business
     })
   }
 
@@ -377,8 +370,7 @@ class BuyerPage extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getBuyerBusinesses, openModal, closeModal, createWeeklyReport }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBuyerBusinesses, openModal, closeModal }, dispatch)
 
 BuyerPage.propTypes = {
   history: PropTypes.object,
@@ -392,8 +384,7 @@ BuyerPage.propTypes = {
   businessesSalesMemo: PropTypes.array,
   isLoadingSalesMemo: PropTypes.bool,
   userRoles: PropTypes.array,
-  closeModal: PropTypes.func,
-  createWeeklyReport: PropTypes.func
+  closeModal: PropTypes.func
 }
 
 const mapStateToProps = state => ({

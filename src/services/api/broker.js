@@ -15,3 +15,11 @@ export const getLastWeeklyReport = businessId => {
     params: { businessId }
   })
 }
+
+export const updateWeeklyReport = weeklyReport => {
+  return request({
+    method: 'put',
+    url: '/buyer/broker/weekly-report',
+    data: weeklyReport
+  })
+}

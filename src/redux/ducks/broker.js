@@ -1,6 +1,7 @@
 import {
   createWeeklyReport as createWeeklyReportAPI,
-  getLastWeeklyReport as getLastWeeklyReportAPI
+  getLastWeeklyReport as getLastWeeklyReportAPI,
+  updateWeeklyReport as updateWeeklyReportAPI
 } from '../../services/api/broker'
 import { toast } from 'react-toastify'
 
@@ -12,7 +13,10 @@ export const Types = {
   CREATE_WEEKLY_REPORT_FAILURE: 'CREATE_WEEKLY_REPORT_FAILURE',
   GET_LAST_WEEKLY_REPORT_LOADING: 'GET_LAST_WEEKLY_REPORT_LOADING',
   GET_LAST_WEEKLY_REPORT_SUCCESS: 'GET_LAST_WEEKLY_REPORT_SUCCESS',
-  GET_LAST_WEEKLY_REPORT_FAILURE: 'GET_LAST_WEEKLY_REPORT_FAILURE'
+  GET_LAST_WEEKLY_REPORT_FAILURE: 'GET_LAST_WEEKLY_REPORT_FAILURE',
+  UPDATE_WEEKLY_REPORT_LOADING: 'UPDATE_WEEKLY_REPORT_LOADING',
+  UPDATE_WEEKLY_REPORT_SUCCESS: 'UPDATE_WEEKLY_REPORT_SUCCESS',
+  UPDATE_WEEKLY_REPORT_FAILURE: 'UPDATE_WEEKLY_REPORT_FAILURE'
 }
 
 // Reducer
@@ -27,6 +31,12 @@ const initialState = {
     isLoading: false,
     object: null,
     error: null
+  },
+  update: {
+    isLoading: false,
+    isUpdated: false,
+    error: null,
+    weeklyReport: {}
   }
 }
 
@@ -90,6 +100,37 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.UPDATE_WEEKLY_REPORT_LOADING:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: action.payload,
+          isUpdated: false,
+          error: null
+        }
+      }
+    case Types.UPDATE_WEEKLY_REPORT_SUCCESS:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: true,
+          error: null,
+          weeklyReport: action.payload
+        }
+      }
+    case Types.UPDATE_WEEKLY_REPORT_FAILURE:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -133,5 +174,25 @@ export const getLastWeeklyReport = businessId => async dispatch => {
       payload: error
     })
     toast.error(error)
+  }
+}
+
+export const updateWeeklyReport = weeklyReport => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_WEEKLY_REPORT_LOADING,
+    payload: true
+  })
+  try {
+    const response = await updateWeeklyReportAPI(weeklyReport)
+    dispatch({
+      type: Types.UPDATE_WEEKLY_REPORT_SUCCESS,
+      payload: weeklyReport
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_WEEKLY_REPORT_FAILURE,
+      payload: error
+    })
   }
 }

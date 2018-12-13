@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -9,13 +9,20 @@ import { closeModal } from '../../redux/ducks/modal'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
-import { getLastWeeklyReport } from '../../redux/ducks/broker'
+import { getLastWeeklyReport, createWeeklyReport, updateWeeklyReport } from '../../redux/ducks/broker'
 import numeral from 'numeral'
 
 class ModalBrokersWeeklyReport extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      stage: [
+        { key: 1, text: 'Info Memorandum', value: 'Info Memorandum' },
+        { key: 2, text: 'On The Market', value: 'On The Market' },
+        { key: 3, text: 'Under Offer', value: 'Under Offer' },
+        { key: 4, text: 'Exchange', value: 'Exchange' },
+        { key: 5, text: 'Sold', value: 'Sold' }
+      ],
       expectedPrice: 0,
       exchange: false
     }
@@ -33,10 +40,6 @@ class ModalBrokersWeeklyReport extends Component {
     }
   }
 
-  _handleSelectChange = (e, { name, value }) => {
-    this.props.setFieldValue(name, value)
-  }
-
   _numberFormat = (e, { name, value }) => {
     const myNumeral = numeral(value)
     const numberFormated = myNumeral.format('$0,0.[99]')
@@ -44,12 +47,40 @@ class ModalBrokersWeeklyReport extends Component {
     this.setState({ [name]: numberFormated })
   }
 
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+    if (value === 'Exchange') {
+      this.setState({ exchange: true })
+      if (this.props.lastWeeklyReport && !moment(this.props.lastWeeklyReport.expectedSettlementDate).isValid()) {
+        this.props.setFieldValue('expectedSettlementDate', null)
+      }
+    } else {
+      this.setState({ exchange: false })
+      this.props.setFieldValue('expectedSettlementDate', null)
+    }
+  }
+
   _handleDateChange = date => {
     this.props.setFieldValue('expectedSettlementDate', date)
   }
 
-  _exchange = () => {
-    this.state.exchange ? this.setState({ exchange: false }) : this.setState({ exchange: true })
+  _handleConfirm = async isConfirmed => {
+    if (!isConfirmed) {
+      this.props.closeModal()
+      return
+    }
+    if (this.props.lastWeeklyReport) {
+      const comparingDate = moment().diff(this.props.lastWeeklyReport.dateTimeCreated, 'day')
+      if (comparingDate >= 3) {
+        await this.props.createWeeklyReport(this.props.values)
+      } else {
+        await this.props.updateWeeklyReport(this.props.values)
+      }
+      this.props.closeModal()
+    } else {
+      await this.props.createWeeklyReport(this.props.values)
+      this.props.closeModal()
+    }
   }
 
   render () {
@@ -59,16 +90,14 @@ class ModalBrokersWeeklyReport extends Component {
       handleBlur,
       errors,
       touched,
-      handleSubmit,
       isSubmitting,
       isValid,
       isLoading,
       title,
       closeModal
     } = this.props
-    // if (lastWeeklyReport) console.log(lastWeeklyReport)
     return (
-      <Modal open dimmer={'blurring'}>
+      <Modal open dimmer={'blurring'} onClose={() => this._handleConfirm(false)}>
         <Modal.Header align="center">{title}</Modal.Header>
         <Modal.Content>
           <Form>
@@ -105,61 +134,65 @@ class ModalBrokersWeeklyReport extends Component {
                 {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
               </Form.Field>
             </Form.Group>
-            {this.state.exchange ? (
-              <Form.Group>
-                <Form.Field>
-                  <Form.Input
-                    label="Expected Price"
-                    name="expectedPrice"
-                    autoComplete="expectedPrice"
-                    value={this.state.expectedPrice}
-                    onChange={this._numberFormat}
-                    onBlur={handleBlur}
-                  />
-                  {errors.expectedPrice && touched.expectedPrice && (
-                    <Label basic color="red" pointing content={errors.expectedPrice} />
-                  )}
-                </Form.Field>
-                <Form.Field>
-                  <label
-                    style={{
-                      marginRight: '78px',
-                      fontSize: '.92857143em',
-                      color: 'rgba(0,0,0,.87)',
-                      fontWeight: '700'
-                    }}
-                  >
-                    Date
-                  </label>
-                  <DatePicker
-                    style={{ marginTop: '5px' }}
-                    selected={values.expectedSettlementDate}
-                    onChange={this._handleDateChange}
-                  />
-                </Form.Field>
-              </Form.Group>
-            ) : null}
+            <Form.Group>
+              <Form.Field width={4}>
+                <Form.Select
+                  label="Stage"
+                  name="stage"
+                  options={this.state.stage}
+                  value={values.stage}
+                  onChange={this._handleSelectChange}
+                />
+              </Form.Field>
+              {this.state.exchange ||
+              (this.props.lastWeeklyReport && this.props.lastWeeklyReport.stage === 'Exchange') ? (
+                  <Fragment>
+                    <Form.Field>
+                      <Form.Input
+                        label="Expected Price"
+                        name="expectedPrice"
+                        autoComplete="expectedPrice"
+                        value={this.state.expectedPrice}
+                        onChange={this._numberFormat}
+                        onBlur={handleBlur}
+                      />
+                      {errors.expectedPrice && touched.expectedPrice && (
+                        <Label basic color="red" pointing content={errors.expectedPrice} />
+                      )}
+                    </Form.Field>
+                    <Form.Field>
+                      <label
+                        style={{
+                          marginRight: '78px',
+                          fontSize: '.92857143em',
+                          color: 'rgba(0,0,0,.87)',
+                          fontWeight: '700'
+                        }}
+                      >
+                      Date
+                      </label>
+                      <DatePicker
+                        style={{ marginTop: '5px' }}
+                        selected={values.expectedSettlementDate}
+                        onChange={this._handleDateChange}
+                      />
+                    </Form.Field>
+                  </Fragment>
+                ) : null}
+            </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button floated="left" color="orange" onClick={closeModal}>
-            <Icon name="archive" />
-            Stage
-          </Button>
-          <Button floated="left" color="yellow" onClick={() => this._exchange()}>
-            <Icon name="exchange" />
-            Exchange
-          </Button>
           <Button color="red" onClick={closeModal}>
             <Icon name="cancel" />
             Cancel
           </Button>
           <Button
-            color="blue"
+            color="green"
             type="submit"
             disabled={isSubmitting || !isValid}
             loading={isLoading}
-            onClick={handleSubmit}
+            onClick={this._handleConfirm}
           >
             <Icon name="save" />
             Save
@@ -185,33 +218,52 @@ ModalBrokersWeeklyReport.propTypes = {
   business: PropTypes.object,
   closeModal: PropTypes.func,
   getLastWeeklyReport: PropTypes.func,
-  lastWeeklyReport: PropTypes.object
+  lastWeeklyReport: PropTypes.object,
+  createWeeklyReport: PropTypes.func,
+  updateWeeklyReport: PropTypes.func
 }
 
 const mapPropsToValues = props => {
+  if (props.lastWeeklyReport) {
+    const comparingDate = moment().diff(props.lastWeeklyReport.dateTimeCreated, 'day')
+    if (comparingDate >= 3) {
+      return {
+        id: null,
+        business_id: props.business.id,
+        dateTimeCreated: moment(),
+        text: '',
+        expectedPrice: 0,
+        expectedSettlementDate: null,
+        stage: ''
+      }
+    }
+  }
+
   return {
+    id: props.lastWeeklyReport ? props.lastWeeklyReport.id : null,
     business_id: props.business.id,
     dateTimeCreated: props.lastWeeklyReport ? moment(props.lastWeeklyReport.dateTimeCreated) : moment(),
     text: props.lastWeeklyReport ? props.lastWeeklyReport.text : '',
     expectedPrice: props.lastWeeklyReport ? props.lastWeeklyReport.expectedPrice : 0,
-    expectedSettlementDate: props.lastWeeklyReport ? moment(props.lastWeeklyReport.expectedSettlementDate) : null
+    expectedSettlementDate: props.lastWeeklyReport ? moment(props.lastWeeklyReport.expectedSettlementDate) : null,
+    stage: props.lastWeeklyReport ? props.lastWeeklyReport.stage : ''
   }
 }
 
 const validationSchema = Yup.object().shape({
   text: Yup.string()
     .required('Text is required.')
-    .max(400, 'Text require max 400 characters.')
+    .max(400, 'Text require max 400 characters.'),
+  stage: Yup.string().required()
 })
-
-const handleSubmit = (values, { props, setSubmitting }) => props.onConfirm(values)
 
 const mapStateToProps = state => ({
   isLoading: state.buyer.update.isLoading,
   lastWeeklyReport: state.broker.getLastWeeklyReport.object
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ closeModal, getLastWeeklyReport }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ closeModal, getLastWeeklyReport, createWeeklyReport, updateWeeklyReport }, dispatch)
 
 export default connect(
   mapStateToProps,
@@ -220,7 +272,6 @@ export default connect(
   withFormik({
     mapPropsToValues,
     validationSchema,
-    handleSubmit,
     enableReinitialize: true
   })(ModalBrokersWeeklyReport)
 )
