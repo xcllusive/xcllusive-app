@@ -1,7 +1,8 @@
 import {
   createWeeklyReport as createWeeklyReportAPI,
   getLastWeeklyReport as getLastWeeklyReportAPI,
-  updateWeeklyReport as updateWeeklyReportAPI
+  updateWeeklyReport as updateWeeklyReportAPI,
+  getBrokersPerRegion as getBrokersPerRegionAPI
 } from '../../services/api/broker'
 import { toast } from 'react-toastify'
 
@@ -16,7 +17,10 @@ export const Types = {
   GET_LAST_WEEKLY_REPORT_FAILURE: 'GET_LAST_WEEKLY_REPORT_FAILURE',
   UPDATE_WEEKLY_REPORT_LOADING: 'UPDATE_WEEKLY_REPORT_LOADING',
   UPDATE_WEEKLY_REPORT_SUCCESS: 'UPDATE_WEEKLY_REPORT_SUCCESS',
-  UPDATE_WEEKLY_REPORT_FAILURE: 'UPDATE_WEEKLY_REPORT_FAILURE'
+  UPDATE_WEEKLY_REPORT_FAILURE: 'UPDATE_WEEKLY_REPORT_FAILURE',
+  GET_BROKERS_PER_REGION_LOADING: 'GET_BROKERS_PER_REGION_LOADING',
+  GET_BROKERS_PER_REGION_SUCCESS: 'GET_BROKERS_PER_REGION_SUCCESS',
+  GET_BROKERS_PER_REGION_FAILURE: 'GET_BROKERS_PER_REGION_FAILURE'
 }
 
 // Reducer
@@ -37,6 +41,11 @@ const initialState = {
     isUpdated: false,
     error: null,
     weeklyReport: {}
+  },
+  getBrokersPerRegion: {
+    isLoading: false,
+    array: [],
+    error: null
   }
 }
 
@@ -131,6 +140,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BROKERS_PER_REGION_LOADING:
+      return {
+        ...state,
+        getBrokersPerRegion: {
+          ...state.getBrokersPerRegion,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BROKERS_PER_REGION_SUCCESS:
+      return {
+        ...state,
+        getBrokersPerRegion: {
+          ...state.getBrokersPerRegion,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BROKERS_PER_REGION_FAILURE:
+      return {
+        ...state,
+        getBrokersPerRegion: {
+          ...state.getBrokersPerRegion,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -194,5 +231,25 @@ export const updateWeeklyReport = weeklyReport => async dispatch => {
       type: Types.UPDATE_WEEKLY_REPORT_FAILURE,
       payload: error
     })
+  }
+}
+
+export const getBrokersPerRegion = region => async dispatch => {
+  dispatch({
+    type: Types.GET_BROKERS_PER_REGION_LOADING,
+    payload: true
+  })
+  try {
+    const brokers = await getBrokersPerRegionAPI(region)
+    dispatch({
+      type: Types.GET_BROKERS_PER_REGION_SUCCESS,
+      payload: brokers.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BROKERS_PER_REGION_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
   }
 }

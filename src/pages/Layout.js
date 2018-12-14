@@ -22,6 +22,7 @@ import BuyerDetails from './Buyer/BuyerDetails'
 import ScoreList from './Buyer/ScoreList'
 import MakeNewScore from './Buyer/MakeNewScore'
 import UserPage from './SystemSettings/SystemSettings'
+import ManagementPage from './Management/Management'
 import ClientManagerList from './ClientManager/ClientManagerList'
 import AgreementPage from './Business/Agreement/BusinessAgreementFields'
 import PreviewAgreement from './Business/Agreement/PreviewAgreement'
@@ -158,7 +159,12 @@ const Layout = ({ match, logout, menu }) => (
         path={`${match.path}clientManager`}
         allowedRoles="CLIENT_MANAGER_MENU"
       />
-      <AuthorizationRoute exact component={UserPage} path={`${match.path}management`} allowedRoles="MANAGEMENT_MENU" />
+      <AuthorizationRoute
+        exact
+        component={ManagementPage}
+        path={`${match.path}management`}
+        allowedRoles="MANAGEMENT_MENU"
+      />
       <AuthorizationRoute
         exact
         component={UserPage}

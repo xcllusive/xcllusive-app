@@ -23,3 +23,11 @@ export const updateWeeklyReport = weeklyReport => {
     data: weeklyReport
   })
 }
+
+export const getBrokersPerRegion = region => {
+  return request({
+    method: 'get',
+    url: '/buyer/broker/brokers-region',
+    params: { region }
+  })
+}
