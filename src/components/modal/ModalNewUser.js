@@ -292,6 +292,23 @@ class ModalNewUser extends Component {
                   checked={!values.listingAgent}
                 />
               </Form.Field>
+              <Form.Field>
+                <label>Level of Info Access</label>
+                <Form.Field
+                  control={Radio}
+                  label="Management"
+                  name="levelOfInfoAccess"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.levelOfInfoAccess}
+                />
+                <Form.Field
+                  control={Radio}
+                  label="Team Leader"
+                  name="levelOfInfoAccess"
+                  onChange={this._handleChangeCheckBox}
+                  checked={!values.levelOfInfoAccess}
+                />
+              </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
               <Form.Field width={9}>
@@ -428,6 +445,7 @@ const mapPropsToValues = props => {
       listingAgent: props.user.listingAgent ? props.user.listingAgent : false,
       broker: props.user.listingAgent ? props.user.listingAgent : false,
       userType: props.user.userType ? props.user.userType : '',
+      levelOfInfoAccess: props.user ? props.user.levelOfInfoAccess : false,
       buyerMenu: _.includes(roles, 'BUYER_MENU'),
       businessMenu: _.includes(roles, 'BUSINESS_MENU'),
       preSaleMenu: _.includes(roles, 'PRESALE_MENU'),
@@ -453,6 +471,7 @@ const mapPropsToValues = props => {
     listingAgent: false,
     broker: false,
     userType: '',
+    levelOfInfoAccess: false,
     buyerMenu: false,
     businessMenu: false,
     preSaleMenu: false,
