@@ -347,6 +347,16 @@ class ModalNewUser extends Component {
                   onChange={this._handleChangeCheckBox}
                 />
               </Form.Field>
+              <Form.Field width={14}>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  name="managementMenu"
+                  label="Management"
+                  value="managementMenu"
+                  checked={values.managementMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
               <Form.Field>
                 <Checkbox
                   as={CheckboxFormatted}
@@ -423,6 +433,7 @@ const mapPropsToValues = props => {
       preSaleMenu: _.includes(roles, 'PRESALE_MENU'),
       resourcesMenu: _.includes(roles, 'RESOURCES_MENU'),
       clientManagerMenu: _.includes(roles, 'CLIENT_MANAGER_MENU'),
+      managementMenu: _.includes(roles, 'MANAGEMENT_MENU'),
       systemSettingsMenu: _.includes(roles, 'SYSTEM_SETTINGS_MENU')
     }
   }
@@ -447,6 +458,7 @@ const mapPropsToValues = props => {
     preSaleMenu: false,
     resourcesMenu: false,
     clientManagerMenu: false,
+    managementMenu: false,
     systemSettingsMenu: false
   }
 }

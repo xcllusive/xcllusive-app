@@ -53,6 +53,9 @@ const Layout = ({ match, logout, menu }) => (
         if (item === 'CLIENT_MANAGER_MENU') {
           return <Menu.Item key={item} name="client manager" as={NavLink} to={`${match.url}clientManager`} />
         }
+        if (item === 'MANAGEMENT_MENU') {
+          return <Menu.Item key={item} name="management" as={NavLink} to={`${match.url}management`} />
+        }
         if (item === 'SYSTEM_SETTINGS_MENU') {
           return <Menu.Item key={item} name="system settings" as={NavLink} to={`${match.url}systemSettings`} />
         }
@@ -155,6 +158,7 @@ const Layout = ({ match, logout, menu }) => (
         path={`${match.path}clientManager`}
         allowedRoles="CLIENT_MANAGER_MENU"
       />
+      <AuthorizationRoute exact component={UserPage} path={`${match.path}management`} allowedRoles="MANAGEMENT_MENU" />
       <AuthorizationRoute
         exact
         component={UserPage}
