@@ -20,11 +20,12 @@ class ModalBrokersWeeklyReport extends Component {
         { key: 1, text: 'Info Memorandum', value: 'Info Memorandum' },
         { key: 2, text: 'On The Market', value: 'On The Market' },
         { key: 3, text: 'Under Offer', value: 'Under Offer' },
-        { key: 4, text: 'Exchange', value: 'Exchange' },
-        { key: 5, text: 'Sold', value: 'Sold' }
+        { key: 4, text: 'Exchanged', value: 'Exchanged' },
+        { key: 5, text: 'Withdrawn', value: 'Withdrawn' },
+        { key: 6, text: 'Sold', value: 'Sold' }
       ],
       expectedPrice: 0,
-      exchange: false
+      exchanged: false
     }
   }
   componentDidMount () {
@@ -35,8 +36,12 @@ class ModalBrokersWeeklyReport extends Component {
     if (nextProps.lastWeeklyReport && nextProps.lastWeeklyReport.expectedPrice !== prevState.expectedPrice) {
       var expectedPrice = numeral(nextProps.values.expectedPrice).format('$0,0.[99]')
     }
+    if (nextProps.lastWeeklyReport && nextProps.lastWeeklyReport.commissionPrice !== prevState.commissionPrice) {
+      var commissionPrice = numeral(nextProps.values.commissionPrice).format('$0,0.[99]')
+    }
     return {
-      expectedPrice: expectedPrice || prevState.expectedPrice
+      expectedPrice: expectedPrice || prevState.expectedPrice,
+      commissionPrice: commissionPrice || prevState.commissionPrice
     }
   }
 
@@ -49,13 +54,13 @@ class ModalBrokersWeeklyReport extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-    if (value === 'Exchange') {
-      this.setState({ exchange: true })
+    if (value === 'Exchanged') {
+      this.setState({ exchanged: true })
       if (this.props.lastWeeklyReport && !moment(this.props.lastWeeklyReport.expectedSettlementDate).isValid()) {
         this.props.setFieldValue('expectedSettlementDate', null)
       }
     } else {
-      this.setState({ exchange: false })
+      this.setState({ exchanged: false })
       this.props.setFieldValue('expectedSettlementDate', null)
     }
   }
@@ -144,8 +149,8 @@ class ModalBrokersWeeklyReport extends Component {
                   onChange={this._handleSelectChange}
                 />
               </Form.Field>
-              {this.state.exchange ||
-              (this.props.lastWeeklyReport && this.props.lastWeeklyReport.stage === 'Exchange') ? (
+              {this.state.exchanged ||
+              (this.props.lastWeeklyReport && this.props.lastWeeklyReport.stage === 'Exchanged') ? (
                   <Fragment>
                     <Form.Field>
                       <Form.Input
@@ -161,6 +166,19 @@ class ModalBrokersWeeklyReport extends Component {
                       )}
                     </Form.Field>
                     <Form.Field>
+                      <Form.Input
+                        label="Expected Commission"
+                        name="expectedCommission"
+                        autoComplete="expectedCommission"
+                        value={this.state.expectedCommission}
+                        onChange={this._numberFormat}
+                        onBlur={handleBlur}
+                      />
+                      {errors.expectedCommission && touched.expectedCommission && (
+                        <Label basic color="red" pointing content={errors.expectedCommission} />
+                      )}
+                    </Form.Field>
+                    <Form.Field>
                       <label
                         style={{
                           marginRight: '78px',
@@ -169,7 +187,7 @@ class ModalBrokersWeeklyReport extends Component {
                           fontWeight: '700'
                         }}
                       >
-                      Date
+                      Expected Settlement Date
                       </label>
                       <DatePicker
                         style={{ marginTop: '5px' }}
@@ -233,6 +251,7 @@ const mapPropsToValues = props => {
         dateTimeCreated: moment(),
         text: '',
         expectedPrice: 0,
+        expectedCommission: 0,
         expectedSettlementDate: null,
         stage: ''
       }
@@ -245,6 +264,7 @@ const mapPropsToValues = props => {
     dateTimeCreated: props.lastWeeklyReport ? moment(props.lastWeeklyReport.dateTimeCreated) : moment(),
     text: props.lastWeeklyReport ? props.lastWeeklyReport.text : '',
     expectedPrice: props.lastWeeklyReport ? props.lastWeeklyReport.expectedPrice : 0,
+    expectedCommission: props.lastWeeklyReport ? props.lastWeeklyReport.expectedCommission : 0,
     expectedSettlementDate: props.lastWeeklyReport ? moment(props.lastWeeklyReport.expectedSettlementDate) : null,
     stage: props.lastWeeklyReport ? props.lastWeeklyReport.stage : ''
   }
