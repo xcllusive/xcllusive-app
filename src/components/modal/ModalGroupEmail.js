@@ -20,6 +20,7 @@ import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
+import ReactQuill from 'react-quill'
 
 import { sendGroupEmail, getBuyersGroupEmail } from '../../redux/ducks/buyer'
 
@@ -29,12 +30,37 @@ class ModalGroupEmail extends Component {
     this.state = {
       array: [],
       checkboxMarkAll: false,
-      fileUpload: true
+      fileUpload: true,
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+          [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+          ['link', 'image'],
+          ['clean']
+        ]
+      },
+      formats: [
+        'header',
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'blockquote',
+        'list',
+        'bullet',
+        'indent',
+        'link',
+        'image'
+      ]
     }
+    this.quillRef = null
+    this.reactQuillRef = null
   }
 
   componentDidMount () {
     this.props.getBuyersGroupEmail(this.props.businessId)
+    this._attachQuillRefs()
   }
 
   componentWillUnmount () {
@@ -88,6 +114,22 @@ class ModalGroupEmail extends Component {
       })
       this.setState({ array })
     }
+  }
+
+  _attachQuillRefs = () => {
+    // Ensure React-Quill reference is available:
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
+      return false
+    }
+    // Skip if Quill reference is defined:
+    if (this.quillRef !== null) return false
+
+    const quillRef = this.reactQuillRef.getEditor()
+    if (quillRef !== null) this.quillRef = quillRef
+  }
+
+  _handleChangeBody = value => {
+    this.props.setFieldValue('body', value)
   }
 
   render () {
@@ -162,20 +204,32 @@ class ModalGroupEmail extends Component {
                   </Form.Field>
                 </Form.Group>
                 <Form.Group>
-                  <h5 style={{ fontSize: '.92857143em' }}>Body</h5>
+                  <h5 style={{ fontSize: '.92857143em', marginLeft: '10px' }}>Body</h5>
                 </Form.Group>
                 <Form.Group>
                   <Form.Field width={16}>
                     <Segment size="mini" inverted color="grey">
                       <Header inverted>Dear ‹‹buyer`s name››</Header>
                     </Segment>
-                    <Form.TextArea
+                    {/* <Form.TextArea
                       name="body"
                       autoComplete="body"
                       value={values.body}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                    />
+                    /> */}
+                    <Form.Field style={{ height: '40vh' }}>
+                      <ReactQuill
+                        ref={el => {
+                          this.reactQuillRef = el
+                        }}
+                        value={values.body}
+                        onChange={this._handleChangeBody}
+                        style={{ height: '90%' }}
+                        modules={this.state.modules}
+                        formats={this.state.formats}
+                      />
+                    </Form.Field>
                     <Segment size="mini" inverted color="grey">
                       <Header inverted>
                         Xcllusive Business Sales

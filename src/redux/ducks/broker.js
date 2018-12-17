@@ -2,7 +2,8 @@ import {
   createWeeklyReport as createWeeklyReportAPI,
   getLastWeeklyReport as getLastWeeklyReportAPI,
   updateWeeklyReport as updateWeeklyReportAPI,
-  getBrokersPerRegion as getBrokersPerRegionAPI
+  getBrokersPerRegion as getBrokersPerRegionAPI,
+  getBusinessesPerBroker as getBusinessesPerBrokerAPI
 } from '../../services/api/broker'
 import { toast } from 'react-toastify'
 
@@ -20,7 +21,10 @@ export const Types = {
   UPDATE_WEEKLY_REPORT_FAILURE: 'UPDATE_WEEKLY_REPORT_FAILURE',
   GET_BROKERS_PER_REGION_LOADING: 'GET_BROKERS_PER_REGION_LOADING',
   GET_BROKERS_PER_REGION_SUCCESS: 'GET_BROKERS_PER_REGION_SUCCESS',
-  GET_BROKERS_PER_REGION_FAILURE: 'GET_BROKERS_PER_REGION_FAILURE'
+  GET_BROKERS_PER_REGION_FAILURE: 'GET_BROKERS_PER_REGION_FAILURE',
+  GET_BUSINESSES_PER_BROKER_LOADING: 'GET_BUSINESSES_PER_BROKER_LOADING',
+  GET_BUSINESSES_PER_BROKER_SUCCESS: 'GET_BUSINESSES_PER_BROKER_SUCCESS',
+  GET_BUSINESSES_PER_BROKER_FAILURE: 'GET_BUSINESSES_PER_BROKER_FAILURE'
 }
 
 // Reducer
@@ -45,6 +49,11 @@ const initialState = {
   getBrokersPerRegion: {
     isLoading: false,
     array: [],
+    error: null
+  },
+  getBusinessesPerBroker: {
+    isLoading: false,
+    businessesAndReport: [],
     error: null
   }
 }
@@ -168,6 +177,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUSINESSES_PER_BROKER_LOADING:
+      return {
+        ...state,
+        getBusinessesPerBroker: {
+          ...state.getBusinessesPerBroker,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_PER_BROKER_SUCCESS:
+      return {
+        ...state,
+        getBusinessesPerBroker: {
+          ...state.getBusinessesPerBroker,
+          isLoading: false,
+          businessesAndReport: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_PER_BROKER_FAILURE:
+      return {
+        ...state,
+        getBusinessesPerBroker: {
+          ...state.getBusinessesPerBroker,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -248,6 +285,26 @@ export const getBrokersPerRegion = region => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_BROKERS_PER_REGION_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const getBusinessesPerBroker = brokerId => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESSES_PER_BROKER_LOADING,
+    payload: true
+  })
+  try {
+    const businessesReport = await getBusinessesPerBrokerAPI(brokerId)
+    dispatch({
+      type: Types.GET_BUSINESSES_PER_BROKER_SUCCESS,
+      payload: businessesReport
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESSES_PER_BROKER_FAILURE,
       payload: error
     })
     toast.error(error.message)

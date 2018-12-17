@@ -31,3 +31,11 @@ export const getBrokersPerRegion = region => {
     params: { region }
   })
 }
+
+export const getBusinessesPerBroker = brokerId => {
+  return request({
+    method: 'get',
+    url: '/buyer/broker/businesses-broker',
+    params: { brokerId }
+  })
+}

@@ -75,7 +75,6 @@ class ModalStageSalesMemo extends Component {
       errors,
       isValid,
       productOptions,
-      industryOptions,
       typeOptions,
       ratingOptions,
       usersBroker,
@@ -149,28 +148,25 @@ class ModalStageSalesMemo extends Component {
                   required
                   label="Business Type"
                   options={typeOptions}
-                  name="businessType"
-                  autoComplete="businessType"
-                  value={values.businessType}
+                  name="typeId"
+                  autoComplete="typeId"
+                  value={values.typeId}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessType && touched.businessType && (
-                  <Label basic color="red" pointing content={errors.businessType} />
-                )}
+                {errors.typeId && touched.typeId && <Label basic color="red" pointing content={errors.typeId} />}
               </Form.Field>
               <Form.Field width={5}>
-                <Form.Select
+                <Form.Input
                   required
                   label="Industry"
-                  options={industryOptions}
-                  name="businessIndustry"
-                  autoComplete="businessIndustry"
-                  value={values.businessIndustry}
-                  onChange={this._handleSelectChange}
+                  // options={industryOptions}
+                  name="industry"
+                  autoComplete="industry"
+                  value={values.industry}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
-                {errors.businessIndustry && touched.businessIndustry && (
-                  <Label basic color="red" pointing content={errors.businessIndustry} />
-                )}
+                {errors.industry && touched.industry && <Label basic color="red" pointing content={errors.industry} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -179,14 +175,12 @@ class ModalStageSalesMemo extends Component {
                   required
                   label="Rating"
                   options={ratingOptions}
-                  name="businessRating"
-                  autoComplete="businessRating"
-                  value={values.businessRating}
+                  name="ratingId"
+                  autoComplete="ratingId"
+                  value={values.ratingId}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessRating && touched.businessRating && (
-                  <Label basic color="red" pointing content={errors.businessRating} />
-                )}
+                {errors.ratingId && touched.ratingId && <Label basic color="red" pointing content={errors.ratingId} />}
               </Form.Field>
             </Form.Group>
             <Divider horizontal>Business Pricing</Divider>
@@ -288,7 +282,7 @@ const mapPropsToValues = props => {
       productId,
       data120DayGuarantee,
       typeId,
-      industryId,
+      industry,
       ratingId,
       brokerAccountName,
       listedPrice,
@@ -300,9 +294,9 @@ const mapPropsToValues = props => {
       business_id: id,
       businessProduct: productId,
       data120DayGuarantee,
-      businessType: typeId,
-      businessIndustry: industryId,
-      businessRating: ratingId,
+      typeId,
+      industry,
+      ratingId,
       brokerAccountName,
       listedPrice,
       engagementFee,
@@ -314,9 +308,9 @@ const mapPropsToValues = props => {
   return {
     businessProduct: '',
     data120DayGuarantee: false,
-    businessType: '',
-    businessIndustry: '',
-    businessRating: '',
+    typeId: '',
+    industry: '',
+    ratingId: '',
     pendingDone: true,
     listedPrice: 0,
     engagementFee: 0,
@@ -328,9 +322,9 @@ const validationSchema = Yup.object().shape({
   businessProduct: Yup.string().required('This field is required.'),
   data120DayGuarantee: Yup.string().required('This field is required.'),
   brokerAccountName: Yup.string().required('This field is required.'),
-  businessType: Yup.string().required('This field is required.'),
-  businessIndustry: Yup.string().required('This field is required.'),
-  businessRating: Yup.string().required('This field is required.'),
+  typeId: Yup.string().required('This field is required.'),
+  industry: Yup.string().required('This field is required.'),
+  ratingId: Yup.string().required('This field is required.'),
   listedPrice: Yup.string().required('This field is required.'),
   engagementFee: Yup.string().required('This field is required.'),
   commissionPerc: Yup.string().required('This field is required.')
@@ -339,7 +333,7 @@ const validationSchema = Yup.object().shape({
 const mapStateToProps = state => {
   return {
     productOptions: state.business.get.productOptions,
-    industryOptions: state.business.get.industryOptions,
+    // industryOptions: state.business.get.industryOptions,
     typeOptions: state.business.get.typeOptions,
     ratingOptions: state.business.get.ratingOptions,
     usersBroker: state.business.get.usersBroker,
