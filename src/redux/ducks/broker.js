@@ -24,7 +24,8 @@ export const Types = {
   GET_BROKERS_PER_REGION_FAILURE: 'GET_BROKERS_PER_REGION_FAILURE',
   GET_BUSINESSES_PER_BROKER_LOADING: 'GET_BUSINESSES_PER_BROKER_LOADING',
   GET_BUSINESSES_PER_BROKER_SUCCESS: 'GET_BUSINESSES_PER_BROKER_SUCCESS',
-  GET_BUSINESSES_PER_BROKER_FAILURE: 'GET_BUSINESSES_PER_BROKER_FAILURE'
+  GET_BUSINESSES_PER_BROKER_FAILURE: 'GET_BUSINESSES_PER_BROKER_FAILURE',
+  CLEAR_WEEKLY_REPORT: 'CLEAR_WEEKLY_REPORT'
 }
 
 // Reducer
@@ -54,6 +55,10 @@ const initialState = {
   getBusinessesPerBroker: {
     isLoading: false,
     businessesAndReport: [],
+    arrayReportOnTheMarket: [],
+    arrayReportImStage: [],
+    arrayReportUnderOffer: [],
+    arrayReportExchanged: [],
     error: null
   }
 }
@@ -193,6 +198,18 @@ export default function reducer (state = initialState, action) {
           ...state.getBusinessesPerBroker,
           isLoading: false,
           businessesAndReport: action.payload,
+          arrayReportOnTheMarket: action.payload.filter(item => {
+            return item.reports !== null && item.reports.stage === 'On The Market'
+          }),
+          arrayReportImStage: action.payload.filter(item => {
+            return item.reports !== null && item.reports.stage === 'Info Memorandum'
+          }),
+          arrayReportUnderOffer: action.payload.filter(item => {
+            return item.reports !== null && item.reports.stage === 'Under Offer'
+          }),
+          arrayReportExchanged: action.payload.filter(item => {
+            return item.reports !== null && item.reports.stage === 'Exchanged'
+          }),
           error: null
         }
       }
@@ -205,6 +222,8 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_WEEKLY_REPORT:
+      return initialState
     default:
       return state
   }
@@ -309,4 +328,10 @@ export const getBusinessesPerBroker = brokerId => async dispatch => {
     })
     toast.error(error.message)
   }
+}
+
+export const clearWeeklyReports = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_WEEKLY_REPORT
+  })
 }

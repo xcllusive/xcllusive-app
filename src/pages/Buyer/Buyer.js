@@ -208,6 +208,7 @@ class BuyerPage extends Component {
                           color="instagram"
                           size="small"
                           onClick={() => this._brokersWeeklyReport(item.business)}
+                          disabled={true}
                         >
                           <Icon name="edit outline" />
                         </Button>
