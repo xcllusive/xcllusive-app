@@ -59,6 +59,9 @@ const initialState = {
     arrayReportImStage: [],
     arrayReportUnderOffer: [],
     arrayReportExchanged: [],
+    arrayReportWithdrawn: [],
+    arrayReportSold: [],
+    arrayBusinessesNotAlocated: [],
     error: null
   }
 }
@@ -209,6 +212,15 @@ export default function reducer (state = initialState, action) {
           }),
           arrayReportExchanged: action.payload.filter(item => {
             return item.reports !== null && item.reports.stage === 'Exchanged'
+          }),
+          arrayReportWithdrawn: action.payload.filter(item => {
+            return item.reports !== null && item.reports.stage === 'Withdrawn'
+          }),
+          arrayReportSold: action.payload.filter(item => {
+            return item.reports !== null && item.reports.stage === 'Sold'
+          }),
+          arrayBusinessesNotAlocated: action.payload.filter(item => {
+            return item.reports === null
           }),
           error: null
         }
