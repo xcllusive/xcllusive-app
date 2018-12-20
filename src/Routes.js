@@ -4,11 +4,13 @@ import { connect } from 'react-redux'
 import { Switch } from 'react-router-dom'
 import { Dimmer, Loader } from 'semantic-ui-react'
 
+import ReactTimeout from 'react-timeout'
+
 import { PrivateRoute, PublicRoute } from './components/routes'
 
 import { Layout, LoginPage } from './pages'
 
-const Routes = ({ isAuthenticated, isAppLoading, location }) => {
+const Routes = ({ isAuthenticated, isAppLoading, location, setTimeout }) => {
   if (isAppLoading) {
     return (
       <Dimmer page active>
@@ -16,19 +18,11 @@ const Routes = ({ isAuthenticated, isAppLoading, location }) => {
       </Dimmer>
     )
   }
+
   return (
     <Switch>
-      <PublicRoute
-        exact
-        location={location}
-        path="/auth"
-        component={LoginPage}
-      />
-      <PrivateRoute
-        path="/"
-        component={Layout}
-        authenticated={isAuthenticated}
-      />
+      <PublicRoute exact location={location} path="/auth" component={LoginPage} />
+      <PrivateRoute path="/" component={Layout} authenticated={isAuthenticated} />
     </Switch>
   )
 }
@@ -36,7 +30,8 @@ const Routes = ({ isAuthenticated, isAppLoading, location }) => {
 Routes.propTypes = {
   isAuthenticated: PropTypes.bool,
   isAppLoading: PropTypes.bool,
-  location: PropTypes.object
+  location: PropTypes.object,
+  setTimeout: PropTypes.func
 }
 
 const mapStateToProps = ({ auth }) => ({
@@ -44,4 +39,4 @@ const mapStateToProps = ({ auth }) => ({
   isAppLoading: auth.isAppLoading
 })
 
-export default connect(mapStateToProps)(Routes)
+export default ReactTimeout(connect(mapStateToProps)(Routes))
