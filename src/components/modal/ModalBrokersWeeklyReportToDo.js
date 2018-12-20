@@ -9,7 +9,7 @@ import { closeModal } from '../../redux/ducks/modal'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
-import { getLastWeeklyReport, updateWeeklyReport } from '../../redux/ducks/broker'
+import { getLastWeeklyReport, updateWeeklyReport, createWeeklyReport } from '../../redux/ducks/broker'
 
 class ModalBrokersWeeklyReportToDo extends Component {
   constructor (props) {
@@ -27,6 +27,9 @@ class ModalBrokersWeeklyReportToDo extends Component {
     }
     if (this.props.lastWeeklyReport) {
       await this.props.updateWeeklyReport(this.props.values, true)
+      this.props.closeModal()
+    } else {
+      await this.props.createWeeklyReport(this.props.values)
       this.props.closeModal()
     }
   }
@@ -118,13 +121,23 @@ ModalBrokersWeeklyReportToDo.propTypes = {
   setFieldValue: PropTypes.func,
   title: PropTypes.string,
   business: PropTypes.object,
+  reports: PropTypes.object,
   closeModal: PropTypes.func,
   getLastWeeklyReport: PropTypes.func,
   lastWeeklyReport: PropTypes.object,
-  updateWeeklyReport: PropTypes.func
+  updateWeeklyReport: PropTypes.func,
+  createWeeklyReport: PropTypes.func
 }
 
 const mapPropsToValues = props => {
+  if (props.reports && props.reports.textToDo) {
+    return {
+      id: props.reports ? props.reports.id : null,
+      business_id: props.business.id,
+      dateTimeCreatedToDo: moment(props.reports.dateTimeCreatedToDo),
+      textToDo: props.reports.textToDo
+    }
+  }
   return {
     id: props.lastWeeklyReport ? props.lastWeeklyReport.id : null,
     business_id: props.business.id,
@@ -145,7 +158,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ closeModal, getLastWeeklyReport, updateWeeklyReport }, dispatch)
+  bindActionCreators({ closeModal, getLastWeeklyReport, updateWeeklyReport, createWeeklyReport }, dispatch)
 
 export default connect(
   mapStateToProps,

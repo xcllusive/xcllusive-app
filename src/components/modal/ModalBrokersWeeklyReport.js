@@ -76,7 +76,7 @@ class ModalBrokersWeeklyReport extends Component {
     }
     if (this.props.lastWeeklyReport) {
       const comparingDate = moment().diff(this.props.lastWeeklyReport.dateTimeCreated, 'day')
-      if (comparingDate >= 3) {
+      if (comparingDate >= 3 || this.props.lastWeeklyReport.stage === '') {
         await this.props.createWeeklyReport(this.props.values)
       } else {
         await this.props.updateWeeklyReport(this.props.values)
@@ -244,7 +244,7 @@ ModalBrokersWeeklyReport.propTypes = {
 const mapPropsToValues = props => {
   if (props.lastWeeklyReport) {
     const comparingDate = moment().diff(props.lastWeeklyReport.dateTimeCreated, 'day')
-    if (comparingDate >= 3) {
+    if (comparingDate >= 3 || props.lastWeeklyReport.stage === '') {
       return {
         id: null,
         business_id: props.business.id,

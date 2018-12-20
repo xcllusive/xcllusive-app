@@ -220,7 +220,7 @@ export default function reducer (state = initialState, action) {
             return item.reports !== null && item.reports.stage === 'Sold'
           }),
           arrayBusinessesNotAlocated: action.payload.filter(item => {
-            return item.reports === null
+            return item.reports === null || item.reports.stage === ''
           }),
           error: null
         }

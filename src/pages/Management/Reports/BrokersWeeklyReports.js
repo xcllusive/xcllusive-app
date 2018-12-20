@@ -29,6 +29,15 @@ class BrokersWeeklyReports extends Component {
     this.props.clearWeeklyReports()
   }
 
+  componentDidUpdate (nextProps) {
+    if (
+      (this.props.isCreated && nextProps.isCreated !== this.props.isCreated) ||
+      (this.props.isUpdated && nextProps.isUpdated !== this.props.isUpdated)
+    ) {
+      this.props.getBusinessesPerBroker(this.props.values.brokerAccountName)
+    }
+  }
+
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
     if (name === 'dataRegion') {
@@ -43,11 +52,18 @@ class BrokersWeeklyReports extends Component {
     return moment().diff(date, 'day')
   }
 
-  _toDo = business => {
+  _toDo = (business, reports) => {
     this.props.openModal(TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT_TO_DO, {
       title: 'To Do',
-      business
+      business,
+      reports
     })
+  }
+
+  _olderThan7Days = report => {
+    if (moment().diff(report.dateTimeCreated, 'day') > 7) {
+      return '#f5020229'
+    } else return null
   }
 
   render () {
@@ -129,15 +145,26 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <b>{onTheMarket.business.businessName}</b>
+                                          <Header>
+                                            <b>{onTheMarket.business.businessName}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Header as="h3" color="brown">
+                                            <b>{numeral(onTheMarket.business.currentPrice).format('$0,0.[99]')}</b>
+                                          </Header>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
                                         <Grid.Column>
                                           <Button
                                             size="small"
-                                            color="blue"
-                                            onClick={() => this._toDo(onTheMarket.business)}
+                                            color={
+                                              onTheMarket.reports && onTheMarket.reports.textToDo ? 'yellow' : 'blue'
+                                            }
+                                            onClick={() => this._toDo(onTheMarket.business, onTheMarket.reports)}
                                           >
                                             <Icon name="pencil alternate" />
                                             To Do
@@ -149,15 +176,24 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>{onTheMarket.reports ? onTheMarket.reports.text : ''}</Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            backgroundColor: onTheMarket.reports
+                                              ? this._olderThan7Days(onTheMarket.reports)
+                                              : null
+                                          }}
+                                        >
+                                          {onTheMarket.reports ? onTheMarket.reports.text : ''}
+                                        </Grid.Column>
                                       </Grid.Row>
-                                      {onTheMarket.reports.textToDo ? (
-                                        <Grid.Row style={{ backgroundColor: 'yellow' }}>
-                                          <Grid.Column>
-                                            {onTheMarket.reports ? onTheMarket.reports.textToDo : ''}
-                                          </Grid.Column>
-                                        </Grid.Row>
-                                      ) : null}
+                                      {onTheMarket.arrayOneBeforeLastTextToDo &&
+                                      onTheMarket.arrayOneBeforeLastTextToDo.textToDo ? (
+                                          <Grid.Row style={{ backgroundColor: 'yellow' }}>
+                                            <Grid.Column>
+                                              {onTheMarket.reports ? onTheMarket.arrayOneBeforeLastTextToDo.textToDo : ''}
+                                            </Grid.Column>
+                                          </Grid.Row>
+                                        ) : null}
                                     </Grid>
                                   </Table.Cell>
                                   <Table.Cell width={4}>
@@ -214,11 +250,11 @@ class BrokersWeeklyReports extends Component {
                                           style={{
                                             paddingBottom: '0px',
                                             paddingTop: '0px',
-                                            color: onTheMarket.business.data120DayGuarantee === 1 ? 'red' : 'green'
+                                            color: onTheMarket.business.data120DayGuarantee === '1' ? 'red' : 'green'
                                           }}
                                           width={5}
                                         >
-                                          <b>{onTheMarket.business.data120DayGuarantee === 1 ? 'Yes' : 'No'}</b>
+                                          <b>{onTheMarket.business.data120DayGuarantee === '1' ? 'Yes' : 'No'}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -229,7 +265,7 @@ class BrokersWeeklyReports extends Component {
                                           style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
                                           width={5}
                                         >
-                                          <b>{onTheMarket.nOfPendingTasks.count}</b>
+                                          <b>{onTheMarket.nOfPendingTasks}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -283,14 +319,23 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <b>{imStage.business.businessName}</b>
+                                          <Header>
+                                            <b>{imStage.business.businessName}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Header as="h3" color="brown">
+                                            <b>{numeral(imStage.business.currentPrice).format('$0,0.[99]')}</b>
+                                          </Header>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
                                         <Grid.Column>
                                           <Button
                                             size="small"
-                                            color="blue"
+                                            color={imStage.reports && imStage.reports.textToDo ? 'yellow' : 'blue'}
                                             onClick={() => this._toDo(imStage.business)}
                                           >
                                             <Icon name="pencil alternate" />
@@ -305,11 +350,16 @@ class BrokersWeeklyReports extends Component {
                                       <Grid.Row>
                                         <Grid.Column>{imStage.reports ? imStage.reports.text : ''}</Grid.Column>
                                       </Grid.Row>
-                                      {imStage.reports.textToDo ? (
-                                        <Grid.Row style={{ backgroundColor: 'yellow' }}>
-                                          <Grid.Column>{imStage.reports ? imStage.reports.textToDo : ''}</Grid.Column>
-                                        </Grid.Row>
-                                      ) : null}
+                                      {imStage.arrayOneBeforeLastTextToDo &&
+                                      imStage.arrayOneBeforeLastTextToDo.textToDo ? (
+                                          <Grid.Row style={{ backgroundColor: 'yellow' }}>
+                                            <Grid.Column>
+                                              {imStage.arrayOneBeforeLastTextToDo
+                                                ? imStage.arrayOneBeforeLastTextToDo.textToDo
+                                                : ''}
+                                            </Grid.Column>
+                                          </Grid.Row>
+                                        ) : null}
                                     </Grid>
                                   </Table.Cell>
                                   <Table.Cell width={4}>
@@ -380,14 +430,25 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <b>{underOffer.business.businessName}</b>
+                                          <Header>
+                                            <b>{underOffer.business.businessName}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Header as="h3" color="brown">
+                                            <b>{numeral(underOffer.business.currentPrice).format('$0,0.[99]')}</b>
+                                          </Header>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
                                         <Grid.Column>
                                           <Button
                                             size="small"
-                                            color="blue"
+                                            color={
+                                              underOffer.reports && underOffer.reports.textToDo ? 'yellow' : 'blue'
+                                            }
                                             onClick={() => this._toDo(underOffer.business)}
                                           >
                                             <Icon name="pencil alternate" />
@@ -402,13 +463,16 @@ class BrokersWeeklyReports extends Component {
                                       <Grid.Row>
                                         <Grid.Column>{underOffer.reports ? underOffer.reports.text : ''}</Grid.Column>
                                       </Grid.Row>
-                                      {underOffer.reports.textToDo ? (
-                                        <Grid.Row style={{ backgroundColor: 'yellow' }}>
-                                          <Grid.Column>
-                                            {underOffer.reports ? underOffer.reports.textToDo : ''}
-                                          </Grid.Column>
-                                        </Grid.Row>
-                                      ) : null}
+                                      {underOffer.arrayOneBeforeLastTextToDo &&
+                                      underOffer.arrayOneBeforeLastTextToDo.textToDo ? (
+                                          <Grid.Row style={{ backgroundColor: 'yellow' }}>
+                                            <Grid.Column>
+                                              {underOffer.arrayOneBeforeLastTextToDo
+                                                ? underOffer.arrayOneBeforeLastTextToDo.textToDo
+                                                : ''}
+                                            </Grid.Column>
+                                          </Grid.Row>
+                                        ) : null}
                                     </Grid>
                                   </Table.Cell>
                                   <Table.Cell width={4}>
@@ -417,7 +481,10 @@ class BrokersWeeklyReports extends Component {
                                         <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
                                           <b>Days On The Market:</b>
                                         </Grid.Column>
-                                        <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={5}>
+                                        <Grid.Column
+                                          style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
+                                          width={5}
+                                        >
                                           {underOffer.business.daysOnTheMarket ? (
                                             <b>{this._diffDays(underOffer.business.daysOnTheMarket)}</b>
                                           ) : (
@@ -455,11 +522,11 @@ class BrokersWeeklyReports extends Component {
                                           style={{
                                             paddingBottom: '0px',
                                             paddingTop: '0px',
-                                            color: underOffer.business.data120DayGuarantee === 1 ? 'red' : 'green'
+                                            color: underOffer.business.data120DayGuarantee === '1' ? 'red' : 'green'
                                           }}
                                           width={5}
                                         >
-                                          <b>{underOffer.business.data120DayGuarantee === 1 ? 'Yes' : 'No'}</b>
+                                          <b>{underOffer.business.data120DayGuarantee === '1' ? 'Yes' : 'No'}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -470,7 +537,7 @@ class BrokersWeeklyReports extends Component {
                                           style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
                                           width={5}
                                         >
-                                          <b>{underOffer.nOfPendingTasks.count}</b>
+                                          <b>{underOffer.nOfPendingTasks}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -524,14 +591,23 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <b>{exchanged.business.businessName}</b>
+                                          <Header>
+                                            <b>{exchanged.business.businessName}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Header as="h3" color="brown">
+                                            <b>{numeral(exchanged.business.currentPrice).format('$0,0.[99]')}</b>
+                                          </Header>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
                                         <Grid.Column>
                                           <Button
                                             size="small"
-                                            color="blue"
+                                            color={exchanged.reports && exchanged.reports.textToDo ? 'yellow' : 'blue'}
                                             onClick={() => this._toDo(exchanged.business)}
                                           >
                                             <Icon name="pencil alternate" />
@@ -546,13 +622,16 @@ class BrokersWeeklyReports extends Component {
                                       <Grid.Row>
                                         <Grid.Column>{exchanged.reports ? exchanged.reports.text : ''}</Grid.Column>
                                       </Grid.Row>
-                                      {exchanged.reports.textToDo ? (
-                                        <Grid.Row style={{ backgroundColor: 'yellow' }}>
-                                          <Grid.Column>
-                                            {exchanged.reports ? exchanged.reports.textToDo : ''}
-                                          </Grid.Column>
-                                        </Grid.Row>
-                                      ) : null}
+                                      {exchanged.arrayOneBeforeLastTextToDo &&
+                                      exchanged.arrayOneBeforeLastTextToDo.textToDo ? (
+                                          <Grid.Row style={{ backgroundColor: 'yellow' }}>
+                                            <Grid.Column>
+                                              {exchanged.arrayOneBeforeLastTextToDo
+                                                ? exchanged.arrayOneBeforeLastTextToDo.textToDo
+                                                : ''}
+                                            </Grid.Column>
+                                          </Grid.Row>
+                                        ) : null}
                                     </Grid>
                                   </Table.Cell>
                                   <Table.Cell width={4}>
@@ -622,11 +701,11 @@ class BrokersWeeklyReports extends Component {
                                           style={{
                                             paddingBottom: '0px',
                                             paddingTop: '0px',
-                                            color: exchanged.business.data120DayGuarantee === 1 ? 'red' : 'green'
+                                            color: exchanged.business.data120DayGuarantee === '1' ? 'red' : 'green'
                                           }}
                                           width={5}
                                         >
-                                          <b>{exchanged.business.data120DayGuarantee === 1 ? 'Yes' : 'No'}</b>
+                                          <b>{exchanged.business.data120DayGuarantee === '1' ? 'Yes' : 'No'}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -637,7 +716,7 @@ class BrokersWeeklyReports extends Component {
                                           style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
                                           width={5}
                                         >
-                                          <b>{exchanged.nOfPendingTasks.count}</b>
+                                          <b>{exchanged.nOfPendingTasks}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -691,14 +770,23 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <b>{withdrawn.business.businessName}</b>
+                                          <Header>
+                                            <b>{withdrawn.business.businessName}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Header as="h3" color="brown">
+                                            <b>{numeral(withdrawn.business.currentPrice).format('$0,0.[99]')}</b>
+                                          </Header>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
                                         <Grid.Column>
                                           <Button
                                             size="small"
-                                            color="blue"
+                                            color={withdrawn.reports && withdrawn.reports.textToDo ? 'yellow' : 'blue'}
                                             onClick={() => this._toDo(withdrawn.business)}
                                           >
                                             <Icon name="pencil alternate" />
@@ -713,13 +801,16 @@ class BrokersWeeklyReports extends Component {
                                       <Grid.Row>
                                         <Grid.Column>{withdrawn.reports ? withdrawn.reports.text : ''}</Grid.Column>
                                       </Grid.Row>
-                                      {withdrawn.reports.textToDo ? (
-                                        <Grid.Row style={{ backgroundColor: 'yellow' }}>
-                                          <Grid.Column>
-                                            {withdrawn.reports ? withdrawn.reports.textToDo : ''}
-                                          </Grid.Column>
-                                        </Grid.Row>
-                                      ) : null}
+                                      {withdrawn.arrayOneBeforeLastTextToDo &&
+                                      withdrawn.arrayOneBeforeLastTextToDo.textToDo ? (
+                                          <Grid.Row style={{ backgroundColor: 'yellow' }}>
+                                            <Grid.Column>
+                                              {withdrawn.arrayOneBeforeLastTextToDo
+                                                ? withdrawn.arrayOneBeforeLastTextToDo.textToDo
+                                                : ''}
+                                            </Grid.Column>
+                                          </Grid.Row>
+                                        ) : null}
                                     </Grid>
                                   </Table.Cell>
                                   <Table.Cell width={4}>
@@ -766,11 +857,11 @@ class BrokersWeeklyReports extends Component {
                                           style={{
                                             paddingBottom: '0px',
                                             paddingTop: '0px',
-                                            color: withdrawn.business.data120DayGuarantee === 1 ? 'red' : 'green'
+                                            color: withdrawn.business.data120DayGuarantee === '1' ? 'red' : 'green'
                                           }}
                                           width={5}
                                         >
-                                          <b>{withdrawn.business.data120DayGuarantee === 1 ? 'Yes' : 'No'}</b>
+                                          <b>{withdrawn.business.data120DayGuarantee === '1' ? 'Yes' : 'No'}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -781,7 +872,7 @@ class BrokersWeeklyReports extends Component {
                                           style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
                                           width={5}
                                         >
-                                          <b>{withdrawn.nOfPendingTasks.count}</b>
+                                          <b>{withdrawn.nOfPendingTasks}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -835,12 +926,25 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <b>{sold.business.businessName}</b>
+                                          <Header>
+                                            <b>{sold.business.businessName}</b>
+                                          </Header>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Button size="small" color="blue" onClick={() => this._toDo(sold.business)}>
+                                          <Header as="h3" color="brown">
+                                            <b>{numeral(sold.business.currentPrice).format('$0,0.[99]')}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Button
+                                            size="small"
+                                            color={sold.reports && sold.reports.textToDo ? 'yellow' : 'blue'}
+                                            onClick={() => this._toDo(sold.business)}
+                                          >
                                             <Icon name="pencil alternate" />
                                             To Do
                                           </Button>
@@ -853,9 +957,13 @@ class BrokersWeeklyReports extends Component {
                                       <Grid.Row>
                                         <Grid.Column>{sold.reports ? sold.reports.text : ''}</Grid.Column>
                                       </Grid.Row>
-                                      {sold.reports.textToDo ? (
+                                      {sold.arrayOneBeforeLastTextToDo && sold.arrayOneBeforeLastTextToDo.textToDo ? (
                                         <Grid.Row style={{ backgroundColor: 'yellow' }}>
-                                          <Grid.Column>{sold.reports ? sold.reports.textToDo : ''}</Grid.Column>
+                                          <Grid.Column>
+                                            {sold.arrayOneBeforeLastTextToDo
+                                              ? sold.arrayOneBeforeLastTextToDo.textToDo
+                                              : ''}
+                                          </Grid.Column>
                                         </Grid.Row>
                                       ) : null}
                                     </Grid>
@@ -924,11 +1032,11 @@ class BrokersWeeklyReports extends Component {
                                           style={{
                                             paddingBottom: '0px',
                                             paddingTop: '0px',
-                                            color: sold.business.data120DayGuarantee === 1 ? 'red' : 'green'
+                                            color: sold.business.data120DayGuarantee === '1' ? 'red' : 'green'
                                           }}
                                           width={5}
                                         >
-                                          <b>{sold.business.data120DayGuarantee === 1 ? 'Yes' : 'No'}</b>
+                                          <b>{sold.business.data120DayGuarantee === '1' ? 'Yes' : 'No'}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -936,7 +1044,7 @@ class BrokersWeeklyReports extends Component {
                                           <b>No. of Pending Tasks</b>
                                         </Grid.Column>
                                         <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={5}>
-                                          <b>{sold.nOfPendingTasks.count}</b>
+                                          <b>{sold.nOfPendingTasks}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -962,7 +1070,7 @@ class BrokersWeeklyReports extends Component {
               {businessesNotAlocated.length > 0 ? (
                 <Fragment>
                   <Header style={{ marginLeft: '10px' }} color="red">
-                    Not Located
+                    Not Alocated
                   </Header>
                   <Grid padded="horizontally">
                     <Grid.Row
@@ -984,10 +1092,53 @@ class BrokersWeeklyReports extends Component {
                               return (
                                 <Table.Row key={notAlocated.business.id}>
                                   <Table.Cell verticalAlign="top" width={2}>
-                                    <b>{notAlocated.business.businessName}</b>
+                                    <Grid>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Header>
+                                            <b>{notAlocated.business.businessName}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Header as="h3" color="brown">
+                                            <b>{numeral(notAlocated.business.currentPrice).format('$0,0.[99]')}</b>
+                                          </Header>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row>
+                                        <Grid.Column>
+                                          <Button
+                                            size="small"
+                                            color={
+                                              notAlocated.reports && notAlocated.reports.textToDo ? 'yellow' : 'blue'
+                                            }
+                                            onClick={() => this._toDo(notAlocated.business)}
+                                          >
+                                            <Icon name="pencil alternate" />
+                                            To Do
+                                          </Button>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                    </Grid>
                                   </Table.Cell>
                                   <Table.Cell verticalAlign="top" width={7}>
-                                    {notAlocated.reports ? notAlocated.reports.text : ''}
+                                    <Grid celled="internally">
+                                      <Grid.Row>
+                                        <Grid.Column>{notAlocated.reports ? notAlocated.reports.text : ''}</Grid.Column>
+                                      </Grid.Row>
+                                      {notAlocated.arrayOneBeforeLastTextToDo &&
+                                      notAlocated.arrayOneBeforeLastTextToDo.textToDo ? (
+                                          <Grid.Row style={{ backgroundColor: 'yellow' }}>
+                                            <Grid.Column>
+                                              {notAlocated.arrayOneBeforeLastTextToDo
+                                                ? notAlocated.arrayOneBeforeLastTextToDo.textToDo
+                                                : ''}
+                                            </Grid.Column>
+                                          </Grid.Row>
+                                        ) : null}
+                                    </Grid>
                                   </Table.Cell>
                                   <Table.Cell width={4}>
                                     <Grid celled="internally">
@@ -1043,11 +1194,11 @@ class BrokersWeeklyReports extends Component {
                                           style={{
                                             paddingBottom: '0px',
                                             paddingTop: '0px',
-                                            color: notAlocated.business.data120DayGuarantee === 1 ? 'red' : 'green'
+                                            color: notAlocated.business.data120DayGuarantee === '1' ? 'red' : 'green'
                                           }}
                                           width={5}
                                         >
-                                          <b>{notAlocated.business.data120DayGuarantee === 1 ? 'Yes' : 'No'}</b>
+                                          <b>{notAlocated.business.data120DayGuarantee === '1' ? 'Yes' : 'No'}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -1058,7 +1209,7 @@ class BrokersWeeklyReports extends Component {
                                           style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
                                           width={5}
                                         >
-                                          <b>{notAlocated.nOfPendingTasks.count}</b>
+                                          <b>{notAlocated.nOfPendingTasks}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -1108,7 +1259,9 @@ BrokersWeeklyReports.propTypes = {
   isLoadingReports: PropTypes.bool,
   reportWithdrawn: PropTypes.array,
   reportSold: PropTypes.array,
-  businessesNotAlocated: PropTypes.array
+  businessesNotAlocated: PropTypes.array,
+  isCreated: PropTypes.bool,
+  isUpdated: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -1128,7 +1281,9 @@ const mapStateToProps = state => ({
   reportWithdrawn: state.broker.getBusinessesPerBroker.arrayReportWithdrawn,
   isLoadingReports: state.broker.getBusinessesPerBroker.isLoading,
   reportSold: state.broker.getBusinessesPerBroker.arrayReportSold,
-  businessesNotAlocated: state.broker.getBusinessesPerBroker.arrayBusinessesNotAlocated
+  businessesNotAlocated: state.broker.getBusinessesPerBroker.arrayBusinessesNotAlocated,
+  isCreated: state.broker.create.isCreated,
+  isUpdated: state.broker.update.isUpdated
 })
 
 const mapDispatchToProps = dispatch =>

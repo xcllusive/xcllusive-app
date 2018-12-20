@@ -126,9 +126,9 @@ class BuyerPage extends Component {
                     <Table.HeaderCell>Last Score</Table.HeaderCell>
                     <Table.HeaderCell>Sent</Table.HeaderCell>
                     <Table.HeaderCell>Make New Score</Table.HeaderCell>
-                    <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                     <Table.HeaderCell>Locked</Table.HeaderCell>
                     <Table.HeaderCell>IM</Table.HeaderCell>
+                    <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -202,17 +202,6 @@ class BuyerPage extends Component {
                           <Icon name="star" />
                         </Button>
                       </Table.Cell>
-                      <Table.Cell>
-                        <Button
-                          icon
-                          color="instagram"
-                          size="small"
-                          onClick={() => this._brokersWeeklyReport(item.business)}
-                          // disabled={true}
-                        >
-                          <Icon name="edit outline" />
-                        </Button>
-                      </Table.Cell>
                       <Table.Cell
                         style={
                           item.lastScore &&
@@ -236,6 +225,17 @@ class BuyerPage extends Component {
                           onClick={() => this._downloadIM(item.business.imUrl)}
                         >
                           <Icon name="download" />
+                        </Button>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          color="instagram"
+                          size="small"
+                          onClick={() => this._brokersWeeklyReport(item.business)}
+                          // disabled={true}
+                        >
+                          <Icon name="edit outline" />
                         </Button>
                       </Table.Cell>
                     </Table.Row>
@@ -264,6 +264,7 @@ class BuyerPage extends Component {
                     <Table.HeaderCell>Follow Up Task</Table.HeaderCell>
                     <Table.HeaderCell>Send Group Email</Table.HeaderCell>
                     <Table.HeaderCell>Days On The Market</Table.HeaderCell>
+                    <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -302,6 +303,17 @@ class BuyerPage extends Component {
                       <Table.Cell>
                         {item.business.daysOnTheMarket ? this._diffDays(item.business.daysOnTheMarket) : '-'}
                       </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          color="instagram"
+                          size="small"
+                          onClick={() => this._brokersWeeklyReport(item.business)}
+                          // disabled={true}
+                        >
+                          <Icon name="edit outline" />
+                        </Button>
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -329,6 +341,7 @@ class BuyerPage extends Component {
                         <Table.HeaderCell>Business Name</Table.HeaderCell>
                         <Table.HeaderCell>Owners</Table.HeaderCell>
                         <Table.HeaderCell>Phone</Table.HeaderCell>
+                        <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -357,6 +370,17 @@ class BuyerPage extends Component {
                             {item.business.firstNameV} {item.business.lastNameV}
                           </Table.Cell>
                           <Table.Cell>{item.business.vendorPhone1}</Table.Cell>
+                          <Table.Cell>
+                            <Button
+                              icon
+                              color="instagram"
+                              size="small"
+                              onClick={() => this._brokersWeeklyReport(item.business)}
+                              // disabled={true}
+                            >
+                              <Icon name="edit outline" />
+                            </Button>
+                          </Table.Cell>
                         </Table.Row>
                       ))}
                     </Table.Body>
