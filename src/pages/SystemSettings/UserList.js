@@ -136,6 +136,7 @@ class UserList extends React.Component {
                   <Table.HeaderCell>Pre Sale</Table.HeaderCell>
                   <Table.HeaderCell>Resources</Table.HeaderCell>
                   <Table.HeaderCell>Client Manager</Table.HeaderCell>
+                  <Table.HeaderCell>Management</Table.HeaderCell>
                   <Table.HeaderCell>Systems Settings</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -153,6 +154,7 @@ class UserList extends React.Component {
                       <Table.Cell>{_.includes(roles, 'PRESALE_MENU') ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>{_.includes(roles, 'RESOURCES_MENU') ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>{_.includes(roles, 'CLIENT_MANAGER_MENU') ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{_.includes(roles, 'MANAGEMENT_MENU') ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>{_.includes(roles, 'SYSTEM_SETTINGS_MENU') ? 'Yes' : 'No'}</Table.Cell>
                     </Table.Row>
                   )

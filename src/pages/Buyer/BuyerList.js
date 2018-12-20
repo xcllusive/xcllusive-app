@@ -32,7 +32,7 @@ class BuyerListPage extends Component {
   }
 
   render () {
-    const { listBuyersList, history, business, isLoadingBusiness, countAll } = this.props
+    const { listBuyersList, history, business, isLoadingBusiness, countAll, countAllEnquiry } = this.props
     return (
       <Wrapper>
         <Dimmer.Dimmable dimmed={isLoadingBusiness} style={{ height: '80vh' }}>
@@ -40,15 +40,28 @@ class BuyerListPage extends Component {
             <Loader>Loading</Loader>
           </Dimmer>
           <Grid style={{ marginTop: 0 }}>
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                {listBuyersList && business ? (
-                  <Header as="h2" content={`${business.businessName} / ${listBuyersList.length} out of ${countAll} `} />
+            <Grid.Row columns={3}>
+              <Grid.Column width={business && business.businessName.length > 35 ? 7 : null}>
+                {listBuyersList && business && countAllEnquiry ? (
+                  <Header
+                    style={{ marginTop: '5px' }}
+                    as="h3"
+                    content={`${business.businessName} / ${listBuyersList.length} out of ${countAll}`}
+                  />
                 ) : (
-                  <Header as="h2" content={'0 records'} />
+                  <Header as="h3" content={'0 record'} />
                 )}
               </Grid.Column>
-              <Grid.Column>
+              <Grid.Column style={{ paddingLeft: '0px' }}>
+                {listBuyersList && business && countAllEnquiry && !this.state.showAll ? (
+                  <Header
+                    style={{ marginTop: '5px', paddingLeft: '0px' }}
+                    as="h3"
+                    content={`+ ${countAllEnquiry - countAll} Waiting for CA (Not in the below list) `}
+                  />
+                ) : null}
+              </Grid.Column>
+              <Grid.Column floated="right">
                 {this.state.showAll ? (
                   <Button color="twitter" onClick={() => this._showAll()} size="small" floated="right">
                     <Icon name="zoom" />
@@ -177,7 +190,8 @@ BuyerListPage.propTypes = {
   getBusinessFromBuyer: PropTypes.func,
   business: PropTypes.object,
   isLoadingBusiness: PropTypes.bool,
-  countAll: PropTypes.number
+  countAll: PropTypes.number,
+  countAllEnquiry: PropTypes.number
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getBuyersFromBusiness, getBusinessFromBuyer }, dispatch)
@@ -186,6 +200,7 @@ const mapStateToProps = state => ({
   listBuyersList: state.buyer.getBuyersFromBusiness.array,
   countAll: state.buyer.getBuyersFromBusiness.countAll,
   business: state.buyer.getBusinessFromBuyer.object,
+  countAllEnquiry: state.buyer.getBusinessFromBuyer.countAllEnquiry,
   isLoadingBusiness: state.buyer.getBusinessFromBuyer.isLoading
 })
 

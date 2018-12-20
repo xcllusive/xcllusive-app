@@ -7,7 +7,7 @@ import _ from 'lodash'
 
 import { Table, Icon, Button, Grid, Dimmer, Loader } from 'semantic-ui-react'
 
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyerBusinesses } from '../../redux/ducks/buyer'
 import Wrapper from '../../components/content/Wrapper'
 import { theme } from '../../styles'
@@ -76,10 +76,16 @@ class BuyerPage extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          // this.props.downloadIM(this.props.business.id)
           window.open(`${imUrl}`, '_blank')
         }
       }
+    })
+  }
+
+  _brokersWeeklyReport = business => {
+    this.props.openModal(TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT, {
+      title: 'Broker`s Weekly Report',
+      business
     })
   }
 
@@ -122,6 +128,7 @@ class BuyerPage extends Component {
                     <Table.HeaderCell>Make New Score</Table.HeaderCell>
                     <Table.HeaderCell>Locked</Table.HeaderCell>
                     <Table.HeaderCell>IM</Table.HeaderCell>
+                    <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -220,6 +227,17 @@ class BuyerPage extends Component {
                           <Icon name="download" />
                         </Button>
                       </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          color="instagram"
+                          size="small"
+                          onClick={() => this._brokersWeeklyReport(item.business)}
+                          // disabled={true}
+                        >
+                          <Icon name="edit outline" />
+                        </Button>
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -246,6 +264,7 @@ class BuyerPage extends Component {
                     <Table.HeaderCell>Follow Up Task</Table.HeaderCell>
                     <Table.HeaderCell>Send Group Email</Table.HeaderCell>
                     <Table.HeaderCell>Days On The Market</Table.HeaderCell>
+                    <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -284,6 +303,17 @@ class BuyerPage extends Component {
                       <Table.Cell>
                         {item.business.daysOnTheMarket ? this._diffDays(item.business.daysOnTheMarket) : '-'}
                       </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          color="instagram"
+                          size="small"
+                          onClick={() => this._brokersWeeklyReport(item.business)}
+                          // disabled={true}
+                        >
+                          <Icon name="edit outline" />
+                        </Button>
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -311,6 +341,7 @@ class BuyerPage extends Component {
                         <Table.HeaderCell>Business Name</Table.HeaderCell>
                         <Table.HeaderCell>Owners</Table.HeaderCell>
                         <Table.HeaderCell>Phone</Table.HeaderCell>
+                        <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -339,6 +370,17 @@ class BuyerPage extends Component {
                             {item.business.firstNameV} {item.business.lastNameV}
                           </Table.Cell>
                           <Table.Cell>{item.business.vendorPhone1}</Table.Cell>
+                          <Table.Cell>
+                            <Button
+                              icon
+                              color="instagram"
+                              size="small"
+                              onClick={() => this._brokersWeeklyReport(item.business)}
+                              // disabled={true}
+                            >
+                              <Icon name="edit outline" />
+                            </Button>
+                          </Table.Cell>
                         </Table.Row>
                       ))}
                     </Table.Body>
@@ -353,7 +395,7 @@ class BuyerPage extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBuyerBusinesses, openModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBuyerBusinesses, openModal, closeModal }, dispatch)
 
 BuyerPage.propTypes = {
   history: PropTypes.object,
@@ -366,7 +408,8 @@ BuyerPage.propTypes = {
   isLoadingForSale: PropTypes.bool,
   businessesSalesMemo: PropTypes.array,
   isLoadingSalesMemo: PropTypes.bool,
-  userRoles: PropTypes.array
+  userRoles: PropTypes.array,
+  closeModal: PropTypes.func
 }
 
 const mapStateToProps = state => ({
