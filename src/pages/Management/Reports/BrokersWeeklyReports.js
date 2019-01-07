@@ -9,6 +9,7 @@ import numeral from 'numeral'
 import { openModal, TypesModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
 import { getBrokersPerRegion, getBusinessesPerBroker, clearWeeklyReports } from '../../../redux/ducks/broker'
+import { getUserLogged } from '../../../redux/ducks/user'
 
 class BrokersWeeklyReports extends Component {
   constructor (props) {
@@ -22,11 +23,15 @@ class BrokersWeeklyReports extends Component {
         { key: 5, text: 'Melbourne Office', value: 'Melbourne Office' },
         { key: 6, text: 'Sydney Office', value: 'Sydney Office' },
         { key: 7, text: 'Queensland Office', value: 'Queensland Office' }
-      ]
+      ],
+      isGotUser: true
     }
   }
-  componentDidMount () {
+  async componentDidMount () {
     this.props.clearWeeklyReports()
+    await this.props.getUserLogged()
+    this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
+    this.props.getBrokersPerRegion(this.props.user.dataRegion)
   }
 
   componentDidUpdate (nextProps) {
@@ -78,7 +83,9 @@ class BrokersWeeklyReports extends Component {
       isLoadingReports,
       reportWithdrawn,
       reportSold,
-      businessesNotAlocated
+      businessesNotAlocated,
+      user,
+      history
     } = this.props
     const { dataRegion } = this.state
     return (
@@ -93,6 +100,7 @@ class BrokersWeeklyReports extends Component {
                 options={dataRegion}
                 value={values.dataRegion}
                 onChange={this._handleSelectChange}
+                disabled={user && !user.levelOfInfoAccess}
               />
             </Form.Field>
             {brokersPerRegion.length > 0 ? (
@@ -145,9 +153,31 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header>
-                                            <b>{onTheMarket.business.businessName}</b>
-                                          </Header>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column>
+                                              <Header style={{ marginRight: '0px' }} floated="left">
+                                                <Icon
+                                                  link
+                                                  name="archive"
+                                                  onClick={() =>
+                                                    history.push({
+                                                      pathname: `/management/historical-weekly-report/${
+                                                        onTheMarket.business.id
+                                                      }`,
+                                                      state: {
+                                                        business: onTheMarket.business
+                                                      }
+                                                    })
+                                                  }
+                                                />
+                                              </Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              <Header>
+                                                <b>{onTheMarket.business.businessName}</b>
+                                              </Header>
+                                            </Grid.Column>
+                                          </Grid.Row>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
@@ -1261,7 +1291,11 @@ BrokersWeeklyReports.propTypes = {
   reportSold: PropTypes.array,
   businessesNotAlocated: PropTypes.array,
   isCreated: PropTypes.bool,
-  isUpdated: PropTypes.bool
+  isUpdated: PropTypes.bool,
+  getUserLogged: PropTypes.func,
+  user: PropTypes.object,
+  isGotUser: PropTypes.bool,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -1283,7 +1317,9 @@ const mapStateToProps = state => ({
   reportSold: state.broker.getBusinessesPerBroker.arrayReportSold,
   businessesNotAlocated: state.broker.getBusinessesPerBroker.arrayBusinessesNotAlocated,
   isCreated: state.broker.create.isCreated,
-  isUpdated: state.broker.update.isUpdated
+  isUpdated: state.broker.update.isUpdated,
+  user: state.user.getLogged.object,
+  isGotUser: state.user.getLogged.isGot
 })
 
 const mapDispatchToProps = dispatch =>
@@ -1292,7 +1328,8 @@ const mapDispatchToProps = dispatch =>
       openModal,
       getBrokersPerRegion,
       getBusinessesPerBroker,
-      clearWeeklyReports
+      clearWeeklyReports,
+      getUserLogged
     },
     dispatch
   )

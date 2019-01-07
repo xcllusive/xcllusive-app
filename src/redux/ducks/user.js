@@ -228,13 +228,13 @@ export const getUsers = (options = false, search = false) => async dispatch => {
   }
 }
 
-export const getUserLogged = () => async dispatch => {
+export const getUserLogged = (id = false) => async dispatch => {
   dispatch({
     type: Types.GET_USER_LOGGED_LOADING,
     payload: true
   })
   try {
-    const user = await getLogged()
+    const user = await getLogged(id)
     dispatch({
       type: Types.GET_USER_LOGGED_SUCCESS,
       payload: user.data

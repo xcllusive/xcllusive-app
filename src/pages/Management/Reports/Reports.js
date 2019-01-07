@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Tab } from 'semantic-ui-react'
 import BrokersWeeklyReports from './BrokersWeeklyReports'
 
@@ -9,7 +10,7 @@ class Reports extends Component {
       panes: [
         {
           menuItem: 'Broker`s Weekly Report',
-          render: () => <BrokersWeeklyReports />
+          render: () => <BrokersWeeklyReports history={this.props.history} />
         }
       ]
     }
@@ -22,6 +23,10 @@ class Reports extends Component {
       </div>
     )
   }
+}
+
+Reports.propTypes = {
+  history: PropTypes.object
 }
 
 export default Reports
