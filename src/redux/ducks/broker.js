@@ -3,7 +3,8 @@ import {
   getLastWeeklyReport as getLastWeeklyReportAPI,
   updateWeeklyReport as updateWeeklyReportAPI,
   getBrokersPerRegion as getBrokersPerRegionAPI,
-  getBusinessesPerBroker as getBusinessesPerBrokerAPI
+  getBusinessesPerBroker as getBusinessesPerBrokerAPI,
+  getBusinessHistoricalWeekly as getBusinessHistoricalWeeklyAPI
 } from '../../services/api/broker'
 import { toast } from 'react-toastify'
 
@@ -25,7 +26,10 @@ export const Types = {
   GET_BUSINESSES_PER_BROKER_LOADING: 'GET_BUSINESSES_PER_BROKER_LOADING',
   GET_BUSINESSES_PER_BROKER_SUCCESS: 'GET_BUSINESSES_PER_BROKER_SUCCESS',
   GET_BUSINESSES_PER_BROKER_FAILURE: 'GET_BUSINESSES_PER_BROKER_FAILURE',
-  CLEAR_WEEKLY_REPORT: 'CLEAR_WEEKLY_REPORT'
+  CLEAR_WEEKLY_REPORT: 'CLEAR_WEEKLY_REPORT',
+  GET_BUSINESS_HISTORICAL_WEEKLY_LOADING: 'GET_BUSINESS_HISTORICAL_WEEKLY_LOADING',
+  GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS: 'GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS',
+  GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE: 'GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE'
 }
 
 // Reducer
@@ -62,6 +66,11 @@ const initialState = {
     arrayReportWithdrawn: [],
     arrayReportSold: [],
     arrayBusinessesNotAlocated: [],
+    error: null
+  },
+  getBusinessHistoricalWeekly: {
+    isLoading: false,
+    array: [],
     error: null
   }
 }
@@ -236,6 +245,34 @@ export default function reducer (state = initialState, action) {
       }
     case Types.CLEAR_WEEKLY_REPORT:
       return initialState
+    case Types.GET_BUSINESS_HISTORICAL_WEEKLY_LOADING:
+      return {
+        ...state,
+        getBusinessHistoricalWeekly: {
+          ...state.getBusinessHistoricalWeekly,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS:
+      return {
+        ...state,
+        getBusinessHistoricalWeekly: {
+          ...state.getBusinessHistoricalWeekly,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE:
+      return {
+        ...state,
+        getBusinessHistoricalWeekly: {
+          ...state.getBusinessHistoricalWeekly,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -346,4 +383,24 @@ export const clearWeeklyReports = () => async dispatch => {
   dispatch({
     type: Types.CLEAR_WEEKLY_REPORT
   })
+}
+
+export const getBusinessHistoricalWeekly = businessId => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESS_HISTORICAL_WEEKLY_LOADING,
+    payload: true
+  })
+  try {
+    const historicalWeekly = await getBusinessHistoricalWeeklyAPI(businessId)
+    dispatch({
+      type: Types.GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS,
+      payload: historicalWeekly.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
 }
