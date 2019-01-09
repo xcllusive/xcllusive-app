@@ -246,9 +246,7 @@ class BrokersWeeklyReports extends Component {
                                               : null
                                           }}
                                         >
-                                          {onTheMarket.reports
-                                            ? this._convertHtmlToRightText(onTheMarket.reports.text)
-                                            : ''}
+                                          {onTheMarket.reports ? onTheMarket.reports.text : ''}
                                         </Grid.Column>
                                       </Grid.Row>
                                       {onTheMarket.arrayOneBeforeLastTextToDo &&
