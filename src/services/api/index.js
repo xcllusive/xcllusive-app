@@ -5,8 +5,8 @@ import { logout } from '../../redux/ducks/auth'
 const client = axios.create({
   // baseURL: 'http://docker-xcllusive-test-api.ap-southeast-2.elasticbeanstalk.com'
   // baseURL: 'http://xcllusive-api-prod.ap-southeast-2.elasticbeanstalk.com'
-  // baseURL: 'https://mercury-api.xcllusive.com.au/'
-  baseURL: 'http://localhost:5000'
+  baseURL: 'https://mercury-api.xcllusive.com.au/'
+  // baseURL: 'http://localhost:5000'
 })
 
 const request = async options => {
