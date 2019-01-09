@@ -4,10 +4,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Grid, Table, Segment, Header, Button, Icon } from 'semantic-ui-react'
-import moment from 'moment'
 import Wrapper from '../../../components/content/Wrapper'
 import { getUserLogged } from '../../../redux/ducks/user'
 import { getBusinessHistoricalWeekly } from '../../../redux/ducks/broker'
+import moment from 'moment'
+import numeral from 'numeral'
 
 class HistoricalWeeklyReport extends Component {
   constructor (props) {
@@ -39,8 +40,12 @@ class HistoricalWeeklyReport extends Component {
     this.setState({ showAll: true })
   }
 
+  _backToWeeklyReport () {
+    this.props.history.push('/Management')
+  }
+
   render () {
-    const { broker, businessHistoricalWeekly } = this.props
+    const { broker, businessHistoricalWeekly, expectedObject } = this.props
     const { business } = this.props.location.state
     return (
       <Wrapper>
@@ -48,9 +53,17 @@ class HistoricalWeeklyReport extends Component {
           Historical Weekly Report
         </Header>
         <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Header textAlign="right">
+          <Grid.Row columns={2}>
+            <Grid.Column floated="left">
+              <Header>
+                <Button size="small" color="green" onClick={() => this._backToWeeklyReport()}>
+                  <Icon name="backward" />
+                  Back to Weekly Report
+                </Button>
+              </Header>
+            </Grid.Column>
+            <Grid.Column floated="right">
+              <Header>
                 {this.state.showAll ? (
                   <Button color="twitter" onClick={() => this._showAll()} size="small" floated="right">
                     <Icon name="zoom" />
@@ -91,13 +104,40 @@ class HistoricalWeeklyReport extends Component {
                     style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
                   >
                     <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell />
-                          <Table.HeaderCell>Text</Table.HeaderCell>
-                          <Table.HeaderCell />
-                        </Table.Row>
-                      </Table.Header>
+                      {expectedObject && expectedObject.expectedSettlementDate ? (
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ fontSize: '1.3em' }}>Exchanged</Table.HeaderCell>
+                            <Table.HeaderCell style={{ fontSize: '1.3em' }}>
+                              Settlement Date:
+                              <label style={{ color: 'blue' }}>
+                                {' '}
+                                {moment(expectedObject.expectedSettlementDate).format('DD/MM/YYYY')}
+                              </label>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ fontSize: '1.3em' }}>
+                              <Grid>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column>
+                                    Price:
+                                    <label style={{ color: 'blue' }}>
+                                      {' '}
+                                      {numeral(expectedObject.expectedPrice).format('$0,0.[99]')}
+                                    </label>
+                                  </Grid.Column>
+                                  <Grid.Column>
+                                    Commission:
+                                    <label style={{ color: 'blue' }}>
+                                      {' '}
+                                      {numeral(expectedObject.expectedCommission).format('$0,0.[99]')}
+                                    </label>
+                                  </Grid.Column>
+                                </Grid.Row>
+                              </Grid>
+                            </Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+                      ) : null}
                       <Table.Body>
                         {businessHistoricalWeekly.map(HistoricalWeekly => {
                           return (
@@ -167,7 +207,7 @@ class HistoricalWeeklyReport extends Component {
                                   </Grid.Row>
                                   <Grid.Row columns={2}>
                                     <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
-                                      <b>120 Guaranty</b>
+                                      <b>120 Guaranty:</b>
                                     </Grid.Column>
                                     <Grid.Column
                                       style={{
@@ -202,6 +242,21 @@ class HistoricalWeeklyReport extends Component {
                                       <b>{HistoricalWeekly.nOfNewLogs7Days}</b>
                                     </Grid.Column>
                                   </Grid.Row>
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
+                                      <b>Weekly Discussion:</b>
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{
+                                        paddingBottom: '0px',
+                                        paddingTop: '0px',
+                                        color: HistoricalWeekly.progressDiscussion === 'Yes' ? 'red' : 'green'
+                                      }}
+                                      width={5}
+                                    >
+                                      <b>{HistoricalWeekly.progressDiscussion}</b>
+                                    </Grid.Column>
+                                  </Grid.Row>
                                 </Grid>
                               </Table.Cell>
                             </Table.Row>
@@ -227,7 +282,9 @@ HistoricalWeeklyReport.propTypes = {
   getUserLogged: PropTypes.func,
   broker: PropTypes.object,
   getBusinessHistoricalWeekly: PropTypes.func,
-  businessHistoricalWeekly: PropTypes.array
+  businessHistoricalWeekly: PropTypes.array,
+  history: PropTypes.object,
+  expectedObject: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -239,7 +296,8 @@ const mapPropsToValues = props => {
 
 const mapStateToProps = state => ({
   broker: state.user.getLogged.object,
-  businessHistoricalWeekly: state.broker.getBusinessHistoricalWeekly.array
+  businessHistoricalWeekly: state.broker.getBusinessHistoricalWeekly.array,
+  expectedObject: state.broker.getBusinessHistoricalWeekly.expectedObject
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getUserLogged, getBusinessHistoricalWeekly }, dispatch)

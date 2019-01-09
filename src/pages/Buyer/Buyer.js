@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -320,75 +320,72 @@ class BuyerPage extends Component {
               </Table>
             </Dimmer.Dimmable>
           </Grid.Row>
-          {this._isUserBusiness() ? (
-            <Fragment>
-              <Grid.Row style={{ paddingBottom: 0 }}>
-                <h2>
-                  <b>
-                    <div align="left"> Sales Memo </div>
-                  </b>
-                </h2>
-              </Grid.Row>
-              <Grid.Row style={{ paddingTop: 0 }}>
-                <Dimmer.Dimmable dimmed={isLoadingSalesMemo} style={{ width: '100%' }}>
-                  <Dimmer inverted active={isLoadingSalesMemo}>
-                    <Loader>Loading</Loader>
-                  </Dimmer>
-                  <Table color="blue" celled inverted size="small" compact textAlign="center">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Business ID</Table.HeaderCell>
-                        <Table.HeaderCell>Business Name</Table.HeaderCell>
-                        <Table.HeaderCell>Owners</Table.HeaderCell>
-                        <Table.HeaderCell>Phone</Table.HeaderCell>
-                        <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {businessesSalesMemo.map(item => (
-                        <Table.Row active key={item.business.id}>
-                          <Table.Cell textAlign="left">{`BS${item.business.id}`}</Table.Cell>
-                          <Table.Cell
-                            textAlign="left"
-                            selectable
-                            onClick={() => history.push(`/business/${item.business.id}`)}
-                          >
-                            <Icon
-                              style={{
-                                fontSize: '1.2em',
-                                width: 'auto',
-                                paddingLeft: '5px',
-                                fontFamily: 'lato',
-                                color: 'blue'
-                              }}
-                              link
-                            >
-                              {item.business.businessName}
-                            </Icon>
-                          </Table.Cell>
-                          <Table.Cell>
-                            {item.business.firstNameV} {item.business.lastNameV}
-                          </Table.Cell>
-                          <Table.Cell>{item.business.vendorPhone1}</Table.Cell>
-                          <Table.Cell>
-                            <Button
-                              icon
-                              color="instagram"
-                              size="small"
-                              onClick={() => this._brokersWeeklyReport(item.business)}
-                              // disabled={true}
-                            >
-                              <Icon name="edit outline" />
-                            </Button>
-                          </Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
-                </Dimmer.Dimmable>
-              </Grid.Row>
-            </Fragment>
-          ) : null}
+
+          <Grid.Row style={{ paddingBottom: 0 }}>
+            <h2>
+              <b>
+                <div align="left"> Sales Memo </div>
+              </b>
+            </h2>
+          </Grid.Row>
+          <Grid.Row style={{ paddingTop: 0 }}>
+            <Dimmer.Dimmable dimmed={isLoadingSalesMemo} style={{ width: '100%' }}>
+              <Dimmer inverted active={isLoadingSalesMemo}>
+                <Loader>Loading</Loader>
+              </Dimmer>
+              <Table color="blue" celled inverted size="small" compact textAlign="center">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Business ID</Table.HeaderCell>
+                    <Table.HeaderCell>Business Name</Table.HeaderCell>
+                    <Table.HeaderCell>Owners</Table.HeaderCell>
+                    <Table.HeaderCell>Phone</Table.HeaderCell>
+                    <Table.HeaderCell>Broker`s Report</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {businessesSalesMemo.map(item => (
+                    <Table.Row active key={item.business.id}>
+                      <Table.Cell textAlign="left">{`BS${item.business.id}`}</Table.Cell>
+                      <Table.Cell
+                        textAlign="left"
+                        selectable
+                        onClick={() => (this._isUserBusiness() ? history.push(`/business/${item.business.id}`) : null)}
+                      >
+                        <Icon
+                          style={{
+                            fontSize: '1.2em',
+                            width: 'auto',
+                            paddingLeft: '5px',
+                            fontFamily: 'lato',
+                            color: 'blue'
+                          }}
+                          link
+                        >
+                          {item.business.businessName}
+                        </Icon>
+                      </Table.Cell>
+                      <Table.Cell>
+                        {item.business.firstNameV} {item.business.lastNameV}
+                      </Table.Cell>
+                      <Table.Cell>{item.business.vendorPhone1}</Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          icon
+                          color="instagram"
+                          size="small"
+                          onClick={() => this._brokersWeeklyReport(item.business)}
+                          // disabled={true}
+                        >
+                          <Icon name="edit outline" />
+                        </Button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Dimmer.Dimmable>
+          </Grid.Row>
         </Grid>
       </Wrapper>
     )

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Table, Segment, Header, Dimmer, Loader, Button, Icon } from 'semantic-ui-react'
+import { Grid, Form, Table, Segment, Header, Dimmer, Loader, Button, Icon, Label } from 'semantic-ui-react'
 import moment from 'moment'
 import numeral from 'numeral'
 import { openModal, TypesModal } from '../../../redux/ducks/modal'
@@ -28,7 +28,7 @@ class BrokersWeeklyReports extends Component {
     }
   }
   async componentDidMount () {
-    this.props.clearWeeklyReports()
+    // this.props.clearWeeklyReports()
     await this.props.getUserLogged()
     this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
     this.props.getBrokersPerRegion(this.props.user.dataRegion)
@@ -71,6 +71,15 @@ class BrokersWeeklyReports extends Component {
     } else return null
   }
 
+  _goToHistoricalWeeklyReport (business) {
+    this.props.history.push({
+      pathname: `/management/historical-weekly-report/${business.id}`,
+      state: {
+        business: business
+      }
+    })
+  }
+
   render () {
     const {
       values,
@@ -84,40 +93,67 @@ class BrokersWeeklyReports extends Component {
       reportWithdrawn,
       reportSold,
       businessesNotAlocated,
-      user,
-      history
+      user
     } = this.props
     const { dataRegion } = this.state
     return (
       <Wrapper>
         <Form>
-          <Form.Group>
-            <Form.Field>
-              <Form.Select
-                required
-                label="Select One Region"
-                name="dataRegion"
-                options={dataRegion}
-                value={values.dataRegion}
-                onChange={this._handleSelectChange}
-                disabled={user && !user.levelOfInfoAccess}
-              />
-            </Form.Field>
-            {brokersPerRegion.length > 0 ? (
-              <Form.Field>
-                <Form.Select
-                  required
-                  label="Select One Broker"
-                  options={brokersPerRegion}
-                  name="brokerAccountName"
-                  autoComplete="brokerAccountName"
-                  value={values.brokerAccountName}
-                  onChange={this._handleSelectChange}
-                  loading={isLoadingBroker}
-                />
-              </Form.Field>
-            ) : null}
-          </Form.Group>
+          <Grid>
+            <Grid.Row style={{ paddingBottom: '0px' }} columns={2}>
+              <Grid.Column>
+                <Form.Group>
+                  <Form.Field>
+                    <Form.Select
+                      required
+                      label="Select One Region"
+                      name="dataRegion"
+                      options={dataRegion}
+                      value={values.dataRegion}
+                      onChange={this._handleSelectChange}
+                      disabled={user && !user.levelOfInfoAccess}
+                    />
+                  </Form.Field>
+                  {brokersPerRegion.length > 0 ? (
+                    <Form.Field>
+                      <Form.Select
+                        required
+                        label="Select One Broker"
+                        options={brokersPerRegion}
+                        name="brokerAccountName"
+                        autoComplete="brokerAccountName"
+                        value={values.brokerAccountName}
+                        onChange={this._handleSelectChange}
+                        loading={isLoadingBroker}
+                      />
+                    </Form.Field>
+                  ) : null}
+                </Form.Group>
+              </Grid.Column>
+              {values.brokerAccountName > 0 ? (
+                <Grid.Column textAlign="center">
+                  <Grid style={{ marginLeft: '300px' }}>
+                    <Grid.Row style={{ paddingBottom: '0px', marginTop: '20px' }}>
+                      <Grid.Column textAlign="left">
+                        <Label style={{ backgroundColor: '#f5020229' }} size="medium" />
+                        <label>
+                          <b>older than 7 days</b>
+                        </label>
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row style={{ paddingTop: '0px' }}>
+                      <Grid.Column textAlign="left">
+                        <Label style={{ backgroundColor: 'rgba(255, 255, 0, 1)' }} size="medium" />
+                        <label>
+                          <b>last to do task</b>
+                        </label>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                </Grid.Column>
+              ) : null}
+            </Grid.Row>
+          </Grid>
         </Form>
         <Dimmer.Dimmable dimmed={isLoadingReports} style={{ height: '80vh' }}>
           <Dimmer inverted active={isLoadingReports}>
@@ -159,22 +195,19 @@ class BrokersWeeklyReports extends Component {
                                                 <Icon
                                                   link
                                                   name="archive"
-                                                  onClick={() =>
-                                                    history.push({
-                                                      pathname: `/management/historical-weekly-report/${
-                                                        onTheMarket.business.id
-                                                      }`,
-                                                      state: {
-                                                        business: onTheMarket.business
-                                                      }
-                                                    })
-                                                  }
+                                                  onClick={() => this._goToHistoricalWeeklyReport(onTheMarket.business)}
                                                 />
                                               </Header>
                                             </Grid.Column>
                                             <Grid.Column>
-                                              <Header>
-                                                <b>{onTheMarket.business.businessName}</b>
+                                              <Header
+                                                onClick={() =>
+                                                  this.props.history.push(`business/${onTheMarket.business.id}`)
+                                                }
+                                              >
+                                                <u>
+                                                  <b>{onTheMarket.business.businessName}</b>
+                                                </u>
                                               </Header>
                                             </Grid.Column>
                                           </Grid.Row>
@@ -274,7 +307,7 @@ class BrokersWeeklyReports extends Component {
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
                                         <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
-                                          <b>120 Guaranty</b>
+                                          <b>120 Guaranty:</b>
                                         </Grid.Column>
                                         <Grid.Column
                                           style={{
@@ -307,6 +340,21 @@ class BrokersWeeklyReports extends Component {
                                           width={5}
                                         >
                                           <b>{onTheMarket.nOfNewLogs7Days.count}</b>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                          <b>Weekly Discussion:</b>
+                                        </Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            paddingBottom: '0px',
+                                            paddingTop: '0px',
+                                            color: onTheMarket.reports.progressDiscussion === 'No' ? 'red' : 'green'
+                                          }}
+                                          width={5}
+                                        >
+                                          <b>{onTheMarket.reports.progressDiscussion}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                     </Grid>
@@ -349,9 +397,28 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header>
-                                            <b>{imStage.business.businessName}</b>
-                                          </Header>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column>
+                                              <Header style={{ marginRight: '0px' }} floated="left">
+                                                <Icon
+                                                  link
+                                                  name="archive"
+                                                  onClick={() => this._goToHistoricalWeeklyReport(imStage.business)}
+                                                />
+                                              </Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              <Header
+                                                onClick={() =>
+                                                  this.props.history.push(`business/${imStage.business.id}`)
+                                                }
+                                              >
+                                                <u>
+                                                  <b>{imStage.business.businessName}</b>
+                                                </u>
+                                              </Header>
+                                            </Grid.Column>
+                                          </Grid.Row>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
@@ -420,6 +487,21 @@ class BrokersWeeklyReports extends Component {
                                           <b>{imStage.nOfEnquiries.count}</b>
                                         </Grid.Column>
                                       </Grid.Row>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                          <b>Weekly Discussion:</b>
+                                        </Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            paddingBottom: '0px',
+                                            paddingTop: '0px',
+                                            color: imStage.reports.progressDiscussion === 'No' ? 'red' : 'green'
+                                          }}
+                                          width={5}
+                                        >
+                                          <b>{imStage.reports.progressDiscussion}</b>
+                                        </Grid.Column>
+                                      </Grid.Row>
                                     </Grid>
                                   </Table.Cell>
                                 </Table.Row>
@@ -460,9 +542,28 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header>
-                                            <b>{underOffer.business.businessName}</b>
-                                          </Header>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column>
+                                              <Header style={{ marginRight: '0px' }} floated="left">
+                                                <Icon
+                                                  link
+                                                  name="archive"
+                                                  onClick={() => this._goToHistoricalWeeklyReport(underOffer.business)}
+                                                />
+                                              </Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              <Header
+                                                onClick={() =>
+                                                  this.props.history.push(`business/${underOffer.business.id}`)
+                                                }
+                                              >
+                                                <u>
+                                                  <b>{underOffer.business.businessName}</b>
+                                                </u>
+                                              </Header>
+                                            </Grid.Column>
+                                          </Grid.Row>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
@@ -581,6 +682,21 @@ class BrokersWeeklyReports extends Component {
                                           <b>{underOffer.nOfNewLogs7Days.count}</b>
                                         </Grid.Column>
                                       </Grid.Row>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                          <b>Weekly Discussion:</b>
+                                        </Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            paddingBottom: '0px',
+                                            paddingTop: '0px',
+                                            color: underOffer.reports.progressDiscussion === 'No' ? 'red' : 'green'
+                                          }}
+                                          width={5}
+                                        >
+                                          <b>{underOffer.reports.progressDiscussion}</b>
+                                        </Grid.Column>
+                                      </Grid.Row>
                                     </Grid>
                                   </Table.Cell>
                                 </Table.Row>
@@ -621,9 +737,28 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header>
-                                            <b>{exchanged.business.businessName}</b>
-                                          </Header>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column>
+                                              <Header style={{ marginRight: '0px' }} floated="left">
+                                                <Icon
+                                                  link
+                                                  name="archive"
+                                                  onClick={() => this._goToHistoricalWeeklyReport(exchanged.business)}
+                                                />
+                                              </Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              <Header
+                                                onClick={() =>
+                                                  this.props.history.push(`business/${exchanged.business.id}`)
+                                                }
+                                              >
+                                                <u>
+                                                  <b>{exchanged.business.businessName}</b>
+                                                </u>
+                                              </Header>
+                                            </Grid.Column>
+                                          </Grid.Row>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
@@ -706,7 +841,13 @@ class BrokersWeeklyReports extends Component {
                                           style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
                                           width={5}
                                         >
-                                          <b>{moment(exchanged.reports.expectedSettlementDate).format('DD/MM/YYYY')}</b>
+                                          {moment(exchanged.reports.expectedSettlementDate).isValid() ? (
+                                            <b>
+                                              {moment(exchanged.reports.expectedSettlementDate).format('DD/MM/YYYY')}
+                                            </b>
+                                          ) : (
+                                            '-'
+                                          )}
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -760,6 +901,21 @@ class BrokersWeeklyReports extends Component {
                                           <b>{exchanged.nOfNewLogs7Days.count}</b>
                                         </Grid.Column>
                                       </Grid.Row>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                          <b>Weekly Discussion:</b>
+                                        </Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            paddingBottom: '0px',
+                                            paddingTop: '0px',
+                                            color: exchanged.reports.progressDiscussion === 'No' ? 'red' : 'green'
+                                          }}
+                                          width={5}
+                                        >
+                                          <b>{exchanged.reports.progressDiscussion}</b>
+                                        </Grid.Column>
+                                      </Grid.Row>
                                     </Grid>
                                   </Table.Cell>
                                 </Table.Row>
@@ -800,9 +956,28 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header>
-                                            <b>{withdrawn.business.businessName}</b>
-                                          </Header>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column>
+                                              <Header style={{ marginRight: '0px' }} floated="left">
+                                                <Icon
+                                                  link
+                                                  name="archive"
+                                                  onClick={() => this._goToHistoricalWeeklyReport(withdrawn.business)}
+                                                />
+                                              </Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              <Header
+                                                onClick={() =>
+                                                  this.props.history.push(`business/${withdrawn.business.id}`)
+                                                }
+                                              >
+                                                <u>
+                                                  <b>{withdrawn.business.businessName}</b>
+                                                </u>
+                                              </Header>
+                                            </Grid.Column>
+                                          </Grid.Row>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
@@ -916,6 +1091,21 @@ class BrokersWeeklyReports extends Component {
                                           <b>{withdrawn.nOfNewLogs7Days.count}</b>
                                         </Grid.Column>
                                       </Grid.Row>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                          <b>Weekly Discussion:</b>
+                                        </Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            paddingBottom: '0px',
+                                            paddingTop: '0px',
+                                            color: withdrawn.reports.progressDiscussion === 'No' ? 'red' : 'green'
+                                          }}
+                                          width={5}
+                                        >
+                                          <b>{withdrawn.reports.progressDiscussion}</b>
+                                        </Grid.Column>
+                                      </Grid.Row>
                                     </Grid>
                                   </Table.Cell>
                                 </Table.Row>
@@ -956,9 +1146,26 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header>
-                                            <b>{sold.business.businessName}</b>
-                                          </Header>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column>
+                                              <Header style={{ marginRight: '0px' }} floated="left">
+                                                <Icon
+                                                  link
+                                                  name="archive"
+                                                  onClick={() => this._goToHistoricalWeeklyReport(sold.business)}
+                                                />
+                                              </Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              <Header
+                                                onClick={() => this.props.history.push(`business/${sold.business.id}`)}
+                                              >
+                                                <u>
+                                                  <b>{sold.business.businessName}</b>
+                                                </u>
+                                              </Header>
+                                            </Grid.Column>
+                                          </Grid.Row>
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row>
@@ -1037,7 +1244,11 @@ class BrokersWeeklyReports extends Component {
                                           style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
                                           width={5}
                                         >
-                                          <b>{moment(sold.reports.expectedSettlementDate).format('DD/MM/YYYY')}</b>
+                                          {moment(sold.reports.expectedSettlementDate).isValid() ? (
+                                            <b>{moment(sold.reports.expectedSettlementDate).format('DD/MM/YYYY')}</b>
+                                          ) : (
+                                            '-'
+                                          )}
                                         </Grid.Column>
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
@@ -1056,7 +1267,7 @@ class BrokersWeeklyReports extends Component {
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
                                         <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
-                                          <b>120 Guaranty</b>
+                                          <b>120 Guaranty:</b>
                                         </Grid.Column>
                                         <Grid.Column
                                           style={{
@@ -1083,6 +1294,21 @@ class BrokersWeeklyReports extends Component {
                                         </Grid.Column>
                                         <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={5}>
                                           <b>{sold.nOfNewLogs7Days.count}</b>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                          <b>Weekly Discussion:</b>
+                                        </Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            paddingBottom: '0px',
+                                            paddingTop: '0px',
+                                            color: sold.reports.progressDiscussion === 'No' ? 'red' : 'green'
+                                          }}
+                                          width={5}
+                                        >
+                                          <b>{sold.reports.progressDiscussion}</b>
                                         </Grid.Column>
                                       </Grid.Row>
                                     </Grid>
@@ -1125,8 +1351,14 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header>
-                                            <b>{notAlocated.business.businessName}</b>
+                                          <Header
+                                            onClick={() =>
+                                              this.props.history.push(`business/${notAlocated.business.id}`)
+                                            }
+                                          >
+                                            <u>
+                                              <b>{notAlocated.business.businessName}</b>
+                                            </u>
                                           </Header>
                                         </Grid.Column>
                                       </Grid.Row>
@@ -1218,7 +1450,7 @@ class BrokersWeeklyReports extends Component {
                                       </Grid.Row>
                                       <Grid.Row columns={2}>
                                         <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
-                                          <b>120 Guaranty</b>
+                                          <b>120 Guaranty:</b>
                                         </Grid.Column>
                                         <Grid.Column
                                           style={{

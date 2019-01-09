@@ -71,6 +71,7 @@ const initialState = {
   getBusinessHistoricalWeekly: {
     isLoading: false,
     array: [],
+    expectedObject: {},
     error: null
   }
 }
@@ -260,7 +261,8 @@ export default function reducer (state = initialState, action) {
         getBusinessHistoricalWeekly: {
           ...state.getBusinessHistoricalWeekly,
           isLoading: false,
-          array: action.payload,
+          array: action.payload.data,
+          expectedObject: action.payload.expectedObject,
           error: null
         }
       }
@@ -394,7 +396,7 @@ export const getBusinessHistoricalWeekly = businessId => async dispatch => {
     const historicalWeekly = await getBusinessHistoricalWeeklyAPI(businessId)
     dispatch({
       type: Types.GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS,
-      payload: historicalWeekly.data
+      payload: historicalWeekly
     })
   } catch (error) {
     dispatch({
