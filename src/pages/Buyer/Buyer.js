@@ -230,7 +230,7 @@ class BuyerPage extends Component {
                       <Table.Cell>
                         <Button
                           icon
-                          color="instagram"
+                          color={item.business.lastBrokerReport && (moment().diff(moment(item.business.lastBrokerReport.dateTimeCreated, 'days')) < 3) ? 'instagram' : 'olive'}
                           size="small"
                           onClick={() => this._brokersWeeklyReport(item.business)}
                           // disabled={true}
