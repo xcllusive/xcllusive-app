@@ -103,7 +103,7 @@ class ModalBrokersWeeklyReport extends Component {
       this.props.closeModal()
       return
     }
-    this.props.values.text = this._convertHtmlToRightText(this.props.values.text)
+    // this.props.values.text = this._convertHtmlToRightText(this.props.values.text)
     if (this.props.lastWeeklyReport) {
       const comparingDate = moment().diff(this.props.lastWeeklyReport.dateTimeCreated, 'day')
       if (comparingDate >= 3 || this.props.lastWeeklyReport.stage === '') {
