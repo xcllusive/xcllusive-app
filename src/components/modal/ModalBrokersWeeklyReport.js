@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label, Grid } from 'semantic-ui-react'
 import * as Yup from 'yup'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 import { closeModal } from '../../redux/ducks/modal'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -16,6 +18,10 @@ class ModalBrokersWeeklyReport extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      modules: {
+        toolbar: [[{}], ['', '', '', '', ''], [{}, {}, {}, {}], ['', ''], ['']]
+      },
+      formats: ['', '', '', '', '', '', '', '', '', '', ''],
       stage: [
         { key: 1, text: 'Info Memorandum', value: 'Info Memorandum' },
         { key: 2, text: 'On The Market', value: 'On The Market' },
@@ -27,9 +33,12 @@ class ModalBrokersWeeklyReport extends Component {
       expectedPrice: 0,
       exchanged: false
     }
+    this.quillRef = null
+    this.reactQuillRef = null
   }
   componentDidMount () {
     this.props.getLastWeeklyReport(this.props.business.id)
+    this._attachQuillRefs()
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -69,11 +78,23 @@ class ModalBrokersWeeklyReport extends Component {
     this.props.setFieldValue('expectedSettlementDate', date)
   }
 
+  _handleChangeRadio = (e, { value }) => {
+    this.props.setFieldValue('progressDiscussion', value)
+  }
+
+  _convertHtmlToRightText = html => {
+    let htmlConverted = html.replace(/<p>/gi, '')
+    htmlConverted = htmlConverted.replace(/<\/p>/gi, '')
+
+    return encodeURIComponent(htmlConverted)
+  }
+
   _handleConfirm = async isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       return
     }
+    this.props.values.text = this._convertHtmlToRightText(this.props.values.text)
     if (this.props.lastWeeklyReport) {
       const comparingDate = moment().diff(this.props.lastWeeklyReport.dateTimeCreated, 'day')
       if (comparingDate >= 3 || this.props.lastWeeklyReport.stage === '') {
@@ -88,19 +109,24 @@ class ModalBrokersWeeklyReport extends Component {
     }
   }
 
+  _attachQuillRefs = () => {
+    // Ensure React-Quill reference is available:
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
+      return false
+    }
+    // Skip if Quill reference is defined:
+    if (this.quillRef !== null) return false
+
+    const quillRef = this.reactQuillRef.getEditor()
+    if (quillRef !== null) this.quillRef = quillRef
+  }
+
+  _handleChangeBody = value => {
+    this.props.setFieldValue('text', value)
+  }
+
   render () {
-    const {
-      values,
-      handleChange,
-      handleBlur,
-      errors,
-      touched,
-      isSubmitting,
-      isValid,
-      isLoading,
-      title,
-      closeModal
-    } = this.props
+    const { values, handleBlur, errors, touched, isSubmitting, isValid, isLoading, title, closeModal } = this.props
     return (
       <Modal open dimmer={'blurring'} onClose={() => this._handleConfirm(false)}>
         <Modal.Header align="center">{title}</Modal.Header>
@@ -125,19 +151,41 @@ class ModalBrokersWeeklyReport extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
+            <Form.Group>
+              <h5 style={{ fontSize: '.92857143em', paddingLeft: '8px' }}>Text (max. 400 characters)</h5>
+            </Form.Group>
             <Form.Group widths="equal">
-              <Form.Field>
-                <Form.TextArea
-                  style={{ height: '20vh' }}
-                  label="Text"
-                  name="text"
-                  autoComplete="text"
+              <Form.Field style={{ height: '20vh' }}>
+                <ReactQuill
+                  ref={el => {
+                    this.reactQuillRef = el
+                  }}
                   value={values.text}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  onChange={this._handleChangeBody}
+                  style={{ height: '80%' }}
+                  modules={this.state.modules}
+                  formats={this.state.formats}
                 />
-                {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
               </Form.Field>
+            </Form.Group>
+            <Form.Group style={{ marginBottom: '0px', marginLeft: '2px' }}>
+              <b>Have you had a business selling progress discussion with the vendor in the last 7 days? </b>
+            </Form.Group>
+            <Form.Group style={{ marginTop: '5px', marginBottom: '0px' }}>
+              <Form.Radio
+                label="Yes"
+                value={values.progressDiscussion === 'Yes' ? values.progressDiscussion : 'Yes'}
+                checked={values.progressDiscussion === 'Yes'}
+                onChange={this._handleChangeRadio}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Radio
+                label="No"
+                value={values.progressDiscussion === 'No' ? values.progressDiscussion : 'No'}
+                checked={values.progressDiscussion === 'No'}
+                onChange={this._handleChangeRadio}
+              />
             </Form.Group>
             <Form.Group>
               <Form.Field width={4}>
@@ -150,7 +198,9 @@ class ModalBrokersWeeklyReport extends Component {
                 />
               </Form.Field>
               {this.state.exchanged ||
-              (this.props.lastWeeklyReport && this.props.lastWeeklyReport.stage === 'Exchanged') ? (
+              (this.props.lastWeeklyReport &&
+                this.props.lastWeeklyReport.stage === 'Exchanged' &&
+                moment().diff(this.props.lastWeeklyReport.dateTimeCreated, 'day') <= 3) ? (
                   <Fragment>
                     <Form.Field>
                       <Form.Input
@@ -208,7 +258,9 @@ class ModalBrokersWeeklyReport extends Component {
           <Button
             color="green"
             type="submit"
-            disabled={isSubmitting || !isValid}
+            disabled={
+              isSubmitting || !isValid || (values.progressDiscussion !== 'Yes' && values.progressDiscussion !== 'No')
+            }
             loading={isLoading}
             onClick={this._handleConfirm}
           >
