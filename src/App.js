@@ -6,7 +6,7 @@ import moment from 'moment'
 import IdleTimer from 'react-idle-timer'
 
 import { store } from './redux/store'
-import { loginWithToken, loginAppLoading } from './redux/ducks/auth'
+import { loginWithToken, loginAppLoading, logout } from './redux/ducks/auth'
 import Routes from './Routes'
 import { theme } from './styles'
 
@@ -27,6 +27,9 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.idleTimer = null
+    this.state = {
+      timeout: 1 * 60 * 60 * 1000 // hours * 60 * 60 * 1000 = milliseconds
+    }
   }
 
   componentDidMount () {
@@ -36,22 +39,11 @@ class App extends Component {
     } else {
       store.dispatch(loginAppLoading(false))
     }
-
-    console.log(this.idleTimer)
   }
 
-  _onAction (e) {
-    console.log('user did something', e)
-  }
-
-  _onActive (e) {
-    console.log('user is active', e)
-    console.log('time remaining', this.idleTimer.getRemainingTime())
-  }
-
-  _onIdle (e) {
-    console.log('user is idle', e)
-    console.log('last active', this.idleTimer.getLastActiveTime())
+  _onIdle = () => {
+    const token = window.localStorage.getItem('xcllusiveJWT')
+    token && store.dispatch(logout('You were disconnected for inactivity.'))
   }
 
   render () {
@@ -61,10 +53,9 @@ class App extends Component {
           ref={ref => {
             this.idleTimer = ref
           }}
-          onActive={this.onActive}
-          onIdle={this.onIdle}
-          onAction={this.onAction}
-          timeout={10}
+          onIdle={this._onIdle}
+          timeout={this.state.timeout}
+          debounce={250}
           startOnLoad
         />
         <Provider store={store}>

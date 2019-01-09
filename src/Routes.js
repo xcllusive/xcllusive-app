@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import { Switch } from 'react-router-dom'
 import { Dimmer, Loader } from 'semantic-ui-react'
 
-import ReactTimeout from 'react-timeout'
-
 import { PrivateRoute, PublicRoute } from './components/routes'
 
 import { Layout, LoginPage } from './pages'
@@ -39,4 +37,4 @@ const mapStateToProps = ({ auth }) => ({
   isAppLoading: auth.isAppLoading
 })
 
-export default ReactTimeout(connect(mapStateToProps)(Routes))
+export default connect(mapStateToProps)(Routes)
