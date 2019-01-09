@@ -39,3 +39,11 @@ export const getBusinessesPerBroker = brokerId => {
     params: { brokerId }
   })
 }
+
+export const getBusinessHistoricalWeekly = businessId => {
+  return request({
+    method: 'get',
+    url: '/buyer/broker/business-historical-weekly',
+    params: { businessId }
+  })
+}

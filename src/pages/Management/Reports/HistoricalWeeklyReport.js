@@ -1,0 +1,253 @@
+import React, { Component, Fragment } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { withFormik } from 'formik'
+import { Grid, Table, Segment, Header, Button, Icon } from 'semantic-ui-react'
+import moment from 'moment'
+import Wrapper from '../../../components/content/Wrapper'
+import { getUserLogged } from '../../../redux/ducks/user'
+import { getBusinessHistoricalWeekly } from '../../../redux/ducks/broker'
+
+class HistoricalWeeklyReport extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      dataRegion: [
+        { key: 1, text: 'Adelaide Office', value: 'Adelaide Office' },
+        { key: 2, text: 'Camberra Office', value: 'Camberra Office' },
+        { key: 3, text: 'Cowra Office', value: 'Cowra Office' },
+        { key: 4, text: 'Gosford Office', value: 'Gosford Office' },
+        { key: 5, text: 'Melbourne Office', value: 'Melbourne Office' },
+        { key: 6, text: 'Sydney Office', value: 'Sydney Office' },
+        { key: 7, text: 'Queensland Office', value: 'Queensland Office' }
+      ],
+      isGotUser: true,
+      showAll: true
+    }
+  }
+  componentDidMount () {
+    this.props.getUserLogged(this.props.location.state.business.brokerAccountName)
+    this.props.getBusinessHistoricalWeekly(this.props.location.state.business.id)
+  }
+
+  _showAll () {
+    this.setState({ showAll: false })
+  }
+
+  _showLess () {
+    this.setState({ showAll: true })
+  }
+
+  render () {
+    const { broker, businessHistoricalWeekly } = this.props
+    const { business } = this.props.location.state
+    return (
+      <Wrapper>
+        <Header style={{ marginTop: '10px' }} textAlign="center">
+          Historical Weekly Report
+        </Header>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column>
+              <Header textAlign="right">
+                {this.state.showAll ? (
+                  <Button color="twitter" onClick={() => this._showAll()} size="small" floated="right">
+                    <Icon name="zoom" />
+                    Show To Do Notes
+                  </Button>
+                ) : (
+                  <Button color="orange" onClick={() => this._showLess()} size="small" floated="right">
+                    <Icon name="cut" />
+                    Hide To Do Notes
+                  </Button>
+                )}
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <Segment style={{ backgroundColor: '#065896', paddingLeft: '0px', paddingRight: '0px' }} size="small">
+          <Fragment>
+            <Grid>
+              <Grid.Row columns={2}>
+                <Grid.Column>
+                  <Header style={{ color: '#ffff', marginLeft: '10px' }} floated="left">
+                    {business.businessName}
+                  </Header>
+                </Grid.Column>
+                <Grid.Column>
+                  {broker ? (
+                    <Header style={{ color: '#ffff', marginLeft: '10px' }} floated="right">
+                      {broker.firstName} {broker.lastName}
+                    </Header>
+                  ) : null}
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+            {businessHistoricalWeekly ? (
+              <Grid padded="horizontally">
+                <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
+                  <Grid.Column
+                    style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
+                  >
+                    <Table celled striped selectable compact size="small">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell />
+                          <Table.HeaderCell>Text</Table.HeaderCell>
+                          <Table.HeaderCell />
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {businessHistoricalWeekly.map(HistoricalWeekly => {
+                          return (
+                            <Table.Row key={HistoricalWeekly.id}>
+                              <Table.Cell verticalAlign="top" width={2}>
+                                <Grid celled="internally">
+                                  <Grid.Row>
+                                    <Grid.Column>
+                                      {moment(HistoricalWeekly.dateTimeCreated).format('DD/MM/YYYY')}
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                  <Grid.Row style={{ fontSize: '1.2em', color: 'red' }}>
+                                    <Grid.Column>{HistoricalWeekly.stage}</Grid.Column>
+                                  </Grid.Row>
+                                </Grid>
+                              </Table.Cell>
+                              <Table.Cell verticalAlign="top" width={7}>
+                                <Grid celled="internally">
+                                  <Grid.Row>
+                                    <Grid.Column>{HistoricalWeekly.text}</Grid.Column>
+                                  </Grid.Row>
+                                  {HistoricalWeekly.textToDo && !this.state.showAll ? (
+                                    <Grid.Row style={{ backgroundColor: 'yellow' }}>
+                                      <Grid.Column>{HistoricalWeekly.textToDo}</Grid.Column>
+                                    </Grid.Row>
+                                  ) : null}
+                                </Grid>
+                              </Table.Cell>
+                              <Table.Cell width={4}>
+                                <Grid celled="internally">
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
+                                      <b>Days On The Market:</b>
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{
+                                        paddingBottom: '0px',
+                                        paddingTop: '0px',
+                                        color: 'blue'
+                                      }}
+                                      width={5}
+                                    >
+                                      {HistoricalWeekly.daysOnTheMarket}
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
+                                      <b>No. of Enquiries:</b>
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
+                                      width={5}
+                                    >
+                                      <b>{HistoricalWeekly.nOfEnquiries}</b>
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
+                                      <b>No. of Enquiries, 7 Days:</b>
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
+                                      width={5}
+                                    >
+                                      <b>{HistoricalWeekly.nOfEnquiries7Days}</b>
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
+                                      <b>120 Guaranty</b>
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{
+                                        paddingBottom: '0px',
+                                        paddingTop: '0px',
+                                        color: HistoricalWeekly.data120DayGuarantee === 'Yes' ? 'red' : 'green'
+                                      }}
+                                      width={5}
+                                    >
+                                      <b>{HistoricalWeekly.data120DayGuarantee}</b>
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
+                                      <b>No. of Pending Tasks:</b>
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
+                                      width={5}
+                                    >
+                                      <b>{HistoricalWeekly.nOfPendingTasks}</b>
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={9}>
+                                      <b>No. of New Logs, 7 Days:</b>
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{ paddingBottom: '0px', paddingTop: '0px', color: 'blue' }}
+                                      width={5}
+                                    >
+                                      <b>{HistoricalWeekly.nOfNewLogs7Days}</b>
+                                    </Grid.Column>
+                                  </Grid.Row>
+                                </Grid>
+                              </Table.Cell>
+                            </Table.Row>
+                          )
+                        })}
+                      </Table.Body>
+                    </Table>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            ) : null}
+          </Fragment>
+        </Segment>
+      </Wrapper>
+    )
+  }
+}
+
+HistoricalWeeklyReport.propTypes = {
+  values: PropTypes.object,
+  setFieldValue: PropTypes.func,
+  location: PropTypes.object,
+  getUserLogged: PropTypes.func,
+  broker: PropTypes.object,
+  getBusinessHistoricalWeekly: PropTypes.func,
+  businessHistoricalWeekly: PropTypes.array
+}
+
+const mapPropsToValues = props => {
+  return {
+    dataRegion: '',
+    brokerAccountName: 0
+  }
+}
+
+const mapStateToProps = state => ({
+  broker: state.user.getLogged.object,
+  businessHistoricalWeekly: state.broker.getBusinessHistoricalWeekly.array
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({ getUserLogged, getBusinessHistoricalWeekly }, dispatch)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  withFormik({
+    mapPropsToValues
+  })(HistoricalWeeklyReport)
+)

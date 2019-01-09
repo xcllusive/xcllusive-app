@@ -31,8 +31,9 @@ export const update = user => {
   })
 }
 
-export const getLogged = () => {
+export const getLogged = id => {
   return request({
-    url: '/user/user-logged'
+    url: '/user/user-logged',
+    params: { id }
   })
 }

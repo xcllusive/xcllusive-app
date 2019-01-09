@@ -29,6 +29,7 @@ import PreviewAgreement from './Business/Agreement/PreviewAgreement'
 import MakeTaxInvoice from './Business/Invoice/MakeTaxInvoice'
 import AppraisalMenu from './Business/Appraisal/AppraisalMenu'
 import AppraisalList from './Business/Appraisal/AppraisalList'
+import HistoricalWeeklyReport from './Management/Reports/HistoricalWeeklyReport'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
@@ -163,6 +164,12 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={ManagementPage}
         path={`${match.path}management`}
+        allowedRoles="MANAGEMENT_MENU"
+      />
+      <AuthorizationRoute
+        exact
+        component={HistoricalWeeklyReport}
+        path={`${match.path}management/historical-weekly-report/:idBusiness`}
         allowedRoles="MANAGEMENT_MENU"
       />
       <AuthorizationRoute
