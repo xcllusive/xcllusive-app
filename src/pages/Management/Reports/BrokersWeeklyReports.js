@@ -8,7 +8,7 @@ import moment from 'moment'
 import numeral from 'numeral'
 import { openModal, TypesModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
-import { getBrokersPerRegion, getBusinessesPerBroker, clearWeeklyReports } from '../../../redux/ducks/broker'
+import { setBrokerAccountName, getBrokersPerRegion, getBusinessesPerBroker, clearWeeklyReports } from '../../../redux/ducks/broker'
 import { getUserLogged } from '../../../redux/ducks/user'
 
 class BrokersWeeklyReports extends Component {
@@ -38,8 +38,10 @@ class BrokersWeeklyReports extends Component {
     // } else {
     await this.props.getUserLogged()
     this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
-    this.props.getBrokersPerRegion(this.props.user.dataRegion)
-    // }
+    if (this.props.brokersPerRegion <= 0) {
+      this.props.getBrokersPerRegion(this.props.user.dataRegion)
+    }
+    this.props.brokerAccountNameRestored && this.props.setFieldValue('brokerAccountName', this.props.brokerAccountNameRestored)
   }
 
   componentDidUpdate (nextProps) {
@@ -59,10 +61,12 @@ class BrokersWeeklyReports extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+
     if (name === 'dataRegion') {
       this.props.getBrokersPerRegion(value)
     }
     if (name === 'brokerAccountName') {
+      this.props.setBrokerAccountName(value)
       this.props.getBusinessesPerBroker(value)
     }
   }
@@ -1543,7 +1547,9 @@ BrokersWeeklyReports.propTypes = {
   user: PropTypes.object,
   isGotUser: PropTypes.bool,
   history: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object,
+  setBrokerAccountName: PropTypes.func,
+  brokerAccountNameRestored: PropTypes.number
 }
 
 const mapPropsToValues = props => {
@@ -1556,6 +1562,7 @@ const mapPropsToValues = props => {
 const mapStateToProps = state => ({
   brokersPerRegion: state.broker.getBrokersPerRegion.array,
   isLoadingBroker: state.broker.getBrokersPerRegion.isLoading,
+  brokerAccountNameRestored: state.broker.brokerAccountName,
   reportOnTheMarket: state.broker.getBusinessesPerBroker.arrayReportOnTheMarket,
   reportImStage: state.broker.getBusinessesPerBroker.arrayReportImStage,
   reportUnderOffer: state.broker.getBusinessesPerBroker.arrayReportUnderOffer,
@@ -1574,6 +1581,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       openModal,
+      setBrokerAccountName,
       getBrokersPerRegion,
       getBusinessesPerBroker,
       clearWeeklyReports,

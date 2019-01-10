@@ -29,12 +29,14 @@ export const Types = {
   CLEAR_WEEKLY_REPORT: 'CLEAR_WEEKLY_REPORT',
   GET_BUSINESS_HISTORICAL_WEEKLY_LOADING: 'GET_BUSINESS_HISTORICAL_WEEKLY_LOADING',
   GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS: 'GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS',
-  GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE: 'GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE'
+  GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE: 'GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE',
+  SET_BROKERS_ACCOUNT_NAME: 'SET_BROKERS_ACCOUNT_NAME'
 }
 
 // Reducer
 
 const initialState = {
+  brokerAccountName: null,
   create: {
     isLoading: false,
     isCreated: false,
@@ -275,6 +277,11 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SET_BROKERS_ACCOUNT_NAME:
+      return {
+        ...state,
+        brokerAccountName: action.payload
+      }
     default:
       return state
   }
@@ -405,4 +412,11 @@ export const getBusinessHistoricalWeekly = businessId => async dispatch => {
     })
     toast.error(error.message)
   }
+}
+
+export const setBrokerAccountName = value => dispatch => {
+  dispatch({
+    type: Types.SET_BROKERS_ACCOUNT_NAME,
+    payload: value
+  })
 }
