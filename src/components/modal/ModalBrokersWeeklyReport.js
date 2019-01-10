@@ -80,6 +80,11 @@ class ModalBrokersWeeklyReport extends Component {
 
   _handleChangeRadio = (e, { value }) => {
     this.props.setFieldValue('progressDiscussion', value)
+    if (value === 'Yes') {
+      this.props.setFieldValue('progressDiscussionYes', value)
+    } else {
+      this.props.setFieldValue('progressDiscussionNo', value)
+    }
   }
 
   _convertHtmlToRightText = html => {
@@ -147,6 +152,7 @@ class ModalBrokersWeeklyReport extends Component {
       closeModal,
       handleChange
     } = this.props
+    console.log(this.props.values)
     return (
       <Modal open dimmer={'blurring'} onClose={() => this._handleConfirm(false)}>
         <Modal.Header align="center">{title}</Modal.Header>
@@ -177,7 +183,7 @@ class ModalBrokersWeeklyReport extends Component {
             <Form.Group widths="equal">
               <Form.Field>
                 <Form.TextArea
-                  label="text"
+                  label="Text"
                   name="text"
                   value={values.text}
                   onChange={handleChange}
@@ -204,7 +210,7 @@ class ModalBrokersWeeklyReport extends Component {
             <Form.Group style={{ marginTop: '5px', marginBottom: '0px' }}>
               <Form.Radio
                 label="Yes"
-                value={values.progressDiscussion}
+                value={values.progressDiscussionYes === '' ? 'Yes' : values.progressDiscussionYes}
                 checked={values.progressDiscussion === 'Yes'}
                 onChange={this._handleChangeRadio}
               />
@@ -212,7 +218,7 @@ class ModalBrokersWeeklyReport extends Component {
             <Form.Group>
               <Form.Radio
                 label="No"
-                value={values.progressDiscussion}
+                value={values.progressDiscussionNo === '' ? 'No' : values.progressDiscussionNo}
                 checked={values.progressDiscussion === 'No'}
                 onChange={this._handleChangeRadio}
               />
@@ -348,7 +354,16 @@ const mapPropsToValues = props => {
     expectedPrice: props.lastWeeklyReport ? props.lastWeeklyReport.expectedPrice : 0,
     expectedCommission: props.lastWeeklyReport ? props.lastWeeklyReport.expectedCommission : 0,
     expectedSettlementDate: props.lastWeeklyReport ? moment(props.lastWeeklyReport.expectedSettlementDate) : null,
-    stage: props.lastWeeklyReport ? props.lastWeeklyReport.stage : ''
+    stage: props.lastWeeklyReport ? props.lastWeeklyReport.stage : '',
+    progressDiscussionYes:
+      props.lastWeeklyReport && props.lastWeeklyReport.progressDiscussion === 'Yes'
+        ? props.lastWeeklyReport.progressDiscussion
+        : '',
+    progressDiscussionNo:
+      props.lastWeeklyReport && props.lastWeeklyReport.progressDiscussion === 'No'
+        ? props.lastWeeklyReport.progressDiscussion
+        : '',
+    progressDiscussion: props.lastWeeklyReport ? props.lastWeeklyReport.progressDiscussion : ''
   }
 }
 
