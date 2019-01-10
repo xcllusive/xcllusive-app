@@ -204,7 +204,7 @@ class ModalBrokersWeeklyReport extends Component {
             <Form.Group style={{ marginTop: '5px', marginBottom: '0px' }}>
               <Form.Radio
                 label="Yes"
-                value={values.progressDiscussion === 'Yes' ? values.progressDiscussion : 'Yes'}
+                value={values.progressDiscussion}
                 checked={values.progressDiscussion === 'Yes'}
                 onChange={this._handleChangeRadio}
               />
@@ -212,7 +212,7 @@ class ModalBrokersWeeklyReport extends Component {
             <Form.Group>
               <Form.Radio
                 label="No"
-                value={values.progressDiscussion === 'No' ? values.progressDiscussion : 'No'}
+                value={values.progressDiscussion}
                 checked={values.progressDiscussion === 'No'}
                 onChange={this._handleChangeRadio}
               />

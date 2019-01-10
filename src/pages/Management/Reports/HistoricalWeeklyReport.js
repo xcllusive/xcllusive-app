@@ -41,7 +41,13 @@ class HistoricalWeeklyReport extends Component {
   }
 
   _backToWeeklyReport () {
-    this.props.history.push('/Management')
+    // this.props.history.pop({
+    //   pathname: '/management',
+    //   state: {
+    //     keepRecords: true
+    //   }
+    // })
+    this.props.history.goBack()
   }
 
   render () {

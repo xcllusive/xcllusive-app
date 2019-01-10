@@ -28,15 +28,18 @@ class BrokersWeeklyReports extends Component {
     }
   }
   async componentDidMount () {
-    // this.props.clearWeeklyReports()
-    if (this.props.user && this.props.user.brokerAccountName) {
-      this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
-      this.props.setFieldValue('brokerAccountName', this.props.user.brokerAccountName)
-    } else {
-      await this.props.getUserLogged()
-      this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
-      this.props.getBrokersPerRegion(this.props.user.dataRegion)
-    }
+    // // this.props.clearWeeklyReports()
+    // if (
+    //   (this.props.user && this.props.user.brokerAccountName) ||
+    //   (this.props.location && this.props.location.state.keepRecords)
+    // ) {
+    //   this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
+    //   this.props.setFieldValue('brokerAccountName', this.props.user.brokerAccountName)
+    // } else {
+    await this.props.getUserLogged()
+    this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
+    this.props.getBrokersPerRegion(this.props.user.dataRegion)
+    // }
   }
 
   componentDidUpdate (nextProps) {
@@ -48,11 +51,11 @@ class BrokersWeeklyReports extends Component {
     }
   }
 
-  componentWillUnmount () {
-    if (this.props.values.brokerAccountName) {
-      this.props.user.brokerAccountName = this.props.values.brokerAccountName
-    }
-  }
+  // componentWillUnmount () {
+  //   if (this.props.values.brokerAccountName) {
+  //     this.props.user.brokerAccountName = this.props.values.brokerAccountName
+  //   }
+  // }
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
@@ -107,6 +110,7 @@ class BrokersWeeklyReports extends Component {
       user
     } = this.props
     const { dataRegion } = this.state
+    console.log(this.props)
     return (
       <Wrapper>
         <Form>
@@ -1538,7 +1542,8 @@ BrokersWeeklyReports.propTypes = {
   getUserLogged: PropTypes.func,
   user: PropTypes.object,
   isGotUser: PropTypes.bool,
-  history: PropTypes.object
+  history: PropTypes.object,
+  location: PropTypes.object
 }
 
 const mapPropsToValues = props => {
