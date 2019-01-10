@@ -182,6 +182,7 @@ class ModalBrokersWeeklyReport extends Component {
                   value={values.text}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  // spellCheck
                 />
               </Form.Field>
               {/* <Form.Field style={{ height: '20vh' }}>
