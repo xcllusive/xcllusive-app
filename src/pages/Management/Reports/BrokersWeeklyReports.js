@@ -8,7 +8,12 @@ import moment from 'moment'
 import numeral from 'numeral'
 import { openModal, TypesModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
-import { setBrokerAccountName, getBrokersPerRegion, getBusinessesPerBroker, clearWeeklyReports } from '../../../redux/ducks/broker'
+import {
+  setBrokerAccountName,
+  getBrokersPerRegion,
+  getBusinessesPerBroker,
+  clearWeeklyReports
+} from '../../../redux/ducks/broker'
 import { getUserLogged } from '../../../redux/ducks/user'
 
 class BrokersWeeklyReports extends Component {
@@ -41,7 +46,8 @@ class BrokersWeeklyReports extends Component {
     if (this.props.brokersPerRegion <= 0) {
       this.props.getBrokersPerRegion(this.props.user.dataRegion)
     }
-    this.props.brokerAccountNameRestored && this.props.setFieldValue('brokerAccountName', this.props.brokerAccountNameRestored)
+    this.props.brokerAccountNameRestored &&
+      this.props.setFieldValue('brokerAccountName', this.props.brokerAccountNameRestored)
   }
 
   componentDidUpdate (nextProps) {
@@ -114,7 +120,6 @@ class BrokersWeeklyReports extends Component {
       user
     } = this.props
     const { dataRegion } = this.state
-    console.log(this.props)
     return (
       <Wrapper>
         <Form>

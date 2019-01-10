@@ -152,7 +152,6 @@ class ModalBrokersWeeklyReport extends Component {
       closeModal,
       handleChange
     } = this.props
-    console.log(this.props.values)
     return (
       <Modal open dimmer={'blurring'} onClose={() => this._handleConfirm(false)}>
         <Modal.Header align="center">{title}</Modal.Header>
