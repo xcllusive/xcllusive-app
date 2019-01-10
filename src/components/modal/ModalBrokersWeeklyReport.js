@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label, Grid } from 'semantic-ui-react'
 import * as Yup from 'yup'
-// import ReactQuill from 'react-quill'
+import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { closeModal } from '../../redux/ducks/modal'
 import DatePicker from 'react-datepicker'
@@ -31,7 +31,8 @@ class ModalBrokersWeeklyReport extends Component {
         { key: 6, text: 'Sold', value: 'Sold' }
       ],
       expectedPrice: 0,
-      exchanged: false
+      exchanged: false,
+      biggerThan400: false
     }
     this.quillRef = null
     this.reactQuillRef = null
@@ -87,28 +88,12 @@ class ModalBrokersWeeklyReport extends Component {
     }
   }
 
-  _convertHtmlToRightText = html => {
-    let htmlConverted = html.replace(/<style([\s\S]*?)<\/style>/gi, '')
-    htmlConverted = htmlConverted.replace(/<script([\s\S]*?)<\/script>/gi, '')
-    htmlConverted = htmlConverted.replace(/<\/div>/gi, '\n')
-    htmlConverted = htmlConverted.replace(/<\/li>/gi, '\n')
-    htmlConverted = htmlConverted.replace(/<li>/gi, '  *  ')
-    htmlConverted = htmlConverted.replace(/<\/ul>/gi, '\n')
-    htmlConverted = htmlConverted.replace(/<\/p>/gi, '\n')
-    htmlConverted = htmlConverted.replace(/<br\s*[\\/]?>/gi, '\n')
-    htmlConverted = htmlConverted.replace(/<[^>]+>/gi, '')
-    htmlConverted = htmlConverted.replace(/<p>/gi, '')
-    htmlConverted = htmlConverted.replace(/<\/p>/gi, '')
-
-    return encodeURIComponent(htmlConverted)
-  }
-
   _handleConfirm = async isConfirmed => {
     if (!isConfirmed) {
       this.props.closeModal()
       return
     }
-    // this.props.values.text = this._convertHtmlToRightText(this.props.values.text)
+
     if (this.props.lastWeeklyReport) {
       const comparingDate = moment().diff(this.props.lastWeeklyReport.dateTimeCreated, 'day')
       if (comparingDate >= 3 || this.props.lastWeeklyReport.stage === '') {
@@ -137,21 +122,13 @@ class ModalBrokersWeeklyReport extends Component {
 
   _handleChangeBody = value => {
     this.props.setFieldValue('text', value)
+    if (value.length > 400) {
+      this.setState({ biggerThan400: true })
+    }
   }
 
   render () {
-    const {
-      values,
-      handleBlur,
-      errors,
-      touched,
-      isSubmitting,
-      isValid,
-      isLoading,
-      title,
-      closeModal,
-      handleChange
-    } = this.props
+    const { values, handleBlur, errors, touched, isSubmitting, isValid, isLoading, title, closeModal } = this.props
     return (
       <Modal open dimmer={'blurring'} onClose={() => this._handleConfirm(false)}>
         <Modal.Header align="center">{title}</Modal.Header>
@@ -176,21 +153,11 @@ class ModalBrokersWeeklyReport extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            {/* <Form.Group>
+            <Form.Group>
               <h5 style={{ fontSize: '.92857143em', paddingLeft: '8px' }}>Text (max. 400 characters)</h5>
-            </Form.Group> */}
+            </Form.Group>
             <Form.Group widths="equal">
-              <Form.Field>
-                <Form.TextArea
-                  label="Text"
-                  name="text"
-                  value={values.text}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  // spellCheck
-                />
-              </Form.Field>
-              {/* <Form.Field style={{ height: '20vh' }}>
+              <Form.Field style={{ height: '20vh' }}>
                 <ReactQuill
                   ref={el => {
                     this.reactQuillRef = el
@@ -201,7 +168,8 @@ class ModalBrokersWeeklyReport extends Component {
                   modules={this.state.modules}
                   formats={this.state.formats}
                 />
-              </Form.Field> */}
+                {errors.text && this.state.biggerThan400 && <Label basic color="red" pointing content={errors.text} />}
+              </Form.Field>
             </Form.Group>
             <Form.Group style={{ marginBottom: '0px', marginLeft: '2px' }}>
               <b>Have you had a business selling progress discussion with the vendor in the last 7 days? </b>

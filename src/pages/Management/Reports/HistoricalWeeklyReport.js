@@ -50,6 +50,13 @@ class HistoricalWeeklyReport extends Component {
     this.props.history.goBack()
   }
 
+  _convertHtmlToRightText = html => {
+    let htmlConverted = html.replace(/<p>/gi, '')
+    htmlConverted = htmlConverted.replace(/<\/p>/gi, '')
+
+    return htmlConverted
+  }
+
   render () {
     const { broker, businessHistoricalWeekly, expectedObject } = this.props
     const { business } = this.props.location.state
@@ -163,7 +170,7 @@ class HistoricalWeeklyReport extends Component {
                               <Table.Cell verticalAlign="top" width={7}>
                                 <Grid celled="internally">
                                   <Grid.Row>
-                                    <Grid.Column>{HistoricalWeekly.text}</Grid.Column>
+                                    <Grid.Column>{this._convertHtmlToRightText(HistoricalWeekly.text)}</Grid.Column>
                                   </Grid.Row>
                                   {HistoricalWeekly.textToDo && !this.state.showAll ? (
                                     <Grid.Row style={{ backgroundColor: 'yellow' }}>

@@ -104,6 +104,13 @@ class BrokersWeeklyReports extends Component {
     })
   }
 
+  _convertHtmlToRightText = html => {
+    let htmlConverted = html.replace(/<p>/gi, '')
+    htmlConverted = htmlConverted.replace(/<\/p>/gi, '')
+
+    return htmlConverted
+  }
+
   render () {
     const {
       values,
@@ -270,7 +277,9 @@ class BrokersWeeklyReports extends Component {
                                               : null
                                           }}
                                         >
-                                          {onTheMarket.reports ? onTheMarket.reports.text : ''}
+                                          {onTheMarket.reports
+                                            ? this._convertHtmlToRightText(onTheMarket.reports.text)
+                                            : ''}
                                         </Grid.Column>
                                       </Grid.Row>
                                       {onTheMarket.arrayOneBeforeLastTextToDo &&
@@ -469,7 +478,9 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>{imStage.reports ? imStage.reports.text : ''}</Grid.Column>
+                                        <Grid.Column>
+                                          {imStage.reports ? this._convertHtmlToRightText(imStage.reports.text) : ''}
+                                        </Grid.Column>
                                       </Grid.Row>
                                       {imStage.arrayOneBeforeLastTextToDo &&
                                       imStage.arrayOneBeforeLastTextToDo.textToDo ? (
@@ -616,7 +627,11 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>{underOffer.reports ? underOffer.reports.text : ''}</Grid.Column>
+                                        <Grid.Column>
+                                          {underOffer.reports
+                                            ? this._convertHtmlToRightText(underOffer.reports.text)
+                                            : ''}
+                                        </Grid.Column>
                                       </Grid.Row>
                                       {underOffer.arrayOneBeforeLastTextToDo &&
                                       underOffer.arrayOneBeforeLastTextToDo.textToDo ? (
@@ -809,7 +824,11 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>{exchanged.reports ? exchanged.reports.text : ''}</Grid.Column>
+                                        <Grid.Column>
+                                          {exchanged.reports
+                                            ? this._convertHtmlToRightText(exchanged.reports.text)
+                                            : ''}
+                                        </Grid.Column>
                                       </Grid.Row>
                                       {exchanged.arrayOneBeforeLastTextToDo &&
                                       exchanged.arrayOneBeforeLastTextToDo.textToDo ? (
@@ -1028,7 +1047,11 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>{withdrawn.reports ? withdrawn.reports.text : ''}</Grid.Column>
+                                        <Grid.Column>
+                                          {withdrawn.reports
+                                            ? this._convertHtmlToRightText(withdrawn.reports.text)
+                                            : ''}
+                                        </Grid.Column>
                                       </Grid.Row>
                                       {withdrawn.arrayOneBeforeLastTextToDo &&
                                       withdrawn.arrayOneBeforeLastTextToDo.textToDo ? (
@@ -1216,7 +1239,9 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>{sold.reports ? sold.reports.text : ''}</Grid.Column>
+                                        <Grid.Column>
+                                          {sold.reports ? this._convertHtmlToRightText(sold.reports.text) : ''}
+                                        </Grid.Column>
                                       </Grid.Row>
                                       {sold.arrayOneBeforeLastTextToDo && sold.arrayOneBeforeLastTextToDo.textToDo ? (
                                         <Grid.Row style={{ backgroundColor: 'yellow' }}>
@@ -1412,7 +1437,11 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>{notAlocated.reports ? notAlocated.reports.text : ''}</Grid.Column>
+                                        <Grid.Column>
+                                          {notAlocated.reports
+                                            ? this._convertHtmlToRightText(notAlocated.reports.text)
+                                            : ''}
+                                        </Grid.Column>
                                       </Grid.Row>
                                       {notAlocated.arrayOneBeforeLastTextToDo &&
                                       notAlocated.arrayOneBeforeLastTextToDo.textToDo ? (
