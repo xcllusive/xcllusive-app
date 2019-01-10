@@ -29,9 +29,14 @@ class BrokersWeeklyReports extends Component {
   }
   async componentDidMount () {
     // this.props.clearWeeklyReports()
-    await this.props.getUserLogged()
-    this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
-    this.props.getBrokersPerRegion(this.props.user.dataRegion)
+    if (this.props.user && this.props.user.brokerAccountName) {
+      this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
+      this.props.setFieldValue('brokerAccountName', this.props.user.brokerAccountName)
+    } else {
+      await this.props.getUserLogged()
+      this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
+      this.props.getBrokersPerRegion(this.props.user.dataRegion)
+    }
   }
 
   componentDidUpdate (nextProps) {
@@ -40,6 +45,12 @@ class BrokersWeeklyReports extends Component {
       (this.props.isUpdated && nextProps.isUpdated !== this.props.isUpdated)
     ) {
       this.props.getBusinessesPerBroker(this.props.values.brokerAccountName)
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.props.values.brokerAccountName) {
+      this.props.user.brokerAccountName = this.props.values.brokerAccountName
     }
   }
 
