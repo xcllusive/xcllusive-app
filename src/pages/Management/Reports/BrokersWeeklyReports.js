@@ -90,7 +90,7 @@ class BrokersWeeklyReports extends Component {
   }
 
   _olderThan7Days = report => {
-    if (moment().diff(report.dateTimeCreated, 'day') > 7) {
+    if (moment().diff(report.dateTimeCreated, 'day') > 6) {
       return '#f5020229'
     } else return null
   }
@@ -478,7 +478,13 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            backgroundColor: imStage.reports
+                                              ? this._olderThan7Days(imStage.reports)
+                                              : null
+                                          }}
+                                        >
                                           {imStage.reports ? this._convertHtmlToRightText(imStage.reports.text) : ''}
                                         </Grid.Column>
                                       </Grid.Row>
@@ -627,7 +633,13 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            backgroundColor: underOffer.reports
+                                              ? this._olderThan7Days(underOffer.reports)
+                                              : null
+                                          }}
+                                        >
                                           {underOffer.reports
                                             ? this._convertHtmlToRightText(underOffer.reports.text)
                                             : ''}
@@ -824,7 +836,13 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            backgroundColor: exchanged.reports
+                                              ? this._olderThan7Days(exchanged.reports)
+                                              : null
+                                          }}
+                                        >
                                           {exchanged.reports
                                             ? this._convertHtmlToRightText(exchanged.reports.text)
                                             : ''}
@@ -1047,7 +1065,13 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            backgroundColor: withdrawn.reports
+                                              ? this._olderThan7Days(withdrawn.reports)
+                                              : null
+                                          }}
+                                        >
                                           {withdrawn.reports
                                             ? this._convertHtmlToRightText(withdrawn.reports.text)
                                             : ''}
@@ -1239,7 +1263,11 @@ class BrokersWeeklyReports extends Component {
                                   <Table.Cell verticalAlign="top" width={7}>
                                     <Grid celled="internally">
                                       <Grid.Row>
-                                        <Grid.Column>
+                                        <Grid.Column
+                                          style={{
+                                            backgroundColor: sold.reports ? this._olderThan7Days(sold.reports) : null
+                                          }}
+                                        >
                                           {sold.reports ? this._convertHtmlToRightText(sold.reports.text) : ''}
                                         </Grid.Column>
                                       </Grid.Row>
