@@ -101,9 +101,11 @@ class ModalBrokersWeeklyReport extends Component {
       } else {
         await this.props.updateWeeklyReport(this.props.values)
       }
+      this.props.callBack(isConfirmed)
       this.props.closeModal()
     } else {
       await this.props.createWeeklyReport(this.props.values)
+      this.props.callBack(isConfirmed)
       this.props.closeModal()
     }
   }
@@ -293,7 +295,8 @@ ModalBrokersWeeklyReport.propTypes = {
   getLastWeeklyReport: PropTypes.func,
   lastWeeklyReport: PropTypes.object,
   createWeeklyReport: PropTypes.func,
-  updateWeeklyReport: PropTypes.func
+  updateWeeklyReport: PropTypes.func,
+  callBack: PropTypes.func.isRequired
 }
 
 const mapPropsToValues = props => {
@@ -308,7 +311,9 @@ const mapPropsToValues = props => {
         expectedPrice: 0,
         expectedCommission: 0,
         expectedSettlementDate: null,
-        stage: ''
+        stage: '',
+        progressDiscussionYes: 'Yes',
+        progressDiscussionNo: 'No'
       }
     }
   }

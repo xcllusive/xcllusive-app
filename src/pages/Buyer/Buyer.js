@@ -85,8 +85,24 @@ class BuyerPage extends Component {
   _brokersWeeklyReport = business => {
     this.props.openModal(TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT, {
       title: 'Broker`s Weekly Report',
-      business
+      business,
+      callBack: isConfirmed => {
+        this.props.getBuyerBusinesses(false, business.stageId)
+      }
     })
+  }
+
+  _changeBrokersReportButtonColor (item) {
+    if (item.lastBrokerReport && this._diffDays(item.lastBrokerReport.dateTimeCreated) < 3) {
+      if (item.lastBrokerReport.stage === 'Exchanged') {
+        if (
+          item.lastBrokerReport.expectedSettlementDate &&
+          this._diffDays(item.lastBrokerReport.expectedSettlementDate) < 0
+        ) {
+          return 'green'
+        } else return 'instagram'
+      } else return 'green'
+    } else return 'instagram'
   }
 
   render () {
@@ -228,11 +244,7 @@ class BuyerPage extends Component {
                           <Table.Cell>
                             <Button
                               icon
-                              color={
-                                item.lastBrokerReport && this._diffDays(item.lastBrokerReport.dateTimeCreated) < 3
-                                  ? 'green'
-                                  : 'instagram'
-                              }
+                              color={this._changeBrokersReportButtonColor(item)}
                               size="small"
                               onClick={() => this._brokersWeeklyReport(item.business)}
                               // disabled={true}
@@ -312,11 +324,7 @@ class BuyerPage extends Component {
                           <Table.Cell>
                             <Button
                               icon
-                              color={
-                                item.lastBrokerReport && this._diffDays(item.lastBrokerReport.dateTimeCreated) < 3
-                                  ? 'green'
-                                  : 'instagram'
-                              }
+                              color={this._changeBrokersReportButtonColor(item)}
                               size="small"
                               onClick={() => this._brokersWeeklyReport(item.business)}
                               // disabled={true}
@@ -383,11 +391,7 @@ class BuyerPage extends Component {
                           <Table.Cell>
                             <Button
                               icon
-                              color={
-                                item.lastBrokerReport && this._diffDays(item.lastBrokerReport.dateTimeCreated) < 3
-                                  ? 'green'
-                                  : 'instagram'
-                              }
+                              color={this._changeBrokersReportButtonColor(item)}
                               size="small"
                               onClick={() => this._brokersWeeklyReport(item.business)}
                               // disabled={true}
