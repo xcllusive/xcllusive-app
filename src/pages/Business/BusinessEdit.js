@@ -10,7 +10,7 @@ import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailFor
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
-import EditBusinessPriceFormTest from '../../components/forms/EditBusinessPriceFormTest'
+import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
 
 class BusinessEditPage extends Component {
   constructor (props) {
@@ -198,7 +198,7 @@ class BusinessEditPage extends Component {
                   menuItem: 'Pricing/Information',
                   render: () => (
                     <Tab.Pane attached={false}>
-                      <EditBusinessPriceFormTest business={business} />
+                      <EditBusinessPriceForm business={business} />
                     </Tab.Pane>
                   )
                 }
