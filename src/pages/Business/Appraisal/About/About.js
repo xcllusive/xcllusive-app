@@ -7,6 +7,7 @@ import { Form, Label, Message, Step, Grid, Header, Segment, Icon } from 'semanti
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+import { updateBusiness } from '../../../../redux/ducks/business'
 import { TypesModal, openModal } from '../../../../redux/ducks/modal'
 import { BusinessCommencedOptions } from '../../../../constants/BusinessCommencedOptions'
 import CustomersSuppliersForm from './CustomersSuppliersForm'
@@ -24,6 +25,15 @@ class AboutPage extends Component {
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
+    this._updateBusiness(this.props.values)
+  }
+
+  _updateBusiness = values => {
+    const business = {
+      id: values.business_id,
+      typeId: values.typeId
+    }
+    this.props.updateBusiness(business)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -59,7 +69,7 @@ class AboutPage extends Component {
   }
 
   render () {
-    const { values, handleChange, handleBlur, errors, touched, typeOptions, industryOptions } = this.props
+    const { values, handleChange, handleBlur, errors, touched, typeOptions } = this.props
     const { businessCommencedOptions, currentOwnerOptions } = this.state
     return (
       <Wrapper>
@@ -85,13 +95,12 @@ class AboutPage extends Component {
                       <Form.Select
                         label="Business Type"
                         options={typeOptions}
-                        name="businessType"
-                        autoComplete="businessType"
-                        value={values.businessType}
+                        name="typeId"
+                        autoComplete="typeId"
+                        value={values.typeId}
                         onChange={this._handleSelectChange}
                       />
-                      {errors.businessType &&
-                        touched.businessType && <Label basic color="red" pointing content={errors.businessType} />}
+                      {errors.typeId && touched.typeId && <Label basic color="red" pointing content={errors.typeId} />}
                     </Form.Field>
                     <Form.Field width={1}>
                       <Icon
@@ -105,29 +114,16 @@ class AboutPage extends Component {
                       />
                     </Form.Field>
                     <Form.Field>
-                      <Form.Select
+                      <Form.Input
                         label="Business Industry"
-                        options={industryOptions}
-                        name="businessIndustry"
-                        autoComplete="businessIndustry"
-                        value={values.businessIndustry}
+                        name="industry"
+                        autoComplete="industry"
+                        value={values.industry}
                         onChange={this._handleSelectChange}
                       />
-                      {errors.businessIndustry &&
-                        touched.businessIndustry && (
-                        <Label basic color="red" pointing content={errors.businessIndustry} />
+                      {errors.industry && touched.industry && (
+                        <Label basic color="red" pointing content={errors.industry} />
                       )}
-                    </Form.Field>
-                    <Form.Field width={1}>
-                      <Icon
-                        style={{ marginTop: '27px', marginLeft: '-10px' }}
-                        name="add"
-                        color="green"
-                        inverted
-                        circular
-                        link
-                        onClick={() => this._newBusinessRegister(4)}
-                      />
                     </Form.Field>
                   </Form.Group>
                   <Form.Group widths="equal">
@@ -140,8 +136,7 @@ class AboutPage extends Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      {errors.productsServices &&
-                        touched.productsServices && (
+                      {errors.productsServices && touched.productsServices && (
                         <Label basic color="red" pointing content={errors.productsServices} />
                       )}
                     </Form.Field>
@@ -156,8 +151,7 @@ class AboutPage extends Component {
                         value={values.businessCommenced}
                         onChange={this._handleSelectChange}
                       />
-                      {errors.businessCommenced &&
-                        touched.businessCommenced && (
+                      {errors.businessCommenced && touched.businessCommenced && (
                         <Label basic color="red" pointing content={errors.businessCommenced} />
                       )}
                     </Form.Field>
@@ -170,8 +164,9 @@ class AboutPage extends Component {
                         value={values.currentOwner}
                         onChange={this._handleSelectChange}
                       />
-                      {errors.currentOwner &&
-                        touched.currentOwner && <Label basic color="red" pointing content={errors.currentOwner} />}
+                      {errors.currentOwner && touched.currentOwner && (
+                        <Label basic color="red" pointing content={errors.currentOwner} />
+                      )}
                     </Form.Field>
                     <Form.Field style={{ marginTop: '30px' }} width={2}>
                       <Form.Checkbox label="Same" name="same" onChange={this._copyCheckBox} checked={values.same} />
@@ -187,8 +182,9 @@ class AboutPage extends Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      {errors.tradingHours &&
-                        touched.tradingHours && <Label basic color="red" pointing content={errors.tradingHours} />}
+                      {errors.tradingHours && touched.tradingHours && (
+                        <Label basic color="red" pointing content={errors.tradingHours} />
+                      )}
                     </Form.Field>
                     <Form.Field>
                       <Form.Input
@@ -199,8 +195,7 @@ class AboutPage extends Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      {errors.nOfBusinessLocations &&
-                        touched.nOfBusinessLocations && (
+                      {errors.nOfBusinessLocations && touched.nOfBusinessLocations && (
                         <Label basic color="red" pointing content={errors.nOfBusinessLocations} />
                       )}
                     </Form.Field>
@@ -338,18 +333,18 @@ AboutPage.propTypes = {
   isValid: PropTypes.bool,
   business: PropTypes.object,
   typeOptions: PropTypes.array,
-  industryOptions: PropTypes.array,
   openModal: PropTypes.func,
   appraisalObject: PropTypes.object,
   updateAppraisal: PropTypes.func,
-  confirmsCompleteSteps: PropTypes.func
+  confirmsCompleteSteps: PropTypes.func,
+  updateBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  businessType: props.business ? props.business.typeId : '',
-  businessIndustry: props.business ? props.business.industryId : '',
+  typeId: props.business ? props.business.typeId : '',
+  industry: props.business ? props.business.industry : '',
   productsServices: props.appraisalObject ? props.appraisalObject.productsServices : '',
   businessCommenced: props.appraisalObject ? props.appraisalObject.businessCommenced : '',
   currentOwner: props.appraisalObject ? props.appraisalObject.currentOwner : '',
@@ -387,8 +382,7 @@ const mapPropsToValues = props => ({
 
 const mapStateToProps = state => {
   return {
-    typeOptions: state.business.get.typeOptions,
-    industryOptions: state.business.get.industryOptions
+    typeOptions: state.business.get.typeOptions
   }
 }
 
@@ -427,7 +421,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ openModal, updateAppraisal }, dispatch)
+  return bindActionCreators({ openModal, updateAppraisal, updateBusiness }, dispatch)
 }
 
 export default connect(

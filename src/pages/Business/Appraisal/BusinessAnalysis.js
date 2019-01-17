@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 import { Message, Step, Grid, Table, Header, Form, Pagination, Segment } from 'semantic-ui-react'
 import SliderComponent from '../../../components/content/Appraisal/SliderComponent'
 import * as Yup from 'yup'
@@ -13,7 +15,22 @@ import { listAppraisalRegister } from '../../../redux/ducks/appraisalRegister'
 class BusinessAnalysisPage extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      modules: {
+        toolbar: [[{}], ['', '', '', '', ''], [{}, {}, {}, {}], ['', ''], ['']]
+      },
+      formats: ['', '', '', '', '', '', '', '', '', '', ''],
+      stage: [
+        { key: 1, text: 'Info Memorandum', value: 'Info Memorandum' },
+        { key: 2, text: 'On The Market', value: 'On The Market' },
+        { key: 3, text: 'Under Offer', value: 'Under Offer' },
+        { key: 4, text: 'Exchanged', value: 'Exchanged' },
+        { key: 5, text: 'Withdrawn', value: 'Withdrawn' },
+        { key: 6, text: 'Sold', value: 'Sold' }
+      ]
+    }
+    this.quillRef = null
+    this.reactQuillRef = null
   }
 
   componentDidMount () {
@@ -22,10 +39,27 @@ class BusinessAnalysisPage extends Component {
     this.props.listAppraisalRegister('criticalIssues', 10)
     this.props.listAppraisalRegister('descriptionBusinessRisk')
     this.props.listAppraisalRegister('descriptionMarket')
+    this._attachQuillRefs()
   }
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
+  }
+
+  _attachQuillRefs = () => {
+    // Ensure React-Quill reference is available:
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
+      return false
+    }
+    // Skip if Quill reference is defined:
+    if (this.quillRef !== null) return false
+
+    const quillRef = this.reactQuillRef.getEditor()
+    if (quillRef !== null) this.quillRef = quillRef
+  }
+
+  _handleChangeBody = value => {
+    this.props.setFieldValue('riskList', value)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -73,12 +107,25 @@ class BusinessAnalysisPage extends Component {
             </Header>
             <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
               <Grid.Column width={9}>
-                <Form.Field>
+                {/* <Form.Field>
                   <Form.TextArea
                     name="riskList"
                     value={values.riskList}
                     style={{ height: '205px' }}
                     onChange={handleChange}
+                    onKeyDown={this._handleChangeTextArea}
+                  />
+                </Form.Field> */}
+                <Form.Field style={{ height: '20vh' }}>
+                  <ReactQuill
+                    ref={el => {
+                      this.reactQuillRef = el
+                    }}
+                    value={values.riskList}
+                    onChange={this._handleChangeBody}
+                    style={{ height: '80%' }}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
                     onKeyDown={this._handleChangeTextArea}
                   />
                 </Form.Field>
