@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Message, Step, Grid, Header, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
-// import moment from 'moment'
+import moment from 'moment'
 
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
@@ -42,9 +42,9 @@ class FinancialAnalysisPage extends PureComponent {
     }
   }
 
-  // componentDidMount () {
-  //   if (this.props.appraisalObject && !this.props.appraisalObject.year6) this._calculateFinancialYear()
-  // }
+  componentDidMount () {
+    if (this.props.appraisalObject && !this.props.appraisalObject.year6) this._calculateFinancialYear()
+  }
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
@@ -54,24 +54,24 @@ class FinancialAnalysisPage extends PureComponent {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  // _calculateFinancialYear = async () => {
-  //   const dateChangeFinancialYear = moment('30/06', 'DD/MM')
-  //   const currentDayMonth = moment()
-  //   let financialYear = null
-  //   if (currentDayMonth > dateChangeFinancialYear) {
-  //     financialYear = moment()
-  //       .add(1, 'year')
-  //       .format('YYYY')
-  //   } else financialYear = moment().format('YYYY')
+  _calculateFinancialYear = async () => {
+    const dateChangeFinancialYear = moment('30/06', 'DD/MM')
+    const currentDayMonth = moment()
+    let financialYear = null
+    if (currentDayMonth > dateChangeFinancialYear) {
+      financialYear = moment()
+        .add(1, 'year')
+        .format('YYYY')
+    } else financialYear = moment().format('YYYY')
 
-  //   await this.setState({ financialYear })
-  //   this.props.setFieldValue('year1', this.state.financialYear - 5)
-  //   this.props.setFieldValue('year2', this.state.financialYear - 4)
-  //   this.props.setFieldValue('year3', this.state.financialYear - 3)
-  //   this.props.setFieldValue('year4', this.state.financialYear - 2)
-  //   this.props.setFieldValue('year5', this.state.financialYear - 1)
-  //   this.props.setFieldValue('year6', this.state.financialYear)
-  // }
+    await this.setState({ financialYear })
+    this.props.setFieldValue('year1', this.state.financialYear - 5)
+    this.props.setFieldValue('year2', this.state.financialYear - 4)
+    this.props.setFieldValue('year3', this.state.financialYear - 3)
+    this.props.setFieldValue('year4', this.state.financialYear - 2)
+    this.props.setFieldValue('year5', this.state.financialYear - 1)
+    this.props.setFieldValue('year6', this.state.financialYear)
+  }
 
   _getCalcs = obj => {
     if (!obj.year || !obj.field) return
@@ -109,7 +109,7 @@ class FinancialAnalysisPage extends PureComponent {
             handleBlur={this.props.handleBlur}
             errors={this.props.errors}
             touched={this.props.touched}
-            financialYear={null}
+            financialYear={this.state.financialYear}
             appraisalObject={appraisalObject}
             sendCalcs={this._getCalcs}
             setFieldValue={this.props.setFieldValue}
