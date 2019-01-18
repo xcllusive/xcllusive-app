@@ -901,8 +901,8 @@ const validationSchema = Yup.object().shape({
   vendorEmail: Yup.string().email('Invalid email address.'),
   businessSource: Yup.string().required('Source is required.'),
   sourceNotes: Yup.string().max(100, 'Source Notes require max 100 characters.'),
-  description: Yup.string().max(2000, 'Source Notes require max 2000 characters.'),
-  businessNameSecondary: Yup.string().max(120, 'Source Notes require max 120 characters.'),
+  description: Yup.string().max(2000, 'Description require max 2000 characters.'),
+  businessNameSecondary: Yup.string().max(120, 'Business Name Secondary require max 120 characters.'),
   // businessABN: Yup.string()
   //   .min(11, 'ABN require min 11 integers.')
   //   .max(11, 'ABN require max 11 integers.'),
