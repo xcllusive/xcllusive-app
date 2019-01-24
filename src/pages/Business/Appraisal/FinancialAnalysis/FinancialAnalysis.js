@@ -122,11 +122,10 @@ class FinancialAnalysisPage extends PureComponent {
             </CustomColumn>
           </Grid.Row>
           <AddbacksAndAdjustmentsForm
-            financialYear={null}
+            financialYear={this.state.financialYear}
             business={this.props.business}
             appraisalObject={this.props.appraisalObject}
-            operatingProfit={this.state.operatingProfit}
-            sales={this.state.sales}
+            handleChange={this.props.handleChange}
           />
         </Grid>
         <Grid>

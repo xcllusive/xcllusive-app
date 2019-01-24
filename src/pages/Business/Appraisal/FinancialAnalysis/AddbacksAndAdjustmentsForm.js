@@ -158,15 +158,15 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   _calcTotalAdjustedProfit = column => {
-    const total = this._calcTotal(column) + this.props.operatingProfit[`operatingProfit${column}`]
+    const total = this._calcTotal(column) + this.props.appraisalObject[`operatingProfit${column}`]
     return numeral(total).value()
   }
 
   _calcAdjustedProfit = column => {
-    const totalAdjustedProfit = this._calcTotal(column) + this.props.operatingProfit[`operatingProfit${column}`]
-    const total = (totalAdjustedProfit / this.props.sales[`sales${column}`]) * 100
+    const totalAdjustedProfit = this._calcTotal(column) + this.props.appraisalObject[`operatingProfit${column}`]
+    const total = (totalAdjustedProfit / numeral(this.props.appraisalObject[`sales${column}`]).value()) * 100
 
-    return numeral(total).value()
+    return numeral(total).format('0.00')
   }
 
   render () {
@@ -3622,9 +3622,7 @@ AddbacksAndAdjustmentsForm.propTypes = {
   financialYear: PropTypes.string,
   setCalcTotalAddbacksAndAdjustments: PropTypes.func,
   updateAppraisal: PropTypes.func,
-  appraisalObject: PropTypes.object,
-  operatingProfit: PropTypes.object,
-  sales: PropTypes.object
+  appraisalObject: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
