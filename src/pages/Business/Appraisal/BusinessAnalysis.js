@@ -58,8 +58,16 @@ class BusinessAnalysisPage extends Component {
     if (quillRef !== null) this.quillRef = quillRef
   }
 
-  _handleChangeBody = value => {
+  _handleChangeRisk = value => {
     this.props.setFieldValue('riskList', value)
+  }
+
+  _handleChangeDrivers = value => {
+    this.props.setFieldValue('valueDriversList', value)
+  }
+
+  _handleChangeIssues = value => {
+    this.props.setFieldValue('criticalIssuesList', value)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -85,7 +93,8 @@ class BusinessAnalysisPage extends Component {
   }
 
   render () {
-    const { values, handleChange } = this.props
+    const { values } = this.props
+    console.log(this.props.descriptionBusinessRiskArray)
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -107,22 +116,13 @@ class BusinessAnalysisPage extends Component {
             </Header>
             <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
               <Grid.Column width={9}>
-                {/* <Form.Field>
-                  <Form.TextArea
-                    name="riskList"
-                    value={values.riskList}
-                    style={{ height: '205px' }}
-                    onChange={handleChange}
-                    onKeyDown={this._handleChangeTextArea}
-                  />
-                </Form.Field> */}
                 <Form.Field style={{ height: '20vh' }}>
                   <ReactQuill
                     ref={el => {
                       this.reactQuillRef = el
                     }}
                     value={values.riskList}
-                    onChange={this._handleChangeBody}
+                    onChange={this._handleChangeRisk}
                     style={{ height: '80%' }}
                     modules={this.state.modules}
                     formats={this.state.formats}
@@ -166,12 +166,16 @@ class BusinessAnalysisPage extends Component {
             </Header>
             <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
               <Grid.Column width={9}>
-                <Form.Field>
-                  <Form.TextArea
-                    name="valueDriversList"
+                <Form.Field style={{ height: '20vh' }}>
+                  <ReactQuill
+                    ref={el => {
+                      this.reactQuillRef = el
+                    }}
                     value={values.valueDriversList}
-                    style={{ height: '205px' }}
-                    onChange={handleChange}
+                    onChange={this._handleChangeDrivers}
+                    style={{ height: '80%' }}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
                     onKeyDown={this._handleChangeTextArea}
                   />
                 </Form.Field>
@@ -212,12 +216,16 @@ class BusinessAnalysisPage extends Component {
             </Header>
             <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
               <Grid.Column width={9}>
-                <Form.Field>
-                  <Form.TextArea
-                    name="criticalIssuesList"
+                <Form.Field style={{ height: '20vh' }}>
+                  <ReactQuill
+                    ref={el => {
+                      this.reactQuillRef = el
+                    }}
                     value={values.criticalIssuesList}
-                    style={{ height: '205px' }}
-                    onChange={handleChange}
+                    onChange={this._handleChangeIssues}
+                    style={{ height: '80%' }}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
                     onKeyDown={this._handleChangeTextArea}
                   />
                 </Form.Field>

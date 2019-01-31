@@ -94,7 +94,9 @@ class ModalEmailTemplates extends Component {
     // this.props.sendEmailBuyerBrokersEmail(sendEmail)
     window.location.href = `mailto:${this.props.buyerObject.email} ?subject=${this.props.values.subject} &body=Hi ${
       this.props.buyerObject.firstName
-    }, %0D%0A %0D%0A${this._convertHtmlToRightText(this.props.values.body)}`
+    },%0D%0A %0D%0ARecently you inquired about a business we have listed for sale, ${
+      this.props.businessObject.businessName
+    }.%0D%0A${this._convertHtmlToRightText(this.props.values.body)}`
     this.props.closeModal()
   }
 
@@ -173,6 +175,7 @@ ModalEmailTemplates.propTypes = {
   setFieldValue: PropTypes.func,
   sendEmailBuyerBrokersEmail: PropTypes.func,
   buyerObject: PropTypes.object,
+  businessObject: PropTypes.object,
   isLoadingSentEmail: PropTypes.bool,
   isSentEmail: PropTypes.bool,
   isLoadingEmailTemplate: PropTypes.bool

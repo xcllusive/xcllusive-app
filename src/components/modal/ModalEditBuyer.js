@@ -29,7 +29,7 @@ class ModalEditBuyer extends Component {
     }
   }
   componentDidMount () {
-    this.props.getBusinessRegister(1)
+    this.props.getBusinessRegister(1, 1000)
   }
 
   _handleSelectChange = (e, { name, value }) => {

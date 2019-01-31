@@ -14,7 +14,7 @@ import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class ModalNewBusiness extends Component {
   componentDidMount () {
-    this.props.getBusinessRegister(1)
+    this.props.getBusinessRegister(1, 1000)
     this.props.getUsers()
   }
 
