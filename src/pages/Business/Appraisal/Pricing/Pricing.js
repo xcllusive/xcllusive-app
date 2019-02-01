@@ -40,7 +40,39 @@ class PricingPage extends Component {
 
   componentWillUnmount () {
     const obj = {
-      agreedValue: this._replaceDollarAndComma(this.props.values.agreedValue)
+      agreedValue: this._replaceDollarAndComma(this.props.values.agreedValue),
+      smallestMultiplier: numeral(this.props.smallestMultiplier).format('0,0.[99]'),
+      avgMultiplier: numeral(
+        this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject)
+      ).format('0,0.[99]'),
+      riskPremium: numeral(
+        this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) +
+          (this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) *
+            this.props.values.sliderRiskPremium) /
+            100
+      ).format('0,0.[99]'),
+      marketPremium: numeral(
+        this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) +
+          (this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) *
+            this.props.values.sliderRiskPremium) /
+            100 +
+          (this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) *
+            this.props.values.sliderMarketPremium) /
+            100
+      ).format('0,0.[99]'),
+      askingPrice: numeral(
+        this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) +
+          (this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) *
+            this.props.values.sliderRiskPremium) /
+            100 +
+          (this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) *
+            this.props.values.sliderMarketPremium) /
+            100 +
+          (this._comparableMultiplier(this.props.values.pricingMethod, this.props.appraisalObject) *
+            this.props.values.sliderNegotiationPremium) /
+            100
+      ).format('0,0.[99]'),
+      lessThan5PercChanceOfSelling: numeral(this.props.biggestMultiplier).format('0,0.[99]')
     }
     Object.assign(this.props.values, obj)
     this.props.updateAppraisal(this.props.values)
@@ -872,8 +904,9 @@ class PricingPage extends Component {
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
-                        {errors.agreedValue &&
-                          touched.agreedValue && <Label basic color="red" pointing content={errors.agreedValue} />}
+                        {errors.agreedValue && touched.agreedValue && (
+                          <Label basic color="red" pointing content={errors.agreedValue} />
+                        )}
                       </Form.Field>
                     </Form.Group>
                   </Form>
