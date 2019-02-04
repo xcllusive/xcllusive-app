@@ -15,128 +15,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
-      rows: [
-        {
-          name: 'aaRow1',
-          tabIndex: 100,
-          columns: [
-            {
-              name: 'aaRow1Year1',
-              tabIndex: 200
-            },
-            {
-              name: 'aaRow1Year2',
-              tabIndex: 300
-            },
-            {
-              name: 'aaRow1Year3',
-              tabIndex: 400
-            },
-            {
-              name: 'aaRow1Year4',
-              tabIndex: 500
-            },
-            {
-              name: 'aaRow1Year5',
-              tabIndex: 600
-            },
-            {
-              name: 'aaRow1Year6',
-              tabIndex: 700
-            }
-          ]
-        },
-        {
-          name: 'aaRow2',
-          tabIndex: 101,
-          columns: [
-            {
-              name: 'aaRow2Year1',
-              tabIndex: 201
-            },
-            {
-              name: 'aaRow2Year2',
-              tabIndex: 301
-            },
-            {
-              name: 'aaRow2Year3',
-              tabIndex: 401
-            },
-            {
-              name: 'aaRow2Year4',
-              tabIndex: 501
-            },
-            {
-              name: 'aaRow2Year5',
-              tabIndex: 601
-            },
-            {
-              name: 'aaRow2Year6',
-              tabIndex: 701
-            }
-          ]
-        },
-        {
-          name: 'aaRow3',
-          tabIndex: 102,
-          columns: [
-            {
-              name: 'aaRow3Year1',
-              tabIndex: 202
-            },
-            {
-              name: 'aaRow3Year2',
-              tabIndex: 302
-            },
-            {
-              name: 'aaRow3Year3',
-              tabIndex: 402
-            },
-            {
-              name: 'aaRow3Year4',
-              tabIndex: 502
-            },
-            {
-              name: 'aaRow3Year5',
-              tabIndex: 602
-            },
-            {
-              name: 'aaRow3Year6',
-              tabIndex: 702
-            }
-          ]
-        },
-        {
-          name: 'aaRow4',
-          tabIndex: 103,
-          columns: [
-            {
-              name: 'aaRow4Year1',
-              tabIndex: 203
-            },
-            {
-              name: 'aaRow4Year2',
-              tabIndex: 303
-            },
-            {
-              name: 'aaRow4Year3',
-              tabIndex: 403
-            },
-            {
-              name: 'aaRow4Year4',
-              tabIndex: 503
-            },
-            {
-              name: 'aaRow4Year5',
-              tabIndex: 603
-            },
-            {
-              name: 'aaRow4Year6',
-              tabIndex: 703
-            }
-          ]
-        }
-      ]
+      rows: this._createArrayWithTable(30)
     }
   }
 
@@ -146,6 +25,43 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
+  }
+
+  _createArrayWithTable = (itens = 30) => {
+    const array = []
+    for (let row = 1; row <= itens; row++) {
+      array.push({
+        name: `aaRow${row}`,
+        tabIndex: 100 + row,
+        columns: [
+          {
+            name: `aaRow${row}Year1`,
+            tabIndex: 200 + 1
+          },
+          {
+            name: `aaRow${row}Year2`,
+            tabIndex: 300 + 1
+          },
+          {
+            name: `aaRow${row}Year3`,
+            tabIndex: 400 + 1
+          },
+          {
+            name: `aaRow${row}Year4`,
+            tabIndex: 500 + 1
+          },
+          {
+            name: `aaRow${row}Year5`,
+            tabIndex: 600 + 1
+          },
+          {
+            name: `aaRow${row}Year6`,
+            tabIndex: 700 + 1
+          }
+        ]
+      })
+    }
+    return array
   }
 
   _calcTotal = column => {
@@ -184,24 +100,66 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year1 > 0 ? appraisalObject.year1 : financialYear - 5}</b>
+            <Form.Field style={{ marginTop: '5px' }}>
+              <Form.Checkbox
+                name="renderPdfYear1"
+                checked={values.renderPdfYear1}
+                onChange={this._handleChangeCheckBox}
+              />
+            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year2 > 0 ? appraisalObject.year2 : financialYear - 4}</b>
+            <Form.Field style={{ marginTop: '5px' }}>
+              <Form.Checkbox
+                name="renderPdfYear2"
+                checked={values.renderPdfYear2}
+                onChange={this._handleChangeCheckBox}
+              />
+            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year3 > 0 ? appraisalObject.year3 : financialYear - 3}</b>
+            <Form.Field style={{ marginTop: '5px' }}>
+              <Form.Checkbox
+                name="renderPdfYear3"
+                checked={values.renderPdfYear3}
+                onChange={this._handleChangeCheckBox}
+              />
+            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year4 > 0 ? appraisalObject.year4 : financialYear - 2}</b>
+            <Form.Field style={{ marginTop: '5px' }}>
+              <Form.Checkbox
+                name="renderPdfYear4"
+                checked={values.renderPdfYear4}
+                onChange={this._handleChangeCheckBox}
+              />
+            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year5 > 0 ? appraisalObject.year5 : financialYear - 1}</b>
+            <Form.Field style={{ marginTop: '5px' }}>
+              <Form.Checkbox
+                name="renderPdfYear5"
+                checked={values.renderPdfYear5}
+                onChange={this._handleChangeCheckBox}
+              />
+            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year6 > 0 ? appraisalObject.year6 : financialYear} YTD</b>{' '}
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{financialYear} Annualised</b>
+            <Form.Field style={{ marginTop: '5px' }}>
+              <Form.Checkbox
+                name="renderPdfYear7"
+                checked={values.renderPdfYear7}
+                onChange={this._handleChangeCheckBox}
+              />
+            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>Annualised Yes/No</b>
@@ -304,220 +262,29 @@ AddbacksAndAdjustmentsForm.propTypes = {
   appraisalObject: PropTypes.object
 }
 
-const mapPropsToValues = props => ({
-  aaRow1Year1: props.appraisalObject ? props.appraisalObject.aaRow1Year1 : 0,
-  aaRow1: props.appraisalObject ? props.appraisalObject.aaRow1 : '',
-  aaRow2Year1: props.appraisalObject ? props.appraisalObject.aaRow2Year1 : 0,
-  aaRow2: props.appraisalObject ? props.appraisalObject.aaRow2 : '',
-  aaRow3Year1: 0,
-  aaRow3: props.appraisalObject ? props.appraisalObject.aaRow3 : '',
-  aaRow4Year1: 0,
-  aaRow4: props.appraisalObject ? props.appraisalObject.aaRow4 : '',
-  aaRow5Year1: 0,
-  aaRow5: props.appraisalObject ? props.appraisalObject.aaRow5 : '',
-  aaRow6Year1: 0,
-  aaRow6: props.appraisalObject ? props.appraisalObject.aaRow6 : '',
-  aaRow7Year1: 0,
-  aaRow7: props.appraisalObject ? props.appraisalObject.aaRow7 : '',
-  aaRow8Year1: 0,
-  aaRow8: props.appraisalObject ? props.appraisalObject.aaRow8 : '',
-  aaRow9Year1: 0,
-  aaRow9: props.appraisalObject ? props.appraisalObject.aaRow9 : '',
-  aaRow10Year1: 0,
-  aaRow10: props.appraisalObject ? props.appraisalObject.aaRow10 : '',
-  aaRow11Year1: 0,
-  aaRow11: props.appraisalObject ? props.appraisalObject.aaRow11 : '',
-  aaRow12Year1: 0,
-  aaRow12: props.appraisalObject ? props.appraisalObject.aaRow12 : '',
-  aaRow13Year1: 0,
-  aaRow13: props.appraisalObject ? props.appraisalObject.aaRow13 : '',
-  aaRow14Year1: 0,
-  aaRow14: props.appraisalObject ? props.appraisalObject.aaRow14 : '',
-  aaRow15Year1: 0,
-  aaRow15: props.appraisalObject ? props.appraisalObject.aaRow15 : '',
-  aaRow16Year1: 0,
-  aaRow16: props.appraisalObject ? props.appraisalObject.aaRow16 : '',
-  aaRow17Year1: 0,
-  aaRow17: props.appraisalObject ? props.appraisalObject.aaRow17 : '',
-  aaRow18Year1: 0,
-  aaRow18: props.appraisalObject ? props.appraisalObject.aaRow18 : '',
-  aaRow19Year1: 0,
-  aaRow19: props.appraisalObject ? props.appraisalObject.aaRow19 : '',
-  aaRow20Year1: 0,
-  aaRow20: props.appraisalObject ? props.appraisalObject.aaRow20 : '',
-  aaRow21Year1: 0,
-  aaRow21: props.appraisalObject ? props.appraisalObject.aaRow21 : '',
-  aaRow22Year1: 0,
-  aaRow22: props.appraisalObject ? props.appraisalObject.aaRow22 : '',
-  aaRow23Year1: 0,
-  aaRow23: props.appraisalObject ? props.appraisalObject.aaRow23 : '',
-  aaRow24Year1: 0,
-  aaRow24: props.appraisalObject ? props.appraisalObject.aaRow24 : '',
-  aaRow25Year1: 0,
-  aaRow25: props.appraisalObject ? props.appraisalObject.aaRow25 : '',
-  aaRow26Year1: 0,
-  aaRow26: props.appraisalObject ? props.appraisalObject.aaRow26 : '',
-  aaRow27Year1: 0,
-  aaRow27: props.appraisalObject ? props.appraisalObject.aaRow27 : '',
-  aaRow28Year1: 0,
-  aaRow28: props.appraisalObject ? props.appraisalObject.aaRow28 : '',
-  aaRow29Year1: 0,
-  aaRow29: props.appraisalObject ? props.appraisalObject.aaRow29 : '',
-  aaRow30Year1: 0,
-  aaRow30: props.appraisalObject ? props.appraisalObject.aaRow30 : '',
-  aaRow1Year2: props.appraisalObject ? props.appraisalObject.aaRow1Year2 : '',
-  aaRow2Year2: props.appraisalObject ? props.appraisalObject.aaRow1Year2 : '',
-  aaRow3Year2: props.appraisalObject ? props.appraisalObject.aaRow3Year2 : '',
-  aaRow4Year2: 0,
-  aaRow5Year2: 0,
-  aaRow6Year2: 0,
-  aaRow7Year2: 0,
-  aaRow8Year2: 0,
-  aaRow9Year2: 0,
-  aaRow10Year2: 0,
-  aaRow11Year2: 0,
-  aaRow12Year2: 0,
-  aaRow13Year2: 0,
-  aaRow14Year2: 0,
-  aaRow15Year2: 0,
-  aaRow16Year2: 0,
-  aaRow17Year2: 0,
-  aaRow18Year2: 0,
-  aaRow19Year2: 0,
-  aaRow20Year2: 0,
-  aaRow21Year2: 0,
-  aaRow22Year2: 0,
-  aaRow23Year2: 0,
-  aaRow24Year2: 0,
-  aaRow25Year2: 0,
-  aaRow26Year2: 0,
-  aaRow27Year2: 0,
-  aaRow28Year2: 0,
-  aaRow29Year2: 0,
-  aaRow30Year2: 0,
-  aaRow1Year3: props.appraisalObject ? props.appraisalObject.aaRow1Year3 : '',
-  aaRow2Year3: props.appraisalObject ? props.appraisalObject.aaRow2Year3 : '',
-  aaRow3Year3: props.appraisalObject ? props.appraisalObject.aaRow3Year3 : '',
-  aaRow4Year3: 0,
-  aaRow5Year3: 0,
-  aaRow6Year3: 0,
-  aaRow7Year3: 0,
-  aaRow8Year3: 0,
-  aaRow9Year3: 0,
-  aaRow10Year3: 0,
-  aaRow11Year3: 0,
-  aaRow12Year3: 0,
-  aaRow13Year3: 0,
-  aaRow14Year3: 0,
-  aaRow15Year3: 0,
-  aaRow16Year3: 0,
-  aaRow17Year3: 0,
-  aaRow18Year3: 0,
-  aaRow19Year3: 0,
-  aaRow20Year3: 0,
-  aaRow21Year3: 0,
-  aaRow22Year3: 0,
-  aaRow23Year3: 0,
-  aaRow24Year3: 0,
-  aaRow25Year3: 0,
-  aaRow26Year3: 0,
-  aaRow27Year3: 0,
-  aaRow28Year3: 0,
-  aaRow29Year3: 0,
-  aaRow30Year3: 0,
-  aaRow1Year4: props.appraisalObject ? props.appraisalObject.aaRow1Year4 : '',
-  aaRow2Year4: props.appraisalObject ? props.appraisalObject.aaRow2Year4 : '',
-  aaRow3Year4: props.appraisalObject ? props.appraisalObject.aaRow3Year4 : '',
-  aaRow4Year4: 0,
-  aaRow5Year4: 0,
-  aaRow6Year4: 0,
-  aaRow7Year4: 0,
-  aaRow8Year4: 0,
-  aaRow9Year4: 0,
-  aaRow10Year4: 0,
-  aaRow11Year4: 0,
-  aaRow12Year4: 0,
-  aaRow13Year4: 0,
-  aaRow14Year4: 0,
-  aaRow15Year4: 0,
-  aaRow16Year4: 0,
-  aaRow17Year4: 0,
-  aaRow18Year4: 0,
-  aaRow19Year4: 0,
-  aaRow20Year4: 0,
-  aaRow21Year4: 0,
-  aaRow22Year4: 0,
-  aaRow23Year4: 0,
-  aaRow24Year4: 0,
-  aaRow25Year4: 0,
-  aaRow26Year4: 0,
-  aaRow27Year4: 0,
-  aaRow28Year4: 0,
-  aaRow29Year4: 0,
-  aaRow30Year4: 0,
-  aaRow1Year5: props.appraisalObject ? props.appraisalObject.aaRow1Year5 : '',
-  aaRow2Year5: props.appraisalObject ? props.appraisalObject.aaRow2Year5 : '',
-  aaRow3Year5: props.appraisalObject ? props.appraisalObject.aaRow3Year5 : '',
-  aaRow4Year5: 0,
-  aaRow5Year5: 0,
-  aaRow6Year5: 0,
-  aaRow7Year5: 0,
-  aaRow8Year5: 0,
-  aaRow9Year5: 0,
-  aaRow10Year5: 0,
-  aaRow11Year5: 0,
-  aaRow12Year5: 0,
-  aaRow13Year5: 0,
-  aaRow14Year5: 0,
-  aaRow15Year5: 0,
-  aaRow16Year5: 0,
-  aaRow17Year5: 0,
-  aaRow18Year5: 0,
-  aaRow19Year5: 0,
-  aaRow20Year5: 0,
-  aaRow21Year5: 0,
-  aaRow22Year5: 0,
-  aaRow23Year5: 0,
-  aaRow24Year5: 0,
-  aaRow25Year5: 0,
-  aaRow26Year5: 0,
-  aaRow27Year5: 0,
-  aaRow28Year5: 0,
-  aaRow29Year5: 0,
-  aaRow30Year5: 0,
-  aaRow1Year6: props.appraisalObject ? props.appraisalObject.aaRow1Year6 : '',
-  aaRow2Year6: props.appraisalObject ? props.appraisalObject.aaRow2Year6 : '',
-  aaRow3Year6: props.appraisalObject ? props.appraisalObject.aaRow3Year6 : '',
-  aaRow4Year6: 0,
-  aaRow5Year6: 0,
-  aaRow6Year6: 0,
-  aaRow7Year6: 0,
-  aaRow8Year6: 0,
-  aaRow9Year6: 0,
-  aaRow10Year6: 0,
-  aaRow11Year6: 0,
-  aaRow12Year6: 0,
-  aaRow13Year6: 0,
-  aaRow14Year6: 0,
-  aaRow15Year6: 0,
-  aaRow16Year6: 0,
-  aaRow17Year6: 0,
-  aaRow18Year6: 0,
-  aaRow19Year6: 0,
-  aaRow20Year6: 0,
-  aaRow21Year6: 0,
-  aaRow22Year6: 0,
-  aaRow23Year6: 0,
-  aaRow24Year6: 0,
-  aaRow25Year6: 0,
-  aaRow26Year6: 0,
-  aaRow27Year6: 0,
-  aaRow28Year6: 0,
-  aaRow29Year6: 0,
-  aaRow30Year6: 0,
-  business_id: props.business ? props.business.id : '',
-  id: props.appraisalObject ? props.appraisalObject.id : ''
-})
+const mapPropsToValues = props => {
+  const values = {
+    business_id: props.business ? props.business.id : '',
+    id: props.appraisalObject ? props.appraisalObject.id : '',
+    renderPdfYear1: props.appraisalObject ? props.appraisalObject.renderPdfYear1 : false,
+    renderPdfYear2: props.appraisalObject ? props.appraisalObject.renderPdfYear2 : false,
+    renderPdfYear3: props.appraisalObject ? props.appraisalObject.renderPdfYear3 : false,
+    renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : false,
+    renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : false,
+    renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false
+  }
+  for (let row = 1; row <= 30; row++) {
+    values[`aaRow${row}`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}`] : 0
+    values[`aaRow${row}Year1`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year1`] : 0
+    values[`aaRow${row}Year2`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year2`] : 0
+    values[`aaRow${row}Year3`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year3`] : 0
+    values[`aaRow${row}Year4`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year4`] : 0
+    values[`aaRow${row}Year5`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year5`] : 0
+    values[`aaRow${row}Year6`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year6`] : 0
+    values[`aaRow${row}Year7`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year7`] : 0
+  }
+  return values
+}
 
 const mapStateToProps = state => ({})
 
