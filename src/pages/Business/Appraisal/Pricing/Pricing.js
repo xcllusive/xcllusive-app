@@ -75,6 +75,25 @@ class PricingPage extends Component {
       lessThan5PercChanceOfSelling: numeral(this.props.biggestMultiplier).format('0,0.[99]')
     }
     Object.assign(this.props.values, obj)
+
+    // cayo
+    const objFormula = {
+      formulaValuePricingMethod: numeral(
+        this._pricingMethod(this.props.values.pricingMethod, this.props.appraisalObject)
+      ).format('$0,0.[99]'),
+      formulaPriceBasedOnComparable: numeral(
+        this._priceBasedOnComparable(this.props.values.pricingMethod, this.props.appraisalObject)
+      ).format('$0,0.[99]'),
+      formulaRiskPremium: numeral(this._riskPremium(this.props.values, this.props.appraisalObject)).format('$0,0.[99]'),
+      formulaMarketPremium: numeral(this._marketPremium(this.props.values, this.props.appraisalObject)).format(
+        '$0,0.[99]'
+      ),
+      formulaNegotiationPremium: numeral(
+        this._negotiationPremium(this.props.values, this.props.appraisalObject)
+      ).format('$0,0.[99]'),
+      formulaAskingPrice: numeral(this._askingPrice(this.props.values, this.props.appraisalObject)).format('$0,0.[99]')
+    }
+    Object.assign(this.props.values, objFormula)
     this.props.updateAppraisal(this.props.values)
   }
 
