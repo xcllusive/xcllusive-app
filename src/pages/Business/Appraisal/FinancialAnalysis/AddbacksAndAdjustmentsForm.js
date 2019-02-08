@@ -100,66 +100,24 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year1 > 0 ? appraisalObject.year1 : financialYear - 5}</b>
-            <Form.Field style={{ marginTop: '5px' }}>
-              <Form.Checkbox
-                name="renderPdfYear1"
-                checked={values.renderPdfYear1}
-                onChange={this._handleChangeCheckBox}
-              />
-            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year2 > 0 ? appraisalObject.year2 : financialYear - 4}</b>
-            <Form.Field style={{ marginTop: '5px' }}>
-              <Form.Checkbox
-                name="renderPdfYear2"
-                checked={values.renderPdfYear2}
-                onChange={this._handleChangeCheckBox}
-              />
-            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year3 > 0 ? appraisalObject.year3 : financialYear - 3}</b>
-            <Form.Field style={{ marginTop: '5px' }}>
-              <Form.Checkbox
-                name="renderPdfYear3"
-                checked={values.renderPdfYear3}
-                onChange={this._handleChangeCheckBox}
-              />
-            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year4 > 0 ? appraisalObject.year4 : financialYear - 2}</b>
-            <Form.Field style={{ marginTop: '5px' }}>
-              <Form.Checkbox
-                name="renderPdfYear4"
-                checked={values.renderPdfYear4}
-                onChange={this._handleChangeCheckBox}
-              />
-            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year5 > 0 ? appraisalObject.year5 : financialYear - 1}</b>
-            <Form.Field style={{ marginTop: '5px' }}>
-              <Form.Checkbox
-                name="renderPdfYear5"
-                checked={values.renderPdfYear5}
-                onChange={this._handleChangeCheckBox}
-              />
-            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{appraisalObject && appraisalObject.year6 > 0 ? appraisalObject.year6 : financialYear} YTD</b>{' '}
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>{financialYear} Annualised</b>
-            <Form.Field style={{ marginTop: '5px' }}>
-              <Form.Checkbox
-                name="renderPdfYear7"
-                checked={values.renderPdfYear7}
-                onChange={this._handleChangeCheckBox}
-              />
-            </Form.Field>
           </CustomColumn>
           <CustomColumn textAlign="center">
             <b>Annualised Yes/No</b>
@@ -265,13 +223,7 @@ AddbacksAndAdjustmentsForm.propTypes = {
 const mapPropsToValues = props => {
   const values = {
     business_id: props.business ? props.business.id : '',
-    id: props.appraisalObject ? props.appraisalObject.id : '',
-    renderPdfYear1: props.appraisalObject ? props.appraisalObject.renderPdfYear1 : false,
-    renderPdfYear2: props.appraisalObject ? props.appraisalObject.renderPdfYear2 : false,
-    renderPdfYear3: props.appraisalObject ? props.appraisalObject.renderPdfYear3 : false,
-    renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : false,
-    renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : false,
-    renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false
+    id: props.appraisalObject ? props.appraisalObject.id : ''
   }
   for (let row = 1; row <= 30; row++) {
     values[`aaRow${row}`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}`] : 0

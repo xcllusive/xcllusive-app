@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Checkbox, Label, Grid, Button, Icon, Input } from 'semantic-ui-react'
+import { Checkbox, Label, Grid, Button, Icon, Input, Form } from 'semantic-ui-react'
 import numeral from 'numeral'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
@@ -10,6 +10,7 @@ const FinancialAnalysisForm = ({
   handleChange,
   handleBlur,
   handleChangeCheckBox,
+  handleChangeCheckBoxPdf,
   errors,
   touched,
   financialYear,
@@ -145,6 +146,10 @@ const FinancialAnalysisForm = ({
     setFieldValue(`calcOperatingProfitPerc${column}`, _calcOperatingProfitPerc(sales, cogs, otherIncome, expense))
   }
 
+  const _handleChangeCheckBoxPdf = (e, { name }) => {
+    handleChangeCheckBoxPdf(e, { name })
+  }
+
   return (
     <Fragment>
       <Grid.Row>
@@ -159,8 +164,9 @@ const FinancialAnalysisForm = ({
             onBlur={handleBlur}
             tabIndex={-2}
           />
-          {errors.monthsCovered &&
-            touched.monthsCovered && <Label basic color="red" pointing content={errors.monthsCovered} />}
+          {errors.monthsCovered && touched.monthsCovered && (
+            <Label basic color="red" pointing content={errors.monthsCovered} />
+          )}
           <Input
             label="Seasonal Adjustment (%)"
             name="seasonalAdjustment"
@@ -171,8 +177,9 @@ const FinancialAnalysisForm = ({
             onBlur={handleBlur}
             tabIndex={-1}
           />
-          {errors.seasonalAdjustment &&
-            touched.seasonalAdjustment && <Label basic color="red" pointing content={errors.seasonalAdjustment} />}
+          {errors.seasonalAdjustment && touched.seasonalAdjustment && (
+            <Label basic color="red" pointing content={errors.seasonalAdjustment} />
+          )}
           <Button color="facebook" size="small">
             <Icon name="forward" />
             Move Financial Year
@@ -184,24 +191,72 @@ const FinancialAnalysisForm = ({
           <b>Financial Year</b>
         </CustomColumn>
         <CustomColumn textAlign="center">
+          <Form.Field>
+            <Form.Checkbox
+              label="Show in PDF"
+              name="renderPdfYear1"
+              checked={values.renderPdfYear1}
+              onChange={_handleChangeCheckBoxPdf}
+            />
+          </Form.Field>
           <b>{appraisalObject && appraisalObject.year1 > 0 ? appraisalObject.year1 : financialYear - 5}</b>
         </CustomColumn>
         <CustomColumn textAlign="center">
+          <Form.Field>
+            <Form.Checkbox
+              label="Show in PDF"
+              name="renderPdfYear2"
+              checked={values.renderPdfYear2}
+              onChange={_handleChangeCheckBoxPdf}
+            />
+          </Form.Field>
           <b>{appraisalObject && appraisalObject.year2 > 0 ? appraisalObject.year2 : financialYear - 4}</b>
         </CustomColumn>
         <CustomColumn textAlign="center">
+          <Form.Field>
+            <Form.Checkbox
+              label="Show in PDF"
+              name="renderPdfYear3"
+              checked={values.renderPdfYear3}
+              onChange={_handleChangeCheckBoxPdf}
+            />
+          </Form.Field>
           <b>{appraisalObject && appraisalObject.year3 > 0 ? appraisalObject.year3 : financialYear - 3}</b>
         </CustomColumn>
         <CustomColumn textAlign="center">
+          <Form.Field>
+            <Form.Checkbox
+              label="Show in PDF"
+              name="renderPdfYear4"
+              checked={values.renderPdfYear4}
+              onChange={_handleChangeCheckBoxPdf}
+            />
+          </Form.Field>
           <b>{appraisalObject && appraisalObject.year4 > 0 ? appraisalObject.year4 : financialYear - 2}</b>
         </CustomColumn>
         <CustomColumn textAlign="center">
+          <Form.Field>
+            <Form.Checkbox
+              label="Show in PDF"
+              name="renderPdfYear5"
+              checked={values.renderPdfYear5}
+              onChange={_handleChangeCheckBoxPdf}
+            />
+          </Form.Field>
           <b>{appraisalObject && appraisalObject.year5 > 0 ? appraisalObject.year5 : financialYear - 1}</b>
         </CustomColumn>
         <CustomColumn textAlign="center">
           <b>{appraisalObject && appraisalObject.year6 > 0 ? appraisalObject.year6 : financialYear} YTD</b>{' '}
         </CustomColumn>
         <CustomColumn textAlign="center">
+          <Form.Field>
+            <Form.Checkbox
+              label="Show in PDF"
+              name="renderPdfYear7"
+              checked={values.renderPdfYear7}
+              onChange={_handleChangeCheckBoxPdf}
+            />
+          </Form.Field>
           <b>{financialYear} Annualised</b>
         </CustomColumn>
         <CustomColumn textAlign="center">
@@ -445,8 +500,9 @@ const FinancialAnalysisForm = ({
             onChange={_handleChangeOtherIncome}
             onBlur={handleBlur}
           />
-          {errors.otherIncome1 &&
-            touched.otherIncome1 && <Label basic color="red" pointing content={errors.otherIncome1} />}
+          {errors.otherIncome1 && touched.otherIncome1 && (
+            <Label basic color="red" pointing content={errors.otherIncome1} />
+          )}
         </CustomColumn>
         <CustomColumn>
           <Input
@@ -460,8 +516,9 @@ const FinancialAnalysisForm = ({
             onChange={_handleChangeOtherIncome}
             onBlur={handleBlur}
           />
-          {errors.otherIncome2 &&
-            touched.otherIncome2 && <Label basic color="red" pointing content={errors.otherIncome2} />}
+          {errors.otherIncome2 && touched.otherIncome2 && (
+            <Label basic color="red" pointing content={errors.otherIncome2} />
+          )}
         </CustomColumn>
         <CustomColumn>
           <Input
@@ -475,8 +532,9 @@ const FinancialAnalysisForm = ({
             onChange={_handleChangeOtherIncome}
             onBlur={handleBlur}
           />
-          {errors.otherIncome3 &&
-            touched.otherIncome3 && <Label basic color="red" pointing content={errors.otherIncome3} />}
+          {errors.otherIncome3 && touched.otherIncome3 && (
+            <Label basic color="red" pointing content={errors.otherIncome3} />
+          )}
         </CustomColumn>
         <CustomColumn>
           <Input
@@ -490,8 +548,9 @@ const FinancialAnalysisForm = ({
             onChange={_handleChangeOtherIncome}
             onBlur={handleBlur}
           />
-          {errors.otherIncome4 &&
-            touched.otherIncome4 && <Label basic color="red" pointing content={errors.otherIncome4} />}
+          {errors.otherIncome4 && touched.otherIncome4 && (
+            <Label basic color="red" pointing content={errors.otherIncome4} />
+          )}
         </CustomColumn>
         <CustomColumn>
           <Input
@@ -505,8 +564,9 @@ const FinancialAnalysisForm = ({
             onChange={_handleChangeOtherIncome}
             onBlur={handleBlur}
           />
-          {errors.otherIncome5 &&
-            touched.otherIncome5 && <Label basic color="red" pointing content={errors.otherIncome5} />}
+          {errors.otherIncome5 && touched.otherIncome5 && (
+            <Label basic color="red" pointing content={errors.otherIncome5} />
+          )}
         </CustomColumn>
         <CustomColumn>
           <Input
@@ -520,8 +580,9 @@ const FinancialAnalysisForm = ({
             onChange={_handleChangeOtherIncome}
             onBlur={handleBlur}
           />
-          {errors.otherIncome6 &&
-            touched.otherIncome6 && <Label basic color="red" pointing content={errors.otherIncome6} />}
+          {errors.otherIncome6 && touched.otherIncome6 && (
+            <Label basic color="red" pointing content={errors.otherIncome6} />
+          )}
         </CustomColumn>
         <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
           {/* {_calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)} */}
@@ -696,7 +757,8 @@ FinancialAnalysisForm.propTypes = {
   appraisalObject: PropTypes.object,
   updateAppraisal: PropTypes.func,
   sendCalcs: PropTypes.func,
-  handleChangeCheckBox: PropTypes.func
+  handleChangeCheckBox: PropTypes.func,
+  handleChangeCheckBoxPdf: PropTypes.func
 }
 
 export default FinancialAnalysisForm

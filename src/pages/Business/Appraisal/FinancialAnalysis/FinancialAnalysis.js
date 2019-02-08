@@ -47,6 +47,7 @@ class FinancialAnalysisPage extends PureComponent {
   }
 
   componentWillUnmount () {
+    console.log(this.props.values)
     this.props.updateAppraisal(this.props.values)
   }
 
@@ -104,6 +105,7 @@ class FinancialAnalysisPage extends PureComponent {
         <Grid celled="internally" divided>
           <FinancialAnalysisForm
             handleChangeCheckBox={this._handleChangeCheckBox}
+            handleChangeCheckBoxPdf={this._handleChangeCheckBox}
             values={values}
             handleChange={this.props.handleChange}
             handleBlur={this.props.handleBlur}
@@ -131,7 +133,7 @@ class FinancialAnalysisPage extends PureComponent {
         <Grid>
           <Grid.Row columns={2}>
             <CustomColumn width={9}>
-              <OwnersMarketWagesForm />
+              <OwnersMarketWagesForm business={this.props.business} appraisalObject={this.props.appraisalObject} />
             </CustomColumn>
             <CustomColumn width={7}>
               <StockForm />
@@ -254,7 +256,13 @@ const mapPropsToValues = props => ({
   salesYesNo: props.appraisalObject ? props.appraisalObject.salesYesNo : false,
   cogsYesNo: props.appraisalObject ? props.appraisalObject.cogsYesNo : false,
   otherIncomeYesNo: props.appraisalObject ? props.appraisalObject.otherIncomeYesNo : false,
-  expensesYesNo: props.appraisalObject ? props.appraisalObject.expensesYesNo : false
+  expensesYesNo: props.appraisalObject ? props.appraisalObject.expensesYesNo : false,
+  renderPdfYear1: props.appraisalObject ? props.appraisalObject.renderPdfYear1 : false,
+  renderPdfYear2: props.appraisalObject ? props.appraisalObject.renderPdfYear2 : false,
+  renderPdfYear3: props.appraisalObject ? props.appraisalObject.renderPdfYear3 : false,
+  renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : false,
+  renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : false,
+  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false
 })
 
 const validationSchema = Yup.object().shape({})
