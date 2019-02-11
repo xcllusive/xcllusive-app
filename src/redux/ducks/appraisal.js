@@ -36,6 +36,7 @@ const initialState = {
   create: {
     isLoading: false,
     isCreated: false,
+    appraisal: {},
     error: null
   },
   getAll: {
@@ -160,6 +161,7 @@ export default function reducer (state = initialState, action) {
         create: {
           ...state.create,
           isLoading: false,
+          appraisal: action.payload,
           isCreated: true
         }
       }
@@ -329,7 +331,8 @@ export const createAppraisal = businessId => async dispatch => {
   try {
     const response = await create(businessId)
     dispatch({
-      type: Types.CREATE_APPRAISAL_SUCCESS
+      type: Types.CREATE_APPRAISAL_SUCCESS,
+      payload: response.data
     })
     toast.success(response.message)
   } catch (error) {
@@ -414,12 +417,18 @@ export const updateAppraisal = (appraisal, showToast = true) => async dispatch =
   }
 }
 
-export const downloadAppraisal = appraisal => async dispatch => {
+export const downloadAppraisal = (appraisal, draft = false) => async dispatch => {
   dispatch({
     type: Types.DOWNLOAD_APPRAISAL_LOADING,
     payload: true
   })
   try {
+    if (draft) {
+      const obj = {
+        draft
+      }
+      Object.assign(appraisal, obj)
+    }
     const response = await downloadAppr(appraisal)
     dispatch({
       type: Types.DOWNLOAD_APPRAISAL_SUCCESS

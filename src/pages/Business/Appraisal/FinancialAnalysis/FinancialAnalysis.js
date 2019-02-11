@@ -135,8 +135,8 @@ class FinancialAnalysisPage extends PureComponent {
               <OwnersMarketWagesForm business={this.props.business} appraisalObject={this.props.appraisalObject} />
             </CustomColumn>
             <CustomColumn width={7}>
-              <StockForm />
-              <PhysicalAssetValueForm />
+              <StockForm business={this.props.business} appraisalObject={this.props.appraisalObject} />
+              <PhysicalAssetValueForm business={this.props.business} appraisalObject={this.props.appraisalObject} />
             </CustomColumn>
           </Grid.Row>
         </Grid>
@@ -264,8 +264,7 @@ const mapPropsToValues = props => ({
   renderPdfYear3: props.appraisalObject ? props.appraisalObject.renderPdfYear3 : false,
   renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : false,
   renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : false,
-  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false,
-  financialInfoSource: props.appraisalObject ? props.appraisalObject.financialInfoSource : ''
+  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false
 })
 
 const validationSchema = Yup.object().shape({})

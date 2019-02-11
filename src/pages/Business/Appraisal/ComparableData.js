@@ -581,8 +581,9 @@ class ComparableDataPage extends Component {
                     this._handleSelectChange(data)
                   }}
                 />
-                {errors.lastBusiness &&
-                  touched.lastBusiness && <Label basic color="red" pointing content={errors.lastBusiness} />}
+                {errors.lastBusiness && touched.lastBusiness && (
+                  <Label basic color="red" pointing content={errors.lastBusiness} />
+                )}
               </Form.Field>
               <Form.Field width={5}>
                 <Form.Input
@@ -709,49 +710,51 @@ class ComparableDataPage extends Component {
                 <Table.HeaderCell rowSpan="4">Delete</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
-            <Table.Body>
-              {listSelected.map(selectedList => (
-                <Table.Row active key={selectedList.id}>
-                  <Table.Cell>{selectedList.businessType}</Table.Cell>
-                  <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(this._ebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(this._ebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(this._pebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(this._pebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
-                  <Table.Cell>
-                    <Icon color={this._colorArrow(selectedList)} name={this._nameArrow(selectedList)} />
-                  </Table.Cell>
-                  <Table.Cell>{numeral(selectedList.soldPrice).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(selectedList.stockValue).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(selectedList.assetValue).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(selectedList.soldPrice + selectedList.stockValue).format('$0,0')}</Table.Cell>
-                  <Table.Cell>{numeral(this._turnOver(selectedList)).format('0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._multiplierEbitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._multiplierEbitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._multiplierPebitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
-                  <Table.Cell>{numeral(this._multiplierPebitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
-                  <Table.Cell>
-                    {numeral(this._multiplierEbitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {numeral(this._multiplierEbitdaAvgWithStock(selectedList)).format('0,0.[99]')}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {numeral(this._multiplierPebitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {numeral(this._multiplierPebitdaAvgWithStock(selectedList)).format('0,0.[99]')}
-                  </Table.Cell>
-                  <Table.Cell>{selectedList.termsOfDeal} </Table.Cell>
-                  <Table.Cell>{selectedList.specialNotes} </Table.Cell>
-                  <Table.Cell>
-                    <Button icon onClick={() => this._toggleModalConfirmDelete(selectedList)}>
-                      <Icon link color="red" name="trash" />
-                    </Button>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
+            {listSelected ? (
+              <Table.Body>
+                {listSelected.map(selectedList => (
+                  <Table.Row active key={selectedList.id}>
+                    <Table.Cell>{selectedList.businessType}</Table.Cell>
+                    <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._ebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._ebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._pebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._pebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
+                    <Table.Cell>
+                      <Icon color={this._colorArrow(selectedList)} name={this._nameArrow(selectedList)} />
+                    </Table.Cell>
+                    <Table.Cell>{numeral(selectedList.soldPrice).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(selectedList.stockValue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(selectedList.assetValue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(selectedList.soldPrice + selectedList.stockValue).format('$0,0')}</Table.Cell>
+                    <Table.Cell>{numeral(this._turnOver(selectedList)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierEbitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierEbitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierPebitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._multiplierPebitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierEbitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierEbitdaAvgWithStock(selectedList)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierPebitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierPebitdaAvgWithStock(selectedList)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>{selectedList.termsOfDeal} </Table.Cell>
+                    <Table.Cell>{selectedList.specialNotes} </Table.Cell>
+                    <Table.Cell>
+                      <Button icon onClick={() => this._toggleModalConfirmDelete(selectedList)}>
+                        <Icon link color="red" name="trash" />
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            ) : null}
             <Table.Footer>
               <Table.Row active>
                 <Table.Cell>
@@ -951,7 +954,7 @@ class ComparableDataPage extends Component {
               label="Please confirm that you have completed the above information"
               name="confirmComparableData"
               onChange={this._handleCheckBox}
-              disabled={this.props.listSelected.length === 0}
+              disabled={this.props.listSelected && this.props.listSelected.length === 0}
               checked={values.confirmComparableData}
               onClick={() => this.props.confirmsCompleteSteps('confirmComparableData', !values.confirmComparableData)}
             />

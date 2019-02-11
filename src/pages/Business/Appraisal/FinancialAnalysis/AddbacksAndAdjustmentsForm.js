@@ -235,6 +235,17 @@ const mapPropsToValues = props => {
     values[`aaRow${row}Year6`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year6`] : 0
     values[`aaRow${row}Year7`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year7`] : 0
   }
+  values['aaRow1'] = props.appraisalObject ? props.appraisalObject['aaRow1'] : ''
+  values['aaRow2'] = props.appraisalObject ? props.appraisalObject['aaRow2'] : ''
+  values['aaRow3'] = props.appraisalObject ? props.appraisalObject['aaRow3'] : ''
+  values['aaRow4'] = props.appraisalObject ? props.appraisalObject['aaRow4'] : ''
+  values['aaRow5'] = props.appraisalObject ? props.appraisalObject['aaRow5'] : ''
+  values['aaRow6'] = props.appraisalObject ? props.appraisalObject['aaRow6'] : ''
+  values['aaRow7'] = props.appraisalObject ? props.appraisalObject['aaRow7'] : ''
+  values['aaRow8'] = props.appraisalObject ? props.appraisalObject['aaRow8'] : ''
+  values['aaRow9'] = props.appraisalObject ? props.appraisalObject['aaRow9'] : ''
+  values['aaRow10'] = props.appraisalObject ? props.appraisalObject['aaRow10'] : ''
+
   return values
 }
 

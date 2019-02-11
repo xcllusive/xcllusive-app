@@ -1236,7 +1236,8 @@ PricingPage.propTypes = {
   listSelected: PropTypes.array,
   calcMinMaxChart: PropTypes.func,
   isCalculated: PropTypes.bool,
-  confirmsCompleteSteps: PropTypes.func
+  confirmsCompleteSteps: PropTypes.func,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => ({

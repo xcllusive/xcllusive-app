@@ -6,7 +6,7 @@ import { withFormik } from 'formik'
 import { Message, Step, Segment, Grid, Header, Button, Icon } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
-import { updateAppraisal } from '../../../redux/ducks/appraisal'
+import { updateAppraisal, downloadAppraisal } from '../../../redux/ducks/appraisal'
 import { theme } from '../../../styles'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
@@ -32,14 +32,7 @@ class GenerateAndSendPage extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          // this.props.downloadAgreement({
-          //   businessId: this.props.location.state.business.id,
-          //   fileName: `agreement_${this.props.location.state.business.businessName.substring(
-          //     0,
-          //     10
-          //   )}_${moment().format('DD_MM_YYYY')}.pdf`,
-          //   body: this.state.body
-          // })
+          this.props.downloadAppraisal(this.props.appraisalObject)
         }
       }
     })
@@ -53,14 +46,7 @@ class GenerateAndSendPage extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          // this.props.downloadAgreement({
-          //   businessId: this.props.location.state.business.id,
-          //   fileName: `agreement_${this.props.location.state.business.businessName.substring(
-          //     0,
-          //     10
-          //   )}_${moment().format('DD_MM_YYYY')}.pdf`,
-          //   body: this.state.body
-          // })
+          this.props.downloadAppraisal(this.props.appraisalObject, true)
         }
       }
     })
@@ -246,18 +232,18 @@ class GenerateAndSendPage extends Component {
                   color={theme.buttonDownload}
                   onClick={this._modalConfirmDownloadAppraisal}
                   size="small"
-                  disabled={
-                    !appraisalObject.confirmBusinessDetail ||
-                    !appraisalObject.confirmAbout ||
-                    !appraisalObject.confirmCustomersSuppliers ||
-                    !appraisalObject.confirmPremisesEnployees ||
-                    !appraisalObject.confirmOwnershipFinalNotes ||
-                    !appraisalObject.confirmBusinessAnalysis ||
-                    !appraisalObject.confirmFinancialAnalysis ||
-                    !appraisalObject.confirmComparableData ||
-                    !appraisalObject.confirmPricing ||
-                    !appraisalObject.confirmNotesAndAssumptions
-                  }
+                  // disabled={
+                  //   !appraisalObject.confirmBusinessDetail ||
+                  //   !appraisalObject.confirmAbout ||
+                  //   !appraisalObject.confirmCustomersSuppliers ||
+                  //   !appraisalObject.confirmPremisesEnployees ||
+                  //   !appraisalObject.confirmOwnershipFinalNotes ||
+                  //   !appraisalObject.confirmBusinessAnalysis ||
+                  //   !appraisalObject.confirmFinancialAnalysis ||
+                  //   !appraisalObject.confirmComparableData ||
+                  //   !appraisalObject.confirmPricing ||
+                  //   !appraisalObject.confirmNotesAndAssumptions
+                  // }
                   // loading={isLoadingDownloading}
                 >
                   <Icon name="download" />
@@ -267,18 +253,18 @@ class GenerateAndSendPage extends Component {
                   color="orange"
                   onClick={this._modalConfirmDownloadDraftAppraisal}
                   size="small"
-                  disabled={
-                    !appraisalObject.confirmBusinessDetail ||
-                    !appraisalObject.confirmAbout ||
-                    !appraisalObject.confirmCustomersSuppliers ||
-                    !appraisalObject.confirmPremisesEnployees ||
-                    !appraisalObject.confirmOwnershipFinalNotes ||
-                    !appraisalObject.confirmBusinessAnalysis ||
-                    !appraisalObject.confirmFinancialAnalysis ||
-                    !appraisalObject.confirmComparableData ||
-                    !appraisalObject.confirmPricing ||
-                    !appraisalObject.confirmNotesAndAssumptions
-                  }
+                  // disabled={
+                  //   !appraisalObject.confirmBusinessDetail ||
+                  //   !appraisalObject.confirmAbout ||
+                  //   !appraisalObject.confirmCustomersSuppliers ||
+                  //   !appraisalObject.confirmPremisesEnployees ||
+                  //   !appraisalObject.confirmOwnershipFinalNotes ||
+                  //   !appraisalObject.confirmBusinessAnalysis ||
+                  //   !appraisalObject.confirmFinancialAnalysis ||
+                  //   !appraisalObject.confirmComparableData ||
+                  //   !appraisalObject.confirmPricing ||
+                  //   !appraisalObject.confirmNotesAndAssumptions
+                  // }
                   // loading={isLoadingDownloading}
                 >
                   <Icon name="download" />
@@ -313,7 +299,7 @@ class GenerateAndSendPage extends Component {
                   size="small"
                   onClick={this._modalSendAppraisal}
                   // loading={isLoadingSendEmail}
-                  disabled={!appraisalObject.downloaded}
+                  // disabled={!appraisalObject.downloaded}
                 >
                   <Icon name="send" />
                   Send Appraisal
@@ -342,7 +328,8 @@ GenerateAndSendPage.propTypes = {
   updateAppraisal: PropTypes.func,
   handleItemClick: PropTypes.func,
   confirmsCompleteSteps: PropTypes.func,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  downloadAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -360,7 +347,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       updateAppraisal,
-      openModal
+      openModal,
+      downloadAppraisal
     },
     dispatch
   )

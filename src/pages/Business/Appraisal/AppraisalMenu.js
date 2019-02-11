@@ -289,11 +289,12 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Pricing' ? (
           <Segment>
-            {appraisal && appraisal.id ? (
+            {appraisal && appraisal.id && appraisal.comparableDataSelectedList !== null ? (
               <Pricing
                 business={business}
                 appraisalObject={appraisal}
                 confirmsCompleteSteps={this.updateCompleteSteps}
+                history={this.props.history}
               />
             ) : null}
           </Segment>

@@ -28,14 +28,15 @@ class AppraisalListPage extends Component {
         title: 'Creating Appraisal',
         text: 'Are you sure you want to create a new appraisal for this business?'
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this.props.createAppraisal(this.props.values)
+          await this.props.createAppraisal(this.props.values)
           this.props.history.push({
             pathname: 'appraisalMenu',
             state: {
               business: this.props.location.state.business,
-              isLoadingCreating: this.props.isLoadingCreating
+              isLoadingCreating: this.props.isLoadingCreating,
+              appraisalObject: this.props.createdAppraisal
             }
           })
         }
@@ -56,6 +57,21 @@ class AppraisalListPage extends Component {
         }
       }
     })
+  }
+
+  _calcPercCompleted = props => {
+    return (
+      props.percBusinessDetail +
+      props.percAbout +
+      props.percCustomersSuppliers +
+      props.percPremisesEnployees +
+      props.percOwnershipFinalNotes +
+      props.percBusinessAnalysis +
+      props.percFinancialAnalysis +
+      props.percComparableData +
+      props.percPricing +
+      props.percNotesAndAssumptions
+    )
   }
 
   render () {
@@ -100,13 +116,15 @@ class AppraisalListPage extends Component {
                       <Table.Cell>{moment(listAppraisal.dateTimeCreated).format('DD/MM/YYYY')}</Table.Cell>
                       <Table.Cell>TBD with Zoran</Table.Cell>
                       <Table.Cell>TBD with Zoran</Table.Cell>
-                      <Table.Cell>{listAppraisal.completed}</Table.Cell>
+                      <Table.Cell>
+                        {listAppraisal.completed === 100 ? 'Completed' : `${listAppraisal.completed}%`}
+                      </Table.Cell>
                       <Table.Cell>
                         {listAppraisal.sentDate ? moment(listAppraisal.sentDate).format('DD/MM/YYYY') : 'No'}
                       </Table.Cell>
                       <Table.Cell />
                       <Table.Cell />
-                      <Table.Cell>Yes</Table.Cell>
+                      <Table.Cell>{listAppraisal.downloaded ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>
                         <Button
                           icon
@@ -161,7 +179,9 @@ AppraisalListPage.propTypes = {
   isLoadingCreating: PropTypes.bool,
   getAppraisals: PropTypes.func,
   listAppraisalList: PropTypes.array,
-  removeAppraisal: PropTypes.func
+  removeAppraisal: PropTypes.func,
+  createdAppraisal: PropTypes.object,
+  percPricing: PropTypes.number
 }
 
 const mapPropsToValues = props => {
@@ -175,7 +195,9 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = state => ({
   isLoadingCreating: state.appraisal.create.isLoading,
-  listAppraisalList: state.appraisal.getAll.array
+  listAppraisalList: state.appraisal.getAll.array,
+  createdAppraisal: state.appraisal.create.appraisal,
+  percPricing: state.appraisal.getCalcCompleteSteps.confirm.confirmPricing.completedPerc
 })
 
 export default connect(
