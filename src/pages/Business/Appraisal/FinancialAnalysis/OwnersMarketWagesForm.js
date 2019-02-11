@@ -26,33 +26,66 @@ class AddbacksAndAdjustmentsForm extends Component {
   componentWillUnmount () {
     const obj = {
       totalAnnualWages: this._replaceDollarAndComma(this.props.values.totalAnnualWages),
-      owner1AnnualWage: this._replaceDollarAndComma(this.props.values.owner1AnnualWage)
+      owner1AnnualWage: this._replaceDollarAndComma(this.props.values.owner1AnnualWage),
+      owner2AnnualWage: this._replaceDollarAndComma(this.props.values.owner2AnnualWage),
+      owner3AnnualWage: this._replaceDollarAndComma(this.props.values.owner3AnnualWage),
+      owner4AnnualWage: this._replaceDollarAndComma(this.props.values.owner4AnnualWage),
+      owner5AnnualWage: this._replaceDollarAndComma(this.props.values.owner5AnnualWage),
+      owner6AnnualWage: this._replaceDollarAndComma(this.props.values.owner6AnnualWage),
+      owner7AnnualWage: this._replaceDollarAndComma(this.props.values.owner7AnnualWage)
     }
     Object.assign(this.props.values, obj)
-    this.props.updateAppraisal(this.props.values)
+    this.props.updateAppraisal(this.props.values, false)
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    console.log(nextProps.appraisalObject.owner1AnnualWage, prevState.owner1AnnualWage)
-    if (nextProps.appraisalObject && nextProps.appraisalObject.owner1AnnualWage !== prevState.owner1AnnualWage) {
+    if (
+      nextProps.appraisalObject &&
+      (nextProps.appraisalObject.owner1AnnualWage !== prevState.owner1AnnualWage ||
+        nextProps.appraisalObject.owner1AnnualWage === 0)
+    ) {
       var owner1AnnualWage = numeral(nextProps.values.owner1AnnualWage).format('$0,0.[99]')
     }
-    if (nextProps.appraisalObject && nextProps.appraisalObject.owner2AnnualWage !== prevState.owner2AnnualWage) {
+    if (
+      nextProps.appraisalObject &&
+      (nextProps.appraisalObject.owner2AnnualWage !== prevState.owner2AnnualWage ||
+        nextProps.appraisalObject.owner2AnnualWage === 0)
+    ) {
       var owner2AnnualWage = numeral(nextProps.values.owner2AnnualWage).format('$0,0.[99]')
     }
-    if (nextProps.appraisalObject && nextProps.appraisalObject.owner3AnnualWage !== prevState.owner3AnnualWage) {
+    if (
+      nextProps.appraisalObject &&
+      (nextProps.appraisalObject.owner3AnnualWage !== prevState.owner3AnnualWage ||
+        nextProps.appraisalObject.owner3AnnualWage === 0)
+    ) {
       var owner3AnnualWage = numeral(nextProps.values.owner3AnnualWage).format('$0,0.[99]')
     }
-    if (nextProps.appraisalObject && nextProps.appraisalObject.owner4AnnualWage !== prevState.owner4AnnualWage) {
+    if (
+      nextProps.appraisalObject &&
+      (nextProps.appraisalObject.owner4AnnualWage !== prevState.owner4AnnualWage ||
+        nextProps.appraisalObject.owner4AnnualWage === 0)
+    ) {
       var owner4AnnualWage = numeral(nextProps.values.owner4AnnualWage).format('$0,0.[99]')
     }
-    if (nextProps.appraisalObject && nextProps.appraisalObject.owner5AnnualWage !== prevState.owner5AnnualWage) {
+    if (
+      nextProps.appraisalObject &&
+      (nextProps.appraisalObject.owner5AnnualWage !== prevState.owner5AnnualWage ||
+        nextProps.appraisalObject.owner5AnnualWage === 0)
+    ) {
       var owner5AnnualWage = numeral(nextProps.values.owner5AnnualWage).format('$0,0.[99]')
     }
-    if (nextProps.appraisalObject && nextProps.appraisalObject.owner6AnnualWage !== prevState.owner6AnnualWage) {
+    if (
+      nextProps.appraisalObject &&
+      (nextProps.appraisalObject.owner6AnnualWage !== prevState.owner6AnnualWage ||
+        nextProps.appraisalObject.owner6AnnualWage === 0)
+    ) {
       var owner6AnnualWage = numeral(nextProps.values.owner6AnnualWage).format('$0,0.[99]')
     }
-    if (nextProps.appraisalObject && nextProps.appraisalObject.owner7AnnualWage !== prevState.owner7AnnualWage) {
+    if (
+      nextProps.appraisalObject &&
+      (nextProps.appraisalObject.owner7AnnualWage !== prevState.owner7AnnualWage ||
+        nextProps.appraisalObject.owner7AnnualWage === 0)
+    ) {
       var owner7AnnualWage = numeral(nextProps.values.owner7AnnualWage).format('$0,0.[99]')
     }
 
@@ -159,7 +192,8 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner1AnnualWage"
                       autoComplete="owner1AnnualWage"
-                      value={this.state.owner1AnnualWage === 0 ? values.owner1AnnualWage : this.state.owner1AnnualWage}
+                      // value={this.state.owner1AnnualWage === 0 ? values.owner1AnnualWage : this.state.owner1AnnualWage}
+                      value={this.state.owner1AnnualWage}
                       onChange={this._handleChangeTotalWage}
                       onBlur={handleBlur}
                     />
@@ -210,6 +244,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner2AnnualWage"
                       autoComplete="owner2AnnualWage"
+                      // value={this.state.owner2AnnualWage === 0 ? values.owner2AnnualWage : this.state.owner2AnnualWage}
                       value={this.state.owner2AnnualWage}
                       onChange={this._handleChangeTotalWage}
                       onBlur={handleBlur}
@@ -261,6 +296,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner3AnnualWage"
                       autoComplete="owner3AnnualWage"
+                      // value={this.state.owner3AnnualWage === 0 ? values.owner3AnnualWage : this.state.owner3AnnualWage}
                       value={this.state.owner3AnnualWage}
                       onChange={this._handleChangeTotalWage}
                       onBlur={handleBlur}
@@ -312,6 +348,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner4AnnualWage"
                       autoComplete="owner4AnnualWage"
+                      // value={this.state.owner4AnnualWage === 0 ? values.owner4AnnualWage : this.state.owner4AnnualWage}
                       value={this.state.owner4AnnualWage}
                       onChange={this._handleChangeTotalWage}
                       onBlur={handleBlur}
@@ -363,7 +400,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner5AnnualWage"
                       autoComplete="owner5AnnualWage"
-                      value={this.state.owner5AnnualWage}
+                      value={this.state.owner5AnnualWage === 0 ? values.owner5AnnualWage : this.state.owner5AnnualWage}
                       onChange={this._handleChangeTotalWage}
                       onBlur={handleBlur}
                     />
@@ -414,7 +451,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner6AnnualWage"
                       autoComplete="owner6AnnualWage"
-                      value={this.state.owner6AnnualWage}
+                      value={this.state.owner6AnnualWage === 0 ? values.owner6AnnualWage : this.state.owner6AnnualWage}
                       onChange={this._handleChangeTotalWage}
                       onBlur={handleBlur}
                     />
@@ -465,7 +502,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner7AnnualWage"
                       autoComplete="owner7AnnualWage"
-                      value={this.state.owner7AnnualWage}
+                      value={this.state.owner7AnnualWage === 0 ? values.owner7AnnualWage : this.state.owner7AnnualWage}
                       onChange={this._handleChangeTotalWage}
                       onBlur={handleBlur}
                     />

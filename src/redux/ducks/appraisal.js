@@ -390,7 +390,7 @@ export const getAppraisal = id => async dispatch => {
   }
 }
 
-export const updateAppraisal = appraisal => async dispatch => {
+export const updateAppraisal = (appraisal, showToast = true) => async dispatch => {
   dispatch({
     type: Types.UPDATE_APPRAISAL_LOADING,
     payload: true
@@ -402,7 +402,9 @@ export const updateAppraisal = appraisal => async dispatch => {
       type: Types.UPDATE_APPRAISAL_SUCCESS,
       payload: getAppraisal.data
     })
-    toast.success(response.message)
+    if (showToast) {
+      toast.success(response.message)
+    }
   } catch (error) {
     dispatch({
       type: Types.UPDATE_APPRAISAL_FAILURE,

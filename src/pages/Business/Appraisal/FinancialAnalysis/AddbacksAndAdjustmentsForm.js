@@ -20,7 +20,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   componentWillUnmount () {
-    this.props.updateAppraisal(this.props.values)
+    this.props.updateAppraisal(this.props.values, false)
   }
 
   _handleChangeCheckBox = (e, { name }) => {

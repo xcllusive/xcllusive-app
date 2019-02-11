@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { listAppraisalRegister } from '../../../../redux/ducks/appraisalRegister'
 import { mapArrayToValuesForDropdown } from '../../../../utils/sharedFunctionArray'
 import { TypesModal, openModal } from '../../../../redux/ducks/modal'
+import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
 class FinancialInformationSourceForm extends Component {
   constructor (props) {
@@ -17,6 +18,10 @@ class FinancialInformationSourceForm extends Component {
 
   componentDidMount () {
     this.props.listAppraisalRegister('financialInfoSource')
+  }
+
+  componentWillUnmount () {
+    this.props.updateAppraisal(this.props.values, false)
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -51,22 +56,14 @@ class FinancialInformationSourceForm extends Component {
               <Form.Field width={15}>
                 <Form.Select
                   label="Financial Information Source"
-                  options={mapArrayToValuesForDropdown(
-                    financialInfoSourceOptions
-                  )}
+                  options={mapArrayToValuesForDropdown(financialInfoSourceOptions)}
                   name="financialInfoSource"
                   autoComplete="financialInfoSource"
                   value={values.financialInfoSource}
                   onChange={this._handleSelectChange}
                 />
-                {errors.financialInfoSource &&
-                  touched.financialInfoSource && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.financialInfoSource}
-                  />
+                {errors.financialInfoSource && touched.financialInfoSource && (
+                  <Label basic color="red" pointing content={errors.financialInfoSource} />
                 )}
               </Form.Field>
               <Form.Field width={1}>
@@ -77,9 +74,7 @@ class FinancialInformationSourceForm extends Component {
                   inverted
                   circular
                   link
-                  onClick={() =>
-                    this._newAppraisalRegister('financialInfoSource')
-                  }
+                  onClick={() => this._newAppraisalRegister('financialInfoSource')}
                 />
               </Form.Field>
             </Form.Group>
@@ -100,22 +95,28 @@ FinancialInformationSourceForm.propTypes = {
   isValid: PropTypes.bool,
   financialInfoSourceOptions: PropTypes.array,
   listAppraisalRegister: PropTypes.func,
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  updateAppraisal: PropTypes.func,
+  appraisalObject: PropTypes.object,
+  business: PropTypes.object
 }
 
-const mapPropsToValues = props => ({})
+const mapPropsToValues = props => ({
+  business_id: props.business ? props.business.id : '',
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  financialInfoSource: props.appraisalObject ? props.appraisalObject.financialInfoSource : 0
+})
 
 const mapStateToProps = state => {
   return {
-    financialInfoSourceOptions:
-      state.appraisalRegister.get.financialInfoSource.array
+    financialInfoSourceOptions: state.appraisalRegister.get.financialInfoSource.array
   }
 }
 
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ listAppraisalRegister, openModal }, dispatch)
+  return bindActionCreators({ listAppraisalRegister, openModal, updateAppraisal }, dispatch)
 }
 
 export default connect(

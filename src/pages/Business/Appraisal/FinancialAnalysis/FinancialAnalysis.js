@@ -47,7 +47,6 @@ class FinancialAnalysisPage extends PureComponent {
   }
 
   componentWillUnmount () {
-    console.log(this.props.values)
     this.props.updateAppraisal(this.props.values)
   }
 
@@ -144,7 +143,10 @@ class FinancialAnalysisPage extends PureComponent {
         <Grid>
           <Grid.Row centered>
             <Grid.Column width={6}>
-              <FinancialInformationSourceForm />
+              <FinancialInformationSourceForm
+                appraisalObject={this.props.appraisalObject}
+                business={this.props.business}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -262,7 +264,8 @@ const mapPropsToValues = props => ({
   renderPdfYear3: props.appraisalObject ? props.appraisalObject.renderPdfYear3 : false,
   renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : false,
   renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : false,
-  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false
+  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false,
+  financialInfoSource: props.appraisalObject ? props.appraisalObject.financialInfoSource : ''
 })
 
 const validationSchema = Yup.object().shape({})

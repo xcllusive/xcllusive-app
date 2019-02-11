@@ -94,7 +94,6 @@ class BusinessAnalysisPage extends Component {
 
   render () {
     const { values } = this.props
-    console.log(this.props.descriptionBusinessRiskArray)
     return (
       <Wrapper>
         <Step.Group size="large">
