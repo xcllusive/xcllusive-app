@@ -61,3 +61,11 @@ export const remove = appraisalId => {
     url: `/appraisal/${appraisalId}`
   })
 }
+
+export const duplicate = appraisalId => {
+  // It needs to talk to zoran to define how we gonna make it
+  // return request({
+  //   method: 'post',
+  //   url: `/appraisal/duplicate${appraisalId}`
+  // })
+}

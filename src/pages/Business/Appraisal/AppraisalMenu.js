@@ -296,7 +296,11 @@ class AppraisalMenuPage extends Component {
                 confirmsCompleteSteps={this.updateCompleteSteps}
                 history={this.props.history}
               />
-            ) : null}
+            ) : (
+              <Label style={{ textAlign: 'center' }} tag size="large" color="blue">
+                To access this section you must go back to [Comparable Data] and make your selected list!
+              </Label>
+            )}
           </Segment>
         ) : null}
         {this.state.activeItem === 'Notes And Assumptions' ? (

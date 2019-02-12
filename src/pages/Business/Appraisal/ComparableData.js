@@ -312,9 +312,11 @@ class ComparableDataPage extends Component {
   }
 
   componentWillUnmount () {
-    const mergeObjects = this._assignObject()
-    this.props.updateAppraisal(mergeObjects)
-    this.props.saveSelectedList(this.props.listSelected, this.props.appraisalObject.id)
+    if (this.props.appraisalObject.comparableDataSelectedList !== null) {
+      const mergeObjects = this._assignObject()
+      this.props.updateAppraisal(mergeObjects)
+      this.props.saveSelectedList(this.props.listSelected, this.props.appraisalObject.id)
+    }
   }
 
   _handleCheckBox = (e, { name }) => {

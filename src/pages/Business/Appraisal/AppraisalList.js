@@ -9,7 +9,7 @@ import moment from 'moment'
 import { theme } from '../../../styles'
 import Wrapper from '../../../components/content/Wrapper'
 
-import { createAppraisal, getAppraisals, removeAppraisal } from '../../../redux/ducks/appraisal'
+import { createAppraisal, getAppraisals, removeAppraisal, duplicateAppraisal } from '../../../redux/ducks/appraisal'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 class AppraisalListPage extends Component {
@@ -74,6 +74,22 @@ class AppraisalListPage extends Component {
     )
   }
 
+  _duplicateAppraisal = id => {
+    // It needs to talk to zoran to define how we gonna make it
+    // this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+    //   options: {
+    //     title: 'Duplicating Appraisal',
+    //     text: 'Are you sure you want to duplicate this appraisal?'
+    //   },
+    //   onConfirm: async isConfirmed => {
+    //     if (isConfirmed) {
+    //       await this.props.duplicateAppraisal(id)
+    //       this.props.getAppraisals(this.props.location.state.business.id)
+    //     }
+    //   }
+    // })
+  }
+
   render () {
     const { history, listAppraisalList } = this.props
     const { business } = this.props.location.state
@@ -105,7 +121,7 @@ class AppraisalListPage extends Component {
                     <Table.HeaderCell>Sent</Table.HeaderCell>
                     <Table.HeaderCell>Resend</Table.HeaderCell>
                     <Table.HeaderCell>Duplicate</Table.HeaderCell>
-                    <Table.HeaderCell>Download</Table.HeaderCell>
+                    <Table.HeaderCell>Downloaded</Table.HeaderCell>
                     <Table.HeaderCell>Edit</Table.HeaderCell>
                     <Table.HeaderCell>Delete</Table.HeaderCell>
                   </Table.Row>
@@ -123,7 +139,11 @@ class AppraisalListPage extends Component {
                         {listAppraisal.sentDate ? moment(listAppraisal.sentDate).format('DD/MM/YYYY') : 'No'}
                       </Table.Cell>
                       <Table.Cell />
-                      <Table.Cell />
+                      <Table.Cell>
+                        <Button disabled icon onClick={() => this._duplicateAppraisal(listAppraisal.id)}>
+                          <Icon link size="large" name="copy" />
+                        </Button>
+                      </Table.Cell>
                       <Table.Cell>{listAppraisal.downloaded ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>
                         <Button
@@ -181,7 +201,8 @@ AppraisalListPage.propTypes = {
   listAppraisalList: PropTypes.array,
   removeAppraisal: PropTypes.func,
   createdAppraisal: PropTypes.object,
-  percPricing: PropTypes.number
+  percPricing: PropTypes.number,
+  duplicateAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -191,7 +212,7 @@ const mapPropsToValues = props => {
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ createAppraisal, openModal, getAppraisals, removeAppraisal }, dispatch)
+  bindActionCreators({ createAppraisal, openModal, getAppraisals, removeAppraisal, duplicateAppraisal }, dispatch)
 
 const mapStateToProps = state => ({
   isLoadingCreating: state.appraisal.create.isLoading,

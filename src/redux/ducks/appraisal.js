@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import download from '../../utils/file-download'
-import { create, getAll, get, update, downloadAppr, send, remove } from '../../services/api/appraisal'
+import { create, getAll, get, update, downloadAppr, send, remove, duplicate } from '../../services/api/appraisal'
 
 // Action Types
 
@@ -27,6 +27,9 @@ export const Types = {
   REMOVE_APPRAISAL_LOADING: 'REMOVE_APPRAISAL_LOADING',
   REMOVE_APPRAISAL_SUCCESS: 'REMOVE_APPRAISAL_SUCCESS',
   REMOVE_APPRAISAL_FAILURE: 'REMOVE_APPRAISAL_FAILURE',
+  DUPLICATE_APPRAISAL_LOADING: 'DUPLICATE_APPRAISAL_LOADING',
+  DUPLICATE_APPRAISAL_SUCCESS: 'DUPLICATE_APPRAISAL_SUCCESS',
+  DUPLICATE_APPRAISAL_FAILURE: 'DUPLICATE_APPRAISAL_FAILURE',
   CALC_COMPLETE_STEPS: 'CALC_COMPLETE_STEPS'
 }
 
@@ -84,6 +87,12 @@ const initialState = {
       confirmNotesAndAssumptions: { isConfirm: false, completedPerc: 0 }
     },
     isCalculated: false
+  },
+  duplicate: {
+    isLoading: false,
+    isDuplicated: false,
+    appraisal: {},
+    error: null
   }
 }
 
@@ -295,6 +304,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.DUPLICATE_APPRAISAL_LOADING:
+      return {
+        ...state,
+        duplicate: {
+          ...state.duplicate,
+          isLoading: action.payload,
+          isDuplicated: false,
+          error: null
+        }
+      }
+    case Types.DUPLICATE_APPRAISAL_SUCCESS:
+      return {
+        ...state,
+        duplicate: {
+          ...state.duplicate,
+          isLoading: false,
+          isDuplicated: true
+        }
+      }
+    case Types.DUPLICATE_APPRAISAL_FAILURE:
+      return {
+        ...state,
+        duplicate: {
+          ...state.duplicate,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CALC_COMPLETE_STEPS:
       return {
         ...state,
@@ -477,6 +514,26 @@ export const removeAppraisal = appraisalId => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.REMOVE_APPRAISAL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const duplicateAppraisal = appraisalId => async dispatch => {
+  dispatch({
+    type: Types.DUPLICATE_APPRAISAL_LOADING,
+    payload: true
+  })
+  try {
+    const response = await duplicate(appraisalId)
+    dispatch({
+      type: Types.DUPLICATE_APPRAISAL_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.DUPLICATE_APPRAISAL_FAILURE,
       payload: error
     })
     toast.error(error)

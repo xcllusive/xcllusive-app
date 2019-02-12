@@ -94,6 +94,33 @@ class PricingPage extends Component {
       formulaAskingPrice: numeral(this._askingPrice(this.props.values, this.props.appraisalObject)).format('$0,0.[99]')
     }
     Object.assign(this.props.values, objFormula)
+
+    if (this.props.values.reducePriceForStockValue) {
+      const objAskingPriceTrue = {
+        askingPriceValue1: numeral(
+          this._askingPrice(this.props.values, this.props.appraisalObject) -
+            this._stockValue(this.props.appraisalObject) +
+            ((this._askingPrice(this.props.values, this.props.appraisalObject) -
+              this._stockValue(this.props.appraisalObject)) *
+              this.props.values.sliderLowRange) /
+              100
+        ).format('$0,0.[99]'),
+        askingPriceValue2:
+          this._askingPrice(this.props.values, this.props.appraisalObject) -
+          this._stockValue(this.props.appraisalObject)
+      }
+      Object.assign(this.props.values, objAskingPriceTrue)
+    } else {
+      const objAskingPriceFalse = {
+        askingPriceValue1: numeral(
+          this._askingPrice(this.props.values, this.props.appraisalObject) +
+            this._percLowRange(this.props.values, this.props.appraisalObject)
+        ).format('$0,0.[99]'),
+        askingPriceValue2: numeral(this._askingPrice(this.props.values, this.props.appraisalObject)).format('$0,0.[99]')
+      }
+      Object.assign(this.props.values, objAskingPriceFalse)
+    }
+
     this.props.updateAppraisal(this.props.values)
   }
 
@@ -593,7 +620,6 @@ class PricingPage extends Component {
   render () {
     const { appraisalObject, values, handleChange, handleBlur, errors, touched } = this.props
     // const {} = this.state
-
     return (
       <Wrapper>
         <Step.Group size="large">
