@@ -74,7 +74,7 @@ class GenerateAndSendPage extends Component {
   }
 
   render () {
-    const { appraisalObject } = this.props
+    const { appraisalObject, isLoadingDownloading } = this.props
     // const {} = this.state
 
     return (
@@ -244,7 +244,7 @@ class GenerateAndSendPage extends Component {
                   //   !appraisalObject.confirmPricing ||
                   //   !appraisalObject.confirmNotesAndAssumptions
                   // }
-                  // loading={isLoadingDownloading}
+                  loading={isLoadingDownloading}
                 >
                   <Icon name="download" />
                   Download Appraisal
@@ -329,7 +329,8 @@ GenerateAndSendPage.propTypes = {
   handleItemClick: PropTypes.func,
   confirmsCompleteSteps: PropTypes.func,
   openModal: PropTypes.func,
-  downloadAppraisal: PropTypes.func
+  downloadAppraisal: PropTypes.func,
+  isLoadingDownloading: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -338,7 +339,9 @@ const mapPropsToValues = props => ({
 })
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    isLoadingDownloading: state.appraisal.download.isLoading
+  }
 }
 
 const validationSchema = Yup.object().shape({})

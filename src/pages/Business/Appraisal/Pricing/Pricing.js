@@ -105,9 +105,10 @@ class PricingPage extends Component {
               this.props.values.sliderLowRange) /
               100
         ).format('$0,0.[99]'),
-        askingPriceValue2:
+        askingPriceValue2: numeral(
           this._askingPrice(this.props.values, this.props.appraisalObject) -
-          this._stockValue(this.props.appraisalObject)
+            this._stockValue(this.props.appraisalObject)
+        ).format('$0,0.[99]')
       }
       Object.assign(this.props.values, objAskingPriceTrue)
     } else {
@@ -1275,7 +1276,7 @@ const mapPropsToValues = props => ({
   sliderNegotiationPremium: props.appraisalObject ? props.appraisalObject.sliderNegotiationPremium : 0,
   agreedValue: props.appraisalObject ? numeral(props.appraisalObject.agreedValue).format('0,0.[99]') : 0,
   sliderLowRange: -10,
-  inclStock: true,
+  inclStock: props.appraisalObject ? props.appraisalObject.inclStock : true,
   reducePriceForStockValue: true,
   confirmPricing: props.appraisalObject ? props.appraisalObject.confirmPricing : false
 })

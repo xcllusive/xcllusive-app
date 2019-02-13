@@ -32,9 +32,12 @@ export const getAll = businessId => {
 
 export const downloadAppr = object => {
   return request({
-    method: 'get',
-    url: `/appraisal/${object.id}/download-pdf`,
-    responseType: 'blob'
+    method: 'post',
+    url: `/appraisal/${object.id}/generate`,
+    responseType: 'blob',
+    data: {
+      draft: object.draft
+    }
   })
 }
 

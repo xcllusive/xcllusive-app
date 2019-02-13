@@ -461,10 +461,15 @@ export const downloadAppraisal = (appraisal, draft = false) => async dispatch =>
   })
   try {
     if (draft) {
-      const obj = {
+      const draftTrue = {
         draft
       }
-      Object.assign(appraisal, obj)
+      Object.assign(appraisal, draftTrue)
+    } else {
+      const draftFalse = {
+        draft: false
+      }
+      Object.assign(appraisal, draftFalse)
     }
     const response = await downloadAppr(appraisal)
     dispatch({
