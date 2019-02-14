@@ -1,6 +1,17 @@
-import { toast } from 'react-toastify'
+import {
+  toast
+} from 'react-toastify'
 import download from '../../utils/file-download'
-import { create, getAll, get, update, downloadAppr, send, remove, duplicate } from '../../services/api/appraisal'
+import {
+  create,
+  getAll,
+  get,
+  update,
+  downloadAppr,
+  send,
+  remove,
+  duplicate
+} from '../../services/api/appraisal'
 
 // Action Types
 
@@ -75,16 +86,46 @@ const initialState = {
   },
   getCalcCompleteSteps: {
     confirm: {
-      confirmBusinessDetail: { isConfirm: false, completedPerc: 0 },
-      confirmAbout: { isConfirm: false, completedPerc: 0 },
-      confirmCustomersSuppliers: { isConfirm: false, completedPerc: 0 },
-      confirmPremisesEnployees: { isConfirm: false, completedPerc: 0 },
-      confirmOwnershipFinalNotes: { isConfirm: false, completedPerc: 0 },
-      confirmBusinessAnalysis: { isConfirm: false, completedPerc: 0 },
-      confirmFinancialAnalysis: { isConfirm: false, completedPerc: 0 },
-      confirmComparableData: { isConfirm: false, completedPerc: 0 },
-      confirmPricing: { isConfirm: false, completedPerc: 0 },
-      confirmNotesAndAssumptions: { isConfirm: false, completedPerc: 0 }
+      confirmBusinessDetail: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmAbout: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmCustomersSuppliers: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmPremisesEnployees: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmOwnershipFinalNotes: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmBusinessAnalysis: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmFinancialAnalysis: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmComparableData: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmPricing: {
+        isConfirm: false,
+        completedPerc: 0
+      },
+      confirmNotesAndAssumptions: {
+        isConfirm: false,
+        completedPerc: 0
+      }
     },
     isCalculated: false
   },
@@ -475,7 +516,7 @@ export const downloadAppraisal = (appraisal, draft = false) => async dispatch =>
     dispatch({
       type: Types.DOWNLOAD_APPRAISAL_SUCCESS
     })
-    download(response, appraisal.fileName)
+    download(response, `BS${appraisal.Business.id}-${appraisal.Business.businessName}.pdf`)
   } catch (error) {
     dispatch({
       type: Types.DOWNLOAD_APPRAISAL_FAILURE,
