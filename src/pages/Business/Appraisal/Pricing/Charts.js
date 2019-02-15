@@ -144,9 +144,9 @@ class ChartsPage extends Component {
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
                 <XAxis dataKey="year" />
-                <YAxis tickFormatter={value => numeral(value).format('$0,0.[99]')} />
+                <YAxis tickFormatter={value => numeral(value).format('$0,0')} />
                 <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip formatter={value => numeral(value).format('$0,0.[99]')} />
+                <Tooltip formatter={value => numeral(value).format('$0,0')} />
                 <Legend />
                 <Line type="monotone" dataKey="Sales" stroke="orange" strokeWidth={2} activeDot={{ r: 8 }} />
                 <Line type="monotone" dataKey="Gross Profit" stroke="blue" strokeWidth={2} />

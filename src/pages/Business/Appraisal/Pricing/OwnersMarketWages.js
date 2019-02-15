@@ -71,7 +71,7 @@ class OwnersMarketWagesPage extends Component {
             </Grid.Column>
             <Grid.Column textAlign="center">
               {appraisalObject && appraisalObject.owner1AnnualWage
-                ? numeral(appraisalObject.owner1AnnualWage).format('$0,0.[99]')
+                ? numeral(appraisalObject.owner1AnnualWage).format('$0,0')
                 : null}
             </Grid.Column>
           </Grid.Row>
@@ -84,7 +84,7 @@ class OwnersMarketWagesPage extends Component {
             </Grid.Column>
             <Grid.Column textAlign="center">
               {appraisalObject && appraisalObject.owner2AnnualWage
-                ? numeral(appraisalObject.owner2AnnualWage).format('$0,0.[99]')
+                ? numeral(appraisalObject.owner2AnnualWage).format('$0,0')
                 : null}
             </Grid.Column>
           </Grid.Row>
@@ -97,7 +97,7 @@ class OwnersMarketWagesPage extends Component {
             </Grid.Column>
             <Grid.Column textAlign="center">
               {appraisalObject && appraisalObject.owner3AnnualWage
-                ? numeral(appraisalObject.owner3AnnualWage).format('$0,0.[99]')
+                ? numeral(appraisalObject.owner3AnnualWage).format('$0,0')
                 : null}
             </Grid.Column>
           </Grid.Row>
@@ -110,7 +110,7 @@ class OwnersMarketWagesPage extends Component {
             </Grid.Column>
             <Grid.Column textAlign="center">
               {appraisalObject && appraisalObject.owner4AnnualWage
-                ? numeral(appraisalObject.owner4AnnualWage).format('$0,0.[99]')
+                ? numeral(appraisalObject.owner4AnnualWage).format('$0,0')
                 : null}
             </Grid.Column>
           </Grid.Row>
@@ -123,7 +123,7 @@ class OwnersMarketWagesPage extends Component {
             </Grid.Column>
             <Grid.Column textAlign="center">
               {appraisalObject && appraisalObject.owner5AnnualWage
-                ? numeral(appraisalObject.owner5AnnualWage).format('$0,0.[99]')
+                ? numeral(appraisalObject.owner5AnnualWage).format('$0,0')
                 : null}
             </Grid.Column>
           </Grid.Row>
@@ -136,7 +136,7 @@ class OwnersMarketWagesPage extends Component {
             </Grid.Column>
             <Grid.Column textAlign="center">
               {appraisalObject && appraisalObject.owner6AnnualWage
-                ? numeral(appraisalObject.owner6AnnualWage).format('$0,0.[99]')
+                ? numeral(appraisalObject.owner6AnnualWage).format('$0,0')
                 : null}
             </Grid.Column>
           </Grid.Row>
@@ -149,16 +149,14 @@ class OwnersMarketWagesPage extends Component {
             </Grid.Column>
             <Grid.Column textAlign="center">
               {appraisalObject && appraisalObject.owner7AnnualWage
-                ? numeral(appraisalObject.owner7AnnualWage).format('$0,0.[99]')
+                ? numeral(appraisalObject.owner7AnnualWage).format('$0,0')
                 : null}
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={3}>
             <Grid.Column textAlign="center" />
             <Grid.Column textAlign="center">Total Wages</Grid.Column>
-            <Grid.Column textAlign="center">
-              {numeral(this._totalWages(appraisalObject)).format('$0,0.[99]')}
-            </Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this._totalWages(appraisalObject)).format('$0,0')}</Grid.Column>
           </Grid.Row>
         </Grid>
       </Segment>

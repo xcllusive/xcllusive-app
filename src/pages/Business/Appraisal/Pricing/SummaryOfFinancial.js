@@ -26,43 +26,43 @@ class SummaryOfFinancialPage extends Component {
             <Grid.Column textAlign="center">
               <b>EBITDA Last Year</b>
             </Grid.Column>
-            <Grid.Column textAlign="center">{numeral(this.props._ebitdaLastYear).format('$0,0.[99]')}</Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this.props._ebitdaLastYear).format('$0,0')}</Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="center">
               <b>EBITDA Avg</b>
             </Grid.Column>
-            <Grid.Column textAlign="center">{numeral(this.props._ebitdaAvg).format('$0,0.[99]')}</Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this.props._ebitdaAvg).format('$0,0')}</Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="center">
               <b>PEBITDA Last Year</b>
             </Grid.Column>
-            <Grid.Column textAlign="center">{numeral(this.props._pebitdaLastYear).format('$0,0.[99]')}</Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this.props._pebitdaLastYear).format('$0,0')}</Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="center">
               <b>PEBITDA Avg</b>
             </Grid.Column>
-            <Grid.Column textAlign="center">{numeral(this.props._pebitdaAvg).format('$0,0.[99]')}</Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this.props._pebitdaAvg).format('$0,0')}</Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="center">
               <b>Stock Value</b>
             </Grid.Column>
-            <Grid.Column textAlign="center">{numeral(this.props._stockValue).format('$0,0.[99]')}</Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this.props._stockValue).format('$0,0')}</Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="center">
               <b>Necessary Stock Value</b>
             </Grid.Column>
-            <Grid.Column textAlign="center">{numeral(this.props._necessaryStockValue).format('$0,0.[99]')}</Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this.props._necessaryStockValue).format('$0,0')}</Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="center">
               <b>Assets Value</b>
             </Grid.Column>
-            <Grid.Column textAlign="center">{numeral(this.props._assetsValue).format('$0,0.[99]')}</Grid.Column>
+            <Grid.Column textAlign="center">{numeral(this.props._assetsValue).format('$0,0')}</Grid.Column>
           </Grid.Row>
         </Grid>
       </Segment>

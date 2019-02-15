@@ -80,18 +80,16 @@ class PricingPage extends Component {
     const objFormula = {
       formulaValuePricingMethod: numeral(
         this._pricingMethod(this.props.values.pricingMethod, this.props.appraisalObject)
-      ).format('$0,0.[99]'),
+      ).format('$0,0'),
       formulaPriceBasedOnComparable: numeral(
         this._priceBasedOnComparable(this.props.values.pricingMethod, this.props.appraisalObject)
-      ).format('$0,0.[99]'),
-      formulaRiskPremium: numeral(this._riskPremium(this.props.values, this.props.appraisalObject)).format('$0,0.[99]'),
-      formulaMarketPremium: numeral(this._marketPremium(this.props.values, this.props.appraisalObject)).format(
-        '$0,0.[99]'
-      ),
+      ).format('$0,0'),
+      formulaRiskPremium: numeral(this._riskPremium(this.props.values, this.props.appraisalObject)).format('$0,0'),
+      formulaMarketPremium: numeral(this._marketPremium(this.props.values, this.props.appraisalObject)).format('$0,0'),
       formulaNegotiationPremium: numeral(
         this._negotiationPremium(this.props.values, this.props.appraisalObject)
-      ).format('$0,0.[99]'),
-      formulaAskingPrice: numeral(this._askingPrice(this.props.values, this.props.appraisalObject)).format('$0,0.[99]')
+      ).format('$0,0'),
+      formulaAskingPrice: numeral(this._askingPrice(this.props.values, this.props.appraisalObject)).format('$0,0')
     }
     Object.assign(this.props.values, objFormula)
 
@@ -104,11 +102,11 @@ class PricingPage extends Component {
               this._stockValue(this.props.appraisalObject)) *
               this.props.values.sliderLowRange) /
               100
-        ).format('$0,0.[99]'),
+        ).format('$0,0'),
         askingPriceValue2: numeral(
           this._askingPrice(this.props.values, this.props.appraisalObject) -
             this._stockValue(this.props.appraisalObject)
-        ).format('$0,0.[99]')
+        ).format('$0,0')
       }
       Object.assign(this.props.values, objAskingPriceTrue)
     } else {
@@ -116,8 +114,8 @@ class PricingPage extends Component {
         askingPriceValue1: numeral(
           this._askingPrice(this.props.values, this.props.appraisalObject) +
             this._percLowRange(this.props.values, this.props.appraisalObject)
-        ).format('$0,0.[99]'),
-        askingPriceValue2: numeral(this._askingPrice(this.props.values, this.props.appraisalObject)).format('$0,0.[99]')
+        ).format('$0,0'),
+        askingPriceValue2: numeral(this._askingPrice(this.props.values, this.props.appraisalObject)).format('$0,0')
       }
       Object.assign(this.props.values, objAskingPriceFalse)
     }
@@ -739,7 +737,7 @@ class PricingPage extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   {appraisalObject
-                    ? numeral(this._ebitdaAvg(appraisalObject) * appraisalObject.sumMEbitdaAvg).format('$0,0.[99]')
+                    ? numeral(this._ebitdaAvg(appraisalObject) * appraisalObject.sumMEbitdaAvg).format('$0,0')
                     : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -785,7 +783,7 @@ class PricingPage extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   {appraisalObject
-                    ? numeral(this._pebitdaAvg(appraisalObject) * appraisalObject.sumMPebitdaAvg).format('$0,0.[99]')
+                    ? numeral(this._pebitdaAvg(appraisalObject) * appraisalObject.sumMPebitdaAvg).format('$0,0')
                     : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -809,7 +807,7 @@ class PricingPage extends Component {
                   {appraisalObject
                     ? numeral(
                       this._ebitdaLastYear(appraisalObject) * appraisalObject.sumMEbitdaLastYearWithStock
-                    ).format('$0,0.[99]')
+                    ).format('$0,0')
                     : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -857,7 +855,7 @@ class PricingPage extends Component {
                   {appraisalObject
                     ? numeral(
                       this._pebitdaLastYear(appraisalObject) * appraisalObject.sumMPebitdaLastYearWithStock
-                    ).format('$0,0.[99]')
+                    ).format('$0,0')
                     : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -903,7 +901,7 @@ class PricingPage extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   {appraisalObject
-                    ? numeral(this._turnOver(appraisalObject) * appraisalObject.sumMTO).format('$0,0.[99]')
+                    ? numeral(this._turnOver(appraisalObject) * appraisalObject.sumMTO).format('$0,0')
                     : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -922,7 +920,7 @@ class PricingPage extends Component {
                 </Grid.Column>
                 <Grid.Column textAlign="center" />
                 <Grid.Column>
-                  {appraisalObject ? numeral(this._assetsValue(appraisalObject)).format('$0,0.[99]') : 0}
+                  {appraisalObject ? numeral(this._assetsValue(appraisalObject)).format('$0,0') : 0}
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row columns={3}>
@@ -945,7 +943,7 @@ class PricingPage extends Component {
                       <Form.Field width={5}>
                         <Form.Input
                           name="agreedValue"
-                          value={numeral(values.agreedValue).format('$0,0.[99]')}
+                          value={numeral(values.agreedValue).format('$0,0')}
                           autoComplete="agreedValue"
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -990,7 +988,7 @@ class PricingPage extends Component {
                     <Grid.Column textAlign="left">
                       {values.pricingMethod === 10 || values.pricingMethod === 11
                         ? ''
-                        : numeral(this._pricingMethod(values.pricingMethod, appraisalObject)).format('$0,0.[99]')}
+                        : numeral(this._pricingMethod(values.pricingMethod, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>{values.pricingMethod === 10 || values.pricingMethod === 11 ? '' : 'x'}</Grid.Column>
                     <Grid.Column textAlign="left">
@@ -1000,23 +998,23 @@ class PricingPage extends Component {
                     </Grid.Column>
                     <Grid.Column>{values.pricingMethod === 10 || values.pricingMethod === 11 ? '' : '='}</Grid.Column>
                     <Grid.Column textAlign="left">
-                      {numeral(this._priceBasedOnComparable(values.pricingMethod, appraisalObject)).format('$0,0.[99]')}
+                      {numeral(this._priceBasedOnComparable(values.pricingMethod, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>+</Grid.Column>
                     <Grid.Column textAlign="left">
-                      {numeral(this._riskPremium(values, appraisalObject)).format('$0,0.[99]')}
+                      {numeral(this._riskPremium(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>+</Grid.Column>
                     <Grid.Column textAlign="left">
-                      {numeral(this._marketPremium(values, appraisalObject)).format('$0,0.[99]')}
+                      {numeral(this._marketPremium(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>+</Grid.Column>
                     <Grid.Column textAlign="left">
-                      {numeral(this._negotiationPremium(values, appraisalObject)).format('$0,0.[99]')}
+                      {numeral(this._negotiationPremium(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>=</Grid.Column>
                     <Grid.Column textAlign="left">
-                      {numeral(this._askingPrice(values, appraisalObject)).format('$0,0.[99]')}
+                      {numeral(this._askingPrice(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column textAlign="left">
                       {values.pricingMethod === 10 || values.pricingMethod === 11
@@ -1107,10 +1105,10 @@ class PricingPage extends Component {
                                 ((this._askingPrice(values, appraisalObject) - this._stockValue(appraisalObject)) *
                                   values.sliderLowRange) /
                                   100
-                          ).format('$0,0.[99]')
+                          ).format('$0,0')
                           : numeral(
                             this._askingPrice(values, appraisalObject) + this._percLowRange(values, appraisalObject)
-                          ).format('$0,0.[99]')}
+                          ).format('$0,0')}
                       </h3>
                     </Form.Field>
                     <Form.Field>
@@ -1121,15 +1119,15 @@ class PricingPage extends Component {
                         {values.reducePriceForStockValue
                           ? numeral(
                             this._askingPrice(values, appraisalObject) - this._stockValue(appraisalObject)
-                          ).format('$0,0.[99]')
-                          : numeral(this._askingPrice(values, appraisalObject)).format('$0,0.[99]')}
+                          ).format('$0,0')
+                          : numeral(this._askingPrice(values, appraisalObject)).format('$0,0')}
                       </h3>
                     </Form.Field>
                     <Form.Field>
                       <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
                     </Form.Field>
                     <Form.Field>
-                      <h3>{numeral(this._stockValue(appraisalObject)).format('$0,0.[99]')}</h3>
+                      <h3>{numeral(this._stockValue(appraisalObject)).format('$0,0')}</h3>
                     </Form.Field>
                   </Form.Group>
                 </Form>
