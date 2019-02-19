@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
-import { getBusinessRegister } from '../../redux/ducks/businessRegister'
+import { getBuyerRegister } from '../../redux/ducks/buyerRegister'
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 import { closeModal } from '../../redux/ducks/modal'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
@@ -30,7 +30,7 @@ class ModalNewBuyer extends Component {
   }
 
   componentDidMount () {
-    this.props.getBusinessRegister(1, 1000)
+    this.props.getBuyerRegister(2, 1000)
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -258,7 +258,7 @@ ModalNewBuyer.propTypes = {
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   sourceOptions: PropTypes.array,
-  getBusinessRegister: PropTypes.func,
+  getBuyerRegister: PropTypes.func,
   dropDownLoading: PropTypes.bool,
   closeModal: PropTypes.func,
   title: PropTypes.string
@@ -302,11 +302,11 @@ const handleSubmit = (values, { props, setSubmitting }) => props.onConfirm(value
 
 const mapStateToProps = state => ({
   isLoading: state.buyer.update.isLoading,
-  sourceOptions: state.businessRegister.get.source.array,
-  dropDownLoading: state.businessRegister.get.source.isLoading
+  sourceOptions: state.buyerRegister.get.source.array,
+  dropDownLoading: state.buyerRegister.get.source.isLoading
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBusinessRegister, closeModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBuyerRegister, closeModal }, dispatch)
 
 export default connect(
   mapStateToProps,
