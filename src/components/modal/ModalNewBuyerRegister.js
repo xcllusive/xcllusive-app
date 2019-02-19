@@ -7,17 +7,13 @@ import { connect } from 'react-redux'
 import * as Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
-import {
-  createBuyerRegister,
-  updateBuyerRegister,
-  getBuyerRegister
-} from '../../redux/ducks/buyerRegister'
+import { createBuyerRegister, updateBuyerRegister, getBuyerRegister } from '../../redux/ducks/buyerRegister'
 
 class ModalNewBuyerRegister extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      typesBuyerRegisters: [{ key: 1, text: 'Buyer Type', value: 1 }]
+      typesBuyerRegisters: [{ key: 1, text: 'Buyer Type', value: 1 }, { key: 2, text: 'Buyer Source', value: 2 }]
     }
   }
 
@@ -25,6 +21,7 @@ class ModalNewBuyerRegister extends Component {
     if (nextProps.isCreated || nextProps.isUpdated) {
       nextProps.getBuyerRegister(nextProps.values.buyerRegister)
     }
+    return null
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -48,9 +45,7 @@ class ModalNewBuyerRegister extends Component {
 
     return (
       <Modal open dimmer="blurring">
-        <Modal.Header align="center">
-          {this.props.title ? this.props.title : ''}
-        </Modal.Header>
+        <Modal.Header align="center">{this.props.title ? this.props.title : ''}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group>
@@ -65,14 +60,8 @@ class ModalNewBuyerRegister extends Component {
                   onChange={this._handleSelectChange}
                   disabled={this.props.buyerRegister !== undefined}
                 />
-                {errors.buyerRegister &&
-                  touched.buyerRegister && (
-                  <Label
-                    basic
-                    pointing
-                    color="red"
-                    content={errors.buyerRegister}
-                  />
+                {errors.buyerRegister && touched.buyerRegister && (
+                  <Label basic pointing color="red" content={errors.buyerRegister} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -87,10 +76,7 @@ class ModalNewBuyerRegister extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.label &&
-                  touched.label && (
-                  <Label basic color="red" pointing content={errors.label} />
-                )}
+                {errors.label && touched.label && <Label basic color="red" pointing content={errors.label} />}
               </Form.Field>
             </Form.Group>
           </Form>

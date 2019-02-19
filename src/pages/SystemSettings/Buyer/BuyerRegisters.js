@@ -13,6 +13,7 @@ import Wrapper from '../../../components/content/Wrapper'
 class BuyerRegisters extends Component {
   componentDidMount () {
     this.props.getBuyerRegister(1)
+    this.props.getBuyerRegister(2)
   }
 
   _toggleModalConfirm = (id, buyerRegister) => {
@@ -55,11 +56,11 @@ class BuyerRegisters extends Component {
   }
 
   render () {
-    const { isLoadingBuyerRegister } = this.props
+    const { isLoadingBuyerRegister, isLoadingSource } = this.props
     return (
       <Wrapper>
-        <Dimmer.Dimmable dimmed={isLoadingBuyerRegister} style={{ height: '80vh' }}>
-          <Dimmer inverted active={isLoadingBuyerRegister}>
+        <Dimmer.Dimmable dimmed={isLoadingBuyerRegister || isLoadingSource} style={{ height: '80vh' }}>
+          <Dimmer inverted active={isLoadingBuyerRegister || isLoadingSource}>
             <Loader>Loading</Loader>
           </Dimmer>
           <Grid padded="horizontally">
@@ -113,6 +114,47 @@ class BuyerRegisters extends Component {
                   lastItem={null}
                 />
               </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  Buyer Source
+                </Header>
+                <Table compact celled inverted selectable color="blue" size="small">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>ID</Table.HeaderCell>
+                      <Table.HeaderCell>Label</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.sourceOptions.array.map(sourceOptions => {
+                      return (
+                        <Table.Row active key={sourceOptions.id}>
+                          <Table.Cell>{sourceOptions.id}</Table.Cell>
+                          <Table.Cell>{sourceOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            <Icon link name="edit" onClick={() => this._editBuyer(sourceOptions, 2)} />
+                            <Icon
+                              link
+                              name="trash"
+                              color="red"
+                              onClick={() => this._toggleModalConfirm(sourceOptions.id, 2)}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 2)}
+                  defaultActivePage={this.props.sourceOptions.activePage}
+                  totalPages={this.props.sourceOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         </Dimmer.Dimmable>
@@ -126,15 +168,19 @@ BuyerRegisters.propTypes = {
   typeOptions: PropTypes.object,
   openModal: PropTypes.func,
   getBuyerRegister: PropTypes.func,
-  isLoadingBuyerRegister: PropTypes.bool
+  isLoadingBuyerRegister: PropTypes.bool,
+  sourceOptions: PropTypes.object,
+  isLoadingSource: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
   typeOptions: state.buyerRegister.get.type,
+  sourceOptions: state.buyerRegister.get.source,
   createBuyerRegister: state.buyerRegister.create.isCreated,
   updateBuyerRegister: state.buyerRegister.update.isUpdated,
   deleteBuyerRegister: state.buyerRegister.delete.isDeleted,
-  isLoadingBuyerRegister: state.buyerRegister.get.type.isLoading
+  isLoadingBuyerRegister: state.buyerRegister.get.type.isLoading,
+  isLoadingSource: state.buyerRegister.get.source.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
