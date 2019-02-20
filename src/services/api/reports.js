@@ -1,9 +1,9 @@
 import request from '.'
 
-export const getMarketingReport = () => {
+export const getMarketingReport = (dateFrom, dateTo) => {
   return request({
     method: 'get',
-    url: 'reports/marketing-report'
-    // params: { businessId }
+    url: 'reports/marketing-report',
+    params: { dateFrom, dateTo }
   })
 }

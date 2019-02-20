@@ -14,7 +14,7 @@ export const Types = {
 const initialState = {
   getMarketingReport: {
     isLoading: false,
-    object: null,
+    array: [],
     error: null
   }
 }
@@ -27,7 +27,7 @@ export default function reducer (state = initialState, action) {
         getLastWeeklyReport: {
           ...state.getMarketingReport,
           isLoading: action.payload,
-          object: null,
+          array: null,
           error: null
         }
       }
@@ -37,7 +37,7 @@ export default function reducer (state = initialState, action) {
         getMarketingReport: {
           ...state.getMarketingReport,
           isLoading: false,
-          object: action.payload,
+          array: action.payload,
           error: null
         }
       }
@@ -57,13 +57,13 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getMarketingReport = businessId => async dispatch => {
+export const getMarketingReport = (dateFrom, dateTo) => async dispatch => {
   dispatch({
     type: Types.GET_MARKETING_REPORT_LOADING,
     payload: true
   })
   try {
-    const getMarketingReport = await getMarketingReportAPI(businessId)
+    const getMarketingReport = await getMarketingReportAPI(dateFrom, dateTo)
     dispatch({
       type: Types.GET_MARKETING_REPORT_SUCCESS,
       payload: getMarketingReport.data

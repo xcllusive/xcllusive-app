@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Table, Header, Segment } from 'semantic-ui-react'
+import { Grid, Form, Table, Header, Segment, Button } from 'semantic-ui-react'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import { getMarketingReport } from '../../../redux/ducks/reports'
 import Wrapper from '../../../components/content/Wrapper'
@@ -66,7 +66,6 @@ class MarketingReports extends Component {
       this._showMsg('bigger')
     } else {
       this.props.setFieldValue('dateTo', date)
-      this.props.getMarketingReport()
     }
   }
 
@@ -80,9 +79,14 @@ class MarketingReports extends Component {
     })
   }
 
+  _confirmReports = (dateFrom, dateTo) => {
+    this.props.getMarketingReport(moment(dateFrom).format('YYYY/MM/DD'), moment(dateTo).format('YYYY/MM/DD'))
+  }
+
   render () {
-    const { values } = this.props
+    const { values, leadsPerAnalyst } = this.props
     // const { dataRegion } = this.state
+    console.log(leadsPerAnalyst)
     return (
       <Wrapper>
         <Form>
@@ -93,8 +97,8 @@ class MarketingReports extends Component {
                   <label
                     style={{
                       marginLeft: '15px',
-                      marginTop: '10px',
-                      marginRight: '20px',
+                      marginTop: '5px',
+                      marginRight: '15px',
                       fontSize: '.92857143em',
                       color: 'rgba(0,0,0,.87)',
                       fontWeight: '700'
@@ -112,8 +116,8 @@ class MarketingReports extends Component {
                   <label
                     style={{
                       marginLeft: '15px',
-                      marginTop: '10px',
-                      marginRight: '20px',
+                      marginTop: '5px',
+                      marginRight: '15px',
                       fontSize: '.92857143em',
                       color: 'rgba(0,0,0,.87)',
                       fontWeight: '700'
@@ -128,38 +132,60 @@ class MarketingReports extends Component {
                       popperPlacement="top-end"
                     />
                   </Form.Field>
+                  <Form.Field>
+                    <Button
+                      positive
+                      icon="checkmark"
+                      labelPosition="right"
+                      content="Confirm"
+                      onClick={() => this._confirmReports(values.dateFrom, values.dateTo)}
+                    />
+                  </Form.Field>
                 </Form.Group>
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Form>
-        <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
-          <Fragment>
-            <Header style={{ marginLeft: '10px' }} color="red">
-              Define a name
-            </Header>
-            <Grid padded="horizontally">
-              <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
-                <Grid.Column
-                  style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
-                >
-                  <Table celled striped selectable compact size="small">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Office</Table.HeaderCell>
-                        <Table.HeaderCell>Listing Agent</Table.HeaderCell>
-                        <Table.HeaderCell>Total</Table.HeaderCell>
-                        <Table.HeaderCell>Signed Up</Table.HeaderCell>
-                        <Table.HeaderCell>Convertion Rate</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body />
-                  </Table>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Fragment>
-        </Segment>
+        {leadsPerAnalyst && leadsPerAnalyst.length > 0 ? (
+          <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
+            <Fragment>
+              <Header style={{ marginLeft: '10px' }} color="red">
+                Leads Per Analyst
+              </Header>
+              <Grid padded="horizontally">
+                <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
+                  <Grid.Column
+                    style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
+                  >
+                    <Table celled striped selectable compact size="small">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell>Office</Table.HeaderCell>
+                          <Table.HeaderCell>Listing Agent</Table.HeaderCell>
+                          <Table.HeaderCell>Total</Table.HeaderCell>
+                          <Table.HeaderCell>Signed Up</Table.HeaderCell>
+                          <Table.HeaderCell>Convertion Rate</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {leadsPerAnalyst.map(leadsPerAnalyst => {
+                          return (
+                            <Table.Row key={leadsPerAnalyst.listingAgent_id}>
+                              <Table.Cell>{leadsPerAnalyst['listingAgent.dataRegion']}</Table.Cell>
+                              <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                leadsPerAnalyst['listingAgent.lastName']
+                              }`}</Table.Cell>
+                            </Table.Row>
+                          )
+                        })}
+                      </Table.Body>
+                    </Table>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Fragment>
+          </Segment>
+        ) : null}
       </Wrapper>
     )
   }
@@ -169,7 +195,8 @@ MarketingReports.propTypes = {
   values: PropTypes.object,
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
-  getMarketingReport: PropTypes.func
+  getMarketingReport: PropTypes.func,
+  leadsPerAnalyst: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -179,7 +206,9 @@ const mapPropsToValues = props => {
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  leadsPerAnalyst: state.reports.getMarketingReport.array
+})
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
