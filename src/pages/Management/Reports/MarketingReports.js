@@ -10,21 +10,12 @@ import Wrapper from '../../../components/content/Wrapper'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
+import numeral from 'numeral'
 
 class MarketingReports extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      dataRegion: [
-        { key: 1, text: 'Adelaide Office', value: 'Adelaide Office' },
-        { key: 2, text: 'Camberra Office', value: 'Camberra Office' },
-        { key: 3, text: 'Cowra Office', value: 'Cowra Office' },
-        { key: 4, text: 'Gosford Office', value: 'Gosford Office' },
-        { key: 5, text: 'Melbourne Office', value: 'Melbourne Office' },
-        { key: 6, text: 'Sydney Office', value: 'Sydney Office' },
-        { key: 7, text: 'Queensland Office', value: 'Queensland Office' }
-      ]
-    }
+    this.state = {}
   }
   async componentDidMount () {
     // // this.props.clearWeeklyReports()
@@ -84,55 +75,52 @@ class MarketingReports extends Component {
   }
 
   render () {
-    const { values, leadsPerAnalyst } = this.props
-    // const { dataRegion } = this.state
-    console.log(leadsPerAnalyst)
+    const { values, leadsPerAnalyst, isLoadingLeadsPerAnalyst } = this.props
+    console.log(isLoadingLeadsPerAnalyst)
     return (
       <Wrapper>
         <Form>
           <Grid>
-            <Grid.Row style={{ paddingBottom: '0px' }} columns={2}>
+            <Grid.Row>
               <Grid.Column>
-                <Form.Group>
-                  <label
-                    style={{
-                      marginLeft: '15px',
-                      marginTop: '5px',
-                      marginRight: '15px',
-                      fontSize: '.92857143em',
-                      color: 'rgba(0,0,0,.87)',
-                      fontWeight: '700'
-                    }}
-                  >
-                    Date From:
-                  </label>
+                <Form.Group style={{ marginLeft: '20px' }}>
                   <Form.Field>
+                    <label
+                      style={{
+                        marginTop: '5px',
+                        marginRight: '15px',
+                        fontSize: '.92857143em',
+                        color: 'rgba(0,0,0,.87)',
+                        fontWeight: '700'
+                      }}
+                    >
+                      Date From:
+                    </label>
                     <DatePicker
                       selected={values.dateFrom}
                       onChange={this._handleDateFromChange}
                       popperPlacement="top-end"
                     />
                   </Form.Field>
-                  <label
-                    style={{
-                      marginLeft: '15px',
-                      marginTop: '5px',
-                      marginRight: '15px',
-                      fontSize: '.92857143em',
-                      color: 'rgba(0,0,0,.87)',
-                      fontWeight: '700'
-                    }}
-                  >
-                    Date To:
-                  </label>
                   <Form.Field>
+                    <label
+                      style={{
+                        marginTop: '5px',
+                        marginRight: '15px',
+                        fontSize: '.92857143em',
+                        color: 'rgba(0,0,0,.87)',
+                        fontWeight: '700'
+                      }}
+                    >
+                      Date To:
+                    </label>
                     <DatePicker
                       selected={values.dateTo}
                       onChange={this._handleDateToChange}
                       popperPlacement="top-end"
                     />
                   </Form.Field>
-                  <Form.Field>
+                  <Form.Field style={{ marginTop: '30px' }}>
                     <Button
                       positive
                       icon="checkmark"
@@ -160,11 +148,11 @@ class MarketingReports extends Component {
                     <Table celled striped selectable compact size="small">
                       <Table.Header>
                         <Table.Row>
-                          <Table.HeaderCell>Office</Table.HeaderCell>
-                          <Table.HeaderCell>Listing Agent</Table.HeaderCell>
-                          <Table.HeaderCell>Total</Table.HeaderCell>
-                          <Table.HeaderCell>Signed Up</Table.HeaderCell>
-                          <Table.HeaderCell>Convertion Rate</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Office</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Listing Agent</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Total</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Signed Up</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Convertion Rate</Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
@@ -175,6 +163,15 @@ class MarketingReports extends Component {
                               <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
                                 leadsPerAnalyst['listingAgent.lastName']
                               }`}</Table.Cell>
+                              <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
+                              <Table.Cell style={{ textAlign: 'right' }}>
+                                {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
+                              </Table.Cell>
+                              <Table.Cell style={{ textAlign: 'right' }}>
+                                {leadsPerAnalyst.countImStage > 0
+                                  ? numeral((leadsPerAnalyst.count / leadsPerAnalyst.countImStage) * 100).format('0,0')
+                                  : 0}
+                              </Table.Cell>
                             </Table.Row>
                           )
                         })}
@@ -196,7 +193,8 @@ MarketingReports.propTypes = {
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
   getMarketingReport: PropTypes.func,
-  leadsPerAnalyst: PropTypes.array
+  leadsPerAnalyst: PropTypes.array,
+  isLoadingLeadsPerAnalyst: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -207,7 +205,8 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  leadsPerAnalyst: state.reports.getMarketingReport.array
+  leadsPerAnalyst: state.reports.getMarketingReport.array,
+  isLoadingLeadsPerAnalyst: state.reports.getMarketingReport.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
