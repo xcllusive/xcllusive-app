@@ -14,7 +14,9 @@ export const Types = {
 const initialState = {
   getMarketingReport: {
     isLoading: false,
-    array: [],
+    leadsPerAnalystArray: [],
+    arrayTotalPerSource: [],
+    totalGeralPerSource: null,
     error: null
   }
 }
@@ -27,7 +29,9 @@ export default function reducer (state = initialState, action) {
         getLastWeeklyReport: {
           ...state.getMarketingReport,
           isLoading: action.payload,
-          array: null,
+          leadsPerAnalystArray: null,
+          arrayTotalPerSource: null,
+          totalGeralPerSource: null,
           error: null
         }
       }
@@ -37,7 +41,9 @@ export default function reducer (state = initialState, action) {
         getMarketingReport: {
           ...state.getMarketingReport,
           isLoading: false,
-          array: action.payload,
+          leadsPerAnalystArray: action.payload.arrayFinal,
+          arrayTotalPerSource: action.payload.arrayTotalPerSource,
+          totalGeralPerSource: action.payload.totalGeralPerSource,
           error: null
         }
       }

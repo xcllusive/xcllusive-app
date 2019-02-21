@@ -75,8 +75,7 @@ class MarketingReports extends Component {
   }
 
   render () {
-    const { values, leadsPerAnalyst, isLoadingLeadsPerAnalyst } = this.props
-    console.log(isLoadingLeadsPerAnalyst)
+    const { values, leadsPerAnalystArray, arrayTotalPerSource, totalGeralPerSource } = this.props
     return (
       <Wrapper>
         <Form>
@@ -134,7 +133,7 @@ class MarketingReports extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        {leadsPerAnalyst && leadsPerAnalyst.length > 0 ? (
+        {leadsPerAnalystArray && leadsPerAnalystArray.length > 0 ? (
           <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
             <Fragment>
               <Header style={{ marginLeft: '10px' }} color="red">
@@ -149,14 +148,14 @@ class MarketingReports extends Component {
                       <Table.Header>
                         <Table.Row>
                           <Table.HeaderCell style={{ textAlign: 'center' }}>Office</Table.HeaderCell>
-                          <Table.HeaderCell style={{ textAlign: 'center' }}>Listing Agent</Table.HeaderCell>
-                          <Table.HeaderCell style={{ textAlign: 'center' }}>Total</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Analyst</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Total Leads</Table.HeaderCell>
                           <Table.HeaderCell style={{ textAlign: 'center' }}>Signed Up</Table.HeaderCell>
                           <Table.HeaderCell style={{ textAlign: 'center' }}>Convertion Rate</Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
-                        {leadsPerAnalyst.map(leadsPerAnalyst => {
+                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
                           return (
                             <Table.Row key={leadsPerAnalyst.listingAgent_id}>
                               <Table.Cell>{leadsPerAnalyst['listingAgent.dataRegion']}</Table.Cell>
@@ -183,6 +182,51 @@ class MarketingReports extends Component {
             </Fragment>
           </Segment>
         ) : null}
+        {arrayTotalPerSource && arrayTotalPerSource.length > 0 ? (
+          <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
+            <Fragment>
+              <Header style={{ marginLeft: '10px' }} color="red">
+                Total Per Source
+              </Header>
+              <Grid padded="horizontally">
+                <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
+                  <Grid.Column
+                    style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
+                  >
+                    <Table celled striped selectable compact size="small">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Source</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Total</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {arrayTotalPerSource.map(totalPerSource => {
+                          return (
+                            <Table.Row key={totalPerSource.sourceId}>
+                              <Table.Cell>{totalPerSource['source.label']}</Table.Cell>
+                              <Table.Cell style={{ textAlign: 'right' }}>{totalPerSource.count}</Table.Cell>
+                            </Table.Row>
+                          )
+                        })}
+                      </Table.Body>
+                      <Table.Footer fullWidth>
+                        <Table.Row>
+                          <Table.HeaderCell>
+                            <b>TOTAL:</b>
+                          </Table.HeaderCell>
+                          <Table.HeaderCell textAlign="right">
+                            <b>{totalGeralPerSource}</b>
+                          </Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Footer>
+                    </Table>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Fragment>
+          </Segment>
+        ) : null}
       </Wrapper>
     )
   }
@@ -193,8 +237,9 @@ MarketingReports.propTypes = {
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
   getMarketingReport: PropTypes.func,
-  leadsPerAnalyst: PropTypes.array,
-  isLoadingLeadsPerAnalyst: PropTypes.bool
+  leadsPerAnalystArray: PropTypes.array,
+  arrayTotalPerSource: PropTypes.array,
+  totalGeralPerSource: PropTypes.number
 }
 
 const mapPropsToValues = props => {
@@ -205,8 +250,9 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  leadsPerAnalyst: state.reports.getMarketingReport.array,
-  isLoadingLeadsPerAnalyst: state.reports.getMarketingReport.isLoading
+  leadsPerAnalystArray: state.reports.getMarketingReport.leadsPerAnalystArray,
+  arrayTotalPerSource: state.reports.getMarketingReport.arrayTotalPerSource,
+  totalGeralPerSource: state.reports.getMarketingReport.totalGeralPerSource
 })
 
 const mapDispatchToProps = dispatch =>
