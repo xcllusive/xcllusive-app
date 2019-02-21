@@ -16,6 +16,7 @@ const initialState = {
     isLoading: false,
     leadsPerAnalystArray: [],
     arrayTotalPerSource: [],
+    arrayLeadsPerSource: [],
     totalGeralPerSource: null,
     error: null
   }
@@ -31,6 +32,7 @@ export default function reducer (state = initialState, action) {
           isLoading: action.payload,
           leadsPerAnalystArray: null,
           arrayTotalPerSource: null,
+          arrayLeadsPerSource: null,
           totalGeralPerSource: null,
           error: null
         }
@@ -43,6 +45,7 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           leadsPerAnalystArray: action.payload.arrayFinal,
           arrayTotalPerSource: action.payload.arrayTotalPerSource,
+          arrayLeadsPerSource: action.payload.arrayLeadsPerSource,
           totalGeralPerSource: action.payload.totalGeralPerSource,
           error: null
         }

@@ -75,7 +75,7 @@ class MarketingReports extends Component {
   }
 
   render () {
-    const { values, leadsPerAnalystArray, arrayTotalPerSource, totalGeralPerSource } = this.props
+    const { values, leadsPerAnalystArray, arrayTotalPerSource, totalGeralPerSource, arrayLeadsPerSource } = this.props
     return (
       <Wrapper>
         <Form>
@@ -147,30 +147,74 @@ class MarketingReports extends Component {
                     <Table celled striped selectable compact size="small">
                       <Table.Header>
                         <Table.Row>
-                          <Table.HeaderCell style={{ textAlign: 'center' }}>Office</Table.HeaderCell>
-                          <Table.HeaderCell style={{ textAlign: 'center' }}>Analyst</Table.HeaderCell>
-                          <Table.HeaderCell style={{ textAlign: 'center' }}>Total Leads</Table.HeaderCell>
-                          <Table.HeaderCell style={{ textAlign: 'center' }}>Signed Up</Table.HeaderCell>
-                          <Table.HeaderCell style={{ textAlign: 'center' }}>Convertion Rate</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'left' }}>Sydney Office</Table.HeaderCell>
+                          <Table.HeaderCell />
+                          <Table.HeaderCell />
+                          <Table.HeaderCell />
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
                         {leadsPerAnalystArray.map(leadsPerAnalyst => {
+                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Sydney Office') {
+                            return (
+                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
+                                {/* <Table.Cell>{leadsPerAnalyst['listingAgent.dataRegion']}</Table.Cell> */}
+                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                  leadsPerAnalyst['listingAgent.lastName']
+                                }`}</Table.Cell>
+                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
+                                <Table.Cell style={{ textAlign: 'right' }}>
+                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ textAlign: 'right' }}>
+                                  {leadsPerAnalyst.countImStage > 0
+                                    ? numeral((leadsPerAnalyst.count / leadsPerAnalyst.countImStage) * 100).format(
+                                      '0,0'
+                                    )
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          }
+                        })}
+                      </Table.Body>
+                    </Table>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Fragment>
+          </Segment>
+        ) : null}
+        {arrayLeadsPerSource && arrayLeadsPerSource.length > 0 ? (
+          <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
+            <Fragment>
+              <Header style={{ marginLeft: '10px' }} color="red">
+                Leads Per Source
+              </Header>
+              <Grid padded="horizontally">
+                <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
+                  <Grid.Column
+                    style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
+                  >
+                    <Table celled striped selectable compact size="small">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Office</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Analyst</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>Source</Table.HeaderCell>
+                          <Table.HeaderCell style={{ textAlign: 'center' }}>N of Source</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {arrayLeadsPerSource.map((LeadsPerSource, index) => {
                           return (
-                            <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                              <Table.Cell>{leadsPerAnalyst['listingAgent.dataRegion']}</Table.Cell>
-                              <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                leadsPerAnalyst['listingAgent.lastName']
+                            <Table.Row key={index}>
+                              <Table.Cell>{LeadsPerSource['listingAgent.dataRegion']}</Table.Cell>
+                              <Table.Cell>{`${LeadsPerSource['listingAgent.firstName']} ${
+                                LeadsPerSource['listingAgent.lastName']
                               }`}</Table.Cell>
-                              <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                              <Table.Cell style={{ textAlign: 'right' }}>
-                                {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ textAlign: 'right' }}>
-                                {leadsPerAnalyst.countImStage > 0
-                                  ? numeral((leadsPerAnalyst.count / leadsPerAnalyst.countImStage) * 100).format('0,0')
-                                  : 0}
-                              </Table.Cell>
+                              <Table.Cell>{LeadsPerSource['source.label']}</Table.Cell>
+                              <Table.Cell>{LeadsPerSource.count}</Table.Cell>
                             </Table.Row>
                           )
                         })}
@@ -239,6 +283,7 @@ MarketingReports.propTypes = {
   getMarketingReport: PropTypes.func,
   leadsPerAnalystArray: PropTypes.array,
   arrayTotalPerSource: PropTypes.array,
+  arrayLeadsPerSource: PropTypes.array,
   totalGeralPerSource: PropTypes.number
 }
 
@@ -252,6 +297,7 @@ const mapPropsToValues = props => {
 const mapStateToProps = state => ({
   leadsPerAnalystArray: state.reports.getMarketingReport.leadsPerAnalystArray,
   arrayTotalPerSource: state.reports.getMarketingReport.arrayTotalPerSource,
+  arrayLeadsPerSource: state.reports.getMarketingReport.arrayLeadsPerSource,
   totalGeralPerSource: state.reports.getMarketingReport.totalGeralPerSource
 })
 
