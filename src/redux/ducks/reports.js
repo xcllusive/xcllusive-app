@@ -16,8 +16,14 @@ const initialState = {
     isLoading: false,
     leadsPerAnalystArray: [],
     arrayTotalPerSource: [],
-    arrayLeadsPerSource: [],
+    arrayLeadsPerSourceAdelaide: [],
+    arrayLeadsPerSourceCamberra: [],
+    arrayLeadsPerSourceCowra: [],
+    arrayLeadsPerSourceMelbourne: [],
+    arrayLeadsPerSourceSydney: [],
+    arrayLeadsPerSourceQueensland: [],
     totalGeralPerSource: null,
+    arrayOffices: [],
     error: null
   }
 }
@@ -32,8 +38,14 @@ export default function reducer (state = initialState, action) {
           isLoading: action.payload,
           leadsPerAnalystArray: null,
           arrayTotalPerSource: null,
-          arrayLeadsPerSource: null,
+          arrayLeadsPerSourceAdelaide: null,
+          arrayLeadsPerSourceCamberra: null,
+          arrayLeadsPerSourceCowra: null,
+          arrayLeadsPerSourceMelbourne: null,
+          arrayLeadsPerSourceSydney: null,
+          arrayLeadsPerSourceQueensland: null,
           totalGeralPerSource: null,
+          arrayOffices: null,
           error: null
         }
       }
@@ -45,8 +57,15 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           leadsPerAnalystArray: action.payload.arrayFinal,
           arrayTotalPerSource: action.payload.arrayTotalPerSource,
-          arrayLeadsPerSource: action.payload.arrayLeadsPerSource,
+          arrayLeadsPerSourceAdelaide: action.payload.arrayLeadsPerSourceAdelaide,
+          arrayLeadsPerSourceCamberra: action.payload.arrayLeadsPerSourceCamberra,
+          arrayLeadsPerSourceCowra: action.payload.arrayLeadsPerSourceCowra,
+          arrayLeadsPerSourceGosford: action.payload.arrayLeadsPerSourceGosford,
+          arrayLeadsPerSourceMelbourne: action.payload.arrayLeadsPerSourceMelbourne,
+          arrayLeadsPerSourceSydney: action.payload.arrayLeadsPerSourceSydney,
+          arrayLeadsPerSourceQueensland: action.payload.arrayLeadsPerSourceQueensland,
           totalGeralPerSource: action.payload.totalGeralPerSource,
+          arrayOffices: action.payload.arrayOffices,
           error: null
         }
       }
