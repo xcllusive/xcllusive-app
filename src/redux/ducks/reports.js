@@ -6,7 +6,8 @@ import { toast } from 'react-toastify'
 export const Types = {
   GET_MARKETING_REPORT_LOADING: 'GET_MARKETING_REPORT_LOADING',
   GET_MARKETING_REPORT_SUCCESS: 'GET_MARKETING_REPORT_SUCCESS',
-  GET_MARKETING_REPORT_FAILURE: 'GET_MARKETING_REPORT_FAILURE'
+  GET_MARKETING_REPORT_FAILURE: 'GET_MARKETING_REPORT_FAILURE',
+  CLEAR_MARKETING_REPORT: 'CLEAR_MARKETING_REPORT'
 }
 
 // Reducer
@@ -78,6 +79,8 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_MARKETING_REPORT:
+      return initialState
     default:
       return state
   }
@@ -103,4 +106,10 @@ export const getMarketingReport = (dateFrom, dateTo) => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const clearMarketingReports = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_MARKETING_REPORT
+  })
 }

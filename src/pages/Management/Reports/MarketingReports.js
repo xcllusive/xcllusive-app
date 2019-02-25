@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Grid, Form, Table, Header, Segment, Button } from 'semantic-ui-react'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
-import { getMarketingReport } from '../../../redux/ducks/reports'
+import { getMarketingReport, clearMarketingReports } from '../../../redux/ducks/reports'
 import Wrapper from '../../../components/content/Wrapper'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -16,6 +16,10 @@ class MarketingReports extends Component {
   constructor (props) {
     super(props)
     this.state = {}
+  }
+
+  componentDidMount = () => {
+    this.props.clearMarketingReports()
   }
 
   _handleDateFromChange = date => {
@@ -189,7 +193,7 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0[0]'
+                                      '0.0'
                                     )} %`
                                     : 0}
                                 </Table.Cell>
@@ -248,7 +252,7 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0[0]'
+                                      '0.0'
                                     )}%`
                                     : 0}
                                 </Table.Cell>
@@ -307,7 +311,7 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0[0]'
+                                      '0.0'
                                     )}%`
                                     : 0}
                                 </Table.Cell>
@@ -366,7 +370,7 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0[0]'
+                                      '0.0'
                                     )}%`
                                     : 0}
                                 </Table.Cell>
@@ -425,7 +429,7 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0[0]'
+                                      '0.0'
                                     )}%`
                                     : 0}
                                 </Table.Cell>
@@ -484,7 +488,7 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0[0]'
+                                      '0.0'
                                     )}%`
                                     : 0}
                                 </Table.Cell>
@@ -543,7 +547,7 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0[0]'
+                                      '0.0'
                                     )}%`
                                     : 0}
                                 </Table.Cell>
@@ -589,7 +593,7 @@ class MarketingReports extends Component {
                             {this._totalGeralSignedUp(arrayOffices[0])}
                           </Table.HeaderCell>
                           <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }}>
-                            {`${numeral(this._AvgConvertionRate(arrayOffices[0])).format('0.0[0]')}%`}
+                            {`${numeral(this._AvgConvertionRate(arrayOffices[0])).format('0,0.0')}%`}
                           </Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>
@@ -639,7 +643,7 @@ class MarketingReports extends Component {
                                     (LeadsPerSourceAdelaide.countSourceImStageAdelaide /
                                         LeadsPerSourceAdelaide.count) *
                                         100
-                                  ).format('0.0[0]')}%`
+                                  ).format('0,0.0')}%`
                                   : 0}
                               </Table.Cell>
                             </Table.Row>
@@ -675,7 +679,7 @@ class MarketingReports extends Component {
                                     (LeadsPerSourceCamberra.countSourceImStageCamberra /
                                         LeadsPerSourceCamberra.count) *
                                         100
-                                  ).format('0.0[0]')}%`
+                                  ).format('0,0.0')}%`
                                   : 0}
                               </Table.Cell>
                             </Table.Row>
@@ -709,7 +713,7 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceCowra.countSourceImStageCowra > 0
                                   ? `${numeral(
                                     (LeadsPerSourceCowra.countSourceImStageCowra / LeadsPerSourceCowra.count) * 100
-                                  ).format('0.0[0]')}%`
+                                  ).format('0,0.0')}%`
                                   : 0}
                               </Table.Cell>
                             </Table.Row>
@@ -744,7 +748,7 @@ class MarketingReports extends Component {
                                   ? `${numeral(
                                     (LeadsPerSourceGosford.countSourceImStageGosford / LeadsPerSourceGosford.count) *
                                         100
-                                  ).format('0.0[0]')}%`
+                                  ).format('0,0.0')}%`
                                   : 0}
                               </Table.Cell>
                             </Table.Row>
@@ -780,7 +784,7 @@ class MarketingReports extends Component {
                                     (LeadsPerSourceMelbourne.countSourceImStageMelbourne /
                                         LeadsPerSourceMelbourne.count) *
                                         100
-                                  ).format('0.0[0]')}%`
+                                  ).format('0,0.0')}%`
                                   : 0}
                               </Table.Cell>
                             </Table.Row>
@@ -814,7 +818,7 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceSydney.countSourceImStageSydney > 0
                                   ? `${numeral(
                                     (LeadsPerSourceSydney.countSourceImStageSydney / LeadsPerSourceSydney.count) * 100
-                                  ).format('0.0[0]')}%`
+                                  ).format('0,0.0')}%`
                                   : 0}
                               </Table.Cell>
                             </Table.Row>
@@ -850,7 +854,7 @@ class MarketingReports extends Component {
                                     (LeadsPerSourceQueensland.countSourceImStageQueensland /
                                         LeadsPerSourceQueensland.count) *
                                         100
-                                  ).format('0.0[0]')}%`
+                                  ).format('0,0.0')}%`
                                   : 0}
                               </Table.Cell>
                             </Table.Row>
@@ -929,12 +933,13 @@ MarketingReports.propTypes = {
   arrayLeadsPerSourceSydney: PropTypes.array,
   arrayLeadsPerSourceQueensland: PropTypes.array,
   totalGeralPerSource: PropTypes.number,
-  arrayOffices: PropTypes.array
+  arrayOffices: PropTypes.array,
+  clearMarketingReports: PropTypes.func
 }
 
 const mapPropsToValues = props => {
   return {
-    dateFrom: moment('01/01/2019'),
+    dateFrom: moment().subtract(30, 'days'),
     dateTo: moment()
   }
 }
@@ -957,7 +962,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       openModal,
-      getMarketingReport
+      getMarketingReport,
+      clearMarketingReports
     },
     dispatch
   )
