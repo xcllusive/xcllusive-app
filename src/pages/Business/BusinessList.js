@@ -98,7 +98,7 @@ class BusinessListPage extends Component {
     return (
       <Wrapper>
         <GridBusinessStage>
-          <Statistic.Group size="mini" color="blue" widths={3}>
+          <Statistic.Group size="mini" color="blue" widths={4}>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(1, 'Potential Listing')}>
               <Statistic.Value>
                 {objectQtdeBusinessStage
@@ -120,6 +120,10 @@ class BusinessListPage extends Component {
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(4, 'For Sale')}>
               <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessForSale : 0}</Statistic.Value>
               <Statistic.Label>For Sale</Statistic.Label>
+            </Statistic>
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(8, 'Lost')}>
+              <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessLost : 0}</Statistic.Value>
+              <Statistic.Label>Lost</Statistic.Label>
             </Statistic>
           </Statistic.Group>
         </GridBusinessStage>
