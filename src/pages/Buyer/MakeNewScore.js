@@ -6,19 +6,7 @@ import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import * as Yup from 'yup'
 import moment from 'moment'
-import {
-  Grid,
-  Header,
-  Dimmer,
-  Loader,
-  Button,
-  Icon,
-  Message,
-  Statistic,
-  Segment,
-  Label,
-  Form
-} from 'semantic-ui-react'
+import { Grid, Header, Dimmer, Loader, Button, Icon, Message, Statistic, Segment, Label, Form } from 'semantic-ui-react'
 
 import { getBusiness } from '../../redux/ducks/business'
 
@@ -80,26 +68,15 @@ class MakeNewScorePage extends Component {
   }
 
   componentDidUpdate () {
-    if (
-      this.props.enquiries &&
-      this.props.enquiries.lastScore &&
-      !this.state.updateLastScore
-    ) {
+    if (this.props.enquiries && this.props.enquiries.lastScore && !this.state.updateLastScore) {
       this.setState({ lastScore: this.props.enquiries.lastScore.total })
       this.setState({ updateLastScore: true })
     }
 
-    if (
-      !this.props.isLoadingEnquiries &&
-      this.props.enquiries &&
-      !this.state.updateEnquiries
-    ) {
+    if (!this.props.isLoadingEnquiries && this.props.enquiries && !this.state.updateEnquiries) {
       if (this.props.values.diff > 4) this.props.values.diff = 4
       if (this.props.values.diff < -4) this.props.values.diff = -4
-      const objectEnquiries = _.find(
-        this.props.enquiriesOptions,
-        o => o.label === this.props.values.diff.toString()
-      )
+      const objectEnquiries = _.find(this.props.enquiriesOptions, o => o.label === this.props.values.diff.toString())
       this.setState({ objectEnquiries })
       this.setState({ updateEnquiries: true })
     }
@@ -110,10 +87,7 @@ class MakeNewScorePage extends Component {
       !this.props.isLoadingPerceivedPrice &&
       !this.state.updatePerceivedPrice
     ) {
-      this._findItemArray(
-        'perceivedPrice_id',
-        this.props.values.perceivedPrice_id
-      )
+      this._findItemArray('perceivedPrice_id', this.props.values.perceivedPrice_id)
       this.setState({ updatePerceivedPrice: true })
     }
 
@@ -123,10 +97,7 @@ class MakeNewScorePage extends Component {
       !this.props.isLoadingInfoTransMomen &&
       !this.state.updateInfoTransMomen
     ) {
-      this._findItemArray(
-        'infoTransMomen_id',
-        this.props.values.infoTransMomen_id
-      )
+      this._findItemArray('infoTransMomen_id', this.props.values.infoTransMomen_id)
       this.setState({ updateInfoTransMomen: true })
     }
 
@@ -136,10 +107,7 @@ class MakeNewScorePage extends Component {
       !this.props.isLoadingCurrentInterest &&
       !this.state.updateCurrentInterest
     ) {
-      this._findItemArray(
-        'currentInterest_id',
-        this.props.values.currentInterest_id
-      )
+      this._findItemArray('currentInterest_id', this.props.values.currentInterest_id)
       this.setState({ updateCurrentInterest: true })
     }
 
@@ -149,22 +117,13 @@ class MakeNewScorePage extends Component {
       !this.props.isLoadingPerceivedRisk &&
       !this.state.updatePerceivedRisk
     ) {
-      this._findItemArray(
-        'perceivedRisk_id',
-        this.props.values.perceivedRisk_id
-      )
+      this._findItemArray('perceivedRisk_id', this.props.values.perceivedRisk_id)
       this.setState({ updatePerceivedRisk: true })
     }
 
-    if (
-      this.props.score &&
-      this.props.isCalculated &&
-      !this.state.updateCalculated
-    ) {
+    if (this.props.score && this.props.isCalculated && !this.state.updateCalculated) {
       this.props.history.replace(
-        `/buyer/business/${this.props.match.params.idBusiness}/make-new-score/${
-          this.props.score.id
-        }`
+        `/buyer/business/${this.props.match.params.idBusiness}/make-new-score/${this.props.score.id}`
       )
       this.setState({ updateCalculated: true })
     }
@@ -172,21 +131,16 @@ class MakeNewScorePage extends Component {
 
   static getDerivedStateFromProps (nextProps, prevState) {
     if (prevState.updateSent && nextProps.isSentScore) {
-      nextProps.history.push(
-        `/buyer/business/${nextProps.business.id}/score-list`
-      )
+      nextProps.history.push(`/buyer/business/${nextProps.business.id}/score-list`)
     }
     if (nextProps.score) {
       return { score: nextProps.score.total }
     }
 
     if (nextProps.enquiries) {
-      if (nextProps.values.diff > 4) nextProps.values.diff = 4
-      if (nextProps.values.diff < -4) nextProps.values.diff = -4
-      const objectEnquiries = _.find(
-        nextProps.enquiriesOptions,
-        o => o.label === nextProps.values.diff.toString()
-      )
+      // if (nextProps.values.diff > 4) nextProps.values.diff = 4
+      // if (nextProps.values.diff < -4) nextProps.values.diff = -4
+      const objectEnquiries = _.find(nextProps.enquiriesOptions, o => o.label === nextProps.values.diff.toString())
       return {
         objectEnquiries
       }
@@ -382,11 +336,7 @@ class MakeNewScorePage extends Component {
           <Grid style={{ marginTop: 0 }}>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Header
-                  as="h2"
-                  color="blue"
-                  content={`Currently Editing: ${business.businessName}`}
-                />
+                <Header as="h2" color="blue" content={`Currently Editing: ${business.businessName}`} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -395,23 +345,16 @@ class MakeNewScorePage extends Component {
               <Grid.Column>
                 <Message info size="tiny">
                   <Message.Header>What to do?</Message.Header>
+                  <p>Step1: Select an option from the drop down(except for `Enquiries in Last 4 Weeks`)</p>
                   <p>
-                    Step1: Select an option from the drop down(except for
-                    `Enquiries in Last 4 Weeks`)
+                    Step2: Leave agent notes for your vendor in the cream boxes. Please note that your vendor will see
+                    this notes.
                   </p>
-                  <p>
-                    Step2: Leave agent notes for your vendor in the cream boxes.
-                    Please note that your vendor will see this notes.
-                  </p>
-                  <p>
-                    Step3: Complete all five boxes and click `Calculate your
-                    score` to review your score
-                  </p>
+                  <p>Step3: Complete all five boxes and click `Calculate your score` to review your score</p>
                   <p />
                   <p>
-                    If you are happy with your score you can leave by clicking
-                    `Back to Business List`. If you make any changes, you can
-                    review them by clicking `Calculate your score`.
+                    If you are happy with your score you can leave by clicking `Back to Business List`. If you make any
+                    changes, you can review them by clicking `Calculate your score`.
                   </p>
                 </Message>
               </Grid.Column>
@@ -430,11 +373,7 @@ class MakeNewScorePage extends Component {
                     <Statistic.Label>Previous Score</Statistic.Label>
                   </Statistic>
                   <Statistic>
-                    <Statistic.Value>
-                      {this.props.score && this.props.score.dateSent
-                        ? 'Yes'
-                        : 'No'}
-                    </Statistic.Value>
+                    <Statistic.Value>{this.props.score && this.props.score.dateSent ? 'Yes' : 'No'}</Statistic.Value>
                     <Statistic.Label>Sent</Statistic.Label>
                   </Statistic>
                   <Statistic>
@@ -452,25 +391,13 @@ class MakeNewScorePage extends Component {
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
-                        <Header
-                          color="orange"
-                          as="h3"
-                          textAlign="left"
-                          size="small"
-                        >
+                        <Header color="orange" as="h3" textAlign="left" size="small">
                           Enquiries in Last 4 Weeks
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
-                        <Header
-                          color="blue"
-                          as="h3"
-                          textAlign="right"
-                          size="small"
-                        >
-                          {this.state.objectEnquiries
-                            ? this.state.objectEnquiries.weight
-                            : null}
+                        <Header color="blue" as="h3" textAlign="right" size="small">
+                          {this.state.objectEnquiries ? this.state.objectEnquiries.weight : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -487,15 +414,7 @@ class MakeNewScorePage extends Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      {errors.yours &&
-                        touched.yours && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.yours}
-                        />
-                      )}
+                      {errors.yours && touched.yours && <Label basic color="red" pointing content={errors.yours} />}
                       <Label>Avg</Label>
                       <Form.Input
                         width={5}
@@ -506,15 +425,7 @@ class MakeNewScorePage extends Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      {errors.avg &&
-                        touched.avg && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.avg}
-                        />
-                      )}
+                      {errors.avg && touched.avg && <Label basic color="red" pointing content={errors.avg} />}
                       <Label>Diff</Label>
                       <Form.Input
                         width={5}
@@ -525,23 +436,10 @@ class MakeNewScorePage extends Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      {errors.diff &&
-                        touched.diff && (
-                        <Label
-                          basic
-                          color="red"
-                          pointing
-                          content={errors.diff}
-                        />
-                      )}
+                      {errors.diff && touched.diff && <Label basic color="red" pointing content={errors.diff} />}
                     </Form.Group>
                   </Form>
-                  <Header
-                    style={{ marginTop: 0 }}
-                    as="h3"
-                    textAlign="center"
-                    size="tiny"
-                  >
+                  <Header style={{ marginTop: 0 }} as="h3" textAlign="center" size="tiny">
                     Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
@@ -557,14 +455,8 @@ class MakeNewScorePage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesEnquiries &&
-                      touched.notesEnquiries && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.notesEnquiries}
-                      />
+                    {errors.notesEnquiries && touched.notesEnquiries && (
+                      <Label basic color="red" pointing content={errors.notesEnquiries} />
                     )}
                   </Form>
                 </Segment>
@@ -585,25 +477,13 @@ class MakeNewScorePage extends Component {
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
-                        <Header
-                          color="orange"
-                          as="h3"
-                          textAlign="left"
-                          size="small"
-                        >
+                        <Header color="orange" as="h3" textAlign="left" size="small">
                           Perceived Price from Buyers
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
-                        <Header
-                          color="blue"
-                          as="h3"
-                          textAlign="right"
-                          size="small"
-                        >
-                          {this.state.objectPrice
-                            ? this.state.objectPrice.weight
-                            : null}
+                        <Header color="blue" as="h3" textAlign="right" size="small">
+                          {this.state.objectPrice ? this.state.objectPrice.weight : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -612,9 +492,7 @@ class MakeNewScorePage extends Component {
                     <Form.Group>
                       <Form.Select
                         width={16}
-                        options={mapArrayToValuesForDropdown(
-                          perceivedPriceOptions
-                        )}
+                        options={mapArrayToValuesForDropdown(perceivedPriceOptions)}
                         name="perceivedPrice_id"
                         autoComplete="perceivedPrice_id"
                         disabled={
@@ -627,12 +505,7 @@ class MakeNewScorePage extends Component {
                       />
                     </Form.Group>
                   </Form>
-                  <Header
-                    style={{ marginTop: 0 }}
-                    as="h3"
-                    textAlign="center"
-                    size="tiny"
-                  >
+                  <Header style={{ marginTop: 0 }} as="h3" textAlign="center" size="tiny">
                     Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
@@ -648,14 +521,8 @@ class MakeNewScorePage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesPrice &&
-                      touched.notesPrice && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.notesPrice}
-                      />
+                    {errors.notesPrice && touched.notesPrice && (
+                      <Label basic color="red" pointing content={errors.notesPrice} />
                     )}
                   </Form>
                 </Segment>
@@ -676,25 +543,13 @@ class MakeNewScorePage extends Component {
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
-                        <Header
-                          color="orange"
-                          as="h3"
-                          textAlign="left"
-                          size="small"
-                        >
+                        <Header color="orange" as="h3" textAlign="left" size="small">
                           Information / Transparency / Momentum
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
-                        <Header
-                          color="blue"
-                          as="h3"
-                          textAlign="right"
-                          size="small"
-                        >
-                          {this.state.objectMomentum
-                            ? this.state.objectMomentum.weight
-                            : null}
+                        <Header color="blue" as="h3" textAlign="right" size="small">
+                          {this.state.objectMomentum ? this.state.objectMomentum.weight : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -703,9 +558,7 @@ class MakeNewScorePage extends Component {
                     <Form.Group>
                       <Form.Select
                         width={16}
-                        options={mapArrayToValuesForDropdown(
-                          infoTransMomenOptions
-                        )}
+                        options={mapArrayToValuesForDropdown(infoTransMomenOptions)}
                         name="infoTransMomen_id"
                         autoComplete="infoTransMomen_id"
                         disabled={
@@ -718,12 +571,7 @@ class MakeNewScorePage extends Component {
                       />
                     </Form.Group>
                   </Form>
-                  <Header
-                    style={{ marginTop: 0 }}
-                    as="h3"
-                    textAlign="center"
-                    size="tiny"
-                  >
+                  <Header style={{ marginTop: 0 }} as="h3" textAlign="center" size="tiny">
                     Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
@@ -739,14 +587,8 @@ class MakeNewScorePage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesMomentum &&
-                      touched.notesMomentum && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.notesMomentum}
-                      />
+                    {errors.notesMomentum && touched.notesMomentum && (
+                      <Label basic color="red" pointing content={errors.notesMomentum} />
                     )}
                   </Form>
                 </Segment>
@@ -767,25 +609,13 @@ class MakeNewScorePage extends Component {
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
-                        <Header
-                          color="orange"
-                          as="h3"
-                          textAlign="left"
-                          size="small"
-                        >
+                        <Header color="orange" as="h3" textAlign="left" size="small">
                           Current Interest
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
-                        <Header
-                          color="blue"
-                          as="h3"
-                          textAlign="right"
-                          size="small"
-                        >
-                          {this.state.objectInterest
-                            ? this.state.objectInterest.weight
-                            : null}
+                        <Header color="blue" as="h3" textAlign="right" size="small">
+                          {this.state.objectInterest ? this.state.objectInterest.weight : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -794,9 +624,7 @@ class MakeNewScorePage extends Component {
                     <Form.Group>
                       <Form.Select
                         width={16}
-                        options={mapArrayToValuesForDropdown(
-                          currentInterestOptions
-                        )}
+                        options={mapArrayToValuesForDropdown(currentInterestOptions)}
                         name="currentInterest_id"
                         autoComplete="currentInterest_id"
                         disabled={
@@ -809,12 +637,7 @@ class MakeNewScorePage extends Component {
                       />
                     </Form.Group>
                   </Form>
-                  <Header
-                    style={{ marginTop: 0 }}
-                    as="h3"
-                    textAlign="center"
-                    size="tiny"
-                  >
+                  <Header style={{ marginTop: 0 }} as="h3" textAlign="center" size="tiny">
                     Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
@@ -830,14 +653,8 @@ class MakeNewScorePage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesInterest &&
-                      touched.notesInterest && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.notesInterest}
-                      />
+                    {errors.notesInterest && touched.notesInterest && (
+                      <Label basic color="red" pointing content={errors.notesInterest} />
                     )}
                   </Form>
                 </Segment>
@@ -858,25 +675,13 @@ class MakeNewScorePage extends Component {
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
-                        <Header
-                          color="orange"
-                          as="h3"
-                          textAlign="left"
-                          size="small"
-                        >
+                        <Header color="orange" as="h3" textAlign="left" size="small">
                           Buyer Perceived Risk
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
-                        <Header
-                          color="blue"
-                          as="h3"
-                          textAlign="right"
-                          size="small"
-                        >
-                          {this.state.objectRisk
-                            ? this.state.objectRisk.weight
-                            : null}
+                        <Header color="blue" as="h3" textAlign="right" size="small">
+                          {this.state.objectRisk ? this.state.objectRisk.weight : null}
                         </Header>
                       </Grid.Column>
                     </Grid.Row>
@@ -885,9 +690,7 @@ class MakeNewScorePage extends Component {
                     <Form.Group>
                       <Form.Select
                         width={16}
-                        options={mapArrayToValuesForDropdown(
-                          perceivedRiskOptions
-                        )}
+                        options={mapArrayToValuesForDropdown(perceivedRiskOptions)}
                         name="perceivedRisk_id"
                         autoComplete="perceivedRisk_id"
                         disabled={
@@ -900,12 +703,7 @@ class MakeNewScorePage extends Component {
                       />
                     </Form.Group>
                   </Form>
-                  <Header
-                    style={{ marginTop: 0 }}
-                    as="h3"
-                    textAlign="center"
-                    size="tiny"
-                  >
+                  <Header style={{ marginTop: 0 }} as="h3" textAlign="center" size="tiny">
                     Notes for report : (Max 310 Characters)
                   </Header>
                   <Form>
@@ -921,14 +719,8 @@ class MakeNewScorePage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesRisk &&
-                      touched.notesRisk && (
-                      <Label
-                        basic
-                        color="red"
-                        pointing
-                        content={errors.notesRisk}
-                      />
+                    {errors.notesRisk && touched.notesRisk && (
+                      <Label basic color="red" pointing content={errors.notesRisk} />
                     )}
                   </Form>
                 </Segment>
@@ -946,18 +738,12 @@ class MakeNewScorePage extends Component {
             <Grid.Row>
               <Grid.Column>
                 <Message warning size="tiny">
-                  <Message.Header>
-                    Don`t leave yet! You`re almost done...
-                  </Message.Header>
+                  <Message.Header>Don`t leave yet! You`re almost done...</Message.Header>
                   <p>
-                    Before you leave, make sure you click the red button below.
-                    If you`ve made any changes, though the text will change, the
-                    score won`t update until you click it.
+                    Before you leave, make sure you click the red button below. If you`ve made any changes, though the
+                    text will change, the score won`t update until you click it.
                   </p>
-                  <p>
-                    So if you want to know the actual score before it gets sent
-                    make sure you click red button.
-                  </p>
+                  <p>So if you want to know the actual score before it gets sent make sure you click red button.</p>
                 </Message>
               </Grid.Column>
             </Grid.Row>
@@ -971,23 +757,17 @@ class MakeNewScorePage extends Component {
                           icon
                           color="red"
                           floated="right"
-                          onClick={() =>
-                            this._modalConfirmCalculateScore(values)
-                          }
+                          onClick={() => this._modalConfirmCalculateScore(values)}
                           disabled={!isValid}
                         >
                           <Icon name="calculator" />
-                          {score
-                            ? 'Recalculate Your Score'
-                            : 'Calculate Your Score'}
+                          {score ? 'Recalculate Your Score' : 'Calculate Your Score'}
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
                         <Statistic.Group size="tiny" widths={1}>
                           <Statistic floated="left">
-                            <Statistic.Value>
-                              {this.state.score}
-                            </Statistic.Value>
+                            <Statistic.Value>{this.state.score}</Statistic.Value>
                             <Statistic.Label>This Score</Statistic.Label>
                           </Statistic>
                         </Statistic.Group>
@@ -996,14 +776,11 @@ class MakeNewScorePage extends Component {
                         <Button
                           color="yellow"
                           floated="right"
-                          onClick={() =>
-                            this._modalConfirmSendScore(values.scoreId)
-                          }
+                          onClick={() => this._modalConfirmSendScore(values.scoreId)}
                           disabled={
                             (this.props.score &&
                               this.props.score.dateSent !== null &&
-                              typeof this.props.score.dateSent !==
-                                'undefined') ||
+                              typeof this.props.score.dateSent !== 'undefined') ||
                             !this.props.score
                           }
                           loading={isLoadingSendScore}
@@ -1023,11 +800,7 @@ class MakeNewScorePage extends Component {
                       <Grid.Column>
                         <Button
                           color="green"
-                          onClick={() =>
-                            history.push(
-                              `/buyer/business/${business.id}/score-list`
-                            )
-                          }
+                          onClick={() => history.push(`/buyer/business/${business.id}/score-list`)}
                           size="small"
                           floated="left"
                         >
@@ -1036,12 +809,7 @@ class MakeNewScorePage extends Component {
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
-                        <Button
-                          color="green"
-                          onClick={() => history.push('/buyer')}
-                          size="small"
-                          floated="right"
-                        >
+                        <Button color="green" onClick={() => history.push('/buyer')} size="small" floated="right">
                           <Icon name="backward" />
                           Back to Business List
                         </Button>
@@ -1103,9 +871,7 @@ const mapPropsToValues = props => {
     return {
       yours: props.score ? props.score.yours : props.enquiries.yours,
       avg: props.score ? props.score.avg : props.enquiries.avg,
-      diff: props.score
-        ? props.score.diff
-        : props.enquiries.yours - props.enquiries.avg,
+      diff: props.score ? props.score.diff : props.enquiries.yours - props.enquiries.avg,
       perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
       notesPrice: props.score ? props.score.notesPrice : '',
       infoTransMomen_id: props.score ? props.score.infoTransMomen_id : '',
@@ -1116,9 +882,7 @@ const mapPropsToValues = props => {
       notesRisk: props.score ? props.score.notesRisk : '',
       notesEnquiries: props.score ? props.score.notesEnquiries : '',
       total: props.score ? props.score.total : '',
-      business_id: props.score
-        ? props.score.business_id
-        : props.match.params.idBusiness,
+      business_id: props.score ? props.score.business_id : props.match.params.idBusiness,
       scoreId: props.score ? props.score.id : ''
     }
   }
@@ -1143,34 +907,15 @@ const mapPropsToValues = props => {
 }
 
 const validationSchema = Yup.object().shape({
-  notesEnquiries: Yup.string().max(
-    310,
-    'This notes requires maximum of 310 characteres'
-  ),
-  perceivedPrice_id: Yup.string().required(
-    'Perceived Price from Buyers is required.'
-  ),
-  notesPrice: Yup.string().max(
-    310,
-    'This notes requires maximum of 310 characteres'
-  ),
-  infoTransMomen_id: Yup.string().required(
-    'Information / Transparency / Momentum is required.'
-  ),
-  notesMomentum: Yup.string().max(
-    310,
-    'This notes requires maximum of 310 characteres'
-  ),
+  notesEnquiries: Yup.string().max(310, 'This notes requires maximum of 310 characteres'),
+  perceivedPrice_id: Yup.string().required('Perceived Price from Buyers is required.'),
+  notesPrice: Yup.string().max(310, 'This notes requires maximum of 310 characteres'),
+  infoTransMomen_id: Yup.string().required('Information / Transparency / Momentum is required.'),
+  notesMomentum: Yup.string().max(310, 'This notes requires maximum of 310 characteres'),
   currentInterest_id: Yup.string().required('Current Interest is required.'),
-  notesInterest: Yup.string().max(
-    310,
-    'This notes requires maximum of 310 characteres'
-  ),
+  notesInterest: Yup.string().max(310, 'This notes requires maximum of 310 characteres'),
   perceivedRisk_id: Yup.string().required('Buyer Perceived Risk is required.'),
-  notesRisk: Yup.string().max(
-    310,
-    'This notes requires maximum of 310 characteres'
-  )
+  notesRisk: Yup.string().max(310, 'This notes requires maximum of 310 characteres')
 })
 
 const mapDispatchToProps = dispatch =>
