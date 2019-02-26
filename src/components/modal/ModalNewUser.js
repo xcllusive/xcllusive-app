@@ -7,8 +7,10 @@ import { withFormik } from 'formik'
 import { Modal, Form, Label, Checkbox, Icon, Button, Radio } from 'semantic-ui-react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
+import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 import { closeModal } from '../../redux/ducks/modal'
+import { getOfficeRegister } from '../../redux/ducks/officeRegister'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em;
@@ -19,15 +21,6 @@ class ModalNewUser extends Component {
     super(props)
     this.state = {
       formOptions: {
-        dataRegion: [
-          { key: 1, text: 'Adelaide Office', value: 'Adelaide Office' },
-          { key: 2, text: 'Camberra Office', value: 'Camberra Office' },
-          { key: 3, text: 'Cowra Office', value: 'Cowra Office' },
-          { key: 4, text: 'Gosford Office', value: 'Gosford Office' },
-          { key: 5, text: 'Melbourne Office', value: 'Melbourne Office' },
-          { key: 6, text: 'Sydney Office', value: 'Sydney Office' },
-          { key: 7, text: 'Queensland Office', value: 'Queensland Office' }
-        ],
         userType: [
           { key: 1, text: 'Admin', value: 'Admin' },
           { key: 2, text: 'Broker', value: 'Broker' },
@@ -49,6 +42,7 @@ class ModalNewUser extends Component {
 
   componentDidMount () {
     this.props.resetForm()
+    this.props.getOfficeRegister()
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -75,8 +69,8 @@ class ModalNewUser extends Component {
   }
 
   render () {
-    const { dataRegion, userType, state } = this.state.formOptions
-
+    const { userType, state } = this.state.formOptions
+    const { officeOptions } = this.props
     const {
       values,
       touched,
@@ -255,14 +249,12 @@ class ModalNewUser extends Component {
                 <Form.Select
                   required
                   label="Office Region"
-                  name="dataRegion"
-                  options={dataRegion}
-                  value={values.dataRegion}
+                  name="officeId"
+                  options={mapArrayToValuesForDropdown(officeOptions)}
+                  value={values.officeId}
                   onChange={this._handleSelectChange}
                 />
-                {errors.dataRegion && touched.dataRegion && (
-                  <Label basic color="red" pointing content={errors.dataRegion} />
-                )}
+                {errors.officeId && touched.officeId && <Label basic color="red" pointing content={errors.officeId} />}
               </Form.Field>
               <Form.Field>
                 <Form.Select
@@ -422,7 +414,9 @@ ModalNewUser.propTypes = {
   updateLoading: PropTypes.bool,
   resetForm: PropTypes.func,
   user: PropTypes.object,
-  title: PropTypes.string
+  title: PropTypes.string,
+  getOfficeRegister: PropTypes.func,
+  officeOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -441,7 +435,7 @@ const mapPropsToValues = props => {
       suburb: props.user.suburb ? props.user.suburb : '',
       street: props.user.street ? props.user.street : '',
       postCode: props.user.postCode ? props.user.postCode : '',
-      dataRegion: props.user.dataRegion ? props.user.dataRegion : '',
+      officeId: props.user ? props.user.officeId : '',
       listingAgent: props.user.listingAgent ? props.user.listingAgent : false,
       broker: props.user.listingAgent ? props.user.listingAgent : false,
       userType: props.user.userType ? props.user.userType : '',
@@ -467,7 +461,6 @@ const mapPropsToValues = props => {
     suburb: '',
     street: '',
     postCode: '',
-    dataRegion: '',
     listingAgent: false,
     broker: false,
     userType: '',
@@ -502,7 +495,7 @@ const validationSchema = Yup.object().shape({
   suburb: Yup.string().max(40, 'Suburb require max 40 charecters.'),
   street: Yup.string().max(40, 'Street require max 40 charecters.'),
   postCode: Yup.number().integer('Only numbers are permitted.'),
-  dataRegion: Yup.string().required('Office Region is required.'),
+  officeId: Yup.number().required('Office Region is required.'),
   // listingAgent: Yup.number().required('Listing Agent is required.'),
   userType: Yup.string().required('User Type is required.')
 })
@@ -514,12 +507,13 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 const mapStateToProps = state => {
   return {
     createLoading: state.user.create.isLoading,
-    updateLoading: state.user.update.isLoading
+    updateLoading: state.user.update.isLoading,
+    officeOptions: state.officeRegister.get.array
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ closeModal }, dispatch)
+  return bindActionCreators({ closeModal, getOfficeRegister }, dispatch)
 }
 
 export default connect(

@@ -14,21 +14,14 @@ import {
   getBusinessesPerBroker,
   clearWeeklyReports
 } from '../../../redux/ducks/broker'
+import { mapArrayToValuesForDropdown } from '../../../utils/sharedFunctionArray'
 import { getUserLogged } from '../../../redux/ducks/user'
+import { getOfficeRegister } from '../../../redux/ducks/officeRegister'
 
 class BrokersWeeklyReports extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      dataRegion: [
-        { key: 1, text: 'Adelaide Office', value: 'Adelaide Office' },
-        { key: 2, text: 'Camberra Office', value: 'Camberra Office' },
-        { key: 3, text: 'Cowra Office', value: 'Cowra Office' },
-        { key: 4, text: 'Gosford Office', value: 'Gosford Office' },
-        { key: 5, text: 'Melbourne Office', value: 'Melbourne Office' },
-        { key: 6, text: 'Sydney Office', value: 'Sydney Office' },
-        { key: 7, text: 'Queensland Office', value: 'Queensland Office' }
-      ],
       isGotUser: true
     }
   }
@@ -41,10 +34,11 @@ class BrokersWeeklyReports extends Component {
     //   this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
     //   this.props.setFieldValue('brokerAccountName', this.props.user.brokerAccountName)
     // } else {
+    await this.props.getOfficeRegister()
     await this.props.getUserLogged()
-    this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
+    this.props.setFieldValue('officeRegion', this.props.officeOptions.label)
     if (this.props.brokersPerRegion <= 0) {
-      this.props.getBrokersPerRegion(this.props.user.dataRegion)
+      this.props.getBrokersPerRegion(this.props.officeOptions.label)
     }
     this.props.brokerAccountNameRestored &&
       this.props.setFieldValue('brokerAccountName', this.props.brokerAccountNameRestored)
@@ -68,7 +62,7 @@ class BrokersWeeklyReports extends Component {
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
 
-    if (name === 'dataRegion') {
+    if (name === 'officeRegion') {
       this.props.getBrokersPerRegion(value)
     }
     if (name === 'brokerAccountName') {
@@ -124,9 +118,9 @@ class BrokersWeeklyReports extends Component {
       reportWithdrawn,
       reportSold,
       businessesNotAlocated,
-      user
+      user,
+      officeOptions
     } = this.props
-    const { dataRegion } = this.state
     return (
       <Wrapper>
         <Form>
@@ -137,9 +131,9 @@ class BrokersWeeklyReports extends Component {
                   <Form.Field>
                     <Form.Select
                       required
-                      label="Select One Region"
-                      name="dataRegion"
-                      options={dataRegion}
+                      label="Select One Office"
+                      name="officeRegion"
+                      options={mapArrayToValuesForDropdown(officeOptions)}
                       value={values.dataRegion}
                       onChange={this._handleSelectChange}
                       disabled={user && !user.levelOfInfoAccess}
@@ -1611,12 +1605,14 @@ BrokersWeeklyReports.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
   setBrokerAccountName: PropTypes.func,
-  brokerAccountNameRestored: PropTypes.number
+  brokerAccountNameRestored: PropTypes.number,
+  getOfficeRegister: PropTypes.func,
+  officeOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
   return {
-    dataRegion: '',
+    officeRegion: '',
     brokerAccountName: 0
   }
 }
@@ -1636,7 +1632,8 @@ const mapStateToProps = state => ({
   isCreated: state.broker.create.isCreated,
   isUpdated: state.broker.update.isUpdated,
   user: state.user.getLogged.object,
-  isGotUser: state.user.getLogged.isGot
+  isGotUser: state.user.getLogged.isGot,
+  officeOptions: state.officeRegister.get.array
 })
 
 const mapDispatchToProps = dispatch =>
@@ -1647,7 +1644,8 @@ const mapDispatchToProps = dispatch =>
       getBrokersPerRegion,
       getBusinessesPerBroker,
       clearWeeklyReports,
-      getUserLogged
+      getUserLogged,
+      getOfficeRegister
     },
     dispatch
   )
