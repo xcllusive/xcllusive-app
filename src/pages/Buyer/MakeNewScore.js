@@ -8,7 +8,7 @@ import * as Yup from 'yup'
 import moment from 'moment'
 import { Grid, Header, Dimmer, Loader, Button, Icon, Message, Statistic, Segment, Label, Form } from 'semantic-ui-react'
 
-import { getBusiness } from '../../redux/ducks/business'
+import { getBusinessFromBuyer } from '../../redux/ducks/buyer'
 
 import Wrapper from '../../components/content/Wrapper'
 import CardScore from '../../components/content/CardScore'
@@ -51,8 +51,8 @@ class MakeNewScorePage extends Component {
   }
 
   componentDidMount () {
-    this.props.getBusiness(this.props.match.params.idBusiness)
-    this.props.enquiriesLast4Weeks(this.props.match.params.idBusiness)
+    this.props.getBusinessFromBuyer(this.props.match.params.idBusiness)
+    this.props.enquiriesLast4Weeks(parseInt(this.props.match.params.idBusiness))
     if (this.props.match.params.idScore) {
       this.props.getScore(this.props.match.params.idScore)
     }
@@ -138,8 +138,8 @@ class MakeNewScorePage extends Component {
     }
 
     if (nextProps.enquiries) {
-      // if (nextProps.values.diff > 4) nextProps.values.diff = 4
-      // if (nextProps.values.diff < -4) nextProps.values.diff = -4
+      if (nextProps.values.diff > 4) nextProps.values.diff = 4
+      if (nextProps.values.diff < -4) nextProps.values.diff = -4
       const objectEnquiries = _.find(nextProps.enquiriesOptions, o => o.label === nextProps.values.diff.toString())
       return {
         objectEnquiries
@@ -336,7 +336,7 @@ class MakeNewScorePage extends Component {
           <Grid style={{ marginTop: 0 }}>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Header as="h2" color="blue" content={`Currently Editing: ${business.businessName}`} />
+                <Header as="h2" color="blue" content={`Currently Editing: ${business ? business.businessName : null}`} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -830,7 +830,7 @@ MakeNewScorePage.propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
   values: PropTypes.object,
-  getBusiness: PropTypes.func,
+  getBusinessFromBuyer: PropTypes.func,
   business: PropTypes.object,
   isLoadingBusiness: PropTypes.bool,
   listScoreRegister: PropTypes.func,
@@ -921,7 +921,7 @@ const validationSchema = Yup.object().shape({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      getBusiness,
+      getBusinessFromBuyer,
       listScoreRegister,
       calculateScore,
       openModal,
@@ -935,8 +935,8 @@ const mapDispatchToProps = dispatch =>
   )
 
 const mapStateToProps = state => ({
-  business: state.business.get.object,
-  isLoadingBusiness: state.business.get.isLoading,
+  business: state.buyer.getBusinessFromBuyer.object,
+  isLoadingBusiness: state.buyer.getBusinessFromBuyer.isLoading,
   perceivedPriceOptions: state.scoreRegister.get.perceivedPrice.array,
   isLoadingPerceivedPrice: state.scoreRegister.get.perceivedPrice.isLoading,
   infoTransMomenOptions: state.scoreRegister.get.infoTransMomen.array,

@@ -24,6 +24,7 @@ import appraisal from './ducks/appraisal'
 import businessSold from './ducks/businessSold'
 import broker from './ducks/broker'
 import reports from './ducks/reports'
+import officeRegister from './ducks/officeRegister'
 
 export default combineReducers({
   modal,
@@ -49,5 +50,6 @@ export default combineReducers({
   businessSold,
   broker,
   reports,
+  officeRegister,
   router: routerReducer
 })

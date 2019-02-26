@@ -7,19 +7,16 @@ import { connect } from 'react-redux'
 import * as Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
-import { createBuyerRegister, updateBuyerRegister, getBuyerRegister } from '../../redux/ducks/buyerRegister'
+import { createOfficeRegister, updateOfficeRegister, getOfficeRegister } from '../../redux/ducks/officeRegister'
 
-class ModalNewBuyerRegister extends Component {
+class ModalOfficeRegister extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      typesBuyerRegisters: [{ key: 1, text: 'Buyer Type', value: 1 }, { key: 2, text: 'Buyer Source', value: 2 }]
-    }
+    this.state = {}
   }
-
   static getDerivedStateFromProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated) {
-      nextProps.getBuyerRegister(nextProps.values.buyerRegister)
+      nextProps.getOfficeRegister(nextProps.values.officeRegister)
     }
     return null
   }
@@ -40,31 +37,11 @@ class ModalNewBuyerRegister extends Component {
       createLoading,
       updateLoading
     } = this.props
-
-    const { typesBuyerRegisters } = this.state
-    console.log(this.props.objectBuyerRegister)
     return (
       <Modal open dimmer="blurring">
         <Modal.Header align="center">{this.props.title ? this.props.title : ''}</Modal.Header>
         <Modal.Content>
           <Form>
-            <Form.Group>
-              <Form.Field width={4}>
-                <Form.Select
-                  required
-                  label="Buyer Register"
-                  name="buyerRegister"
-                  options={typesBuyerRegisters}
-                  autoComplete="buyerRegister"
-                  value={values.buyerRegister}
-                  onChange={this._handleSelectChange}
-                  disabled={this.props.buyerRegister !== undefined}
-                />
-                {errors.buyerRegister && touched.buyerRegister && (
-                  <Label basic pointing color="red" content={errors.buyerRegister} />
-                )}
-              </Form.Field>
-            </Form.Group>
             <Form.Group>
               <Form.Field width={16}>
                 <Form.Input
@@ -83,13 +60,14 @@ class ModalNewBuyerRegister extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button
+            type="submit"
             color="blue"
             disabled={createLoading || updateLoading || !isValid}
             loading={createLoading || updateLoading}
             onClick={handleSubmit}
           >
             <Icon name="save" />
-            {this.props.buyerRegister ? 'Edit Register' : 'Create Register'}
+            {this.props.objectOfficeRegister ? 'Edit Register' : 'Create Register'}
           </Button>
           <Button color="red" onClick={this.props.closeModal}>
             <Icon name="cancel" />
@@ -101,7 +79,7 @@ class ModalNewBuyerRegister extends Component {
   }
 }
 
-ModalNewBuyerRegister.propTypes = {
+ModalOfficeRegister.propTypes = {
   closeModal: PropTypes.func.isRequired,
   title: PropTypes.string,
   values: PropTypes.object,
@@ -113,50 +91,47 @@ ModalNewBuyerRegister.propTypes = {
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
-  objectBuyerRegister: PropTypes.object,
-  buyerRegister: PropTypes.number,
+  objectOfficeRegister: PropTypes.object,
   updateLoading: PropTypes.bool,
   isCreated: PropTypes.bool,
   isUpdated: PropTypes.bool,
-  getBuyerRegister: PropTypes.func
+  getOfficeRegister: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
-  buyerRegister: props.buyerRegister ? props.buyerRegister : '',
-  label: props.objectBuyerRegister ? props.objectBuyerRegister.label : '',
-  id: props.objectBuyerRegister ? props.objectBuyerRegister.id : null
+  label: props.objectOfficeRegister ? props.objectOfficeRegister.label : '',
+  id: props.objectOfficeRegister ? props.objectOfficeRegister.id : null
 })
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
     .min(2, 'Label required minimum 2 characters.')
-    .max(200, 'Label require max 200 characters.'),
-  buyerRegister: Yup.number().required('Buyer Register is required.')
+    .max(200, 'Label require max 200 characters.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  if (props.buyerRegister) {
-    props.updateBuyerRegister(values)
+  if (props.objectOfficeRegister) {
+    props.updateOfficeRegister(values)
   } else {
-    props.createBuyerRegister(values)
+    props.createOfficeRegister(values)
   }
 }
 
 const mapStateToProps = state => ({
-  createLoading: state.buyerRegister.create.isLoading,
-  isCreated: state.buyerRegister.create.isCreated,
-  updateLoading: state.buyerRegister.update.isLoading,
-  isUpdated: state.buyerRegister.update.isUpdated
+  createLoading: state.officeRegister.create.isLoading,
+  isCreated: state.officeRegister.create.isCreated,
+  updateLoading: state.officeRegister.update.isLoading,
+  isUpdated: state.officeRegister.update.isUpdated
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      createBuyerRegister,
-      updateBuyerRegister,
-      getBuyerRegister
+      createOfficeRegister,
+      updateOfficeRegister,
+      getOfficeRegister
     },
     dispatch
   )
@@ -170,5 +145,5 @@ export default connect(
     validationSchema,
     handleSubmit,
     enableReinitialize: true
-  })(ModalNewBuyerRegister)
+  })(ModalOfficeRegister)
 )

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Table, Grid, Header, Button, Icon, Pagination, Form } from 'semantic-ui-react'
 
-import { getBusiness } from '../../redux/ducks/business'
+import { getBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { listScore, removeScore } from '../../redux/ducks/score'
 import moment from 'moment'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
@@ -19,7 +19,7 @@ class ScoreListPage extends Component {
 
   componentDidMount () {
     this.props.listScore(this.props.match.params.id)
-    this.props.getBusiness(this.props.match.params.id)
+    this.props.getBusinessFromBuyer(this.props.match.params.id)
   }
 
   _toggleModalConfirmDelete = idScore => {
@@ -32,7 +32,7 @@ class ScoreListPage extends Component {
         if (isConfirmed) {
           await this.props.removeScore(idScore)
           this.props.listScore(this.props.match.params.id)
-          this.props.getBusiness(this.props.match.params.id)
+          this.props.getBusinessFromBuyer(this.props.match.params.idBusiness)
         }
       }
     })
@@ -56,7 +56,12 @@ class ScoreListPage extends Component {
                   </Form.Field>
                   <Form.Field>
                     {/* <h2 style={{ color: 'blue' }}>{business.businessName}</h2> */}
-                    <Header style={{ marginTop: '0px' }} as="h2" color="blue" content={business.businessName} />
+                    <Header
+                      style={{ marginTop: '0px' }}
+                      as="h2"
+                      color="blue"
+                      content={business ? business.businessName : null}
+                    />
                   </Form.Field>
                 </Form.Group>
               </Form>
@@ -142,7 +147,7 @@ ScoreListPage.propTypes = {
   match: PropTypes.object,
   listScoreList: PropTypes.object,
   history: PropTypes.object,
-  getBusiness: PropTypes.func,
+  getBusinessFromBuyer: PropTypes.func,
   business: PropTypes.object,
   isLoadingBusiness: PropTypes.bool,
   listScore: PropTypes.func,
@@ -150,12 +155,13 @@ ScoreListPage.propTypes = {
   openModal: PropTypes.func
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBusiness, listScore, removeScore, openModal }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getBusinessFromBuyer, listScore, removeScore, openModal }, dispatch)
 
 const mapStateToProps = state => ({
   listScoreList: state.score.listScore,
-  business: state.business.get.object,
-  isLoadingBusiness: state.business.get.isLoading
+  business: state.buyer.getBusinessFromBuyer.object,
+  isLoadingBusiness: state.buyer.getBusinessFromBuyer.isLoading
 })
 
 export default connect(

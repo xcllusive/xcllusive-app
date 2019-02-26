@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import styled from 'styled-components'
 import { Table, Input, Checkbox, Grid, Button, Icon, Dimmer, Loader } from 'semantic-ui-react'
-import { getUsers, createUser, updateUser } from '../../redux/ducks/user'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
-import Wrapper from '../../components/content/Wrapper'
+import { getUsers, createUser, updateUser } from '../../../redux/ducks/user'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
+import Wrapper from '../../../components/content/Wrapper'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em;

@@ -28,6 +28,7 @@ import ModalSendAppraisal from './ModalSendAppraisal'
 import ModalOwnersApprovalConfirm from './ModalOwnersApprovalConfirm'
 import ModalBrokersWeeklyReport from './ModalBrokersWeeklyReport'
 import ModalBrokersWeeklyReportToDo from './ModalBrokersWeeklyReportToDo'
+import ModalOfficeRegister from './ModalOfficeRegister'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -37,6 +38,7 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_EDIT_BUYER_REGISTER]: ModalNewBuyerRegister,
   [TypesModal.MODAL_TYPE_NEW_SCORE_REGISTER]: ModalNewScoreRegister,
   [TypesModal.MODAL_TYPE_EDIT_SCORE_REGISTER]: ModalNewScoreRegister,
+  [TypesModal.MODAL_TYPE_OFFICE_REGISTER]: ModalOfficeRegister,
   [TypesModal.MODAL_TYPE_UPLOAD_FILE]: ModalUploadFile,
   [TypesModal.MODAL_TYPE_EMAIL_TEMPLATES]: ModalEmailTemplates,
   [TypesModal.MODAL_TYPE_GROUP_EMAIL]: ModalGroupEmail,

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
 
-import UserList from './UserList'
+import User from './User/User'
 import Business from './Business/Business'
 import Buyer from './Buyer/Buyer'
 // import EmailTemplates from './EmailTemplates'
@@ -21,7 +21,7 @@ class SystemSettingsPage extends Component {
       panes: [
         {
           menuItem: 'Users',
-          render: () => <UserList />
+          render: () => <User />
         },
         {
           menuItem: 'Buyer',
@@ -46,11 +46,7 @@ class SystemSettingsPage extends Component {
   render () {
     return (
       <div>
-        <Tab
-          renderActiveOnly
-          menu={{ secondary: true, pointing: true }}
-          panes={this.state.panes}
-        />
+        <Tab renderActiveOnly menu={{ secondary: true, pointing: true }} panes={this.state.panes} />
       </div>
     )
   }
