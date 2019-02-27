@@ -939,7 +939,7 @@ MarketingReports.propTypes = {
 
 const mapPropsToValues = props => {
   return {
-    dateFrom: moment().subtract(30, 'days'),
+    dateFrom: moment().startOf('month'),
     dateTo: moment()
   }
 }

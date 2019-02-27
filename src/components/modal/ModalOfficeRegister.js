@@ -46,7 +46,7 @@ class ModalOfficeRegister extends Component {
               <Form.Field width={16}>
                 <Form.Input
                   required
-                  label="Label"
+                  label="Office Name"
                   name="label"
                   autoComplete="label"
                   value={values.label}
@@ -54,6 +54,60 @@ class ModalOfficeRegister extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.label && touched.label && <Label basic color="red" pointing content={errors.label} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field width={16}>
+                <Form.Input
+                  required
+                  label="Address"
+                  name="address"
+                  autoComplete="address"
+                  value={values.address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.address && touched.address && <Label basic color="red" pointing content={errors.address} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field width={16}>
+                <Form.Input
+                  required
+                  label="Phone Number"
+                  name="phoneNumber"
+                  autoComplete="phoneNumber"
+                  value={values.phoneNumber}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.phoneNumber && touched.phoneNumber && (
+                  <Label basic color="red" pointing content={errors.phoneNumber} />
+                )}
+              </Form.Field>
+              <Form.Field width={16}>
+                <Form.Input
+                  required
+                  label="License"
+                  name="license"
+                  autoComplete="license"
+                  value={values.license}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.license && touched.license && <Label basic color="red" pointing content={errors.license} />}
+              </Form.Field>
+              <Form.Field width={16}>
+                <Form.Input
+                  required
+                  label="ABN"
+                  name="abn"
+                  autoComplete="abn"
+                  value={values.abn}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.abn && touched.abn && <Label basic color="red" pointing content={errors.abn} />}
               </Form.Field>
             </Form.Group>
           </Form>
@@ -99,15 +153,35 @@ ModalOfficeRegister.propTypes = {
 }
 
 const mapPropsToValues = props => ({
+  id: props.objectOfficeRegister ? props.objectOfficeRegister.id : null,
   label: props.objectOfficeRegister ? props.objectOfficeRegister.label : '',
-  id: props.objectOfficeRegister ? props.objectOfficeRegister.id : null
+  address: props.objectOfficeRegister ? props.objectOfficeRegister.address : '',
+  phoneNumber: props.objectOfficeRegister ? props.objectOfficeRegister.phoneNumber : '',
+  license: props.objectOfficeRegister ? props.objectOfficeRegister.license : '',
+  abn: props.objectOfficeRegister ? props.objectOfficeRegister.abn : ''
 })
 
 const validationSchema = Yup.object().shape({
   label: Yup.string()
     .required('Label is required.')
     .min(2, 'Label required minimum 2 characters.')
-    .max(200, 'Label require max 200 characters.')
+    .max(200, 'Label require max 200 characters.'),
+  address: Yup.string()
+    .required('Address is required.')
+    .min(2, 'Address required minimum 2 characters.')
+    .max(255, 'Address require max 255 characters.'),
+  phoneNumber: Yup.string()
+    .required('Phone Number is required.')
+    .min(2, 'Phone Number required minimum 2 characters.')
+    .max(255, 'Phone Number require max 45 characters.'),
+  license: Yup.string()
+    .required('License is required.')
+    .min(2, 'License required minimum 2 characters.')
+    .max(255, 'License require max 45 characters.'),
+  abn: Yup.string()
+    .required('ABN is required.')
+    .min(2, 'ABN required minimum 2 characters.')
+    .max(255, 'ABN require max 45 characters.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

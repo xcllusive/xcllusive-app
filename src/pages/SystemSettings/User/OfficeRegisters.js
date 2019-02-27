@@ -70,7 +70,7 @@ class OfficeRegisters extends Component {
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-              <Grid.Column width={8}>
+              <Grid.Column width={12}>
                 <Header as="h5" attached="top">
                   Office Registered
                 </Header>
@@ -79,6 +79,10 @@ class OfficeRegisters extends Component {
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
                       <Table.HeaderCell>Label</Table.HeaderCell>
+                      <Table.HeaderCell>Address</Table.HeaderCell>
+                      <Table.HeaderCell>Phone</Table.HeaderCell>
+                      <Table.HeaderCell>License</Table.HeaderCell>
+                      <Table.HeaderCell>ABN</Table.HeaderCell>
                       <Table.HeaderCell>Settings</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
@@ -88,6 +92,10 @@ class OfficeRegisters extends Component {
                         <Table.Row active key={officeOptions.id}>
                           <Table.Cell>{officeOptions.id}</Table.Cell>
                           <Table.Cell>{officeOptions.label}</Table.Cell>
+                          <Table.Cell>{officeOptions.address}</Table.Cell>
+                          <Table.Cell>{officeOptions.phoneNumber}</Table.Cell>
+                          <Table.Cell>{officeOptions.license}</Table.Cell>
+                          <Table.Cell>{officeOptions.abn}</Table.Cell>
                           <Table.Cell>
                             <Icon link name="edit" onClick={() => this._editOffice(officeOptions, 1)} />
                             <Icon
