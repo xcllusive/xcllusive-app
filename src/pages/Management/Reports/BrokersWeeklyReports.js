@@ -6,6 +6,7 @@ import { withFormik } from 'formik'
 import { Grid, Form, Table, Segment, Header, Dimmer, Loader, Button, Icon, Label } from 'semantic-ui-react'
 import moment from 'moment'
 import numeral from 'numeral'
+import _ from 'lodash'
 import { openModal, TypesModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
 import {
@@ -26,19 +27,13 @@ class BrokersWeeklyReports extends Component {
     }
   }
   async componentDidMount () {
-    // // this.props.clearWeeklyReports()
-    // if (
-    //   (this.props.user && this.props.user.brokerAccountName) ||
-    //   (this.props.location && this.props.location.state.keepRecords)
-    // ) {
-    //   this.props.setFieldValue('dataRegion', this.props.user.dataRegion)
-    //   this.props.setFieldValue('brokerAccountName', this.props.user.brokerAccountName)
-    // } else {
     await this.props.getOfficeRegister()
     await this.props.getUserLogged()
-    this.props.setFieldValue('officeRegion', this.props.officeOptions.label)
-    if (this.props.brokersPerRegion <= 0) {
-      this.props.getBrokersPerRegion(this.props.officeOptions.label)
+
+    const officeOfUserLogged = _.find(this.props.officeOptions, o => o.id === this.props.user.officeId)
+    if (!this.props.user.levelOfInfoAccess) {
+      this.props.setFieldValue('officeRegion', officeOfUserLogged.id)
+      this.props.getBrokersPerRegion(officeOfUserLogged.id)
     }
     this.props.brokerAccountNameRestored &&
       this.props.setFieldValue('brokerAccountName', this.props.brokerAccountNameRestored)
