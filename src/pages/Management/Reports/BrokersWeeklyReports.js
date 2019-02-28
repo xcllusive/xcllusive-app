@@ -134,7 +134,7 @@ class BrokersWeeklyReports extends Component {
                       label="Select One Office"
                       name="officeRegion"
                       options={mapArrayToValuesForDropdown(officeOptions)}
-                      value={values.dataRegion}
+                      value={values.officeRegion}
                       onChange={this._handleSelectChange}
                       disabled={user && !user.levelOfInfoAccess}
                     />
