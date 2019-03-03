@@ -126,12 +126,12 @@ class ModalNewHelpDesk extends Component {
                   <Label basic color="red" pointing content={errors.attachment} />
                 )}
               </Form.Field>
-              {/* <Form.Field width={5} style={{ alignSelf: 'flex-end' }}>
+              <Form.Field width={5} style={{ alignSelf: 'flex-end' }}>
                 <Form.Button floated="right" color="yellow" onClick={e => this._removeFileUploaded(e)}>
                   <Icon name="remove" />
                   Remove
                 </Form.Button>
-              </Form.Field> */}
+              </Form.Field>
             </Form.Group>
           </Form>
         </Modal.Content>

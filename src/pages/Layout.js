@@ -30,7 +30,6 @@ import MakeTaxInvoice from './Business/Invoice/MakeTaxInvoice'
 import AppraisalMenu from './Business/Appraisal/AppraisalMenu'
 import AppraisalList from './Business/Appraisal/AppraisalList'
 import HistoricalWeeklyReport from './Management/Reports/HistoricalWeeklyReport'
-import HelpDesk from './HelpDesk/HelpDesk'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
@@ -62,9 +61,9 @@ const Layout = ({ match, logout, menu }) => (
         if (item === 'SYSTEM_SETTINGS_MENU') {
           return <Menu.Item key={item} name="system settings" as={NavLink} to={`${match.url}systemSettings`} />
         }
-        if (item === 'HELP_DESK_MENU') {
-          return <Menu.Item key={item} name="help desk" as={NavLink} to={`${match.url}helpDesk`} />
-        }
+        // if (item === 'HELP_DESK_MENU') {
+        //   return <Menu.Item key={item} name="help desk" as={NavLink} to={`${match.url}helpDesk`} />
+        // }
       })}
       <Menu.Menu position="right">
         <Menu.Item onClick={() => logout()} position="right">
@@ -182,7 +181,7 @@ const Layout = ({ match, logout, menu }) => (
         path={`${match.path}systemSettings`}
         allowedRoles="SYSTEM_SETTINGS_MENU"
       />
-      <AuthorizationRoute exact component={HelpDesk} path={`${match.path}helpDesk`} allowedRoles="HELP_DESK_MENU" />
+      {/* <AuthorizationRoute exact component={HelpDesk} path={`${match.path}helpDesk`} allowedRoles="HELP_DESK_MENU" /> */}
       <Route
         render={() => <span>You, don`t have permission to access this page!</span>}
         path={`${match.path}unathorized`}
