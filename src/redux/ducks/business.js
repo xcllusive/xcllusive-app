@@ -11,7 +11,8 @@ import {
   getBuyersGroupEmail as getBuyersGroupEmailAPI,
   getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI,
   getAllPerUser,
-  uploadIM as uploadIMAPI
+  uploadIM as uploadIMAPI,
+  getAllPhonesEmailsBusinesses as getAllPhonesEmailsBusinessesAPI
 } from '../../services/api/business'
 
 import { getAllFromBusiness } from '../../services/api/businessLog'
@@ -57,7 +58,10 @@ export const Types = {
   GET_BUSINESSES_PER_USER_FAILURE: 'GET_BUSINESSES_PER_USER_FAILURE',
   UPLOAD_IM_LOADING: 'UPLOAD_IM_LOADING',
   UPLOAD_IM_SUCCESS: 'UPLOAD_IM_SUCCESS',
-  UPLOAD_IM_FAILURE: 'UPLOAD_IM_FAILURE'
+  UPLOAD_IM_FAILURE: 'UPLOAD_IM_FAILURE',
+  GET_PHONES_EMAILS_BUSINESSES_LOADING: 'GET_PHONES_EMAILS_BUSINESSES_LOADING',
+  GET_PHONES_EMAILS_BUSINESSES_SUCCESS: 'GET_PHONES_EMAILS_BUSINESSES_SUCCESS',
+  GET_PHONES_EMAILS_BUSINESSES_FAILURE: 'GET_PHONES_EMAILS_BUSINESSES_FAILURE'
 }
 
 // Reducer
@@ -132,6 +136,11 @@ const initialState = {
   uploadIM: {
     isLoading: false,
     isUploaded: false,
+    error: null
+  },
+  getPhonesEmailBusinesses: {
+    isLoading: false,
+    array: [],
     error: null
   }
 }
@@ -532,6 +541,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_PHONES_EMAILS_BUSINESSES_LOADING:
+      return {
+        ...state,
+        getPhonesEmailBusinesses: {
+          ...state.getPhonesEmailBusinesses,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_PHONES_EMAILS_BUSINESSES_SUCCESS:
+      return {
+        ...state,
+        getPhonesEmailBusinesses: {
+          ...state.getPhonesEmailBusinesses,
+          isLoading: false,
+          array: action.payload.data,
+          error: null
+        }
+      }
+    case Types.GET_PHONES_EMAILS_BUSINESSES_FAILURE:
+      return {
+        ...state,
+        getPhonesEmailBusinesses: {
+          ...state.getPhonesEmailBusinesses,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -800,5 +837,25 @@ const setGetBusinessReducer = business => {
   return {
     type: Types.GET_BUSINESS_SUCCESS,
     payload: business
+  }
+}
+
+export const getAllPhonesEmailsBusinesses = () => async dispatch => {
+  dispatch({
+    type: Types.GET_PHONES_EMAILS_BUSINESSES_LOADING,
+    payload: true
+  })
+  try {
+    const phonesEmailsbusinesses = await getAllPhonesEmailsBusinessesAPI()
+    dispatch({
+      type: Types.GET_PHONES_EMAILS_BUSINESSES_SUCCESS,
+      payload: phonesEmailsbusinesses
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_PHONES_EMAILS_BUSINESSES_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
   }
 }

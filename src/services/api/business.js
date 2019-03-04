@@ -123,3 +123,9 @@ export const uploadIM = (imFile, businessId) => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const getAllPhonesEmailsBusinesses = () => {
+  return request({
+    url: '/business/phones-emails-businesses'
+  })
+}
