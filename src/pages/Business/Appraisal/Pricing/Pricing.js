@@ -1127,7 +1127,13 @@ class PricingPage extends Component {
                       <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
                     </Form.Field>
                     <Form.Field>
-                      <h3>{numeral(this._stockValue(appraisalObject)).format('$0,0')}</h3>
+                      <h3>
+                        {appraisalObject.stockValuationOption === 2
+                          ? numeral(this._stockValue(appraisalObject)).format('$0,0')
+                          : appraisalObject.stockValuationOption === 3
+                            ? numeral(appraisalObject.stockNecessary).format('$0,0')
+                            : 'No Stock'}
+                      </h3>
                     </Form.Field>
                   </Form.Group>
                 </Form>

@@ -74,7 +74,7 @@ class ClientManagerList extends Component {
         buyer: null,
         createdBuyer: true
       })
-      if (this.props.newBuyerObject.id !== '') {
+      if (this.props.newBuyerObject && this.props.newBuyerObject.id !== '') {
         this.timer = setTimeout(() => this.props.getBuyers(`B${this.props.newBuyerObject.id}`), 100)
       }
     }
@@ -309,9 +309,23 @@ class ClientManagerList extends Component {
   _newBuyer = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUYER, {
       title: 'New Buyer',
-      onConfirm: async values => {
+      onConfirm: async (values, searchDuplicatedBuyer = false) => {
         if (values) {
-          await this.props.createBuyer(values)
+          if (searchDuplicatedBuyer) {
+            await this.props.closeModal()
+            this.setState({
+              inputSearchBuyer: searchDuplicatedBuyer.email
+                ? searchDuplicatedBuyer.email
+                : searchDuplicatedBuyer.telephone1
+            })
+            const inputDuplicatedBuyer = searchDuplicatedBuyer.email
+              ? searchDuplicatedBuyer.email
+              : searchDuplicatedBuyer.telephone1
+
+            this.timer = setTimeout(() => this.props.getBuyers(inputDuplicatedBuyer), 500)
+          } else {
+            await this.props.createBuyer(values)
+          }
           this.props.closeModal()
         }
       }

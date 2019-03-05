@@ -443,7 +443,7 @@ class EditBusinessDetailForm extends Component {
                         }
                       })
                     }
-                    disabled
+                    // disabled
                   >
                     <Icon name="edit" />
                     Appraisal Mgmt

@@ -11,7 +11,8 @@ import {
   getBuyerBusinesses as getBuyerBusinessesAPI,
   getBuyersFromBusiness as getBuyersFromBusinessAPI,
   getBusinessFromBuyer as getBusinessFromBuyerAPI,
-  getBuyersGroupEmail as getBuyersGroupEmailAPI
+  getBuyersGroupEmail as getBuyersGroupEmailAPI,
+  verifyDuplicatedBuyer as verifyDuplicatedBuyerAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -51,7 +52,11 @@ export const Types = {
   GET_BUSINESS_FROM_BUYER_FAILURE: 'GET_BUSINESS_FROM_BUYER_FAILURE',
   GET_BUYERS_GROUP_EMAIL_LOADING: 'GET_BUYERS_GROUP_EMAIL_LOADING',
   GET_BUYERS_GROUP_EMAIL_SUCCESS: 'GET_BUYERS_GROUP_EMAIL_SUCCESS',
-  GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE'
+  GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE',
+  VERIFY_DUPLICATED_BUYER_LOADING: 'VERIFY_DUPLICATED_BUYER_LOADING',
+  VERIFY_DUPLICATED_BUYER_SUCCESS: 'VERIFY_DUPLICATED_BUYER_SUCCESS',
+  VERIFY_DUPLICATED_BUYER_FAILURE: 'VERIFY_DUPLICATED_BUYER_FAILURE',
+  CLEAR_BUYER: 'CLEAR_BUYER'
 }
 
 // Reducer
@@ -124,6 +129,12 @@ const initialState = {
   getBuyersGroupEmail: {
     isLoading: true,
     array: [],
+    error: null
+  },
+  verifyDuplicatedBuyer: {
+    isLoading: true,
+    disable: false,
+    object: null,
     error: null
   }
 }
@@ -465,6 +476,39 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.VERIFY_DUPLICATED_BUYER_LOADING:
+      return {
+        ...state,
+        verifyDuplicatedBuyer: {
+          ...state.verifyDuplicatedBuyer,
+          isLoading: action.payload,
+          disable: false,
+          error: null
+        }
+      }
+    case Types.VERIFY_DUPLICATED_BUYER_SUCCESS:
+      return {
+        ...state,
+        verifyDuplicatedBuyer: {
+          ...state.verifyDuplicatedBuyer,
+          isLoading: false,
+          disable: true,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.VERIFY_DUPLICATED_BUYER_FAILURE:
+      return {
+        ...state,
+        verifyDuplicatedBuyer: {
+          ...state.verifyDuplicatedBuyer,
+          isLoading: false,
+          disable: false,
+          error: action.payload
+        }
+      }
+    case Types.CLEAR_BUYER:
+      return initialState
     default:
       return state
   }
@@ -708,4 +752,30 @@ export const getBuyersGroupEmail = businessId => async dispatch => {
     })
     toast.error(error.message)
   }
+}
+
+export const verifyDuplicatedBuyer = values => async dispatch => {
+  dispatch({
+    type: Types.VERIFY_DUPLICATED_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const verifyDuplicatedBuyer = await verifyDuplicatedBuyerAPI(values)
+    dispatch({
+      type: Types.VERIFY_DUPLICATED_BUYER_SUCCESS,
+      payload: verifyDuplicatedBuyer.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.VERIFY_DUPLICATED_BUYER_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const clearBuyer = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_BUYER
+  })
 }
