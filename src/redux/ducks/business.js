@@ -12,7 +12,7 @@ import {
   getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI,
   getAllPerUser,
   uploadIM as uploadIMAPI,
-  getAllPhonesEmailsBusinesses as getAllPhonesEmailsBusinessesAPI
+  verifyDuplicatedBusiness as verifyDuplicatedBusinessAPI
 } from '../../services/api/business'
 
 import { getAllFromBusiness } from '../../services/api/businessLog'
@@ -59,9 +59,10 @@ export const Types = {
   UPLOAD_IM_LOADING: 'UPLOAD_IM_LOADING',
   UPLOAD_IM_SUCCESS: 'UPLOAD_IM_SUCCESS',
   UPLOAD_IM_FAILURE: 'UPLOAD_IM_FAILURE',
-  GET_PHONES_EMAILS_BUSINESSES_LOADING: 'GET_PHONES_EMAILS_BUSINESSES_LOADING',
-  GET_PHONES_EMAILS_BUSINESSES_SUCCESS: 'GET_PHONES_EMAILS_BUSINESSES_SUCCESS',
-  GET_PHONES_EMAILS_BUSINESSES_FAILURE: 'GET_PHONES_EMAILS_BUSINESSES_FAILURE'
+  VERIFY_DUPLICATED_BUSINESS_LOADING: 'VERIFY_DUPLICATED_BUSINESS_LOADING',
+  VERIFY_DUPLICATED_BUSINESS_SUCCESS: 'VERIFY_DUPLICATED_BUSINESS_SUCCESS',
+  VERIFY_DUPLICATED_BUSINESS_FAILURE: 'VERIFY_DUPLICATED_BUSINESS_FAILURE',
+  CLEAR_BUSINESS: 'CLEAR_BUSINESS'
 }
 
 // Reducer
@@ -90,6 +91,7 @@ const initialState = {
   create: {
     isLoading: false,
     isCreated: false,
+    object: null,
     error: null
   },
   update: {
@@ -138,9 +140,10 @@ const initialState = {
     isUploaded: false,
     error: null
   },
-  getPhonesEmailBusinesses: {
+  verifyDuplicatedBusiness: {
     isLoading: false,
-    array: [],
+    object: null,
+    disableButton: false,
     error: null
   }
 }
@@ -163,6 +166,7 @@ export default function reducer (state = initialState, action) {
           ...state.create,
           isLoading: false,
           isCreated: true,
+          object: action.payload,
           error: null
         }
       }
@@ -541,34 +545,39 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.GET_PHONES_EMAILS_BUSINESSES_LOADING:
+    case Types.VERIFY_DUPLICATED_BUSINESS_LOADING:
       return {
         ...state,
-        getPhonesEmailBusinesses: {
-          ...state.getPhonesEmailBusinesses,
+        verifyDuplicatedBusiness: {
+          ...state.verifyDuplicatedBusiness,
           isLoading: action.payload,
+          disableButton: false,
           error: null
         }
       }
-    case Types.GET_PHONES_EMAILS_BUSINESSES_SUCCESS:
+    case Types.VERIFY_DUPLICATED_BUSINESS_SUCCESS:
       return {
         ...state,
-        getPhonesEmailBusinesses: {
-          ...state.getPhonesEmailBusinesses,
+        verifyDuplicatedBusiness: {
+          ...state.verifyDuplicatedBusiness,
           isLoading: false,
-          array: action.payload.data,
+          object: action.payload,
+          disableButton: true,
           error: null
         }
       }
-    case Types.GET_PHONES_EMAILS_BUSINESSES_FAILURE:
+    case Types.VERIFY_DUPLICATED_BUSINESS_FAILURE:
       return {
         ...state,
-        getPhonesEmailBusinesses: {
-          ...state.getPhonesEmailBusinesses,
+        verifyDuplicatedBusiness: {
+          ...state.verifyDuplicatedBusiness,
           isLoading: false,
+          disableButton: false,
           error: action.payload
         }
       }
+    case Types.CLEAR_BUSINESS:
+      return initialState
     default:
       return state
   }
@@ -588,7 +597,8 @@ export const createBusiness = business => async dispatch => {
   try {
     const response = await create(business)
     dispatch({
-      type: Types.CREATE_BUSINESS_SUCCESS
+      type: Types.CREATE_BUSINESS_SUCCESS,
+      payload: response.data
     })
     toast.success(response.message)
   } catch (error) {
@@ -840,22 +850,28 @@ const setGetBusinessReducer = business => {
   }
 }
 
-export const getAllPhonesEmailsBusinesses = () => async dispatch => {
+export const verifyDuplicatedBusiness = values => async dispatch => {
   dispatch({
-    type: Types.GET_PHONES_EMAILS_BUSINESSES_LOADING,
+    type: Types.VERIFY_DUPLICATED_BUSINESS_LOADING,
     payload: true
   })
   try {
-    const phonesEmailsbusinesses = await getAllPhonesEmailsBusinessesAPI()
+    const verifyDuplicatedBusiness = await verifyDuplicatedBusinessAPI(values)
     dispatch({
-      type: Types.GET_PHONES_EMAILS_BUSINESSES_SUCCESS,
-      payload: phonesEmailsbusinesses
+      type: Types.VERIFY_DUPLICATED_BUSINESS_SUCCESS,
+      payload: verifyDuplicatedBusiness.data
     })
   } catch (error) {
     dispatch({
-      type: Types.GET_PHONES_EMAILS_BUSINESSES_FAILURE,
+      type: Types.VERIFY_DUPLICATED_BUSINESS_FAILURE,
       payload: error
     })
     toast.error(error.message)
   }
+}
+
+export const clearBusiness = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_BUSINESS
+  })
 }

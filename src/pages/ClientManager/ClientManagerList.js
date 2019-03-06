@@ -350,9 +350,21 @@ class ClientManagerList extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
       title: 'New Business',
       where: 'ClientManager',
-      onConfirm: async values => {
+      onConfirm: async (values, searchDuplicatedBusiness = false) => {
         if (values) {
-          await this.props.createBusiness(values)
+          if (searchDuplicatedBusiness) {
+            await this.props.closeModal()
+            this.setState({
+              inputSearchBusiness: `BS${searchDuplicatedBusiness.id}`
+            })
+            this.timer = setTimeout(() => this.props.getBusinesses(`BS${searchDuplicatedBusiness.id}`), 500)
+          } else {
+            await this.props.createBusiness(values)
+            this.setState({
+              inputSearchBusiness: `BS${this.props.newBusinessObject.id}`
+            })
+            this.timer = setTimeout(() => this.props.getBusinesses(`BS${this.props.newBusinessObject.id}`), 500)
+          }
           this.props.closeModal()
         }
       }
@@ -869,7 +881,8 @@ ClientManagerList.propTypes = {
   values: PropTypes.object,
   newBuyerObject: PropTypes.object,
   isSentCa: PropTypes.bool,
-  isReceivedCa: PropTypes.bool
+  isReceivedCa: PropTypes.bool,
+  newBusinessObject: PropTypes.object
 }
 
 const mapPropsToValues = () => ({
@@ -897,7 +910,8 @@ const mapStateToProps = state => ({
   isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading,
   businessObject: state.business.get.object,
   objectEmailTemplate: state.emailTemplates.get.object,
-  newBuyerObject: state.buyer.create.newBuyer
+  newBuyerObject: state.buyer.create.newBuyer,
+  newBusinessObject: state.business.create.object
 })
 
 const mapDispatchToProps = dispatch =>

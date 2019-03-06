@@ -124,8 +124,9 @@ export const uploadIM = (imFile, businessId) => {
   })
 }
 
-export const getAllPhonesEmailsBusinesses = () => {
+export const verifyDuplicatedBusiness = values => {
   return request({
-    url: '/business/phones-emails-businesses'
+    url: '/business/duplicated-business',
+    params: values
   })
 }
