@@ -118,6 +118,7 @@ const initialState = {
     isLoading: true,
     array: [],
     countAll: 0,
+    isGotBuyers: false,
     error: null
   },
   getBusinessFromBuyer: {
@@ -396,6 +397,7 @@ export default function reducer (state = initialState, action) {
         getBuyersFromBusiness: {
           ...state.getBuyersFromBusiness,
           isLoading: action.payload,
+          isGotBuyers: false,
           error: null
         }
       }
@@ -407,6 +409,7 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           array: action.payload.array,
           countAll: action.payload.countAll,
+          isGotBuyers: true,
           error: null
         }
       }
@@ -416,6 +419,7 @@ export default function reducer (state = initialState, action) {
         getBuyersFromBusiness: {
           ...state.getBuyersFromBusiness,
           isLoading: false,
+          isGotBuyers: false,
           error: action.payload
         }
       }

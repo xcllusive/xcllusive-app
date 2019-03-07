@@ -129,21 +129,10 @@ class BuyerDetails extends Component {
       await this.props.updateBuyer(updateBuyer)
     } else {
       await this.props.updateBuyer(updateBuyer)
-      if (this.props.values && (this.props.values.buyerLog_id > 0 || this.state.buyerLog_id > 0)) {
-        if (this.state.buyerLog_id) {
-          this.props.values.buyerLog_id = parseInt(this.state.buyerLog_id)
-          if (this.props.values.buyerLog_followUp === '') {
-            this.props.values.buyerLog_followUp = this.state.buyerLog_followUp
-          }
-          if (this.props.values.buyerLog_text === '') {
-            this.props.values.buyerLog_text = this.state.buyerLog_text
-          }
-        }
-        await this.props.updateBuyerLog(this.props.values)
-      }
+      if (this.props.values && this.props.values.buyerLog_id > 0) await this.props.updateBuyerLog(this.props.values)
     }
 
-    await this.props.getBusinessBuyerLog(
+    this.props.getBusinessBuyerLog(
       this.props.match.params.idBuyer,
       this.props.match.params.idBusiness,
       5,
