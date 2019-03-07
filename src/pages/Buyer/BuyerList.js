@@ -125,7 +125,10 @@ class BuyerListPage extends Component {
                             }, false)
                           }
                         >
-                          {buyersList.BuyerLog[0].text}
+                          {buyersList.BuyerLog.map((item, index) => {
+                            if (item.followUpStatus === 'Pending') return item.text
+                          })}
+                          {/* {buyersList.BuyerLog[0].text} */}
                         </Table.Cell>
                         <Table.Cell
                           warning={
