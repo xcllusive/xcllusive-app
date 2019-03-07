@@ -158,7 +158,7 @@ class BuyerListPage extends Component {
                           }
                         >
                           {/* cayo */}
-                          {this._textBuyer(buyersList.BuyerLog)}
+                          {/* {this._textBuyer(buyersList.BuyerLog)} */}
                           {/* {buyersList.BuyerLog.map((item, index) => {
                             if (item.buyer_id === 24129) console.log('oi')
                             if (item.followUpStatus === 'Pending') {
