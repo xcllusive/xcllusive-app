@@ -63,6 +63,18 @@ class BuyerListPage extends Component {
     })
   }
 
+  returningPendingBuyerIfNeeded = buyerLog => {
+    let text = null
+    buyerLog.forEach(log => {
+      if (log.followUpStatus === 'Pending') {
+        text = log.text
+        return log.text
+      } else return null
+    })
+
+    return text || buyerLog[0].text
+  }
+
   render () {
     const { listBuyersList, history, business, isLoadingBusiness, countAll, countAllEnquiry } = this.props
     return (
@@ -157,22 +169,10 @@ class BuyerListPage extends Component {
                             }, false)
                           }
                         >
-                          {/* cayo */}
-                          {/* {this._textBuyer(buyersList.BuyerLog)} */}
-                          {/* {buyersList.BuyerLog.map((item, index) => {
-                            if (item.buyer_id === 24129) console.log('oi')
-                            if (item.followUpStatus === 'Pending') {
-                              return item.text
-                            } else {
-                              if (buyersList.BuyerLog.length > 0) {
-                                if (item.followUpStatus === 'Pending') {
-                                  return item.text
-                                }
-                                return null
-                              } else return item.text
-                            }
-                          })} */}
-                          {buyersList.BuyerLog[0].text}
+                          {buyersList.BuyerLog.length > 1 && !this.state.showAll
+                            ? this.returningPendingBuyerIfNeeded(buyersList.BuyerLog)
+                            : buyersList.BuyerLog[0].text}
+                          {/* {buyersList.BuyerLog[0].text} */}
                         </Table.Cell>
                         <Table.Cell
                           warning={
