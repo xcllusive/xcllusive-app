@@ -25,9 +25,6 @@ class ModalNewBusiness extends Component {
   componentDidMount () {
     this.props.getBusinessRegister(1, 1000)
     this.props.getUsers()
-    if (this.props.where === 'ClientManager') {
-      this.props.clearBusiness()
-    }
   }
 
   componentWillUnmount () {
@@ -35,6 +32,7 @@ class ModalNewBusiness extends Component {
       phoneMsg: false,
       emailMsg: false
     })
+    this.props.clearBusiness()
   }
 
   _handleSelectChange = (e, { name, value }) => {

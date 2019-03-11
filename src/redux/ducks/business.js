@@ -62,7 +62,7 @@ export const Types = {
   VERIFY_DUPLICATED_BUSINESS_LOADING: 'VERIFY_DUPLICATED_BUSINESS_LOADING',
   VERIFY_DUPLICATED_BUSINESS_SUCCESS: 'VERIFY_DUPLICATED_BUSINESS_SUCCESS',
   VERIFY_DUPLICATED_BUSINESS_FAILURE: 'VERIFY_DUPLICATED_BUSINESS_FAILURE',
-  CLEAR_BUSINESS: 'CLEAR_BUSINESS'
+  CLEAR_DUPLICATED_BUSINESS: 'CLEAR_DUPLICATED_BUSINESS'
 }
 
 // Reducer
@@ -576,8 +576,13 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.CLEAR_BUSINESS:
-      return initialState
+    case Types.CLEAR_DUPLICATED_BUSINESS:
+      return {
+        ...state,
+        verifyDuplicatedBusiness: {
+          object: null
+        }
+      }
     default:
       return state
   }
@@ -872,6 +877,6 @@ export const verifyDuplicatedBusiness = values => async dispatch => {
 
 export const clearBusiness = () => async dispatch => {
   dispatch({
-    type: Types.CLEAR_BUSINESS
+    type: Types.CLEAR_DUPLICATED_BUSINESS
   })
 }
