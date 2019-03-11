@@ -39,7 +39,10 @@ class BusinessListPage extends Component {
     this.setState({
       inputSearch: value
     })
-    this.timer = setTimeout(() => this.props.getBusinessesPerUser(value, this.state.stageSelected, true), 1000)
+    this.timer = setTimeout(
+      () => this.props.getBusinessesPerUser(value, this.state.stageSelected, !!this.state.showAll),
+      1000
+    )
   }
 
   _newBusiness = () => {
