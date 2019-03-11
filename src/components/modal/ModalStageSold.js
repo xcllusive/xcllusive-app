@@ -35,8 +35,7 @@ class StageSoldForm extends Component {
       year4: 0,
       agreedWageForWorkingOwners: 0,
       agreedWageForMainOwner: 0,
-      latestFullYearTotalRevenue: 0,
-      array: []
+      latestFullYearTotalRevenue: 0
     }
   }
 
@@ -44,7 +43,6 @@ class StageSoldForm extends Component {
     this._calculateFinancialYear()
     this.props.getBusinessSold(this.props.business.id)
     this.props.getBuyersBusinessSold(this.props.business.id, true)
-    this.setState({ array: this._calculateYears(2019) })
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -112,6 +110,12 @@ class StageSoldForm extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+  }
+
+  _handleSelectChangeYear = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+    this.props.setFieldValue('year1Label', value + 2)
+    this.props.setFieldValue('year2Label', value + 1)
   }
 
   _handleChangeRadio = (e, { value }) => {
@@ -191,9 +195,11 @@ class StageSoldForm extends Component {
   }
 
   _calculateYears = (year, qtdeYears) => {
-    // const currentYear = moment().year()
     let array10Years = []
-    for (qtdeYears; qtdeYears <= 10; qtdeYears++) {
+    let totalYears = 10
+    if (qtdeYears === 2) totalYears = 11
+    if (qtdeYears === 3) totalYears = 12
+    for (qtdeYears; qtdeYears <= totalYears; qtdeYears++) {
       let array = { key: qtdeYears, text: year - qtdeYears, value: qtdeYears }
       array10Years.push(array)
     }
@@ -213,6 +219,7 @@ class StageSoldForm extends Component {
       listBuyersFromBusiness,
       typeOptions
     } = this.props
+    console.log()
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -355,7 +362,7 @@ class StageSoldForm extends Component {
                       name="year1Label"
                       autoComplete="year1Label"
                       value={values.year1Label}
-                      onChange={this._handleSelectChange}
+                      disabled
                     />
                   </b>
                 </Form.Field>
@@ -367,7 +374,7 @@ class StageSoldForm extends Component {
                       name="year2Label"
                       autoComplete="year2Label"
                       value={values.year2Label}
-                      onChange={this._handleSelectChange}
+                      disabled
                     />
                   </b>
                 </Form.Field>
@@ -379,7 +386,7 @@ class StageSoldForm extends Component {
                       name="year3Label"
                       autoComplete="year3Label"
                       value={values.year3Label}
-                      onChange={this._handleSelectChange}
+                      onChange={this._handleSelectChangeYear}
                     />
                   </b>
                 </Form.Field>

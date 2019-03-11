@@ -25,7 +25,9 @@ class ModalNewBusiness extends Component {
   componentDidMount () {
     this.props.getBusinessRegister(1, 1000)
     this.props.getUsers()
-    this.props.clearBusiness()
+    if (this.props.where === 'ClientManager') {
+      this.props.clearBusiness()
+    }
   }
 
   componentWillUnmount () {
@@ -88,7 +90,7 @@ class ModalNewBusiness extends Component {
     }
   }
 
-  _verifyDuplicatedBuyer = async values => {
+  _verifyDuplicatedBusiness = async values => {
     await this.props.verifyDuplicatedBusiness(values)
     if (!this.props.duplicatedBusinessObject) {
       await this.props.onConfirm(values)
@@ -96,7 +98,7 @@ class ModalNewBusiness extends Component {
     }
   }
 
-  _closeModalAndSearchBuyer = (values, duplicatedBusinessObject) => {
+  _closeModalAndSearchBusiness = (values, duplicatedBusinessObject) => {
     this.props.onConfirm(values, duplicatedBusinessObject)
   }
 
@@ -312,11 +314,13 @@ class ModalNewBusiness extends Component {
               <Message.List>
                 <Message.Item>
                   {duplicatedBusinessObject.firstNameV} {duplicatedBusinessObject.lastNameV}{' '}
-                  <Icon
-                    link
-                    name="search"
-                    onClick={() => this._closeModalAndSearchBuyer(values, duplicatedBusinessObject)}
-                  />
+                  {this.props.where === 'ClientManager' ? (
+                    <Icon
+                      link
+                      name="search"
+                      onClick={() => this._closeModalAndSearchBusiness(values, duplicatedBusinessObject)}
+                    />
+                  ) : null}
                 </Message.Item>
                 <Message.Item>{duplicatedBusinessObject.vendorEmail}</Message.Item>
                 <Message.Item>{duplicatedBusinessObject.vendorPhone1}</Message.Item>
@@ -341,7 +345,7 @@ class ModalNewBusiness extends Component {
             color="blue"
             disabled={isSubmitting || !isValid || disableButton}
             loading={isLoading}
-            onClick={() => this._verifyDuplicatedBuyer(values)}
+            onClick={() => this._verifyDuplicatedBusiness(values)}
             type="submit"
           >
             <Icon name="save" />
