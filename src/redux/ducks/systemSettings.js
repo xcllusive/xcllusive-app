@@ -1,6 +1,4 @@
-import {
-  get, update
-} from '../../services/api/systemSettings'
+import { get, update, execute } from '../../services/api/systemSettings'
 //  import { toast } from 'react-toastify'
 
 // Action Types
@@ -11,7 +9,10 @@ export const Types = {
   GET_SYSTEM_SETTINGS_FAILURE: 'GET_SYSTEM_SETTINGS_FAILURE',
   UPDATE_SYSTEM_SETTINGS_LOADING: 'UPDATE_SYSTEM_SETTINGS_LOADING',
   UPDATE_SYSTEM_SETTINGS_SUCCESS: 'UPDATE_SYSTEM_SETTINGS_SUCCESS',
-  UPDATE_SYSTEM_SETTINGS_FAILURE: 'UPDATE_SYSTEM_SETTINGS_FAILURE'
+  UPDATE_SYSTEM_SETTINGS_FAILURE: 'UPDATE_SYSTEM_SETTINGS_FAILURE',
+  EXECUTE_JAVASCRIPT_LOADING: 'EXECUTE_JAVASCRIPT_LOADING',
+  EXECUTE_JAVASCRIPT_SUCCESS: 'EXECUTE_JAVASCRIPT_SUCCESS',
+  EXECUTE_JAVASCRIPT_FAILURE: 'EXECUTE_JAVASCRIPT_FAILURE'
 }
 
 // Reducer
@@ -27,6 +28,11 @@ const initialState = {
     isUpdated: false,
     error: null,
     systemSettings: {}
+  },
+  executeJavaScript: {
+    object: {},
+    isLoading: false,
+    error: null
   }
 }
 
@@ -89,6 +95,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.EXECUTE_JAVASCRIPT_LOADING:
+      return {
+        ...state,
+        executeJavaScript: {
+          ...state.executeJavaScript,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.EXECUTE_JAVASCRIPT_SUCCESS:
+      return {
+        ...state,
+        executeJavaScript: {
+          ...state.executeJavaScript,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.EXECUTE_JAVASCRIPT_FAILURE:
+      return {
+        ...state,
+        executeJavaScript: {
+          ...state.executeJavaScript,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -129,6 +163,25 @@ export const updateSystemSettings = systemSettings => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_SYSTEM_SETTINGS_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const executeJavaScript = () => async dispatch => {
+  dispatch({
+    type: Types.EXECUTE_JAVASCRIPT_LOADING,
+    payload: true
+  })
+  try {
+    const response = await execute()
+    dispatch({
+      type: Types.EXECUTE_JAVASCRIPT_SUCCESS,
+      payload: response
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.EXECUTE_JAVASCRIPT_FAILURE,
       payload: error
     })
   }
