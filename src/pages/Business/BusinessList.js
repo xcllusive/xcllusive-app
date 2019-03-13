@@ -187,6 +187,9 @@ class BusinessListPage extends Component {
                     {businesses.map(business => (
                       <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
                         <Table.Cell
+                          style={{
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? 'Green' : null
+                          }}
                           warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
