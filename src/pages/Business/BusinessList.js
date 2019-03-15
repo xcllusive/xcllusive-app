@@ -88,7 +88,8 @@ class BusinessListPage extends Component {
       history,
       match,
       businesses,
-      objectQtdeBusinessStage
+      objectQtdeBusinessStage,
+      totalLostRecontact
     } = this.props
 
     if (isLoadingBusinesses || isLoadingQtdeBusinesses) {
@@ -110,6 +111,7 @@ class BusinessListPage extends Component {
                   }`
                   : 0}
               </Statistic.Value>
+              <Statistic.Value>{`+ ${totalLostRecontact} Lost to Recontact` || 0}</Statistic.Value>
               <Statistic.Label>Potential Listing</Statistic.Label>
             </Statistic>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(9, 'Appraisal')}>
@@ -188,7 +190,7 @@ class BusinessListPage extends Component {
                       <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
                         <Table.Cell
                           style={{
-                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? 'Green' : null
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
                           }}
                           warning={
                             !business.BusinessLog.reduce((last, log) => {
@@ -203,6 +205,9 @@ class BusinessListPage extends Component {
                           }
                         >{`BS${business.id}`}</Table.Cell>
                         <Table.Cell
+                          style={{
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                          }}
                           warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
@@ -218,6 +223,9 @@ class BusinessListPage extends Component {
                           {business.businessName}
                         </Table.Cell>
                         <Table.Cell
+                          style={{
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                          }}
                           warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
@@ -231,6 +239,9 @@ class BusinessListPage extends Component {
                           }
                         >{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
                         <Table.Cell
+                          style={{
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                          }}
                           warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
@@ -246,6 +257,9 @@ class BusinessListPage extends Component {
                           {business.BusinessLog[0].text}
                         </Table.Cell>
                         <Table.Cell
+                          style={{
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                          }}
                           warning={
                             !business.BusinessLog.reduce((last, log) => {
                               if (last === true) {
@@ -286,7 +300,8 @@ BusinessListPage.propTypes = {
   objectQtdeBusinessStage: PropTypes.object,
   getBusinessesPerUser: PropTypes.func,
   closeModal: PropTypes.func,
-  isLoadingQtdeBusinesses: PropTypes.bool
+  isLoadingQtdeBusinesses: PropTypes.bool,
+  totalLostRecontact: PropTypes.number
 }
 
 const mapDispatchToProps = dispatch =>
@@ -299,6 +314,7 @@ const mapStateToProps = state => ({
   isCreated: state.business.create.isCreated,
   // businesses: state.business.getAll.array,
   businesses: state.business.getAllPerUser.array.rows,
+  totalLostRecontact: state.business.getAllPerUser.array.totalLostRecontact,
   isLoadingBusinesses: state.business.getAllPerUser.isLoading,
   isLoadingQtdeBusinesses: state.business.getQtdeBusinessStageUser.isLoading,
   objectQtdeBusinessStage: state.business.getQtdeBusinessStageUser.object
