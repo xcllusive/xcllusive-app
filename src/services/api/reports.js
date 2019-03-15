@@ -7,3 +7,18 @@ export const getMarketingReport = (dateFrom, dateTo) => {
     params: { dateFrom, dateTo }
   })
 }
+
+export const getAllAnalysts = () => {
+  return request({
+    method: 'get',
+    url: 'reports/all-analysts'
+  })
+}
+
+export const getAnalystReport = (analystId, dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: 'reports/analyst-report',
+    params: { analystId, dateFrom, dateTo }
+  })
+}
