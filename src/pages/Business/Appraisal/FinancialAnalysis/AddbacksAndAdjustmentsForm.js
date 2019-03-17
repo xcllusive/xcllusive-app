@@ -69,13 +69,13 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     for (let i = 1; i < 30; i++) {
       total = total + numeral(this.props.values[`aaRow${i}Year${column}`]).value()
     }
-    const result = numeral(total).value()
-    return result
+
+    return numeral(total).format('0,0')
   }
 
   _calcTotalAdjustedProfit = column => {
     const total = this._calcTotal(column) + this.props.appraisalObject[`operatingProfit${column}`]
-    return numeral(total).value()
+    return numeral(total).format('0,0')
   }
 
   _calcAdjustedProfit = column => {
@@ -86,7 +86,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   _handleChangeInputCurrency = (e, { value, name }) => {
-    this.props.setFieldValue(name, numeral(value).value() || 0)
+    this.props.setFieldValue(name, numeral(value).format('0,0') || 0)
   }
 
   render () {
@@ -94,36 +94,47 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
 
     return (
       <Fragment>
-        <Grid.Row style={{ backgroundColor: 'lightyellow', celledPadding: '.3em' }} columns={9}>
+        <Grid.Row
+          style={{
+            backgroundColor: 'lightyellow',
+            celledPadding: '.3em'
+          }}
+          columns={9}
+        >
           <CustomColumn>
-            <b>Financial Year</b>
+            <b> Financial Year </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>{appraisalObject && appraisalObject.year1 > 0 ? appraisalObject.year1 : financialYear - 5}</b>
+            <b> {appraisalObject && appraisalObject.year1 > 0 ? appraisalObject.year1 : financialYear - 5} </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>{appraisalObject && appraisalObject.year2 > 0 ? appraisalObject.year2 : financialYear - 4}</b>
+            <b> {appraisalObject && appraisalObject.year2 > 0 ? appraisalObject.year2 : financialYear - 4} </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>{appraisalObject && appraisalObject.year3 > 0 ? appraisalObject.year3 : financialYear - 3}</b>
+            <b> {appraisalObject && appraisalObject.year3 > 0 ? appraisalObject.year3 : financialYear - 3} </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>{appraisalObject && appraisalObject.year4 > 0 ? appraisalObject.year4 : financialYear - 2}</b>
+            <b> {appraisalObject && appraisalObject.year4 > 0 ? appraisalObject.year4 : financialYear - 2} </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>{appraisalObject && appraisalObject.year5 > 0 ? appraisalObject.year5 : financialYear - 1}</b>
+            <b> {appraisalObject && appraisalObject.year5 > 0 ? appraisalObject.year5 : financialYear - 1} </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>{appraisalObject && appraisalObject.year6 > 0 ? appraisalObject.year6 : financialYear} YTD</b>{' '}
+            <b>
+              {appraisalObject && appraisalObject.year6 > 0 ? appraisalObject.year6 : financialYear}
+              YTD
+            </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>{financialYear} Annualised</b>
+            <b>
+              {financialYear}
+              Annualised
+            </b>
           </CustomColumn>
           <CustomColumn textAlign="center">
-            <b>Annualised Yes/No</b>
+            <b> Annualised Yes / No </b>
           </CustomColumn>
         </Grid.Row>
-
         {this.state.rows.map((item, key) => (
           <Grid.Row columns={9} key={key}>
             <CustomColumn>
@@ -150,11 +161,20 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
                 />
               </CustomColumn>
             ))}
-            <CustomColumn style={{ backgroundColor: 'white' }} textAlign="center">
+            <CustomColumn
+              style={{
+                backgroundColor: 'white'
+              }}
+              textAlign="center"
+            >
               0
             </CustomColumn>
             <CustomColumn textAlign="center">
-              <Form.Field style={{ marginTop: '10px' }}>
+              <Form.Field
+                style={{
+                  marginTop: '10px'
+                }}
+              >
                 <Form.Checkbox
                   name={`${item.name}YesNo`}
                   checked={values[`${item.name}YesNo`]}
@@ -164,42 +184,41 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             </CustomColumn>
           </Grid.Row>
         ))}
-
         <Grid.Row columns={9}>
           <CustomColumn>
-            <b>Total Adjustments</b>
+            <b> Total Adjustments </b>
           </CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotal(1)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotal(2)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotal(3)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotal(4)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotal(5)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotal(6)}</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotal(1)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotal(2)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotal(3)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotal(4)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotal(5)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotal(6)} </CustomColumn>
+          <CustomColumn textAlign="center"> 0 </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
-            <b>Total Adjusted Profit INCL. Owners Wages</b>
+            <b> Total Adjusted Profit INCL.Owners Wages </b>
           </CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(1)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(2)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(3)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(4)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(5)}</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcTotalAdjustedProfit(6)}</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotalAdjustedProfit(1)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotalAdjustedProfit(2)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotalAdjustedProfit(3)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotalAdjustedProfit(4)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotalAdjustedProfit(5)} </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcTotalAdjustedProfit(6)} </CustomColumn>
+          <CustomColumn textAlign="center"> 0 </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
-            <b>Adjusted Profit % </b>
+            <b> Adjusted Profit % </b>
           </CustomColumn>
-          <CustomColumn textAlign="center">{this._calcAdjustedProfit(1)} %</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcAdjustedProfit(2)} %</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcAdjustedProfit(3)} %</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcAdjustedProfit(4)} %</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcAdjustedProfit(5)} %</CustomColumn>
-          <CustomColumn textAlign="center">{this._calcAdjustedProfit(6)} %</CustomColumn>
-          <CustomColumn textAlign="center">0</CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcAdjustedProfit(1)} % </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcAdjustedProfit(2)} % </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcAdjustedProfit(3)} % </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcAdjustedProfit(4)} % </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcAdjustedProfit(5)} % </CustomColumn>
+          <CustomColumn textAlign="center"> {this._calcAdjustedProfit(6)} % </CustomColumn>
+          <CustomColumn textAlign="center"> 0 </CustomColumn>
         </Grid.Row>
       </Fragment>
     )
@@ -227,13 +246,27 @@ const mapPropsToValues = props => {
   }
   for (let row = 1; row <= 30; row++) {
     values[`aaRow${row}`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}`] : 0
-    values[`aaRow${row}Year1`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year1`] : 0
-    values[`aaRow${row}Year2`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year2`] : 0
-    values[`aaRow${row}Year3`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year3`] : 0
-    values[`aaRow${row}Year4`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year4`] : 0
-    values[`aaRow${row}Year5`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year5`] : 0
-    values[`aaRow${row}Year6`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year6`] : 0
-    values[`aaRow${row}Year7`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}Year7`] : 0
+    values[`aaRow${row}Year1`] = props.appraisalObject
+      ? numeral(props.appraisalObject[`aaRow${row}Year1`]).format('0,0')
+      : 0
+    values[`aaRow${row}Year2`] = props.appraisalObject
+      ? numeral(props.appraisalObject[`aaRow${row}Year2`]).format('0,0')
+      : 0
+    values[`aaRow${row}Year3`] = props.appraisalObject
+      ? numeral(props.appraisalObject[`aaRow${row}Year3`]).format('0,0')
+      : 0
+    values[`aaRow${row}Year4`] = props.appraisalObject
+      ? numeral(props.appraisalObject[`aaRow${row}Year4`]).format('0,0')
+      : 0
+    values[`aaRow${row}Year5`] = props.appraisalObject
+      ? numeral(props.appraisalObject[`aaRow${row}Year5`]).format('0,0')
+      : 0
+    values[`aaRow${row}Year6`] = props.appraisalObject
+      ? numeral(props.appraisalObject[`aaRow${row}Year6`]).format('0,0')
+      : 0
+    values[`aaRow${row}Year7`] = props.appraisalObject
+      ? numeral(props.appraisalObject[`aaRow${row}Year7`]).format('0,0')
+      : 0
   }
   values['aaRow1'] = props.appraisalObject ? props.appraisalObject['aaRow1'] : ''
   values['aaRow2'] = props.appraisalObject ? props.appraisalObject['aaRow2'] : ''
@@ -254,7 +287,12 @@ const mapStateToProps = state => ({})
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal }, dispatch)
+  return bindActionCreators(
+    {
+      updateAppraisal
+    },
+    dispatch
+  )
 }
 
 export default connect(

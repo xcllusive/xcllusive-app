@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -6,6 +6,7 @@ import { withFormik } from 'formik'
 import { Message, Step, Grid, Header, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import moment from 'moment'
+import numeral from 'numeral'
 
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
@@ -18,7 +19,7 @@ import PhysicalAssetValueForm from './PhysicalAssetValueForm'
 import FinancialInformationSourceForm from './FinancialInformationSourceForm'
 import CustomColumn from '../../../../components/content/CustomGridColumn'
 
-class FinancialAnalysisPage extends PureComponent {
+class FinancialAnalysisPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -64,7 +65,9 @@ class FinancialAnalysisPage extends PureComponent {
         .format('YYYY')
     } else financialYear = moment().format('YYYY')
 
-    await this.setState({ financialYear })
+    await this.setState({
+      financialYear
+    })
     this.props.setFieldValue('year1', this.state.financialYear - 5)
     this.props.setFieldValue('year2', this.state.financialYear - 4)
     this.props.setFieldValue('year3', this.state.financialYear - 3)
@@ -86,18 +89,17 @@ class FinancialAnalysisPage extends PureComponent {
 
   render () {
     const { values, appraisalObject } = this.props
-
     return (
       <Wrapper>
         <Step.Group size="large">
           <Step active icon="chart line" title="Step 4" description="Financial Analysis" />
           <Message info size="large">
             <p>
-              The data you enter on this page will be used on the `Financial Analysis` page of the appraisal. This
-              information will also be used to calculate the value of the business. Enter data as you would on a
-              spreadsheet, using the [tab] key to switch quickly between cells. This page can be left open for longer
-              than most other pages, but it is recommended that you manually save regularly to ensure that you don`t
-              lose any work. This is done by clicking the [Save] button at the bottom of this page.
+              The data you enter on this page will be used on the `Financial Analysis` page of the appraisal.This
+              information will also be used to calculate the value of the business.Enter data as you would on a
+              spreadsheet, using the[tab] key to switch quickly between cells.This page can be left open for longer than
+              most other pages, but it is recommended that you manually save regularly to ensure that you don `t lose
+              any work. This is done by clicking the [Save] button at the bottom of this page.
             </p>
           </Message>
         </Step.Group>
@@ -114,6 +116,7 @@ class FinancialAnalysisPage extends PureComponent {
             appraisalObject={appraisalObject}
             sendCalcs={this._getCalcs}
             setFieldValue={this.props.setFieldValue}
+            setFieldTouched={this.props.setFieldTouched}
           />
           <Grid.Row>
             <CustomColumn>
@@ -189,7 +192,8 @@ FinancialAnalysisPage.propTypes = {
   updateAppraisal: PropTypes.func,
   appraisalObject: PropTypes.object,
   business: PropTypes.object,
-  confirmsCompleteSteps: PropTypes.func
+  confirmsCompleteSteps: PropTypes.func,
+  setFieldTouched: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -197,7 +201,7 @@ const mapPropsToValues = props => ({
   id: props.appraisalObject ? props.appraisalObject.id : '',
   monthsCovered: props.appraisalObject ? props.appraisalObject.monthsCovered : 0,
   seasonalAdjustment: props.appraisalObject ? props.appraisalObject.seasonalAdjustment : 0,
-  sales1: props.appraisalObject ? props.appraisalObject.sales1 : 0,
+  sales1: props.appraisalObject ? numeral(props.appraisalObject.sales1).format('0,0') : 0,
   sales2: props.appraisalObject ? props.appraisalObject.sales2 : 0,
   sales3: props.appraisalObject ? props.appraisalObject.sales3 : 0,
   sales4: props.appraisalObject ? props.appraisalObject.sales4 : 0,
