@@ -52,6 +52,27 @@ const FinancialAnalysisForm = ({
     return (year / monthsCovered) * 12 + ((year / monthsCovered) * 12 - year) * seasonalAdjustment
   }
 
+  const _handleBlurCalcAnualised = e => {
+    if (values.salesYesNo) {
+      setFieldValue('calcAnnualised1', _calcAnnualised(values.sales6, values.monthsCovered, values.seasonalAdjustment))
+    }
+    if (values.cogsYesNo) {
+      setFieldValue('calcAnnualised2', _calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment))
+    }
+    if (values.otherIncomeYesNo) {
+      setFieldValue(
+        'calcAnnualised5',
+        _calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)
+      )
+    }
+    if (values.expensesYesNo) {
+      setFieldValue(
+        'calcAnnualised7',
+        _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
+      )
+    }
+  }
+
   const _handleChangeCheckBox = (e, { name, row, checked }) => {
     handleChangeCheckBox(e, {
       name
@@ -189,7 +210,7 @@ const FinancialAnalysisForm = ({
             autoComplete="monthsCovered"
             value={values.monthsCovered}
             onChange={handleChange}
-            onBlur={handleBlur}
+            onBlur={_handleBlurCalcAnualised}
             tabIndex={-2}
           />
           {errors.monthsCovered && touched.monthsCovered && (
@@ -201,7 +222,7 @@ const FinancialAnalysisForm = ({
             autoComplete="seasonalAdjustment"
             value={values.seasonalAdjustment}
             onChange={handleChange}
-            onBlur={handleBlur}
+            onBlur={_handleBlurCalcAnualised}
             tabIndex={-1}
           />
           {errors.seasonalAdjustment && touched.seasonalAdjustment && (

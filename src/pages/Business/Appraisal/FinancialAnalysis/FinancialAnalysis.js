@@ -6,7 +6,6 @@ import { withFormik } from 'formik'
 import { Message, Step, Grid, Header, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import moment from 'moment'
-import numeral from 'numeral'
 
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 
@@ -201,7 +200,7 @@ const mapPropsToValues = props => ({
   id: props.appraisalObject ? props.appraisalObject.id : '',
   monthsCovered: props.appraisalObject ? props.appraisalObject.monthsCovered : 0,
   seasonalAdjustment: props.appraisalObject ? props.appraisalObject.seasonalAdjustment : 0,
-  sales1: props.appraisalObject ? numeral(props.appraisalObject.sales1).format('0,0') : 0,
+  sales1: props.appraisalObject ? props.appraisalObject.sales1 : 0,
   sales2: props.appraisalObject ? props.appraisalObject.sales2 : 0,
   sales3: props.appraisalObject ? props.appraisalObject.sales3 : 0,
   sales4: props.appraisalObject ? props.appraisalObject.sales4 : 0,
