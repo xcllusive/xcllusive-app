@@ -14,7 +14,10 @@ export const Types = {
   CLEAR_MARKETING_REPORT: 'CLEAR_MARKETING_REPORT',
   GET_ALL_ANALYSTS_LOADING: 'GET_ALL_ANALYSTS_LOADING',
   GET_ALL_ANALYSTS_SUCCESS: 'GET_ALL_ANALYSTS_SUCCESS',
-  GET_ALL_ANALYSTS_FAILURE: 'GET_ALL_ANALYSTS_FAILURE'
+  GET_ALL_ANALYSTS_FAILURE: 'GET_ALL_ANALYSTS_FAILURE',
+  GET_ANALYST_REPORT_LOADING: 'GET_ANALYST_REPORT_LOADING',
+  GET_ANALYST_REPORT_SUCCESS: 'GET_ANALYST_REPORT_SUCCESS',
+  GET_ANALYST_REPORT_FAILURE: 'GET_ANALYST_REPORT_FAILURE'
 }
 
 // Reducer
@@ -41,7 +44,7 @@ const initialState = {
   },
   getAnalystReports: {
     isLoading: false,
-    object: {},
+    array: [],
     error: null
   }
 }
@@ -139,7 +142,7 @@ export default function reducer (state = initialState, action) {
         getAnalystReports: {
           ...state.getAnalystReports,
           isLoading: false,
-          object: action.payload,
+          array: action.payload,
           error: null
         }
       }
@@ -207,16 +210,17 @@ export const getAllAnalysts = () => async dispatch => {
   }
 }
 
-export const getAnalystReport = () => async dispatch => {
+export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => async dispatch => {
+  console.log(analystId, dateFrom, dateTo, stageId)
   dispatch({
     type: Types.GET_ANALYST_REPORT_LOADING,
     payload: true
   })
   try {
-    const getMarketingReport = await getAnalystReportAPI()
+    const getAnalystReport = await getAnalystReportAPI(analystId, dateFrom, dateTo, stageId)
     dispatch({
       type: Types.GET_ANALYST_REPORT_SUCCESS,
-      payload: getMarketingReport.data
+      payload: getAnalystReport.data
     })
   } catch (error) {
     dispatch({

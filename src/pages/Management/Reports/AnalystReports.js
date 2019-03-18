@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Button } from 'semantic-ui-react'
+import { Grid, Form, Button, Statistic, Dimmer, Loader, Table } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
 import { getAllAnalysts, getAnalystReport } from '../../../redux/ducks/reports'
+import GridBusinessStage from '../../../components/content/GridBusinessStage'
 import moment from 'moment'
 
 class AnalystReports extends Component {
@@ -52,17 +53,17 @@ class AnalystReports extends Component {
     })
   }
 
-  _confirmReports = values => {
-    console.log(values)
+  _confirmReports = (values, stageId) => {
     this.props.getAnalystReport(
       values.analyst,
       moment(values.dateFrom).format('YYYY/MM/DD'),
-      moment(values.dateTo).format('YYYY/MM/DD')
+      moment(values.dateTo).format('YYYY/MM/DD'),
+      stageId
     )
   }
 
   render () {
-    const { values, arrayAnalysts } = this.props
+    const { values, arrayAnalysts, arrayBusinesses, isLoadingReports, match } = this.props
     return (
       <Wrapper>
         <Form>
@@ -122,7 +123,7 @@ class AnalystReports extends Component {
                           icon="checkmark"
                           labelPosition="right"
                           content="Confirm"
-                          onClick={() => this._confirmReports(values)}
+                          onClick={() => this._confirmReports(values, 1)}
                         />
                       </Form.Field>
                     </Fragment>
@@ -132,11 +133,148 @@ class AnalystReports extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        {/* <Dimmer.Dimmable dimmed={isLoadingReports} style={{ height: '80vh' }}>
+        <Dimmer.Dimmable dimmed={isLoadingReports} style={{ height: '80vh' }}>
           <Dimmer inverted active={isLoadingReports}>
             <Loader>Loading</Loader>
           </Dimmer>
-        </Dimmer.Dimmable> */}
+          {arrayBusinesses.length > 0 ? (
+            <Fragment>
+              <GridBusinessStage>
+                <Statistic.Group size="mini" color="blue" widths={4}>
+                  <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 1)}>
+                    {/* <Statistic.Value>
+                  {objectQtdeBusinessStage
+                  ? `${objectQtdeBusinessStage.businessPotentialListingFilter} of ${
+                    objectQtdeBusinessStage.businessPotentialListing
+                  }`
+                  : 0}
+                </Statistic.Value> */}
+                    <Statistic.Label>Potential Listing</Statistic.Label>
+                  </Statistic>
+                  <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 9)}>
+                    <Statistic.Value>
+                      {/* {objectQtdeBusinessStage
+                  ? `${objectQtdeBusinessStage.businessAppraisalFilter} of ${objectQtdeBusinessStage.businessAppraisal}`
+                  : 0} */}
+                    </Statistic.Value>
+                    <Statistic.Label>Appraisal</Statistic.Label>
+                  </Statistic>
+                  <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 4)}>
+                    {/* <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessForSale : 0}</Statistic.Value> */}
+                    <Statistic.Label>For Sale</Statistic.Label>
+                  </Statistic>
+                  <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 8)}>
+                    {/* <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessLost : 0}</Statistic.Value> */}
+                    <Statistic.Label>Lost</Statistic.Label>
+                  </Statistic>
+                </Statistic.Group>
+              </GridBusinessStage>
+              <Table color="blue" inverted celled selectable compact size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Business ID</Table.HeaderCell>
+                    <Table.HeaderCell>Business Name</Table.HeaderCell>
+                    <Table.HeaderCell>Contact Name</Table.HeaderCell>
+                    <Table.HeaderCell>Log Text</Table.HeaderCell>
+                    <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {arrayBusinesses.map(business => (
+                    <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                        }}
+                        warning={
+                          !business.BusinessLog.reduce((last, log) => {
+                            if (last === true) {
+                              return true
+                            }
+                            return (
+                              log.followUpStatus === 'Pending' &&
+                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                            )
+                          }, false)
+                        }
+                      >{`BS${business.id}`}</Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                        }}
+                        warning={
+                          !business.BusinessLog.reduce((last, log) => {
+                            if (last === true) {
+                              return true
+                            }
+                            return (
+                              log.followUpStatus === 'Pending' &&
+                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                            )
+                          }, false)
+                        }
+                      >
+                        {business.businessName}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                        }}
+                        warning={
+                          !business.BusinessLog.reduce((last, log) => {
+                            if (last === true) {
+                              return true
+                            }
+                            return (
+                              log.followUpStatus === 'Pending' &&
+                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                            )
+                          }, false)
+                        }
+                      >{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                        }}
+                        warning={
+                          !business.BusinessLog.reduce((last, log) => {
+                            if (last === true) {
+                              return true
+                            }
+                            return (
+                              log.followUpStatus === 'Pending' &&
+                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                            )
+                          }, false)
+                        }
+                      >
+                        {business.BusinessLog[0].text}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                        }}
+                        warning={
+                          !business.BusinessLog.reduce((last, log) => {
+                            if (last === true) {
+                              return true
+                            }
+                            return (
+                              log.followUpStatus === 'Pending' &&
+                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                            )
+                          }, false)
+                        }
+                      >
+                        {moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Fragment>
+          ) : null}
+        </Dimmer.Dimmable>
       </Wrapper>
     )
   }
@@ -150,7 +288,10 @@ AnalystReports.propTypes = {
   getAllAnalysts: PropTypes.func,
   arrayAnalysts: PropTypes.array,
   openModal: PropTypes.func,
-  getAnalystReport: PropTypes.func
+  getAnalystReport: PropTypes.func,
+  arrayBusinesses: PropTypes.array,
+  isLoadingReports: PropTypes.bool,
+  match: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -162,7 +303,9 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  arrayAnalysts: state.reports.getAllAnalysts.array
+  arrayAnalysts: state.reports.getAllAnalysts.array,
+  arrayBusinesses: state.reports.getAnalystReports.array,
+  isLoadingReports: state.reports.getAnalystReports.isLoading
 })
 
 const mapDispatchToProps = dispatch =>

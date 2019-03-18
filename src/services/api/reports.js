@@ -15,10 +15,10 @@ export const getAllAnalysts = () => {
   })
 }
 
-export const getAnalystReport = (analystId, dateFrom, dateTo) => {
+export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => {
   return request({
     method: 'get',
     url: 'reports/analyst-report',
-    params: { analystId, dateFrom, dateTo }
+    params: { analystId, dateFrom, dateTo, stageId }
   })
 }
