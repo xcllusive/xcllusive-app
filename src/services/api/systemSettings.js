@@ -13,3 +13,9 @@ export const update = systemSettings => {
     data: systemSettings
   })
 }
+
+export const execute = () => {
+  return request({
+    url: '/system-settings/execute-javascript'
+  })
+}

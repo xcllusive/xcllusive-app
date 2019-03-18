@@ -145,7 +145,6 @@ class ModalGroupEmail extends Component {
       isLoadingGroupEmail,
       isLoadingSendEmail
     } = this.props
-
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>

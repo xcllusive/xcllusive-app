@@ -123,3 +123,10 @@ export const uploadIM = (imFile, businessId) => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const verifyDuplicatedBusiness = values => {
+  return request({
+    url: '/business/duplicated-business',
+    params: values
+  })
+}

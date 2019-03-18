@@ -6,6 +6,7 @@ import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { withFormik } from 'formik'
+import * as Yup from 'yup'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
@@ -20,10 +21,17 @@ import {
   Segment,
   Button,
   Statistic,
-  Pagination
+  Pagination,
+  Label
 } from 'semantic-ui-react'
 
-import { getBuyer, getBusinessesFromBuyer, updateBuyer, getBusinessFromBuyer } from '../../redux/ducks/buyer'
+import {
+  getBuyer,
+  getBusinessesFromBuyer,
+  updateBuyer,
+  getBusinessFromBuyer,
+  getBuyersFromBusiness
+} from '../../redux/ducks/buyer'
 import {
   createNewLog,
   updateBuyerLog,
@@ -130,6 +138,9 @@ class BuyerDetails extends Component {
       5,
       this.state.activePage
     )
+
+    /* set this func here because can not refresh the previous page properly without it */
+    await this.props.getBuyersFromBusiness(this.props.match.params.idBusiness)
   }
 
   _selectLog = buyerLog => {
@@ -227,7 +238,9 @@ class BuyerDetails extends Component {
       activePageBusinessBuyerLogList,
       isLoadingPreviousBusiness,
       isLoadingLogTable,
-      typeOptions
+      typeOptions,
+      errors,
+      touched
     } = this.props
     const { priceOptions } = this.state
     return (
@@ -302,13 +315,16 @@ class BuyerDetails extends Component {
                           <Form.Field width={16}>
                             <Form.TextArea
                               style={{ height: '150px' }}
-                              label="Communication text"
+                              label="Communication text (max. 1200 characteres)"
                               name="buyerLog_text"
                               autoComplete="buyerLog_text"
                               value={values.buyerLog_text ? values.buyerLog_text : this.state.buyerLog_text}
                               onChange={handleChange}
                             />
                           </Form.Field>
+                          {errors.buyerLog_text && touched.buyerLog_text && (
+                            <Label basic color="red" pointing content={errors.buyerLog_text} />
+                          )}
                         </Form.Group>
                         <Form.Group>
                           <Form.Field style={{ marginLeft: '90%' }}>
@@ -558,7 +574,8 @@ const mapDispatchToProps = dispatch =>
       updateBuyerLog,
       createNewLog,
       getBuyerRegister,
-      finaliseBuyerLog
+      finaliseBuyerLog,
+      getBuyersFromBusiness
     },
     dispatch
   )
@@ -595,7 +612,10 @@ BuyerDetails.propTypes = {
   getBuyerRegister: PropTypes.func,
   typeOptions: PropTypes.array,
   finaliseBuyerLog: PropTypes.func,
-  isLoadingBusinessBuyerLogList: PropTypes.bool
+  isLoadingBusinessBuyerLogList: PropTypes.bool,
+  errors: PropTypes.object,
+  touched: PropTypes.object,
+  getBuyersFromBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -612,6 +632,10 @@ const mapPropsToValues = props => {
     newLog: false
   }
 }
+
+const validationSchema = Yup.object().shape({
+  buyerLog_text: Yup.string().max(10, 'Communication Text requires maximum of 1200 characteres')
+})
 
 const mapStateToProps = state => ({
   buyer: state.buyer.get.object,
@@ -634,6 +658,7 @@ export default connect(
 )(
   withFormik({
     mapPropsToValues,
+    validationSchema,
     enableReinitialize: true
   })(BuyerDetails)
 )

@@ -160,7 +160,7 @@ class FinancialAnalysisPage extends Component {
                   <Form.Field>
                     <Form.Checkbox
                       label="Please confirm that you have completed the above information"
-                      name="confirmAbout"
+                      name="confirmFinancialAnalysis"
                       onChange={this._handleChangeCheckBox}
                       checked={values.confirmFinancialAnalysis}
                       onClick={() =>

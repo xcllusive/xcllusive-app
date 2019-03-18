@@ -3,19 +3,36 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
+import { Modal, Form, Icon, Button, Label, Message } from 'semantic-ui-react'
 import * as Yup from 'yup'
-
+import _ from 'lodash'
 import { closeModal } from '../../redux/ducks/modal'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
+import { verifyDuplicatedBusiness, clearBusiness } from '../../redux/ducks/business'
 import { getUsers } from '../../redux/ducks/user'
 
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 class ModalNewBusiness extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      phoneMsg: false,
+      emailMsg: false
+    }
+  }
+
   componentDidMount () {
     this.props.getBusinessRegister(1, 1000)
     this.props.getUsers()
+  }
+
+  componentWillUnmount () {
+    this.setState({
+      phoneMsg: false,
+      emailMsg: false
+    })
+    this.props.clearBusiness()
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -33,6 +50,56 @@ class ModalNewBusiness extends Component {
     return [{ key: 1, text: 'No users found', value: null }]
   }
 
+  _findTelephoneDuplicated = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+    const findDuplicatedPhone = _.find(
+      this.props.phonesEmailBusinesses,
+      o =>
+        o.vendorPhone1 !== null &&
+        (o.vendorPhone1.split(' ').join('') === value.split(' ').join('') ||
+          o.vendorPhone1.split('-').join('') === value.split('-').join('') ||
+          o.vendorPhone1 === value)
+    )
+    if (findDuplicatedPhone && findDuplicatedPhone.vendorPhone1 !== '') {
+      this.setState({
+        phoneMsg: findDuplicatedPhone
+      })
+    } else {
+      this.setState({
+        phoneMsg: false
+      })
+    }
+  }
+
+  _findEmailDuplicated = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+    const findDuplicatedEmail = _.find(
+      this.props.phonesEmailBusinesses,
+      o => o.vendorEmail !== null && o.vendorEmail === value
+    )
+    if (findDuplicatedEmail && findDuplicatedEmail.vendorEmail !== '') {
+      this.setState({
+        emailMsg: findDuplicatedEmail
+      })
+    } else {
+      this.setState({
+        emailMsg: false
+      })
+    }
+  }
+
+  _verifyDuplicatedBusiness = async values => {
+    await this.props.verifyDuplicatedBusiness(values)
+    if (!this.props.duplicatedBusinessObject) {
+      await this.props.onConfirm(values)
+      this.props.closeModal(values)
+    }
+  }
+
+  _closeModalAndSearchBusiness = (values, duplicatedBusinessObject) => {
+    this.props.onConfirm(values, duplicatedBusinessObject)
+  }
+
   render () {
     const {
       values,
@@ -40,7 +107,6 @@ class ModalNewBusiness extends Component {
       handleBlur,
       errors,
       touched,
-      handleSubmit,
       isSubmitting,
       isValid,
       isLoading,
@@ -48,7 +114,10 @@ class ModalNewBusiness extends Component {
       dropDownLoading,
       title,
       closeModal,
-      isLoadingUser
+      isLoadingUser,
+      duplicatedBusinessObject,
+      disableButton,
+      handleSubmit
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
@@ -103,11 +172,21 @@ class ModalNewBusiness extends Component {
                   name="vendorPhone1"
                   autoComplete="vendorPhone1"
                   value={values.vendorPhone1}
-                  onChange={handleChange}
+                  onChange={this._findTelephoneDuplicated}
                   onBlur={handleBlur}
                 />
                 {errors.vendorPhone1 && touched.vendorPhone1 && (
                   <Label basic color="red" pointing content={errors.vendorPhone1} />
+                )}
+                {this.state.phoneMsg && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={`This phone has been already added for this business: [BS${this.state.phoneMsg.id} - ${
+                      this.state.phoneMsg.businessName
+                    }]`}
+                  />
                 )}
               </Form.Field>
               <Form.Field>
@@ -144,11 +223,21 @@ class ModalNewBusiness extends Component {
                   name="vendorEmail"
                   autoComplete="vendorEmail"
                   value={values.vendorEmail}
-                  onChange={handleChange}
+                  onChange={this._findEmailDuplicated}
                   onBlur={handleBlur}
                 />
                 {errors.vendorEmail && touched.vendorEmail && (
                   <Label basic color="red" pointing content={errors.vendorEmail} />
+                )}
+                {this.state.emailMsg && (
+                  <Label
+                    basic
+                    color="red"
+                    pointing
+                    content={`This email has been already added for this business: [BS${this.state.emailMsg.id} - ${
+                      this.state.emailMsg.businessName
+                    }]`}
+                  />
                 )}
               </Form.Field>
               <Form.Field>
@@ -217,13 +306,44 @@ class ModalNewBusiness extends Component {
               </Form.Group>
             ) : null}
           </Form>
+          {duplicatedBusinessObject ? (
+            <Message warning>
+              <Message.Header>Duplicated Business Alert!!</Message.Header>
+              <Message.List>
+                <Message.Item>
+                  {duplicatedBusinessObject.firstNameV} {duplicatedBusinessObject.lastNameV}{' '}
+                  {this.props.where === 'ClientManager' ? (
+                    <Icon
+                      link
+                      name="search"
+                      onClick={() => this._closeModalAndSearchBusiness(values, duplicatedBusinessObject)}
+                    />
+                  ) : null}
+                </Message.Item>
+                <Message.Item>{duplicatedBusinessObject.vendorEmail}</Message.Item>
+                <Message.Item>{duplicatedBusinessObject.vendorPhone1}</Message.Item>
+              </Message.List>
+            </Message>
+          ) : null}
         </Modal.Content>
         <Modal.Actions>
+          {duplicatedBusinessObject ? (
+            <Button
+              color="green"
+              type="submit"
+              disabled={isSubmitting || !isValid}
+              loading={isLoading}
+              onClick={handleSubmit}
+            >
+              <Icon name="save" />
+              Create Duplicated Business
+            </Button>
+          ) : null}
           <Button
             color="blue"
-            disabled={isSubmitting || !isValid}
+            disabled={isSubmitting || !isValid || disableButton}
             loading={isLoading}
-            onClick={handleSubmit}
+            onClick={() => this._verifyDuplicatedBusiness(values)}
             type="submit"
           >
             <Icon name="save" />
@@ -258,7 +378,13 @@ ModalNewBusiness.propTypes = {
   closeModal: PropTypes.func,
   getUsers: PropTypes.func,
   users: PropTypes.array,
-  isLoadingUser: PropTypes.bool
+  isLoadingUser: PropTypes.bool,
+  verifyDuplicatedBusiness: PropTypes.func,
+  phonesEmailBusinesses: PropTypes.array,
+  duplicatedBusinessObject: PropTypes.object,
+  onConfirm: PropTypes.func,
+  disableButton: PropTypes.bool,
+  clearBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -311,12 +437,17 @@ const mapStateToProps = state => {
     sourceOptions: state.businessRegister.get.source.array,
     dropDownLoading: state.businessRegister.get.source.isLoading,
     users: state.user.get.array,
-    isLoadingUser: state.user.get.isLoading
+    isLoadingUser: state.user.get.isLoading,
+    duplicatedBusinessObject: state.business.verifyDuplicatedBusiness.object,
+    disableButton: state.business.verifyDuplicatedBusiness.disableButton
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusinessRegister, closeModal, getUsers }, dispatch)
+  return bindActionCreators(
+    { getBusinessRegister, closeModal, getUsers, verifyDuplicatedBusiness, clearBusiness },
+    dispatch
+  )
 }
 
 export default connect(

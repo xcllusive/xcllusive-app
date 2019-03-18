@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Icon, Button, Label } from 'semantic-ui-react'
+import { Modal, Form, Icon, Button, Label, Message } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { getBuyerRegister } from '../../redux/ducks/buyerRegister'
+import { verifyDuplicatedBuyer, clearBuyer } from '../../redux/ducks/buyer'
 import { OptionsPriceSelectBuyer } from '../../constants/OptionsPriceSelect'
 import { closeModal } from '../../redux/ducks/modal'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
@@ -30,6 +31,7 @@ class ModalNewBuyer extends Component {
   }
 
   componentDidMount () {
+    this.props.clearBuyer()
     this.props.getBuyerRegister(2, 1000)
   }
 
@@ -52,6 +54,18 @@ class ModalNewBuyer extends Component {
     this.props.setFieldValue('telephone1Number', `${zero}${toString.toString()}`)
   }
 
+  _verifyDuplicatedBuyer = async values => {
+    await this.props.verifyDuplicatedBuyer(values)
+    if (!this.props.duplicatedBuyerObject) {
+      this.props.onConfirm(values)
+      this.props.closeModal(values)
+    }
+  }
+
+  _closeModalAndSearchBuyer = (values, duplicatedBuyerObject) => {
+    this.props.onConfirm(values, duplicatedBuyerObject)
+  }
+
   render () {
     const { state, priceOptions } = this.state
     const {
@@ -60,14 +74,16 @@ class ModalNewBuyer extends Component {
       handleBlur,
       errors,
       touched,
-      handleSubmit,
       isSubmitting,
       isValid,
       isLoading,
       sourceOptions,
       dropDownLoading,
       title,
-      closeModal
+      closeModal,
+      duplicatedBuyerObject,
+      disableButton,
+      handleSubmit
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
@@ -224,14 +240,43 @@ class ModalNewBuyer extends Component {
               </Form.Field>
             </Form.Group>
           </Form>
+          {duplicatedBuyerObject ? (
+            <Message warning>
+              <Message.Header>Duplicated Buyer Alert!!</Message.Header>
+              <Message.List>
+                <Message.Item>
+                  {duplicatedBuyerObject.firstName} {duplicatedBuyerObject.surname}{' '}
+                  <Icon
+                    link
+                    name="search"
+                    onClick={() => this._closeModalAndSearchBuyer(values, duplicatedBuyerObject)}
+                  />
+                </Message.Item>
+                <Message.Item>{duplicatedBuyerObject.email}</Message.Item>
+                <Message.Item>{duplicatedBuyerObject.telephone1}</Message.Item>
+              </Message.List>
+            </Message>
+          ) : null}
         </Modal.Content>
         <Modal.Actions>
+          {duplicatedBuyerObject ? (
+            <Button
+              color="green"
+              type="submit"
+              disabled={isSubmitting || !isValid}
+              loading={isLoading}
+              onClick={handleSubmit}
+            >
+              <Icon name="save" />
+              Create Duplicated Buyer
+            </Button>
+          ) : null}
           <Button
             color="blue"
             type="submit"
-            disabled={isSubmitting || !isValid}
+            disabled={isSubmitting || !isValid || disableButton}
             loading={isLoading}
-            onClick={handleSubmit}
+            onClick={() => this._verifyDuplicatedBuyer(values)}
           >
             <Icon name="save" />
             Create Buyer
@@ -261,7 +306,12 @@ ModalNewBuyer.propTypes = {
   getBuyerRegister: PropTypes.func,
   dropDownLoading: PropTypes.bool,
   closeModal: PropTypes.func,
-  title: PropTypes.string
+  onConfirm: PropTypes.func,
+  title: PropTypes.string,
+  verifyDuplicatedBuyer: PropTypes.func,
+  duplicatedBuyerObject: PropTypes.object,
+  disableButton: PropTypes.bool,
+  clearBuyer: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -298,15 +348,20 @@ const validationSchema = Yup.object().shape({
   // priceTo: Yup.number().typeError('You must type only number here!')
 })
 
-const handleSubmit = (values, { props, setSubmitting }) => props.onConfirm(values)
+const handleSubmit = (values, { props, setSubmitting }) => {
+  props.onConfirm(values)
+}
 
 const mapStateToProps = state => ({
   isLoading: state.buyer.update.isLoading,
   sourceOptions: state.buyerRegister.get.source.array,
-  dropDownLoading: state.buyerRegister.get.source.isLoading
+  dropDownLoading: state.buyerRegister.get.source.isLoading,
+  duplicatedBuyerObject: state.buyer.verifyDuplicatedBuyer.object,
+  disableButton: state.buyer.verifyDuplicatedBuyer.disable
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBuyerRegister, closeModal }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getBuyerRegister, closeModal, verifyDuplicatedBuyer, clearBuyer }, dispatch)
 
 export default connect(
   mapStateToProps,

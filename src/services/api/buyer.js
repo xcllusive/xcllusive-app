@@ -95,3 +95,10 @@ export const getBuyersGroupEmail = businessId => {
     url: `/buyer/${businessId}/group-email`
   })
 }
+
+export const verifyDuplicatedBuyer = values => {
+  return request({
+    url: '/buyer/duplicated-buyer',
+    params: values
+  })
+}

@@ -12,13 +12,30 @@ class BuyerListPage extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      showAll: true
+      showAll: true,
+      savedBuyerList: null
     }
   }
 
   componentDidMount () {
     this.props.getBuyersFromBusiness(this.props.match.params.id)
     this.props.getBusinessFromBuyer(this.props.match.params.id)
+  }
+
+  // componentDidUpdate () {
+  //   if (this.props.isGotBuyers && this.props.listBuyersList && this.state.showAll) {
+  //     this.setState({ savedBuyerList: this.props.listBuyersList })
+  //     // console.log('test', savedBuyerList)
+  //   }
+  // }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.isGotBuyers && prevState.showAll) {
+      return {
+        savedBuyerList: nextProps.listBuyersList
+      }
+    }
+    return null
   }
 
   _showAll () {
@@ -29,6 +46,33 @@ class BuyerListPage extends Component {
   _showLess () {
     this.setState({ showAll: true })
     this.props.getBuyersFromBusiness(this.props.match.params.id)
+  }
+
+  _textBuyer = listBuyer => {
+    listBuyer.forEach((item, index) => {
+      this.state.savedBuyerList.forEach((itemSaved, index) => {
+        if (item.buyer_id === itemSaved.BuyerLog[0].buyer_id && !this.state.showAll) {
+          // if (item.buyer_id === 22359) console.log(itemSaved.BuyerLog[0].followUpStatus)
+          if (itemSaved.BuyerLog[0].buyer_id === 22359) console.log('times')
+          return itemSaved.BuyerLog[0].text
+        } else {
+          if (itemSaved.BuyerLog[0].buyer_id === 22359) console.log('times 2')
+          return item.text
+        }
+      })
+    })
+  }
+
+  returningPendingBuyerIfNeeded = buyerLog => {
+    let text = null
+    buyerLog.forEach(log => {
+      if (log.followUpStatus === 'Pending') {
+        text = log.text
+        return log.text
+      } else return null
+    })
+
+    return text || buyerLog[0].text
   }
 
   render () {
@@ -125,7 +169,10 @@ class BuyerListPage extends Component {
                             }, false)
                           }
                         >
-                          {buyersList.BuyerLog[0].text}
+                          {buyersList.BuyerLog.length > 1 && !this.state.showAll
+                            ? this.returningPendingBuyerIfNeeded(buyersList.BuyerLog)
+                            : buyersList.BuyerLog[0].text}
+                          {/* {buyersList.BuyerLog[0].text} */}
                         </Table.Cell>
                         <Table.Cell
                           warning={
@@ -191,7 +238,8 @@ BuyerListPage.propTypes = {
   business: PropTypes.object,
   isLoadingBusiness: PropTypes.bool,
   countAll: PropTypes.number,
-  countAllEnquiry: PropTypes.number
+  countAllEnquiry: PropTypes.number,
+  isGotBuyers: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getBuyersFromBusiness, getBusinessFromBuyer }, dispatch)
@@ -199,6 +247,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({ getBuyersFromBusines
 const mapStateToProps = state => ({
   listBuyersList: state.buyer.getBuyersFromBusiness.array,
   countAll: state.buyer.getBuyersFromBusiness.countAll,
+  isGotBuyers: state.buyer.getBuyersFromBusiness.isGotBuyers,
   business: state.buyer.getBusinessFromBuyer.object,
   countAllEnquiry: state.buyer.getBusinessFromBuyer.countAllEnquiry,
   isLoadingBusiness: state.buyer.getBusinessFromBuyer.isLoading

@@ -153,9 +153,7 @@ class BuyerPage extends Component {
                             textAlign="left"
                             selectable
                             onClick={
-                              item.lastScore &&
-                              item.lastScore.dateTimeCreated &&
-                              this._diffDays(item.lastScore.dateTimeCreated) >= 30
+                              item.lastScore && this._diffDays(item.lastScore.dateSent) >= 30
                                 ? () => this._showMsg()
                                 : () => history.push(`buyer/business/${item.business.id}`)
                             }
@@ -218,17 +216,12 @@ class BuyerPage extends Component {
                           </Table.Cell>
                           <Table.Cell
                             style={
-                              item.lastScore &&
-                              item.lastScore.dateSent &&
-                              item.lastScore.dateTimeCreated &&
-                              this._diffDays(item.lastScore.dateTimeCreated) >= 25
+                              item.lastScore && item.lastScore.dateSent && this._diffDays(item.lastScore.dateSent) >= 25
                                 ? { color: theme.redColor }
                                 : null
                             }
                           >
-                            {item.lastScore && item.lastScore.dateSent && item.lastScore.dateTimeCreated
-                              ? this._locked(item.lastScore.dateTimeCreated)
-                              : '-'}
+                            {item.lastScore && item.lastScore.dateSent ? this._locked(item.lastScore.dateSent) : '-'}
                           </Table.Cell>
                           <Table.Cell>
                             <Button

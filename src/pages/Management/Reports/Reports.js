@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Tab } from 'semantic-ui-react'
 import BrokersWeeklyReports from './BrokersWeeklyReports'
 import MarketingReports from './MarketingReports'
+import AnalystReports from './AnalystReports'
 
 class Reports extends Component {
   constructor (props) {
@@ -16,6 +17,10 @@ class Reports extends Component {
         {
           menuItem: 'Broker`s Weekly Report',
           render: () => <BrokersWeeklyReports history={this.props.history} />
+        },
+        {
+          menuItem: 'Analyst`s Report',
+          render: () => <AnalystReports history={this.props.history} />
         }
       ]
     }

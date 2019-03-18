@@ -11,7 +11,8 @@ import {
   getBuyersGroupEmail as getBuyersGroupEmailAPI,
   getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI,
   getAllPerUser,
-  uploadIM as uploadIMAPI
+  uploadIM as uploadIMAPI,
+  verifyDuplicatedBusiness as verifyDuplicatedBusinessAPI
 } from '../../services/api/business'
 
 import { getAllFromBusiness } from '../../services/api/businessLog'
@@ -57,7 +58,11 @@ export const Types = {
   GET_BUSINESSES_PER_USER_FAILURE: 'GET_BUSINESSES_PER_USER_FAILURE',
   UPLOAD_IM_LOADING: 'UPLOAD_IM_LOADING',
   UPLOAD_IM_SUCCESS: 'UPLOAD_IM_SUCCESS',
-  UPLOAD_IM_FAILURE: 'UPLOAD_IM_FAILURE'
+  UPLOAD_IM_FAILURE: 'UPLOAD_IM_FAILURE',
+  VERIFY_DUPLICATED_BUSINESS_LOADING: 'VERIFY_DUPLICATED_BUSINESS_LOADING',
+  VERIFY_DUPLICATED_BUSINESS_SUCCESS: 'VERIFY_DUPLICATED_BUSINESS_SUCCESS',
+  VERIFY_DUPLICATED_BUSINESS_FAILURE: 'VERIFY_DUPLICATED_BUSINESS_FAILURE',
+  CLEAR_DUPLICATED_BUSINESS: 'CLEAR_DUPLICATED_BUSINESS'
 }
 
 // Reducer
@@ -86,6 +91,7 @@ const initialState = {
   create: {
     isLoading: false,
     isCreated: false,
+    object: null,
     error: null
   },
   update: {
@@ -133,6 +139,12 @@ const initialState = {
     isLoading: false,
     isUploaded: false,
     error: null
+  },
+  verifyDuplicatedBusiness: {
+    isLoading: false,
+    object: null,
+    disableButton: false,
+    error: null
   }
 }
 
@@ -154,6 +166,7 @@ export default function reducer (state = initialState, action) {
           ...state.create,
           isLoading: false,
           isCreated: true,
+          object: action.payload,
           error: null
         }
       }
@@ -532,6 +545,44 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.VERIFY_DUPLICATED_BUSINESS_LOADING:
+      return {
+        ...state,
+        verifyDuplicatedBusiness: {
+          ...state.verifyDuplicatedBusiness,
+          isLoading: action.payload,
+          disableButton: false,
+          error: null
+        }
+      }
+    case Types.VERIFY_DUPLICATED_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        verifyDuplicatedBusiness: {
+          ...state.verifyDuplicatedBusiness,
+          isLoading: false,
+          object: action.payload,
+          disableButton: true,
+          error: null
+        }
+      }
+    case Types.VERIFY_DUPLICATED_BUSINESS_FAILURE:
+      return {
+        ...state,
+        verifyDuplicatedBusiness: {
+          ...state.verifyDuplicatedBusiness,
+          isLoading: false,
+          disableButton: false,
+          error: action.payload
+        }
+      }
+    case Types.CLEAR_DUPLICATED_BUSINESS:
+      return {
+        ...state,
+        verifyDuplicatedBusiness: {
+          object: null
+        }
+      }
     default:
       return state
   }
@@ -551,7 +602,8 @@ export const createBusiness = business => async dispatch => {
   try {
     const response = await create(business)
     dispatch({
-      type: Types.CREATE_BUSINESS_SUCCESS
+      type: Types.CREATE_BUSINESS_SUCCESS,
+      payload: response.data
     })
     toast.success(response.message)
   } catch (error) {
@@ -801,4 +853,30 @@ const setGetBusinessReducer = business => {
     type: Types.GET_BUSINESS_SUCCESS,
     payload: business
   }
+}
+
+export const verifyDuplicatedBusiness = values => async dispatch => {
+  dispatch({
+    type: Types.VERIFY_DUPLICATED_BUSINESS_LOADING,
+    payload: true
+  })
+  try {
+    const verifyDuplicatedBusiness = await verifyDuplicatedBusinessAPI(values)
+    dispatch({
+      type: Types.VERIFY_DUPLICATED_BUSINESS_SUCCESS,
+      payload: verifyDuplicatedBusiness.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.VERIFY_DUPLICATED_BUSINESS_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const clearBusiness = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_DUPLICATED_BUSINESS
+  })
 }

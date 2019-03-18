@@ -112,6 +112,12 @@ class StageSoldForm extends Component {
     this.props.setFieldValue(name, value)
   }
 
+  _handleSelectChangeYear = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
+    this.props.setFieldValue('year1Label', value + 2)
+    this.props.setFieldValue('year2Label', value + 1)
+  }
+
   _handleChangeRadio = (e, { value }) => {
     this.props.setFieldValue('trend', value)
   }
@@ -140,6 +146,7 @@ class StageSoldForm extends Component {
     } else financialYear = moment().format('YYYY')
 
     this.setState({ financialYear })
+    return financialYear
   }
 
   _modalConfirmChangeStage = () => {
@@ -187,6 +194,18 @@ class StageSoldForm extends Component {
     // return null
   }
 
+  _calculateYears = (year, qtdeYears) => {
+    let array10Years = []
+    let totalYears = 10
+    if (qtdeYears === 2) totalYears = 11
+    if (qtdeYears === 3) totalYears = 12
+    for (qtdeYears; qtdeYears <= totalYears; qtdeYears++) {
+      let array = { key: qtdeYears, text: year - qtdeYears, value: qtdeYears }
+      array10Years.push(array)
+    }
+    return array10Years
+  }
+
   render () {
     const {
       values,
@@ -197,10 +216,12 @@ class StageSoldForm extends Component {
       handleBlur,
       options,
       isLoadingBusinessSold,
-      listBuyersFromBusiness
+      listBuyersFromBusiness,
+      typeOptions
     } = this.props
+    console.log()
     return (
-      <Modal open size="small" onClose={() => this._handleConfirm(false)}>
+      <Modal open size="large" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content style={{ paddingTop: '0px' }} scrolling>
           <Dimmer.Dimmable dimmed={isLoadingBusinessSold}>
@@ -212,18 +233,31 @@ class StageSoldForm extends Component {
             </Header>
             <Form>
               <Divider horizontal>Business Details</Divider>
-              <Form.Group>
-                <Form.Field width={8}>
-                  <Form.Input
-                    label="Business Type Description"
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <Form.Select
+                    label="Business Type"
+                    options={typeOptions}
                     name="businessType"
                     autoComplete="businessType"
                     value={values.businessType}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={this._handleSelectChange}
                   />
                   {errors.businessType && touched.businessType && (
                     <Label basic color="red" pointing content={errors.businessType} />
+                  )}
+                </Form.Field>
+                <Form.Field>
+                  <Form.Input
+                    label="Industry"
+                    name="industry"
+                    autoComplete="industry"
+                    value={values.industry}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.industry && touched.industry && (
+                    <Label basic color="red" pointing content={errors.industry} />
                   )}
                 </Form.Field>
               </Form.Group>
@@ -279,8 +313,6 @@ class StageSoldForm extends Component {
                     <Label basic color="red" pointing content={errors.stockValue} />
                   )}
                 </Form.Field>
-              </Form.Group>
-              <Form.Group>
                 <Form.Field>
                   <Form.Input
                     label="Asset Value"
@@ -321,10 +353,50 @@ class StageSoldForm extends Component {
                   )}
                 </Form.Field>
               </Form.Group>
+              <Form.Group style={{ marginBottom: '0px' }}>
+                <Form.Field width={4}>
+                  <b>
+                    <Form.Select
+                      label="Year"
+                      options={this._calculateYears(this.state.financialYear, 3)}
+                      name="year1Label"
+                      autoComplete="year1Label"
+                      value={values.year1Label}
+                      disabled
+                    />
+                  </b>
+                </Form.Field>
+                <Form.Field width={4}>
+                  <b>
+                    <Form.Select
+                      label="Year"
+                      options={this._calculateYears(this.state.financialYear, 2)}
+                      name="year2Label"
+                      autoComplete="year2Label"
+                      value={values.year2Label}
+                      disabled
+                    />
+                  </b>
+                </Form.Field>
+                <Form.Field width={4}>
+                  <b>
+                    <Form.Select
+                      label="Year"
+                      options={this._calculateYears(this.state.financialYear, 1)}
+                      name="year3Label"
+                      autoComplete="year3Label"
+                      value={values.year3Label}
+                      onChange={this._handleSelectChangeYear}
+                    />
+                  </b>
+                </Form.Field>
+                <Form.Field width={4}>
+                  <Form.Input label="Year" value={this.state.financialYear + ' Annualised YTD'} readOnly />
+                </Form.Field>
+              </Form.Group>
               <Form.Group>
                 <Form.Field width={4}>
                   <Form.Input
-                    label={this.state.financialYear - 3}
                     name="year1"
                     autoComplete="year1"
                     value={this.state.year1}
@@ -335,7 +407,6 @@ class StageSoldForm extends Component {
                 </Form.Field>
                 <Form.Field width={4}>
                   <Form.Input
-                    label={this.state.financialYear - 2}
                     name="year2"
                     autoComplete="year2"
                     value={this.state.year2}
@@ -346,7 +417,6 @@ class StageSoldForm extends Component {
                 </Form.Field>
                 <Form.Field width={4}>
                   <Form.Input
-                    label={this.state.financialYear - 1}
                     name="year3"
                     autoComplete="year3"
                     value={this.state.year3}
@@ -357,7 +427,6 @@ class StageSoldForm extends Component {
                 </Form.Field>
                 <Form.Field width={4}>
                   <Form.Input
-                    label={this.state.financialYear + ' Annualised YTD'}
                     name="year4"
                     autoComplete="year4"
                     value={this.state.year4}
@@ -530,13 +599,18 @@ StageSoldForm.propTypes = {
   isLoadingBusinessSold: PropTypes.bool,
   getBuyersBusinessSold: PropTypes.func,
   listBuyersFromBusiness: PropTypes.array,
-  businessSoldCreated: PropTypes.object
+  businessSoldCreated: PropTypes.object,
+  typeOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => ({
   id: props.businessSold ? props.businessSold.id : null,
   businessId: props.business ? props.business.id : null,
-  businessType: props.businessSold ? props.businessSold.businessType : '',
+  businessType:
+    props.businessSold && props.businessSold.businessType
+      ? parseInt(props.businessSold.businessType)
+      : parseInt(props.business.businessType),
+  industry: props.businessSold && props.businessSold.industry ? props.businessSold.industry : props.business.industry,
   settlementDate: props.businessSold ? moment(props.businessSold.settlementDate) : moment(),
   buyerName: props.businessSold ? props.businessSold.buyerName : '',
   soldPrice: props.businessSold ? props.businessSold.soldPrice : 0,
@@ -555,14 +629,18 @@ const mapPropsToValues = props => ({
   termsOfDeal: props.businessSold ? props.businessSold.termsOfDeal : '',
   specialNotes: props.businessSold ? props.businessSold.specialNotes : '',
   sold: props.businessSold ? props.businessSold.sold : false,
-  trend: props.businessSold ? props.businessSold.trend : 'up'
+  trend: props.businessSold ? props.businessSold.trend : 'up',
+  year1Label: props.businessSold ? props.businessSold.year1Label : moment() > moment('30/06', 'DD/MM') ? 4 : 3,
+  year2Label: props.businessSold ? props.businessSold.year2Label : moment() > moment('30/06', 'DD/MM') ? 3 : 2,
+  year3Label: props.businessSold ? props.businessSold.year3Label : moment() > moment('30/06', 'DD/MM') ? 2 : 1
 })
 
 const mapStateToProps = state => ({
   businessSold: state.businessSold.get.object.data,
   isLoadingBusinessSold: state.businessSold.get.isLoading,
   listBuyersFromBusiness: state.businessSold.getBuyersBusiness.array,
-  businessSoldCreated: state.businessSold.create.object
+  businessSoldCreated: state.businessSold.create.object,
+  typeOptions: state.business.get.typeOptions
 })
 
 const mapDispatchToProps = dispatch =>

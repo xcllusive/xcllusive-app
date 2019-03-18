@@ -6,16 +6,7 @@ import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment'
 import { closeModal } from '../../redux/ducks/modal'
-import {
-  Modal,
-  Form,
-  Label,
-  Icon,
-  Button,
-  Radio,
-  Divider,
-  Message
-} from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Radio, Divider, Message } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -39,10 +30,7 @@ class StageLostForm extends Component {
         this.props.setFieldValue('recoveryStageNotWant', false)
       }
     }
-    if (
-      name === 'saleNotesLostWant' &&
-      this.props.values['saleNotesLostWant']
-    ) {
+    if (name === 'saleNotesLostWant' && this.props.values['saleNotesLostWant']) {
       this.props.setFieldValue('recoveryStageNotWant', '')
       if (this.props.values['recoveryStageNotSigned']) {
         this.props.setFieldValue('recoveryStageNotSigned', false)
@@ -53,6 +41,14 @@ class StageLostForm extends Component {
     }
     if (name === 'followUpLog' && !this.props.values[name]) {
       this.props.setFieldValue('text', '')
+    }
+  }
+
+  _handleChangeCheckBoxWithoutDefault = yesNo => {
+    if (yesNo === 'Yes') {
+      this.props.setFieldValue('addLeadNurtureList', 'Yes')
+    } else {
+      this.props.setFieldValue('addLeadNurtureList', 'No')
     }
   }
 
@@ -86,9 +82,8 @@ class StageLostForm extends Component {
         <Modal.Content>
           <Message warning>
             <Message.Header>IMPORTANT:</Message.Header>
-            Once you have marked this business as `Lost` you can change it back
-            to a potential listing by searching for it and changing the stage
-            manually.
+            Once you have marked this business as `Lost` you can change it back to a potential listing by searching for
+            it and changing the stage manually.
           </Message>
           <Form>
             <Form.Group>
@@ -102,14 +97,8 @@ class StageLostForm extends Component {
                   value={values.businessRating}
                   onChange={this._handleSelectChange}
                 />
-                {errors.businessRating &&
-                  touched.businessRating && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.businessRating}
-                  />
+                {errors.businessRating && touched.businessRating && (
+                  <Label basic color="red" pointing content={errors.businessRating} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -124,14 +113,8 @@ class StageLostForm extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.afterSalesNotes &&
-                  touched.afterSalesNotes && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.afterSalesNotes}
-                  />
+                {errors.afterSalesNotes && touched.afterSalesNotes && (
+                  <Label basic color="red" pointing content={errors.afterSalesNotes} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -189,14 +172,8 @@ class StageLostForm extends Component {
                     value={values.recoveryStageNotSigned}
                     onChange={this._handleSelectChange}
                   />
-                  {errors.recoveryStageNotSigned &&
-                    touched.recoveryStageNotSigned && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.recoveryStageNotSigned}
-                    />
+                  {errors.recoveryStageNotSigned && touched.recoveryStageNotSigned && (
+                    <Label basic color="red" pointing content={errors.recoveryStageNotSigned} />
                   )}
                 </Form.Field>
               ) : (
@@ -210,18 +187,34 @@ class StageLostForm extends Component {
                     value={values.recoveryStageNotWant}
                     onChange={this._handleSelectChange}
                   />
-                  {errors.recoveryStageNotWant &&
-                    touched.recoveryStageNotWant && (
-                    <Label
-                      basic
-                      color="red"
-                      pointing
-                      content={errors.recoveryStageNotWant}
-                    />
+                  {errors.recoveryStageNotWant && touched.recoveryStageNotWant && (
+                    <Label basic color="red" pointing content={errors.recoveryStageNotWant} />
                   )}
                 </Form.Field>
               )}
             </Form.Group>
+            <Form.Group>
+              <label>Do you want to to add to Lead Nurture List</label>
+              <Form.Field
+                control={Radio}
+                label="Yes"
+                name="addLeadNurtureList"
+                onChange={() => this._handleChangeCheckBoxWithoutDefault('Yes')}
+                checked={values.addLeadNurtureList === 'Yes'}
+              />
+              <Form.Field
+                control={Radio}
+                label="No"
+                name="addLeadNurtureList"
+                onChange={() => this._handleChangeCheckBoxWithoutDefault('No')}
+                checked={values.addLeadNurtureList === 'No'}
+              />
+            </Form.Group>
+            {/* <Form.Group>
+              <label>Do you want to to add to Lead Nurture List</label>
+              <Form.Checkbox label="Yes" name="test" onChange={this._handleChangeCheckBox} checked={values.test} />
+              <Form.Checkbox label="No" name="test" onChange={this._handleChangeCheckBox} checked={!values.test} />
+            </Form.Group> */}
             <Divider horizontal>(Optional) Set Follow up date</Divider>
             <Form.Group>
               <Form.Checkbox
@@ -232,19 +225,11 @@ class StageLostForm extends Component {
               />
               {this.props.values.followUpLog ? (
                 <Form.Field>
-                  <DatePicker
-                    selected={values.date}
-                    onChange={this._handleDateChange}
-                    popperPlacement="top-end"
-                  />
+                  <DatePicker selected={values.date} onChange={this._handleDateChange} popperPlacement="top-end" />
                 </Form.Field>
               ) : (
                 <Form.Field>
-                  <DatePicker
-                    selected={values.date}
-                    onChange={this._handleDateChange}
-                    disabled
-                  />
+                  <DatePicker selected={values.date} onChange={this._handleDateChange} disabled />
                 </Form.Field>
               )}
             </Form.Group>
@@ -259,10 +244,7 @@ class StageLostForm extends Component {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.text &&
-                    touched.text && (
-                    <Label basic color="red" pointing content={errors.text} />
-                  )}
+                  {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
                 </Form.Field>
               ) : (
                 <Form.Field width={10}>
@@ -297,8 +279,19 @@ const validationSchema = Yup.object().shape({
   afterSalesNotes: Yup.string().required('Lost Notes is required.'),
   saleNotesLostMeeting: Yup.string().required('This field is required.'),
   saleNotesLostWant: Yup.string().required('Lost Notes is required.'),
-  recoveryStageNotSigned: Yup.string().required('This field is required.'),
-  recoveryStageNotWant: Yup.string().required('This field is required.'),
+  // recoveryStageNotSigned: Yup.string()
+  //   .required('This field is required.')
+  //   .when('saleNotesLostWant', {
+  //     is: saleNotesLostWant => saleNotesLostWant,
+  //     then: Yup.string().required(),
+  //     otherwise: Yup.string().notRequired()
+  //   }),
+  recoveryStageNotWant: Yup.string().when('saleNotesLostWant', {
+    is: saleNotesLostWant => saleNotesLostWant === true,
+    then: Yup.string().required(),
+    otherwise: Yup.string().notRequired()
+  }),
+  addLeadNurtureList: Yup.string().required(),
   date: Yup.string().required('This field is required.')
 })
 
@@ -331,7 +324,8 @@ const mapPropsToValues = props => ({
   recoveryStageNotSigned: false,
   followUpLog: false,
   businessId: props.business.id ? props.business.id : '',
-  text: ''
+  text: '',
+  addLeadNurtureList: ''
 })
 
 const mapStateToProps = state => ({
@@ -341,8 +335,7 @@ const mapStateToProps = state => ({
   stageNotWantOptions: state.business.get.stageNotWantOptions
 })
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ updateStageLost, closeModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ updateStageLost, closeModal }, dispatch)
 
 export default connect(
   mapStateToProps,

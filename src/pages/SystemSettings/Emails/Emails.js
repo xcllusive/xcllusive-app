@@ -8,7 +8,7 @@ import Wrapper from '../../../components/content/Wrapper'
 import * as Yup from 'yup'
 import { getSystemSettings, updateSystemSettings } from '../../../redux/ducks/systemSettings'
 
-class EmailTemplates extends Component {
+class Emails extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -41,15 +41,31 @@ class EmailTemplates extends Component {
           <Form.Group>
             <Form.Field width={6}>
               <Form.Input
-                label="Email"
+                label="Email Office"
                 name="emailOffice"
                 autoComplete="emailOffice"
                 value={values.emailOffice}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.emailOffice &&
-                touched.emailOffice && <Label basic color="red" pointing content={errors.emailOffice} />}
+              {errors.emailOffice && touched.emailOffice && (
+                <Label basic color="red" pointing content={errors.emailOffice} />
+              )}
+            </Form.Field>
+          </Form.Group>
+          <Form.Group>
+            <Form.Field width={6}>
+              <Form.Input
+                label="Email Marketing"
+                name="emailMarketing"
+                autoComplete="emailMarketing"
+                value={values.emailMarketing}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {errors.emailMarketing && touched.emailMarketing && (
+                <Label basic color="red" pointing content={errors.emailMarketing} />
+              )}
             </Form.Field>
           </Form.Group>
         </Form>
@@ -58,7 +74,7 @@ class EmailTemplates extends Component {
   }
 }
 
-EmailTemplates.propTypes = {
+Emails.propTypes = {
   values: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
@@ -74,12 +90,16 @@ EmailTemplates.propTypes = {
 const validationSchema = Yup.object().shape({
   emailOffice: Yup.string()
     .email('Invalid email address.')
-    .required('Email is required.')
+    .required('Email Office is required.'),
+  emailMarketing: Yup.string()
+    .email('Invalid email address.')
+    .required('Email Marketing is required.')
 })
 
 const mapPropsToValues = props => {
   return {
-    emailOffice: props.emailOffice ? props.emailOffice : ''
+    emailOffice: props.emailOffice ? props.emailOffice : '',
+    emailMarketing: props.emailMarketing ? props.emailMarketing : ''
   }
 }
 
@@ -88,7 +108,8 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 }
 
 const mapStateToProps = state => ({
-  emailOffice: state.systemSettings.get.object ? state.systemSettings.get.object.emailOffice : ''
+  emailOffice: state.systemSettings.get.object ? state.systemSettings.get.object.emailOffice : '',
+  emailMarketing: state.systemSettings.get.object ? state.systemSettings.get.object.emailMarketing : ''
 })
 
 const mapDispatchToProps = dispatch =>
@@ -109,5 +130,5 @@ export default connect(
     handleSubmit,
     enableReinitialize: true,
     validationSchema
-  })(EmailTemplates)
+  })(Emails)
 )
