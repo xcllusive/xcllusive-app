@@ -11,16 +11,16 @@ class Reports extends Component {
     this.state = {
       panes: [
         {
+          menuItem: 'Analyst`s Report',
+          render: () => <AnalystReports history={this.props.history} />
+        },
+        {
           menuItem: 'Marketing Reports',
           render: () => <MarketingReports history={this.props.history} />
         },
         {
           menuItem: 'Broker`s Weekly Report',
           render: () => <BrokersWeeklyReports history={this.props.history} />
-        },
-        {
-          menuItem: 'Analyst`s Report',
-          render: () => <AnalystReports history={this.props.history} />
         }
       ]
     }

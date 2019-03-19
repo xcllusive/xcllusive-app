@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Button, Statistic, Dimmer, Loader, Table } from 'semantic-ui-react'
+import { Grid, Form, Button, Statistic, Dimmer, Loader, Table, Segment, Header } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import Wrapper from '../../../components/content/Wrapper'
-import { getAllAnalysts, getAnalystReport } from '../../../redux/ducks/reports'
+import { getAllAnalysts, getAnalystReport, getQtdeBusinessesStagePerUser } from '../../../redux/ducks/reports'
 import GridBusinessStage from '../../../components/content/GridBusinessStage'
 import moment from 'moment'
 
@@ -16,11 +16,12 @@ class AnalystReports extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      isGotUser: true
+      isGotUser: true,
+      stageSelected: 'Potential Listing'
     }
   }
   componentDidMount () {
-    this.props.getAllAnalysts()
+    if (!this.props.arrayBusinesses) this.props.getAllAnalysts()
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -53,7 +54,18 @@ class AnalystReports extends Component {
     })
   }
 
-  _confirmReports = (values, stageId) => {
+  _confirmReports = async (values, stageId, fromButton = false) => {
+    if (stageId === 1) this.setState({ stageSelected: 'Potential Listing' })
+    if (stageId === 4) this.setState({ stageSelected: 'For Sale' })
+    if (stageId === 8) this.setState({ stageSelected: 'Lost' })
+    if (stageId === 9) this.setState({ stageSelected: 'Appraisal' })
+    if (fromButton) {
+      await this.props.getQtdeBusinessesStagePerUser(
+        values.analyst,
+        moment(values.dateFrom).format('YYYY/MM/DD'),
+        moment(values.dateTo).format('YYYY/MM/DD')
+      )
+    }
     this.props.getAnalystReport(
       values.analyst,
       moment(values.dateFrom).format('YYYY/MM/DD'),
@@ -63,12 +75,12 @@ class AnalystReports extends Component {
   }
 
   render () {
-    const { values, arrayAnalysts, arrayBusinesses, isLoadingReports, match } = this.props
+    const { values, arrayAnalysts, arrayBusinesses, isLoadingReports, qtdeBusinesses } = this.props
     return (
       <Wrapper>
         <Form>
           <Grid>
-            <Grid.Row style={{ paddingBottom: '0px' }} columns={2}>
+            <Grid.Row style={{ paddingBottom: '0px' }}>
               <Grid.Column>
                 <Form.Group>
                   <Form.Field>
@@ -123,7 +135,7 @@ class AnalystReports extends Component {
                           icon="checkmark"
                           labelPosition="right"
                           content="Confirm"
-                          onClick={() => this._confirmReports(values, 1)}
+                          onClick={() => this._confirmReports(values, 1, true)}
                         />
                       </Form.Field>
                     </Fragment>
@@ -137,141 +149,201 @@ class AnalystReports extends Component {
           <Dimmer inverted active={isLoadingReports}>
             <Loader>Loading</Loader>
           </Dimmer>
-          {arrayBusinesses.length > 0 ? (
+          {arrayBusinesses && arrayBusinesses.length > 0 ? (
             <Fragment>
               <GridBusinessStage>
                 <Statistic.Group size="mini" color="blue" widths={4}>
                   <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 1)}>
-                    {/* <Statistic.Value>
-                  {objectQtdeBusinessStage
-                  ? `${objectQtdeBusinessStage.businessPotentialListingFilter} of ${
-                    objectQtdeBusinessStage.businessPotentialListing
-                  }`
-                  : 0}
-                </Statistic.Value> */}
+                    <Statistic.Value>{qtdeBusinesses ? qtdeBusinesses.businessPotentialListing : 0}</Statistic.Value>
                     <Statistic.Label>Potential Listing</Statistic.Label>
                   </Statistic>
                   <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 9)}>
-                    <Statistic.Value>
-                      {/* {objectQtdeBusinessStage
-                  ? `${objectQtdeBusinessStage.businessAppraisalFilter} of ${objectQtdeBusinessStage.businessAppraisal}`
-                  : 0} */}
-                    </Statistic.Value>
+                    <Statistic.Value>{qtdeBusinesses ? qtdeBusinesses.businessAppraisal : 0}</Statistic.Value>
                     <Statistic.Label>Appraisal</Statistic.Label>
                   </Statistic>
                   <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 4)}>
-                    {/* <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessForSale : 0}</Statistic.Value> */}
+                    <Statistic.Value>{qtdeBusinesses ? qtdeBusinesses.businessForSale : 0}</Statistic.Value>
                     <Statistic.Label>For Sale</Statistic.Label>
                   </Statistic>
                   <Statistic style={{ cursor: 'pointer' }} onClick={() => this._confirmReports(values, 8)}>
-                    {/* <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessLost : 0}</Statistic.Value> */}
+                    <Statistic.Value>{qtdeBusinesses ? qtdeBusinesses.businessLost : 0}</Statistic.Value>
                     <Statistic.Label>Lost</Statistic.Label>
                   </Statistic>
                 </Statistic.Group>
               </GridBusinessStage>
-              <Table color="blue" inverted celled selectable compact size="small">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Business ID</Table.HeaderCell>
-                    <Table.HeaderCell>Business Name</Table.HeaderCell>
-                    <Table.HeaderCell>Contact Name</Table.HeaderCell>
-                    <Table.HeaderCell>Log Text</Table.HeaderCell>
-                    <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {arrayBusinesses.map(business => (
-                    <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
-                      <Table.Cell
-                        style={{
-                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
-                        }}
-                        warning={
-                          !business.BusinessLog.reduce((last, log) => {
-                            if (last === true) {
-                              return true
-                            }
-                            return (
-                              log.followUpStatus === 'Pending' &&
-                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
-                            )
-                          }, false)
-                        }
-                      >{`BS${business.id}`}</Table.Cell>
-                      <Table.Cell
-                        style={{
-                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
-                        }}
-                        warning={
-                          !business.BusinessLog.reduce((last, log) => {
-                            if (last === true) {
-                              return true
-                            }
-                            return (
-                              log.followUpStatus === 'Pending' &&
-                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
-                            )
-                          }, false)
-                        }
-                      >
-                        {business.businessName}
-                      </Table.Cell>
-                      <Table.Cell
-                        style={{
-                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
-                        }}
-                        warning={
-                          !business.BusinessLog.reduce((last, log) => {
-                            if (last === true) {
-                              return true
-                            }
-                            return (
-                              log.followUpStatus === 'Pending' &&
-                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
-                            )
-                          }, false)
-                        }
-                      >{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
-                      <Table.Cell
-                        style={{
-                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
-                        }}
-                        warning={
-                          !business.BusinessLog.reduce((last, log) => {
-                            if (last === true) {
-                              return true
-                            }
-                            return (
-                              log.followUpStatus === 'Pending' &&
-                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
-                            )
-                          }, false)
-                        }
-                      >
-                        {business.BusinessLog[0].text}
-                      </Table.Cell>
-                      <Table.Cell
-                        style={{
-                          backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
-                        }}
-                        warning={
-                          !business.BusinessLog.reduce((last, log) => {
-                            if (last === true) {
-                              return true
-                            }
-                            return (
-                              log.followUpStatus === 'Pending' &&
-                              moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
-                            )
-                          }, false)
-                        }
-                      >
-                        {moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
+              <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
+                <Header style={{ marginLeft: '10px' }} color="red">
+                  {this.state.stageSelected}
+                </Header>
+                <Table celled striped selectable compact size="small">
+                  <Table.Header>
+                    {this.state.stageSelected !== 'Lost' ? (
+                      <Table.Row>
+                        <Table.HeaderCell>Business ID</Table.HeaderCell>
+                        <Table.HeaderCell>Business Name</Table.HeaderCell>
+                        <Table.HeaderCell>Contact Name</Table.HeaderCell>
+                        <Table.HeaderCell>Log Text</Table.HeaderCell>
+                        <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
+                      </Table.Row>
+                    ) : (
+                      <Table.Row>
+                        <Table.HeaderCell width={4}>Business</Table.HeaderCell>
+                        <Table.HeaderCell width={8}>Listing Agent Lost Notes</Table.HeaderCell>
+                        <Table.HeaderCell width={4}>Recovery Notes</Table.HeaderCell>
+                      </Table.Row>
+                    )}
+                  </Table.Header>
+                  <Table.Body>
+                    {arrayBusinesses.map(business =>
+                      business.stageId !== 8 ? (
+                        <Table.Row key={business.id}>
+                          <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                          <Table.Cell>{business.businessName}</Table.Cell>
+                          <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
+                          <Table.Cell>{business.BusinessLog[0].text}</Table.Cell>
+                          <Table.Cell>{moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}</Table.Cell>
+                        </Table.Row>
+                      ) : (
+                        <Table.Row key={business.id}>
+                          <Table.Cell>
+                            <Grid celled="internally">
+                              <Grid.Row>
+                                <Grid.Column width={16}>
+                                  <Header style={{ color: 'blue' }}>
+                                    <u>
+                                      <b>{business.businessName}</b>
+                                    </u>
+                                  </Header>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
+                                  ID:
+                                </Grid.Column>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
+                                  <b>{`BS${business.id}`}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
+                                  Source:
+                                </Grid.Column>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
+                                  <b>{business.source.label}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
+                                  Went to meeting:
+                                </Grid.Column>
+                                <Grid.Column
+                                  style={{
+                                    paddingBottom: '0px',
+                                    paddingTop: '0px',
+                                    color: business.saleNotesLostMeeting === 'No' ? 'Green' : 'Red'
+                                  }}
+                                  width={2}
+                                >
+                                  <b>{business.saleNotesLostMeeting}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
+                                  Do we want it:
+                                </Grid.Column>
+                                <Grid.Column
+                                  style={{
+                                    paddingBottom: '0px',
+                                    paddingTop: '0px',
+                                    color: business.saleNotesLostWant === 'No' ? 'Green' : 'Red'
+                                  }}
+                                  width={2}
+                                >
+                                  <b>{business.saleNotesLostWant}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
+                                  Days until lost:
+                                </Grid.Column>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
+                                  <b>{moment().diff(business.lostDate, 'day')}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
+                                  Lost date:
+                                </Grid.Column>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
+                                  <b>{moment(business.lostDate).format('DD/MM/YYYY')}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                            </Grid>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Grid celled="internally">
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={5}>
+                                  {business.saleNotesLostWant
+                                    ? 'Why did they not sign with us?'
+                                    : 'Why did we not want then?'}
+                                </Grid.Column>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={11}>
+                                  <b>
+                                    {business.saleNotesLostWant
+                                      ? business.stageNotSigned.label
+                                      : business.stageNotWant.label}
+                                  </b>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column width={5}>Agent Notes:</Grid.Column>
+                                <Grid.Column width={11}>
+                                  <b>{business.afterSalesNotes}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                            </Grid>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Grid celled="internally">
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={7}>
+                                  Recovery Business:
+                                </Grid.Column>
+                                <Grid.Column
+                                  style={{
+                                    paddingBottom: '0px',
+                                    paddingTop: '0px',
+                                    color: business.BusinessLog[0].followUpStatus === 'Pending' ? 'Green' : 'Red'
+                                  }}
+                                  width={9}
+                                >
+                                  <b>{business.BusinessLog[0].followUpStatus === 'Pending' ? 'Yes' : 'No'}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                              <Grid.Row columns={2}>
+                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={7}>
+                                  Lead Nature List:
+                                </Grid.Column>
+                                <Grid.Column
+                                  style={{
+                                    paddingBottom: '0px',
+                                    paddingTop: '0px',
+                                    color: business.addLeadNurtureList ? 'Green' : 'Red'
+                                  }}
+                                  width={9}
+                                >
+                                  <b>{business.addLeadNurtureList ? 'Yes' : 'No'}</b>
+                                </Grid.Column>
+                              </Grid.Row>
+                            </Grid>
+                          </Table.Cell>
+                        </Table.Row>
+                      )
+                    )}
+                  </Table.Body>
+                </Table>
+              </Segment>
             </Fragment>
           ) : null}
         </Dimmer.Dimmable>
@@ -291,13 +363,16 @@ AnalystReports.propTypes = {
   getAnalystReport: PropTypes.func,
   arrayBusinesses: PropTypes.array,
   isLoadingReports: PropTypes.bool,
-  match: PropTypes.func
+  match: PropTypes.func,
+  getQtdeBusinessesStagePerUser: PropTypes.func,
+  qtdeBusinesses: PropTypes.object
 }
 
 const mapPropsToValues = props => {
   return {
     analyst: '',
-    dateFrom: moment().startOf('month'),
+    // dateFrom: moment().startOf('month'),
+    dateFrom: moment('01/06/2018'),
     dateTo: moment()
   }
 }
@@ -305,7 +380,8 @@ const mapPropsToValues = props => {
 const mapStateToProps = state => ({
   arrayAnalysts: state.reports.getAllAnalysts.array,
   arrayBusinesses: state.reports.getAnalystReports.array,
-  isLoadingReports: state.reports.getAnalystReports.isLoading
+  isLoadingReports: state.reports.getAnalystReports.isLoading,
+  qtdeBusinesses: state.reports.getQtdeBusinessesStagePerUser.qtde
 })
 
 const mapDispatchToProps = dispatch =>
@@ -313,7 +389,8 @@ const mapDispatchToProps = dispatch =>
     {
       getAllAnalysts,
       openModal,
-      getAnalystReport
+      getAnalystReport,
+      getQtdeBusinessesStagePerUser
     },
     dispatch
   )

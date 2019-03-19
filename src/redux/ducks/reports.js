@@ -1,7 +1,8 @@
 import {
   getMarketingReport as getMarketingReportAPI,
   getAllAnalysts as getAllAnalystsAPI,
-  getAnalystReport as getAnalystReportAPI
+  getAnalystReport as getAnalystReportAPI,
+  getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -17,7 +18,10 @@ export const Types = {
   GET_ALL_ANALYSTS_FAILURE: 'GET_ALL_ANALYSTS_FAILURE',
   GET_ANALYST_REPORT_LOADING: 'GET_ANALYST_REPORT_LOADING',
   GET_ANALYST_REPORT_SUCCESS: 'GET_ANALYST_REPORT_SUCCESS',
-  GET_ANALYST_REPORT_FAILURE: 'GET_ANALYST_REPORT_FAILURE'
+  GET_ANALYST_REPORT_FAILURE: 'GET_ANALYST_REPORT_FAILURE',
+  GET_BUSINESSES_STAGE_PER_USER_LOADING: 'GET_BUSINESSES_STAGE_PER_USER_LOADING',
+  GET_BUSINESSES_STAGE_PER_USER_SUCCESS: 'GET_BUSINESSES_STAGE_PER_USER_SUCCESS',
+  GET_BUSINESSES_STAGE_PER_USER_FAILURE: 'GET_BUSINESSES_STAGE_PER_USER_FAILURE'
 }
 
 // Reducer
@@ -44,7 +48,12 @@ const initialState = {
   },
   getAnalystReports: {
     isLoading: false,
-    array: [],
+    array: null,
+    error: null
+  },
+  getQtdeBusinessesStagePerUser: {
+    isLoading: false,
+    qtde: null,
     error: null
   }
 }
@@ -155,6 +164,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUSINESSES_STAGE_PER_USER_LOADING:
+      return {
+        ...state,
+        getQtdeBusinessesStagePerUser: {
+          ...state.getQtdeBusinessesStagePerUser,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_STAGE_PER_USER_SUCCESS:
+      return {
+        ...state,
+        getQtdeBusinessesStagePerUser: {
+          ...state.getQtdeBusinessesStagePerUser,
+          isLoading: false,
+          qtde: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_STAGE_PER_USER_FAILURE:
+      return {
+        ...state,
+        getQtdeBusinessesStagePerUser: {
+          ...state.getQtdeBusinessesStagePerUser,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_MARKETING_REPORT:
       return initialState
     default:
@@ -211,7 +248,6 @@ export const getAllAnalysts = () => async dispatch => {
 }
 
 export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => async dispatch => {
-  console.log(analystId, dateFrom, dateTo, stageId)
   dispatch({
     type: Types.GET_ANALYST_REPORT_LOADING,
     payload: true
@@ -225,6 +261,26 @@ export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => async 
   } catch (error) {
     dispatch({
       type: Types.GET_ANALYST_REPORT_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getQtdeBusinessesStagePerUser = (analystId, dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESSES_STAGE_PER_USER_LOADING,
+    payload: true
+  })
+  try {
+    const getAnalystReport = await getQtdeBusinessesStagePerUserAPI(analystId, dateFrom, dateTo)
+    dispatch({
+      type: Types.GET_BUSINESSES_STAGE_PER_USER_SUCCESS,
+      payload: getAnalystReport.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESSES_STAGE_PER_USER_FAILURE,
       payload: error
     })
     toast.error(error)

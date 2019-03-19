@@ -22,3 +22,11 @@ export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => {
     params: { analystId, dateFrom, dateTo, stageId }
   })
 }
+
+export const getQtdeBusinessesStagePerUser = (analystId, dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: 'reports/qtde-businesses-stage-per-user',
+    params: { analystId, dateFrom, dateTo }
+  })
+}
