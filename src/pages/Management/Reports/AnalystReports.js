@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Button, Statistic, Dimmer, Loader, Table, Segment, Header } from 'semantic-ui-react'
+import { Grid, Form, Button, Statistic, Dimmer, Loader, Table, Segment, Header, Icon } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
@@ -149,7 +149,7 @@ class AnalystReports extends Component {
           <Dimmer inverted active={isLoadingReports}>
             <Loader>Loading</Loader>
           </Dimmer>
-          {arrayBusinesses && arrayBusinesses.length > 0 ? (
+          {arrayBusinesses ? (
             <Fragment>
               <GridBusinessStage>
                 <Statistic.Group size="mini" color="blue" widths={4}>
@@ -171,179 +171,207 @@ class AnalystReports extends Component {
                   </Statistic>
                 </Statistic.Group>
               </GridBusinessStage>
-              <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
-                <Header style={{ marginLeft: '10px' }} color="red">
-                  {this.state.stageSelected}
-                </Header>
-                <Table celled striped selectable compact size="small">
-                  <Table.Header>
-                    {this.state.stageSelected !== 'Lost' ? (
-                      <Table.Row>
-                        <Table.HeaderCell>Business ID</Table.HeaderCell>
-                        <Table.HeaderCell>Business Name</Table.HeaderCell>
-                        <Table.HeaderCell>Contact Name</Table.HeaderCell>
-                        <Table.HeaderCell>Log Text</Table.HeaderCell>
-                        <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
-                      </Table.Row>
-                    ) : (
-                      <Table.Row>
-                        <Table.HeaderCell width={4}>Business</Table.HeaderCell>
-                        <Table.HeaderCell width={8}>Listing Agent Lost Notes</Table.HeaderCell>
-                        <Table.HeaderCell width={4}>Recovery Notes</Table.HeaderCell>
-                      </Table.Row>
-                    )}
-                  </Table.Header>
-                  <Table.Body>
-                    {arrayBusinesses.map(business =>
-                      business.stageId !== 8 ? (
-                        <Table.Row key={business.id}>
-                          <Table.Cell>{`BS${business.id}`}</Table.Cell>
-                          <Table.Cell>{business.businessName}</Table.Cell>
-                          <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
-                          <Table.Cell>{business.BusinessLog[0].text}</Table.Cell>
-                          <Table.Cell>{moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}</Table.Cell>
+              {arrayBusinesses.length > 0 ? (
+                <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
+                  <Header style={{ marginLeft: '10px' }} color="red">
+                    {this.state.stageSelected}
+                  </Header>
+                  <Table celled striped selectable compact size="small">
+                    <Table.Header>
+                      {this.state.stageSelected !== 'Lost' ? (
+                        <Table.Row>
+                          <Table.HeaderCell>Business ID</Table.HeaderCell>
+                          <Table.HeaderCell>Business Name</Table.HeaderCell>
+                          <Table.HeaderCell>Contact Name</Table.HeaderCell>
+                          <Table.HeaderCell>Log Text</Table.HeaderCell>
+                          <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
                         </Table.Row>
                       ) : (
-                        <Table.Row key={business.id}>
-                          <Table.Cell>
-                            <Grid celled="internally">
-                              <Grid.Row>
-                                <Grid.Column width={16}>
-                                  <Header style={{ color: 'blue' }}>
-                                    <u>
-                                      <b>{business.businessName}</b>
-                                    </u>
-                                  </Header>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
-                                  ID:
-                                </Grid.Column>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
-                                  <b>{`BS${business.id}`}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
-                                  Source:
-                                </Grid.Column>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
-                                  <b>{business.source.label}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
-                                  Went to meeting:
-                                </Grid.Column>
-                                <Grid.Column
-                                  style={{
-                                    paddingBottom: '0px',
-                                    paddingTop: '0px',
-                                    color: business.saleNotesLostMeeting === 'No' ? 'Green' : 'Red'
-                                  }}
-                                  width={2}
-                                >
-                                  <b>{business.saleNotesLostMeeting}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
-                                  Do we want it:
-                                </Grid.Column>
-                                <Grid.Column
-                                  style={{
-                                    paddingBottom: '0px',
-                                    paddingTop: '0px',
-                                    color: business.saleNotesLostWant === 'No' ? 'Green' : 'Red'
-                                  }}
-                                  width={2}
-                                >
-                                  <b>{business.saleNotesLostWant}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
-                                  Days until lost:
-                                </Grid.Column>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
-                                  <b>{moment().diff(business.lostDate, 'day')}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
-                                  Lost date:
-                                </Grid.Column>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
-                                  <b>{moment(business.lostDate).format('DD/MM/YYYY')}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                            </Grid>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Grid celled="internally">
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={5}>
-                                  {business.saleNotesLostWant
-                                    ? 'Why did they not sign with us?'
-                                    : 'Why did we not want then?'}
-                                </Grid.Column>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={11}>
-                                  <b>
-                                    {business.saleNotesLostWant
-                                      ? business.stageNotSigned.label
-                                      : business.stageNotWant.label}
-                                  </b>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column width={5}>Agent Notes:</Grid.Column>
-                                <Grid.Column width={11}>
-                                  <b>{business.afterSalesNotes}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                            </Grid>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Grid celled="internally">
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={7}>
-                                  Recovery Business:
-                                </Grid.Column>
-                                <Grid.Column
-                                  style={{
-                                    paddingBottom: '0px',
-                                    paddingTop: '0px',
-                                    color: business.BusinessLog[0].followUpStatus === 'Pending' ? 'Green' : 'Red'
-                                  }}
-                                  width={9}
-                                >
-                                  <b>{business.BusinessLog[0].followUpStatus === 'Pending' ? 'Yes' : 'No'}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                              <Grid.Row columns={2}>
-                                <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={7}>
-                                  Lead Nature List:
-                                </Grid.Column>
-                                <Grid.Column
-                                  style={{
-                                    paddingBottom: '0px',
-                                    paddingTop: '0px',
-                                    color: business.addLeadNurtureList ? 'Green' : 'Red'
-                                  }}
-                                  width={9}
-                                >
-                                  <b>{business.addLeadNurtureList ? 'Yes' : 'No'}</b>
-                                </Grid.Column>
-                              </Grid.Row>
-                            </Grid>
-                          </Table.Cell>
+                        <Table.Row>
+                          <Table.HeaderCell width={4}>Business</Table.HeaderCell>
+                          <Table.HeaderCell width={8}>Listing Agent Lost Notes</Table.HeaderCell>
+                          <Table.HeaderCell width={4}>Recovery Notes</Table.HeaderCell>
                         </Table.Row>
-                      )
-                    )}
-                  </Table.Body>
-                </Table>
-              </Segment>
+                      )}
+                    </Table.Header>
+                    <Table.Body>
+                      {arrayBusinesses.map(business =>
+                        business.stageId !== 8 ? (
+                          <Table.Row key={business.id}>
+                            <Table.Cell>
+                              <Grid>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column width={2}>
+                                    <Icon
+                                      link
+                                      name="magnify"
+                                      onClick={() => this.props.history.push(`business/${business.id}`)}
+                                    />
+                                  </Grid.Column>
+                                  <Grid.Column style={{ paddingLeft: '0px' }}>{`BS${business.id}`}</Grid.Column>
+                                </Grid.Row>
+                              </Grid>
+                            </Table.Cell>
+                            <Table.Cell>{business.businessName}</Table.Cell>
+                            <Table.Cell>{`${business.firstNameV} ${business.lastNameV}`}</Table.Cell>
+                            <Table.Cell>{business.BusinessLog[0].text}</Table.Cell>
+                            <Table.Cell>{moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}</Table.Cell>
+                          </Table.Row>
+                        ) : (
+                          <Table.Row key={business.id}>
+                            <Table.Cell>
+                              <Grid celled="internally">
+                                <Grid.Row>
+                                  <Grid.Column width={16}>
+                                    <Header style={{ color: 'blue' }}>
+                                      <u>
+                                        <b>{business.businessName}</b>
+                                      </u>
+                                    </Header>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                    ID:
+                                  </Grid.Column>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={4}>
+                                    <Grid>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column>
+                                          <Icon
+                                            link
+                                            name="magnify"
+                                            onClick={() => this.props.history.push(`business/${business.id}`)}
+                                          />
+                                        </Grid.Column>
+                                        <Grid.Column style={{ paddingLeft: '0px' }}>
+                                          <b>{`BS${business.id}`}</b>
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                    </Grid>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                    Source:
+                                  </Grid.Column>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
+                                    <b>{business.source.label}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                    Went to meeting:
+                                  </Grid.Column>
+                                  <Grid.Column
+                                    style={{
+                                      paddingBottom: '0px',
+                                      paddingTop: '0px',
+                                      color: business.saleNotesLostMeeting === 'No' ? 'Green' : 'Red'
+                                    }}
+                                    width={2}
+                                  >
+                                    <b>{business.saleNotesLostMeeting}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                    Do we want it:
+                                  </Grid.Column>
+                                  <Grid.Column
+                                    style={{
+                                      paddingBottom: '0px',
+                                      paddingTop: '0px',
+                                      color: business.saleNotesLostWant === 'No' ? 'Green' : 'Red'
+                                    }}
+                                    width={2}
+                                  >
+                                    <b>{business.saleNotesLostWant}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                    Days until lost:
+                                  </Grid.Column>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
+                                    <b>{moment().diff(business.lostDate, 'day')}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={8}>
+                                    Lost date:
+                                  </Grid.Column>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
+                                    <b>{moment(business.lostDate).format('DD/MM/YYYY')}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                              </Grid>
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Grid celled="internally">
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={5}>
+                                    {business.saleNotesLostWant
+                                      ? 'Why did they not sign with us?'
+                                      : 'Why did we not want then?'}
+                                  </Grid.Column>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={11}>
+                                    <b>
+                                      {business.saleNotesLostWant
+                                        ? business.stageNotSigned.label
+                                        : business.stageNotWant.label}
+                                    </b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column width={5}>Agent Notes:</Grid.Column>
+                                  <Grid.Column width={11}>
+                                    <b>{business.afterSalesNotes}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                              </Grid>
+                            </Table.Cell>
+                            <Table.Cell>
+                              <Grid celled="internally">
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={7}>
+                                    Recovery Business:
+                                  </Grid.Column>
+                                  <Grid.Column
+                                    style={{
+                                      paddingBottom: '0px',
+                                      paddingTop: '0px',
+                                      color: business.BusinessLog[0].followUpStatus === 'Pending' ? 'Green' : 'Red'
+                                    }}
+                                    width={9}
+                                  >
+                                    <b>{business.BusinessLog[0].followUpStatus === 'Pending' ? 'Yes' : 'No'}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                  <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={7}>
+                                    Lead Nature List:
+                                  </Grid.Column>
+                                  <Grid.Column
+                                    style={{
+                                      paddingBottom: '0px',
+                                      paddingTop: '0px',
+                                      color: business.addLeadNurtureList ? 'Green' : 'Red'
+                                    }}
+                                    width={9}
+                                  >
+                                    <b>{business.addLeadNurtureList ? 'Yes' : 'No'}</b>
+                                  </Grid.Column>
+                                </Grid.Row>
+                              </Grid>
+                            </Table.Cell>
+                          </Table.Row>
+                        )
+                      )}
+                    </Table.Body>
+                  </Table>
+                </Segment>
+              ) : null}
             </Fragment>
           ) : null}
         </Dimmer.Dimmable>
