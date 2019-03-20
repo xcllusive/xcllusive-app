@@ -2,7 +2,8 @@ import {
   getMarketingReport as getMarketingReportAPI,
   getAllAnalysts as getAllAnalystsAPI,
   getAnalystReport as getAnalystReportAPI,
-  getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI
+  getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI,
+  getBusinessesPerAnalyst as getBusinessesPerAnalystAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -21,7 +22,10 @@ export const Types = {
   GET_ANALYST_REPORT_FAILURE: 'GET_ANALYST_REPORT_FAILURE',
   GET_BUSINESSES_STAGE_PER_USER_LOADING: 'GET_BUSINESSES_STAGE_PER_USER_LOADING',
   GET_BUSINESSES_STAGE_PER_USER_SUCCESS: 'GET_BUSINESSES_STAGE_PER_USER_SUCCESS',
-  GET_BUSINESSES_STAGE_PER_USER_FAILURE: 'GET_BUSINESSES_STAGE_PER_USER_FAILURE'
+  GET_BUSINESSES_STAGE_PER_USER_FAILURE: 'GET_BUSINESSES_STAGE_PER_USER_FAILURE',
+  GET_BUSINESSES_PER_ANALYST_LOADING: 'GET_BUSINESSES_PER_ANALYST_LOADING',
+  GET_BUSINESSES_PER_ANALYST_SUCCESS: 'GET_BUSINESSES_PER_ANALYST_SUCCESS',
+  GET_BUSINESSES_PER_ANALYST_FAILURE: 'GET_BUSINESSES_PER_ANALYST_FAILURE'
 }
 
 // Reducer
@@ -54,6 +58,11 @@ const initialState = {
   getQtdeBusinessesStagePerUser: {
     isLoading: false,
     qtde: null,
+    error: null
+  },
+  getBusinessesAnalyst: {
+    isLoading: false,
+    object: {},
     error: null
   }
 }
@@ -192,6 +201,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUSINESSES_PER_ANALYST_LOADING:
+      return {
+        ...state,
+        getBusinessesAnalyst: {
+          ...state.getBusinessesAnalyst,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_PER_ANALYST_SUCCESS:
+      return {
+        ...state,
+        getBusinessesAnalyst: {
+          ...state.getBusinessesAnalyst,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESSES_PER_ANALYST_FAILURE:
+      return {
+        ...state,
+        getBusinessesAnalyst: {
+          ...state.getBusinessesAnalyst,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_MARKETING_REPORT:
       return initialState
     default:
@@ -281,6 +318,26 @@ export const getQtdeBusinessesStagePerUser = (analystId, dateFrom, dateTo) => as
   } catch (error) {
     dispatch({
       type: Types.GET_BUSINESSES_STAGE_PER_USER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESSES_PER_ANALYST_LOADING,
+    payload: true
+  })
+  try {
+    const getBusinessesAnalyst = await getBusinessesPerAnalystAPI(analystId, dateFrom, dateTo)
+    dispatch({
+      type: Types.GET_BUSINESSES_PER_ANALYST_SUCCESS,
+      payload: getBusinessesAnalyst.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESSES_PER_ANALYST_FAILURE,
       payload: error
     })
     toast.error(error)

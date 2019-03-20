@@ -30,6 +30,7 @@ import MakeTaxInvoice from './Business/Invoice/MakeTaxInvoice'
 import AppraisalMenu from './Business/Appraisal/AppraisalMenu'
 import AppraisalList from './Business/Appraisal/AppraisalList'
 import HistoricalWeeklyReport from './Management/Reports/HistoricalWeeklyReport'
+import BusinessesListPerAnalyst from './Management/Reports/BusinessesListPerAnalyst'
 
 const Layout = ({ match, logout, menu }) => (
   <Fragment>
@@ -167,6 +168,12 @@ const Layout = ({ match, logout, menu }) => (
         exact
         component={ManagementPage}
         path={`${match.path}management`}
+        allowedRoles="MANAGEMENT_MENU"
+      />
+      <AuthorizationRoute
+        exact
+        component={BusinessesListPerAnalyst}
+        path={`${match.path}management/businesses-list-analyst/:idUser`}
         allowedRoles="MANAGEMENT_MENU"
       />
       <AuthorizationRoute

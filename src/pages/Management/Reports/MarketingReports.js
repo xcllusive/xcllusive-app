@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Table, Header, Segment, Button } from 'semantic-ui-react'
+import { Grid, Form, Table, Header, Segment, Button, Icon } from 'semantic-ui-react'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import { getMarketingReport, clearMarketingReports } from '../../../redux/ducks/reports'
 import Wrapper from '../../../components/content/Wrapper'
@@ -183,9 +183,35 @@ class MarketingReports extends Component {
                           if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Adelaide Office') {
                             return (
                               <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                  leadsPerAnalyst['listingAgent.lastName']
-                                }`}</Table.Cell>
+                                <Table.Cell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() =>
+                                            this.props.history.push({
+                                              pathname: `management/businesses-list-analyst/${
+                                                leadsPerAnalyst.listingAgent_id
+                                              }`,
+                                              state: {
+                                                analystObject: leadsPerAnalyst,
+                                                dateFrom: values.dateFrom,
+                                                dateTo: values.dateTo
+                                              }
+                                            })
+                                          }
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                          leadsPerAnalyst['listingAgent.lastName']
+                                        }`}
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
@@ -242,9 +268,35 @@ class MarketingReports extends Component {
                           if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Camberra Office') {
                             return (
                               <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                  leadsPerAnalyst['listingAgent.lastName']
-                                }`}</Table.Cell>
+                                <Table.Cell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() =>
+                                            this.props.history.push({
+                                              pathname: `management/businesses-list-analyst/${
+                                                leadsPerAnalyst.listingAgent_id
+                                              }`,
+                                              state: {
+                                                analystObject: leadsPerAnalyst,
+                                                dateFrom: values.dateFrom,
+                                                dateTo: values.dateTo
+                                              }
+                                            })
+                                          }
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                          leadsPerAnalyst['listingAgent.lastName']
+                                        }`}
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
@@ -301,9 +353,35 @@ class MarketingReports extends Component {
                           if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Cowra Office') {
                             return (
                               <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                  leadsPerAnalyst['listingAgent.lastName']
-                                }`}</Table.Cell>
+                                <Table.Cell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() =>
+                                            this.props.history.push({
+                                              pathname: `management/businesses-list-analyst/${
+                                                leadsPerAnalyst.listingAgent_id
+                                              }`,
+                                              state: {
+                                                analystObject: leadsPerAnalyst,
+                                                dateFrom: values.dateFrom,
+                                                dateTo: values.dateTo
+                                              }
+                                            })
+                                          }
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                          leadsPerAnalyst['listingAgent.lastName']
+                                        }`}
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
@@ -360,9 +438,35 @@ class MarketingReports extends Component {
                           if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Gosford Office') {
                             return (
                               <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                  leadsPerAnalyst['listingAgent.lastName']
-                                }`}</Table.Cell>
+                                <Table.Cell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() =>
+                                            this.props.history.push({
+                                              pathname: `management/businesses-list-analyst/${
+                                                leadsPerAnalyst.listingAgent_id
+                                              }`,
+                                              state: {
+                                                analystObject: leadsPerAnalyst,
+                                                dateFrom: values.dateFrom,
+                                                dateTo: values.dateTo
+                                              }
+                                            })
+                                          }
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                          leadsPerAnalyst['listingAgent.lastName']
+                                        }`}
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
@@ -419,9 +523,35 @@ class MarketingReports extends Component {
                           if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Melbourne Office') {
                             return (
                               <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                  leadsPerAnalyst['listingAgent.lastName']
-                                }`}</Table.Cell>
+                                <Table.Cell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() =>
+                                            this.props.history.push({
+                                              pathname: `management/businesses-list-analyst/${
+                                                leadsPerAnalyst.listingAgent_id
+                                              }`,
+                                              state: {
+                                                analystObject: leadsPerAnalyst,
+                                                dateFrom: values.dateFrom,
+                                                dateTo: values.dateTo
+                                              }
+                                            })
+                                          }
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                          leadsPerAnalyst['listingAgent.lastName']
+                                        }`}
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
@@ -478,9 +608,35 @@ class MarketingReports extends Component {
                           if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Sydney Office') {
                             return (
                               <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                  leadsPerAnalyst['listingAgent.lastName']
-                                }`}</Table.Cell>
+                                <Table.Cell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() =>
+                                            this.props.history.push({
+                                              pathname: `management/businesses-list-analyst/${
+                                                leadsPerAnalyst.listingAgent_id
+                                              }`,
+                                              state: {
+                                                analystObject: leadsPerAnalyst,
+                                                dateFrom: values.dateFrom,
+                                                dateTo: values.dateTo
+                                              }
+                                            })
+                                          }
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                          leadsPerAnalyst['listingAgent.lastName']
+                                        }`}
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
@@ -537,9 +693,35 @@ class MarketingReports extends Component {
                           if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Queensland Office') {
                             return (
                               <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>{`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                  leadsPerAnalyst['listingAgent.lastName']
-                                }`}</Table.Cell>
+                                <Table.Cell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() =>
+                                            this.props.history.push({
+                                              pathname: `management/businesses-list-analyst/${
+                                                leadsPerAnalyst.listingAgent_id
+                                              }`,
+                                              state: {
+                                                analystObject: leadsPerAnalyst,
+                                                dateFrom: values.dateFrom,
+                                                dateTo: values.dateTo
+                                              }
+                                            })
+                                          }
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column>
+                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
+                                          leadsPerAnalyst['listingAgent.lastName']
+                                        }`}
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
@@ -934,7 +1116,8 @@ MarketingReports.propTypes = {
   arrayLeadsPerSourceQueensland: PropTypes.array,
   totalGeralPerSource: PropTypes.number,
   arrayOffices: PropTypes.array,
-  clearMarketingReports: PropTypes.func
+  clearMarketingReports: PropTypes.func,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => {
