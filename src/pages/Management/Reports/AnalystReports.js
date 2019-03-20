@@ -399,8 +399,7 @@ AnalystReports.propTypes = {
 const mapPropsToValues = props => {
   return {
     analyst: '',
-    // dateFrom: moment().startOf('month'),
-    dateFrom: moment('01/06/2018'),
+    dateFrom: moment().startOf('month'),
     dateTo: moment()
   }
 }
