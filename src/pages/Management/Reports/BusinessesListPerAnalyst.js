@@ -14,14 +14,25 @@ class BusinessesListPerAnalyst extends Component {
     this.state = {}
   }
   componentDidMount () {
-    this.props.getBusinessesPerAnalyst(
-      this.props.location.state.analystObject.listingAgent_id,
-      moment(this.props.location.state.dateFrom).format('YYYY/MM/DD'),
-      moment(this.props.location.state.dateTo).format('YYYY/MM/DD')
-    )
+    if (this.props.savedRecords) {
+      this.props.getBusinessesPerAnalyst(
+        this.props.match.params.idUser,
+        moment(new Date(this.props.savedRecords.dateFrom)).format('YYYY/MM/DD'),
+        moment(new Date(this.props.savedRecords.dateTo)).format('YYYY/MM/DD')
+      )
+    }
   }
 
-  _backToWeeklyReport () {
+  _goToBusinessPage (business) {
+    this.props.history.push({
+      pathname: `/business/${business.id}`,
+      state: {
+        previousPage: 'Marketing Report'
+      }
+    })
+  }
+
+  _backToMarketingReport () {
     this.props.history.goBack()
   }
 
@@ -37,7 +48,7 @@ class BusinessesListPerAnalyst extends Component {
           <Grid.Row columns={1}>
             <Grid.Column floated="left">
               <Header>
-                <Button size="small" color="green" onClick={() => this._backToWeeklyReport()}>
+                <Button size="small" color="green" onClick={() => this._backToMarketingReport()}>
                   <Icon name="backward" />
                   Back to Marketing Report
                 </Button>
@@ -74,7 +85,16 @@ class BusinessesListPerAnalyst extends Component {
                   {businessesLeads.map(business => {
                     return (
                       <Table.Row key={business.id}>
-                        <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                        <Table.Cell>
+                          <Grid>
+                            <Grid.Row columns={2}>
+                              <Grid.Column width={1}>
+                                <Icon link name="magnify" onClick={() => this._goToBusinessPage(business)} />
+                              </Grid.Column>
+                              <Grid.Column>{`BS${business.id}`}</Grid.Column>
+                            </Grid.Row>
+                          </Grid>
+                        </Table.Cell>
                         <Table.Cell>{business.businessName}</Table.Cell>
                         <Table.Cell>{`${business.firstNameV} ${business.lastNameV} `}</Table.Cell>
                       </Table.Row>
@@ -114,7 +134,16 @@ class BusinessesListPerAnalyst extends Component {
                   {businessesSignedUp.map(business => {
                     return (
                       <Table.Row key={business.id}>
-                        <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                        <Table.Cell>
+                          <Grid>
+                            <Grid.Row columns={2}>
+                              <Grid.Column width={1}>
+                                <Icon link name="magnify" onClick={() => this._goToBusinessPage(business)} />
+                              </Grid.Column>
+                              <Grid.Column>{`BS${business.id}`}</Grid.Column>
+                            </Grid.Row>
+                          </Grid>
+                        </Table.Cell>
                         <Table.Cell>{business.businessName}</Table.Cell>
                         <Table.Cell>{`${business.firstNameV} ${business.lastNameV} `}</Table.Cell>
                       </Table.Row>
@@ -137,7 +166,9 @@ BusinessesListPerAnalyst.propTypes = {
   history: PropTypes.object,
   getBusinessesPerAnalyst: PropTypes.func,
   businessesLeads: PropTypes.array,
-  businessesSignedUp: PropTypes.array
+  businessesSignedUp: PropTypes.array,
+  match: PropTypes.object,
+  savedRecords: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -148,7 +179,8 @@ const mapPropsToValues = props => {
 
 const mapStateToProps = state => ({
   businessesLeads: state.reports.getBusinessesAnalyst.object.listBusinessesDateCreated,
-  businessesSignedUp: state.reports.getBusinessesAnalyst.object.listBusinessesSalesMemorandum
+  businessesSignedUp: state.reports.getBusinessesAnalyst.object.listBusinessesSalesMemorandum,
+  savedRecords: state.reports.keepMarketingRecords.records
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getBusinessesPerAnalyst }, dispatch)

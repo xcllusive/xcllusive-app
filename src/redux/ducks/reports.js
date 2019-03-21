@@ -25,7 +25,10 @@ export const Types = {
   GET_BUSINESSES_STAGE_PER_USER_FAILURE: 'GET_BUSINESSES_STAGE_PER_USER_FAILURE',
   GET_BUSINESSES_PER_ANALYST_LOADING: 'GET_BUSINESSES_PER_ANALYST_LOADING',
   GET_BUSINESSES_PER_ANALYST_SUCCESS: 'GET_BUSINESSES_PER_ANALYST_SUCCESS',
-  GET_BUSINESSES_PER_ANALYST_FAILURE: 'GET_BUSINESSES_PER_ANALYST_FAILURE'
+  GET_BUSINESSES_PER_ANALYST_FAILURE: 'GET_BUSINESSES_PER_ANALYST_FAILURE',
+  KEEP_MARKETING_RECORDS: 'KEEP_MARKETING_RECORDS',
+  SET_LAST_TAB_SELECTED: 'SET_LAST_TAB_SELECTED',
+  KEEP_ANALYST_PARAMS: 'KEEP_ANALYST_PARAMS'
 }
 
 // Reducer
@@ -64,7 +67,14 @@ const initialState = {
     isLoading: false,
     object: {},
     error: null
-  }
+  },
+  keepMarketingRecords: {
+    records: null
+  },
+  setLastTabSelected: {
+    index: 0
+  },
+  keepAnalystParams: null
 }
 
 export default function reducer (state = initialState, action) {
@@ -229,6 +239,27 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.KEEP_MARKETING_RECORDS:
+      return {
+        ...state,
+        keepMarketingRecords: {
+          ...state.getBusinessesAnalyst,
+          records: action.payload
+        }
+      }
+    case Types.SET_LAST_TAB_SELECTED:
+      return {
+        ...state,
+        setLastTabSelected: {
+          ...state.setLastTabSelected,
+          index: action.payload
+        }
+      }
+    case Types.KEEP_ANALYST_PARAMS:
+      return {
+        ...state,
+        keepAnalystParams: action.payload
+      }
     case Types.CLEAR_MARKETING_REPORT:
       return initialState
     default:
@@ -248,6 +279,10 @@ export const getMarketingReport = (dateFrom, dateTo) => async dispatch => {
     dispatch({
       type: Types.GET_MARKETING_REPORT_SUCCESS,
       payload: getMarketingReport.data
+    })
+    dispatch({
+      type: Types.KEEP_MARKETING_RECORDS,
+      payload: { dateFrom, dateTo }
     })
   } catch (error) {
     dispatch({
@@ -294,6 +329,10 @@ export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => async 
     dispatch({
       type: Types.GET_ANALYST_REPORT_SUCCESS,
       payload: getAnalystReport.data
+    })
+    dispatch({
+      type: Types.KEEP_ANALYST_PARAMS,
+      payload: { analystId, dateFrom, dateTo, stageId }
     })
   } catch (error) {
     dispatch({
@@ -342,4 +381,11 @@ export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => async di
     })
     toast.error(error)
   }
+}
+
+export const setLastTabSelected = indexLastTab => async dispatch => {
+  dispatch({
+    type: Types.SET_LAST_TAB_SELECTED,
+    payload: indexLastTab
+  })
 }

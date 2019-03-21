@@ -30,7 +30,8 @@ export const Types = {
   GET_BUSINESS_HISTORICAL_WEEKLY_LOADING: 'GET_BUSINESS_HISTORICAL_WEEKLY_LOADING',
   GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS: 'GET_BUSINESS_HISTORICAL_WEEKLY_SUCCESS',
   GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE: 'GET_BUSINESS_HISTORICAL_WEEKLY_FAILURE',
-  SET_BROKERS_ACCOUNT_NAME: 'SET_BROKERS_ACCOUNT_NAME'
+  SET_BROKERS_ACCOUNT_NAME: 'SET_BROKERS_ACCOUNT_NAME',
+  KEEP_WEEKLY_REPORT_RECORDS: 'KEEP_WEEKLY_REPORT_RECORDS'
 }
 
 // Reducer
@@ -75,7 +76,8 @@ const initialState = {
     array: [],
     expectedObject: {},
     error: null
-  }
+  },
+  keepWeeklyReportRecords: null
 }
 
 export default function reducer (state = initialState, action) {
@@ -282,6 +284,11 @@ export default function reducer (state = initialState, action) {
         ...state,
         brokerAccountName: action.payload
       }
+    case Types.KEEP_WEEKLY_REPORT_RECORDS:
+      return {
+        ...state,
+        keepWeeklyReportRecords: action.payload
+      }
     default:
       return state
   }
@@ -368,7 +375,7 @@ export const getBrokersPerRegion = region => async dispatch => {
   }
 }
 
-export const getBusinessesPerBroker = brokerId => async dispatch => {
+export const getBusinessesPerBroker = (brokerId, officeId) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_PER_BROKER_LOADING,
     payload: true
@@ -378,6 +385,10 @@ export const getBusinessesPerBroker = brokerId => async dispatch => {
     dispatch({
       type: Types.GET_BUSINESSES_PER_BROKER_SUCCESS,
       payload: businessesReport
+    })
+    dispatch({
+      type: Types.KEEP_WEEKLY_REPORT_RECORDS,
+      payload: { brokerId, officeId }
     })
   } catch (error) {
     dispatch({

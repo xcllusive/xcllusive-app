@@ -16,8 +16,7 @@ class AnalystReports extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      isGotUser: true,
-      stageSelected: 'Potential Listing'
+      isGotUser: true
     }
   }
   componentDidMount () {
@@ -55,10 +54,6 @@ class AnalystReports extends Component {
   }
 
   _confirmReports = async (values, stageId, fromButton = false) => {
-    if (stageId === 1) this.setState({ stageSelected: 'Potential Listing' })
-    if (stageId === 4) this.setState({ stageSelected: 'For Sale' })
-    if (stageId === 8) this.setState({ stageSelected: 'Lost' })
-    if (stageId === 9) this.setState({ stageSelected: 'Appraisal' })
     if (fromButton) {
       await this.props.getQtdeBusinessesStagePerUser(
         values.analyst,
@@ -74,8 +69,26 @@ class AnalystReports extends Component {
     )
   }
 
+  _goToBusinessPage (business) {
+    this.props.history.push({
+      pathname: `/business/${business.id}`,
+      state: {
+        previousPage: 'Analyst Report'
+      }
+    })
+  }
+
+  _showStageLabel (keepAnalystParams) {
+    let label = ''
+    if (keepAnalystParams.stageId === 1) label = 'Potential Listing'
+    if (keepAnalystParams.stageId === 4) label = 'For Sale'
+    if (keepAnalystParams.stageId === 8) label = 'Lost'
+    if (keepAnalystParams.stageId === 9) label = 'Appraisal'
+    return label
+  }
+
   render () {
-    const { values, arrayAnalysts, arrayBusinesses, isLoadingReports, qtdeBusinesses } = this.props
+    const { values, arrayAnalysts, arrayBusinesses, isLoadingReports, qtdeBusinesses, keepAnalystParams } = this.props
     return (
       <Wrapper>
         <Form>
@@ -171,14 +184,14 @@ class AnalystReports extends Component {
                   </Statistic>
                 </Statistic.Group>
               </GridBusinessStage>
-              {arrayBusinesses.length > 0 ? (
+              {keepAnalystParams && arrayBusinesses.length > 0 ? (
                 <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
                   <Header style={{ marginLeft: '10px' }} color="red">
-                    {this.state.stageSelected}
+                    {this._showStageLabel(keepAnalystParams)}
                   </Header>
                   <Table celled striped selectable compact size="small">
                     <Table.Header>
-                      {this.state.stageSelected !== 'Lost' ? (
+                      {keepAnalystParams && keepAnalystParams.stageId !== 8 ? (
                         <Table.Row>
                           <Table.HeaderCell>Business ID</Table.HeaderCell>
                           <Table.HeaderCell>Business Name</Table.HeaderCell>
@@ -202,11 +215,7 @@ class AnalystReports extends Component {
                               <Grid>
                                 <Grid.Row columns={2}>
                                   <Grid.Column width={2}>
-                                    <Icon
-                                      link
-                                      name="magnify"
-                                      onClick={() => this.props.history.push(`business/${business.id}`)}
-                                    />
+                                    <Icon link name="magnify" onClick={() => this._goToBusinessPage(business)} />
                                   </Grid.Column>
                                   <Grid.Column style={{ paddingLeft: '0px' }}>{`BS${business.id}`}</Grid.Column>
                                 </Grid.Row>
@@ -238,11 +247,7 @@ class AnalystReports extends Component {
                                     <Grid>
                                       <Grid.Row columns={2}>
                                         <Grid.Column>
-                                          <Icon
-                                            link
-                                            name="magnify"
-                                            onClick={() => this.props.history.push(`business/${business.id}`)}
-                                          />
+                                          <Icon link name="magnify" onClick={() => this._goToBusinessPage(business)} />
                                         </Grid.Column>
                                         <Grid.Column style={{ paddingLeft: '0px' }}>
                                           <b>{`BS${business.id}`}</b>
@@ -393,14 +398,15 @@ AnalystReports.propTypes = {
   isLoadingReports: PropTypes.bool,
   match: PropTypes.func,
   getQtdeBusinessesStagePerUser: PropTypes.func,
-  qtdeBusinesses: PropTypes.object
+  qtdeBusinesses: PropTypes.object,
+  keepAnalystParams: PropTypes.object
 }
 
 const mapPropsToValues = props => {
   return {
-    analyst: '',
-    dateFrom: moment().startOf('month'),
-    dateTo: moment()
+    analyst: props.keepAnalystParams ? props.keepAnalystParams.analystId : '',
+    dateFrom: props.keepAnalystParams ? moment(new Date(props.keepAnalystParams.dateFrom)) : moment().startOf('month'),
+    dateTo: props.keepAnalystParams ? moment(new Date(props.keepAnalystParams.dateTo)) : moment()
   }
 }
 
@@ -408,7 +414,8 @@ const mapStateToProps = state => ({
   arrayAnalysts: state.reports.getAllAnalysts.array,
   arrayBusinesses: state.reports.getAnalystReports.array,
   isLoadingReports: state.reports.getAnalystReports.isLoading,
-  qtdeBusinesses: state.reports.getQtdeBusinessesStagePerUser.qtde
+  qtdeBusinesses: state.reports.getQtdeBusinessesStagePerUser.qtde,
+  keepAnalystParams: state.reports.keepAnalystParams
 })
 
 const mapDispatchToProps = dispatch =>

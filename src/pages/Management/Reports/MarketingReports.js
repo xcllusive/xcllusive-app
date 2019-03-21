@@ -19,7 +19,7 @@ class MarketingReports extends Component {
   }
 
   componentDidMount = () => {
-    this.props.clearMarketingReports()
+    // this.props.clearMarketingReports()
   }
 
   _handleDateFromChange = date => {
@@ -78,6 +78,17 @@ class MarketingReports extends Component {
 
   _AvgConvertionRate = arrayOffices => {
     return (this._totalGeralSignedUp(arrayOffices) / this._totalGeralLeads(arrayOffices)) * 100
+  }
+
+  _goToBusinessesListPerAnalyst = leadsPerAnalyst => {
+    this.props.history.push({
+      pathname: `management/businesses-list-analyst/${leadsPerAnalyst.listingAgent_id}`,
+      state: {
+        analystObject: leadsPerAnalyst,
+        dateFrom: this.props.values.dateFrom,
+        dateTo: this.props.values.dateTo
+      }
+    })
   }
 
   render () {
@@ -190,18 +201,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() =>
-                                            this.props.history.push({
-                                              pathname: `management/businesses-list-analyst/${
-                                                leadsPerAnalyst.listingAgent_id
-                                              }`,
-                                              state: {
-                                                analystObject: leadsPerAnalyst,
-                                                dateFrom: values.dateFrom,
-                                                dateTo: values.dateTo
-                                              }
-                                            })
-                                          }
+                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
                                         />
                                       </Grid.Column>
                                       <Grid.Column>
@@ -275,18 +275,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() =>
-                                            this.props.history.push({
-                                              pathname: `management/businesses-list-analyst/${
-                                                leadsPerAnalyst.listingAgent_id
-                                              }`,
-                                              state: {
-                                                analystObject: leadsPerAnalyst,
-                                                dateFrom: values.dateFrom,
-                                                dateTo: values.dateTo
-                                              }
-                                            })
-                                          }
+                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
                                         />
                                       </Grid.Column>
                                       <Grid.Column>
@@ -360,18 +349,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() =>
-                                            this.props.history.push({
-                                              pathname: `management/businesses-list-analyst/${
-                                                leadsPerAnalyst.listingAgent_id
-                                              }`,
-                                              state: {
-                                                analystObject: leadsPerAnalyst,
-                                                dateFrom: values.dateFrom,
-                                                dateTo: values.dateTo
-                                              }
-                                            })
-                                          }
+                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
                                         />
                                       </Grid.Column>
                                       <Grid.Column>
@@ -445,18 +423,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() =>
-                                            this.props.history.push({
-                                              pathname: `management/businesses-list-analyst/${
-                                                leadsPerAnalyst.listingAgent_id
-                                              }`,
-                                              state: {
-                                                analystObject: leadsPerAnalyst,
-                                                dateFrom: values.dateFrom,
-                                                dateTo: values.dateTo
-                                              }
-                                            })
-                                          }
+                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
                                         />
                                       </Grid.Column>
                                       <Grid.Column>
@@ -530,18 +497,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() =>
-                                            this.props.history.push({
-                                              pathname: `management/businesses-list-analyst/${
-                                                leadsPerAnalyst.listingAgent_id
-                                              }`,
-                                              state: {
-                                                analystObject: leadsPerAnalyst,
-                                                dateFrom: values.dateFrom,
-                                                dateTo: values.dateTo
-                                              }
-                                            })
-                                          }
+                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
                                         />
                                       </Grid.Column>
                                       <Grid.Column>
@@ -615,18 +571,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() =>
-                                            this.props.history.push({
-                                              pathname: `management/businesses-list-analyst/${
-                                                leadsPerAnalyst.listingAgent_id
-                                              }`,
-                                              state: {
-                                                analystObject: leadsPerAnalyst,
-                                                dateFrom: values.dateFrom,
-                                                dateTo: values.dateTo
-                                              }
-                                            })
-                                          }
+                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
                                         />
                                       </Grid.Column>
                                       <Grid.Column>
@@ -700,18 +645,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() =>
-                                            this.props.history.push({
-                                              pathname: `management/businesses-list-analyst/${
-                                                leadsPerAnalyst.listingAgent_id
-                                              }`,
-                                              state: {
-                                                analystObject: leadsPerAnalyst,
-                                                dateFrom: values.dateFrom,
-                                                dateTo: values.dateTo
-                                              }
-                                            })
-                                          }
+                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
                                         />
                                       </Grid.Column>
                                       <Grid.Column>
@@ -1117,13 +1051,15 @@ MarketingReports.propTypes = {
   totalGeralPerSource: PropTypes.number,
   arrayOffices: PropTypes.array,
   clearMarketingReports: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
+  location: PropTypes.object,
+  savedRecords: PropTypes.object
 }
 
 const mapPropsToValues = props => {
   return {
-    dateFrom: moment().startOf('month'),
-    dateTo: moment()
+    dateFrom: props.savedRecords ? moment(new Date(props.savedRecords.dateFrom)) : moment().startOf('month'),
+    dateTo: props.savedRecords ? moment(new Date(props.savedRecords.dateTo)) : moment()
   }
 }
 
@@ -1138,7 +1074,8 @@ const mapStateToProps = state => ({
   arrayLeadsPerSourceSydney: state.reports.getMarketingReport.arrayLeadsPerSourceSydney,
   arrayLeadsPerSourceQueensland: state.reports.getMarketingReport.arrayLeadsPerSourceQueensland,
   totalGeralPerSource: state.reports.getMarketingReport.totalGeralPerSource,
-  arrayOffices: state.reports.getMarketingReport.arrayOffices
+  arrayOffices: state.reports.getMarketingReport.arrayOffices,
+  savedRecords: state.reports.keepMarketingRecords.records
 })
 
 const mapDispatchToProps = dispatch =>

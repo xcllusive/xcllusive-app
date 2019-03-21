@@ -27,8 +27,10 @@ class BrokersWeeklyReports extends Component {
     }
   }
   async componentDidMount () {
-    await this.props.getOfficeRegister()
-    await this.props.getUserLogged()
+    if (!this.props.keepWeeklyReportRecords) {
+      await this.props.getOfficeRegister()
+      await this.props.getUserLogged()
+    }
 
     const officeOfUserLogged = _.find(this.props.officeOptions, o => o.id === this.props.user.officeId)
     if (!this.props.user.levelOfInfoAccess) {
@@ -44,7 +46,7 @@ class BrokersWeeklyReports extends Component {
       (this.props.isCreated && nextProps.isCreated !== this.props.isCreated) ||
       (this.props.isUpdated && nextProps.isUpdated !== this.props.isUpdated)
     ) {
-      this.props.getBusinessesPerBroker(this.props.values.brokerAccountName)
+      this.props.getBusinessesPerBroker(this.props.values.brokerAccountName, this.props.values.officeRegion)
     }
   }
 
@@ -62,7 +64,7 @@ class BrokersWeeklyReports extends Component {
     }
     if (name === 'brokerAccountName') {
       this.props.setBrokerAccountName(value)
-      this.props.getBusinessesPerBroker(value)
+      this.props.getBusinessesPerBroker(value, this.props.values.officeRegion)
     }
   }
 
@@ -98,6 +100,15 @@ class BrokersWeeklyReports extends Component {
     htmlConverted = htmlConverted.replace(/<\/p>/gi, '')
 
     return htmlConverted
+  }
+
+  _goToBusinessPage (business) {
+    this.props.history.push({
+      pathname: `/business/${business.id}`,
+      state: {
+        previousPage: 'Brokers Weekly Report'
+      }
+    })
   }
 
   render () {
@@ -220,11 +231,7 @@ class BrokersWeeklyReports extends Component {
                                               </Header>
                                             </Grid.Column>
                                             <Grid.Column>
-                                              <Header
-                                                onClick={() =>
-                                                  this.props.history.push(`business/${onTheMarket.business.id}`)
-                                                }
-                                              >
+                                              <Header onClick={() => this._goToBusinessPage(onTheMarket.business)}>
                                                 <u>
                                                   <b>{onTheMarket.business.businessName}</b>
                                                 </u>
@@ -430,11 +437,7 @@ class BrokersWeeklyReports extends Component {
                                               </Header>
                                             </Grid.Column>
                                             <Grid.Column>
-                                              <Header
-                                                onClick={() =>
-                                                  this.props.history.push(`business/${imStage.business.id}`)
-                                                }
-                                              >
+                                              <Header onClick={() => this._goToBusinessPage(imStage.business)}>
                                                 <u>
                                                   <b>{imStage.business.businessName}</b>
                                                 </u>
@@ -583,11 +586,7 @@ class BrokersWeeklyReports extends Component {
                                               </Header>
                                             </Grid.Column>
                                             <Grid.Column>
-                                              <Header
-                                                onClick={() =>
-                                                  this.props.history.push(`business/${underOffer.business.id}`)
-                                                }
-                                              >
+                                              <Header onClick={() => this._goToBusinessPage(underOffer.business)}>
                                                 <u>
                                                   <b>{underOffer.business.businessName}</b>
                                                 </u>
@@ -788,11 +787,7 @@ class BrokersWeeklyReports extends Component {
                                               </Header>
                                             </Grid.Column>
                                             <Grid.Column>
-                                              <Header
-                                                onClick={() =>
-                                                  this.props.history.push(`business/${exchanged.business.id}`)
-                                                }
-                                              >
+                                              <Header onClick={() => this._goToBusinessPage(exchanged.business)}>
                                                 <u>
                                                   <b>{exchanged.business.businessName}</b>
                                                 </u>
@@ -1017,11 +1012,7 @@ class BrokersWeeklyReports extends Component {
                                               </Header>
                                             </Grid.Column>
                                             <Grid.Column>
-                                              <Header
-                                                onClick={() =>
-                                                  this.props.history.push(`business/${withdrawn.business.id}`)
-                                                }
-                                              >
+                                              <Header onClick={() => this._goToBusinessPage(withdrawn.business)}>
                                                 <u>
                                                   <b>{withdrawn.business.businessName}</b>
                                                 </u>
@@ -1217,9 +1208,7 @@ class BrokersWeeklyReports extends Component {
                                               </Header>
                                             </Grid.Column>
                                             <Grid.Column>
-                                              <Header
-                                                onClick={() => this.props.history.push(`business/${sold.business.id}`)}
-                                              >
+                                              <Header onClick={() => this._goToBusinessPage(sold.business)}>
                                                 <u>
                                                   <b>{sold.business.businessName}</b>
                                                 </u>
@@ -1417,11 +1406,7 @@ class BrokersWeeklyReports extends Component {
                                     <Grid>
                                       <Grid.Row>
                                         <Grid.Column>
-                                          <Header
-                                            onClick={() =>
-                                              this.props.history.push(`business/${notAlocated.business.id}`)
-                                            }
-                                          >
+                                          <Header onClick={() => this._goToBusinessPage(notAlocated.business)}>
                                             <u>
                                               <b>{notAlocated.business.businessName}</b>
                                             </u>
@@ -1602,13 +1587,14 @@ BrokersWeeklyReports.propTypes = {
   setBrokerAccountName: PropTypes.func,
   brokerAccountNameRestored: PropTypes.number,
   getOfficeRegister: PropTypes.func,
-  officeOptions: PropTypes.array
+  officeOptions: PropTypes.array,
+  keepWeeklyReportRecords: PropTypes.object
 }
 
 const mapPropsToValues = props => {
   return {
-    officeRegion: '',
-    brokerAccountName: 0
+    officeRegion: props.keepWeeklyReportRecords ? props.keepWeeklyReportRecords.officeId : '',
+    brokerAccountName: props.keepWeeklyReportRecords ? props.keepWeeklyReportRecords.brokerId : 0
   }
 }
 
@@ -1628,7 +1614,8 @@ const mapStateToProps = state => ({
   isUpdated: state.broker.update.isUpdated,
   user: state.user.getLogged.object,
   isGotUser: state.user.getLogged.isGot,
-  officeOptions: state.officeRegister.get.array
+  officeOptions: state.officeRegister.get.array,
+  keepWeeklyReportRecords: state.broker.keepWeeklyReportRecords
 })
 
 const mapDispatchToProps = dispatch =>

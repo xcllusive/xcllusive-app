@@ -101,6 +101,10 @@ class BusinessEditPage extends Component {
     return moment().diff(date, 'day')
   }
 
+  _backToPreviousPage () {
+    this.props.history.goBack()
+  }
+
   render () {
     const { arrayLogsFromBusiness, isLoading, business, history } = this.props
 
@@ -111,10 +115,27 @@ class BusinessEditPage extends Component {
         </Dimmer>
       )
     }
-
     return (
       <Wrapper>
         <Grid>
+          {this.props.location.state && this.props.location.state.previousPage ? (
+            <Grid.Row
+              style={{
+                marginTop: '25px',
+                marginBottom: 0,
+                paddingBottom: 0
+              }}
+            >
+              <Grid.Column floated="left">
+                <Header>
+                  <Button size="small" color="green" onClick={() => this._backToPreviousPage()}>
+                    <Icon name="backward" />
+                    Back to {this.props.location.state.previousPage}
+                  </Button>
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+          ) : null}
           <Grid.Row
             style={{
               justifyContent: 'center',
@@ -285,7 +306,8 @@ BusinessEditPage.propTypes = {
   businessesForSale: PropTypes.array,
   totalEnquiry: PropTypes.number,
   totalLastScore: PropTypes.number,
-  isUpdated: PropTypes.bool
+  isUpdated: PropTypes.bool,
+  location: PropTypes.object
 }
 
 const mapDispatchToProps = dispatch => {
