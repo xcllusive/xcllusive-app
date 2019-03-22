@@ -49,6 +49,7 @@ class BusinessListPage extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
       title: 'New Business',
       where: 'Business',
+      history: this.props.history,
       onConfirm: async values => {
         if (values) {
           await this.props.createBusiness(values)

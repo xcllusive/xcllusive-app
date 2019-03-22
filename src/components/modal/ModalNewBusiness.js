@@ -96,8 +96,13 @@ class ModalNewBusiness extends Component {
     }
   }
 
-  _closeModalAndSearchBusiness = (values, duplicatedBusinessObject) => {
-    this.props.onConfirm(values, duplicatedBusinessObject)
+  _closeModalAndSearchBusiness = (values, duplicatedBusinessObject, where) => {
+    if (where === 'Client Manager') {
+      this.props.onConfirm(values, duplicatedBusinessObject)
+    } else {
+      this.props.closeModal(values)
+      this.props.history.push(`/business/${duplicatedBusinessObject.id}`)
+    }
   }
 
   render () {
@@ -312,13 +317,13 @@ class ModalNewBusiness extends Component {
               <Message.List>
                 <Message.Item>
                   {duplicatedBusinessObject.firstNameV} {duplicatedBusinessObject.lastNameV}{' '}
-                  {this.props.where === 'ClientManager' ? (
-                    <Icon
-                      link
-                      name="search"
-                      onClick={() => this._closeModalAndSearchBusiness(values, duplicatedBusinessObject)}
-                    />
-                  ) : null}
+                  <Icon
+                    link
+                    name="search"
+                    onClick={() =>
+                      this._closeModalAndSearchBusiness(values, duplicatedBusinessObject, this.props.where)
+                    }
+                  />
                 </Message.Item>
                 <Message.Item>{duplicatedBusinessObject.vendorEmail}</Message.Item>
                 <Message.Item>{duplicatedBusinessObject.vendorPhone1}</Message.Item>
@@ -384,7 +389,8 @@ ModalNewBusiness.propTypes = {
   duplicatedBusinessObject: PropTypes.object,
   onConfirm: PropTypes.func,
   disableButton: PropTypes.bool,
-  clearBusiness: PropTypes.func
+  clearBusiness: PropTypes.func,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
