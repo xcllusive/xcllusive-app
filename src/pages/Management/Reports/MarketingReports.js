@@ -751,7 +751,9 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceAdelaide.count}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceAdelaide.countSourceImStageAdelaide}
+                                {LeadsPerSourceAdelaide.countSourceImStageAdelaide
+                                  ? LeadsPerSourceAdelaide.countSourceImStageAdelaide
+                                  : 0}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                 {LeadsPerSourceAdelaide.countSourceImStageAdelaide > 0
@@ -787,7 +789,9 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceCamberra.count}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCamberra.countSourceImStageCamberra}
+                                {LeadsPerSourceCamberra.countSourceImStageCamberra
+                                  ? LeadsPerSourceCamberra.countSourceImStageCamberra
+                                  : 0}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                 {LeadsPerSourceCamberra.countSourceImStageCamberra > 0
@@ -823,7 +827,9 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceCowra.count}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCowra.countSourceImStageCowra}
+                                {LeadsPerSourceCowra.countSourceImStageCowra
+                                  ? LeadsPerSourceCowra.countSourceImStageCowra
+                                  : 0}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                 {LeadsPerSourceCowra.countSourceImStageCowra > 0
@@ -857,7 +863,9 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceGosford.count}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceGosford.countSourceImStageGosford}
+                                {LeadsPerSourceGosford.countSourceImStageGosford
+                                  ? LeadsPerSourceGosford.countSourceImStageGosford
+                                  : 0}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                 {LeadsPerSourceGosford.countSourceImStageGosford > 0
@@ -892,7 +900,9 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceMelbourne.count}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceMelbourne.countSourceImStageMelbourne}
+                                {LeadsPerSourceMelbourne.countSourceImStageMelbourne
+                                  ? LeadsPerSourceMelbourne.countSourceImStageMelbourne
+                                  : 0}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                 {LeadsPerSourceMelbourne.countSourceImStageMelbourne > 0
@@ -928,7 +938,9 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceSydney.count}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceSydney.countSourceImStageSydney}
+                                {LeadsPerSourceSydney.countSourceImStageSydney
+                                  ? LeadsPerSourceSydney.countSourceImStageSydney
+                                  : 0}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                 {LeadsPerSourceSydney.countSourceImStageSydney > 0
@@ -962,7 +974,9 @@ class MarketingReports extends Component {
                                 {LeadsPerSourceQueensland.count}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceQueensland.countSourceImStageQueensland}
+                                {LeadsPerSourceQueensland.countSourceImStageQueensland
+                                  ? LeadsPerSourceQueensland.countSourceImStageQueensland
+                                  : 0}
                               </Table.Cell>
                               <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                 {LeadsPerSourceQueensland.countSourceImStageQueensland > 0
