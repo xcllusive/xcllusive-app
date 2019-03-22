@@ -789,7 +789,8 @@ EditBusinessDetailForm.propTypes = {
   uploadIM: PropTypes.func,
   isUploadedIM: PropTypes.bool,
   isLoadingIM: PropTypes.bool,
-  isUpdatedBusiness: PropTypes.bool
+  isUpdatedBusiness: PropTypes.bool,
+  isLoadingGetFromBuyer: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -920,9 +921,14 @@ const handleSubmit = (values, { props, setSubmitting }) => {
   props.updateBusiness(values).then(setSubmitting(false))
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+  console.log(props)
   return {
-    isLoadingGet: state.business.get.isLoading,
+    isLoadingGet:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.isLoading
+        : state.business.get.isLoading,
+    isLoadingGetFromBuyer: state.buyer.getBusinessFromBuyer.isLoading,
     isLoadingUpdate: state.business.update.isLoading,
     isUpdatedBusiness: state.business.update.isUpdated,
     sourceOptions: state.business.get.sourceOptions,

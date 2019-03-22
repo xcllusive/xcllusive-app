@@ -81,6 +81,12 @@ const Layout = ({ match, logout, menu }) => (
       <AuthorizationRoute exact component={EditPage} path={`${match.path}business/:id`} allowedRoles="BUSINESS_MENU" />
       <AuthorizationRoute
         exact
+        component={EditPage}
+        path={`${match.path}business/:id/from-buyer`}
+        allowedRoles="BUYER_MENU"
+      />
+      <AuthorizationRoute
+        exact
         component={AgreementPage}
         path={`${match.path}business/:id/agreement/:idAgreement`}
         allowedRoles="BUSINESS_MENU"
@@ -190,7 +196,7 @@ const Layout = ({ match, logout, menu }) => (
       />
       {/* <AuthorizationRoute exact component={HelpDesk} path={`${match.path}helpDesk`} allowedRoles="HELP_DESK_MENU" /> */}
       <Route
-        render={() => <span>You, don`t have permission to access this page!</span>}
+        render={() => <span>Sorry, You don`t have permission to access this page!</span>}
         path={`${match.path}unathorized`}
       />
       <Route component={NotFoundPage} />

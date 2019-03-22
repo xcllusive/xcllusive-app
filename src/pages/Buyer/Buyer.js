@@ -105,6 +105,16 @@ class BuyerPage extends Component {
     } else return 'instagram'
   }
 
+  _goToBusinessPage (business) {
+    this.props.history.push({
+      pathname: `/business/${business.id}/from-buyer`,
+      state: {
+        previousPage: 'Buyer Menu',
+        fromBuyerMenu: true
+      }
+    })
+  }
+
   render () {
     const {
       history,
@@ -148,7 +158,16 @@ class BuyerPage extends Component {
                     <Table.Body>
                       {businessesForSale.map(item => (
                         <Table.Row active key={item.business.id}>
-                          <Table.Cell textAlign="left">{`BS${item.business.id}`}</Table.Cell>
+                          <Table.Cell textAlign="left">
+                            <Grid>
+                              <Grid.Row columns={2}>
+                                <Grid.Column width={1}>
+                                  <Icon link name="magnify" onClick={() => this._goToBusinessPage(item.business)} />
+                                </Grid.Column>
+                                <Grid.Column>{`BS${item.business.id}`}</Grid.Column>
+                              </Grid.Row>
+                            </Grid>
+                          </Table.Cell>
                           <Table.Cell
                             textAlign="left"
                             selectable

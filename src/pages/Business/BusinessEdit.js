@@ -9,6 +9,7 @@ import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
+import { getBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
 
@@ -38,12 +39,26 @@ class BusinessEditPage extends Component {
 
   componentDidMount () {
     const { id } = this.props.match.params
-    this.props.getBusiness(id)
-    this.props.getLogFromBusiness(id)
+    console.log('didMount')
+    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+      this.props.getBusinessFromBuyer(id)
+      this.props.getLogFromBusiness(id)
+    } else {
+      this.props.getBusiness(id)
+      this.props.getLogFromBusiness(id)
+    }
   }
 
   shouldComponentUpdate (nextprops) {
-    if (this.props.isLoading === nextprops.isLoading) return false
+    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+      if (this.props.isLoadingGetFromBuyer === nextprops.isLoadingGetFromBuyer) {
+        return false
+      }
+    } else {
+      if (this.props.isLoading === nextprops.isLoading) {
+        return false
+      }
+    }
 
     return true
   }
@@ -106,14 +121,23 @@ class BusinessEditPage extends Component {
   }
 
   render () {
-    const { arrayLogsFromBusiness, isLoading, business, history } = this.props
-
-    if (isLoading) {
+    const { arrayLogsFromBusiness, isLoading, business, history, isLoadingGetFromBuyer } = this.props
+    if (isLoading && isLoadingGetFromBuyer) {
       return (
-        <Dimmer inverted active={this.props.isLoading}>
+        <Dimmer
+          inverted
+          active={
+            this.props.location.state && this.props.location.state.fromBuyerMenu ? isLoadingGetFromBuyer : isLoading
+          }
+        >
           <Loader inverted />
         </Dimmer>
       )
+    }
+    console.log('business', business)
+    console.log('this.props.history', this.props.history)
+    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+      console.log('this.props.location.state.fromBuyerMenu', this.props.location.state.fromBuyerMenu)
     }
     return (
       <Wrapper>
@@ -226,7 +250,6 @@ class BusinessEditPage extends Component {
               ]}
             />
           </Grid.Row>
-
           <Grid.Row style={{ justifyContent: 'flex-end', padding: '0 15px' }}>
             <Button color="facebook" onClick={() => this.props.history.push(`${this.props.match.url}/log`)}>
               <Icon name="commenting" />
@@ -307,17 +330,23 @@ BusinessEditPage.propTypes = {
   totalEnquiry: PropTypes.number,
   totalLastScore: PropTypes.number,
   isUpdated: PropTypes.bool,
-  location: PropTypes.object
+  location: PropTypes.object,
+  getBusinessFromBuyer: PropTypes.func,
+  isLoadingGetFromBuyer: PropTypes.bool
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, cleanBusiness, getLogFromBusiness }, dispatch)
+  return bindActionCreators({ getBusiness, cleanBusiness, getLogFromBusiness, getBusinessFromBuyer }, dispatch)
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
     isLoading: state.business.get.isLoading,
-    business: state.business.get.object,
+    isLoadingGetFromBuyer: state.buyer.getBusinessFromBuyer.isLoading,
+    business:
+      props.location.state && props.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.object
+        : state.business.get.object,
     totalEnquiry: state.business.get.totalEnquiry,
     totalLastScore: state.business.get.totalLastScore,
     error: state.business.get.error,
