@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import * as Yup from 'yup'
 import moment from 'moment'
+import numeral from 'numeral'
 import { Grid, Header, Dimmer, Loader, Button, Icon, Message, Statistic, Segment, Label, Form } from 'semantic-ui-react'
 
 import { getBusinessFromBuyer } from '../../redux/ducks/buyer'
@@ -67,15 +68,22 @@ class MakeNewScorePage extends Component {
     this.props.clearScore()
   }
 
-  componentDidUpdate () {
+  async componentDidUpdate () {
     if (this.props.enquiries && this.props.enquiries.lastScore && !this.state.updateLastScore) {
       this.setState({ lastScore: this.props.enquiries.lastScore.total })
       this.setState({ updateLastScore: true })
     }
 
     if (!this.props.isLoadingEnquiries && this.props.enquiries && !this.state.updateEnquiries) {
-      if (this.props.values.diff > 4) this.props.values.diff = 4
-      if (this.props.values.diff < -4) this.props.values.diff = -4
+      if (!this.props.values.diff) {
+        await this.props.setFieldValue(
+          'diff',
+          numeral(this.props.enquiries.yours - this.props.enquiries.avg).format('0,0.[99]')
+        )
+        await this.props.setFieldValue('diff', parseInt(this.props.values.diff))
+      }
+      if (this.props.values.diff > 4) await this.props.setFieldValue('diff', 4)
+      if (parseInt(this.props.values.diff) < -4) await this.props.setFieldValue('diff', -4)
       const objectEnquiries = _.find(this.props.enquiriesOptions, o => o.label === this.props.values.diff.toString())
       this.setState({ objectEnquiries })
       this.setState({ updateEnquiries: true })
@@ -336,7 +344,11 @@ class MakeNewScorePage extends Component {
           <Grid style={{ marginTop: 0 }}>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Header as="h2" color="blue" content={`Currently Editing: ${business ? business.businessName : null}`} />
+                <Header
+                  as="h2"
+                  color="blue"
+                  content={`Currently Editing: ${business ? business.businessName : null}`}
+                />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -871,7 +883,7 @@ const mapPropsToValues = props => {
     return {
       yours: props.score ? props.score.yours : props.enquiries.yours,
       avg: props.score ? props.score.avg : props.enquiries.avg,
-      diff: props.score ? props.score.diff : props.enquiries.yours - props.enquiries.avg,
+      diff: props.score ? props.score.diff : numeral(props.enquiries.yours - props.enquiries.avg).format('0,0.[99]'),
       perceivedPrice_id: props.score ? props.score.perceivedPrice_id : '',
       notesPrice: props.score ? props.score.notesPrice : '',
       infoTransMomen_id: props.score ? props.score.infoTransMomen_id : '',
