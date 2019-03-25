@@ -9,6 +9,7 @@ import * as Yup from 'yup'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness, uploadIM } from '../../redux/ducks/business'
+import { getBusinessFromBuyer, updateBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 
 import { theme } from '../../styles'
@@ -43,8 +44,13 @@ class EditBusinessDetailForm extends Component {
   async componentWillUnmount () {
     // console.log(this.props.isSubmitting, this.props.isValid)
     if (this.props.isSubmitting || this.props.isValid) {
-      await this.props.updateBusiness(this.props.values)
-      this.props.getBusiness(this.props.business.id)
+      if (this.props.history.location.state && this.props.history.location.state.fromBuyerMenu) {
+        await this.props.updateBusinessFromBuyer(this.props.values)
+        this.props.getBusinessFromBuyer(this.props.business.id)
+      } else {
+        await this.props.updateBusiness(this.props.values)
+        this.props.getBusiness(this.props.business.id)
+      }
     }
   }
 
@@ -790,7 +796,8 @@ EditBusinessDetailForm.propTypes = {
   isUploadedIM: PropTypes.bool,
   isLoadingIM: PropTypes.bool,
   isUpdatedBusiness: PropTypes.bool,
-  isLoadingGetFromBuyer: PropTypes.bool
+  updateBusinessFromBuyer: PropTypes.func,
+  getBusinessFromBuyer: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -918,27 +925,53 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBusiness(values).then(setSubmitting(false))
+  if (props.history.location.state && props.history.location.state.fromBuyerMenu) {
+    props.updateBusinessFromBuyer(values).then(setSubmitting(false))
+  } else {
+    props.updateBusiness(values).then(setSubmitting(false))
+  }
 }
 
 const mapStateToProps = (state, props) => {
-  console.log(props)
   return {
     isLoadingGet:
       props.history.location.state && props.history.location.state.fromBuyerMenu
         ? state.buyer.getBusinessFromBuyer.isLoading
         : state.business.get.isLoading,
-    isLoadingGetFromBuyer: state.buyer.getBusinessFromBuyer.isLoading,
-    isLoadingUpdate: state.business.update.isLoading,
-    isUpdatedBusiness: state.business.update.isUpdated,
-    sourceOptions: state.business.get.sourceOptions,
-    ratingOptions: state.business.get.ratingOptions,
-    productOptions: state.business.get.productOptions,
+    isLoadingUpdate:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.isLoading
+        : state.business.get.isLoading,
+    isUpdatedBusiness:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.isUpdated
+        : state.business.get.isUpdated,
+    sourceOptions:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.sourceOptions
+        : state.business.get.sourceOptions,
+    ratingOptions:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.ratingOptions
+        : state.business.get.ratingOptions,
+    productOptions:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.productOptions
+        : state.business.get.productOptions,
     // industryOptions: state.business.get.industryOptions,
-    typeOptions: state.business.get.typeOptions,
-    stageOptions: state.business.get.stageOptions,
+    typeOptions:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.typeOptions
+        : state.business.get.typeOptions,
+    stageOptions:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.stageOptions
+        : state.business.get.stageOptions,
     reassignedBusiness: state.business.reassignBusiness.isReassigned,
-    usersBroker: state.business.get.usersBroker,
+    usersBroker:
+      props.history.location.state && props.history.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.usersBroker
+        : state.business.get.usersBroker,
     updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated,
     updateStageLost: state.business.updateStageLost.isUpdated,
     userRoles: state.auth.user.roles,
@@ -948,7 +981,18 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness, getBusiness, getLogFromBusiness, openModal, uploadIM }, dispatch)
+  return bindActionCreators(
+    {
+      updateBusiness,
+      getBusiness,
+      getLogFromBusiness,
+      openModal,
+      uploadIM,
+      updateBusinessFromBuyer,
+      getBusinessFromBuyer
+    },
+    dispatch
+  )
 }
 
 export default connect(

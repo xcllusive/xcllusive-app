@@ -102,3 +102,22 @@ export const verifyDuplicatedBuyer = values => {
     params: values
   })
 }
+
+export const updateBusinessFromBuyer = business => {
+  return request({
+    method: 'put',
+    url: `/buyer/business-from-buyer/${business.id}`,
+    data: business
+  })
+}
+
+export const getBusinessLogFromBuyer = (businessId, search) => {
+  const params = {
+    businessId
+  }
+  if (search && search.length > 0) params.search = search
+  return request({
+    url: '/buyer/business-log-from-buyer',
+    params
+  })
+}

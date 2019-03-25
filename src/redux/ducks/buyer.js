@@ -12,7 +12,9 @@ import {
   getBuyersFromBusiness as getBuyersFromBusinessAPI,
   getBusinessFromBuyer as getBusinessFromBuyerAPI,
   getBuyersGroupEmail as getBuyersGroupEmailAPI,
-  verifyDuplicatedBuyer as verifyDuplicatedBuyerAPI
+  verifyDuplicatedBuyer as verifyDuplicatedBuyerAPI,
+  updateBusinessFromBuyer as updateBusinessFromBuyerAPI,
+  getBusinessLogFromBuyer as getBusinessLogFromBuyerAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -50,6 +52,12 @@ export const Types = {
   GET_BUSINESS_FROM_BUYER_LOADING: 'GET_BUSINESS_FROM_BUYER_LOADING',
   GET_BUSINESS_FROM_BUYER_SUCCESS: 'GET_BUSINESS_FROM_BUYER_SUCCESS',
   GET_BUSINESS_FROM_BUYER_FAILURE: 'GET_BUSINESS_FROM_BUYER_FAILURE',
+  UPDATE_BUSINESS_FROM_BUYER_LOADING: 'UPDATE_BUSINESS_FROM_BUYER_LOADING',
+  UPDATE_BUSINESS_FROM_BUYER_SUCCESS: 'UPDATE_BUSINESS_FROM_BUYER_SUCCESS',
+  UPDATE_BUSINESS_FROM_BUYER_FAILURE: 'UPDATE_BUSINESS_FROM_BUYER_FAILURE',
+  GET_BUSINESS_LOG_FROM_BUYER_LOADING: 'GET_BUSINESS_LOG_FROM_BUYER_LOADING',
+  GET_BUSINESS_LOG_FROM_BUYER_SUCCESS: 'GET_BUSINESS_LOG_FROM_BUYER_SUCCESS',
+  GET_BUSINESS_LOG_FROM_BUYER_FAILURE: 'GET_BUSINESS_LOG_FROM_BUYER_FAILURE',
   GET_BUYERS_GROUP_EMAIL_LOADING: 'GET_BUYERS_GROUP_EMAIL_LOADING',
   GET_BUYERS_GROUP_EMAIL_SUCCESS: 'GET_BUYERS_GROUP_EMAIL_SUCCESS',
   GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE',
@@ -124,6 +132,16 @@ const initialState = {
   getBusinessFromBuyer: {
     isLoading: true,
     object: null,
+    totalEnquiry: 0,
+    totalLastScore: null,
+    stageOptions: [],
+    sourceOptions: [],
+    ratingOptions: [],
+    productOptions: [],
+    industryOptions: [],
+    typeOptions: [],
+    stageNotSignedOptions: [],
+    stageNotWantOptions: [],
     error: null,
     countAllEnquiry: 0
   },
@@ -136,6 +154,16 @@ const initialState = {
     isLoading: true,
     disable: false,
     object: null,
+    error: null
+  },
+  updateBusinessFromBuyer: {
+    isLoading: false,
+    isUpdated: false,
+    error: null
+  },
+  getBusinessLogFromBuyer: {
+    array: [],
+    isLoading: false,
     error: null
   }
 }
@@ -283,6 +311,79 @@ export default function reducer (state = initialState, action) {
         ...state,
         getBusinessesFromBuyer: {
           ...state.getBusinessesFromBuyer,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.UPDATE_BUSINESS_FROM_BUYER_LOADING:
+      return {
+        ...state,
+        updateBusinessFromBuyer: {
+          ...state.update,
+          isLoading: action.payload,
+          error: null,
+          isUpdated: false
+        }
+      }
+    case Types.UPDATE_BUSINESS_FROM_BUYER_SUCCESS:
+      return {
+        ...state,
+        updateBusinessFromBuyer: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: true,
+          error: null
+        },
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload.business,
+          totalEnquiry: action.payload.countAllEnquiry,
+          totalLastScore: action.payload.lastScore ? action.payload.lastScore.total : null,
+          stageOptions: action.payload.stageList,
+          sourceOptions: action.payload.sourceList,
+          ratingOptions: action.payload.ratingList,
+          productOptions: action.payload.productList,
+          industryOptions: action.payload.industryList,
+          typeOptions: action.payload.typeList,
+          usersBroker: action.payload.usersBroker,
+          stageNotSignedOptions: action.payload.stageNotSignedList,
+          stageNotWantOptions: action.payload.stageNotWantList,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_FROM_BUYER_FAILURE:
+      return {
+        ...state,
+        updateBusinessFromBuyer: {
+          ...state.updateBusinessFromBuyer,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_BUSINESS_LOG_FROM_BUYER_LOADING:
+      return {
+        ...state,
+        getBusinessLogFromBuyer: {
+          ...state.getBusinessLogFromBuyer,
+          isLoading: true
+        }
+      }
+    case Types.GET_BUSINESS_LOG_FROM_BUYER_SUCCESS:
+      return {
+        ...state,
+        getBusinessLogFromBuyer: {
+          ...state.getBusinessLogFromBuyer,
+          isLoading: false,
+          array: action.payload
+        }
+      }
+    case Types.GET_BUSINESS_LOG_FROM_BUYER_FAILURE:
+      return {
+        ...state,
+        getBusinessLogFromBuyer: {
+          ...state.getBusinessLogFromBuyer,
           isLoading: false,
           error: action.payload
         }
@@ -439,6 +540,17 @@ export default function reducer (state = initialState, action) {
           ...state.getBusinessFromBuyer,
           isLoading: false,
           object: action.payload.business,
+          totalEnquiry: action.payload.countAllEnquiry,
+          totalLastScore: action.payload.lastScore ? action.payload.lastScore.total : null,
+          stageOptions: action.payload.stageList,
+          sourceOptions: action.payload.sourceList,
+          ratingOptions: action.payload.ratingList,
+          productOptions: action.payload.productList,
+          industryOptions: action.payload.industryList,
+          typeOptions: action.payload.typeList,
+          usersBroker: action.payload.usersBroker,
+          stageNotSignedOptions: action.payload.stageNotSignedList,
+          stageNotWantOptions: action.payload.stageNotWantList,
           countAllEnquiry: action.payload.countAllEnquiry,
           error: null
         }
@@ -735,6 +847,47 @@ export const getBusinessFromBuyer = id => async dispatch => {
       payload: error
     })
     toast.error(error.message)
+  }
+}
+
+export const updateBusinessFromBuyer = business => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_BUSINESS_FROM_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await updateBusinessFromBuyerAPI(business)
+    const getBusiness = await getBusinessFromBuyerAPI(business.id)
+    dispatch({
+      type: Types.UPDATE_BUSINESS_FROM_BUYER_SUCCESS,
+      payload: getBusiness
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_BUSINESS_FROM_BUYER_FAILURE,
+      payload: error
+    })
+    toast.error('Error trying to upload the business. Please get in contact with IT department.')
+  }
+}
+
+export const getBusinessLogFromBuyer = (businessId, search = false) => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESS_LOG_FROM_BUYER_LOADING
+  })
+  try {
+    const response = await getBusinessLogFromBuyerAPI(businessId, search)
+    dispatch({
+      type: Types.GET_BUSINESS_LOG_FROM_BUYER_SUCCESS,
+      payload: response.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESS_LOG_FROM_BUYER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
   }
 }
 

@@ -9,7 +9,7 @@ import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
-import { getBusinessFromBuyer } from '../../redux/ducks/buyer'
+import { getBusinessFromBuyer, getBusinessLogFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
 
@@ -39,10 +39,9 @@ class BusinessEditPage extends Component {
 
   componentDidMount () {
     const { id } = this.props.match.params
-    console.log('didMount')
     if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
       this.props.getBusinessFromBuyer(id)
-      this.props.getLogFromBusiness(id)
+      this.props.getBusinessLogFromBuyer(id)
     } else {
       this.props.getBusiness(id)
       this.props.getLogFromBusiness(id)
@@ -133,11 +132,6 @@ class BusinessEditPage extends Component {
           <Loader inverted />
         </Dimmer>
       )
-    }
-    console.log('business', business)
-    console.log('this.props.history', this.props.history)
-    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
-      console.log('this.props.location.state.fromBuyerMenu', this.props.location.state.fromBuyerMenu)
     }
     return (
       <Wrapper>
@@ -235,7 +229,7 @@ class BusinessEditPage extends Component {
                           </Grid.Row>
                         </Grid>
                       </Segment>
-                      <EditBusinessDetailForm business={business} history={history} />
+                      {<EditBusinessDetailForm business={business} history={history} />}
                     </Tab.Pane>
                   )
                 },
@@ -332,11 +326,15 @@ BusinessEditPage.propTypes = {
   isUpdated: PropTypes.bool,
   location: PropTypes.object,
   getBusinessFromBuyer: PropTypes.func,
-  isLoadingGetFromBuyer: PropTypes.bool
+  isLoadingGetFromBuyer: PropTypes.bool,
+  getBusinessLogFromBuyer: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ getBusiness, cleanBusiness, getLogFromBusiness, getBusinessFromBuyer }, dispatch)
+  return bindActionCreators(
+    { getBusiness, cleanBusiness, getLogFromBusiness, getBusinessFromBuyer, getBusinessLogFromBuyer },
+    dispatch
+  )
 }
 
 const mapStateToProps = (state, props) => {

@@ -57,14 +57,14 @@ class AnalystReports extends Component {
     if (fromButton) {
       await this.props.getQtdeBusinessesStagePerUser(
         values.analyst,
-        moment(values.dateFrom).format('YYYY/MM/DD'),
-        moment(values.dateTo).format('YYYY/MM/DD')
+        moment(values.dateFrom).format('YYYY/MM/DD 00:00:00'),
+        moment(values.dateTo).format('YYYY/MM/DD 23:59:59')
       )
     }
     this.props.getAnalystReport(
       values.analyst,
-      moment(values.dateFrom).format('YYYY/MM/DD'),
-      moment(values.dateTo).format('YYYY/MM/DD'),
+      moment(values.dateFrom).format('YYYY/MM/DD 00:00:00'),
+      moment(values.dateTo).format('YYYY/MM/DD 23:59:59'),
       stageId
     )
   }
@@ -272,7 +272,7 @@ class AnalystReports extends Component {
                                     style={{
                                       paddingBottom: '0px',
                                       paddingTop: '0px',
-                                      color: business.saleNotesLostMeeting === 'No' ? 'Green' : 'Red'
+                                      color: business.saleNotesLostMeeting === 'Yes' ? 'Green' : 'Red'
                                     }}
                                     width={2}
                                   >
@@ -287,7 +287,7 @@ class AnalystReports extends Component {
                                     style={{
                                       paddingBottom: '0px',
                                       paddingTop: '0px',
-                                      color: business.saleNotesLostWant === 'No' ? 'Green' : 'Red'
+                                      color: business.saleNotesLostWant === 'Yes' ? 'Green' : 'Red'
                                     }}
                                     width={2}
                                   >
@@ -299,7 +299,7 @@ class AnalystReports extends Component {
                                     Days until lost:
                                   </Grid.Column>
                                   <Grid.Column style={{ paddingBottom: '0px', paddingTop: '0px' }} width={2}>
-                                    <b>{moment().diff(business.lostDate, 'day')}</b>
+                                    <b>{moment(business.lostDate).diff(business.dateTimeCreated, 'day')}</b>
                                   </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row columns={2}>

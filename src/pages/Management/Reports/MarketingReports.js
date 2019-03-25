@@ -49,7 +49,10 @@ class MarketingReports extends Component {
   }
 
   _confirmReports = (dateFrom, dateTo) => {
-    this.props.getMarketingReport(moment(dateFrom).format('YYYY/MM/DD'), moment(dateTo).format('YYYY/MM/DD'))
+    this.props.getMarketingReport(
+      moment(dateFrom).format('YYYY/MM/DD 00:00:00'),
+      moment(dateTo).format('YYYY/MM/DD 23:59:59')
+    )
   }
 
   _totalGeralLeads = arrayOffices => {
