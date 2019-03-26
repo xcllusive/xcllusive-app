@@ -7,11 +7,11 @@ import moment from 'moment'
 import numeral from 'numeral'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
+import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
 
 import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
 import { getBusinessFromBuyer, getBusinessLogFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
-import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
 
 class BusinessEditPage extends Component {
   constructor (props) {
@@ -39,7 +39,10 @@ class BusinessEditPage extends Component {
 
   componentDidMount () {
     const { id } = this.props.match.params
-    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+    if (
+      (this.props.location.state && this.props.location.state.fromBuyerMenu) ||
+      (this.props.location && this.props.location.pathname === `/business/${id}/from-buyer`)
+    ) {
       this.props.getBusinessFromBuyer(id)
       this.props.getBusinessLogFromBuyer(id)
     } else {
@@ -49,7 +52,11 @@ class BusinessEditPage extends Component {
   }
 
   shouldComponentUpdate (nextprops) {
-    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+    const { id } = this.props.match.params
+    if (
+      (this.props.location.state && this.props.location.state.fromBuyerMenu) ||
+      (this.props.location && this.props.location.pathname === `/business/${id}/from-buyer`)
+    ) {
       if (this.props.isLoadingGetFromBuyer === nextprops.isLoadingGetFromBuyer) {
         return false
       }
@@ -119,14 +126,34 @@ class BusinessEditPage extends Component {
     this.props.history.goBack()
   }
 
+  _openBusinessLog = () => {
+    if (
+      (this.props.location.state && this.props.location.state.fromBuyerMenu) ||
+      (this.props.location && this.props.location.pathname === `/business/${this.props.match.params.id}/from-buyer`)
+    ) {
+      return this.props.history.push({
+        pathname: `/business/${this.props.business.id}/log/from-buyer`,
+        state: {
+          fromBuyerMenu: true
+        }
+      })
+    } else {
+      return this.props.history.push(`${this.props.match.url}/log`)
+    }
+  }
+
   render () {
-    const { arrayLogsFromBusiness, isLoading, business, history, isLoadingGetFromBuyer } = this.props
+    const { arrayLogsFromBusiness, isLoading, business, history, isLoadingGetFromBuyer, match } = this.props
     if (isLoading && isLoadingGetFromBuyer) {
       return (
         <Dimmer
           inverted
           active={
-            this.props.location.state && this.props.location.state.fromBuyerMenu ? isLoadingGetFromBuyer : isLoading
+            (this.props.location.state && this.props.location.state.fromBuyerMenu) ||
+            (this.props.location &&
+              this.props.location.pathname === `/business/${this.props.match.params.id}/from-buyer`)
+              ? isLoadingGetFromBuyer
+              : isLoading
           }
         >
           <Loader inverted />
@@ -229,7 +256,7 @@ class BusinessEditPage extends Component {
                           </Grid.Row>
                         </Grid>
                       </Segment>
-                      {<EditBusinessDetailForm business={business} history={history} />}
+                      {<EditBusinessDetailForm business={business} history={history} match={match} />}
                     </Tab.Pane>
                   )
                 },
@@ -237,7 +264,7 @@ class BusinessEditPage extends Component {
                   menuItem: 'Pricing/Information',
                   render: () => (
                     <Tab.Pane attached={false}>
-                      <EditBusinessPriceForm business={business} />
+                      <EditBusinessPriceForm business={business} history={history} />
                     </Tab.Pane>
                   )
                 }
@@ -245,65 +272,69 @@ class BusinessEditPage extends Component {
             />
           </Grid.Row>
           <Grid.Row style={{ justifyContent: 'flex-end', padding: '0 15px' }}>
-            <Button color="facebook" onClick={() => this.props.history.push(`${this.props.match.url}/log`)}>
+            <Button color="facebook" onClick={() => this._openBusinessLog()}>
               <Icon name="commenting" />
               Open Logs
             </Button>
           </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              <Table size={'small'} color="blue" celled inverted selectable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Log</Table.HeaderCell>
-                    <Table.HeaderCell>Follow Up</Table.HeaderCell>
-                    <Table.HeaderCell>Status</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {arrayLogsFromBusiness.map(logBusiness => {
-                    return (
-                      <Table.Row
-                        active
-                        key={logBusiness.id}
-                        onClick={() => this.props.history.push(`${this.props.match.url}/log`)}
-                      >
-                        <Table.Cell>{logBusiness.text}</Table.Cell>
-                        <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
-                        <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
-                      </Table.Row>
-                    )
-                  })}
-                </Table.Body>
-              </Table>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row style={{ justifyContent: 'center' }}>
-            <Form>
-              <Form.Group inline>
-                <Form.Input
-                  label="Created By"
-                  placeholder={`${business.CreatedBy.firstName} ${business.CreatedBy.lastName}`}
-                  readOnly
-                />
-                <Form.Input
-                  label="Creation Date"
-                  placeholder={moment(this.props.business.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}
-                  readOnly
-                />
-                <Form.Input
-                  label="Modified By"
-                  placeholder={`${business.ModifiedBy.firstName} ${business.ModifiedBy.lastName}`}
-                  readOnly
-                />
-                <Form.Input
-                  label="Modified Date"
-                  placeholder={moment(this.props.business.dateTimeModified).format('DD/MM/YYYY - HH:mm')}
-                  readOnly
-                />
-              </Form.Group>
-            </Form>
-          </Grid.Row>
+          {arrayLogsFromBusiness ? (
+            <Grid.Row>
+              <Grid.Column>
+                <Table size={'small'} color="blue" celled inverted selectable>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Log</Table.HeaderCell>
+                      <Table.HeaderCell>Follow Up</Table.HeaderCell>
+                      <Table.HeaderCell>Status</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {arrayLogsFromBusiness.map(logBusiness => {
+                      return (
+                        <Table.Row
+                          active
+                          key={logBusiness.id}
+                          onClick={() => this.props.history.push(`${this.props.match.url}/log`)}
+                        >
+                          <Table.Cell>{logBusiness.text}</Table.Cell>
+                          <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
+                          <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+              </Grid.Column>
+            </Grid.Row>
+          ) : null}
+          {business && business.CreatedBy ? (
+            <Grid.Row style={{ justifyContent: 'center' }}>
+              <Form>
+                <Form.Group inline>
+                  <Form.Input
+                    label="Created By"
+                    placeholder={`${business.CreatedBy.firstName} ${business.CreatedBy.lastName}`}
+                    readOnly
+                  />
+                  <Form.Input
+                    label="Creation Date"
+                    placeholder={moment(this.props.business.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}
+                    readOnly
+                  />
+                  <Form.Input
+                    label="Modified By"
+                    placeholder={`${business.ModifiedBy.firstName} ${business.ModifiedBy.lastName}`}
+                    readOnly
+                  />
+                  <Form.Input
+                    label="Modified Date"
+                    placeholder={moment(this.props.business.dateTimeModified).format('DD/MM/YYYY - HH:mm')}
+                    readOnly
+                  />
+                </Form.Group>
+              </Form>
+            </Grid.Row>
+          ) : null}
         </Grid>
       </Wrapper>
     )
@@ -342,14 +373,35 @@ const mapStateToProps = (state, props) => {
     isLoading: state.business.get.isLoading,
     isLoadingGetFromBuyer: state.buyer.getBusinessFromBuyer.isLoading,
     business:
-      props.location.state && props.location.state.fromBuyerMenu
+      (props.location.state && props.location.state.fromBuyerMenu) ||
+      (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
         ? state.buyer.getBusinessFromBuyer.object
         : state.business.get.object,
-    totalEnquiry: state.business.get.totalEnquiry,
-    totalLastScore: state.business.get.totalLastScore,
-    error: state.business.get.error,
-    arrayLogsFromBusiness: state.businessLog.get.array,
-    isUpdated: state.business.update.isUpdated
+    totalEnquiry:
+      (props.location.state && props.location.state.fromBuyerMenu) ||
+      (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
+        ? state.buyer.getBusinessFromBuyer.totalEnquiry
+        : state.business.get.totalEnquiry,
+    totalLastScore:
+      (props.location.state && props.location.state.fromBuyerMenu) ||
+      (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
+        ? state.buyer.getBusinessFromBuyer.totalLastScore
+        : state.business.get.totalLastScore,
+    error:
+      (props.location.state && props.location.state.fromBuyerMenu) ||
+      (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
+        ? state.buyer.getBusinessFromBuyer.error
+        : state.business.get.error,
+    arrayLogsFromBusiness:
+      (props.location.state && props.location.state.fromBuyerMenu) ||
+      (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
+        ? state.buyer.getBusinessLogFromBuyer.array
+        : state.business.get.array,
+    isUpdated:
+      (props.location.state && props.location.state.fromBuyerMenu) ||
+      (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
+        ? state.buyer.getBusinessFromBuyer.isUpdated
+        : state.business.get.isUpdated
   }
 }
 

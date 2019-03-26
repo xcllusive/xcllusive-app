@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import numeral from 'numeral'
 import { Form, Header, Grid, Segment, Icon } from 'semantic-ui-react'
-
+import { updateBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { updateBusiness } from '../../redux/ducks/business'
 
 const EditBusinessPriceForm = ({
@@ -204,7 +204,9 @@ EditBusinessPriceForm.propTypes = {
   handleSubmit: PropTypes.func,
   isLoadingUpdate: PropTypes.bool,
   isValid: PropTypes.bool,
-  isSubmitting: PropTypes.bool
+  isSubmitting: PropTypes.bool,
+  updateBusinessFromBuyer: PropTypes.func,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -251,14 +253,18 @@ const mapPropsToValues = props => {
 }
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBusiness(values).then(setSubmitting(false))
+  if (props.history.location.state && props.history.location.state.fromBuyerMenu) {
+    props.updateBusinessFromBuyer(values).then(setSubmitting(false))
+  } else {
+    props.updateBusiness(values).then(setSubmitting(false))
+  }
 }
 
 const mapStateToProps = state => ({
   isLoadingUpdate: state.business.update.isLoading
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ updateBusiness }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ updateBusiness, updateBusinessFromBuyer }, dispatch)
 
 export default connect(
   mapStateToProps,

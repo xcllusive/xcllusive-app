@@ -121,3 +121,18 @@ export const getBusinessLogFromBuyer = (businessId, search) => {
     params
   })
 }
+
+export const updateBusinessLogFromBuyer = businessLog => {
+  return request({
+    method: 'put',
+    url: `/buyer/business-log-from-buyer/${businessLog.businessId}`,
+    data: businessLog
+  })
+}
+
+export const finaliseBusinessLogFromBuyer = businessLog => {
+  return request({
+    method: 'post',
+    url: `/buyer/business-log-from-buyer/${businessLog.businessId}/finalise`
+  })
+}

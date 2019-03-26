@@ -15,6 +15,12 @@ import {
   updateBusinessLog,
   finaliseBusinessLog
 } from '../../redux/ducks/businessLog'
+import {
+  getBusinessFromBuyer,
+  getBusinessLogFromBuyer,
+  updateBusinessLogFromBuyer,
+  finaliseBusinessLogFromBuyer
+} from '../../redux/ducks/buyer'
 
 import { Statistic, Grid, Input, Table, Form, Label, Button, Icon, Segment } from 'semantic-ui-react'
 
@@ -43,7 +49,7 @@ class BusinessLogPage extends Component {
   // }
 
   static getDerivedStateFromProps (nextProps) {
-    if (nextProps.arrayLogBusiness.length && !nextProps.isLoadingarrayLogBusiness) {
+    if (nextProps.arrayLogBusiness && nextProps.arrayLogBusiness.length && !nextProps.isLoadingarrayLogBusiness) {
       const { newLog, id, followUp, text } = nextProps.arrayLogBusiness[0]
 
       return {
@@ -57,8 +63,13 @@ class BusinessLogPage extends Component {
   }
 
   componentDidMount () {
-    this.props.getBusiness(this.props.match.params.id)
-    this.props.getLogFromBusiness(this.props.match.params.id)
+    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+      this.props.getBusinessFromBuyer(this.props.match.params.id)
+      this.props.getBusinessLogFromBuyer(this.props.match.params.id)
+    } else {
+      this.props.getBusiness(this.props.match.params.id)
+      this.props.getLogFromBusiness(this.props.match.params.id)
+    }
     if (this.props.arrayLogBusiness.length) {
       this._selectLog(this.props.arrayLogBusiness[0])
     }
@@ -75,7 +86,11 @@ class BusinessLogPage extends Component {
   }
 
   _handleSearch = () => {
-    this.props.getLogFromBusiness(this.props.match.params.id, this.state.inputSearch)
+    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+      this.props.getBusinessLogFromBuyer(this.props.match.params.id, this.state.inputSearch)
+    } else {
+      this.props.getLogFromBusiness(this.props.match.params.id, this.state.inputSearch)
+    }
   }
 
   _handleDateChange = date => {
@@ -103,9 +118,22 @@ class BusinessLogPage extends Component {
   }
 
   _saveAndReturnToBusiness = values => {
-    if (this.props.values.newLog) this.props.updateBusinessLog(values)
+    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+      if (this.props.values.newLog) this.props.updateBusinessLogFromBuyer(values)
+      this.props.history.push(`/business/${this.props.match.params.id}/from-buyer`)
+    } else {
+      if (this.props.values.newLog) this.props.updateBusinessLog(values)
 
-    this.props.history.push(`/business/${this.props.match.params.id}`)
+      this.props.history.push(`/business/${this.props.match.params.id}`)
+    }
+  }
+
+  _finaliseBusinessLog = values => {
+    if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
+      this.props.finaliseBusinessLogFromBuyer(values)
+    } else {
+      this.props.finaliseBusinessLog(values)
+    }
   }
 
   render () {
@@ -122,31 +150,33 @@ class BusinessLogPage extends Component {
     return (
       <Wrapper>
         <div>
-          <Statistic.Group style={{ marginTop: '20px' }} size="mini" widths={4}>
-            <Statistic color="orange">
-              <Statistic.Value>{business.businessName}</Statistic.Value>
-              <Statistic.Label>
-                BS
-                {this.props.match.params.id}
-              </Statistic.Label>
-            </Statistic>
-            <Statistic color="blue">
-              <Statistic.Value>
-                {business.firstNameV} {business.lastNameV}
-              </Statistic.Value>
-              <Statistic.Label>Vendor</Statistic.Label>
-            </Statistic>
-            <Statistic color="blue">
-              <Statistic.Value>
-                <Icon link name="mail" onClick={() => (window.location.href = `mailto:${business.vendorEmail}`)} />
-              </Statistic.Value>
-              <Statistic.Label>{business.vendorEmail}</Statistic.Label>
-            </Statistic>
-            <Statistic color="blue">
-              <Statistic.Value>{business.vendorPhone1}</Statistic.Value>
-              <Statistic.Label>Telephone</Statistic.Label>
-            </Statistic>
-          </Statistic.Group>
+          {business ? (
+            <Statistic.Group style={{ marginTop: '20px' }} size="mini" widths={4}>
+              <Statistic color="orange">
+                <Statistic.Value>{business.businessName}</Statistic.Value>
+                <Statistic.Label>
+                  BS
+                  {this.props.match.params.id}
+                </Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>
+                  {business.firstNameV} {business.lastNameV}
+                </Statistic.Value>
+                <Statistic.Label>Vendor</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>
+                  <Icon link name="mail" onClick={() => (window.location.href = `mailto:${business.vendorEmail}`)} />
+                </Statistic.Value>
+                <Statistic.Label>{business.vendorEmail}</Statistic.Label>
+              </Statistic>
+              <Statistic color="blue">
+                <Statistic.Value>{business.vendorPhone1}</Statistic.Value>
+                <Statistic.Label>Telephone</Statistic.Label>
+              </Statistic>
+            </Statistic.Group>
+          ) : null}
           <Segment style={{ height: '300px', backgroundColor: '#d4d4d53b' }}>
             <Grid>
               <Grid.Row>
@@ -193,7 +223,7 @@ class BusinessLogPage extends Component {
                   color="orange"
                   size="small"
                   loading={loadingFinaliseStatus}
-                  onClick={() => this.props.finaliseBusinessLog(values)}
+                  onClick={() => this._finaliseBusinessLog(values)}
                 >
                   <Icon name="cut" />
                   Finalise Communication
@@ -254,32 +284,34 @@ class BusinessLogPage extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          <Table color="blue" celled inverted selectable compact size="small">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Date Created</Table.HeaderCell>
-                <Table.HeaderCell>Text</Table.HeaderCell>
-                <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {arrayLogBusiness.map(logBusiness => {
-                return (
-                  <Table.Row active key={logBusiness.id} onClick={() => this._selectLog(logBusiness)}>
-                    <Table.Cell>
-                      {logBusiness.dateTimeCreated === null
-                        ? moment(logBusiness.dateTimeModified).format('DD/MM/YYYY - HH:mm')
-                        : moment(logBusiness.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}
-                    </Table.Cell>
-                    <Table.Cell>{logBusiness.text}</Table.Cell>
-                    <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
-                    <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-          </Table>
+          {arrayLogBusiness ? (
+            <Table color="blue" celled inverted selectable compact size="small">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Date Created</Table.HeaderCell>
+                  <Table.HeaderCell>Text</Table.HeaderCell>
+                  <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
+                  <Table.HeaderCell>Status</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {arrayLogBusiness.map(logBusiness => {
+                  return (
+                    <Table.Row active key={logBusiness.id} onClick={() => this._selectLog(logBusiness)}>
+                      <Table.Cell>
+                        {logBusiness.dateTimeCreated === null
+                          ? moment(logBusiness.dateTimeModified).format('DD/MM/YYYY - HH:mm')
+                          : moment(logBusiness.dateTimeCreated).format('DD/MM/YYYY - HH:mm')}
+                      </Table.Cell>
+                      <Table.Cell>{logBusiness.text}</Table.Cell>
+                      <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
+                      <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
+                    </Table.Row>
+                  )
+                })}
+              </Table.Body>
+            </Table>
+          ) : null}
           {this.state.businessLog ? (
             <Form>
               <Form.Group inline>
@@ -338,7 +370,12 @@ BusinessLogPage.propTypes = {
   updateBusinessLog: PropTypes.func,
   loadingUpdateStatus: PropTypes.bool,
   finaliseBusinessLog: PropTypes.func,
-  loadingFinaliseStatus: PropTypes.bool
+  loadingFinaliseStatus: PropTypes.bool,
+  location: PropTypes.object,
+  getBusinessLogFromBuyer: PropTypes.func,
+  getBusinessFromBuyer: PropTypes.func,
+  updateBusinessLogFromBuyer: PropTypes.func,
+  finaliseBusinessLogFromBuyer: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -354,13 +391,28 @@ const mapPropsToValues = props => {
 
 const handleSubmit = () => {}
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
   return {
-    business: state.business.get.object,
-    arrayLogBusiness: state.businessLog.get.array,
-    isLoadingarrayLogBusiness: state.businessLog.get.isLoading,
-    loadingUpdateStatus: state.businessLog.updateLog.isLoading,
-    loadingFinaliseStatus: state.businessLog.finaliseLog.isLoading
+    business:
+      props.location.state && props.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessFromBuyer.object
+        : state.business.get.object,
+    arrayLogBusiness:
+      props.location.state && props.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessLogFromBuyer.array
+        : state.businessLog.get.array,
+    isLoadingarrayLogBusiness:
+      props.location.state && props.location.state.fromBuyerMenu
+        ? state.buyer.getBusinessLogFromBuyer.isLoading
+        : state.businessLog.get.isLoading,
+    loadingUpdateStatus:
+      props.location.state && props.location.state.fromBuyerMenu
+        ? state.buyer.updateBusinessLogFromBuyer.isLoading
+        : state.businessLog.updateLog.isLoading,
+    loadingFinaliseStatus:
+      props.location.state && props.location.state.fromBuyerMenu
+        ? state.buyer.finaliseBusinessLogFromBuyer.isLoading
+        : state.businessLog.finaliseLog.isLoading
   }
 }
 
@@ -371,7 +423,11 @@ const mapDispatchToProps = dispatch => {
       getLogFromBusiness,
       clearBusinessLog,
       updateBusinessLog,
-      finaliseBusinessLog
+      finaliseBusinessLog,
+      getBusinessFromBuyer,
+      getBusinessLogFromBuyer,
+      updateBusinessLogFromBuyer,
+      finaliseBusinessLogFromBuyer
     },
     dispatch
   )

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import { withFormik } from 'formik'
-import { Form, Icon, Grid, Radio, Label, Dimmer, Loader, Button } from 'semantic-ui-react'
+import { Form, Icon, Grid, Radio, Label, Button, Dimmer, Loader } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
@@ -44,7 +44,11 @@ class EditBusinessDetailForm extends Component {
   async componentWillUnmount () {
     // console.log(this.props.isSubmitting, this.props.isValid)
     if (this.props.isSubmitting || this.props.isValid) {
-      if (this.props.history.location.state && this.props.history.location.state.fromBuyerMenu) {
+      if (
+        this.props.history.location &&
+        (this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer` ||
+          this.props.history.location.pathname === '/buyer')
+      ) {
         await this.props.updateBusinessFromBuyer(this.props.values)
         this.props.getBusinessFromBuyer(this.props.business.id)
       } else {
@@ -251,7 +255,6 @@ class EditBusinessDetailForm extends Component {
       handleSubmit,
       errors,
       touched,
-      isLoadingGet,
       isLoadingUpdate,
       isValid,
       isSubmitting,
@@ -262,7 +265,8 @@ class EditBusinessDetailForm extends Component {
       typeOptions,
       stageOptions,
       usersBroker,
-      isLoadingIM
+      isLoadingIM,
+      isLoadingGet
     } = this.props
     const { state } = this.state
     return (
@@ -434,6 +438,10 @@ class EditBusinessDetailForm extends Component {
                     primary
                     size="small"
                     onClick={() => this._openModalReassignBusiness(values.id, values.listingAgent)}
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
                   >
                     <Icon name="edit" />
                     Reassign Business
@@ -449,7 +457,10 @@ class EditBusinessDetailForm extends Component {
                         }
                       })
                     }
-                    // disabled
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
                   >
                     <Icon name="edit" />
                     Appraisal Mgmt
@@ -457,7 +468,15 @@ class EditBusinessDetailForm extends Component {
                 </Form.Group>
                 <Form.Group>
                   {!this.props.business.agreement_id ? (
-                    <Form.Button size="small" color="brown" onClick={() => this._openModalListAgreement(values.state)}>
+                    <Form.Button
+                      size="small"
+                      color="brown"
+                      disabled={
+                        this.props.history.location &&
+                        this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                      }
+                      onClick={() => this._openModalListAgreement(values.state)}
+                    >
                       <Icon name="file" />
                       Agreement
                     </Form.Button>
@@ -466,6 +485,10 @@ class EditBusinessDetailForm extends Component {
                       <Form.Button
                         size="small"
                         color={theme.buttonEdit}
+                        disabled={
+                          this.props.history.location &&
+                          this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                        }
                         onClick={() =>
                           this.props.history.push({
                             pathname: `/business/${this.props.business.id}/agreement/${
@@ -484,6 +507,10 @@ class EditBusinessDetailForm extends Component {
                       <Form.Button
                         size="small"
                         color={theme.buttonNew}
+                        disabled={
+                          this.props.history.location &&
+                          this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                        }
                         onClick={() => this._openModalListAgreement(values.state)}
                       >
                         <Icon name="file" />
@@ -493,6 +520,10 @@ class EditBusinessDetailForm extends Component {
                   )}
                   <Button
                     color="grey"
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
                     onClick={() =>
                       this.props.history.push({
                         pathname: `/business/${this.props.business.id}/invoice`,
@@ -618,6 +649,10 @@ class EditBusinessDetailForm extends Component {
                     control={Radio}
                     label="Yes"
                     name="data120DayGuarantee"
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
                     onChange={this._handleChangeCheckBox}
                     checked={values.data120DayGuarantee}
                   />
@@ -625,12 +660,20 @@ class EditBusinessDetailForm extends Component {
                     control={Radio}
                     label="No"
                     name="data120DayGuarantee"
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
                     onChange={this._handleChangeCheckBox}
                     checked={!values.data120DayGuarantee}
                   />
                   <Form.Checkbox
                     label="Notify Owner for IM request"
                     name="notifyOwner"
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
                     onChange={this._handleChangeCheckBox}
                     checked={values.notifyOwner}
                   />
@@ -714,8 +757,11 @@ class EditBusinessDetailForm extends Component {
                       autoComplete="stage"
                       value={values.stage}
                       disabled={
-                        !this._isUserPreSale() && (values.stage === 3 || values.stage === 8)
-                      } /* Sales Memo and Lost */
+                        (!this._isUserPreSale() &&
+                          (values.stage === 3 || values.stage === 8)) /* Sales Memo and Lost */ ||
+                        (this.props.history.location &&
+                          this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`)
+                      }
                       onChange={this._handleSelectChange}
                     />
                     {errors.stage && touched.stage && <Label basic color="red" pointing content={errors.stage} />}
@@ -797,7 +843,8 @@ EditBusinessDetailForm.propTypes = {
   isLoadingIM: PropTypes.bool,
   isUpdatedBusiness: PropTypes.bool,
   updateBusinessFromBuyer: PropTypes.func,
-  getBusinessFromBuyer: PropTypes.func
+  getBusinessFromBuyer: PropTypes.func,
+  match: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -925,7 +972,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  if (props.history.location.state && props.history.location.state.fromBuyerMenu) {
+  if (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`) {
     props.updateBusinessFromBuyer(values).then(setSubmitting(false))
   } else {
     props.updateBusiness(values).then(setSubmitting(false))
@@ -935,41 +982,41 @@ const handleSubmit = (values, { props, setSubmitting }) => {
 const mapStateToProps = (state, props) => {
   return {
     isLoadingGet:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.isLoading
         : state.business.get.isLoading,
     isLoadingUpdate:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.isLoading
         : state.business.get.isLoading,
     isUpdatedBusiness:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.isUpdated
         : state.business.get.isUpdated,
     sourceOptions:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.sourceOptions
         : state.business.get.sourceOptions,
     ratingOptions:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.ratingOptions
         : state.business.get.ratingOptions,
     productOptions:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.productOptions
         : state.business.get.productOptions,
     // industryOptions: state.business.get.industryOptions,
     typeOptions:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.typeOptions
         : state.business.get.typeOptions,
     stageOptions:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.stageOptions
         : state.business.get.stageOptions,
     reassignedBusiness: state.business.reassignBusiness.isReassigned,
     usersBroker:
-      props.history.location.state && props.history.location.state.fromBuyerMenu
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.usersBroker
         : state.business.get.usersBroker,
     updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated,

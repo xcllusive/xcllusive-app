@@ -14,7 +14,9 @@ import {
   getBuyersGroupEmail as getBuyersGroupEmailAPI,
   verifyDuplicatedBuyer as verifyDuplicatedBuyerAPI,
   updateBusinessFromBuyer as updateBusinessFromBuyerAPI,
-  getBusinessLogFromBuyer as getBusinessLogFromBuyerAPI
+  getBusinessLogFromBuyer as getBusinessLogFromBuyerAPI,
+  updateBusinessLogFromBuyer as updateBusinessLogFromBuyerAPI,
+  finaliseBusinessLogFromBuyer as finaliseBusinessLogFromBuyerAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -58,6 +60,12 @@ export const Types = {
   GET_BUSINESS_LOG_FROM_BUYER_LOADING: 'GET_BUSINESS_LOG_FROM_BUYER_LOADING',
   GET_BUSINESS_LOG_FROM_BUYER_SUCCESS: 'GET_BUSINESS_LOG_FROM_BUYER_SUCCESS',
   GET_BUSINESS_LOG_FROM_BUYER_FAILURE: 'GET_BUSINESS_LOG_FROM_BUYER_FAILURE',
+  UPDATE_BUSINESS_LOG_FROM_BUYER_LOADING: 'UPDATE_BUSINESS_LOG_FROM_BUYER_LOADING',
+  UPDATE_BUSINESS_LOG_FROM_BUYER_SUCCESS: 'UPDATE_BUSINESS_LOG_FROM_BUYER_SUCCESS',
+  UPDATE_BUSINESS_LOG_FROM_BUYER_FAILURE: 'UPDATE_BUSINESS_LOG_FROM_BUYER_FAILURE',
+  FINALISE_BUSINESS_LOG_FROM_BUYER_LOADING: 'FINALISE_BUSINESS_LOG_FROM_BUYER_LOADING',
+  FINALISE_BUSINESS_LOG_FROM_BUYER_SUCCESS: 'FINALISE_BUSINESS_LOG_FROM_BUYER_SUCCESS',
+  FINALISE_BUSINESS_LOG_FROM_BUYER_FAILURE: 'FINALISE_BUSINESS_LOG_FROM_BUYER_FAILURE',
   GET_BUYERS_GROUP_EMAIL_LOADING: 'GET_BUYERS_GROUP_EMAIL_LOADING',
   GET_BUYERS_GROUP_EMAIL_SUCCESS: 'GET_BUYERS_GROUP_EMAIL_SUCCESS',
   GET_BUYERS_GROUP_EMAIL_FAILURE: 'GET_BUYERS_GROUP_EMAIL_FAILURE',
@@ -164,6 +172,16 @@ const initialState = {
   getBusinessLogFromBuyer: {
     array: [],
     isLoading: false,
+    error: null
+  },
+  updateBusinessLogFromBuyer: {
+    isLoading: false,
+    isUpdated: false,
+    error: null
+  },
+  finaliseBusinessLogFromBuyer: {
+    isLoading: false,
+    isUpdated: false,
     error: null
   }
 }
@@ -623,6 +641,64 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.UPDATE_BUSINESS_LOG_FROM_BUYER_LOADING:
+      return {
+        ...state,
+        updateBusinessLogFromBuyer: {
+          ...state.updateBusinessLogFromBuyer,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_LOG_FROM_BUYER_SUCCESS:
+      return {
+        ...state,
+        updateBusinessLogFromBuyer: {
+          ...state.updateBusinessLogFromBuyer,
+          isLoading: false,
+          isUpdated: action.payload,
+          error: null
+        }
+      }
+    case Types.UPDATE_BUSINESS_LOG_FROM_BUYER_FAILURE:
+      return {
+        ...state,
+        updateBusinessLogFromBuyer: {
+          ...state.updateBusinessLogFromBuyer,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
+    case Types.FINALISE_BUSINESS_LOG_FROM_BUYER_LOADING:
+      return {
+        ...state,
+        finaliseBusinessLogFromBuyer: {
+          ...state.finaliseBusinessLogFromBuyer,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.FINALISE_BUSINESS_LOG_FROM_BUYER_SUCCESS:
+      return {
+        ...state,
+        finaliseBusinessLogFromBuyer: {
+          ...state.finaliseBusinessLogFromBuyer,
+          isLoading: false,
+          isUpdated: action.payload,
+          error: null
+        }
+      }
+    case Types.FINALISE_BUSINESS_LOG_FROM_BUYER_FAILURE:
+      return {
+        ...state,
+        finaliseBusinessLogFromBuyer: {
+          ...state.finaliseBusinessLogFromBuyer,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_BUYER:
       return initialState
     default:
@@ -885,6 +961,47 @@ export const getBusinessLogFromBuyer = (businessId, search = false) => async dis
   } catch (error) {
     dispatch({
       type: Types.GET_BUSINESS_LOG_FROM_BUYER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const updateBusinessLogFromBuyer = businessLog => async dispatch => {
+  dispatch({
+    type: Types.UPDATE_BUSINESS_LOG_FROM_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await updateBusinessLogFromBuyerAPI(businessLog)
+    dispatch({
+      type: Types.UPDATE_BUSINESS_LOG_FROM_BUYER_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_BUSINESS_LOG_FROM_BUYER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const finaliseBusinessLogFromBuyer = businessLog => async dispatch => {
+  dispatch({
+    type: Types.FINALISE_BUSINESS_LOG_FROM_BUYER_LOADING,
+    payload: true
+  })
+  try {
+    const response = await finaliseBusinessLogFromBuyerAPI(businessLog)
+    console.log(response, businessLog)
+    dispatch({
+      type: Types.FINALISE_BUSINESS_LOG_FROM_BUYER_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.FINALISE_BUSINESS_LOG_FROM_BUYER_FAILURE,
       payload: error
     })
     toast.error(error)
