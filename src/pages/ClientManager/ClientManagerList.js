@@ -350,6 +350,7 @@ class ClientManagerList extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
       title: 'New Business',
       where: 'ClientManager',
+      history: this.props.history,
       onConfirm: async (values, searchDuplicatedBusiness = false) => {
         if (values) {
           if (searchDuplicatedBusiness) {
