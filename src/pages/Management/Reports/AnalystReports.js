@@ -193,11 +193,11 @@ class AnalystReports extends Component {
                     <Table.Header>
                       {keepAnalystParams && keepAnalystParams.stageId !== 8 ? (
                         <Table.Row>
-                          <Table.HeaderCell>Business ID</Table.HeaderCell>
-                          <Table.HeaderCell>Business Name</Table.HeaderCell>
-                          <Table.HeaderCell>Contact Name</Table.HeaderCell>
-                          <Table.HeaderCell>Log Text</Table.HeaderCell>
-                          <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
+                          <Table.HeaderCell width={2}>Business ID</Table.HeaderCell>
+                          <Table.HeaderCell width={3}>Business Name</Table.HeaderCell>
+                          <Table.HeaderCell width={2}>Contact Name</Table.HeaderCell>
+                          <Table.HeaderCell width={8}>Log Text</Table.HeaderCell>
+                          <Table.HeaderCell width={1}>Follow Up Date</Table.HeaderCell>
                         </Table.Row>
                       ) : (
                         <Table.Row>
