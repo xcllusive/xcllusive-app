@@ -396,7 +396,7 @@ const mapStateToProps = (state, props) => {
       (props.location.state && props.location.state.fromBuyerMenu) ||
       (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
         ? state.buyer.getBusinessLogFromBuyer.array
-        : state.business.get.array,
+        : state.businessLog.get.array,
     isUpdated:
       (props.location.state && props.location.state.fromBuyerMenu) ||
       (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
