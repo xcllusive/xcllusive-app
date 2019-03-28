@@ -231,7 +231,7 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  savedRecords: state.reports.keepMarketingRecords.records,
+  savedRecords: state.reports.keepEnquiryParams,
   isLoading: state.reports.getEnquiryReport.isLoading,
   objectEnquiry: state.reports.getEnquiryReport.objectEnquiry
 })
