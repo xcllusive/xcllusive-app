@@ -38,3 +38,11 @@ export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => {
     params: { analystId, dateFrom, dateTo }
   })
 }
+
+export const getEnquiryReport = (dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: 'reports/enquiry-report',
+    params: { dateFrom, dateTo }
+  })
+}

@@ -3,7 +3,8 @@ import {
   getAllAnalysts as getAllAnalystsAPI,
   getAnalystReport as getAnalystReportAPI,
   getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI,
-  getBusinessesPerAnalyst as getBusinessesPerAnalystAPI
+  getBusinessesPerAnalyst as getBusinessesPerAnalystAPI,
+  getEnquiryReport as getEnquiryReportAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -28,7 +29,11 @@ export const Types = {
   GET_BUSINESSES_PER_ANALYST_FAILURE: 'GET_BUSINESSES_PER_ANALYST_FAILURE',
   KEEP_MARKETING_RECORDS: 'KEEP_MARKETING_RECORDS',
   SET_LAST_TAB_SELECTED: 'SET_LAST_TAB_SELECTED',
-  KEEP_ANALYST_PARAMS: 'KEEP_ANALYST_PARAMS'
+  KEEP_ANALYST_PARAMS: 'KEEP_ANALYST_PARAMS',
+  GET_ENQUIRY_REPORT_LOADING: 'GET_ENQUIRY_REPORT_LOADING',
+  GET_ENQUIRY_REPORT_SUCCESS: 'GET_ENQUIRY_REPORT_SUCCESS',
+  GET_ENQUIRY_REPORT_FAILURE: 'GET_ENQUIRY_REPORT_FAILURE',
+  KEEP_ENQUIRY_RECORDS: 'KEEP_ENQUIRY_RECORDS'
 }
 
 // Reducer
@@ -74,7 +79,13 @@ const initialState = {
   setLastTabSelected: {
     index: 0
   },
-  keepAnalystParams: null
+  keepAnalystParams: null,
+  getEnquiryReport: {
+    isLoading: false,
+    objectEnquiry: null,
+    error: null
+  },
+  keepEnquiryParams: null
 }
 
 export default function reducer (state = initialState, action) {
@@ -260,6 +271,39 @@ export default function reducer (state = initialState, action) {
         ...state,
         keepAnalystParams: action.payload
       }
+    case Types.GET_ENQUIRY_REPORT_LOADING:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_ENQUIRY_REPORT_SUCCESS:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: false,
+          objectEnquiry: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_ENQUIRY_REPORT_FAILURE:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.KEEP_ENQUIRY_PARAMS:
+      return {
+        ...state,
+        keepEnquiryParams: action.payload
+      }
     case Types.CLEAR_MARKETING_REPORT:
       return initialState
     default:
@@ -388,4 +432,28 @@ export const setLastTabSelected = indexLastTab => async dispatch => {
     type: Types.SET_LAST_TAB_SELECTED,
     payload: indexLastTab
   })
+}
+
+export const getEnquiryReport = (dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.GET_ENQUIRY_REPORT_LOADING,
+    payload: true
+  })
+  try {
+    const getEnquiryReport = await getEnquiryReportAPI(dateFrom, dateTo)
+    dispatch({
+      type: Types.GET_ENQUIRY_REPORT_SUCCESS,
+      payload: getEnquiryReport.data
+    })
+    dispatch({
+      type: Types.KEEP_ENQUIRY_RECORDS,
+      payload: { dateFrom, dateTo }
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_ENQUIRY_REPORT_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
 }

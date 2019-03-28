@@ -7,6 +7,7 @@ import BrokersWeeklyReports from './BrokersWeeklyReports'
 import MarketingReports from './MarketingReports'
 import AnalystReports from './AnalystReports'
 import { setLastTabSelected } from '../../../redux/ducks/reports'
+import EnquiryReports from './EnquiryReports'
 
 class Reports extends Component {
   constructor (props) {
@@ -24,6 +25,10 @@ class Reports extends Component {
         {
           menuItem: 'Analyst`s Report',
           render: () => <AnalystReports history={this.props.history} />
+        },
+        {
+          menuItem: 'Enquiries Report',
+          render: () => <EnquiryReports history={this.props.history} />
         }
       ]
     }
