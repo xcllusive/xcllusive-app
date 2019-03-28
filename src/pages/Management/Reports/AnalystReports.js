@@ -272,11 +272,11 @@ class AnalystReports extends Component {
                                     style={{
                                       paddingBottom: '0px',
                                       paddingTop: '0px',
-                                      color: business.saleNotesLostMeeting === 'Yes' ? 'Green' : 'Red'
+                                      color: business.saleNotesLostMeeting ? 'Green' : 'Red'
                                     }}
                                     width={2}
                                   >
-                                    <b>{business.saleNotesLostMeeting}</b>
+                                    <b>{business.saleNotesLostMeeting ? 'Yes' : 'No'}</b>
                                   </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row columns={2}>
@@ -287,11 +287,11 @@ class AnalystReports extends Component {
                                     style={{
                                       paddingBottom: '0px',
                                       paddingTop: '0px',
-                                      color: business.saleNotesLostWant === 'Yes' ? 'Green' : 'Red'
+                                      color: business.saleNotesLostWant ? 'Green' : 'Red'
                                     }}
                                     width={2}
                                   >
-                                    <b>{business.saleNotesLostWant}</b>
+                                    <b>{business.saleNotesLostWant ? 'Yes' : 'No'}</b>
                                   </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row columns={2}>
