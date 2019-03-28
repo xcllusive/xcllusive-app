@@ -68,7 +68,8 @@ class BusinessListPage extends Component {
     this.setState({
       stageSelected: stage,
       stageSelectedName: name,
-      inputSearch: ''
+      inputSearch: '',
+      showAll: true
     })
   }
 
