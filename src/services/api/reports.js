@@ -39,10 +39,10 @@ export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => {
   })
 }
 
-export const getEnquiryReport = (dateFrom, dateTo) => {
+export const getEnquiryReport = (dateFrom, dateTo, listOfIdOfAnalysts) => {
   return request({
     method: 'get',
     url: 'reports/enquiry-report',
-    params: { dateFrom, dateTo }
+    params: { dateFrom, dateTo, listOfIdOfAnalysts }
   })
 }

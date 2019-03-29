@@ -30,6 +30,7 @@ import ModalBrokersWeeklyReport from './ModalBrokersWeeklyReport'
 import ModalBrokersWeeklyReportToDo from './ModalBrokersWeeklyReportToDo'
 import ModalOfficeRegister from './ModalOfficeRegister'
 import ModalNewHelpDesk from './ModalNewHelpDesk'
+import ModalPickAnalysts from './ModalPickAnalysts'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -62,7 +63,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_OWNERS_APPRAISAL_CONFIRM]: ModalOwnersApprovalConfirm,
   [TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT]: ModalBrokersWeeklyReport,
   [TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT_TO_DO]: ModalBrokersWeeklyReportToDo,
-  [TypesModal.MODAL_TYPE_NEW_HELP_DESK]: ModalNewHelpDesk
+  [TypesModal.MODAL_TYPE_NEW_HELP_DESK]: ModalNewHelpDesk,
+  [TypesModal.MODAL_PICK_ANALYSTS]: ModalPickAnalysts
 }
 
 const ModalRoot = ({ type, props }) => {

@@ -33,7 +33,8 @@ export const Types = {
   GET_ENQUIRY_REPORT_LOADING: 'GET_ENQUIRY_REPORT_LOADING',
   GET_ENQUIRY_REPORT_SUCCESS: 'GET_ENQUIRY_REPORT_SUCCESS',
   GET_ENQUIRY_REPORT_FAILURE: 'GET_ENQUIRY_REPORT_FAILURE',
-  KEEP_ENQUIRY_PARAMS: 'KEEP_ENQUIRY_PARAMS'
+  KEEP_ENQUIRY_PARAMS: 'KEEP_ENQUIRY_PARAMS',
+  CLEAR_ENQUIRIES_REPORT: 'CLEAR_ENQUIRIES_REPORT'
 }
 
 // Reducer
@@ -306,6 +307,16 @@ export default function reducer (state = initialState, action) {
       }
     case Types.CLEAR_MARKETING_REPORT:
       return initialState
+    case Types.CLEAR_ENQUIRIES_REPORT:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: false,
+          error: null,
+          objectEnquiry: null
+        }
+      }
     default:
       return state
   }
@@ -434,20 +445,26 @@ export const setLastTabSelected = indexLastTab => async dispatch => {
   })
 }
 
-export const getEnquiryReport = (dateFrom, dateTo) => async dispatch => {
+export const getEnquiryReport = (
+  dateFrom,
+  dateTo,
+  listOfIdOfAnalysts = false,
+  arraySelectedAnalysts = false,
+  showAllEnquiries
+) => async dispatch => {
   dispatch({
     type: Types.GET_ENQUIRY_REPORT_LOADING,
     payload: true
   })
   try {
-    const getEnquiryReport = await getEnquiryReportAPI(dateFrom, dateTo)
+    const getEnquiryReport = await getEnquiryReportAPI(dateFrom, dateTo, listOfIdOfAnalysts)
     dispatch({
       type: Types.GET_ENQUIRY_REPORT_SUCCESS,
       payload: getEnquiryReport.data
     })
     dispatch({
       type: Types.KEEP_ENQUIRY_PARAMS,
-      payload: { dateFrom, dateTo }
+      payload: { dateFrom, dateTo, arraySelectedAnalysts, showAllEnquiries }
     })
   } catch (error) {
     dispatch({
@@ -456,4 +473,10 @@ export const getEnquiryReport = (dateFrom, dateTo) => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const clearEnquiriesReports = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_ENQUIRIES_REPORT
+  })
 }

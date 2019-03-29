@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Button, Segment, Header, Table, Dimmer, Loader } from 'semantic-ui-react'
+import { Grid, Form, Button, Segment, Header, Table, Dimmer, Loader, Radio, Divider } from 'semantic-ui-react'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
-import { getEnquiryReport } from '../../../redux/ducks/reports'
+import { getEnquiryReport, clearEnquiriesReports } from '../../../redux/ducks/reports'
 import Wrapper from '../../../components/content/Wrapper'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -18,9 +18,7 @@ class EnquiryReports extends Component {
     this.state = {}
   }
 
-  componentDidMount = () => {
-    // this.props.clearMarketingReports()
-  }
+  componentDidMount = () => {}
 
   _handleDateFromChange = date => {
     if (moment(date).diff(moment(this.props.values.dateTo)) > 0) {
@@ -48,15 +46,49 @@ class EnquiryReports extends Component {
     })
   }
 
-  _confirmReports = (dateFrom, dateTo) => {
+  _confirmReports = (dateFrom, dateTo, listOfIdOfAnalysts = false, arraySelectedAnalysts = false) => {
     this.props.getEnquiryReport(
       moment(dateFrom).format('YYYY/MM/DD 00:00:00'),
-      moment(dateTo).format('YYYY/MM/DD 23:59:59')
+      moment(dateTo).format('YYYY/MM/DD 23:59:59'),
+      listOfIdOfAnalysts,
+      arraySelectedAnalysts,
+      this.props.values.showAllEnquiries
     )
   }
 
   _percNewEnquiries = enquirie => {
     return (enquirie.count / this.props.objectEnquiry.totalNewEnquiries) * 100
+  }
+
+  _handleChangeCheckBox = async (e, { name }) => {
+    await this.props.clearEnquiriesReports()
+    await this.props.setFieldValue(name, !this.props.values[name])
+    if (!this.props.values.showAllEnquiries) {
+      this._openModalPickAnalysts()
+    }
+  }
+
+  _openModalPickAnalysts = () => {
+    this.props.openModal(TypesModal.MODAL_PICK_ANALYSTS, {
+      options: {
+        title: 'Select the Analysts you want:'
+      },
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          await this.props.setFieldValue('arraySelectedAnalysts', isConfirmed)
+          const listOfIdOfAnalysts = isConfirmed.map(item => {
+            return parseInt(item.value)
+          })
+          this._confirmReports(
+            this.props.values.dateFrom,
+            this.props.values.dateTo,
+            listOfIdOfAnalysts,
+            this.props.values.arraySelectedAnalysts,
+            this.props.values.showAllEnquiries
+          )
+        }
+      }
+    })
   }
 
   render () {
@@ -104,15 +136,33 @@ class EnquiryReports extends Component {
                       popperPlacement="top-end"
                     />
                   </Form.Field>
-                  <Form.Field style={{ marginTop: '30px' }}>
-                    <Button
-                      positive
-                      icon="checkmark"
-                      labelPosition="right"
-                      content="Confirm"
-                      onClick={() => this._confirmReports(values.dateFrom, values.dateTo)}
-                    />
-                  </Form.Field>
+                  <Form.Field
+                    style={{ marginTop: '35px' }}
+                    control={Radio}
+                    label="Show All Enquiries"
+                    name="showAllEnquiries"
+                    onChange={this._handleChangeCheckBox}
+                    checked={values.showAllEnquiries}
+                  />
+                  <Form.Field
+                    style={{ marginTop: '35px' }}
+                    control={Radio}
+                    label="Select the Analysts"
+                    name="showAllEnquiries"
+                    onChange={this._handleChangeCheckBox}
+                    checked={!values.showAllEnquiries}
+                  />
+                  {this.props.values.showAllEnquiries ? (
+                    <Form.Field style={{ marginTop: '30px' }}>
+                      <Button
+                        positive
+                        icon="checkmark"
+                        labelPosition="right"
+                        content="Confirm"
+                        onClick={() => this._confirmReports(values.dateFrom, values.dateTo)}
+                      />
+                    </Form.Field>
+                  ) : null}
                 </Form.Group>
               </Grid.Column>
             </Grid.Row>
@@ -123,89 +173,125 @@ class EnquiryReports extends Component {
             <Loader>Loading</Loader>
           </Dimmer>
           {objectEnquiry ? (
-            <Segment
-              style={{ paddingLeft: '0px', paddingRight: '0px', paddingBottom: '0px', marginLeft: '25%', width: '50%' }}
-              size="small"
-            >
-              <Fragment>
-                <Header style={{ marginLeft: '10px' }} color="red">
-                  Enquiries
-                </Header>
-                <Table celled striped selectable compact size="small">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell textAlign="center" width={2}>
-                        Source
-                      </Table.HeaderCell>
-                      <Table.HeaderCell textAlign="center" width={2}>
-                        Quantity
-                      </Table.HeaderCell>
-                      <Table.HeaderCell textAlign="center" width={2}>
-                        % of New Enquiries
-                      </Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {objectEnquiry.arrayNewEnquiriesOrderByBigger.map(newEnquiries => {
-                      return (
-                        <Table.Row key={newEnquiries.source_id}>
-                          <Table.Cell>{newEnquiries['BuyerSource.label']}</Table.Cell>
-                          <Table.Cell textAlign="right">{newEnquiries.count}</Table.Cell>
-                          <Table.Cell textAlign="right">
-                            {numeral(this._percNewEnquiries(newEnquiries)).format('0,0.[0]')}%
-                          </Table.Cell>
-                        </Table.Row>
-                      )
-                    })}
-                  </Table.Body>
-                  <Table.Footer fullWidth>
-                    <Table.Row>
-                      <Table.HeaderCell>
-                        <b>TOTAL New Enquiries:</b>
-                      </Table.HeaderCell>
-                      <Table.HeaderCell textAlign="right">
-                        <b>{objectEnquiry.totalNewEnquiries}</b>
-                      </Table.HeaderCell>
-                      <Table.HeaderCell textAlign="right">
-                        <b>
-                          % out of total{' '}
-                          {numeral((objectEnquiry.totalNewEnquiries / objectEnquiry.totalEnquiries) * 100).format(
-                            '0,0.[0]'
-                          )}
-                        </b>
-                      </Table.HeaderCell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.HeaderCell>
-                        <b>Existing (DB):</b>
-                      </Table.HeaderCell>
-                      <Table.HeaderCell textAlign="right">
-                        <b>{objectEnquiry.totalEnquiries - objectEnquiry.totalNewEnquiries}</b>
-                      </Table.HeaderCell>
-                      <Table.HeaderCell textAlign="right">
-                        <b>
-                          % out of total{' '}
-                          {numeral(
-                            ((objectEnquiry.totalEnquiries - objectEnquiry.totalNewEnquiries) /
-                              objectEnquiry.totalEnquiries) *
-                              100
-                          ).format('0,0.[0]')}
-                        </b>
-                      </Table.HeaderCell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.HeaderCell>
-                        <b>TOTAL:</b>
-                      </Table.HeaderCell>
-                      <Table.HeaderCell textAlign="right">
-                        <b>{objectEnquiry.totalEnquiries}</b>
-                      </Table.HeaderCell>
-                      <Table.HeaderCell />
-                    </Table.Row>
-                  </Table.Footer>
-                </Table>
-              </Fragment>
-            </Segment>
+            <Grid>
+              <Grid.Row columns={this.props.values.showAllEnquiries ? 1 : 2}>
+                <Grid.Column width={this.props.values.showAllEnquiries ? 16 : 8}>
+                  <Segment
+                    style={{
+                      paddingLeft: '0px',
+                      paddingRight: '0px',
+                      paddingBottom: '0px',
+                      marginLeft: this.props.values.showAllEnquiries ? '25%' : '10%',
+                      width: this.props.values.showAllEnquiries ? '50%' : null
+                    }}
+                    size="small"
+                  >
+                    <Fragment>
+                      <Header style={{ marginLeft: '10px' }} color="red">
+                        Enquiries
+                      </Header>
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell textAlign="center" width={2}>
+                              Source
+                            </Table.HeaderCell>
+                            <Table.HeaderCell textAlign="center" width={2}>
+                              Quantity
+                            </Table.HeaderCell>
+                            <Table.HeaderCell textAlign="center" width={2}>
+                              % of New Enquiries
+                            </Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {objectEnquiry.arrayNewEnquiriesOrderByBigger.map(newEnquiries => {
+                            return (
+                              <Table.Row key={newEnquiries.source_id}>
+                                <Table.Cell>{newEnquiries['BuyerSource.label']}</Table.Cell>
+                                <Table.Cell textAlign="right">{newEnquiries.count}</Table.Cell>
+                                <Table.Cell textAlign="right">
+                                  {numeral(this._percNewEnquiries(newEnquiries)).format('0,0.[0]')}%
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                        <Table.Footer fullWidth>
+                          <Table.Row>
+                            <Table.HeaderCell>
+                              <b>TOTAL New Enquiries:</b>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell textAlign="right">
+                              <b>{objectEnquiry.totalNewEnquiries}</b>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell textAlign="right">
+                              <b>
+                                % out of total{' '}
+                                {numeral((objectEnquiry.totalNewEnquiries / objectEnquiry.totalEnquiries) * 100).format(
+                                  '0,0.[0]'
+                                )}
+                              </b>
+                            </Table.HeaderCell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.HeaderCell>
+                              <b>Existing (DB):</b>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell textAlign="right">
+                              <b>{objectEnquiry.totalEnquiries - objectEnquiry.totalNewEnquiries}</b>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell textAlign="right">
+                              <b>
+                                % out of total{' '}
+                                {numeral(
+                                  ((objectEnquiry.totalEnquiries - objectEnquiry.totalNewEnquiries) /
+                                    objectEnquiry.totalEnquiries) *
+                                    100
+                                ).format('0,0.[0]')}
+                              </b>
+                            </Table.HeaderCell>
+                          </Table.Row>
+                          <Table.Row>
+                            <Table.HeaderCell>
+                              <b>TOTAL:</b>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell textAlign="right">
+                              <b>{objectEnquiry.totalEnquiries}</b>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell />
+                          </Table.Row>
+                        </Table.Footer>
+                      </Table>
+                    </Fragment>
+                  </Segment>
+                </Grid.Column>
+                {!this.props.values.showAllEnquiries ? (
+                  <Grid.Column style={{ marginLeft: '50px' }} width={4}>
+                    <Segment
+                      style={{
+                        paddingLeft: '0px',
+                        paddingRight: '0px',
+                        paddingBottom: '0px'
+                      }}
+                      size="small"
+                    >
+                      <Divider horizontal>Selected Analysts</Divider>
+                      <Table celled compact definition>
+                        <Table.Body>
+                          {this.props.values &&
+                            this.props.values.arraySelectedAnalysts.map(analysts => (
+                              <Table.Row key={analysts.key}>
+                                <Table.Cell textAlign="center">{analysts.text}</Table.Cell>
+                              </Table.Row>
+                            ))}
+                        </Table.Body>
+                      </Table>
+                    </Segment>
+                  </Grid.Column>
+                ) : null}
+              </Grid.Row>
+            </Grid>
           ) : null}
         </Dimmer.Dimmable>
       </Wrapper>
@@ -220,13 +306,18 @@ EnquiryReports.propTypes = {
   getEnquiryReport: PropTypes.func,
   savedRecords: PropTypes.object,
   objectEnquiry: PropTypes.object,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  getAllAnalysts: PropTypes.func,
+  arrayAnalysts: PropTypes.array,
+  clearEnquiriesReports: PropTypes.func
 }
 
 const mapPropsToValues = props => {
   return {
     dateFrom: props.savedRecords ? moment(new Date(props.savedRecords.dateFrom)) : moment().startOf('month'),
-    dateTo: props.savedRecords ? moment(new Date(props.savedRecords.dateTo)) : moment()
+    dateTo: props.savedRecords ? moment(new Date(props.savedRecords.dateTo)) : moment(),
+    showAllEnquiries: props.savedRecords ? props.savedRecords.showAllEnquiries : true,
+    arraySelectedAnalysts: props.savedRecords ? props.savedRecords.arraySelectedAnalysts : []
   }
 }
 
@@ -240,7 +331,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       openModal,
-      getEnquiryReport
+      getEnquiryReport,
+      clearEnquiriesReports
     },
     dispatch
   )
