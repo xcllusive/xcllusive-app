@@ -471,7 +471,7 @@ export const getEnquiryReport = (
       type: Types.GET_ENQUIRY_REPORT_FAILURE,
       payload: error
     })
-    toast.error(error)
+    toast.error(error.message)
   }
 }
 
