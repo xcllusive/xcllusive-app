@@ -15,7 +15,9 @@ import numeral from 'numeral'
 class EnquiryReports extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      listOfIdOfAnalysts: []
+    }
   }
 
   componentDidMount = () => {}
@@ -79,6 +81,7 @@ class EnquiryReports extends Component {
           const listOfIdOfAnalysts = isConfirmed.map(item => {
             return parseInt(item.value)
           })
+          this.setState({ listOfIdOfAnalysts: listOfIdOfAnalysts })
           this._confirmReports(
             this.props.values.dateFrom,
             this.props.values.dateTo,
@@ -152,17 +155,25 @@ class EnquiryReports extends Component {
                     onChange={this._handleChangeCheckBox}
                     checked={!values.showAllEnquiries}
                   />
-                  {this.props.values.showAllEnquiries ? (
-                    <Form.Field style={{ marginTop: '30px' }}>
-                      <Button
-                        positive
-                        icon="checkmark"
-                        labelPosition="right"
-                        content="Confirm"
-                        onClick={() => this._confirmReports(values.dateFrom, values.dateTo)}
-                      />
-                    </Form.Field>
-                  ) : null}
+                  <Form.Field style={{ marginTop: '30px' }}>
+                    <Button
+                      positive
+                      icon="checkmark"
+                      labelPosition="right"
+                      content="Confirm"
+                      onClick={() =>
+                        values.showAllEnquiries
+                          ? this._confirmReports(values.dateFrom, values.dateTo)
+                          : this._confirmReports(
+                            this.props.values.dateFrom,
+                            this.props.values.dateTo,
+                            this.state.listOfIdOfAnalysts,
+                            this.props.values.arraySelectedAnalysts,
+                            this.props.values.showAllEnquiries
+                          )
+                      }
+                    />
+                  </Form.Field>
                 </Form.Group>
               </Grid.Column>
             </Grid.Row>
@@ -174,7 +185,7 @@ class EnquiryReports extends Component {
           </Dimmer>
           {objectEnquiry ? (
             <Grid>
-              <Grid.Row columns={this.props.values.showAllEnquiries ? 1 : 2}>
+              <Grid.Row columns={this.props.values.showAllEnquiries ? 1 : 3}>
                 <Grid.Column width={this.props.values.showAllEnquiries ? 16 : 8}>
                   <Segment
                     style={{
@@ -267,28 +278,38 @@ class EnquiryReports extends Component {
                   </Segment>
                 </Grid.Column>
                 {!this.props.values.showAllEnquiries ? (
-                  <Grid.Column style={{ marginLeft: '50px' }} width={4}>
-                    <Segment
-                      style={{
-                        paddingLeft: '0px',
-                        paddingRight: '0px',
-                        paddingBottom: '0px'
-                      }}
-                      size="small"
-                    >
-                      <Divider horizontal>Selected Analysts</Divider>
-                      <Table celled compact definition>
-                        <Table.Body>
-                          {this.props.values &&
-                            this.props.values.arraySelectedAnalysts.map(analysts => (
-                              <Table.Row key={analysts.key}>
-                                <Table.Cell textAlign="center">{analysts.text}</Table.Cell>
-                              </Table.Row>
-                            ))}
-                        </Table.Body>
-                      </Table>
-                    </Segment>
-                  </Grid.Column>
+                  <Fragment>
+                    <Grid.Column style={{ marginLeft: '50px' }} width={4}>
+                      <Segment
+                        style={{
+                          paddingLeft: '0px',
+                          paddingRight: '0px',
+                          paddingBottom: '0px'
+                        }}
+                        size="small"
+                      >
+                        <Divider horizontal>Selected Analysts</Divider>
+                        <Table celled compact definition>
+                          <Table.Body>
+                            {this.props.values &&
+                              this.props.values.arraySelectedAnalysts.map(analysts => (
+                                <Table.Row key={analysts.key}>
+                                  <Table.Cell textAlign="center">{analysts.text}</Table.Cell>
+                                </Table.Row>
+                              ))}
+                          </Table.Body>
+                        </Table>
+                      </Segment>
+                    </Grid.Column>
+                    <Grid.Column style={{ paddingLeft: '0px' }} width={3}>
+                      <Button
+                        color="twitter"
+                        content="Change my list"
+                        size="small"
+                        onClick={() => this._openModalPickAnalysts()}
+                      />
+                    </Grid.Column>
+                  </Fragment>
                 ) : null}
               </Grid.Row>
             </Grid>

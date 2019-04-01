@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Table, Header, Segment, Button, Icon } from 'semantic-ui-react'
+import { Grid, Form, Table, Header, Segment, Button, Icon, Divider } from 'semantic-ui-react'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import { getMarketingReport, clearMarketingReports } from '../../../redux/ducks/reports'
 import Wrapper from '../../../components/content/Wrapper'
@@ -724,286 +724,298 @@ class MarketingReports extends Component {
           </Segment>
         ) : null}
         {arrayLeadsPerSourceSydney && arrayLeadsPerSourceSydney.length > 0 ? (
-          <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
-            <Fragment>
-              <Header style={{ marginLeft: '10px' }} color="red">
-                Leads Per Source
-              </Header>
-              <Grid padded="horizontally">
-                <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
-                  <Grid.Column
+          <Fragment>
+            <Divider style={{ marginTop: '40px', marginBottom: '40px', color: 'blue' }} horizontal>
+              <h3>SOURCES</h3>
+            </Divider>
+            <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
+              <Fragment>
+                <Header style={{ marginLeft: '10px' }} color="red">
+                  Leads Per Source
+                </Header>
+                <Grid padded="horizontally">
+                  <Grid.Row
                     style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
                   >
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Adelaide Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {arrayLeadsPerSourceAdelaide.map((LeadsPerSourceAdelaide, index) => {
-                          return (
-                            <Table.Row key={index}>
-                              <Table.Cell>{LeadsPerSourceAdelaide['source.label']}</Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceAdelaide.count}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceAdelaide.countSourceImStageAdelaide
-                                  ? LeadsPerSourceAdelaide.countSourceImStageAdelaide
-                                  : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceAdelaide.countSourceImStageAdelaide > 0
-                                  ? `${numeral(
-                                    (LeadsPerSourceAdelaide.countSourceImStageAdelaide /
-                                        LeadsPerSourceAdelaide.count) *
-                                        100
-                                  ).format('0,0.0')}%`
-                                  : 0}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        })}
-                      </Table.Body>
-                    </Table>
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Camberra Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {arrayLeadsPerSourceCamberra.map((LeadsPerSourceCamberra, index) => {
-                          return (
-                            <Table.Row key={index}>
-                              <Table.Cell>{LeadsPerSourceCamberra['source.label']}</Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCamberra.count}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCamberra.countSourceImStageCamberra
-                                  ? LeadsPerSourceCamberra.countSourceImStageCamberra
-                                  : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCamberra.countSourceImStageCamberra > 0
-                                  ? `${numeral(
-                                    (LeadsPerSourceCamberra.countSourceImStageCamberra /
-                                        LeadsPerSourceCamberra.count) *
-                                        100
-                                  ).format('0,0.0')}%`
-                                  : 0}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        })}
-                      </Table.Body>
-                    </Table>
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Cowra Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {arrayLeadsPerSourceCowra.map((LeadsPerSourceCowra, index) => {
-                          return (
-                            <Table.Row key={index}>
-                              <Table.Cell>{LeadsPerSourceCowra['source.label']}</Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCowra.count}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCowra.countSourceImStageCowra
-                                  ? LeadsPerSourceCowra.countSourceImStageCowra
-                                  : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceCowra.countSourceImStageCowra > 0
-                                  ? `${numeral(
-                                    (LeadsPerSourceCowra.countSourceImStageCowra / LeadsPerSourceCowra.count) * 100
-                                  ).format('0,0.0')}%`
-                                  : 0}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        })}
-                      </Table.Body>
-                    </Table>
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Gosford Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {arrayLeadsPerSourceGosford.map((LeadsPerSourceGosford, index) => {
-                          return (
-                            <Table.Row key={index}>
-                              <Table.Cell>{LeadsPerSourceGosford['source.label']}</Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceGosford.count}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceGosford.countSourceImStageGosford
-                                  ? LeadsPerSourceGosford.countSourceImStageGosford
-                                  : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceGosford.countSourceImStageGosford > 0
-                                  ? `${numeral(
-                                    (LeadsPerSourceGosford.countSourceImStageGosford / LeadsPerSourceGosford.count) *
-                                        100
-                                  ).format('0,0.0')}%`
-                                  : 0}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        })}
-                      </Table.Body>
-                    </Table>
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Melbourne Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {arrayLeadsPerSourceMelbourne.map((LeadsPerSourceMelbourne, index) => {
-                          return (
-                            <Table.Row key={index}>
-                              <Table.Cell>{LeadsPerSourceMelbourne['source.label']}</Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceMelbourne.count}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceMelbourne.countSourceImStageMelbourne
-                                  ? LeadsPerSourceMelbourne.countSourceImStageMelbourne
-                                  : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceMelbourne.countSourceImStageMelbourne > 0
-                                  ? `${numeral(
-                                    (LeadsPerSourceMelbourne.countSourceImStageMelbourne /
-                                        LeadsPerSourceMelbourne.count) *
-                                        100
-                                  ).format('0,0.0')}%`
-                                  : 0}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        })}
-                      </Table.Body>
-                    </Table>
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Sydney Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {arrayLeadsPerSourceSydney.map((LeadsPerSourceSydney, index) => {
-                          return (
-                            <Table.Row key={index}>
-                              <Table.Cell>{LeadsPerSourceSydney['source.label']}</Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceSydney.count}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceSydney.countSourceImStageSydney
-                                  ? LeadsPerSourceSydney.countSourceImStageSydney
-                                  : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceSydney.countSourceImStageSydney > 0
-                                  ? `${numeral(
-                                    (LeadsPerSourceSydney.countSourceImStageSydney / LeadsPerSourceSydney.count) * 100
-                                  ).format('0,0.0')}%`
-                                  : 0}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        })}
-                      </Table.Body>
-                    </Table>
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Queensland Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {arrayLeadsPerSourceQueensland.map((LeadsPerSourceQueensland, index) => {
-                          return (
-                            <Table.Row key={index}>
-                              <Table.Cell>{LeadsPerSourceQueensland['source.label']}</Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceQueensland.count}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceQueensland.countSourceImStageQueensland
-                                  ? LeadsPerSourceQueensland.countSourceImStageQueensland
-                                  : 0}
-                              </Table.Cell>
-                              <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                {LeadsPerSourceQueensland.countSourceImStageQueensland > 0
-                                  ? `${numeral(
-                                    (LeadsPerSourceQueensland.countSourceImStageQueensland /
-                                        LeadsPerSourceQueensland.count) *
-                                        100
-                                  ).format('0,0.0')}%`
-                                  : 0}
-                              </Table.Cell>
-                            </Table.Row>
-                          )
-                        })}
-                      </Table.Body>
-                    </Table>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Fragment>
-          </Segment>
+                    <Grid.Column
+                      style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
+                    >
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4 style={{ color: '#2185d0' }}>Adelaide Office</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {arrayLeadsPerSourceAdelaide.map((LeadsPerSourceAdelaide, index) => {
+                            return (
+                              <Table.Row key={index}>
+                                <Table.Cell>{LeadsPerSourceAdelaide['source.label']}</Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceAdelaide.count}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceAdelaide.countSourceImStageAdelaide
+                                    ? LeadsPerSourceAdelaide.countSourceImStageAdelaide
+                                    : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceAdelaide.countSourceImStageAdelaide > 0
+                                    ? `${numeral(
+                                      (LeadsPerSourceAdelaide.countSourceImStageAdelaide /
+                                          LeadsPerSourceAdelaide.count) *
+                                          100
+                                    ).format('0,0.0')}%`
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                      </Table>
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4 style={{ color: '#2185d0' }}>Camberra Office</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {arrayLeadsPerSourceCamberra.map((LeadsPerSourceCamberra, index) => {
+                            return (
+                              <Table.Row key={index}>
+                                <Table.Cell>{LeadsPerSourceCamberra['source.label']}</Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceCamberra.count}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceCamberra.countSourceImStageCamberra
+                                    ? LeadsPerSourceCamberra.countSourceImStageCamberra
+                                    : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceCamberra.countSourceImStageCamberra > 0
+                                    ? `${numeral(
+                                      (LeadsPerSourceCamberra.countSourceImStageCamberra /
+                                          LeadsPerSourceCamberra.count) *
+                                          100
+                                    ).format('0,0.0')}%`
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                      </Table>
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4 style={{ color: '#2185d0' }}>Cowra Office</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {arrayLeadsPerSourceCowra.map((LeadsPerSourceCowra, index) => {
+                            return (
+                              <Table.Row key={index}>
+                                <Table.Cell>{LeadsPerSourceCowra['source.label']}</Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceCowra.count}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceCowra.countSourceImStageCowra
+                                    ? LeadsPerSourceCowra.countSourceImStageCowra
+                                    : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceCowra.countSourceImStageCowra > 0
+                                    ? `${numeral(
+                                      (LeadsPerSourceCowra.countSourceImStageCowra / LeadsPerSourceCowra.count) * 100
+                                    ).format('0,0.0')}%`
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                      </Table>
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4 style={{ color: '#2185d0' }}>Gosford Office</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {arrayLeadsPerSourceGosford.map((LeadsPerSourceGosford, index) => {
+                            return (
+                              <Table.Row key={index}>
+                                <Table.Cell>{LeadsPerSourceGosford['source.label']}</Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceGosford.count}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceGosford.countSourceImStageGosford
+                                    ? LeadsPerSourceGosford.countSourceImStageGosford
+                                    : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceGosford.countSourceImStageGosford > 0
+                                    ? `${numeral(
+                                      (LeadsPerSourceGosford.countSourceImStageGosford /
+                                          LeadsPerSourceGosford.count) *
+                                          100
+                                    ).format('0,0.0')}%`
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                      </Table>
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4 style={{ color: '#2185d0' }}>Melbourne Office</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {arrayLeadsPerSourceMelbourne.map((LeadsPerSourceMelbourne, index) => {
+                            return (
+                              <Table.Row key={index}>
+                                <Table.Cell>{LeadsPerSourceMelbourne['source.label']}</Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceMelbourne.count}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceMelbourne.countSourceImStageMelbourne
+                                    ? LeadsPerSourceMelbourne.countSourceImStageMelbourne
+                                    : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceMelbourne.countSourceImStageMelbourne > 0
+                                    ? `${numeral(
+                                      (LeadsPerSourceMelbourne.countSourceImStageMelbourne /
+                                          LeadsPerSourceMelbourne.count) *
+                                          100
+                                    ).format('0,0.0')}%`
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                      </Table>
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4 style={{ color: '#2185d0' }}>Sydney Office</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {arrayLeadsPerSourceSydney.map((LeadsPerSourceSydney, index) => {
+                            return (
+                              <Table.Row key={index}>
+                                <Table.Cell>{LeadsPerSourceSydney['source.label']}</Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceSydney.count}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceSydney.countSourceImStageSydney
+                                    ? LeadsPerSourceSydney.countSourceImStageSydney
+                                    : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceSydney.countSourceImStageSydney > 0
+                                    ? `${numeral(
+                                      (LeadsPerSourceSydney.countSourceImStageSydney / LeadsPerSourceSydney.count) *
+                                          100
+                                    ).format('0,0.0')}%`
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                      </Table>
+                      <Table celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4 style={{ color: '#2185d0' }}>Queensland Office</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {arrayLeadsPerSourceQueensland.map((LeadsPerSourceQueensland, index) => {
+                            return (
+                              <Table.Row key={index}>
+                                <Table.Cell>{LeadsPerSourceQueensland['source.label']}</Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceQueensland.count}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceQueensland.countSourceImStageQueensland
+                                    ? LeadsPerSourceQueensland.countSourceImStageQueensland
+                                    : 0}
+                                </Table.Cell>
+                                <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
+                                  {LeadsPerSourceQueensland.countSourceImStageQueensland > 0
+                                    ? `${numeral(
+                                      (LeadsPerSourceQueensland.countSourceImStageQueensland /
+                                          LeadsPerSourceQueensland.count) *
+                                          100
+                                    ).format('0,0.0')}%`
+                                    : 0}
+                                </Table.Cell>
+                              </Table.Row>
+                            )
+                          })}
+                        </Table.Body>
+                      </Table>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Fragment>
+            </Segment>
+          </Fragment>
         ) : null}
         {arrayTotalPerSource && arrayTotalPerSource.length > 0 ? (
-          <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
-            <Fragment>
+          <Fragment>
+            <Divider style={{ marginTop: '40px', marginBottom: '40px', color: 'blue' }} horizontal>
+              <h3>TOTALS</h3>
+            </Divider>
+            <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
               <Header style={{ marginLeft: '10px' }} color="red">
                 Total Per Source
               </Header>
@@ -1043,8 +1055,8 @@ class MarketingReports extends Component {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
-            </Fragment>
-          </Segment>
+            </Segment>
+          </Fragment>
         ) : null}
       </Wrapper>
     )
