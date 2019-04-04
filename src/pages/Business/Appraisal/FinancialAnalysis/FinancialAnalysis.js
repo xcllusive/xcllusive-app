@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Message, Step, Grid, Header, Form } from 'semantic-ui-react'
+import { Message, Step, Grid, Header, Form, Segment } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import moment from 'moment'
 
@@ -102,35 +102,41 @@ class FinancialAnalysisPage extends Component {
             </p>
           </Message>
         </Step.Group>
-        <Grid celled="internally" divided>
-          <FinancialAnalysisForm
-            handleChangeCheckBox={this._handleChangeCheckBox}
-            handleChangeCheckBoxPdf={this._handleChangeCheckBox}
-            values={values}
-            handleChange={this.props.handleChange}
-            handleBlur={this.props.handleBlur}
-            errors={this.props.errors}
-            touched={this.props.touched}
-            financialYear={this.state.financialYear}
-            appraisalObject={appraisalObject}
-            sendCalcs={this._getCalcs}
-            setFieldValue={this.props.setFieldValue}
-            setFieldTouched={this.props.setFieldTouched}
-          />
-          <Grid.Row>
-            <CustomColumn>
-              <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
-                Addbacks and Adjustments
-              </Header>
-            </CustomColumn>
-          </Grid.Row>
-          <AddbacksAndAdjustmentsForm
-            financialYear={this.state.financialYear}
-            business={this.props.business}
-            appraisalObject={this.props.appraisalObject}
-            handleChange={this.props.handleChange}
-          />
-        </Grid>
+        <Segment size="small" style={{ backgroundColor: '#f5f5f5' }}>
+          <Grid celled="internally" divided>
+            <FinancialAnalysisForm
+              handleChangeCheckBox={this._handleChangeCheckBox}
+              handleChangeCheckBoxPdf={this._handleChangeCheckBox}
+              values={values}
+              handleChange={this.props.handleChange}
+              handleBlur={this.props.handleBlur}
+              errors={this.props.errors}
+              touched={this.props.touched}
+              financialYear={this.state.financialYear}
+              appraisalObject={appraisalObject}
+              sendCalcs={this._getCalcs}
+              setFieldValue={this.props.setFieldValue}
+              setFieldTouched={this.props.setFieldTouched}
+            />
+          </Grid>
+        </Segment>
+        <Segment size="small" style={{ backgroundColor: '#f5f5f5' }}>
+          <Grid celled="internally" divided>
+            <Grid.Row>
+              <Grid.Column>
+                <Header as="h3" textAlign="center" color="blue">
+                  Addbacks and Adjustments
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+            <AddbacksAndAdjustmentsForm
+              financialYear={this.state.financialYear}
+              business={this.props.business}
+              appraisalObject={this.props.appraisalObject}
+              handleChange={this.props.handleChange}
+            />
+          </Grid>
+        </Segment>
         <Grid>
           <Grid.Row columns={2}>
             <CustomColumn width={9}>

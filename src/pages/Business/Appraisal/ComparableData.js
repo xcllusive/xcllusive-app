@@ -716,7 +716,11 @@ class ComparableDataPage extends Component {
               <Table.Body>
                 {listSelected.map(selectedList => (
                   <Table.Row active key={selectedList.id}>
-                    <Table.Cell>{selectedList.businessType}</Table.Cell>
+                    <Table.Cell>
+                      {selectedList['BusinessType.label']
+                        ? selectedList['BusinessType.label']
+                        : selectedList.BusinessType.label}
+                    </Table.Cell>
                     <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
@@ -871,7 +875,7 @@ class ComparableDataPage extends Component {
             <Table color="blue" celled inverted size="small" compact selectable structured collapsing>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="11">
+                  <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="12">
                     Sold Business Information
                   </Table.HeaderCell>
                   <Table.HeaderCell color="red" textAlign="center" colSpan="5">
@@ -886,6 +890,7 @@ class ComparableDataPage extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.HeaderCell rowSpan="1">Business Type</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">Industry</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">T/O</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">EBITDA Last year</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">EBITDA Avg</Table.HeaderCell>
@@ -912,7 +917,8 @@ class ComparableDataPage extends Component {
               <Table.Body>
                 {listBusinessesSold.map(businessSold => (
                   <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
-                    <Table.Cell>{businessSold.businessType}</Table.Cell>
+                    <Table.Cell>{businessSold['BusinessType.label']}</Table.Cell>
+                    <Table.Cell>{businessSold.industry}</Table.Cell>
                     <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
