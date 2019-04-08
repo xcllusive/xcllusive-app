@@ -127,6 +127,17 @@ const FinancialAnalysisForm = ({
   }
 
   const _handleChangeSales = (e, column) => {
+    if (column === 6) {
+      if (values.salesYesNo) {
+        setFieldValue(
+          `calcAnnualised${1}`,
+          _calcAnnualised(values.sales6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${1}`, 0)
+      }
+    }
+
     e.preventDefault()
     const name = e.target.name
     const value = e.target.value
@@ -146,6 +157,16 @@ const FinancialAnalysisForm = ({
   }
 
   const _handleChangeCogs = (e, column) => {
+    if (column === 6) {
+      if (values.cogsYesNo) {
+        setFieldValue(
+          `calcAnnualised${2}`,
+          _calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${2}`, 0)
+      }
+    }
     e.preventDefault()
     const name = e.target.name
     const value = e.target.value
@@ -164,7 +185,21 @@ const FinancialAnalysisForm = ({
     setFieldValue(`calcOperatingProfitPerc${column}`, _calcOperatingProfitPerc(sales, cogs, otherIncome, expense))
   }
 
-  const _handleChangeOtherIncome = (e, { name, value, column }) => {
+  const _handleChangeOtherIncome = (e, column) => {
+    if (column === 6) {
+      if (values.otherIncomeYesNo) {
+        setFieldValue(
+          `calcAnnualised${5}`,
+          _calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${5}`, 0)
+      }
+    }
+    e.preventDefault()
+    const name = e.target.name
+    const value = e.target.value
+
     const otherIncome = numeral(value).value()
     const cogs = numeral(values[`cogs${column}`]).value()
     const sales = numeral(values[`sales${column}`]).value()
@@ -179,7 +214,21 @@ const FinancialAnalysisForm = ({
     setFieldValue(`calcOperatingProfitPerc${column}`, _calcOperatingProfitPerc(sales, cogs, otherIncome, expense))
   }
 
-  const _handleChangeExpense = (e, { name, value, column }) => {
+  const _handleChangeExpense = (e, column) => {
+    if (column === 6) {
+      if (values.expensesYesNo) {
+        setFieldValue(
+          `calcAnnualised${7}`,
+          _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcAnnualised${7}`, 0)
+      }
+    }
+    e.preventDefault()
+    const name = e.target.name
+    const value = e.target.value
+
     const expense = numeral(value).value()
     const cogs = numeral(values[`cogs${column}`]).value()
     const sales = numeral(values[`sales${column}`]).value()
@@ -541,12 +590,12 @@ const FinancialAnalysisForm = ({
           <b> Gross Margin % </b>
         </CustomColumn>
         {/* <CustomColumn textAlign="center">{_calcGrossMarginPerc(values.sales1, values.cogs1)} %</CustomColumn> */}
-        <CustomColumn textAlign="center"> {values.calcGrossMarginPerc1} %</CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcGrossMarginPerc2} %</CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcGrossMarginPerc3} %</CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcGrossMarginPerc4} %</CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcGrossMarginPerc5} %</CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcGrossMarginPerc6} %</CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc1)} %</CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc2)} %</CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc3)} %</CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc4)} %</CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc5)} %</CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc6)} %</CustomColumn>
         <CustomColumn textAlign="center" />
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -656,7 +705,7 @@ const FinancialAnalysisForm = ({
           textAlign="center"
         >
           {/* {_calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)} */}
-          {values.calcAnnualised5}
+          {numeral(values.calcAnnualised5).format('$0,0')}
         </CustomColumn>
         <CustomColumn textAlign="center">
           <Checkbox
@@ -806,12 +855,12 @@ const FinancialAnalysisForm = ({
         {/* <CustomColumn textAlign="center">
                                   {_calcOperatingProfitPerc(values.sales1, values.cogs1, values.otherIncome1, values.expenses1)} %
                                 </CustomColumn> */}
-        <CustomColumn textAlign="center"> {values.calcOperatingProfitPerc1} % </CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcOperatingProfitPerc2} % </CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcOperatingProfitPerc3} % </CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcOperatingProfitPerc4} % </CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcOperatingProfitPerc5} % </CustomColumn>
-        <CustomColumn textAlign="center"> {values.calcOperatingProfitPerc6} % </CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc1)} % </CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc2)} % </CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc3)} % </CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc4)} % </CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc5)} % </CustomColumn>
+        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc6)} % </CustomColumn>
         <CustomColumn textAlign="center" />
         <CustomColumn textAlign="center" />
       </Grid.Row>
