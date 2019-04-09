@@ -1,17 +1,6 @@
-import {
-  toast
-} from 'react-toastify'
+import { toast } from 'react-toastify'
 import download from '../../utils/file-download'
-import {
-  create,
-  getAll,
-  get,
-  update,
-  downloadAppr,
-  send,
-  remove,
-  duplicate
-} from '../../services/api/appraisal'
+import { create, getAll, get, update, downloadAppr, send, remove, duplicate } from '../../services/api/appraisal'
 
 // Action Types
 
@@ -41,7 +30,8 @@ export const Types = {
   DUPLICATE_APPRAISAL_LOADING: 'DUPLICATE_APPRAISAL_LOADING',
   DUPLICATE_APPRAISAL_SUCCESS: 'DUPLICATE_APPRAISAL_SUCCESS',
   DUPLICATE_APPRAISAL_FAILURE: 'DUPLICATE_APPRAISAL_FAILURE',
-  CALC_COMPLETE_STEPS: 'CALC_COMPLETE_STEPS'
+  CALC_COMPLETE_STEPS: 'CALC_COMPLETE_STEPS',
+  SEND_MONTHS_SEASONAL: 'SEND_MONTHS_SEASONAL'
 }
 
 // Reducer
@@ -134,7 +124,8 @@ const initialState = {
     isDuplicated: false,
     appraisal: {},
     error: null
-  }
+  },
+  sendMonthsSeasonal: null
 }
 
 export default function reducer (state = initialState, action) {
@@ -388,6 +379,11 @@ export default function reducer (state = initialState, action) {
           isCalculated: true
         }
       }
+    case Types.SEND_MONTHS_SEASONAL:
+      return {
+        ...state,
+        sendMonthsSeasonal: action.payload
+      }
     case Types.CLEAR_APPRAISAL:
       return initialState
     default:
@@ -594,6 +590,13 @@ export const clearAppraisal = () => async dispatch => {
 
 export const calcCompleteSteps = (confirmName, confirm) => async dispatch => {
   dispatch(addTodo(confirmName, confirm))
+}
+
+export const calcAnnualisedWhenChangeMonthsAndSeasonal = (monthtsCovered, seasonalAdjustment) => async dispatch => {
+  dispatch({
+    type: Types.SEND_MONTHS_SEASONAL,
+    payload: { monthtsCovered, seasonalAdjustment }
+  })
 }
 
 const addTodo = (confirmName, confirm) => {

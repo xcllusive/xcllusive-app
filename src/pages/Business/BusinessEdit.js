@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { Header, Segment, Statistic, Grid, Form, Table, Button, Icon, Tab, Dimmer, Loader } from 'semantic-ui-react'
 import moment from 'moment'
 import numeral from 'numeral'
+import _ from 'lodash'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
@@ -49,6 +50,7 @@ class BusinessEditPage extends Component {
       this.props.getBusiness(id)
       this.props.getLogFromBusiness(id)
     }
+    this.setState({ isUserClientManager: this._isUserClientManager() })
   }
 
   shouldComponentUpdate (nextprops) {
@@ -71,6 +73,10 @@ class BusinessEditPage extends Component {
 
   componentWillUnmount () {
     this.props.cleanBusiness()
+  }
+
+  _isUserClientManager = () => {
+    return _.includes(this.props.userRoles, 'CLIENT_MANAGER_MENU')
   }
 
   _getProduct (id) {
@@ -264,7 +270,11 @@ class BusinessEditPage extends Component {
                   menuItem: 'Pricing/Information',
                   render: () => (
                     <Tab.Pane attached={false}>
-                      <EditBusinessPriceForm business={business} history={history} />
+                      <EditBusinessPriceForm
+                        business={business}
+                        history={history}
+                        isUserClientManager={this.state.isUserClientManager}
+                      />
                     </Tab.Pane>
                   )
                 }
@@ -358,7 +368,8 @@ BusinessEditPage.propTypes = {
   location: PropTypes.object,
   getBusinessFromBuyer: PropTypes.func,
   isLoadingGetFromBuyer: PropTypes.bool,
-  getBusinessLogFromBuyer: PropTypes.func
+  getBusinessLogFromBuyer: PropTypes.func,
+  userRoles: PropTypes.array
 }
 
 const mapDispatchToProps = dispatch => {
@@ -401,7 +412,8 @@ const mapStateToProps = (state, props) => {
       (props.location.state && props.location.state.fromBuyerMenu) ||
       (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
         ? state.buyer.getBusinessFromBuyer.isUpdated
-        : state.business.get.isUpdated
+        : state.business.get.isUpdated,
+    userRoles: state.auth.user.roles
   }
 }
 

@@ -71,6 +71,7 @@ const FinancialAnalysisForm = ({
         _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
       )
     }
+    this.props.calcAnnualisedWhenChangeMonthsAndSeasonal(values.monthsCovered, values.seasonalAdjustment)
   }
 
   const _handleChangeCheckBox = (e, { name, row, checked }) => {

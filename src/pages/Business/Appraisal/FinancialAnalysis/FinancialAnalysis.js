@@ -134,7 +134,7 @@ class FinancialAnalysisPage extends Component {
               business={this.props.business}
               appraisalObject={this.props.appraisalObject}
               handleChange={this.props.handleChange}
-              monthsCovered={this.props.values.monthsCovered}
+              monthsCovered={parseInt(this.props.values.monthsCovered)}
               seasonalAdjustment={parseInt(this.props.values.seasonalAdjustment)}
             />
           </Grid>

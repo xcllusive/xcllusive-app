@@ -7,6 +7,7 @@ import numeral from 'numeral'
 import { Form, Header, Grid, Segment, Icon } from 'semantic-ui-react'
 import { updateBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { updateBusiness } from '../../redux/ducks/business'
+import moment from 'moment'
 
 const EditBusinessPriceForm = ({
   values,
@@ -15,7 +16,8 @@ const EditBusinessPriceForm = ({
   handleSubmit,
   isValid,
   isSubmitting,
-  isLoadingUpdate
+  isLoadingUpdate,
+  isUserClientManager
 }) => (
   <Form size="tiny" onSubmit={handleSubmit}>
     <Grid divided>
@@ -144,11 +146,14 @@ const EditBusinessPriceForm = ({
               value={values.settlementDate}
             />
             <Form.Input
-              readOnly
+              readOnly={!isUserClientManager}
+              // disabled={!isUserClientManager}
               label="Sold Price"
               name="soldPrice"
               autoComplete="soldPrice"
               value={values.soldPrice}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -206,7 +211,8 @@ EditBusinessPriceForm.propTypes = {
   isValid: PropTypes.bool,
   isSubmitting: PropTypes.bool,
   updateBusinessFromBuyer: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
+  isUserClientManager: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -223,7 +229,7 @@ const mapPropsToValues = props => {
       depositeTaken: props.business.depositeTaken ? numeral(props.business.depositeTaken).format('0,0.00') : 0,
       depositeTakenDate: props.business.depositeTakenDate ? props.business.depositeTakenDate : '',
       commissionSold: props.business.commissionSold ? numeral(props.business.commissionSold).format('0,0.00') : 0,
-      settlementDate: props.business.settlementDate ? props.business.settlementDate : '',
+      settlementDate: props.business.settlementDate ? moment(props.business.settlementDate).format('DD/MM/YYYY') : '',
       soldPrice: props.business.soldPrice ? numeral(props.business.soldPrice).format('0,0.00') : 0,
       attachedPurchaser: props.business.attachedPurchaser ? props.business.attachedPurchaser : 0,
       searchNote: props.business.searchNote ? props.business.searchNote : '',
