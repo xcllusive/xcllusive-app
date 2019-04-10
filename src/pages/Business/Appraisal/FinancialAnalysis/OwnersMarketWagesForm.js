@@ -172,7 +172,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               </CustomColumn>
               <CustomColumn textAlign="center">
                 <Form size="tiny">
-                  <Form.Field>
+                  <Form.Field style={{ textAlign: 'right' }}>
                     <Form.Input
                       name="owner1HoursPWeek"
                       autoComplete="owner1HoursPWeek"

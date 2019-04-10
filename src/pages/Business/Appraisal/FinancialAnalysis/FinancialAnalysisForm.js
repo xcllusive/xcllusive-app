@@ -1,9 +1,13 @@
 import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import { Checkbox, Label, Grid, Button, Icon, Input, Form } from 'semantic-ui-react'
 import numeral from 'numeral'
 
+import { calcAnnualisedWhenChangeMonthsAndSeasonal } from '../../../../redux/ducks/appraisal'
 import CustomColumn from '../../../../components/content/CustomGridColumn'
+// import { connect } from 'http2'
 
 const FinancialAnalysisForm = ({
   values,
@@ -17,7 +21,8 @@ const FinancialAnalysisForm = ({
   appraisalObject,
   sendCalcs,
   setFieldValue,
-  setFieldTouched
+  setFieldTouched,
+  calcAnnualisedWhenChangeMonthsAndSeasonal
 }) => {
   const _calcGrossMargin = (sales, cogs) => sales - cogs
 
@@ -71,7 +76,7 @@ const FinancialAnalysisForm = ({
         _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
       )
     }
-    this.props.calcAnnualisedWhenChangeMonthsAndSeasonal(values.monthsCovered, values.seasonalAdjustment)
+    calcAnnualisedWhenChangeMonthsAndSeasonal(values.monthsCovered, values.seasonalAdjustment)
   }
 
   const _handleChangeCheckBox = (e, { name, row, checked }) => {
@@ -463,7 +468,7 @@ const FinancialAnalysisForm = ({
           style={{
             backgroundColor: 'white'
           }}
-          textAlign="center"
+          textAlign="right"
         >
           {/* {_calcAnnualised(values.sales6, values.monthsCovered, values.seasonalAdjustment)} */}
           {numeral(values.calcAnnualised1).format('$0,0')}
@@ -563,7 +568,7 @@ const FinancialAnalysisForm = ({
           style={{
             backgroundColor: 'white'
           }}
-          textAlign="center"
+          textAlign="right"
         >
           {/* {_calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment)} */}
           {numeral(values.calcAnnualised2).format('$0,0')}
@@ -577,12 +582,12 @@ const FinancialAnalysisForm = ({
           <b> Gross Margin </b>
         </CustomColumn>
         {/* <CustomColumn textAlign="center">{_calcGrossMargin(values.sales1, values.cogs1)} %</CustomColumn> */}
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossMargin1).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossMargin2).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossMargin3).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossMargin4).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossMargin5).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossMargin6).format('$0,0')} </CustomColumn>{' '}
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin1).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin2).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin3).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin4).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin5).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin6).format('$0,0')} </CustomColumn>{' '}
         <CustomColumn textAlign="center" />
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -591,12 +596,12 @@ const FinancialAnalysisForm = ({
           <b> Gross Margin % </b>
         </CustomColumn>
         {/* <CustomColumn textAlign="center">{_calcGrossMarginPerc(values.sales1, values.cogs1)} %</CustomColumn> */}
-        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc1)} %</CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc2)} %</CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc3)} %</CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc4)} %</CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc5)} %</CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcGrossMarginPerc6)} %</CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc1)} %</CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc2)} %</CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc3)} %</CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc4)} %</CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc5)} %</CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc6)} %</CustomColumn>
         <CustomColumn textAlign="center" />
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -703,7 +708,7 @@ const FinancialAnalysisForm = ({
           style={{
             backgroundColor: 'white'
           }}
-          textAlign="center"
+          textAlign="right"
         >
           {/* {_calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)} */}
           {numeral(values.calcAnnualised5).format('$0,0')}
@@ -724,12 +729,12 @@ const FinancialAnalysisForm = ({
         {/* <CustomColumn textAlign="center">
                       {_calcGrossProfit(_calcGrossMargin(values.sales1, values.cogs1), values.otherIncome1)}
                       </CustomColumn> */}
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossProfit1).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossProfit2).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossProfit3).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossProfit4).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossProfit5).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcGrossProfit6).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit1).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit2).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit3).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit4).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit5).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit6).format('$0,0')} </CustomColumn>
         <CustomColumn textAlign="center" />
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -824,7 +829,7 @@ const FinancialAnalysisForm = ({
           style={{
             backgroundColor: 'white'
           }}
-          textAlign="center"
+          textAlign="right"
         >
           {/* {_calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)} */}
           {numeral(values.calcAnnualised7).format('$0,0')}
@@ -840,14 +845,14 @@ const FinancialAnalysisForm = ({
         {/* <CustomColumn textAlign="center">
                                   {_calcOperatingProfit(values.sales1, values.cogs1, values.otherIncome1, values.expenses1, '1')}
                                 </CustomColumn> */}
-        <CustomColumn textAlign="center"> {numeral(values.calcOperatingProfit1).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcOperatingProfit2).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcOperatingProfit3).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcOperatingProfit4).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcOperatingProfit5).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center"> {numeral(values.calcOperatingProfit6).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center" />
-        <CustomColumn textAlign="center" />
+        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit1).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit2).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit3).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit4).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit5).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit6).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right" />
+        <CustomColumn textAlign="right" />
       </Grid.Row>
       <Grid.Row columns={9}>
         <CustomColumn>
@@ -856,12 +861,12 @@ const FinancialAnalysisForm = ({
         {/* <CustomColumn textAlign="center">
                                   {_calcOperatingProfitPerc(values.sales1, values.cogs1, values.otherIncome1, values.expenses1)} %
                                 </CustomColumn> */}
-        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc1)} % </CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc2)} % </CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc3)} % </CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc4)} % </CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc5)} % </CustomColumn>
-        <CustomColumn textAlign="center"> {Math.round(values.calcOperatingProfitPerc6)} % </CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc1)} % </CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc2)} % </CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc3)} % </CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc4)} % </CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc5)} % </CustomColumn>
+        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc6)} % </CustomColumn>
         <CustomColumn textAlign="center" />
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -883,7 +888,17 @@ FinancialAnalysisForm.propTypes = {
   sendCalcs: PropTypes.func,
   handleChangeCheckBox: PropTypes.func,
   handleChangeCheckBoxPdf: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func
 }
 
-export default FinancialAnalysisForm
+const mapStateToProps = state => ({
+  // isLoadingUpdate: state.business.update.isLoading
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({ calcAnnualisedWhenChangeMonthsAndSeasonal }, dispatch)
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FinancialAnalysisForm)

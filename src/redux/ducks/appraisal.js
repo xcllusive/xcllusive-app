@@ -125,7 +125,10 @@ const initialState = {
     appraisal: {},
     error: null
   },
-  sendMonthsSeasonal: null
+  sendMonthsSeasonal: {
+    isLoading: false,
+    object: null
+  }
 }
 
 export default function reducer (state = initialState, action) {
@@ -592,11 +595,18 @@ export const calcCompleteSteps = (confirmName, confirm) => async dispatch => {
   dispatch(addTodo(confirmName, confirm))
 }
 
-export const calcAnnualisedWhenChangeMonthsAndSeasonal = (monthtsCovered, seasonalAdjustment) => async dispatch => {
-  dispatch({
-    type: Types.SEND_MONTHS_SEASONAL,
-    payload: { monthtsCovered, seasonalAdjustment }
-  })
+export const calcAnnualisedWhenChangeMonthsAndSeasonal = (monthsCovered, seasonalAdjustment) => async dispatch => {
+  if (monthsCovered && seasonalAdjustment) {
+    dispatch({
+      type: Types.SEND_MONTHS_SEASONAL,
+      payload: { monthsCovered, seasonalAdjustment }
+    })
+  } else {
+    dispatch({
+      type: Types.SEND_MONTHS_SEASONAL,
+      payload: null
+    })
+  }
 }
 
 const addTodo = (confirmName, confirm) => {

@@ -9,7 +9,7 @@ import numeral from 'numeral'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
 
-import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+import { updateAppraisal, calcAnnualisedWhenChangeMonthsAndSeasonal } from '../../../../redux/ducks/appraisal'
 
 class AddbacksAndAdjustmentsForm extends PureComponent {
   constructor (props) {
@@ -62,28 +62,19 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this.props.updateAppraisal(this.props.values, false)
   }
 
-  // static getDerivedStateFromProps (nextProps, prevState) {
-  //   console.log('nextProps', nextProps)
-  //   console.log('prevState', prevState)
-  //   if (
-  //     nextProps.monthsCovered &&
-  //     nextProps.monthsCovered !== prevState.monthsCoveredState &&
-  //     prevState.monthsCoveredState
-  //   ) {
-  //     console.log('funcionou')
-  //   }
-
-  //   return null
-  // }
-
-  componentDidUpdate (nextProps, prevState) {
+  async componentDidUpdate (nextProps, prevState) {
+    // if (
+    //   ((nextProps.monthsCovered || nextProps.monthsCovered.toString() === 'NaN') &&
+    //     this.props.monthsCovered > 0 &&
+    //     nextProps.monthsCovered !== this.props.monthsCovered) ||
+    //   ((nextProps.seasonalAdjustment || nextProps.seasonalAdjustment.toString() === 'NaN') &&
+    //     (this.props.seasonalAdjustment > 0 || this.props.seasonalAdjustment <= -1) &&
+    //     nextProps.seasonalAdjustment !== this.props.seasonalAdjustment)
+    // )
     if (
-      ((nextProps.monthsCovered || nextProps.monthsCovered.toString() === 'NaN') &&
-        this.props.monthsCovered > 0 &&
-        nextProps.monthsCovered !== this.props.monthsCovered) ||
-      ((nextProps.seasonalAdjustment || nextProps.seasonalAdjustment.toString() === 'NaN') &&
-        (this.props.seasonalAdjustment > 0 || this.props.seasonalAdjustment <= -1) &&
-        nextProps.seasonalAdjustment !== this.props.seasonalAdjustment)
+      this.props.monthsCoveredAndSeasonalAdjusment &&
+      this.props.monthsCoveredAndSeasonalAdjusment.monthsCovered &&
+      this.props.monthsCoveredAndSeasonalAdjusment.seasonalAdjustment
     ) {
       for (let row = 1; row <= 30; row++) {
         if (this.props.values[`aaRow${row}YesNo`]) {
@@ -91,12 +82,18 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             `aaRow${row}Year7`,
             this._calcAnnualised(
               this.props.values[`aaRow${row}Year6`],
-              this.props.monthsCovered,
-              this.props.seasonalAdjustment
+              this.props.monthsCoveredAndSeasonalAdjusment.monthsCovered,
+              this.props.monthsCoveredAndSeasonalAdjusment.seasonalAdjustment
             )
           )
+          // totalAdjusment7 = totalAdjusment7 + numeral(this.props.values[`aaRow${row}Year${7}`]).value()
+          // console.log(totalAdjusment7)
         }
       }
+      await this.props.calcAnnualisedWhenChangeMonthsAndSeasonal(null, null)
+      this._setCalcTotalAdjusment()
+      this._calcTotalAdjustedProfit()
+      this._calcAdjustedProfit()
     }
   }
 
@@ -120,6 +117,9 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     } else {
       this.props.setFieldValue(`aaRow${item.row}Year7`, 0)
     }
+    this._setCalcTotalAdjusment()
+    this._calcTotalAdjustedProfit()
+    this._calcAdjustedProfit()
   }
 
   _calcAnnualised = (yearValue, monthsCoveredValue, seasonalAdjustmentValue) => {
@@ -236,18 +236,14 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this.setState({ totalAdjustedProfit7Perc: numeral(totalAdjustedProfit7Perc).format('0,0') })
   }
 
-  _handleChangeAddbackAndAdjusments = (e, row, name) => {
+  _handleChangeAddbackAndAdjusments = async (e, row, name) => {
     e.preventDefault()
-    this._setCalcTotalAdjusment()
-    this._calcTotalAdjustedProfit()
-    this._calcAdjustedProfit()
-
     if (
       (name.length === 11 && name.substring(10, 11) === '6') ||
       (name.length === 12 && name.substring(11, 12) === '6')
     ) {
       if (this.props.values[`aaRow${row}YesNo`]) {
-        this.props.setFieldValue(
+        await this.props.setFieldValue(
           `aaRow${row}Year7`,
           this._calcAnnualised(
             this.props.values[`aaRow${row}Year6`],
@@ -257,6 +253,9 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
         )
       }
     }
+    this._setCalcTotalAdjusment()
+    this._calcTotalAdjustedProfit()
+    this._calcAdjustedProfit()
   }
 
   _calcTotal = column => {
@@ -279,7 +278,6 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
 
   render () {
     const { values, handleChange, handleBlur, financialYear, appraisalObject } = this.props
-
     return (
       <Fragment>
         <Grid.Row
@@ -327,6 +325,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <Grid.Row columns={9} key={key}>
             <CustomColumn>
               <Input
+                size="small"
                 fluid
                 tabIndex={item.tabIndex}
                 name={item.name}
@@ -339,11 +338,13 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             {item.columns.map((subItem, subKey) => (
               <CustomColumn key={subKey}>
                 <Input
+                  size="small"
+                  style={{ textAlign: 'right' }}
                   fluid
                   tabIndex={item.tabIndex}
                   name={subItem.name}
                   autoComplete={subItem.name}
-                  value={`$${values[subItem.name]}`}
+                  value={parseInt(values[subItem.name]) > 0 ? `$${values[subItem.name]}` : ''}
                   onChange={this._handleChangeInputCurrency}
                   onBlur={e => this._handleChangeAddbackAndAdjusments(e, item.row, subItem.name)}
                 />
@@ -355,7 +356,9 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
               }}
               textAlign="center"
             >
-              {numeral(values[`aaRow${item.row}Year7`]).format('$0,0')}
+              {parseInt(values[`aaRow${item.row}Year7`]) > 0
+                ? numeral(values[`aaRow${item.row}Year7`]).format('$0,0')
+                : ''}
             </CustomColumn>
             <CustomColumn textAlign="center">
               <Form.Field
@@ -377,37 +380,37 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <b> Total Adjustments </b>
           </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjusment1} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjusment2} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjusment3} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjusment4} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjusment5} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjusment6} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjusment7} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment1).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment2).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment3).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment4).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment5).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment6).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment7).format('$0,0')} </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
             <b> Total Adjusted Profit INCL.Owners Wages </b>
           </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit1} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit2} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit3} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit4} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit5} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit6} </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit7} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit1).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit2).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit3).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit4).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit5).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit6).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit7).format('$0,0')} </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
             <b> Adjusted Profit % </b>
           </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit1Perc} % </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit2Perc} % </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit3Perc} % </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit4Perc} % </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit5Perc} % </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit6Perc} % </CustomColumn>
-          <CustomColumn textAlign="center"> {this.state.totalAdjustedProfit7Perc} %</CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit1Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit2Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit3Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit4Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit5Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit6Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit7Perc} %</CustomColumn>
         </Grid.Row>
       </Fragment>
     )
@@ -427,7 +430,9 @@ AddbacksAndAdjustmentsForm.propTypes = {
   updateAppraisal: PropTypes.func,
   appraisalObject: PropTypes.object,
   monthsCovered: PropTypes.number,
-  seasonalAdjustment: PropTypes.number
+  seasonalAdjustment: PropTypes.number,
+  monthsCoveredAndSeasonalAdjusment: PropTypes.object,
+  calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -474,14 +479,17 @@ const mapPropsToValues = props => {
   return values
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  monthsCoveredAndSeasonalAdjusment: state.appraisal.sendMonthsSeasonal
+})
 
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      updateAppraisal
+      updateAppraisal,
+      calcAnnualisedWhenChangeMonthsAndSeasonal
     },
     dispatch
   )
