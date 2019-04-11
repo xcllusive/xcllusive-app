@@ -154,10 +154,11 @@ class AddbacksAndAdjustmentsForm extends Component {
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={4}>
               <CustomColumn>Owner 1/New Owner</CustomColumn>
-              <CustomColumn textAlign="center">
+              <CustomColumn>
                 <Form size="tiny">
                   <Form.Field>
                     <Form.Input
+                      style={{ textAlign: 'right' }}
                       name="owner1Position"
                       autoComplete="owner1Position"
                       value={values.owner1Position}
@@ -172,7 +173,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               </CustomColumn>
               <CustomColumn textAlign="center">
                 <Form size="tiny">
-                  <Form.Field style={{ textAlign: 'right' }}>
+                  <Form.Field>
                     <Form.Input
                       name="owner1HoursPWeek"
                       autoComplete="owner1HoursPWeek"

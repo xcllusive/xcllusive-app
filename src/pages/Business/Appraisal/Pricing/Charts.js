@@ -28,7 +28,7 @@ class ChartsPage extends Component {
       const obj1 = {
         year: appraisalObject.year1,
         Sales: appraisalObject.sales1,
-        'Gross Profit': appraisalObject.grossProfit1,
+        'Gross Profit': appraisalObject.calcGrossProfit1,
         'Total Adjusted Profit': appraisalObject.totalAdjustedProfit1
       }
       await this.setState({ graph1: [...this.state.graph1, obj1] })
@@ -37,7 +37,7 @@ class ChartsPage extends Component {
       const obj2 = {
         year: appraisalObject.year2,
         Sales: appraisalObject.sales2,
-        'Gross Profit': appraisalObject.grossProfit2,
+        'Gross Profit': appraisalObject.calcGrossProfit2,
         'Total Adjusted Profit': appraisalObject.totalAdjustedProfit2
       }
       await this.setState({ graph1: [...this.state.graph1, obj2] })
@@ -46,7 +46,7 @@ class ChartsPage extends Component {
       const obj3 = {
         year: appraisalObject.year3,
         Sales: appraisalObject.sales3,
-        'Gross Profit': appraisalObject.grossProfit3,
+        'Gross Profit': appraisalObject.calcGrossProfit3,
         'Total Adjusted Profit': appraisalObject.totalAdjustedProfit3
       }
       await this.setState({ graph1: [...this.state.graph1, obj3] })
@@ -55,7 +55,7 @@ class ChartsPage extends Component {
       const obj4 = {
         year: appraisalObject.year4,
         Sales: appraisalObject.sales4,
-        'Gross Profit': appraisalObject.grossProfit4,
+        'Gross Profit': appraisalObject.calcGrossProfit4,
         'Total Adjusted Profit': appraisalObject.totalAdjustedProfit4
       }
       await this.setState({ graph1: [...this.state.graph1, obj4] })
@@ -64,7 +64,7 @@ class ChartsPage extends Component {
       const obj5 = {
         year: appraisalObject.year5,
         Sales: appraisalObject.sales5,
-        'Gross Profit': appraisalObject.grossProfit5,
+        'Gross Profit': appraisalObject.calcGrossProfit5,
         'Total Adjusted Profit': appraisalObject.totalAdjustedProfit5
       }
       await this.setState({ graph1: [...this.state.graph1, obj5] })
@@ -73,7 +73,7 @@ class ChartsPage extends Component {
       const obj6 = {
         year: appraisalObject.year6,
         Sales: appraisalObject.sales6,
-        'Gross Profit': appraisalObject.grossProfit6,
+        'Gross Profit': appraisalObject.calcGrossProfit6,
         'Total Adjusted Profit': appraisalObject.totalAdjustedProfit6
       }
       await this.setState({ graph1: [...this.state.graph1, obj6] })
@@ -84,48 +84,48 @@ class ChartsPage extends Component {
     if (appraisalObject && appraisalObject.sales1 > 0) {
       const obj1 = {
         year: appraisalObject.year1,
-        'Gross Profit %': appraisalObject.grossMarginPerc1,
-        'Adjusted Profit %': appraisalObject.adjustedProfitPerc1
+        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc1),
+        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc1)
       }
-      await this.setState({ graph1: [...this.state.graph1, obj1] })
+      await this.setState({ graph2: [...this.state.graph2, obj1] })
     }
     if (appraisalObject && appraisalObject.sales2 > 0) {
       const obj2 = {
         year: appraisalObject.year2,
-        'Gross Profit %': appraisalObject.grossMarginPerc2,
-        'Adjusted Profit %': appraisalObject.adjustedProfitPerc2
+        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc2),
+        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc2)
       }
       await this.setState({ graph2: [...this.state.graph2, obj2] })
     }
     if (appraisalObject && appraisalObject.sales3 > 0) {
       const obj3 = {
         year: appraisalObject.year3,
-        'Gross Profit %': appraisalObject.grossMarginPerc3,
-        'Adjusted Profit %': appraisalObject.adjustedProfitPerc3
+        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc3),
+        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc3)
       }
       await this.setState({ graph2: [...this.state.graph2, obj3] })
     }
     if (appraisalObject && appraisalObject.sales4 > 0) {
       const obj4 = {
         year: appraisalObject.year4,
-        'Gross Profit %': appraisalObject.grossMarginPerc4,
-        'Adjusted Profit %': appraisalObject.adjustedProfitPerc4
+        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc4),
+        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc4)
       }
       await this.setState({ graph2: [...this.state.graph2, obj4] })
     }
     if (appraisalObject && appraisalObject.sales5 > 0) {
       const obj5 = {
         year: appraisalObject.year5,
-        'Gross Profit %': appraisalObject.grossMarginPerc5,
-        'Adjusted Profit %': appraisalObject.adjustedProfitPerc5
+        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc5),
+        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc5)
       }
       await this.setState({ graph2: [...this.state.graph2, obj5] })
     }
     if (appraisalObject && appraisalObject.sales6 > 0) {
       const obj6 = {
         year: appraisalObject.year6,
-        'Gross Profit %': appraisalObject.grossMarginPerc6,
-        'Adjusted Profit %': appraisalObject.adjustedProfitPerc6
+        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc6),
+        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc6)
       }
       await this.setState({ graph2: [...this.state.graph2, obj6] })
     }

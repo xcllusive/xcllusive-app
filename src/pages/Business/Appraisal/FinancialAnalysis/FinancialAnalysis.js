@@ -242,6 +242,7 @@ const mapPropsToValues = props => ({
   calcGrossMargin4: props.appraisalObject ? props.appraisalObject.calcGrossMargin4 : 0,
   calcGrossMargin5: props.appraisalObject ? props.appraisalObject.calcGrossMargin5 : 0,
   calcGrossMargin6: props.appraisalObject ? props.appraisalObject.calcGrossMargin6 : 0,
+  calcGrossMargin7: props.appraisalObject ? props.appraisalObject.calcGrossMargin7 : 0,
   calcGrossMarginPerc1: props.appraisalObject ? props.appraisalObject.calcGrossMarginPerc1 : 0,
   calcGrossMarginPerc2: props.appraisalObject ? props.appraisalObject.calcGrossMarginPerc2 : 0,
   calcGrossMarginPerc3: props.appraisalObject ? props.appraisalObject.calcGrossMarginPerc3 : 0,
@@ -275,7 +276,8 @@ const mapPropsToValues = props => ({
   renderPdfYear3: props.appraisalObject ? props.appraisalObject.renderPdfYear3 : false,
   renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : false,
   renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : false,
-  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false
+  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false,
+  confirmFinancialAnalysis: props.appraisalObject ? props.appraisalObject.confirmFinancialAnalysis : false
 })
 
 const validationSchema = Yup.object().shape({})

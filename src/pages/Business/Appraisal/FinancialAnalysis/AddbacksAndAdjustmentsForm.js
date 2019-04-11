@@ -59,6 +59,20 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
         this.props.values[`aaRow${row}Year7`].toString()
       )
     }
+    this.props.values.adjustedProfitPerc1 = this.state.totalAdjustedProfit1Perc
+    this.props.values.adjustedProfitPerc2 = this.state.totalAdjustedProfit2Perc
+    this.props.values.adjustedProfitPerc3 = this.state.totalAdjustedProfit3Perc
+    this.props.values.adjustedProfitPerc4 = this.state.totalAdjustedProfit4Perc
+    this.props.values.adjustedProfitPerc5 = this.state.totalAdjustedProfit5Perc
+    this.props.values.adjustedProfitPerc6 = this.state.totalAdjustedProfit6Perc
+
+    this.props.values.totalAdjustedProfit1 = this._replaceDollarAndComma(this.state.totalAdjustedProfit1)
+    this.props.values.totalAdjustedProfit2 = this._replaceDollarAndComma(this.state.totalAdjustedProfit2)
+    this.props.values.totalAdjustedProfit3 = this._replaceDollarAndComma(this.state.totalAdjustedProfit3)
+    this.props.values.totalAdjustedProfit4 = this._replaceDollarAndComma(this.state.totalAdjustedProfit4)
+    this.props.values.totalAdjustedProfit5 = this._replaceDollarAndComma(this.state.totalAdjustedProfit5)
+    this.props.values.totalAdjustedProfit6 = this._replaceDollarAndComma(this.state.totalAdjustedProfit6)
+
     this.props.updateAppraisal(this.props.values, false)
   }
 
@@ -276,8 +290,17 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this.props.setFieldValue(name, numeral(value).format('0,0') || 0)
   }
 
+  _handleChangeDescription = async (name, data, item) => {
+    await this.props.setFieldValue(name, data.value)
+    if (data.value.length > 0) {
+      this.props.setFieldValue(`aaRow${item.row}YesNo`, true)
+    } else {
+      this.props.setFieldValue(`aaRow${item.row}YesNo`, false)
+    }
+  }
+
   render () {
-    const { values, handleChange, handleBlur, financialYear, appraisalObject } = this.props
+    const { values, handleBlur, financialYear, appraisalObject } = this.props
     return (
       <Fragment>
         <Grid.Row
@@ -331,7 +354,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
                 name={item.name}
                 autoComplete={item.name}
                 value={values[item.name]}
-                onChange={handleChange}
+                onChange={(e, data) => this._handleChangeDescription(item.name, data, item)}
                 onBlur={handleBlur}
               />
             </CustomColumn>
