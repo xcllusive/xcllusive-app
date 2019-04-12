@@ -249,6 +249,7 @@ const mapPropsToValues = props => ({
   calcGrossMarginPerc4: props.appraisalObject ? props.appraisalObject.calcGrossMarginPerc4 : 0,
   calcGrossMarginPerc5: props.appraisalObject ? props.appraisalObject.calcGrossMarginPerc5 : 0,
   calcGrossMarginPerc6: props.appraisalObject ? props.appraisalObject.calcGrossMarginPerc6 : 0,
+  calcGrossMarginPerc7: props.appraisalObject ? props.appraisalObject.calcGrossMarginPerc7 : 0,
   calcGrossProfit1: props.appraisalObject ? props.appraisalObject.calcGrossProfit1 : 0,
   calcGrossProfit2: props.appraisalObject ? props.appraisalObject.calcGrossProfit2 : 0,
   calcGrossProfit3: props.appraisalObject ? props.appraisalObject.calcGrossProfit3 : 0,
