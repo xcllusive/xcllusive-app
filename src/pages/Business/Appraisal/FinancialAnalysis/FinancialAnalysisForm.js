@@ -197,7 +197,6 @@ const FinancialAnalysisForm = ({
           _calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment)
         )
         if (values.salesYesNo) {
-          // aqui
           setFieldValue(
             `calcGrossMargin${7}`,
             _calcGrossMargin(
@@ -252,12 +251,20 @@ const FinancialAnalysisForm = ({
           `calcAnnualised${row}`,
           _calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)
         )
+        setFieldValue(
+          `calcGrossProfit${7}`,
+          _calcGrossProfit(
+            values.calcGrossMargin7,
+            _calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)
+          )
+        )
       } else {
         if (values.otherIncome6 > 0) {
           setFieldValue(`calcAnnualised${row}`, values.otherIncome6)
         } else {
           setFieldValue(`calcAnnualised${row}`, 0)
         }
+        setFieldValue(`calcGrossProfit${7}`, _calcGrossProfit(values.calcGrossMargin7, values.otherIncome6))
       }
     }
     if (row === 7) {
@@ -266,12 +273,35 @@ const FinancialAnalysisForm = ({
           `calcAnnualised${row}`,
           _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
         )
+        setFieldValue(
+          `calcOperatingProfit${7}`,
+          values.calcGrossProfit7 - _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
+        )
+        setFieldValue(
+          `calcOperatingProfitPerc${7}`,
+          _calcOperatingProfitPerc(
+            values.salesYesNo ? values.calcAnnualised1 : values.sales6,
+            values.cogsYesNo ? values.calcAnnualised2 : values.cogs6,
+            values.otherIncomeYesNo ? values.calcAnnualised5 : values.otherIncome6,
+            _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
+          )
+        )
       } else {
         if (values.expenses6 > 0) {
           setFieldValue(`calcAnnualised${row}`, values.expenses6)
         } else {
           setFieldValue(`calcAnnualised${row}`, 0)
         }
+        setFieldValue(`calcOperatingProfit${7}`, values.calcGrossProfit7 - values.expenses6)
+        setFieldValue(
+          `calcOperatingProfitPerc${7}`,
+          _calcOperatingProfitPerc(
+            values.salesYesNo ? values.calcAnnualised1 : values.sales6,
+            values.cogsYesNo ? values.calcAnnualised2 : values.cogs6,
+            values.otherIncomeYesNo ? values.calcAnnualised5 : values.otherIncome6,
+            values.expenses6
+          )
+        )
       }
     }
   }
@@ -288,7 +318,7 @@ const FinancialAnalysisForm = ({
           _calcAnnualised(values.sales6, values.monthsCovered, values.seasonalAdjustment)
         )
       } else {
-        setFieldValue(`calcAnnualised${1}`, 0)
+        setFieldValue(`calcAnnualised${1}`, values.sales6)
       }
     }
 
@@ -329,7 +359,7 @@ const FinancialAnalysisForm = ({
           _calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment)
         )
       } else {
-        setFieldValue(`calcAnnualised${2}`, 0)
+        setFieldValue(`calcAnnualised${2}`, values.cogs6)
       }
     }
     e.preventDefault()
@@ -369,7 +399,7 @@ const FinancialAnalysisForm = ({
           _calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)
         )
       } else {
-        setFieldValue(`calcAnnualised${5}`, 0)
+        setFieldValue(`calcAnnualised${5}`, values.otherIncome6)
       }
     }
     e.preventDefault()
@@ -388,6 +418,20 @@ const FinancialAnalysisForm = ({
     setFieldValue(`calcGrossProfit${column}`, _calcGrossProfit(_calcGrossMargin(sales, cogs), otherIncome))
     setFieldValue(`calcOperatingProfit${column}`, _calcOperatingProfit(sales, cogs, otherIncome, expense, column))
     setFieldValue(`calcOperatingProfitPerc${column}`, _calcOperatingProfitPerc(sales, cogs, otherIncome, expense))
+
+    if (column === 6) {
+      if (values.otherIncomeYesNo) {
+        setFieldValue(
+          `calcGrossProfit${7}`,
+          _calcGrossProfit(
+            values.calcGrossMargin7,
+            _calcAnnualised(values.otherIncome6, values.monthsCovered, values.seasonalAdjustment)
+          )
+        )
+      } else {
+        setFieldValue(`calcGrossProfit${7}`, _calcGrossProfit(values.calcGrossMargin7, otherIncome))
+      }
+    }
   }
 
   const _handleChangeExpense = (e, column) => {
@@ -398,7 +442,7 @@ const FinancialAnalysisForm = ({
           _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
         )
       } else {
-        setFieldValue(`calcAnnualised${7}`, 0)
+        setFieldValue(`calcAnnualised${7}`, values.expenses6)
       }
     }
     e.preventDefault()
@@ -417,6 +461,25 @@ const FinancialAnalysisForm = ({
     setFieldValue(`calcGrossProfit${column}`, _calcGrossProfit(_calcGrossMargin(sales, cogs), otherIncome))
     setFieldValue(`calcOperatingProfit${column}`, _calcOperatingProfit(sales, cogs, otherIncome, expense, column))
     setFieldValue(`calcOperatingProfitPerc${column}`, _calcOperatingProfitPerc(sales, cogs, otherIncome, expense))
+    if (column === 6) {
+      if (values.expensesYesNo) {
+        setFieldValue(
+          `calcOperatingProfit${7}`,
+          values.calcGrossProfit7 - _calcAnnualised(values.expenses6, values.monthsCovered, values.seasonalAdjustment)
+        )
+      } else {
+        setFieldValue(`calcOperatingProfit${7}`, values.calcGrossProfit7 - values.expenses6)
+      }
+      setFieldValue(
+        `calcOperatingProfitPerc${7}`,
+        _calcOperatingProfitPerc(
+          values.salesYesNo ? values.calcAnnualised1 : values.sales6,
+          values.cogsYesNo ? values.calcAnnualised2 : values.cogs6,
+          values.otherIncomeYesNo ? values.calcAnnualised5 : values.otherIncome6,
+          values.expensesYesNo ? values.calcAnnualised7 : values.expenses6
+        )
+      )
+    }
   }
 
   const _handleChangeCheckBoxPdf = (e, { name }) => {
@@ -905,7 +968,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit4).format('$0,0')} </CustomColumn>
         <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit5).format('$0,0')} </CustomColumn>
         <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit6).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="center" />
+        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit7).format('$0,0')} </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
       <Grid.Row
@@ -1021,7 +1084,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit4).format('$0,0')} </CustomColumn>
         <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit5).format('$0,0')} </CustomColumn>
         <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit6).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right" />
+        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit7).format('$0,0')} </CustomColumn>
         <CustomColumn textAlign="right" />
       </Grid.Row>
       <Grid.Row columns={9}>
@@ -1037,7 +1100,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc4)} % </CustomColumn>
         <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc5)} % </CustomColumn>
         <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc6)} % </CustomColumn>
-        <CustomColumn textAlign="center" />
+        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc7)} % </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
     </Fragment>
