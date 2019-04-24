@@ -69,12 +69,12 @@ class ChartsPage extends Component {
       }
       await this.setState({ graph1: [...this.state.graph1, obj5] })
     }
-    if (appraisalObject && appraisalObject.sales6 > 0) {
+    if (appraisalObject && appraisalObject.sales7 > 0) {
       const obj6 = {
         year: appraisalObject.year6,
-        Sales: appraisalObject.sales6,
-        'Gross Profit': appraisalObject.calcGrossProfit6,
-        'Total Adjusted Profit': appraisalObject.totalAdjustedProfit6
+        Sales: appraisalObject.sales7,
+        'Gross Profit': appraisalObject.calcGrossProfit7,
+        'Total Adjusted Profit': appraisalObject.totalAdjustedProfit7
       }
       await this.setState({ graph1: [...this.state.graph1, obj6] })
     }
@@ -121,11 +121,11 @@ class ChartsPage extends Component {
       }
       await this.setState({ graph2: [...this.state.graph2, obj5] })
     }
-    if (appraisalObject && appraisalObject.sales6 > 0) {
+    if (appraisalObject && appraisalObject.sales7 > 0) {
       const obj6 = {
         year: appraisalObject.year6,
-        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc6),
-        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc6)
+        'Gross Profit %': Math.round(appraisalObject.calcOperatingProfitPerc7),
+        'Adjusted Profit %': Math.round(appraisalObject.adjustedProfitPerc7)
       }
       await this.setState({ graph2: [...this.state.graph2, obj6] })
     }

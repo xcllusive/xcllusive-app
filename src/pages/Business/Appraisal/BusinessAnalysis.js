@@ -43,6 +43,7 @@ class BusinessAnalysisPage extends Component {
   }
 
   componentWillUnmount () {
+    console.log('confirm', this.props.values)
     this.props.updateAppraisal(this.props.values)
   }
 

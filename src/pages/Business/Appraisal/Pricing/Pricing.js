@@ -291,25 +291,25 @@ class PricingPage extends Component {
   }
 
   _ebitdaLastYear = appraisalObject => {
-    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0 && appraisalObject.renderPdfYear7) {
       return appraisalObject.totalAdjustedProfit7 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) {
-      return appraisalObject.totalAdjustedProfit6 - this._totalWages(appraisalObject)
-    }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0) {
+    // if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) {
+    //   return appraisalObject.totalAdjustedProfit6 - this._totalWages(appraisalObject)
+    // }
+    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0 && appraisalObject.renderPdfYear5) {
       return appraisalObject.totalAdjustedProfit5 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0 && appraisalObject.renderPdfYear4) {
       return appraisalObject.totalAdjustedProfit4 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0 && appraisalObject.renderPdfYear3) {
       return appraisalObject.totalAdjustedProfit3 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0 && appraisalObject.renderPdfYear2) {
       return appraisalObject.totalAdjustedProfit2 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0 && appraisalObject.renderPdfYear1) {
       return appraisalObject.totalAdjustedProfit1 - this._totalWages(appraisalObject)
     }
   }
@@ -318,37 +318,37 @@ class PricingPage extends Component {
     let count = 0
     let totalYear = 0
 
-    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0 && appraisalObject.renderPdfYear7) {
       count = count + 1
       totalYear = totalYear + appraisalObject.totalAdjustedProfit7
     }
 
-    if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) {
-      count = count + 1
-      totalYear = totalYear + appraisalObject.totalAdjustedProfit6
-    }
+    // if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) {
+    //   count = count + 1
+    //   totalYear = totalYear + appraisalObject.totalAdjustedProfit6
+    // }
 
-    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0 && appraisalObject.renderPdfYear5) {
       count = count + 1
       totalYear = totalYear + appraisalObject.totalAdjustedProfit5
     }
 
-    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0 && appraisalObject.renderPdfYear4) {
       count = count + 1
       totalYear = totalYear + appraisalObject.totalAdjustedProfit4
     }
 
-    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0 && appraisalObject.renderPdfYear3) {
       count = count + 1
       totalYear = totalYear + appraisalObject.totalAdjustedProfit3
     }
 
-    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0 && appraisalObject.renderPdfYear2) {
       count = count + 1
       totalYear = totalYear + appraisalObject.totalAdjustedProfit2
     }
 
-    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0 && appraisalObject.renderPdfYear1) {
       count = count + 1
       totalYear = totalYear + appraisalObject.totalAdjustedProfit1
     }
@@ -384,37 +384,37 @@ class PricingPage extends Component {
   }
 
   _pebitdaLastYear = appraisalObject => {
-    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0 && appraisalObject.renderPdfYear7) {
       return (
         appraisalObject.totalAdjustedProfit7 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
       )
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) {
-      return (
-        appraisalObject.totalAdjustedProfit6 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
-      )
-    }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0) {
+    // if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) {
+    //   return (
+    //     appraisalObject.totalAdjustedProfit6 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
+    //   )
+    // }
+    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0 && appraisalObject.renderPdfYear5) {
       return (
         appraisalObject.totalAdjustedProfit5 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
       )
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0 && appraisalObject.renderPdfYear4) {
       return (
         appraisalObject.totalAdjustedProfit4 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
       )
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0 && appraisalObject.renderPdfYear3) {
       return (
         appraisalObject.totalAdjustedProfit3 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
       )
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0 && appraisalObject.renderPdfYear2) {
       return (
         appraisalObject.totalAdjustedProfit2 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
       )
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0 && appraisalObject.renderPdfYear1) {
       return (
         appraisalObject.totalAdjustedProfit1 - (this._totalWages(appraisalObject) - appraisalObject.owner1AnnualWage)
       )
@@ -442,13 +442,13 @@ class PricingPage extends Component {
   }
 
   _turnOver = appraisalObject => {
-    if (appraisalObject && appraisalObject.sales7 > 0) return appraisalObject.sales7
-    if (appraisalObject && appraisalObject.sales6 > 0) return appraisalObject.sales6
-    if (appraisalObject && appraisalObject.sales5 > 0) return appraisalObject.sales5
-    if (appraisalObject && appraisalObject.sales4 > 0) return appraisalObject.sales4
-    if (appraisalObject && appraisalObject.sales3 > 0) return appraisalObject.sales3
-    if (appraisalObject && appraisalObject.sales2 > 0) return appraisalObject.sales2
-    if (appraisalObject && appraisalObject.sales1 > 0) return appraisalObject.sales1
+    if (appraisalObject && appraisalObject.sales7 > 0 && appraisalObject.renderPdfYear7) return appraisalObject.sales7
+    // if (appraisalObject && appraisalObject.sales6 > 0) return appraisalObject.sales6
+    if (appraisalObject && appraisalObject.sales5 > 0 && appraisalObject.renderPdfYear5) return appraisalObject.sales5
+    if (appraisalObject && appraisalObject.sales4 > 0 && appraisalObject.renderPdfYear4) return appraisalObject.sales4
+    if (appraisalObject && appraisalObject.sales3 > 0 && appraisalObject.renderPdfYear3) return appraisalObject.sales3
+    if (appraisalObject && appraisalObject.sales2 > 0 && appraisalObject.renderPdfYear2) return appraisalObject.sales2
+    if (appraisalObject && appraisalObject.sales1 > 0 && appraisalObject.renderPdfYear1) return appraisalObject.sales1
   }
 
   _handleChangeSlider = async (value, name) => {
@@ -618,7 +618,6 @@ class PricingPage extends Component {
 
   render () {
     const { appraisalObject, values, handleChange, handleBlur, errors, touched } = this.props
-    // const {} = this.state
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -711,11 +710,9 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMEbitdaLastYear).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
-                    ? numeral(this._ebitdaLastYear(appraisalObject) * appraisalObject.sumMEbitdaLastYear).format(
-                      '$0,0.[99]'
-                    )
+                    ? numeral(this._ebitdaLastYear(appraisalObject) * appraisalObject.sumMEbitdaLastYear).format('$0,0')
                     : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -735,7 +732,7 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMEbitdaAvg).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
                     ? numeral(this._ebitdaAvg(appraisalObject) * appraisalObject.sumMEbitdaAvg).format('$0,0')
                     : 0}
@@ -757,10 +754,10 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMPebitdaLastYear).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
                     ? numeral(this._pebitdaLastYear(appraisalObject) * appraisalObject.sumMPebitdaLastYear).format(
-                      '$0,0.[99]'
+                      '$0,0'
                     )
                     : 0}
                 </Grid.Column>
@@ -781,7 +778,7 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMPebitdaAvg).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
                     ? numeral(this._pebitdaAvg(appraisalObject) * appraisalObject.sumMPebitdaAvg).format('$0,0')
                     : 0}
@@ -803,7 +800,7 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMEbitdaLastYearWithStock).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
                     ? numeral(
                       this._ebitdaLastYear(appraisalObject) * appraisalObject.sumMEbitdaLastYearWithStock
@@ -827,11 +824,9 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMEbitdaAvgWithStock).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
-                    ? numeral(this._ebitdaAvg(appraisalObject) * appraisalObject.sumMEbitdaAvgWithStock).format(
-                      '$0,0.[99]'
-                    )
+                    ? numeral(this._ebitdaAvg(appraisalObject) * appraisalObject.sumMEbitdaAvgWithStock).format('$0,0')
                     : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -851,7 +846,7 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMPebitdaLastYearWithStock).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
                     ? numeral(
                       this._pebitdaLastYear(appraisalObject) * appraisalObject.sumMPebitdaLastYearWithStock
@@ -875,10 +870,10 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMPebitdaAvgWithStock).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
                     ? numeral(this._pebitdaAvg(appraisalObject) * appraisalObject.sumMPebitdaAvgWithStock).format(
-                      '$0,0.[99]'
+                      '$0,0'
                     )
                     : 0}
                 </Grid.Column>
@@ -899,7 +894,7 @@ class PricingPage extends Component {
                 <Grid.Column textAlign="center">
                   {appraisalObject ? numeral(appraisalObject.sumMTO).format('0,0.[99]') : 0}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject
                     ? numeral(this._turnOver(appraisalObject) * appraisalObject.sumMTO).format('$0,0')
                     : 0}
@@ -919,7 +914,7 @@ class PricingPage extends Component {
                   </Form>
                 </Grid.Column>
                 <Grid.Column textAlign="center" />
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   {appraisalObject ? numeral(this._assetsValue(appraisalObject)).format('$0,0') : 0}
                 </Grid.Column>
               </Grid.Row>
@@ -937,11 +932,12 @@ class PricingPage extends Component {
                   </Form>
                 </Grid.Column>
                 <Grid.Column />
-                <Grid.Column>
+                <Grid.Column textAlign="right">
                   <Form>
                     <Form.Group>
                       <Form.Field width={5}>
                         <Form.Input
+                          style={{ textAlign: 'right' }}
                           name="agreedValue"
                           value={numeral(values.agreedValue).format('$0,0')}
                           autoComplete="agreedValue"
@@ -985,7 +981,7 @@ class PricingPage extends Component {
                     </Grid.Column>
                   </Grid.Row>
                   <Grid.Row columns={14}>
-                    <Grid.Column textAlign="left">
+                    <Grid.Column style={{ paddingLeft: '0px' }} textAlign="left">
                       {values.pricingMethod === 10 || values.pricingMethod === 11
                         ? ''
                         : numeral(this._pricingMethod(values.pricingMethod, appraisalObject)).format('$0,0')}
@@ -997,23 +993,23 @@ class PricingPage extends Component {
                         : numeral(this._comparableMultiplier(values.pricingMethod, appraisalObject)).format('0,0.[99]')}
                     </Grid.Column>
                     <Grid.Column>{values.pricingMethod === 10 || values.pricingMethod === 11 ? '' : '='}</Grid.Column>
-                    <Grid.Column textAlign="left">
+                    <Grid.Column style={{ paddingLeft: '2px' }} textAlign="left">
                       {numeral(this._priceBasedOnComparable(values.pricingMethod, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>+</Grid.Column>
-                    <Grid.Column textAlign="left">
+                    <Grid.Column style={{ paddingLeft: '2px' }} textAlign="left">
                       {numeral(this._riskPremium(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>+</Grid.Column>
-                    <Grid.Column textAlign="left">
+                    <Grid.Column style={{ paddingLeft: '2px' }} textAlign="left">
                       {numeral(this._marketPremium(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>+</Grid.Column>
-                    <Grid.Column textAlign="left">
+                    <Grid.Column style={{ paddingLeft: '2px' }} textAlign="left">
                       {numeral(this._negotiationPremium(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column>=</Grid.Column>
-                    <Grid.Column textAlign="left">
+                    <Grid.Column style={{ paddingLeft: '2px' }} textAlign="left">
                       {numeral(this._askingPrice(values, appraisalObject)).format('$0,0')}
                     </Grid.Column>
                     <Grid.Column textAlign="left">

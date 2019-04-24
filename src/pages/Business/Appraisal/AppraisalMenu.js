@@ -289,18 +289,20 @@ class AppraisalMenuPage extends Component {
         ) : null}
         {this.state.activeItem === 'Pricing' ? (
           <Segment>
-            {appraisal && appraisal.id && appraisal.comparableDataSelectedList !== null ? (
-              <Pricing
-                business={business}
-                appraisalObject={appraisal}
-                confirmsCompleteSteps={this.updateCompleteSteps}
-                history={this.props.history}
-              />
-            ) : (
-              <Label style={{ textAlign: 'center' }} tag size="large" color="blue">
+            {appraisal &&
+            appraisal.id &&
+            (appraisal.comparableDataSelectedList !== null && appraisal.comparableDataSelectedList !== '[]') ? (
+                <Pricing
+                  business={business}
+                  appraisalObject={appraisal}
+                  confirmsCompleteSteps={this.updateCompleteSteps}
+                  history={this.props.history}
+                />
+              ) : (
+                <Label style={{ textAlign: 'center' }} tag size="large" color="blue">
                 To access this section you must go back to [Comparable Data] and make your selected list!
-              </Label>
-            )}
+                </Label>
+              )}
           </Segment>
         ) : null}
         {this.state.activeItem === 'Notes And Assumptions' ? (
