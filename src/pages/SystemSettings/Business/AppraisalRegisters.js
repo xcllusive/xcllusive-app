@@ -65,6 +65,7 @@ class AppraisalRegisters extends Component {
   }
 
   _handlePaginationChange = (e, { activePage }, appraisalRegisterType) => {
+    console.log(appraisalRegisterType)
     this.props.listAppraisalRegister(appraisalRegisterType, 5, activePage)
   }
 
@@ -172,8 +173,8 @@ class AppraisalRegisters extends Component {
               <Pagination
                 size="mini"
                 onPageChange={(e, data) => this._handlePaginationChange(e, data, 'risks')}
-                defaultActivePage={this.props.financialInfoSourceOptions.activePage}
-                totalPages={this.props.financialInfoSourceOptions.pages}
+                defaultActivePage={this.props.risksOptions.activePage}
+                totalPages={this.props.risksOptions.pages}
                 firstItem={null}
                 lastItem={null}
               />

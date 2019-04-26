@@ -37,13 +37,12 @@ class BusinessAnalysisPage extends Component {
     this.props.listAppraisalRegister('risks', 10)
     this.props.listAppraisalRegister('valueDrivers', 10)
     this.props.listAppraisalRegister('criticalIssues', 10)
-    this.props.listAppraisalRegister('descriptionBusinessRisk')
-    this.props.listAppraisalRegister('descriptionMarket')
+    this.props.listAppraisalRegister('descriptionBusinessRisk', 11)
+    this.props.listAppraisalRegister('descriptionMarket', 11)
     this._attachQuillRefs()
   }
 
   componentWillUnmount () {
-    console.log('confirm', this.props.values)
     this.props.updateAppraisal(this.props.values)
   }
 
@@ -86,11 +85,19 @@ class BusinessAnalysisPage extends Component {
   }
 
   _insertOnTextArea = (name, text) => {
-    this.props.setFieldValue(name, this.props.values[name] === '' ? text : `${this.props.values[name]}\n${text}`)
+    if (this.props.values[name] === '<p><br></p>') {
+      this.props.setFieldValue(name, text)
+    } else {
+      this.props.setFieldValue(name, this.props.values[name] === '' ? text : `${this.props.values[name]}\n${text}`)
+    }
   }
 
   _handleChangeSlider = (value, name) => {
     this.props.setFieldValue(name, value)
+  }
+
+  _handlePaginationChange = (e, { activePage }, type) => {
+    this.props.listAppraisalRegister(type, 10, activePage)
   }
 
   render () {

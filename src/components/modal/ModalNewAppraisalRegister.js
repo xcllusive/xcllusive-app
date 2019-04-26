@@ -176,8 +176,8 @@ const validationSchema = Yup.object().shape({
     .min(1, 'Label require minimum 1 characters.')
     .when('type', {
       is: type => type === 'risks' || type === 'valueDrivers' || type === 'criticalIssues',
-      then: Yup.string().max(50, 'Label require max 50 characters.'),
-      otherwise: Yup.string().max(200, 'Label require max 200 characters.')
+      then: Yup.string().max(100, 'Label require max 100 characters.'),
+      otherwise: Yup.string().max(300, 'Label require max 300 characters.')
     }),
   type: Yup.string().required('Appraisal Register is required.'),
   points: Yup.number()
