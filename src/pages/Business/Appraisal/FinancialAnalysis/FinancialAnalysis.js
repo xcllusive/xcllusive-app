@@ -281,7 +281,21 @@ const mapPropsToValues = props => ({
   renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : false,
   renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : false,
   renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : false,
-  confirmFinancialAnalysis: props.appraisalObject ? props.appraisalObject.confirmFinancialAnalysis : false
+  confirmFinancialAnalysis: props.appraisalObject ? props.appraisalObject.confirmFinancialAnalysis : false,
+  totalAdjusments1: props.appraisalObject ? props.appraisalObject.totalAdjusments1 : 0,
+  totalAdjusments2: props.appraisalObject ? props.appraisalObject.totalAdjusments2 : 0,
+  totalAdjusments3: props.appraisalObject ? props.appraisalObject.totalAdjusments3 : 0,
+  totalAdjusments4: props.appraisalObject ? props.appraisalObject.totalAdjusments4 : 0,
+  totalAdjusments5: props.appraisalObject ? props.appraisalObject.totalAdjusments5 : 0,
+  totalAdjusments6: props.appraisalObject ? props.appraisalObject.totalAdjusments6 : 0,
+  totalAdjusments7: props.appraisalObject ? props.appraisalObject.totalAdjusments7 : 0,
+  totalAdjustedProfit1Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit1Perc : 0,
+  totalAdjustedProfit2Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit2Perc : 0,
+  totalAdjustedProfit3Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit3Perc : 0,
+  totalAdjustedProfit4Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit4Perc : 0,
+  totalAdjustedProfit5Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit5Perc : 0,
+  totalAdjustedProfit6Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit6Perc : 0,
+  totalAdjustedProfit7Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit7Perc : 0
 })
 
 const validationSchema = Yup.object().shape({})

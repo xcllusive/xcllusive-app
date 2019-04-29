@@ -59,13 +59,21 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
         this.props.values[`aaRow${row}Year7`].toString()
       )
     }
-    this.props.values.adjustedProfitPerc1 = this.state.totalAdjustedProfit1Perc
-    this.props.values.adjustedProfitPerc2 = this.state.totalAdjustedProfit2Perc
-    this.props.values.adjustedProfitPerc3 = this.state.totalAdjustedProfit3Perc
-    this.props.values.adjustedProfitPerc4 = this.state.totalAdjustedProfit4Perc
-    this.props.values.adjustedProfitPerc5 = this.state.totalAdjustedProfit5Perc
-    this.props.values.adjustedProfitPerc6 = this.state.totalAdjustedProfit6Perc
-    this.props.values.adjustedProfitPerc7 = this.state.totalAdjustedProfit7Perc
+    this.props.values.totalAdjusments1 = this._replaceDollarAndComma(this.state.totalAdjusments1)
+    this.props.values.totalAdjusments2 = this._replaceDollarAndComma(this.state.totalAdjusments2)
+    this.props.values.totalAdjusments3 = this._replaceDollarAndComma(this.state.totalAdjusments3)
+    this.props.values.totalAdjusments4 = this._replaceDollarAndComma(this.state.totalAdjusments4)
+    this.props.values.totalAdjusments5 = this._replaceDollarAndComma(this.state.totalAdjusments5)
+    this.props.values.totalAdjusments6 = this._replaceDollarAndComma(this.state.totalAdjusments6)
+    this.props.values.totalAdjusments7 = this._replaceDollarAndComma(this.state.totalAdjusments7)
+
+    this.props.values.adjustedProfitPerc1 = this._replaceDollarAndComma(this.state.totalAdjustedProfit1Perc)
+    this.props.values.adjustedProfitPerc2 = this._replaceDollarAndComma(this.state.totalAdjustedProfit2Perc)
+    this.props.values.adjustedProfitPerc3 = this._replaceDollarAndComma(this.state.totalAdjustedProfit3Perc)
+    this.props.values.adjustedProfitPerc4 = this._replaceDollarAndComma(this.state.totalAdjustedProfit4Perc)
+    this.props.values.adjustedProfitPerc5 = this._replaceDollarAndComma(this.state.totalAdjustedProfit5Perc)
+    this.props.values.adjustedProfitPerc6 = this._replaceDollarAndComma(this.state.totalAdjustedProfit6Perc)
+    this.props.values.adjustedProfitPerc7 = this._replaceDollarAndComma(this.state.totalAdjustedProfit7Perc)
 
     this.props.values.totalAdjustedProfit1 = this._replaceDollarAndComma(this.state.totalAdjustedProfit1)
     this.props.values.totalAdjustedProfit2 = this._replaceDollarAndComma(this.state.totalAdjustedProfit2)
@@ -185,39 +193,46 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   _setCalcTotalAdjusment = () => {
-    let totalAdjusment1 = 0
-    let totalAdjusment2 = 0
-    let totalAdjusment3 = 0
-    let totalAdjusment4 = 0
-    let totalAdjusment5 = 0
-    let totalAdjusment6 = 0
-    let totalAdjusment7 = 0
+    let totalAdjusments1 = 0
+    let totalAdjusments2 = 0
+    let totalAdjusments3 = 0
+    let totalAdjusments4 = 0
+    let totalAdjusments5 = 0
+    let totalAdjusments6 = 0
+    let totalAdjusments7 = 0
     for (let i = 1; i <= 30; i++) {
-      totalAdjusment1 = totalAdjusment1 + numeral(this.props.values[`aaRow${i}Year${1}`]).value()
-      totalAdjusment2 = totalAdjusment2 + numeral(this.props.values[`aaRow${i}Year${2}`]).value()
-      totalAdjusment3 = totalAdjusment3 + numeral(this.props.values[`aaRow${i}Year${3}`]).value()
-      totalAdjusment4 = totalAdjusment4 + numeral(this.props.values[`aaRow${i}Year${4}`]).value()
-      totalAdjusment5 = totalAdjusment5 + numeral(this.props.values[`aaRow${i}Year${5}`]).value()
-      totalAdjusment6 = totalAdjusment6 + numeral(this.props.values[`aaRow${i}Year${6}`]).value()
-      totalAdjusment7 = totalAdjusment7 + numeral(this.props.values[`aaRow${i}Year${7}`]).value()
+      totalAdjusments1 = totalAdjusments1 + numeral(this.props.values[`aaRow${i}Year${1}`]).value()
+      totalAdjusments2 = totalAdjusments2 + numeral(this.props.values[`aaRow${i}Year${2}`]).value()
+      totalAdjusments3 = totalAdjusments3 + numeral(this.props.values[`aaRow${i}Year${3}`]).value()
+      totalAdjusments4 = totalAdjusments4 + numeral(this.props.values[`aaRow${i}Year${4}`]).value()
+      totalAdjusments5 = totalAdjusments5 + numeral(this.props.values[`aaRow${i}Year${5}`]).value()
+      totalAdjusments6 = totalAdjusments6 + numeral(this.props.values[`aaRow${i}Year${6}`]).value()
+      totalAdjusments7 = totalAdjusments7 + numeral(this.props.values[`aaRow${i}Year${7}`]).value()
     }
-    this.setState({ totalAdjusment1: numeral(totalAdjusment1).format('0,0') })
-    this.setState({ totalAdjusment2: numeral(totalAdjusment2).format('0,0') })
-    this.setState({ totalAdjusment3: numeral(totalAdjusment3).format('0,0') })
-    this.setState({ totalAdjusment4: numeral(totalAdjusment4).format('0,0') })
-    this.setState({ totalAdjusment5: numeral(totalAdjusment5).format('0,0') })
-    this.setState({ totalAdjusment6: numeral(totalAdjusment6).format('0,0') })
-    this.setState({ totalAdjusment7: numeral(totalAdjusment7).format('0,0') })
+    this.setState({ totalAdjusments1: numeral(totalAdjusments1).format('0,0') })
+    this.setState({ totalAdjusments2: numeral(totalAdjusments2).format('0,0') })
+    this.setState({ totalAdjusments3: numeral(totalAdjusments3).format('0,0') })
+    this.setState({ totalAdjusments4: numeral(totalAdjusments4).format('0,0') })
+    this.setState({ totalAdjusments5: numeral(totalAdjusments5).format('0,0') })
+    this.setState({ totalAdjusments6: numeral(totalAdjusments6).format('0,0') })
+    this.setState({ totalAdjusments7: numeral(totalAdjusments7).format('0,0') })
   }
 
   _calcTotalAdjustedProfit = async () => {
-    const totalAdjustedProfit1 = this._calcTotal(1) + this.props.appraisalObject[`operatingProfit${1}`]
-    const totalAdjustedProfit2 = this._calcTotal(2) + this.props.appraisalObject[`operatingProfit${2}`]
-    const totalAdjustedProfit3 = this._calcTotal(3) + this.props.appraisalObject[`operatingProfit${3}`]
-    const totalAdjustedProfit4 = this._calcTotal(4) + this.props.appraisalObject[`operatingProfit${4}`]
-    const totalAdjustedProfit5 = this._calcTotal(5) + this.props.appraisalObject[`operatingProfit${5}`]
-    const totalAdjustedProfit6 = this._calcTotal(6) + this.props.appraisalObject[`operatingProfit${6}`]
-    const totalAdjustedProfit7 = this._calcTotal(7) + this.props.appraisalObject[`operatingProfit${7}`]
+    const totalAdjustedProfit1 =
+      this._calcTotal(1) + numeral(this.props.appraisalObject[`calcOperatingProfit${1}`]).value()
+    const totalAdjustedProfit2 =
+      this._calcTotal(2) + numeral(this.props.appraisalObject[`calcOperatingProfit${2}`]).value()
+    const totalAdjustedProfit3 =
+      this._calcTotal(3) + numeral(this.props.appraisalObject[`calcOperatingProfit${3}`]).value()
+    const totalAdjustedProfit4 =
+      this._calcTotal(4) + numeral(this.props.appraisalObject[`calcOperatingProfit${4}`]).value()
+    const totalAdjustedProfit5 =
+      this._calcTotal(5) + numeral(this.props.appraisalObject[`calcOperatingProfit${5}`]).value()
+    const totalAdjustedProfit6 =
+      this._calcTotal(6) + numeral(this.props.appraisalObject[`calcOperatingProfit${6}`]).value()
+    const totalAdjustedProfit7 =
+      this._calcTotal(7) + numeral(this.props.appraisalObject[`calcOperatingProfit${7}`]).value()
     this.setState({ totalAdjustedProfit1: numeral(totalAdjustedProfit1).format('0,0') })
     this.setState({ totalAdjustedProfit2: numeral(totalAdjustedProfit2).format('0,0') })
     this.setState({ totalAdjustedProfit3: numeral(totalAdjustedProfit3).format('0,0') })
@@ -228,20 +243,27 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   _calcAdjustedProfit = () => {
-    const total1 = this._calcTotal(1) + this.props.appraisalObject[`operatingProfit${1}`]
-    const totalAdjustedProfit1Perc = (total1 / numeral(this.props.appraisalObject[`sales${1}`]).value()) * 100
-    const total2 = this._calcTotal(2) + this.props.appraisalObject[`operatingProfit${2}`]
-    const totalAdjustedProfit2Perc = (total2 / numeral(this.props.appraisalObject[`sales${2}`]).value()) * 100
-    const total3 = this._calcTotal(3) + this.props.appraisalObject[`operatingProfit${3}`]
-    const totalAdjustedProfit3Perc = (total3 / numeral(this.props.appraisalObject[`sales${3}`]).value()) * 100
-    const total4 = this._calcTotal(4) + this.props.appraisalObject[`operatingProfit${4}`]
-    const totalAdjustedProfit4Perc = (total4 / numeral(this.props.appraisalObject[`sales${4}`]).value()) * 100
-    const total5 = this._calcTotal(5) + this.props.appraisalObject[`operatingProfit${5}`]
-    const totalAdjustedProfit5Perc = (total5 / numeral(this.props.appraisalObject[`sales${5}`]).value()) * 100
-    const total6 = this._calcTotal(6) + this.props.appraisalObject[`operatingProfit${6}`]
-    const totalAdjustedProfit6Perc = (total6 / numeral(this.props.appraisalObject[`sales${6}`]).value()) * 100
-    const total7 = this._calcTotal(7) + this.props.appraisalObject[`operatingProfit${7}`]
-    const totalAdjustedProfit7Perc = (total7 / numeral(this.props.appraisalObject[`sales${7}`]).value()) * 100
+    const total1 = this._calcTotal(1) + numeral(this.props.appraisalObject[`calcOperatingProfit${1}`]).value()
+    const totalAdjustedProfit1Perc =
+      (numeral(total1).value() / numeral(this.props.appraisalObject[`sales${1}`]).value()) * 100
+    const total2 = this._calcTotal(2) + numeral(this.props.appraisalObject[`calcOperatingProfit${2}`]).value()
+    const totalAdjustedProfit2Perc =
+      (numeral(total2).value() / numeral(this.props.appraisalObject[`sales${2}`]).value()) * 100
+    const total3 = this._calcTotal(3) + numeral(this.props.appraisalObject[`calcOperatingProfit${3}`]).value()
+    const totalAdjustedProfit3Perc =
+      (numeral(total3).value() / numeral(this.props.appraisalObject[`sales${3}`]).value()) * 100
+    const total4 = this._calcTotal(4) + numeral(this.props.appraisalObject[`calcOperatingProfit${4}`]).value()
+    const totalAdjustedProfit4Perc =
+      (numeral(total4).value() / numeral(this.props.appraisalObject[`sales${4}`]).value()) * 100
+    const total5 = this._calcTotal(5) + numeral(this.props.appraisalObject[`calcOperatingProfit${5}`]).value()
+    const totalAdjustedProfit5Perc =
+      (numeral(total5).value() / numeral(this.props.appraisalObject[`sales${5}`]).value()) * 100
+    const total6 = this._calcTotal(6) + numeral(this.props.appraisalObject[`calcOperatingProfit${6}`]).value()
+    const totalAdjustedProfit6Perc =
+      (numeral(total6).value() / numeral(this.props.appraisalObject[`sales${6}`]).value()) * 100
+    const total7 = this._calcTotal(7) + numeral(this.props.appraisalObject[`calcOperatingProfit${7}`]).value()
+    const totalAdjustedProfit7Perc =
+      (numeral(total7).value() / numeral(this.props.appraisalObject.calcAnnualised1).value()) * 100
 
     this.setState({ totalAdjustedProfit1Perc: numeral(totalAdjustedProfit1Perc).format('0,0') })
     this.setState({ totalAdjustedProfit2Perc: numeral(totalAdjustedProfit2Perc).format('0,0') })
@@ -405,13 +427,13 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <b> Total Adjustments </b>
           </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment1).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment2).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment3).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment4).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment5).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment6).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusment7).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments1).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments2).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments3).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments4).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments5).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments6).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments7).format('$0,0')} </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
