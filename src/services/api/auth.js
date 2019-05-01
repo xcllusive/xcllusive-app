@@ -17,3 +17,13 @@ export const loginWithToken = () => {
     url: '/auth/loginWithToken'
   })
 }
+
+export const logoutApi = user => {
+  return request({
+    method: 'post',
+    url: '/auth/logout',
+    data: {
+      user
+    }
+  })
+}

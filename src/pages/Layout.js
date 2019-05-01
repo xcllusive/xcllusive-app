@@ -32,7 +32,7 @@ import AppraisalList from './Business/Appraisal/AppraisalList'
 import HistoricalWeeklyReport from './Management/Reports/HistoricalWeeklyReport'
 import BusinessesListPerAnalyst from './Management/Reports/BusinessesListPerAnalyst'
 
-const Layout = ({ match, logout, menu }) => (
+const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
     <Menu inverted attached color="blue" size="small">
       <Menu.Item as={NavLink} to={`${match.url}`}>
@@ -67,7 +67,7 @@ const Layout = ({ match, logout, menu }) => (
         // }
       })}
       <Menu.Menu position="right">
-        <Menu.Item onClick={() => logout()} position="right">
+        <Menu.Item onClick={() => logout(user)} position="right">
           <Icon name="toggle right" />
           Logout
         </Menu.Item>
@@ -214,11 +214,13 @@ const Layout = ({ match, logout, menu }) => (
 Layout.propTypes = {
   match: PropTypes.object,
   logout: PropTypes.func,
-  menu: PropTypes.array
+  menu: PropTypes.array,
+  user: PropTypes.object
 }
 
 const mapStateToProps = state => ({
-  menu: state.auth.user.roles
+  menu: state.auth.user.roles,
+  user: state.auth.user.userObj
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({ logout }, dispatch)

@@ -46,3 +46,11 @@ export const getEnquiryReport = (dateFrom, dateTo, listOfIdOfAnalysts) => {
     params: { dateFrom, dateTo, listOfIdOfAnalysts }
   })
 }
+
+export const activityRequestControl = (dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: 'reports/activity-request-report',
+    params: { dateFrom, dateTo }
+  })
+}

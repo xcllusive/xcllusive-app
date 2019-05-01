@@ -4,7 +4,8 @@ import {
   getAnalystReport as getAnalystReportAPI,
   getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI,
   getBusinessesPerAnalyst as getBusinessesPerAnalystAPI,
-  getEnquiryReport as getEnquiryReportAPI
+  getEnquiryReport as getEnquiryReportAPI,
+  activityRequestControl as activityRequestControlAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -34,7 +35,10 @@ export const Types = {
   GET_ENQUIRY_REPORT_SUCCESS: 'GET_ENQUIRY_REPORT_SUCCESS',
   GET_ENQUIRY_REPORT_FAILURE: 'GET_ENQUIRY_REPORT_FAILURE',
   KEEP_ENQUIRY_PARAMS: 'KEEP_ENQUIRY_PARAMS',
-  CLEAR_ENQUIRIES_REPORT: 'CLEAR_ENQUIRIES_REPORT'
+  CLEAR_ENQUIRIES_REPORT: 'CLEAR_ENQUIRIES_REPORT',
+  GET_ACTIVITY_REQUEST_CONTROL_LOADING: 'GET_ACTIVITY_REQUEST_CONTROL_LOADING',
+  GET_ACTIVITY_REQUEST_CONTROL_SUCCESS: 'GET_ACTIVITY_REQUEST_CONTROL_SUCCESS',
+  GET_ACTIVITY_REQUEST_CONTROL_FAILURE: 'GET_ACTIVITY_REQUEST_CONTROL_FAILURE'
 }
 
 // Reducer
@@ -86,7 +90,12 @@ const initialState = {
     objectEnquiry: null,
     error: null
   },
-  keepEnquiryParams: null
+  keepEnquiryParams: null,
+  getActivityRequestControl: {
+    isLoading: false,
+    array: null,
+    error: null
+  }
 }
 
 export default function reducer (state = initialState, action) {
@@ -300,6 +309,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_ACTIVITY_REQUEST_CONTROL_LOADING:
+      return {
+        ...state,
+        getActivityRequestControl: {
+          ...state.getActivityRequestControl,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_ACTIVITY_REQUEST_CONTROL_SUCCESS:
+      return {
+        ...state,
+        getActivityRequestControl: {
+          ...state.getActivityRequestControl,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_ACTIVITY_REQUEST_CONTROL_FAILURE:
+      return {
+        ...state,
+        getActivityRequestControl: {
+          ...state.getActivityRequestControl,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.KEEP_ENQUIRY_PARAMS:
       return {
         ...state,
@@ -479,4 +516,24 @@ export const clearEnquiriesReports = () => async dispatch => {
   dispatch({
     type: Types.CLEAR_ENQUIRIES_REPORT
   })
+}
+
+export const activityRequestControl = (dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.GET_ACTIVITY_REQUEST_CONTROL_LOADING,
+    payload: true
+  })
+  try {
+    const getActivityRequestControl = await activityRequestControlAPI(dateFrom, dateTo)
+    dispatch({
+      type: Types.GET_ACTIVITY_REQUEST_CONTROL_SUCCESS,
+      payload: getActivityRequestControl.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_ACTIVITY_REQUEST_CONTROL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
 }

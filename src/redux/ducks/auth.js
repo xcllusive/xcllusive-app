@@ -1,4 +1,4 @@
-import { login as loginApi, loginWithToken as loginWithTokenApi } from '../../services/api/auth'
+import { login as loginApi, loginWithToken as loginWithTokenApi, logoutApi } from '../../services/api/auth'
 import setAuthorizationHeader from '../../utils/setAuthorizationHeader'
 
 // Action Types
@@ -31,6 +31,7 @@ export default function reducer (state = initialState, action) {
         isLoading: false,
         user: {
           ...action.payload,
+          userObj: action.payload,
           roles: JSON.parse(action.payload.roles)
         },
         error: null,
@@ -124,8 +125,13 @@ export const loginWithToken = () => async dispatch => {
   }
 }
 
-export const logout = (error = null) => dispatch => {
-  window.localStorage.removeItem('xcllusiveJWT')
-  setAuthorizationHeader()
-  dispatch(userLogout(error))
+export const logout = (user, error = null) => async dispatch => {
+  try {
+    await logoutApi(user)
+    window.localStorage.removeItem('xcllusiveJWT')
+    setAuthorizationHeader()
+    dispatch(userLogout(error))
+  } catch (error) {
+    dispatch(loginError(null))
+  }
 }
