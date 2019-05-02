@@ -5,7 +5,7 @@ import {
   getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI,
   getBusinessesPerAnalyst as getBusinessesPerAnalystAPI,
   getEnquiryReport as getEnquiryReportAPI,
-  activityRequestControl as activityRequestControlAPI
+  activityRequestControlPerUser as activityRequestControlPerUserAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -38,7 +38,8 @@ export const Types = {
   CLEAR_ENQUIRIES_REPORT: 'CLEAR_ENQUIRIES_REPORT',
   GET_ACTIVITY_REQUEST_CONTROL_LOADING: 'GET_ACTIVITY_REQUEST_CONTROL_LOADING',
   GET_ACTIVITY_REQUEST_CONTROL_SUCCESS: 'GET_ACTIVITY_REQUEST_CONTROL_SUCCESS',
-  GET_ACTIVITY_REQUEST_CONTROL_FAILURE: 'GET_ACTIVITY_REQUEST_CONTROL_FAILURE'
+  GET_ACTIVITY_REQUEST_CONTROL_FAILURE: 'GET_ACTIVITY_REQUEST_CONTROL_FAILURE',
+  KEEP_ACTIVITY_REQUEST_RECORDS: 'KEEP_ACTIVITY_REQUEST_RECORDS'
 }
 
 // Reducer
@@ -93,9 +94,10 @@ const initialState = {
   keepEnquiryParams: null,
   getActivityRequestControl: {
     isLoading: false,
-    array: null,
+    object: null,
     error: null
-  }
+  },
+  keepActivityRequestRecords: null
 }
 
 export default function reducer (state = initialState, action) {
@@ -324,7 +326,7 @@ export default function reducer (state = initialState, action) {
         getActivityRequestControl: {
           ...state.getActivityRequestControl,
           isLoading: false,
-          array: action.payload,
+          object: action.payload,
           error: null
         }
       }
@@ -336,6 +338,11 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           error: action.payload
         }
+      }
+    case Types.KEEP_ACTIVITY_REQUEST_RECORDS:
+      return {
+        ...state,
+        keepActivityRequestRecords: action.payload
       }
     case Types.KEEP_ENQUIRY_PARAMS:
       return {
@@ -518,16 +525,32 @@ export const clearEnquiriesReports = () => async dispatch => {
   })
 }
 
-export const activityRequestControl = (dateFrom, dateTo) => async dispatch => {
+export const activityRequestControlPerUser = (
+  officeId,
+  userIdSelected,
+  dateFrom,
+  dateTo,
+  dataGraph
+) => async dispatch => {
   dispatch({
     type: Types.GET_ACTIVITY_REQUEST_CONTROL_LOADING,
     payload: true
   })
   try {
-    const getActivityRequestControl = await activityRequestControlAPI(dateFrom, dateTo)
+    const getActivityRequestControl = await activityRequestControlPerUserAPI(
+      officeId,
+      userIdSelected,
+      dateFrom,
+      dateTo,
+      dataGraph
+    )
     dispatch({
       type: Types.GET_ACTIVITY_REQUEST_CONTROL_SUCCESS,
       payload: getActivityRequestControl.data
+    })
+    dispatch({
+      type: Types.KEEP_ACTIVITY_REQUEST_RECORDS,
+      payload: { officeId, userIdSelected, dateFrom, dateTo, dataGraph }
     })
   } catch (error) {
     dispatch({

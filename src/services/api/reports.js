@@ -47,10 +47,10 @@ export const getEnquiryReport = (dateFrom, dateTo, listOfIdOfAnalysts) => {
   })
 }
 
-export const activityRequestControl = (dateFrom, dateTo) => {
+export const activityRequestControlPerUser = (officeId, userIdSelected, dateFrom, dateTo) => {
   return request({
     method: 'get',
-    url: 'reports/activity-request-report',
-    params: { dateFrom, dateTo }
+    url: 'reports/activity-request-per-user-report',
+    params: { userIdSelected, dateFrom, dateTo }
   })
 }
