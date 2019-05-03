@@ -54,3 +54,11 @@ export const activityRequestControlPerUser = (officeId, userIdSelected, dateFrom
     params: { userIdSelected, dateFrom, dateTo }
   })
 }
+
+export const getUsersPerRegion = region => {
+  return request({
+    method: 'get',
+    url: '/reports/users-per-region',
+    params: { region }
+  })
+}

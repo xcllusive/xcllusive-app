@@ -5,7 +5,8 @@ import {
   getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI,
   getBusinessesPerAnalyst as getBusinessesPerAnalystAPI,
   getEnquiryReport as getEnquiryReportAPI,
-  activityRequestControlPerUser as activityRequestControlPerUserAPI
+  activityRequestControlPerUser as activityRequestControlPerUserAPI,
+  getUsersPerRegion as getUsersPerRegionAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -39,7 +40,11 @@ export const Types = {
   GET_ACTIVITY_REQUEST_CONTROL_LOADING: 'GET_ACTIVITY_REQUEST_CONTROL_LOADING',
   GET_ACTIVITY_REQUEST_CONTROL_SUCCESS: 'GET_ACTIVITY_REQUEST_CONTROL_SUCCESS',
   GET_ACTIVITY_REQUEST_CONTROL_FAILURE: 'GET_ACTIVITY_REQUEST_CONTROL_FAILURE',
-  KEEP_ACTIVITY_REQUEST_RECORDS: 'KEEP_ACTIVITY_REQUEST_RECORDS'
+  KEEP_ACTIVITY_REQUEST_RECORDS: 'KEEP_ACTIVITY_REQUEST_RECORDS',
+  GET_USERS_PER_REGION_LOADING: 'GET_USERS_PER_REGION_LOADING',
+  GET_USERS_PER_REGION_SUCCESS: 'GET_USERS_PER_REGION_SUCCESS',
+  GET_USERS_PER_REGION_FAILURE: 'GET_USERS_PER_REGION_FAILURE',
+  SET_USER_ACCOUNT_NAME: 'SET_USER_ACCOUNT_NAME'
 }
 
 // Reducer
@@ -94,10 +99,15 @@ const initialState = {
   keepEnquiryParams: null,
   getActivityRequestControl: {
     isLoading: false,
-    object: null,
+    array: null,
     error: null
   },
-  keepActivityRequestRecords: null
+  keepActivityRequestRecords: null,
+  getUsersPerRegion: {
+    isLoading: false,
+    array: [],
+    error: null
+  }
 }
 
 export default function reducer (state = initialState, action) {
@@ -311,6 +321,11 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.KEEP_ENQUIRY_PARAMS:
+      return {
+        ...state,
+        keepEnquiryParams: action.payload
+      }
     case Types.GET_ACTIVITY_REQUEST_CONTROL_LOADING:
       return {
         ...state,
@@ -326,7 +341,14 @@ export default function reducer (state = initialState, action) {
         getActivityRequestControl: {
           ...state.getActivityRequestControl,
           isLoading: false,
-          object: action.payload,
+          array: action.payload.data,
+          maxTotalsPerDate: action.payload.maxTotalsPerDate,
+          minTotalsPerDate: action.payload.minTotalsPerDate,
+          avgTotalsPerDate: action.payload.avgTotalsPerDate,
+          maxTotalsAnalystsPerDate: action.payload.maxTotalsAnalystsPerDate,
+          avgTotalsAnalystsPerDate: action.payload.avgTotalsAnalystsPerDate,
+          maxTotalsBrokersPerDate: action.payload.maxTotalsBrokersPerDate,
+          avgTotalsBrokersPerDate: action.payload.avgTotalsBrokersPerDate,
           error: null
         }
       }
@@ -344,10 +366,47 @@ export default function reducer (state = initialState, action) {
         ...state,
         keepActivityRequestRecords: action.payload
       }
-    case Types.KEEP_ENQUIRY_PARAMS:
+    case Types.GET_USERS_PER_REGION_LOADING:
       return {
         ...state,
-        keepEnquiryParams: action.payload
+        getUsersPerRegion: {
+          ...state.getUsersPerRegion,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_USERS_PER_REGION_SUCCESS:
+      return {
+        ...state,
+        getUsersPerRegion: {
+          ...state.getUsersPerRegion,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_USERS_PER_REGION_FAILURE:
+      return {
+        ...state,
+        getUsersPerRegion: {
+          ...state.getUsersPerRegion,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_BUSINESSES_PER_BROKER_LOADING:
+      return {
+        ...state,
+        getBusinessesPerBroker: {
+          ...state.getBusinessesPerBroker,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.SET_USER_ACCOUNT_NAME:
+      return {
+        ...state,
+        userAccountName: action.payload
       }
     case Types.CLEAR_MARKETING_REPORT:
       return initialState
@@ -546,11 +605,7 @@ export const activityRequestControlPerUser = (
     )
     dispatch({
       type: Types.GET_ACTIVITY_REQUEST_CONTROL_SUCCESS,
-      payload: getActivityRequestControl.data
-    })
-    dispatch({
-      type: Types.KEEP_ACTIVITY_REQUEST_RECORDS,
-      payload: { officeId, userIdSelected, dateFrom, dateTo, dataGraph }
+      payload: getActivityRequestControl
     })
   } catch (error) {
     dispatch({
@@ -559,4 +614,44 @@ export const activityRequestControlPerUser = (
     })
     toast.error(error)
   }
+}
+
+export const keepActivityRequestControlPerUser = (
+  officeId,
+  userIdSelected,
+  dateFrom,
+  dateTo,
+  dataGraph
+) => async dispatch => {
+  dispatch({
+    type: Types.KEEP_ACTIVITY_REQUEST_RECORDS,
+    payload: { officeId, userIdSelected, dateFrom, dateTo, dataGraph }
+  })
+}
+
+export const getUsersPerRegion = region => async dispatch => {
+  dispatch({
+    type: Types.GET_USERS_PER_REGION_LOADING,
+    payload: true
+  })
+  try {
+    const users = await getUsersPerRegionAPI(region)
+    dispatch({
+      type: Types.GET_USERS_PER_REGION_SUCCESS,
+      payload: users.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_USERS_PER_REGION_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const setUserAccountName = value => dispatch => {
+  dispatch({
+    type: Types.SET_USER_ACCOUNT_NAME,
+    payload: value
+  })
 }

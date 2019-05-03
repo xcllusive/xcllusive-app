@@ -4,13 +4,17 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import _ from 'lodash'
-import { Grid, Form, Button, Segment } from 'semantic-ui-react'
+import { Grid, Form, Button, Segment, Statistic, Header, Divider } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
-import { activityRequestControlPerUser } from '../../../redux/ducks/reports'
-import { getBrokersPerRegion, setBrokerAccountName } from '../../../redux/ducks/broker'
+import {
+  activityRequestControlPerUser,
+  keepActivityRequestControlPerUser,
+  getUsersPerRegion,
+  setUserAccountName
+} from '../../../redux/ducks/reports'
 import { mapArrayToValuesForDropdown } from '../../../utils/sharedFunctionArray'
 import { getUserLogged } from '../../../redux/ducks/user'
 import { getOfficeRegister } from '../../../redux/ducks/officeRegister'
@@ -30,16 +34,16 @@ class DailyActivityReports extends Component {
       await this.props.getOfficeRegister()
       await this.props.getUserLogged()
     } else {
-      // this.setState({ data: this.props.keepActivityRequestRecords.dataGraph })
+      this.setState({ data: this.props.keepActivityRequestRecords.dataGraph })
     }
 
     const officeOfUserLogged = _.find(this.props.officeOptions, o => o.id === this.props.user.officeId)
     if (!this.props.user.levelOfInfoAccess) {
       this.props.setFieldValue('officeRegion', officeOfUserLogged.id)
-      this.props.getBrokersPerRegion(officeOfUserLogged.id)
+      this.props.getUsersPerRegion(officeOfUserLogged.id)
     }
-    this.props.brokerAccountNameRestored &&
-      this.props.setFieldValue('brokerAccountName', this.props.brokerAccountNameRestored)
+    this.props.userAccountNameRestored &&
+      this.props.setFieldValue('userAccountName', this.props.userAccountNameRestored)
   }
 
   _handleDateFromChange = date => {
@@ -62,34 +66,48 @@ class DailyActivityReports extends Component {
     this.props.setFieldValue(name, value)
 
     if (name === 'officeRegion') {
-      this.props.getBrokersPerRegion(value)
+      this.props.getUsersPerRegion(value)
     }
-    if (name === 'brokerAccountName') {
-      this.props.setBrokerAccountName(value)
+    if (name === 'userAccountName') {
+      this.props.setUserAccountName(value)
     }
   }
 
-  _confirmReports = async (officeId, userIdSelected, dateFrom, dateTo, dataGraph) => {
-    console.log(dataGraph)
+  _confirmReports = async (officeId, userIdSelected, dateFrom, dateTo) => {
     await this.props.activityRequestControlPerUser(
       officeId,
       userIdSelected,
       moment(dateFrom).format('YYYY/MM/DD'),
-      moment(dateTo).format('YYYY/MM/DD'),
-      dataGraph
+      moment(dateTo).format('YYYY/MM/DD')
     )
 
-    this.setState({
+    await this.setState({
       data: this.props.arrayUserControlActivity
     })
+
+    this.props.keepActivityRequestControlPerUser(officeId, userIdSelected, dateFrom, dateTo, this.state.data)
   }
 
-  _handleBarClick = () => {
+  _handleBarClick = e => {
     console.log('test')
   }
 
   render () {
-    const { values, arrayUserControlActivity, officeOptions, user, isLoadingBroker, brokersPerRegion } = this.props
+    const {
+      values,
+      arrayUserControlActivity,
+      officeOptions,
+      user,
+      isLoadingUser,
+      usersPerRegion,
+      maxTotalsPerDate,
+      minTotalsPerDate,
+      avgTotalsPerDate,
+      maxTotalsAnalystsPerDate,
+      avgTotalsAnalystsPerDate,
+      maxTotalsBrokersPerDate,
+      avgTotalsBrokersPerDate
+    } = this.props
     return (
       <Wrapper>
         <Form>
@@ -111,7 +129,7 @@ class DailyActivityReports extends Component {
                       disabled={user && !user.levelOfInfoAccess}
                     />
                   </Form.Field>
-                  {brokersPerRegion.length > 0 ? (
+                  {usersPerRegion.length > 0 ? (
                     <Form.Field
                       style={{
                         marginTop: '5px'
@@ -119,16 +137,16 @@ class DailyActivityReports extends Component {
                     >
                       <Form.Select
                         label="Select One User"
-                        options={brokersPerRegion}
-                        name="brokerAccountName"
-                        autoComplete="brokerAccountName"
-                        value={values.brokerAccountName}
+                        options={usersPerRegion}
+                        name="userAccountName"
+                        autoComplete="userAccountName"
+                        value={values.userAccountName}
                         onChange={this._handleSelectChange}
-                        loading={isLoadingBroker}
+                        loading={isLoadingUser}
                       />
                     </Form.Field>
                   ) : null}
-                  {values.brokerAccountName > 0 ? (
+                  {values.userAccountName > 0 ? (
                     <Fragment>
                       <Form.Field>
                         <label
@@ -175,7 +193,7 @@ class DailyActivityReports extends Component {
                           onClick={() =>
                             this._confirmReports(
                               values.officeRegion,
-                              values.brokerAccountName,
+                              values.userAccountName,
                               values.dateFrom,
                               values.dateTo,
                               this.state.data
@@ -190,25 +208,92 @@ class DailyActivityReports extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Segment style={{ paddingLeft: '0px', paddingRight: '0px', paddingBottom: '0px' }} size="small">
-          <Grid>
+        {this.state.data.length > 0 ? (
+          <Segment
+            style={{ background: 'rgba(185, 189, 193, 0.11)', paddingLeft: '0px', paddingRight: '0px' }}
+            textAlign="center"
+            size="small"
+          >
             {arrayUserControlActivity ? (
-              <BarChart
-                width={600}
-                height={300}
-                data={this.state.data}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="dateCreated" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="totalRequests" stackId="a" fill="#8884d8" onClick={this._handleBarClick} />
-              </BarChart>
+              <Grid>
+                <Grid.Row columns={2}>
+                  <Grid.Column>
+                    <Grid>
+                      <Grid.Row>
+                        <Grid.Column style={{ marginTop: '10px' }} width={16}>
+                          <Statistic.Group size="small" color="blue" widths={3}>
+                            <Statistic>
+                              <Statistic.Value>{maxTotalsPerDate}</Statistic.Value>
+                              <Statistic.Label>Most</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                              <Statistic.Value>{minTotalsPerDate}</Statistic.Value>
+                              <Statistic.Label>Least</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                              <Statistic.Value>{avgTotalsPerDate}</Statistic.Value>
+                              <Statistic.Label>Average</Statistic.Label>
+                            </Statistic>
+                          </Statistic.Group>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <BarChart
+                            width={800}
+                            height={400}
+                            data={this.state.data}
+                            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="dateCreated" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="totalRequests" fill="#5584d5" onClick={this._handleBarClick} />
+                          </BarChart>
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                  </Grid.Column>
+                  <Grid.Column style={{ marginLeft: '100px' }} width={5}>
+                    <Header color="red">All Users</Header>
+                    <Grid>
+                      <Grid.Row columns={2}>
+                        <Grid.Column>
+                          <Divider horizontal>Analysts</Divider>
+                          <Statistic.Group size="mini" color="green" widths={2}>
+                            <Statistic>
+                              <Statistic.Value>{maxTotalsAnalystsPerDate}</Statistic.Value>
+                              <Statistic.Label>Most</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                              <Statistic.Value>{avgTotalsAnalystsPerDate}</Statistic.Value>
+                              <Statistic.Label>Average</Statistic.Label>
+                            </Statistic>
+                          </Statistic.Group>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Divider horizontal>Brokers</Divider>
+                          <Statistic.Group size="mini" color="green" widths={2}>
+                            <Statistic>
+                              <Statistic.Value>{maxTotalsBrokersPerDate}</Statistic.Value>
+                              <Statistic.Label>Most</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                              <Statistic.Value>{avgTotalsBrokersPerDate}</Statistic.Value>
+                              <Statistic.Label>Average</Statistic.Label>
+                            </Statistic>
+                          </Statistic.Group>
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
             ) : null}
-          </Grid>
-        </Segment>
+          </Segment>
+        ) : null}
       </Wrapper>
     )
   }
@@ -219,22 +304,30 @@ DailyActivityReports.propTypes = {
   setFieldValue: PropTypes.func,
   activityRequestControlPerUser: PropTypes.func,
   arrayUserControlActivity: PropTypes.array,
-  getBrokersPerRegion: PropTypes.func,
+  getUsersPerRegion: PropTypes.func,
   getUserLogged: PropTypes.func,
   getOfficeRegister: PropTypes.func,
   officeOptions: PropTypes.array,
   user: PropTypes.object,
-  brokersPerRegion: PropTypes.array,
-  brokerAccountNameRestored: PropTypes.number,
-  isLoadingBroker: PropTypes.bool,
-  setBrokerAccountName: PropTypes.func,
-  keepActivityRequestRecords: PropTypes.object
+  usersPerRegion: PropTypes.array,
+  userAccountNameRestored: PropTypes.number,
+  isLoadingUser: PropTypes.bool,
+  setUserAccountName: PropTypes.func,
+  keepActivityRequestRecords: PropTypes.object,
+  keepActivityRequestControlPerUser: PropTypes.func,
+  maxTotalsPerDate: PropTypes.number,
+  minTotalsPerDate: PropTypes.number,
+  avgTotalsPerDate: PropTypes.number,
+  maxTotalsAnalystsPerDate: PropTypes.number,
+  avgTotalsAnalystsPerDate: PropTypes.number,
+  maxTotalsBrokersPerDate: PropTypes.number,
+  avgTotalsBrokersPerDate: PropTypes.number
 }
 
 const mapPropsToValues = props => {
   return {
     officeRegion: props.keepActivityRequestRecords ? props.keepActivityRequestRecords.officeId : '',
-    brokerAccountName: props.keepActivityRequestRecords ? props.keepActivityRequestRecords.brokerAccountName : '',
+    userAccountName: props.keepActivityRequestRecords ? props.keepActivityRequestRecords.userAccountName : '',
     dateFrom: props.keepActivityRequestRecords
       ? moment(new Date(props.keepActivityRequestRecords.dateFrom))
       : moment().startOf('month'),
@@ -244,18 +337,32 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  arrayUserControlActivity: state.reports.getActivityRequestControl.object,
+  arrayUserControlActivity: state.reports.getActivityRequestControl.array,
+  maxTotalsPerDate: state.reports.getActivityRequestControl.maxTotalsPerDate,
+  minTotalsPerDate: state.reports.getActivityRequestControl.minTotalsPerDate,
+  avgTotalsPerDate: state.reports.getActivityRequestControl.avgTotalsPerDate,
+  maxTotalsAnalystsPerDate: state.reports.getActivityRequestControl.maxTotalsAnalystsPerDate,
+  avgTotalsAnalystsPerDate: state.reports.getActivityRequestControl.avgTotalsAnalystsPerDate,
+  maxTotalsBrokersPerDate: state.reports.getActivityRequestControl.maxTotalsBrokersPerDate,
+  avgTotalsBrokersPerDate: state.reports.getActivityRequestControl.avgTotalsBrokersPerDate,
   officeOptions: state.officeRegister.get.array,
-  brokerAccountNameRestored: state.broker.brokerAccountName,
-  isLoadingBroker: state.broker.getBrokersPerRegion.isLoading,
-  brokersPerRegion: state.broker.getBrokersPerRegion.array,
+  userAccountNameRestored: state.reports.userAccountName,
+  isLoadingUser: state.reports.getUsersPerRegion.isLoading,
+  usersPerRegion: state.reports.getUsersPerRegion.array,
   user: state.user.getLogged.object,
   keepActivityRequestRecords: state.reports.keepActivityRequestRecords
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { getBrokersPerRegion, activityRequestControlPerUser, getUserLogged, getOfficeRegister, setBrokerAccountName },
+    {
+      getUsersPerRegion,
+      activityRequestControlPerUser,
+      getUserLogged,
+      getOfficeRegister,
+      setUserAccountName,
+      keepActivityRequestControlPerUser
+    },
     dispatch
   )
 export default connect(
