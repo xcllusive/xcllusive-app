@@ -6,7 +6,8 @@ import {
   getBusinessesPerAnalyst as getBusinessesPerAnalystAPI,
   getEnquiryReport as getEnquiryReportAPI,
   activityRequestControlPerUser as activityRequestControlPerUserAPI,
-  getUsersPerRegion as getUsersPerRegionAPI
+  getUsersPerRegion as getUsersPerRegionAPI,
+  getDailyTimeActivityReport as getDailyTimeActivityReportAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -44,7 +45,10 @@ export const Types = {
   GET_USERS_PER_REGION_LOADING: 'GET_USERS_PER_REGION_LOADING',
   GET_USERS_PER_REGION_SUCCESS: 'GET_USERS_PER_REGION_SUCCESS',
   GET_USERS_PER_REGION_FAILURE: 'GET_USERS_PER_REGION_FAILURE',
-  SET_USER_ACCOUNT_NAME: 'SET_USER_ACCOUNT_NAME'
+  SET_USER_ACCOUNT_NAME: 'SET_USER_ACCOUNT_NAME',
+  GET_DAILY_TIME_ACTIVITY_LOADING: 'GET_DAILY_TIME_ACTIVITY_LOADING',
+  GET_DAILY_TIME_ACTIVITY_SUCCESS: 'GET_DAILY_TIME_ACTIVITY_SUCCESS',
+  GET_DAILY_TIME_ACTIVITY_FAILURE: 'GET_DAILY_TIME_ACTIVITY_FAILURE'
 }
 
 // Reducer
@@ -104,6 +108,11 @@ const initialState = {
   },
   keepActivityRequestRecords: null,
   getUsersPerRegion: {
+    isLoading: false,
+    array: [],
+    error: null
+  },
+  getDailyTimeActivityReport: {
     isLoading: false,
     array: [],
     error: null
@@ -394,19 +403,38 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.GET_BUSINESSES_PER_BROKER_LOADING:
-      return {
-        ...state,
-        getBusinessesPerBroker: {
-          ...state.getBusinessesPerBroker,
-          isLoading: action.payload,
-          error: null
-        }
-      }
     case Types.SET_USER_ACCOUNT_NAME:
       return {
         ...state,
         userAccountName: action.payload
+      }
+    case Types.GET_DAILY_TIME_ACTIVITY_LOADING:
+      return {
+        ...state,
+        getDailyTimeActivityReport: {
+          ...state.getDailyTimeActivityReport,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_DAILY_TIME_ACTIVITY_SUCCESS:
+      return {
+        ...state,
+        getDailyTimeActivityReport: {
+          ...state.getDailyTimeActivityReport,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_DAILY_TIME_ACTIVITY_FAILURE:
+      return {
+        ...state,
+        getDailyTimeActivityReport: {
+          ...state.getDailyTimeActivityReport,
+          isLoading: false,
+          error: action.payload
+        }
       }
     case Types.CLEAR_MARKETING_REPORT:
       return initialState
@@ -654,4 +682,24 @@ export const setUserAccountName = value => dispatch => {
     type: Types.SET_USER_ACCOUNT_NAME,
     payload: value
   })
+}
+
+export const getDailyTimeActivityReport = (id, date) => async dispatch => {
+  dispatch({
+    type: Types.GET_DAILY_TIME_ACTIVITY_LOADING,
+    payload: true
+  })
+  try {
+    const dailyTime = await getDailyTimeActivityReportAPI(id, date)
+    dispatch({
+      type: Types.GET_DAILY_TIME_ACTIVITY_SUCCESS,
+      payload: dailyTime.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_DAILY_TIME_ACTIVITY_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
 }

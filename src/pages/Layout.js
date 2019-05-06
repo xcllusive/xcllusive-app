@@ -31,6 +31,7 @@ import AppraisalMenu from './Business/Appraisal/AppraisalMenu'
 import AppraisalList from './Business/Appraisal/AppraisalList'
 import HistoricalWeeklyReport from './Management/Reports/HistoricalWeeklyReport'
 import BusinessesListPerAnalyst from './Management/Reports/BusinessesListPerAnalyst'
+import DailyTimeActivityReports from './Management/Reports/DailyTimeActivityReports'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
@@ -192,6 +193,12 @@ const Layout = ({ match, logout, menu, user }) => (
         exact
         component={HistoricalWeeklyReport}
         path={`${match.path}management/historical-weekly-report/:idBusiness`}
+        allowedRoles="MANAGEMENT_MENU"
+      />
+      <AuthorizationRoute
+        exact
+        component={DailyTimeActivityReports}
+        path={`${match.path}management/daily-time-activity-report`}
         allowedRoles="MANAGEMENT_MENU"
       />
       <AuthorizationRoute

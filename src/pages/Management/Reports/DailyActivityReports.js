@@ -89,7 +89,12 @@ class DailyActivityReports extends Component {
   }
 
   _handleBarClick = e => {
-    console.log('test')
+    this.props.history.push({
+      pathname: '/management/daily-time-activity-report',
+      state: {
+        data: e.payload
+      }
+    })
   }
 
   render () {
@@ -217,7 +222,7 @@ class DailyActivityReports extends Component {
             {arrayUserControlActivity ? (
               <Grid>
                 <Grid.Row columns={2}>
-                  <Grid.Column>
+                  <Grid.Column width={8}>
                     <Grid>
                       <Grid.Row>
                         <Grid.Column style={{ marginTop: '10px' }} width={16}>
@@ -240,26 +245,26 @@ class DailyActivityReports extends Component {
                       <Grid.Row>
                         <Grid.Column>
                           <BarChart
-                            width={800}
+                            width={700}
                             height={400}
                             data={this.state.data}
-                            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
                           >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="dateCreated" />
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey="totalRequests" fill="#5584d5" onClick={this._handleBarClick} />
+                            <Bar dataKey="activity" fill="#5584d5" onClick={this._handleBarClick} />
                           </BarChart>
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
                   </Grid.Column>
-                  <Grid.Column style={{ marginLeft: '100px' }} width={5}>
+                  <Grid.Column style={{ marginLeft: '200px' }} width={5}>
                     <Header color="red">All Users</Header>
                     <Grid>
-                      <Grid.Row columns={2}>
+                      <Grid.Row>
                         <Grid.Column>
                           <Divider horizontal>Analysts</Divider>
                           <Statistic.Group size="mini" color="green" widths={2}>
@@ -273,6 +278,8 @@ class DailyActivityReports extends Component {
                             </Statistic>
                           </Statistic.Group>
                         </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
                         <Grid.Column>
                           <Divider horizontal>Brokers</Divider>
                           <Statistic.Group size="mini" color="green" widths={2}>
@@ -321,7 +328,8 @@ DailyActivityReports.propTypes = {
   maxTotalsAnalystsPerDate: PropTypes.number,
   avgTotalsAnalystsPerDate: PropTypes.number,
   maxTotalsBrokersPerDate: PropTypes.number,
-  avgTotalsBrokersPerDate: PropTypes.number
+  avgTotalsBrokersPerDate: PropTypes.number,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => {

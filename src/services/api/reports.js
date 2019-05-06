@@ -62,3 +62,11 @@ export const getUsersPerRegion = region => {
     params: { region }
   })
 }
+
+export const getDailyTimeActivityReport = (id, date) => {
+  return request({
+    method: 'get',
+    url: '/reports/daily-time-activity-report',
+    params: { id, date }
+  })
+}
