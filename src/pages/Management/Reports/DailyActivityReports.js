@@ -46,7 +46,10 @@ class DailyActivityReports extends Component {
       this.props.setFieldValue('userAccountName', this.props.userAccountNameRestored)
   }
 
-  _handleDateFromChange = date => {
+  _handleDateFromChange = async date => {
+    await this.setState({
+      data: 0
+    })
     if (moment(date).diff(moment(this.props.values.dateTo)) > 0) {
       this._showMsg('smaller')
     } else {
@@ -54,7 +57,10 @@ class DailyActivityReports extends Component {
     }
   }
 
-  _handleDateToChange = date => {
+  _handleDateToChange = async date => {
+    await this.setState({
+      data: 0
+    })
     if (moment(this.props.values.dateFrom).isSameOrAfter(moment(date))) {
       this._showMsg('bigger')
     } else {
@@ -62,7 +68,10 @@ class DailyActivityReports extends Component {
     }
   }
 
-  _handleSelectChange = (e, { name, value }) => {
+  _handleSelectChange = async (e, { name, value }) => {
+    await this.setState({
+      data: 0
+    })
     this.props.setFieldValue(name, value)
 
     if (name === 'officeRegion') {

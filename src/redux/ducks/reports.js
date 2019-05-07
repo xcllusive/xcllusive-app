@@ -115,7 +115,8 @@ const initialState = {
   getDailyTimeActivityReport: {
     isLoading: false,
     array: [],
-    error: null
+    error: null,
+    user: null
   }
 }
 
@@ -423,7 +424,8 @@ export default function reducer (state = initialState, action) {
         getDailyTimeActivityReport: {
           ...state.getDailyTimeActivityReport,
           isLoading: false,
-          array: action.payload,
+          array: action.payload.data,
+          user: action.payload.user,
           error: null
         }
       }
@@ -693,7 +695,7 @@ export const getDailyTimeActivityReport = (id, date) => async dispatch => {
     const dailyTime = await getDailyTimeActivityReportAPI(id, date)
     dispatch({
       type: Types.GET_DAILY_TIME_ACTIVITY_SUCCESS,
-      payload: dailyTime.data
+      payload: dailyTime
     })
   } catch (error) {
     dispatch({

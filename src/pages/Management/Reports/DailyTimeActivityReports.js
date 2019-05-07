@@ -6,14 +6,15 @@ import { withFormik } from 'formik'
 import Wrapper from '../../../components/content/Wrapper'
 import { Header, Grid, Button, Icon, Segment } from 'semantic-ui-react'
 import { getDailyTimeActivityReport } from '../../../redux/ducks/reports'
-// import moment from 'moment'
+import moment from 'moment'
 import { BarChart, Bar, XAxis, Tooltip, CartesianGrid, YAxis, Legend } from 'recharts'
 
 class DailyTimeActivityReports extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      data: []
+      data: [],
+      dateFormatted: null
     }
   }
 
@@ -22,6 +23,8 @@ class DailyTimeActivityReports extends Component {
       this.props.location.state.data.userId_logged,
       this.props.location.state.data.dateCreated
     )
+    const date = moment(this.props.location.state.data.dateCreated).format('YYYY-DD-MM')
+    this.setState({ dateFormatted: date })
   }
 
   _backToWeeklyReport () {
@@ -29,9 +32,8 @@ class DailyTimeActivityReports extends Component {
   }
 
   render () {
-    const { arraydailyTimeReport } = this.props
-    // const { data } = this.props.location.state
-    console.log(arraydailyTimeReport)
+    const { arrayDailyTimeReport, userAnalised } = this.props
+    const { data } = this.props.location.state
     return (
       <Wrapper>
         <Header style={{ marginTop: '10px' }} textAlign="center">
@@ -48,7 +50,7 @@ class DailyTimeActivityReports extends Component {
               </Header>
             </Grid.Column>
           </Grid.Row>
-          {arraydailyTimeReport.length > 0 ? (
+          {arrayDailyTimeReport.length > 0 ? (
             <Grid.Row>
               <Grid.Column>
                 <Segment
@@ -57,12 +59,22 @@ class DailyTimeActivityReports extends Component {
                   size="small"
                 >
                   <Grid>
+                    <Grid.Row columns={2}>
+                      <Grid.Column>
+                        <Header as="h2">{`${userAnalised.firstName} ${userAnalised.lastName}`}</Header>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Header as="h2">{`${data.dateCreated} - ${moment(this.state.dateFormatted).format(
+                          'dddd'
+                        )}`}</Header>
+                      </Grid.Column>
+                    </Grid.Row>
                     <Grid.Row>
                       <Grid.Column>
                         <BarChart
-                          width={700}
-                          height={400}
-                          data={arraydailyTimeReport}
+                          width={1000}
+                          height={500}
+                          data={arrayDailyTimeReport}
                           margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
                         >
                           <CartesianGrid strokeDasharray="3 3" />
@@ -91,7 +103,8 @@ DailyTimeActivityReports.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
   getDailyTimeActivityReport: PropTypes.func,
-  arraydailyTimeReport: PropTypes.array
+  arrayDailyTimeReport: PropTypes.array,
+  userAnalised: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -99,7 +112,8 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  arraydailyTimeReport: state.reports.getDailyTimeActivityReport.array
+  arrayDailyTimeReport: state.reports.getDailyTimeActivityReport.array,
+  userAnalised: state.reports.getDailyTimeActivityReport.user
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getDailyTimeActivityReport }, dispatch)
