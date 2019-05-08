@@ -151,13 +151,14 @@ class EditBusinessDetailForm extends Component {
     })
   }
 
-  _openModalReassignBusiness = (id, listingAgent) => {
+  _openModalReassignBusiness = id => {
     this.props.openModal(TypesModal.MODAL_TYPE_STAGE_REASSIGN_BUSINESS, {
       options: {
         title: 'Reassign Business to New Listing Agent'
       },
       businessId: id,
-      listingAgent: listingAgent.id
+      listingAgent: this.props.values.listingAgent ? this.props.values.listingAgent.id : 0,
+      listingAgentCtc: this.props.values.listingAgentCtc ? this.props.values.listingAgentCtc.id : 0
     })
   }
 
@@ -429,15 +430,17 @@ class EditBusinessDetailForm extends Component {
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
-                  <Form.Input
-                    label="Listing Agent"
-                    placeholder={`${values.listingAgent.firstName} ${values.listingAgent.lastName}`}
-                    readOnly
-                  />
+                  {values.listingAgent ? (
+                    <Form.Input
+                      label="Xcllusive Listing Agent"
+                      placeholder={`${values.listingAgent.firstName} ${values.listingAgent.lastName}`}
+                      readOnly
+                    />
+                  ) : null}
                   <Button
                     primary
                     size="small"
-                    onClick={() => this._openModalReassignBusiness(values.id, values.listingAgent)}
+                    onClick={() => this._openModalReassignBusiness(values.id)}
                     disabled={
                       this.props.history.location &&
                       this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
@@ -466,6 +469,16 @@ class EditBusinessDetailForm extends Component {
                     Appraisal Mgmt
                   </Button>
                 </Form.Group>
+                {values.listingAgentCtc ? (
+                  <Form.Group inline>
+                    <Form.Input
+                      style={{ marginLeft: '25px' }}
+                      label="CTC Listing Agent"
+                      placeholder={`${values.listingAgentCtc.firstName} ${values.listingAgentCtc.lastName}`}
+                      readOnly
+                    />
+                  </Form.Group>
+                ) : null}
                 <Form.Group>
                   {!this.props.business.agreement_id ? (
                     <Form.Button
@@ -870,6 +883,7 @@ const mapPropsToValues = props => {
       data120DayGuarantee,
       notifyOwner,
       listingAgent,
+      listingAgentCtc,
       sourceId,
       ratingId,
       productId,
@@ -901,6 +915,7 @@ const mapPropsToValues = props => {
       data120DayGuarantee,
       notifyOwner,
       listingAgent,
+      listingAgentCtc,
       businessSource: sourceId,
       businessRating: ratingId,
       businessProduct: productId,
@@ -933,6 +948,7 @@ const mapPropsToValues = props => {
     data120DayGuarantee: false,
     notifyOwner: false,
     listingAgent: 0,
+    listingAgentCtc: 0,
     businessSource: '',
     businessRating: '',
     businessProduct: '',

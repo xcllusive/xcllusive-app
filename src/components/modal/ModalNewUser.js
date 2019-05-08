@@ -268,7 +268,7 @@ class ModalNewUser extends Component {
                 {errors.userType && touched.userType && <Label basic color="red" pointing content={errors.userType} />}
               </Form.Field>
               <Form.Field>
-                <label>Listing Agent</label>
+                <label>Listing Agent Xcllusive</label>
                 <Form.Field
                   control={Radio}
                   label="Yes"
@@ -282,6 +282,23 @@ class ModalNewUser extends Component {
                   name="listingAgent"
                   onChange={this._handleChangeCheckBox}
                   checked={!values.listingAgent}
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Listing Agent CTC</label>
+                <Form.Field
+                  control={Radio}
+                  label="Yes"
+                  name="listingAgentCtc"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.listingAgentCtc}
+                />
+                <Form.Field
+                  control={Radio}
+                  label="No"
+                  name="listingAgentCtc"
+                  onChange={this._handleChangeCheckBox}
+                  checked={!values.listingAgentCtc}
                 />
               </Form.Field>
               <Form.Field>
@@ -437,6 +454,7 @@ const mapPropsToValues = props => {
       postCode: props.user.postCode ? props.user.postCode : '',
       officeId: props.user ? props.user.officeId : '',
       listingAgent: props.user.listingAgent ? props.user.listingAgent : false,
+      listingAgentCtc: props.user.listingAgentCtc ? props.user.listingAgentCtc : false,
       broker: props.user.listingAgent ? props.user.listingAgent : false,
       userType: props.user.userType ? props.user.userType : '',
       levelOfInfoAccess: props.user ? props.user.levelOfInfoAccess : false,
@@ -462,6 +480,7 @@ const mapPropsToValues = props => {
     street: '',
     postCode: '',
     listingAgent: false,
+    listingAgentCtc: false,
     broker: false,
     userType: '',
     levelOfInfoAccess: false,

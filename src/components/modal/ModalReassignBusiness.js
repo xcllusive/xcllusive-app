@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Label, Icon, Button, Message } from 'semantic-ui-react'
-import * as Yup from 'yup'
+import { Modal, Form, Icon, Button, Message } from 'semantic-ui-react'
 import { closeModal } from '../../redux/ducks/modal'
 
 import { reassignBusiness } from '../../redux/ducks/business'
@@ -42,13 +41,14 @@ class ModalReassignBusiness extends Component {
     }
     await this.props.reassignBusiness({
       businessId: this.props.businessId,
-      listingAgentId: this.props.values.listingAgent
+      listingAgentId: this.props.values.listingAgent,
+      listingAgentCtcId: this.props.values.listingAgentCtc
     })
     this.props.closeModal()
   }
 
   render () {
-    const { values, touched, errors, isValid, createLoading, options } = this.props
+    const { values, isValid, createLoading, options, xcllusiveAnalysts, ctcAnalysts } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -64,16 +64,26 @@ class ModalReassignBusiness extends Component {
               <Form.Field width={8}>
                 <Form.Select
                   required
-                  label="Reassign Business To New Listing Agent"
+                  label="Reassign Business To New Xcllusive Listing Agent"
                   name="listingAgent"
-                  options={this._mapValuesToArray(this.props.users)}
+                  options={this._mapValuesToArray(xcllusiveAnalysts)}
                   autoComplete="listingAgent"
                   value={values.listingAgent}
                   onChange={this._handleSelectChange}
                 />
-                {errors.listingAgent && touched.listingAgent && (
-                  <Label basic color="red" pointing content={errors.listingAgent} />
-                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field width={8}>
+                <Form.Select
+                  required
+                  label="Reassign Business To New CTC Listing Agent"
+                  name="listingAgentCtc"
+                  options={this._mapValuesToArray(ctcAnalysts)}
+                  autoComplete="listingAgentCtc"
+                  value={values.listingAgentCtc}
+                  onChange={this._handleSelectChange}
+                />
               </Form.Field>
             </Form.Group>
           </Form>
@@ -113,27 +123,34 @@ ModalReassignBusiness.propTypes = {
   }).isRequired,
   reassignBusiness: PropTypes.func,
   businessId: PropTypes.number.isRequired,
-  listingAgent: PropTypes.number.isRequired
+  listingAgent: PropTypes.number.isRequired,
+  listingAgentCtc: PropTypes.number.isRequired,
+  xcllusiveAnalysts: PropTypes.array,
+  ctcAnalysts: PropTypes.array
 }
 
 const mapPropsToValues = props => {
-  if (props && props.listingAgent) {
+  if (props && (props.listingAgent || props.listingAgent)) {
     return {
-      listingAgent: props.listingAgent
+      listingAgent: props.listingAgent,
+      listingAgentCtc: props.listingAgentCtc
     }
   }
   return {
-    listingAgent: 0
+    listingAgent: 0,
+    listingAgentCtc: 0
   }
 }
 
-const validationSchema = Yup.object().shape({
-  listingAgent: Yup.number().required('Listing Agent is required.')
-})
+// const validationSchema = Yup.object().shape({
+//   listingAgent: Yup.number().required('Listing Agent is required.')
+// })
 
 const mapStateToProps = state => ({
   createLoading: state.business.reassignBusiness.isLoading,
-  users: state.user.get.array
+  users: state.user.get.array,
+  xcllusiveAnalysts: state.user.get.xcllusiveAnalysts,
+  ctcAnalysts: state.user.get.ctcAnalysts
 })
 
 const mapDispatchToProps = dispatch =>
@@ -151,7 +168,6 @@ export default connect(
   mapDispatchToProps
 )(
   withFormik({
-    validationSchema,
     mapPropsToValues,
     enableReinitialize: true
   })(ModalReassignBusiness)
