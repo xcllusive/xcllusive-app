@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
-// import Reports from './Reports/Reports'
+import Reports from './Reports/Reports'
 
 class index extends Component {
   constructor (props) {
@@ -11,8 +11,8 @@ class index extends Component {
     this.state = {
       panes: [
         {
-          // menuItem: 'Reports',
-          // render: () => <Reports history={this.props.history} />
+          menuItem: 'Reports',
+          render: () => <Reports history={this.props.history} />
         }
       ]
     }

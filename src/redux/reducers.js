@@ -25,6 +25,7 @@ import businessSold from './ducks/businessSold'
 import broker from './ducks/broker'
 import reports from './ducks/reports'
 import officeRegister from './ducks/officeRegister'
+import reportsCtc from './ducks/CTC/reports'
 
 export default combineReducers({
   modal,
@@ -51,5 +52,6 @@ export default combineReducers({
   broker,
   reports,
   officeRegister,
+  reportsCtc,
   router: routerReducer
 })
