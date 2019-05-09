@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
-import BrokersWeeklyReports from './BrokersWeeklyReports'
-import MarketingReports from './MarketingReports'
-import AnalystReports from './AnalystReports'
-import { setLastTabSelected } from '../../../redux/ducks/reports'
-import EnquiryReports from './EnquiryReports'
-import DailyActivityReports from './DailyActivityReports'
+import BrokersWeekly from './BrokersWeekly'
+import Marketing from './Marketing'
+import Analyst from './Analyst'
+import { setLastTabSelected } from '../../../../redux/ducks/reports'
+import Enquiry from './Enquiry'
+import DailyActivity from './DailyActivity'
 
 class Reports extends Component {
   constructor (props) {
@@ -16,24 +16,24 @@ class Reports extends Component {
     this.state = {
       panes: [
         {
-          menuItem: 'Marketing Reports',
-          render: () => <MarketingReports history={this.props.history} />
+          menuItem: 'Marketing',
+          render: () => <Marketing history={this.props.history} />
         },
         {
-          menuItem: 'Broker`s Weekly Reports',
-          render: () => <BrokersWeeklyReports history={this.props.history} />
+          menuItem: 'Brokers Weekly',
+          render: () => <BrokersWeekly history={this.props.history} />
         },
         {
-          menuItem: 'Analyst`s Reports',
-          render: () => <AnalystReports history={this.props.history} />
+          menuItem: 'Analysts',
+          render: () => <Analyst history={this.props.history} />
         },
         {
-          menuItem: 'Enquiries Reports',
-          render: () => <EnquiryReports history={this.props.history} />
+          menuItem: 'Enquiries',
+          render: () => <Enquiry history={this.props.history} />
         },
         {
-          menuItem: 'Daily Activity Reports',
-          render: () => <DailyActivityReports history={this.props.history} />
+          menuItem: 'Daily Activity',
+          render: () => <DailyActivity history={this.props.history} />
         }
       ]
     }

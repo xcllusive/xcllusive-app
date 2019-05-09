@@ -7,17 +7,17 @@ import { Grid, Form, Table, Segment, Header, Dimmer, Loader, Button, Icon, Label
 import moment from 'moment'
 import numeral from 'numeral'
 import _ from 'lodash'
-import { openModal, TypesModal } from '../../../redux/ducks/modal'
-import Wrapper from '../../../components/content/Wrapper'
+import { openModal, TypesModal } from '../../../../redux/ducks/modal'
+import Wrapper from '../../../../components/content/Wrapper'
 import {
   setBrokerAccountName,
   getBrokersPerRegion,
   getBusinessesPerBroker,
   clearWeeklyReports
-} from '../../../redux/ducks/broker'
-import { mapArrayToValuesForDropdown } from '../../../utils/sharedFunctionArray'
-import { getUserLogged } from '../../../redux/ducks/user'
-import { getOfficeRegister } from '../../../redux/ducks/officeRegister'
+} from '../../../../redux/ducks/broker'
+import { mapArrayToValuesForDropdown } from '../../../../utils/sharedFunctionArray'
+import { getUserLogged } from '../../../../redux/ducks/user'
+import { getOfficeRegister } from '../../../../redux/ducks/officeRegister'
 
 class BrokersWeeklyReports extends Component {
   constructor (props) {

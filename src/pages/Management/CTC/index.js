@@ -3,21 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
-import XcllusiveManagmentReports from './Xcllusive/index'
-import CtcManagementReports from './CTC/index'
+// import Reports from './Reports/Reports'
 
-class ManagementPage extends Component {
+class index extends Component {
   constructor (props) {
     super(props)
     this.state = {
       panes: [
         {
-          menuItem: 'Xcllusive',
-          render: () => <XcllusiveManagmentReports history={this.props.history} />
-        },
-        {
-          menuItem: 'CTC',
-          render: () => <CtcManagementReports history={this.props.history} />
+          // menuItem: 'Reports',
+          // render: () => <Reports history={this.props.history} />
         }
       ]
     }
@@ -34,7 +29,7 @@ class ManagementPage extends Component {
   }
 }
 
-ManagementPage.propTypes = {
+index.propTypes = {
   history: PropTypes.object
 }
 
@@ -45,4 +40,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ManagementPage)
+)(index)

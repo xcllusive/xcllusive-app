@@ -29,9 +29,9 @@ import PreviewAgreement from './Business/Agreement/PreviewAgreement'
 import MakeTaxInvoice from './Business/Invoice/MakeTaxInvoice'
 import AppraisalMenu from './Business/Appraisal/AppraisalMenu'
 import AppraisalList from './Business/Appraisal/AppraisalList'
-import HistoricalWeeklyReport from './Management/Reports/HistoricalWeeklyReport'
-import BusinessesListPerAnalyst from './Management/Reports/BusinessesListPerAnalyst'
-import DailyTimeActivityReports from './Management/Reports/DailyTimeActivityReports'
+import HistoricalWeeklyReport from './Management/Xcllusive/Reports/HistoricalWeekly'
+import BusinessesListPerAnalyst from './Management/Xcllusive/Reports/BusinessesListPerAnalyst'
+import DailyTimeActivityReports from './Management/Xcllusive/Reports/DailyTimeActivity'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>

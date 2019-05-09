@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import _ from 'lodash'
 import { Grid, Form, Button, Segment, Statistic, Header, Divider } from 'semantic-ui-react'
-import Wrapper from '../../../components/content/Wrapper'
+import Wrapper from '../../../../components/content/Wrapper'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
@@ -14,10 +14,10 @@ import {
   keepActivityRequestControlPerUser,
   getUsersPerRegion,
   setUserAccountName
-} from '../../../redux/ducks/reports'
-import { mapArrayToValuesForDropdown } from '../../../utils/sharedFunctionArray'
-import { getUserLogged } from '../../../redux/ducks/user'
-import { getOfficeRegister } from '../../../redux/ducks/officeRegister'
+} from '../../../../redux/ducks/reports'
+import { mapArrayToValuesForDropdown } from '../../../../utils/sharedFunctionArray'
+import { getUserLogged } from '../../../../redux/ducks/user'
+import { getOfficeRegister } from '../../../../redux/ducks/officeRegister'
 import { BarChart, Bar, XAxis, Tooltip, CartesianGrid, YAxis, Legend } from 'recharts'
 
 class DailyActivityReports extends Component {

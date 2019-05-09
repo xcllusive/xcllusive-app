@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Grid, Table, Segment, Header, Button, Icon } from 'semantic-ui-react'
-import Wrapper from '../../../components/content/Wrapper'
-import { getBusinessesPerAnalyst } from '../../../redux/ducks/reports'
+import Wrapper from '../../../../components/content/Wrapper'
+import { getBusinessesPerAnalyst } from '../../../../redux/ducks/reports'
 import moment from 'moment'
 
 class BusinessesListPerAnalyst extends Component {
