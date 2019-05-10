@@ -69,7 +69,7 @@ class MarketingReports extends Component {
 
   _goToBusinessesListPerAnalyst = leadsPerAnalyst => {
     this.props.history.push({
-      pathname: `management/businesses-list-analyst/${leadsPerAnalyst.listingAgent_id}`,
+      pathname: `management/ctc/businesses-list-analyst/${leadsPerAnalyst.listingAgentCtc_id}`,
       state: {
         analystObject: leadsPerAnalyst,
         dateFrom: this.props.values.dateFrom,
@@ -87,7 +87,6 @@ class MarketingReports extends Component {
       arrayLeadsPerSource,
       totalsArray
     } = this.props
-    console.log(totalsArray)
     return (
       <Wrapper>
         <Form>
@@ -270,14 +269,12 @@ class MarketingReports extends Component {
                                   {leadsPerSource.count}
                                 </Table.Cell>
                                 <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                  {leadsPerSource.countSourceSignedUpStage
-                                    ? leadsPerSource.countSourceSignedUpStage
-                                    : 0}
+                                  {leadsPerSource.countSourceSignedUp ? leadsPerSource.countSourceSignedUp : 0}
                                 </Table.Cell>
                                 <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                  {leadsPerSource.countSourceSignedUpStage > 0
+                                  {leadsPerSource.countSourceSignedUp > 0
                                     ? `${numeral(
-                                      (leadsPerSource.countSourceSignedUpStage / leadsPerSource.count) * 100
+                                      (leadsPerSource.countSourceSignedUp / leadsPerSource.count) * 100
                                     ).format('0,0.0')}%`
                                     : 0}
                                 </Table.Cell>
@@ -371,13 +368,11 @@ const mapPropsToValues = props => {
 
 const mapStateToProps = state => ({
   leadsPerAnalystArray: state.reportsCtc.getMarketingReport.leadsPerAnalystArray,
-  arrayTotalPerSource: state.reports.getMarketingReport.arrayTotalPerSource,
+  arrayTotalPerSource: state.reportsCtc.getMarketingReport.arrayTotalPerSource,
   arrayLeadsPerSource: state.reportsCtc.getMarketingReport.arrayLeadsPerSource,
-  arrayLeadsPerSourceSydney: state.reports.getMarketingReport.arrayLeadsPerSourceSydney,
-  arrayLeadsPerSourceQueensland: state.reports.getMarketingReport.arrayLeadsPerSourceQueensland,
-  totalGeralPerSource: state.reports.getMarketingReport.totalGeralPerSource,
+  totalGeralPerSource: state.reportsCtc.getMarketingReport.totalGeralPerSource,
   totalsArray: state.reportsCtc.getMarketingReport.totalsArray,
-  savedRecords: state.reports.keepMarketingRecords.records
+  savedRecords: state.reportsCtc.keepMarketingRecords.records
 })
 
 const mapDispatchToProps = dispatch =>

@@ -32,6 +32,7 @@ import AppraisalList from './Business/Appraisal/AppraisalList'
 import HistoricalWeeklyReport from './Management/Xcllusive/Reports/HistoricalWeekly'
 import BusinessesListPerAnalyst from './Management/Xcllusive/Reports/BusinessesListPerAnalyst'
 import DailyTimeActivityReports from './Management/Xcllusive/Reports/DailyTimeActivity'
+import BusinessesCtcListPerAnalyst from './Management/CTC/Reports/BusinessesListPerAnalyst'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
@@ -199,6 +200,12 @@ const Layout = ({ match, logout, menu, user }) => (
         exact
         component={DailyTimeActivityReports}
         path={`${match.path}management/daily-time-activity-report`}
+        allowedRoles="MANAGEMENT_MENU"
+      />
+      <AuthorizationRoute
+        exact
+        component={BusinessesCtcListPerAnalyst}
+        path={`${match.path}management/ctc/businesses-list-analyst/:idAnalyst`}
         allowedRoles="MANAGEMENT_MENU"
       />
       <AuthorizationRoute
