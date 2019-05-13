@@ -48,7 +48,8 @@ export const Types = {
   SET_USER_ACCOUNT_NAME: 'SET_USER_ACCOUNT_NAME',
   GET_DAILY_TIME_ACTIVITY_LOADING: 'GET_DAILY_TIME_ACTIVITY_LOADING',
   GET_DAILY_TIME_ACTIVITY_SUCCESS: 'GET_DAILY_TIME_ACTIVITY_SUCCESS',
-  GET_DAILY_TIME_ACTIVITY_FAILURE: 'GET_DAILY_TIME_ACTIVITY_FAILURE'
+  GET_DAILY_TIME_ACTIVITY_FAILURE: 'GET_DAILY_TIME_ACTIVITY_FAILURE',
+  SET_LAST_XCLLUSIVE_TAB_SELECTED: 'SET_LAST_XCLLUSIVE_TAB_SELECTED'
 }
 
 // Reducer
@@ -92,6 +93,9 @@ const initialState = {
     records: null
   },
   setLastTabSelected: {
+    index: 0
+  },
+  setLastXcllusiveTabSelected: {
     index: 0
   },
   keepAnalystParams: null,
@@ -295,6 +299,14 @@ export default function reducer (state = initialState, action) {
         ...state,
         setLastTabSelected: {
           ...state.setLastTabSelected,
+          index: action.payload
+        }
+      }
+    case Types.SET_LAST_XCLLUSIVE_TAB_SELECTED:
+      return {
+        ...state,
+        setLastXcllusiveTabSelected: {
+          ...state.setLastXcllusiveTabSelected,
           index: action.payload
         }
       }
@@ -574,6 +586,13 @@ export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => async di
 export const setLastTabSelected = indexLastTab => async dispatch => {
   dispatch({
     type: Types.SET_LAST_TAB_SELECTED,
+    payload: indexLastTab
+  })
+}
+
+export const setLastXcllusiveTabSelected = indexLastTab => async dispatch => {
+  dispatch({
+    type: Types.SET_LAST_XCLLUSIVE_TAB_SELECTED,
     payload: indexLastTab
   })
 }

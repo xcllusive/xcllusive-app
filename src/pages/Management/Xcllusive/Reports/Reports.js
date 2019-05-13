@@ -6,7 +6,7 @@ import { Tab } from 'semantic-ui-react'
 import BrokersWeekly from './BrokersWeekly'
 import Marketing from './Marketing'
 import Analyst from './Analyst'
-import { setLastTabSelected } from '../../../../redux/ducks/reports'
+import { setLastXcllusiveTabSelected } from '../../../../redux/ducks/reports'
 import Enquiry from './Enquiry'
 import DailyActivity from './DailyActivity'
 
@@ -40,7 +40,7 @@ class Reports extends Component {
   }
 
   _handleSelect = (e, { activeIndex }) => {
-    this.props.setLastTabSelected(activeIndex)
+    this.props.setLastXcllusiveTabSelected(activeIndex)
   }
 
   render () {
@@ -60,13 +60,13 @@ class Reports extends Component {
 
 Reports.propTypes = {
   history: PropTypes.object,
-  setLastTabSelected: PropTypes.func,
+  setLastXcllusiveTabSelected: PropTypes.func,
   indexLastTabSelected: PropTypes.number
 }
-const mapDispatchToProps = dispatch => bindActionCreators({ setLastTabSelected }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ setLastXcllusiveTabSelected }, dispatch)
 
 const mapStateToProps = state => ({
-  indexLastTabSelected: state.reports.setLastTabSelected.index
+  setLastXcllusiveTabSelected: state.reports.setLastXcllusiveTabSelected.index
 })
 
 export default connect(

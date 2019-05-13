@@ -1,4 +1,4 @@
-import { get, update, execute } from '../../services/api/systemSettings'
+import { get, update, execute, exportBuyers as exportBuyersAPI } from '../../services/api/systemSettings'
 //  import { toast } from 'react-toastify'
 
 // Action Types
@@ -12,7 +12,10 @@ export const Types = {
   UPDATE_SYSTEM_SETTINGS_FAILURE: 'UPDATE_SYSTEM_SETTINGS_FAILURE',
   EXECUTE_JAVASCRIPT_LOADING: 'EXECUTE_JAVASCRIPT_LOADING',
   EXECUTE_JAVASCRIPT_SUCCESS: 'EXECUTE_JAVASCRIPT_SUCCESS',
-  EXECUTE_JAVASCRIPT_FAILURE: 'EXECUTE_JAVASCRIPT_FAILURE'
+  EXECUTE_JAVASCRIPT_FAILURE: 'EXECUTE_JAVASCRIPT_FAILURE',
+  EXPORT_BUYERS_LOADING: 'EXPORT_BUYERS_LOADING',
+  EXPORT_BUYERS_SUCCESS: 'EXPORT_BUYERS_SUCCESS',
+  EXPORT_BUYERS_FAILURE: 'EXPORT_BUYERS_FAILURE'
 }
 
 // Reducer
@@ -31,6 +34,11 @@ const initialState = {
   },
   executeJavaScript: {
     object: {},
+    isLoading: false,
+    error: null
+  },
+  exportBuyers: {
+    array: [],
     isLoading: false,
     error: null
   }
@@ -123,6 +131,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.EXPORT_BUYERS_LOADING:
+      return {
+        ...state,
+        exportBuyers: {
+          ...state.exportBuyers,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.EXPORT_BUYERS_SUCCESS:
+      return {
+        ...state,
+        exportBuyers: {
+          ...state.exportBuyers,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.EXPORT_BUYERS_FAILURE:
+      return {
+        ...state,
+        exportBuyers: {
+          ...state.exportBuyers,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -163,6 +199,25 @@ export const updateSystemSettings = systemSettings => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_SYSTEM_SETTINGS_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const exportBuyers = (dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.EXPORT_BUYERS_LOADING,
+    payload: true
+  })
+  try {
+    const response = await exportBuyersAPI(dateFrom, dateTo)
+    dispatch({
+      type: Types.EXPORT_BUYERS_SUCCESS,
+      payload: response
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.EXPORT_BUYERS_FAILURE,
       payload: error
     })
   }

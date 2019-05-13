@@ -19,3 +19,11 @@ export const execute = () => {
     url: '/system-settings/execute-javascript'
   })
 }
+
+export const exportBuyers = (dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: '/system-settings/export-buyers',
+    params: { dateFrom, dateTo }
+  })
+}

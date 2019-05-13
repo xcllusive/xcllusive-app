@@ -205,7 +205,7 @@ const Layout = ({ match, logout, menu, user }) => (
       <AuthorizationRoute
         exact
         component={BusinessesCtcListPerAnalyst}
-        path={`${match.path}management/ctc/businesses-list-analyst/:idAnalyst`}
+        path={`${match.path}management/ctc/businesses-list-analyst/:idUser`}
         allowedRoles="MANAGEMENT_MENU"
       />
       <AuthorizationRoute

@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
 import Marketing from './Marketing'
-// import Analyst from './Analyst'
-import { setLastTabSelected } from '../../../../redux/ducks/reports'
+import Analyst from './Analyst'
+import { setLastCtcTabSelected } from '../../../../redux/ducks/CTC/reports'
 
 class Reports extends Component {
   constructor (props) {
@@ -15,17 +15,17 @@ class Reports extends Component {
         {
           menuItem: 'Marketing',
           render: () => <Marketing history={this.props.history} />
+        },
+        {
+          menuItem: 'Analysts',
+          render: () => <Analyst history={this.props.history} />
         }
-        // {
-        //   menuItem: 'Analysts',
-        //   render: () => <Analyst history={this.props.history} />
-        // }
       ]
     }
   }
 
   _handleSelect = (e, { activeIndex }) => {
-    this.props.setLastTabSelected(activeIndex)
+    this.props.setLastCtcTabSelected(activeIndex)
   }
 
   render () {
@@ -45,13 +45,13 @@ class Reports extends Component {
 
 Reports.propTypes = {
   history: PropTypes.object,
-  setLastTabSelected: PropTypes.func,
+  setLastCtcTabSelected: PropTypes.func,
   indexLastTabSelected: PropTypes.number
 }
-const mapDispatchToProps = dispatch => bindActionCreators({ setLastTabSelected }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ setLastCtcTabSelected }, dispatch)
 
 const mapStateToProps = state => ({
-  indexLastTabSelected: state.reports.setLastTabSelected.index
+  indexLastTabSelected: state.reportsCtc.setLastTabSelected.index
 })
 
 export default connect(

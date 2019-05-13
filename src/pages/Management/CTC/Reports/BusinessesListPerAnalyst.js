@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Grid, Table, Segment, Header, Button, Icon } from 'semantic-ui-react'
 import Wrapper from '../../../../components/content/Wrapper'
-import { getBusinessesPerAnalyst } from '../../../../redux/ducks/reports'
+import { getBusinessesPerAnalyst, setLastCtcTabSelected } from '../../../../redux/ducks/CTC/reports'
 import moment from 'moment'
 
 class BusinessesListPerAnalyst extends Component {
@@ -34,6 +34,7 @@ class BusinessesListPerAnalyst extends Component {
 
   _backToMarketingReport () {
     this.props.history.goBack()
+    this.props.setLastCtcTabSelected(0)
   }
 
   render () {
@@ -42,7 +43,7 @@ class BusinessesListPerAnalyst extends Component {
     return (
       <Wrapper>
         <Header style={{ marginTop: '10px' }} textAlign="center">
-          {`${analystObject['listingAgent.firstName']} ${analystObject['listingAgent.lastName']}`}
+          {`${analystObject['listingAgentCtc.firstName']} ${analystObject['listingAgentCtc.lastName']}`}
         </Header>
         <Grid>
           <Grid.Row columns={1}>
@@ -168,7 +169,8 @@ BusinessesListPerAnalyst.propTypes = {
   businessesLeads: PropTypes.array,
   businessesSignedUp: PropTypes.array,
   match: PropTypes.object,
-  savedRecords: PropTypes.object
+  savedRecords: PropTypes.object,
+  setLastCtcTabSelected: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -178,12 +180,12 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  businessesLeads: state.reports.getBusinessesAnalyst.object.listBusinessesDateCreated,
-  businessesSignedUp: state.reports.getBusinessesAnalyst.object.listBusinessesSalesMemorandum,
-  savedRecords: state.reports.keepMarketingRecords.records
+  businessesLeads: state.reportsCtc.getCtcBusinessesAnalyst.object.listBusinessesDateCreated,
+  businessesSignedUp: state.reportsCtc.getCtcBusinessesAnalyst.object.listBusinessesSalesMemorandum,
+  savedRecords: state.reportsCtc.keepMarketingRecords.records
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBusinessesPerAnalyst }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBusinessesPerAnalyst, setLastCtcTabSelected }, dispatch)
 export default connect(
   mapStateToProps,
   mapDispatchToProps
