@@ -22,8 +22,9 @@ export const execute = () => {
 
 export const exportBuyers = (dateFrom, dateTo) => {
   return request({
-    method: 'get',
+    method: 'post',
     url: '/system-settings/export-buyers',
-    params: { dateFrom, dateTo }
+    data: { dateFrom, dateTo },
+    responseType: 'blob'
   })
 }

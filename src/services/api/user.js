@@ -37,3 +37,11 @@ export const getLogged = id => {
     params: { id }
   })
 }
+
+export const activeInactive = user => {
+  return request({
+    method: 'put',
+    url: '/user/active-inactive',
+    data: user
+  })
+}

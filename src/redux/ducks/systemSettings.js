@@ -1,4 +1,6 @@
 import { get, update, execute, exportBuyers as exportBuyersAPI } from '../../services/api/systemSettings'
+import download from '../../utils/file-download'
+import moment from 'moment'
 //  import { toast } from 'react-toastify'
 
 // Action Types
@@ -215,6 +217,7 @@ export const exportBuyers = (dateFrom, dateTo) => async dispatch => {
       type: Types.EXPORT_BUYERS_SUCCESS,
       payload: response
     })
+    download(response, `buyers${moment().format('DD_MM_YYYY_hh_mm_ss')}.xlsx`)
   } catch (error) {
     dispatch({
       type: Types.EXPORT_BUYERS_FAILURE,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Button, Header } from 'semantic-ui-react'
+import { Grid, Form, Button, Header, Segment } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
@@ -38,10 +38,10 @@ class Buyers extends Component {
     })
   }
 
-  _exportBuyers = async values => {
+  _exportBuyers = values => {
     this.props.exportBuyers(
-      moment(values.dateFrom).format('YYYY/MM/DD 00:00:00'),
-      moment(values.dateTo).format('YYYY/MM/DD 23:59:59')
+      moment(values.dateFrom).format('YYYY-MM-DD 00:00:00'),
+      moment(values.dateTo).format('YYYY-MM-DD 23:59:59')
     )
   }
 
@@ -49,62 +49,64 @@ class Buyers extends Component {
     const { values } = this.props
     return (
       <Wrapper>
-        <Header textAlign="center" color="red">
-          Exporting Buyers
-        </Header>
-        <Form>
-          <Grid>
-            <Grid.Row style={{ paddingBottom: '0px' }}>
-              <Grid.Column>
-                <Form.Group>
-                  <Form.Field>
-                    <label
-                      style={{
-                        marginRight: '15px',
-                        fontSize: '.92857143em',
-                        color: 'rgba(0,0,0,.87)',
-                        fontWeight: '700'
-                      }}
-                    >
-                      Date From:
-                    </label>
-                    <DatePicker
-                      selected={values.dateFrom}
-                      onChange={this._handleDateFromChange}
-                      popperPlacement="top-end"
-                    />
-                  </Form.Field>
-                  <Form.Field>
-                    <label
-                      style={{
-                        marginRight: '15px',
-                        fontSize: '.92857143em',
-                        color: 'rgba(0,0,0,.87)',
-                        fontWeight: '700'
-                      }}
-                    >
-                      Date To:
-                    </label>
-                    <DatePicker
-                      selected={values.dateTo}
-                      onChange={this._handleDateToChange}
-                      popperPlacement="top-end"
-                    />
-                  </Form.Field>
-                  <Form.Field style={{ marginTop: '25px' }}>
-                    <Button
-                      positive
-                      icon="checkmark"
-                      labelPosition="right"
-                      content="Export"
-                      onClick={() => this._exportBuyers(values)}
-                    />
-                  </Form.Field>
-                </Form.Group>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Form>
+        <Segment>
+          <Header textAlign="center" color="red">
+            Exporting Buyers
+          </Header>
+          <Form>
+            <Grid>
+              <Grid.Row style={{ paddingBottom: '0px' }}>
+                <Grid.Column>
+                  <Form.Group>
+                    <Form.Field>
+                      <label
+                        style={{
+                          marginRight: '15px',
+                          fontSize: '.92857143em',
+                          color: 'rgba(0,0,0,.87)',
+                          fontWeight: '700'
+                        }}
+                      >
+                        Date From:
+                      </label>
+                      <DatePicker
+                        selected={values.dateFrom}
+                        onChange={this._handleDateFromChange}
+                        popperPlacement="top-end"
+                      />
+                    </Form.Field>
+                    <Form.Field>
+                      <label
+                        style={{
+                          marginRight: '15px',
+                          fontSize: '.92857143em',
+                          color: 'rgba(0,0,0,.87)',
+                          fontWeight: '700'
+                        }}
+                      >
+                        Date To:
+                      </label>
+                      <DatePicker
+                        selected={values.dateTo}
+                        onChange={this._handleDateToChange}
+                        popperPlacement="top-end"
+                      />
+                    </Form.Field>
+                    <Form.Field style={{ marginTop: '25px' }}>
+                      <Button
+                        positive
+                        icon="checkmark"
+                        labelPosition="right"
+                        content="Export"
+                        onClick={() => this._exportBuyers(values)}
+                      />
+                    </Form.Field>
+                  </Form.Group>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Form>
+        </Segment>
       </Wrapper>
     )
   }

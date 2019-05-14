@@ -1,4 +1,4 @@
-import { getAll, create, update, getLogged } from '../../services/api/user'
+import { getAll, create, update, getLogged, activeInactive as activeInactiveAPI } from '../../services/api/user'
 import { toast } from 'react-toastify'
 
 import { Types as TypesModal } from './modal'
@@ -17,7 +17,10 @@ export const Types = {
   UPDATE_USER_FAILURE: 'UPDATE_USER_FAILURE',
   GET_USER_LOGGED_LOADING: 'GET_USER_LOGGED_LOADING',
   GET_USER_LOGGED_SUCCESS: 'GET_USER_LOGGED_SUCCESS',
-  GET_USER_LOGGED_FAILURE: 'GET_USER_LOGGED_FAILURE'
+  GET_USER_LOGGED_FAILURE: 'GET_USER_LOGGED_FAILURE',
+  ACTIVE_INACTIVE_LOADING: 'ACTIVE_INACTIVE_LOADING',
+  ACTIVE_INACTIVE_SUCCESS: 'ACTIVE_INACTIVE_SUCCESS',
+  ACTIVE_INACTIVE_FAILURE: 'ACTIVE_INACTIVE_FAILURE:'
 }
 
 // Reducer
@@ -43,6 +46,11 @@ const initialState = {
   getLogged: {
     isLoading: false,
     object: null,
+    error: null
+  },
+  activeInactive: {
+    isLoading: false,
+    isUpdated: false,
     error: null
   }
 }
@@ -171,6 +179,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.ACTIVE_INACTIVE_LOADING:
+      return {
+        ...state,
+        activeInactive: {
+          ...state.activeInactive,
+          isLoading: action.payload,
+          isUpdated: false
+        }
+      }
+    case Types.ACTIVE_INACTIVE_SUCCESS:
+      return {
+        ...state,
+        activeInactive: {
+          ...state.activeInactive,
+          isLoading: false,
+          isUpdated: true
+        }
+      }
+    case Types.ACTIVE_INACTIVE_FAILURE:
+      return {
+        ...state,
+        activeInactive: {
+          ...state.activeInactive,
+          isLoading: false,
+          isUpdated: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -250,6 +286,26 @@ export const getUserLogged = (id = false) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_USER_LOGGED_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const activeInactive = user => async dispatch => {
+  dispatch({
+    type: Types.ACTIVE_INACTIVE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await activeInactiveAPI(user)
+    dispatch({
+      type: Types.ACTIVE_INACTIVE_SUCCESS,
+      payload: response.data
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.ACTIVE_INACTIVE_FAILURE,
       payload: error
     })
   }

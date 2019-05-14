@@ -4,13 +4,14 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Label, Checkbox, Icon, Button, Radio } from 'semantic-ui-react'
+import { Modal, Form, Label, Checkbox, Icon, Button, Radio, Grid } from 'semantic-ui-react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
 
 import { closeModal } from '../../redux/ducks/modal'
 import { getOfficeRegister } from '../../redux/ducks/officeRegister'
+import { activeInactive } from '../../redux/ducks/user'
 
 const CheckboxFormatted = styled.div`
   padding-right: 1em;
@@ -66,6 +67,12 @@ class ModalNewUser extends Component {
         }
       }
     )
+  }
+
+  _activeInactive = async user => {
+    await this.props.activeInactive(user)
+    this.props.onConfirm(null)
+    this.props.closeModal()
   }
 
   render () {
@@ -397,20 +404,34 @@ class ModalNewUser extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            color="blue"
-            type="submit"
-            disabled={createLoading || updateLoading || !isValid}
-            loading={createLoading || updateLoading}
-            onClick={handleSubmit}
-          >
-            <Icon name="save" />
-            {this.props.user && this.props.user.id ? 'Edit User' : 'Create User'}
-          </Button>
-          <Button color="red" onClick={closeModal}>
-            <Icon name="cancel" />
-            Cancel
-          </Button>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column>
+                <Button
+                  floated="left"
+                  color={this.props.user.active ? 'orange' : 'green'}
+                  onClick={() => this._activeInactive(this.props.user)}
+                >
+                  <Icon name={this.props.user.active ? 'cut' : 'redo'} />
+                  {this.props.user.active ? 'Inactivate' : 'Activate'}
+                </Button>
+                <Button
+                  color="blue"
+                  type="submit"
+                  disabled={createLoading || updateLoading || !isValid}
+                  loading={createLoading || updateLoading}
+                  onClick={handleSubmit}
+                >
+                  <Icon name="save" />
+                  {this.props.user && this.props.user.id ? 'Edit User' : 'Create User'}
+                </Button>
+                <Button color="red" onClick={closeModal}>
+                  <Icon name="cancel" />
+                  Cancel
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Modal.Actions>
       </Modal>
     )
@@ -433,7 +454,9 @@ ModalNewUser.propTypes = {
   user: PropTypes.object,
   title: PropTypes.string,
   getOfficeRegister: PropTypes.func,
-  officeOptions: PropTypes.array
+  officeOptions: PropTypes.array,
+  activeInactive: PropTypes.func,
+  onConfirm: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -458,6 +481,7 @@ const mapPropsToValues = props => {
       broker: props.user.listingAgent ? props.user.listingAgent : false,
       userType: props.user.userType ? props.user.userType : '',
       levelOfInfoAccess: props.user ? props.user.levelOfInfoAccess : false,
+      active: props.user.active ? props.user.active : false,
       buyerMenu: _.includes(roles, 'BUYER_MENU'),
       businessMenu: _.includes(roles, 'BUSINESS_MENU'),
       preSaleMenu: _.includes(roles, 'PRESALE_MENU'),
@@ -532,7 +556,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ closeModal, getOfficeRegister }, dispatch)
+  return bindActionCreators({ closeModal, getOfficeRegister, activeInactive }, dispatch)
 }
 
 export default connect(

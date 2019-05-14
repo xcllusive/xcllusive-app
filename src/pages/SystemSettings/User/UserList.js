@@ -72,6 +72,9 @@ class UserList extends React.Component {
         if (values) {
           await this.props.updateUser(values)
         }
+        if (values === null) {
+          this.props.getUsers()
+        }
       }
     })
   }
@@ -129,6 +132,7 @@ class UserList extends React.Component {
                 <Table.Row>
                   <Table.HeaderCell>ID</Table.HeaderCell>
                   <Table.HeaderCell>Name</Table.HeaderCell>
+                  <Table.HeaderCell>Situation</Table.HeaderCell>
                   <Table.HeaderCell>User Type</Table.HeaderCell>
                   <Table.HeaderCell>Listing Agent</Table.HeaderCell>
                   <Table.HeaderCell>Buyer</Table.HeaderCell>
@@ -147,6 +151,9 @@ class UserList extends React.Component {
                     <Table.Row active onClick={() => this._editUser(user)} key={user.id}>
                       <Table.Cell>{user.id}</Table.Cell>
                       <Table.Cell>{`${user.firstName} ${user.lastName}`}</Table.Cell>
+                      <Table.Cell style={{ color: user.active ? 'green' : 'red' }}>
+                        {user.active ? 'Active' : 'Inactive'}
+                      </Table.Cell>
                       <Table.Cell>{user.userType}</Table.Cell>
                       <Table.Cell>{user.listingAgent ? 'Yes' : 'No'}</Table.Cell>
                       <Table.Cell>{_.includes(roles, 'BUYER_MENU') ? 'Yes' : 'No'}</Table.Cell>
