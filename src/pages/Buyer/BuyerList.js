@@ -17,9 +17,9 @@ class BuyerListPage extends Component {
     }
   }
 
-  componentDidMount () {
-    this.props.getBuyersFromBusiness(this.props.match.params.id)
-    this.props.getBusinessFromBuyer(this.props.match.params.id)
+  async componentDidMount () {
+    await this.props.getBuyersFromBusiness(this.props.match.params.id)
+    await this.props.getBusinessFromBuyer(this.props.match.params.id)
   }
 
   // componentDidUpdate () {

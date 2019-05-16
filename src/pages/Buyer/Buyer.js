@@ -20,10 +20,10 @@ class BuyerPage extends Component {
     }
   }
 
-  componentDidMount () {
-    this.props.getBuyerBusinesses(false, 4)
-    this.props.getBuyerBusinesses(false, 5)
-    this.props.getBuyerBusinesses(false, 3)
+  async componentDidMount () {
+    await this.props.getBuyerBusinesses(false, 4)
+    await this.props.getBuyerBusinesses(false, 5)
+    await this.props.getBuyerBusinesses(false, 3)
   }
 
   _toggleModalGroupEmail = businessId => {
