@@ -72,7 +72,7 @@ class ModalGroupEmail extends Component {
       this.props.closeModal()
       return
     }
-    await this.props.sendGroupEmail(this.props.values, this.state.array)
+    await this.props.sendGroupEmail(this.props.values, this.state.array, this.props.businessId)
     this.props.closeModal()
   }
 

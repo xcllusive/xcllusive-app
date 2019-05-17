@@ -827,13 +827,13 @@ export const sendEmailBuyerBrokersEmail = sendEmail => async dispatch => {
   }
 }
 
-export const sendGroupEmail = (sendGroupEmail, array) => async dispatch => {
+export const sendGroupEmail = (sendGroupEmail, array, businessId) => async dispatch => {
   dispatch({
     type: Types.SEND_GROUP_EMAIL_LOADING,
     payload: true
   })
   try {
-    const response = await sendGroupEmailAPI(sendGroupEmail, array)
+    const response = await sendGroupEmailAPI(sendGroupEmail, array, businessId)
     dispatch({
       type: Types.SEND_GROUP_EMAIL_SUCCESS
     })

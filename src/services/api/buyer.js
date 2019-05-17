@@ -45,12 +45,13 @@ export const sendEmailBuyerBrokersEmail = sendEmail => {
   })
 }
 
-export const sendGroupEmail = (sendGroupEmail, array) => {
+export const sendGroupEmail = (sendGroupEmail, array, businessId) => {
   const data = new FormData()
   data.append('attachment', sendGroupEmail.attachment)
   data.append('subject', sendGroupEmail.subject)
   data.append('body', sendGroupEmail.body)
   data.append('to', JSON.stringify(array))
+  data.append('businessId', businessId)
 
   return request({
     method: 'post',
