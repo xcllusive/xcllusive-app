@@ -267,7 +267,8 @@ class EditBusinessDetailForm extends Component {
       stageOptions,
       usersBroker,
       isLoadingIM,
-      isLoadingGet
+      isLoadingGet,
+      ctcSourceOptions
     } = this.props
     const { state } = this.state
     return (
@@ -386,20 +387,38 @@ class EditBusinessDetailForm extends Component {
                       <Label basic color="red" pointing content={errors.vendorEmail} />
                     )}
                   </Form.Field>
-                  <Form.Field>
-                    <Form.Select
-                      required
-                      label="Source"
-                      options={sourceOptions}
-                      name="businessSource"
-                      autoComplete="businessSource"
-                      value={values.businessSource}
-                      onChange={this._handleSelectChange}
-                    />
-                    {errors.businessSource && touched.businessSource && (
-                      <Label basic color="red" pointing content={errors.businessSource} />
-                    )}
-                  </Form.Field>
+                  {this.props.business.listingAgent_id ? (
+                    <Form.Field>
+                      <Form.Select
+                        required
+                        label="Source"
+                        options={sourceOptions}
+                        name="businessSource"
+                        autoComplete="businessSource"
+                        value={values.businessSource}
+                        onChange={this._handleSelectChange}
+                      />
+                      {errors.businessSource && touched.businessSource && (
+                        <Label basic color="red" pointing content={errors.businessSource} />
+                      )}
+                    </Form.Field>
+                  ) : (
+                    <Form.Field>
+                      <Form.Select
+                        required
+                        label="Source"
+                        options={ctcSourceOptions}
+                        name="ctcSourceId"
+                        autoComplete="ctcSourceId"
+                        value={values.ctcSourceId}
+                        onChange={this._handleSelectChange}
+                      />
+                      {errors.ctcSourceId && touched.ctcSourceId && (
+                        <Label basic color="red" pointing content={errors.ctcSourceId} />
+                      )}
+                    </Form.Field>
+                  )}
+
                   <Form.Field>
                     <Form.Input
                       label="Source Notes"
@@ -857,7 +876,8 @@ EditBusinessDetailForm.propTypes = {
   isUpdatedBusiness: PropTypes.bool,
   updateBusinessFromBuyer: PropTypes.func,
   getBusinessFromBuyer: PropTypes.func,
-  match: PropTypes.object
+  match: PropTypes.object,
+  ctcSourceOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -891,7 +911,8 @@ const mapPropsToValues = props => {
       typeId,
       brokerAccountName,
       stageId,
-      industry
+      industry,
+      ctcSourceId
     } = props.business
 
     const business = {
@@ -923,7 +944,8 @@ const mapPropsToValues = props => {
       businessType: typeId,
       brokerAccountName,
       stage: stageId,
-      industry
+      industry,
+      ctcSourceId
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     business.notifyOwner = business.notifyOwner === true
@@ -947,15 +969,16 @@ const mapPropsToValues = props => {
     postCode: '0000',
     data120DayGuarantee: false,
     notifyOwner: false,
-    listingAgent: 0,
-    listingAgentCtc: 0,
+    listingAgent: '',
+    listingAgentCtc: '',
     businessSource: '',
     businessRating: '',
     businessProduct: '',
     // businessIndustry: '',
     businessType: '',
     stage: '',
-    industry: ''
+    industry: '',
+    ctcSourceId: null
   }
 }
 
@@ -971,7 +994,14 @@ const validationSchema = Yup.object().shape({
   vendorPhone2: Yup.string().max(40, 'Telephone 2 require max 40 characters.'),
   vendorPhone3: Yup.string().max(40, 'Telephone 3 require max 40 characters.'),
   vendorEmail: Yup.string().email('Invalid email address.'),
-  businessSource: Yup.string().required('Source is required.'),
+  // businessSource: Yup.string().required('Source is required.'),
+  // ctcSourceId: Yup.number()
+  //   .notRequired()
+  //   .when('listingAgentCtc_id', {
+  //     is: true,
+  //     then: Yup.number().required('Business Source is required'),
+  //     otherwise: Yup.number().notRequired()
+  //   }),
   sourceNotes: Yup.string().max(100, 'Source Notes require max 100 characters.'),
   description: Yup.string().max(2000, 'Description require max 2000 characters.'),
   businessNameSecondary: Yup.string().max(120, 'Business Name Secondary require max 120 characters.'),
@@ -1013,6 +1043,10 @@ const mapStateToProps = (state, props) => {
       props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.sourceOptions
         : state.business.get.sourceOptions,
+    ctcSourceOptions:
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
+        ? state.buyer.getBusinessFromBuyer.ctcSourceOptions
+        : state.business.get.ctcSourceOptions,
     ratingOptions:
       props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.ratingOptions

@@ -248,10 +248,15 @@ class BusinessEditPage extends Component {
                     <Tab.Pane className="BusinessDetail" attached={false}>
                       <Segment size="mini" inverted color="blue">
                         <Grid>
-                          <Grid.Row columns={2}>
+                          <Grid.Row columns={3}>
                             <Grid.Column>
                               <Header as="h3" textAlign="left" inverted>
                                 Business Detail
+                              </Header>
+                            </Grid.Column>
+                            <Grid.Column>
+                              <Header color="yellow" as="h2" textAlign="center" inverted>
+                                {this.props.business.listingAgent_id ? 'Xcllusive Business' : 'CTC Business'}
                               </Header>
                             </Grid.Column>
                             <Grid.Column>

@@ -346,10 +346,11 @@ class ClientManagerList extends Component {
     })
   }
 
-  _newBusiness = () => {
+  _newBusiness = company => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
-      title: 'New Business',
+      title: company === 'Xcllusive' ? 'New Business for Xcllusive' : 'New Business for CTC',
       where: 'ClientManager',
+      company: company,
       history: this.props.history,
       onConfirm: async (values, searchDuplicatedBusiness = false) => {
         if (values) {
@@ -360,6 +361,11 @@ class ClientManagerList extends Component {
             })
             this.timer = setTimeout(() => this.props.getBusinesses(`BS${searchDuplicatedBusiness.id}`), 500)
           } else {
+            if (company === 'Xcllusive') {
+              values.company = 1
+            } else {
+              values.company = 2
+            }
             await this.props.createBusiness(values)
             this.setState({
               inputSearchBusiness: `BS${this.props.newBusinessObject.id}`
@@ -483,9 +489,13 @@ class ClientManagerList extends Component {
               />
             </Grid.Column>
             <Grid.Column style={{ marginTop: '47px' }}>
-              <Button size="small" onClick={this._newBusiness} color="facebook">
+              <Button size="small" onClick={() => this._newBusiness('Xcllusive')} color="facebook">
                 <Icon name="add" />
-                New Business
+                New Xcllusive Business
+              </Button>
+              <Button size="small" onClick={() => this._newBusiness('CTC')} color="green">
+                <Icon name="add" />
+                New CTC Business
               </Button>
             </Grid.Column>
           </Grid.Row>

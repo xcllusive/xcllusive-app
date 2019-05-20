@@ -46,7 +46,7 @@ class Buyers extends Component {
   }
 
   render () {
-    const { values } = this.props
+    const { values, isLoading } = this.props
     return (
       <Wrapper>
         <Segment>
@@ -97,6 +97,7 @@ class Buyers extends Component {
                         positive
                         icon="checkmark"
                         labelPosition="right"
+                        loading={isLoading}
                         content="Export"
                         onClick={() => this._exportBuyers(values)}
                       />
@@ -119,7 +120,8 @@ Buyers.propTypes = {
   setFieldValue: PropTypes.func,
   openModal: PropTypes.func,
   match: PropTypes.func,
-  exportBuyers: PropTypes.func
+  exportBuyers: PropTypes.func,
+  isLoading: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -129,7 +131,9 @@ const mapPropsToValues = props => {
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  isLoading: state.systemSettings.exportBuyers.isLoading
+})
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

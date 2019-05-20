@@ -1,7 +1,7 @@
+import { toast } from 'react-toastify'
 import { get, update, execute, exportBuyers as exportBuyersAPI } from '../../services/api/systemSettings'
 import download from '../../utils/file-download'
 import moment from 'moment'
-//  import { toast } from 'react-toastify'
 
 // Action Types
 
@@ -237,10 +237,12 @@ export const executeJavaScript = () => async dispatch => {
       type: Types.EXECUTE_JAVASCRIPT_SUCCESS,
       payload: response
     })
+    toast.success('Buyers exported sucessfully')
   } catch (error) {
     dispatch({
       type: Types.EXECUTE_JAVASCRIPT_FAILURE,
       payload: error
     })
+    toast.error(error)
   }
 }

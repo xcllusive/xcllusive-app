@@ -7,23 +7,20 @@ import { connect } from 'react-redux'
 import * as Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
-import {
-  createBusinessRegister,
-  updateBusinessRegister,
-  getBusinessRegister
-} from '../../redux/ducks/businessRegister'
+import { createBusinessRegister, updateBusinessRegister, getBusinessRegister } from '../../redux/ducks/businessRegister'
 
 class ModalNewBusinessRegister extends Component {
   constructor (props) {
     super(props)
     this.state = {
       typesBusinessRegisters: [
-        { key: 1, text: 'Business Source', value: 1 },
+        { key: 1, text: 'Xcllusive - Business Source', value: 1 },
         { key: 2, text: 'Business Rating', value: 2 },
         { key: 3, text: 'Business Product', value: 3 },
         { key: 4, text: 'Business Industry', value: 4 },
         { key: 5, text: 'Business Type', value: 5 },
-        { key: 6, text: 'Business Owner`s Time', value: 6 },
+        // { key: 6, text: 'Business Owner`s Time', value: 6 },
+        { key: 6, text: 'CTC - Business Source', value: 6 },
         { key: 7, text: 'Business Stage', value: 7 },
         { key: 8, text: 'Stage Not Signed', value: 8 },
         { key: 9, text: 'Stage Not Want', value: 9 }
@@ -60,13 +57,11 @@ class ModalNewBusinessRegister extends Component {
 
     return (
       <Modal open dimmer="blurring">
-        <Modal.Header align="center">
-          {this.props.title ? this.props.title : ''}
-        </Modal.Header>
+        <Modal.Header align="center">{this.props.title ? this.props.title : ''}</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Group>
-              <Form.Field width={4}>
+              <Form.Field width={7}>
                 <Form.Select
                   required
                   label="Business Register"
@@ -75,19 +70,10 @@ class ModalNewBusinessRegister extends Component {
                   autoComplete="businessRegisterType"
                   value={values.businessRegisterType}
                   onChange={this._handleSelectChange}
-                  disabled={
-                    this.props.businessRegister !== undefined ||
-                    this.props.type !== undefined
-                  }
+                  disabled={this.props.businessRegister !== undefined || this.props.type !== undefined}
                 />
-                {errors.businessRegisterType &&
-                  touched.businessRegisterType && (
-                  <Label
-                    basic
-                    pointing
-                    color="red"
-                    content={errors.businessRegisterType}
-                  />
+                {errors.businessRegisterType && touched.businessRegisterType && (
+                  <Label basic pointing color="red" content={errors.businessRegisterType} />
                 )}
               </Form.Field>
             </Form.Group>
@@ -102,10 +88,7 @@ class ModalNewBusinessRegister extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.label &&
-                  touched.label && (
-                  <Label basic color="red" pointing content={errors.label} />
-                )}
+                {errors.label && touched.label && <Label basic color="red" pointing content={errors.label} />}
               </Form.Field>
             </Form.Group>
           </Form>
@@ -153,11 +136,7 @@ ModalNewBusinessRegister.propTypes = {
 }
 
 const mapPropsToValues = props => ({
-  businessRegisterType: props.businessRegisterType
-    ? props.businessRegisterType
-    : props.type
-      ? props.type
-      : null,
+  businessRegisterType: props.businessRegisterType ? props.businessRegisterType : props.type ? props.type : null,
   label: props.businessRegister ? props.businessRegister.label : '',
   id: props.businessRegister ? props.businessRegister.id : null
 })

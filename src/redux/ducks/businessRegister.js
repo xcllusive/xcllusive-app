@@ -1,11 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import {
-  get,
-  create,
-  update,
-  remove
-} from '../../services/api/businessRegister'
+import { get, create, update, remove } from '../../services/api/businessRegister'
 
 // Action Types
 
@@ -31,6 +26,7 @@ const TypesBusinessRegister = {
   3: 'product',
   4: 'industry',
   5: 'type',
+  6: 'ctcBusinessSource',
   7: 'stage',
   8: 'stageNotSigned',
   9: 'stageNotWant'
@@ -90,6 +86,13 @@ const initialState = {
       activePage: 1
     },
     stageNotWant: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
+    ctcBusinessSource: {
       isLoading: true,
       array: [],
       error: null,
@@ -249,11 +252,7 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getBusinessRegister = (
-  businessRegisterType,
-  limit = 5,
-  page = null
-) => async dispatch => {
+export const getBusinessRegister = (businessRegisterType, limit = 5, page = null) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESS_REGISTER_LOADING
   })

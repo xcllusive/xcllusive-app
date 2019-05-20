@@ -130,15 +130,15 @@ ModalReassignBusiness.propTypes = {
 }
 
 const mapPropsToValues = props => {
-  if (props && (props.listingAgent || props.listingAgent)) {
+  if (props && (props.listingAgent || props.listingAgentCtc)) {
     return {
       listingAgent: props.listingAgent,
       listingAgentCtc: props.listingAgentCtc
     }
   }
   return {
-    listingAgent: 0,
-    listingAgentCtc: 0
+    listingAgent: null,
+    listingAgentCtc: null
   }
 }
 

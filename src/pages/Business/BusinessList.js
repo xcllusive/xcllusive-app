@@ -11,6 +11,7 @@ import {
   getQtdeBusinessEachStagePerUser,
   getBusinessesPerUser
 } from '../../redux/ducks/business'
+import { getUserLogged } from '../../redux/ducks/user'
 
 import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 
@@ -32,6 +33,7 @@ class BusinessListPage extends Component {
   async componentDidMount () {
     await this.props.getBusinessesPerUser(false, this.state.stageSelected, true)
     this.props.getQtdeBusinessEachStagePerUser()
+    this.props.getUserLogged()
   }
 
   _onSearch = (e, { value }) => {
@@ -45,13 +47,19 @@ class BusinessListPage extends Component {
     )
   }
 
-  _newBusiness = () => {
+  _newBusiness = company => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUSINESS, {
-      title: 'New Business',
+      title: company === 'Xcllusive' ? 'New Business for Xcllusive' : 'New Business for CTC',
       where: 'Business',
       history: this.props.history,
+      company: company,
       onConfirm: async values => {
         if (values) {
+          if (company === 'Xcllusive') {
+            values.company = 1
+          } else {
+            values.company = 2
+          }
           await this.props.createBusiness(values)
           this.props.closeModal()
           await this.props.getBusinessesPerUser(false, this.state.stageSelected, true)
@@ -91,7 +99,8 @@ class BusinessListPage extends Component {
       match,
       businesses,
       objectQtdeBusinessStage,
-      totalLostRecontact
+      totalLostRecontact,
+      user
     } = this.props
 
     if (isLoadingBusinesses || isLoadingQtdeBusinesses) {
@@ -147,7 +156,11 @@ class BusinessListPage extends Component {
               />
             </Grid.Column>
             <Grid.Column floated="right" width={3}>
-              <Button onClick={this._newBusiness} color="facebook" floated="right">
+              <Button
+                onClick={() => (user.listingAgent ? this._newBusiness('Xcllusive') : this._newBusiness('CTC'))}
+                color="facebook"
+                floated="right"
+              >
                 <Icon name="add" />
                 New Business
               </Button>
@@ -303,12 +316,22 @@ BusinessListPage.propTypes = {
   getBusinessesPerUser: PropTypes.func,
   closeModal: PropTypes.func,
   isLoadingQtdeBusinesses: PropTypes.bool,
-  totalLostRecontact: PropTypes.number
+  totalLostRecontact: PropTypes.number,
+  getUserLogged: PropTypes.func,
+  user: PropTypes.object
 }
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { getBusinesses, openModal, createBusiness, getQtdeBusinessEachStagePerUser, getBusinessesPerUser, closeModal },
+    {
+      getBusinesses,
+      openModal,
+      createBusiness,
+      getQtdeBusinessEachStagePerUser,
+      getBusinessesPerUser,
+      closeModal,
+      getUserLogged
+    },
     dispatch
   )
 
@@ -319,7 +342,8 @@ const mapStateToProps = state => ({
   totalLostRecontact: state.business.getAllPerUser.array.totalLostRecontact,
   isLoadingBusinesses: state.business.getAllPerUser.isLoading,
   isLoadingQtdeBusinesses: state.business.getQtdeBusinessStageUser.isLoading,
-  objectQtdeBusinessStage: state.business.getQtdeBusinessStageUser.object
+  objectQtdeBusinessStage: state.business.getQtdeBusinessStageUser.object,
+  user: state.user.getLogged.object
 })
 
 export default connect(

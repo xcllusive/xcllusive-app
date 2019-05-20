@@ -23,7 +23,11 @@ class ModalNewBusiness extends Component {
   }
 
   componentDidMount () {
-    this.props.getBusinessRegister(1, 1000)
+    if (this.props.company === 'Xcllusive') {
+      this.props.getBusinessRegister(1, 1000)
+    } else {
+      this.props.getBusinessRegister(6, 1000)
+    }
     this.props.getUsers()
   }
 
@@ -122,7 +126,11 @@ class ModalNewBusiness extends Component {
       isLoadingUser,
       duplicatedBusinessObject,
       disableButton,
-      handleSubmit
+      handleSubmit,
+      ctcAnalysts,
+      sourceCtcOptions,
+      dropDownCtcLoading,
+      company
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
@@ -245,22 +253,42 @@ class ModalNewBusiness extends Component {
                   />
                 )}
               </Form.Field>
-              <Form.Field>
-                <Form.Select
-                  required
-                  label="Source"
-                  options={mapArrayToValuesForDropdown(sourceOptions)}
-                  name="businessSource"
-                  autoComplete="businessSource"
-                  loading={dropDownLoading}
-                  disabled={dropDownLoading}
-                  value={values.businessSource}
-                  onChange={this._handleSelectChange}
-                />
-                {errors.businessSource && touched.businessSource && (
-                  <Label basic color="red" pointing content={errors.businessSource} />
-                )}
-              </Form.Field>
+              {company === 'Xcllusive' ? (
+                <Form.Field>
+                  <Form.Select
+                    required
+                    label="Source"
+                    options={mapArrayToValuesForDropdown(sourceOptions)}
+                    name="businessSource"
+                    autoComplete="businessSource"
+                    loading={dropDownLoading}
+                    disabled={dropDownLoading}
+                    value={values.businessSource}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.businessSource && touched.businessSource && (
+                    <Label basic color="red" pointing content={errors.businessSource} />
+                  )}
+                </Form.Field>
+              ) : (
+                <Form.Field>
+                  <Form.Select
+                    required
+                    label="Source"
+                    options={mapArrayToValuesForDropdown(sourceCtcOptions)}
+                    name="ctcSourceId"
+                    autoComplete="ctcSourceId"
+                    loading={dropDownCtcLoading}
+                    disabled={dropDownCtcLoading}
+                    value={values.ctcSourceId}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.ctcSourceId && touched.ctcSourceId && (
+                    <Label basic color="red" pointing content={errors.ctcSourceId} />
+                  )}
+                </Form.Field>
+              )}
+
               <Form.Field>
                 <Form.Input
                   label="Source Notes"
@@ -290,24 +318,41 @@ class ModalNewBusiness extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            {this.props.values.where === 'ClientManager' ? (
+            {values.where === 'ClientManager' ? (
               <Form.Group>
-                <Form.Field width={8}>
-                  <Form.Select
-                    required
-                    label="Listing Agent"
-                    name="listingAgent"
-                    options={this._mapValuesToArray(this.props.users)}
-                    autoComplete="listingAgent"
-                    value={values.listingAgent}
-                    onChange={this._handleSelectChange}
-                    loading={isLoadingUser}
-                    disabled={isLoadingUser}
-                  />
-                  {errors.listingAgent && touched.listingAgent && (
-                    <Label basic color="red" pointing content={errors.listingAgent} />
-                  )}
-                </Form.Field>
+                {company === 'Xcllusive' ? (
+                  <Form.Field width={8}>
+                    <Form.Select
+                      required
+                      label="Listing Agent"
+                      name="listingAgent"
+                      options={this._mapValuesToArray(this.props.users)}
+                      autoComplete="listingAgent"
+                      value={values.listingAgent}
+                      onChange={this._handleSelectChange}
+                      loading={isLoadingUser}
+                      disabled={isLoadingUser}
+                    />
+                    {errors.listingAgent && touched.listingAgent && (
+                      <Label basic color="red" pointing content={errors.listingAgent} />
+                    )}
+                  </Form.Field>
+                ) : (
+                  <Form.Field width={8}>
+                    <Form.Select
+                      required
+                      label="Listing Agent"
+                      name="listingAgentCtc"
+                      options={this._mapValuesToArray(ctcAnalysts)}
+                      autoComplete="listingAgentCtc"
+                      value={values.listingAgentCtc}
+                      onChange={this._handleSelectChange}
+                    />
+                    {errors.listingAgentCtc && touched.listingAgentCtc && (
+                      <Label basic color="red" pointing content={errors.listingAgentCtc} />
+                    )}
+                  </Form.Field>
+                )}
               </Form.Group>
             ) : null}
           </Form>
@@ -390,7 +435,11 @@ ModalNewBusiness.propTypes = {
   onConfirm: PropTypes.func,
   disableButton: PropTypes.bool,
   clearBusiness: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
+  company: PropTypes.string,
+  ctcAnalysts: PropTypes.array,
+  sourceCtcOptions: PropTypes.array,
+  dropDownCtcLoading: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -404,8 +453,11 @@ const mapPropsToValues = props => ({
   businessSource: '',
   sourceNotes: '',
   description: '',
-  listingAgent: '',
-  where: props.where ? props.where : null
+  listingAgent: props.listingAgent ? props.listingAgent : '',
+  listingAgentCtc: props.listingAgentCtc ? props.listingAgentCtc : '',
+  ctcSourceId: props.ctcSourceId ? props.ctcSourceId : '',
+  company: props.company ? props.company : '',
+  where: props.where ? props.where : ''
 })
 
 const validationSchema = Yup.object().shape({
@@ -420,14 +472,36 @@ const validationSchema = Yup.object().shape({
   vendorPhone2: Yup.string().max(30, 'Telephone 2 require max 30 characters.'),
   vendorPhone3: Yup.string().max(30, 'Telephone 3 require max 30 characters.'),
   vendorEmail: Yup.string().email('Invalid email address.'),
-  businessSource: Yup.number().required('Source is required.'),
+  // businessSource: Yup.number().required('Source is required.'),
   sourceNotes: Yup.string().max(40, 'Source Notes require max 40 characters.'),
   description: Yup.string().max(2000, 'Source Notes require max 2000 characters.'),
   where: Yup.string(),
+  company: Yup.string(),
+  businessSource: Yup.number()
+    .notRequired()
+    .when('company', {
+      is: company => company === 'Xcllusive',
+      then: Yup.number().required(),
+      otherwise: Yup.number().notRequired()
+    }),
+  ctcSourceId: Yup.number()
+    .notRequired()
+    .when('company', {
+      is: company => company === 'CTC',
+      then: Yup.number().required(),
+      otherwise: Yup.number().notRequired()
+    }),
   listingAgent: Yup.number()
     .notRequired()
-    .when('where', {
-      is: 'ClientManager',
+    .when(['where', 'company'], {
+      is: (where, company) => where === 'ClientManager' && company === 'Xcllusive',
+      then: Yup.number().required('Listing Agent is required'),
+      otherwise: Yup.number().notRequired()
+    }),
+  listingAgentCtc: Yup.number()
+    .notRequired()
+    .when(['where', 'company'], {
+      is: (where, company) => where === 'ClientManager' && company === 'CTC',
       then: Yup.number().required('Listing Agent is required'),
       otherwise: Yup.number().notRequired()
     })
@@ -442,10 +516,13 @@ const mapStateToProps = state => {
     isLoading: state.business.create.isLoading,
     sourceOptions: state.businessRegister.get.source.array,
     dropDownLoading: state.businessRegister.get.source.isLoading,
+    sourceCtcOptions: state.businessRegister.get.ctcBusinessSource.array,
+    dropDownCtcLoading: state.businessRegister.get.ctcBusinessSource.isLoading,
     users: state.user.get.array,
     isLoadingUser: state.user.get.isLoading,
     duplicatedBusinessObject: state.business.verifyDuplicatedBusiness.object,
-    disableButton: state.business.verifyDuplicatedBusiness.disableButton
+    disableButton: state.business.verifyDuplicatedBusiness.disableButton,
+    ctcAnalysts: state.user.get.ctcAnalysts
   }
 }
 

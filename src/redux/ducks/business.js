@@ -86,6 +86,7 @@ const initialState = {
     typeOptions: [],
     stageNotSignedOptions: [],
     stageNotWantOptions: [],
+    ctcSourceOptions: [],
     error: null
   },
   create: {
@@ -236,6 +237,7 @@ export default function reducer (state = initialState, action) {
           usersBroker: action.payload.usersBroker,
           stageNotSignedOptions: action.payload.stageNotSignedList,
           stageNotWantOptions: action.payload.stageNotWantList,
+          ctcSourceOptions: action.payload.ctcSourceList,
           error: null
         },
         update: {
