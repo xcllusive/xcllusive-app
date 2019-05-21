@@ -352,7 +352,7 @@ class ClientManagerList extends Component {
       where: 'ClientManager',
       company: company,
       history: this.props.history,
-      onConfirm: async (values, searchDuplicatedBusiness = false) => {
+      onConfirm: async (values, searchDuplicatedBusiness = false, willReassign = false) => {
         if (values) {
           if (searchDuplicatedBusiness) {
             await this.props.closeModal()
@@ -361,10 +361,13 @@ class ClientManagerList extends Component {
             })
             this.timer = setTimeout(() => this.props.getBusinesses(`BS${searchDuplicatedBusiness.id}`), 500)
           } else {
-            if (company === 'Xcllusive') {
+            if (company === 'Xcllusive' && !willReassign) {
               values.company = 1
+              values.ctcSourceId = null
             } else {
               values.company = 2
+              values.willReassign = willReassign
+              values.ctcSourceId = 1
             }
             await this.props.createBusiness(values)
             this.setState({

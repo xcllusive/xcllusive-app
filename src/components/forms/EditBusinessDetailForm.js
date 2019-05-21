@@ -151,14 +151,15 @@ class EditBusinessDetailForm extends Component {
     })
   }
 
-  _openModalReassignBusiness = id => {
+  _openModalReassignBusiness = (id, company) => {
     this.props.openModal(TypesModal.MODAL_TYPE_STAGE_REASSIGN_BUSINESS, {
       options: {
         title: 'Reassign Business to New Listing Agent'
       },
       businessId: id,
       listingAgent: this.props.values.listingAgent ? this.props.values.listingAgent.id : 0,
-      listingAgentCtc: this.props.values.listingAgentCtc ? this.props.values.listingAgentCtc.id : 0
+      listingAgentCtc: this.props.values.listingAgentCtc ? this.props.values.listingAgentCtc.id : 0,
+      company
     })
   }
 
@@ -459,14 +460,26 @@ class EditBusinessDetailForm extends Component {
                   <Button
                     primary
                     size="small"
-                    onClick={() => this._openModalReassignBusiness(values.id)}
+                    onClick={() => this._openModalReassignBusiness(values.id, 'Xcllusive')}
                     disabled={
                       this.props.history.location &&
                       this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
                     }
                   >
                     <Icon name="edit" />
-                    Reassign Business
+                    Reassign to Xcllusive
+                  </Button>
+                  <Button
+                    color="facebook"
+                    size="small"
+                    onClick={() => this._openModalReassignBusiness(values.id, 'CTC')}
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
+                  >
+                    <Icon name="edit" />
+                    Reassign to CTC
                   </Button>
                   <Button
                     color={'yellow'}

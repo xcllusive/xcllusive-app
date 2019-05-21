@@ -48,7 +48,7 @@ class ModalReassignBusiness extends Component {
   }
 
   render () {
-    const { values, isValid, createLoading, options, xcllusiveAnalysts, ctcAnalysts } = this.props
+    const { values, isValid, createLoading, options, xcllusiveAnalysts, ctcAnalysts, company } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -61,30 +61,31 @@ class ModalReassignBusiness extends Component {
           </Message>
           <Form>
             <Form.Group>
-              <Form.Field width={8}>
-                <Form.Select
-                  required
-                  label="Reassign Business To New Xcllusive Listing Agent"
-                  name="listingAgent"
-                  options={this._mapValuesToArray(xcllusiveAnalysts)}
-                  autoComplete="listingAgent"
-                  value={values.listingAgent}
-                  onChange={this._handleSelectChange}
-                />
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field width={8}>
-                <Form.Select
-                  required
-                  label="Reassign Business To New CTC Listing Agent"
-                  name="listingAgentCtc"
-                  options={this._mapValuesToArray(ctcAnalysts)}
-                  autoComplete="listingAgentCtc"
-                  value={values.listingAgentCtc}
-                  onChange={this._handleSelectChange}
-                />
-              </Form.Field>
+              {company === 'Xcllusive' ? (
+                <Form.Field width={8}>
+                  <Form.Select
+                    required
+                    label="Reassign Business To New Xcllusive Listing Agent"
+                    name="listingAgent"
+                    options={this._mapValuesToArray(xcllusiveAnalysts)}
+                    autoComplete="listingAgent"
+                    value={values.listingAgent}
+                    onChange={this._handleSelectChange}
+                  />
+                </Form.Field>
+              ) : (
+                <Form.Field>
+                  <Form.Select
+                    required
+                    label="Reassign Business To New CTC Listing Agent"
+                    name="listingAgentCtc"
+                    options={this._mapValuesToArray(ctcAnalysts)}
+                    autoComplete="listingAgentCtc"
+                    value={values.listingAgentCtc}
+                    onChange={this._handleSelectChange}
+                  />
+                </Form.Field>
+              )}
             </Form.Group>
           </Form>
         </Modal.Content>
@@ -126,7 +127,8 @@ ModalReassignBusiness.propTypes = {
   listingAgent: PropTypes.number.isRequired,
   listingAgentCtc: PropTypes.number.isRequired,
   xcllusiveAnalysts: PropTypes.array,
-  ctcAnalysts: PropTypes.array
+  ctcAnalysts: PropTypes.array,
+  company: PropTypes.string
 }
 
 const mapPropsToValues = props => {

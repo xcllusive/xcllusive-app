@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -18,16 +18,14 @@ class ModalNewBusiness extends Component {
     super(props)
     this.state = {
       phoneMsg: false,
-      emailMsg: false
+      emailMsg: false,
+      willReassign: false
     }
   }
 
   componentDidMount () {
-    if (this.props.company === 'Xcllusive') {
-      this.props.getBusinessRegister(1, 1000)
-    } else {
-      this.props.getBusinessRegister(6, 1000)
-    }
+    this.props.getBusinessRegister(1, 1000)
+    this.props.getBusinessRegister(6, 1000)
     this.props.getUsers()
   }
 
@@ -95,7 +93,7 @@ class ModalNewBusiness extends Component {
   _verifyDuplicatedBusiness = async values => {
     await this.props.verifyDuplicatedBusiness(values)
     if (!this.props.duplicatedBusinessObject) {
-      await this.props.onConfirm(values)
+      await this.props.onConfirm(values, false, this.state.willReassign)
       this.props.closeModal(values)
     }
   }
@@ -107,6 +105,17 @@ class ModalNewBusiness extends Component {
       this.props.closeModal(values)
       this.props.history.push(`/business/${duplicatedBusinessObject.id}`)
     }
+  }
+
+  _reassignToCtc = () => {
+    this.setState({ willReassign: true })
+    this.props.values.willReassign = true
+  }
+
+  _cancelReassign = () => {
+    this.setState({ willReassign: false })
+    this.props.values.willReassign = false
+    this.props.values.listingAgentCtc = null
   }
 
   render () {
@@ -288,7 +297,6 @@ class ModalNewBusiness extends Component {
                   )}
                 </Form.Field>
               )}
-
               <Form.Field>
                 <Form.Input
                   label="Source Notes"
@@ -319,41 +327,95 @@ class ModalNewBusiness extends Component {
               </Form.Field>
             </Form.Group>
             {values.where === 'ClientManager' ? (
-              <Form.Group>
+              <Fragment>
                 {company === 'Xcllusive' ? (
-                  <Form.Field width={8}>
-                    <Form.Select
-                      required
-                      label="Listing Agent"
-                      name="listingAgent"
-                      options={this._mapValuesToArray(this.props.users)}
-                      autoComplete="listingAgent"
-                      value={values.listingAgent}
-                      onChange={this._handleSelectChange}
-                      loading={isLoadingUser}
-                      disabled={isLoadingUser}
-                    />
-                    {errors.listingAgent && touched.listingAgent && (
-                      <Label basic color="red" pointing content={errors.listingAgent} />
-                    )}
-                  </Form.Field>
+                  <Fragment>
+                    <Form.Group>
+                      <Form.Field width={8}>
+                        <Form.Select
+                          required
+                          label="Listing Agent"
+                          name="listingAgent"
+                          options={this._mapValuesToArray(this.props.users)}
+                          autoComplete="listingAgent"
+                          value={values.listingAgent}
+                          onChange={this._handleSelectChange}
+                          loading={isLoadingUser}
+                          disabled={isLoadingUser}
+                        />
+                        {errors.listingAgent && touched.listingAgent && (
+                          <Label basic color="red" pointing content={errors.listingAgent} />
+                        )}
+                      </Form.Field>
+                      {values.listingAgent && values.businessSource ? (
+                        <Form.Field style={{ marginLeft: '50px', marginTop: '22px' }}>
+                          {!this.state.willReassign ? (
+                            <Button onClick={this._reassignToCtc} color="green">
+                              <Icon name="add" />
+                              Reassign to CTC
+                            </Button>
+                          ) : (
+                            <Button onClick={this._cancelReassign} color="yellow">
+                              <Icon name="cancel" />
+                              Cancel Reassignment
+                            </Button>
+                          )}
+                        </Form.Field>
+                      ) : null}
+                    </Form.Group>
+                    <Form.Group>
+                      {this.state.willReassign ? (
+                        <Fragment>
+                          <Form.Field>
+                            <Form.Select
+                              required
+                              label="CTC Source"
+                              options={mapArrayToValuesForDropdown(sourceCtcOptions)}
+                              name="ctcSourceId"
+                              autoComplete="ctcSourceId"
+                              loading={dropDownCtcLoading}
+                              disabled={true}
+                              value={1}
+                              onChange={this._handleSelectChange}
+                            />
+                          </Form.Field>
+                          <Form.Field width={7}>
+                            <Form.Select
+                              required
+                              label="CTC Listing Agent"
+                              name="listingAgentCtc"
+                              options={this._mapValuesToArray(ctcAnalysts)}
+                              autoComplete="listingAgentCtc"
+                              value={values.listingAgentCtc}
+                              onChange={this._handleSelectChange}
+                            />
+                            {errors.listingAgentCtc && touched.listingAgentCtc && (
+                              <Label basic color="red" pointing content={errors.listingAgentCtc} />
+                            )}
+                          </Form.Field>
+                        </Fragment>
+                      ) : null}
+                    </Form.Group>
+                  </Fragment>
                 ) : (
-                  <Form.Field width={8}>
-                    <Form.Select
-                      required
-                      label="Listing Agent"
-                      name="listingAgentCtc"
-                      options={this._mapValuesToArray(ctcAnalysts)}
-                      autoComplete="listingAgentCtc"
-                      value={values.listingAgentCtc}
-                      onChange={this._handleSelectChange}
-                    />
-                    {errors.listingAgentCtc && touched.listingAgentCtc && (
-                      <Label basic color="red" pointing content={errors.listingAgentCtc} />
-                    )}
-                  </Form.Field>
+                  <Form.Group>
+                    <Form.Field width={8}>
+                      <Form.Select
+                        required
+                        label="Listing Agent"
+                        name="listingAgentCtc"
+                        options={this._mapValuesToArray(ctcAnalysts)}
+                        autoComplete="listingAgentCtc"
+                        value={values.listingAgentCtc}
+                        onChange={this._handleSelectChange}
+                      />
+                      {errors.listingAgentCtc && touched.listingAgentCtc && (
+                        <Label basic color="red" pointing content={errors.listingAgentCtc} />
+                      )}
+                    </Form.Field>
+                  </Form.Group>
                 )}
-              </Form.Group>
+              </Fragment>
             ) : null}
           </Form>
           {duplicatedBusinessObject ? (
@@ -457,7 +519,8 @@ const mapPropsToValues = props => ({
   listingAgentCtc: props.listingAgentCtc ? props.listingAgentCtc : '',
   ctcSourceId: props.ctcSourceId ? props.ctcSourceId : '',
   company: props.company ? props.company : '',
-  where: props.where ? props.where : ''
+  where: props.where ? props.where : '',
+  willReassign: props.willReassign ? props.willReassign : false
 })
 
 const validationSchema = Yup.object().shape({
@@ -498,10 +561,11 @@ const validationSchema = Yup.object().shape({
       then: Yup.number().required('Listing Agent is required'),
       otherwise: Yup.number().notRequired()
     }),
+  willReassign: Yup.boolean(),
   listingAgentCtc: Yup.number()
     .notRequired()
-    .when(['where', 'company'], {
-      is: (where, company) => where === 'ClientManager' && company === 'CTC',
+    .when(['where', 'company', 'willReassign'], {
+      is: (where, company, willReassign) => (where === 'ClientManager' && company === 'CTC') || willReassign === true,
       then: Yup.number().required('Listing Agent is required'),
       otherwise: Yup.number().notRequired()
     })
