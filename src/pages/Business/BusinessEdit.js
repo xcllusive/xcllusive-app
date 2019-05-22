@@ -256,7 +256,7 @@ class BusinessEditPage extends Component {
                             </Grid.Column>
                             <Grid.Column>
                               <Header color="yellow" as="h2" textAlign="center" inverted>
-                                {this.props.business.listingAgent_id ? 'Xcllusive Business' : 'CTC Business'}
+                                {this.props.business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}
                               </Header>
                             </Grid.Column>
                             <Grid.Column>
