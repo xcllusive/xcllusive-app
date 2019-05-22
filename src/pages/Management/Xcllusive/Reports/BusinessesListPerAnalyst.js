@@ -17,8 +17,8 @@ class BusinessesListPerAnalyst extends Component {
     if (this.props.savedRecords) {
       this.props.getBusinessesPerAnalyst(
         this.props.match.params.idUser,
-        moment(new Date(this.props.savedRecords.dateFrom)).format('YYYY/MM/DD'),
-        moment(new Date(this.props.savedRecords.dateTo)).format('YYYY/MM/DD')
+        moment(new Date(this.props.savedRecords.dateFrom)).format('YYYY/MM/DD 00:00:00'),
+        moment(new Date(this.props.savedRecords.dateTo)).format('YYYY/MM/DD 23:59:59')
       )
     }
   }
