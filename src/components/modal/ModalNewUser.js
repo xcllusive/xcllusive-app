@@ -77,7 +77,6 @@ class ModalNewUser extends Component {
 
   render () {
     const { userType, state } = this.state.formOptions
-    const { officeOptions } = this.props
     const {
       values,
       touched,
@@ -89,7 +88,9 @@ class ModalNewUser extends Component {
       createLoading,
       updateLoading,
       closeModal,
-      title
+      title,
+      officeOptions,
+      user
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
@@ -111,7 +112,7 @@ class ModalNewUser extends Component {
               </Form.Field>
               <Form.Field>
                 <Form.Input
-                  action={this.props.user && this.props.user.id !== ''}
+                  action={user && user.id !== ''}
                   type="password"
                   label="Password"
                   name="password"
@@ -120,7 +121,7 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 >
-                  {this.props.user && this.props.user.id ? (
+                  {user && user.id ? (
                     <div>
                       <input
                         disabled={this.state.inputPasswordShow}
@@ -409,11 +410,11 @@ class ModalNewUser extends Component {
               <Grid.Column>
                 <Button
                   floated="left"
-                  color={this.props.user.active ? 'orange' : 'green'}
-                  onClick={() => this._activeInactive(this.props.user)}
+                  color={user && user.active ? 'orange' : 'green'}
+                  onClick={() => this._activeInactive(user)}
                 >
-                  <Icon name={this.props.user.active ? 'cut' : 'redo'} />
-                  {this.props.user.active ? 'Inactivate' : 'Activate'}
+                  <Icon name={user && user.active ? 'cut' : 'redo'} />
+                  {user && user.active ? 'Inactivate' : 'Activate'}
                 </Button>
                 <Button
                   color="blue"
@@ -423,7 +424,7 @@ class ModalNewUser extends Component {
                   onClick={handleSubmit}
                 >
                   <Icon name="save" />
-                  {this.props.user && this.props.user.id ? 'Edit User' : 'Create User'}
+                  {user && user.id ? 'Edit User' : 'Create User'}
                 </Button>
                 <Button color="red" onClick={closeModal}>
                   <Icon name="cancel" />
