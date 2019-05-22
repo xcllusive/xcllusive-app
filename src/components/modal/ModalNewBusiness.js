@@ -139,7 +139,8 @@ class ModalNewBusiness extends Component {
       ctcAnalysts,
       sourceCtcOptions,
       dropDownCtcLoading,
-      company
+      company,
+      xcllusiveAnalysts
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
@@ -336,7 +337,7 @@ class ModalNewBusiness extends Component {
                           required
                           label="Listing Agent"
                           name="listingAgent"
-                          options={this._mapValuesToArray(this.props.users)}
+                          options={this._mapValuesToArray(xcllusiveAnalysts)}
                           autoComplete="listingAgent"
                           value={values.listingAgent}
                           onChange={this._handleSelectChange}
@@ -489,7 +490,7 @@ ModalNewBusiness.propTypes = {
   where: PropTypes.string,
   closeModal: PropTypes.func,
   getUsers: PropTypes.func,
-  users: PropTypes.array,
+  xcllusiveAnalysts: PropTypes.array,
   isLoadingUser: PropTypes.bool,
   verifyDuplicatedBusiness: PropTypes.func,
   phonesEmailBusinesses: PropTypes.array,
@@ -582,7 +583,7 @@ const mapStateToProps = state => {
     dropDownLoading: state.businessRegister.get.source.isLoading,
     sourceCtcOptions: state.businessRegister.get.ctcBusinessSource.array,
     dropDownCtcLoading: state.businessRegister.get.ctcBusinessSource.isLoading,
-    users: state.user.get.array,
+    xcllusiveAnalysts: state.user.get.xcllusiveAnalysts,
     isLoadingUser: state.user.get.isLoading,
     duplicatedBusinessObject: state.business.verifyDuplicatedBusiness.object,
     disableButton: state.business.verifyDuplicatedBusiness.disableButton,
