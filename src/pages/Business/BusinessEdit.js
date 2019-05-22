@@ -245,7 +245,7 @@ class BusinessEditPage extends Component {
                 {
                   menuItem: 'Business Detail',
                   render: () => (
-                    <Tab.Pane className="BusinessDetail" attached={false}>
+                    <Tab.Pane style={{ backgroundColor: '#f1f1f1' }} className="BusinessDetail" attached={false}>
                       <Segment size="mini" inverted color="blue">
                         <Grid>
                           <Grid.Row columns={3}>
@@ -274,7 +274,7 @@ class BusinessEditPage extends Component {
                 {
                   menuItem: 'Pricing/Information',
                   render: () => (
-                    <Tab.Pane attached={false}>
+                    <Tab.Pane style={{ backgroundColor: '#f1f1f1' }} attached={false}>
                       <EditBusinessPriceForm
                         business={business}
                         history={history}

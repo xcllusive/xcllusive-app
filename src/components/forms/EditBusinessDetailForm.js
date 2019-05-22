@@ -388,7 +388,7 @@ class EditBusinessDetailForm extends Component {
                       <Label basic color="red" pointing content={errors.vendorEmail} />
                     )}
                   </Form.Field>
-                  {this.props.business.listingAgent_id ? (
+                  {this.props.business.company_id === 1 ? (
                     <Form.Field>
                       <Form.Select
                         required
