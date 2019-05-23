@@ -18,6 +18,7 @@ class BusinessRegisters extends Component {
     await this.props.getBusinessRegister(7)
     await this.props.getBusinessRegister(8)
     await this.props.getBusinessRegister(9)
+    await this.props.getBusinessRegister(10)
   }
 
   _toggleModalConfirm = (id, registerType) => {
@@ -69,7 +70,8 @@ class BusinessRegisters extends Component {
       isLoadingStageNotSigned,
       isLoadingStageNotWant,
       isLoadingType,
-      isLoadingCtcBusinessSource
+      isLoadingCtcBusinessSource,
+      isLoadingCtcStage
     } = this.props
     return (
       <Wrapper>
@@ -84,7 +86,8 @@ class BusinessRegisters extends Component {
             isLoadingStageNotSigned ||
             isLoadingStageNotWant ||
             isLoadingType ||
-            isLoadingCtcBusinessSource
+            isLoadingCtcBusinessSource ||
+            isLoadingCtcStage
           }
           style={{ marginLeft: '15px' }}
         >
@@ -367,7 +370,7 @@ class BusinessRegisters extends Component {
             <Grid.Row columns={3}>
               <Grid.Column>
                 <Header as="h5" attached="top">
-                  Business Stage
+                  Xcllusive - Business Stage
                 </Header>
                 <Table compact celled inverted selectable color="blue" size="small">
                   <Table.Header>
@@ -402,6 +405,47 @@ class BusinessRegisters extends Component {
                   onPageChange={(e, data) => this._handlePaginationChange(e, data, 7)}
                   defaultActivePage={this.props.stageOptions.activePage}
                   totalPages={this.props.stageOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" attached="top">
+                  CTC - Business Stage
+                </Header>
+                <Table compact celled inverted selectable color="blue" size="small">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>ID</Table.HeaderCell>
+                      <Table.HeaderCell>Label</Table.HeaderCell>
+                      <Table.HeaderCell>Settings</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.ctcStageOptions.array.map(ctcStageOptions => {
+                      return (
+                        <Table.Row active key={ctcStageOptions.id}>
+                          <Table.Cell>{ctcStageOptions.id}</Table.Cell>
+                          <Table.Cell>{ctcStageOptions.label}</Table.Cell>
+                          <Table.Cell>
+                            <Icon link name="edit" onClick={() => this._editBusiness(ctcStageOptions, 10)} />
+                            <Icon
+                              link
+                              name="trash"
+                              color="red"
+                              onClick={() => this._toggleModalConfirm(ctcStageOptions.id, 10)}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 10)}
+                  defaultActivePage={this.props.ctcStageOptions.activePage}
+                  totalPages={this.props.ctcStageOptions.pages}
                   firstItem={null}
                   lastItem={null}
                 />
@@ -445,6 +489,8 @@ class BusinessRegisters extends Component {
                   lastItem={null}
                 />
               </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={1}>
               <Grid.Column>
                 <Header as="h5" attached="top">
                   Stage Not Want
@@ -505,6 +551,7 @@ BusinessRegisters.propTypes = {
   stageNotSignedOptions: PropTypes.object,
   stageNotWantOptions: PropTypes.object,
   ctcSourceOptions: PropTypes.object,
+  ctcStageOptions: PropTypes.object,
   openModal: PropTypes.func,
   getBusinessRegister: PropTypes.func,
   isLoadingSource: PropTypes.bool,
@@ -515,7 +562,8 @@ BusinessRegisters.propTypes = {
   isLoadingStageNotSigned: PropTypes.bool,
   isLoadingStageNotWant: PropTypes.bool,
   isLoadingType: PropTypes.bool,
-  isLoadingCtcBusinessSource: PropTypes.bool
+  isLoadingCtcBusinessSource: PropTypes.bool,
+  isLoadingCtcStage: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
@@ -529,6 +577,7 @@ const mapStateToProps = state => ({
   stageNotWantOptions: state.businessRegister.get.stageNotWant,
   ctcSourceOptions: state.businessRegister.get.ctcBusinessSource,
   typeOptions: state.businessRegister.get.type,
+  ctcStageOptions: state.businessRegister.get.ctcStage,
   createBusinessRegister: state.businessRegister.create.isCreated,
   updateBusinessRegister: state.businessRegister.update.isUpdated,
   deleteBusinessRegister: state.businessRegister.delete.isDeleted,
@@ -540,7 +589,8 @@ const mapStateToProps = state => ({
   isLoadingStage: state.businessRegister.get.stage.isLoading,
   isLoadingStageNotSigned: state.businessRegister.get.stageNotSigned.isLoading,
   isLoadingStageNotWant: state.businessRegister.get.stageNotWant.isLoading,
-  isLoadingCtcBusinessSource: state.businessRegister.get.ctcBusinessSource.isLoading
+  isLoadingCtcBusinessSource: state.businessRegister.get.ctcBusinessSource.isLoading,
+  isLoadingCtcStage: state.businessRegister.get.ctcStage.isLoading
 })
 
 const mapDispatchToProps = dispatch =>

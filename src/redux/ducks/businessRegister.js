@@ -29,7 +29,8 @@ const TypesBusinessRegister = {
   6: 'ctcBusinessSource',
   7: 'stage',
   8: 'stageNotSigned',
-  9: 'stageNotWant'
+  9: 'stageNotWant',
+  10: 'ctcStage'
 }
 
 // Reducer
@@ -93,6 +94,13 @@ const initialState = {
       activePage: 1
     },
     ctcBusinessSource: {
+      isLoading: true,
+      array: [],
+      error: null,
+      pages: 0,
+      activePage: 1
+    },
+    ctcStage: {
       isLoading: true,
       array: [],
       error: null,

@@ -26,6 +26,9 @@ class ModalNewBusiness extends Component {
   componentDidMount () {
     this.props.getBusinessRegister(1, 1000)
     this.props.getBusinessRegister(6, 1000)
+    if (this.props.company === 'CTC') {
+      this.props.getBusinessRegister(10, 1000)
+    }
     this.props.getUsers()
   }
 
@@ -140,7 +143,9 @@ class ModalNewBusiness extends Component {
       sourceCtcOptions,
       dropDownCtcLoading,
       company,
-      xcllusiveAnalysts
+      xcllusiveAnalysts,
+      ctcStageOptions,
+      isLoadingCtcStage
     } = this.props
     return (
       <Modal open dimmer={'blurring'}>
@@ -327,6 +332,26 @@ class ModalNewBusiness extends Component {
                 )}
               </Form.Field>
             </Form.Group>
+            {company === 'CTC' ? (
+              <Form.Group>
+                <Form.Field width={8}>
+                  <Form.Select
+                    required
+                    label="CTC Stage"
+                    options={mapArrayToValuesForDropdown(ctcStageOptions)}
+                    name="ctcStageId"
+                    autoComplete="ctcStageId"
+                    loading={isLoadingCtcStage}
+                    disabled={isLoadingCtcStage}
+                    value={values.ctcStageId}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.ctcStageId && touched.ctcStageId && (
+                    <Label basic color="red" pointing content={errors.ctcStageId} />
+                  )}
+                </Form.Field>
+              </Form.Group>
+            ) : null}
             {values.where === 'ClientManager' ? (
               <Fragment>
                 {company === 'Xcllusive' ? (
@@ -502,7 +527,9 @@ ModalNewBusiness.propTypes = {
   company: PropTypes.string,
   ctcAnalysts: PropTypes.array,
   sourceCtcOptions: PropTypes.array,
-  dropDownCtcLoading: PropTypes.bool
+  dropDownCtcLoading: PropTypes.bool,
+  ctcStageOptions: PropTypes.array,
+  isLoadingCtcStage: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -569,6 +596,13 @@ const validationSchema = Yup.object().shape({
       is: (where, company, willReassign) => (where === 'ClientManager' && company === 'CTC') || willReassign === true,
       then: Yup.number().required('Listing Agent is required'),
       otherwise: Yup.number().notRequired()
+    }),
+  ctcStageId: Yup.number()
+    .notRequired()
+    .when(['company'], {
+      is: company => company === 'CTC',
+      then: Yup.number().required('CTC Stage is required'),
+      otherwise: Yup.number().notRequired()
     })
 })
 
@@ -587,7 +621,9 @@ const mapStateToProps = state => {
     isLoadingUser: state.user.get.isLoading,
     duplicatedBusinessObject: state.business.verifyDuplicatedBusiness.object,
     disableButton: state.business.verifyDuplicatedBusiness.disableButton,
-    ctcAnalysts: state.user.get.ctcAnalysts
+    ctcAnalysts: state.user.get.ctcAnalysts,
+    ctcStageOptions: state.businessRegister.get.ctcStage.array,
+    isLoadingCtcStage: state.businessRegister.get.ctcStage.isLoading
   }
 }
 

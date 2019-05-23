@@ -269,7 +269,8 @@ class EditBusinessDetailForm extends Component {
       usersBroker,
       isLoadingIM,
       isLoadingGet,
-      ctcSourceOptions
+      ctcSourceOptions,
+      ctcStageOptions
     } = this.props
     const { state } = this.state
     return (
@@ -437,6 +438,7 @@ class EditBusinessDetailForm extends Component {
                 <Form.Group widths="equal">
                   <Form.Field>
                     <Form.TextArea
+                      style={{ height: '15em' }}
                       label="Description"
                       name="description"
                       autoComplete="description"
@@ -794,23 +796,41 @@ class EditBusinessDetailForm extends Component {
                   </Form.Field>
                 </Form.Group>
                 <Form.Group inline>
-                  <Form.Field>
-                    <Form.Select
-                      label="Business Stage"
-                      options={stageOptions}
-                      name="stage"
-                      autoComplete="stage"
-                      value={values.stage}
-                      disabled={
-                        (!this._isUserPreSale() &&
-                          (values.stage === 3 || values.stage === 8)) /* Sales Memo and Lost */ ||
-                        (this.props.history.location &&
-                          this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`)
-                      }
-                      onChange={this._handleSelectChange}
-                    />
-                    {errors.stage && touched.stage && <Label basic color="red" pointing content={errors.stage} />}
-                  </Form.Field>
+                  {this.props.business.company_id === 1 ? (
+                    <Form.Field>
+                      <Form.Select
+                        label="Business Stage"
+                        options={stageOptions}
+                        name="stage"
+                        autoComplete="stage"
+                        value={values.stage}
+                        disabled={
+                          (!this._isUserPreSale() &&
+                            (values.stage === 3 || values.stage === 8)) /* Sales Memo and Lost */ ||
+                          (this.props.history.location &&
+                            this.props.history.location.pathname ===
+                              `/business/${this.props.match.params.id}/from-buyer`)
+                        }
+                        onChange={this._handleSelectChange}
+                      />
+                      {errors.stage && touched.stage && <Label basic color="red" pointing content={errors.stage} />}
+                    </Form.Field>
+                  ) : (
+                    <Form.Field>
+                      <Form.Select
+                        required
+                        label="CTC Stage"
+                        options={ctcStageOptions}
+                        name="ctcStageId"
+                        autoComplete="ctcStageId"
+                        value={values.ctcStageId}
+                        onChange={this._handleSelectChange}
+                      />
+                      {errors.ctcStageId && touched.ctcStageId && (
+                        <Label basic color="red" pointing content={errors.ctcStageId} />
+                      )}
+                    </Form.Field>
+                  )}
                   <Form.Button
                     type="submit"
                     disabled={isSubmitting || !isValid}
@@ -890,7 +910,9 @@ EditBusinessDetailForm.propTypes = {
   updateBusinessFromBuyer: PropTypes.func,
   getBusinessFromBuyer: PropTypes.func,
   match: PropTypes.object,
-  ctcSourceOptions: PropTypes.array
+  ctcSourceOptions: PropTypes.array,
+  ctcStageOptions: PropTypes.array,
+  isLoadingCtcStage: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -925,7 +947,8 @@ const mapPropsToValues = props => {
       brokerAccountName,
       stageId,
       industry,
-      ctcSourceId
+      ctcSourceId,
+      ctcStageId
     } = props.business
 
     const business = {
@@ -958,7 +981,8 @@ const mapPropsToValues = props => {
       brokerAccountName,
       stage: stageId,
       industry,
-      ctcSourceId
+      ctcSourceId,
+      ctcStageId
     }
     business.data120DayGuarantee = business.data120DayGuarantee === '1'
     business.notifyOwner = business.notifyOwner === true
@@ -1086,7 +1110,11 @@ const mapStateToProps = (state, props) => {
     updateStageLost: state.business.updateStageLost.isUpdated,
     userRoles: state.auth.user.roles,
     isUploadedIM: state.business.uploadIM.isUploaded,
-    isLoadingIM: state.business.uploadIM.isLoading
+    isLoadingIM: state.business.uploadIM.isLoading,
+    ctcStageOptions:
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
+        ? state.buyer.getBusinessFromBuyer.ctcStageOptions
+        : state.business.get.ctcStageOptions
   }
 }
 

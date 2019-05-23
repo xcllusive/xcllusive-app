@@ -21,9 +21,10 @@ class ModalNewBusinessRegister extends Component {
         { key: 5, text: 'Business Type', value: 5 },
         // { key: 6, text: 'Business Owner`s Time', value: 6 },
         { key: 6, text: 'CTC - Business Source', value: 6 },
-        { key: 7, text: 'Business Stage', value: 7 },
+        { key: 7, text: 'Xcllusive - Business Stage', value: 7 },
         { key: 8, text: 'Stage Not Signed', value: 8 },
-        { key: 9, text: 'Stage Not Want', value: 9 }
+        { key: 9, text: 'Stage Not Want', value: 9 },
+        { key: 10, text: 'CTC - Business Stage', value: 10 }
       ],
       updatedSomething: null
     }
