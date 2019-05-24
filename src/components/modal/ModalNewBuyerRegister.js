@@ -42,7 +42,6 @@ class ModalNewBuyerRegister extends Component {
     } = this.props
 
     const { typesBuyerRegisters } = this.state
-    console.log(this.props.objectBuyerRegister)
     return (
       <Modal open dimmer="blurring">
         <Modal.Header align="center">{this.props.title ? this.props.title : ''}</Modal.Header>

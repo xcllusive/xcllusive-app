@@ -26,9 +26,7 @@ class ModalNewBusiness extends Component {
   componentDidMount () {
     this.props.getBusinessRegister(1, 1000)
     this.props.getBusinessRegister(6, 1000)
-    if (this.props.company === 'CTC') {
-      this.props.getBusinessRegister(10, 1000)
-    }
+    this.props.getBusinessRegister(10, 1000)
     this.props.getUsers()
   }
 
@@ -119,6 +117,7 @@ class ModalNewBusiness extends Component {
     this.setState({ willReassign: false })
     this.props.values.willReassign = false
     this.props.values.listingAgentCtc = null
+    this.props.values.ctcStageId = null
   }
 
   render () {
@@ -332,7 +331,7 @@ class ModalNewBusiness extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            {company === 'CTC' ? (
+            {company === 'CTC' || this.state.willReassign ? (
               <Form.Group>
                 <Form.Field width={8}>
                   <Form.Select

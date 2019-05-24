@@ -33,6 +33,7 @@ import HistoricalWeeklyReport from './Management/Xcllusive/Reports/HistoricalWee
 import BusinessesListPerAnalyst from './Management/Xcllusive/Reports/BusinessesListPerAnalyst'
 import DailyTimeActivityReports from './Management/Xcllusive/Reports/DailyTimeActivity'
 import BusinessesCtcListPerAnalyst from './Management/CTC/Reports/BusinessesListPerAnalyst'
+import CtcBusinessList from './Business/CtcBusinessList'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
@@ -79,7 +80,12 @@ const Layout = ({ match, logout, menu, user }) => (
     <ModalRoot />
     <Switch>
       <Route exact component={DashBoardPage} path={`${match.path}`} />
-      <AuthorizationRoute exact component={ListPage} path={`${match.path}business`} allowedRoles="BUSINESS_MENU" />
+      <AuthorizationRoute
+        exact
+        component={user.listingAgent > 0 ? ListPage : CtcBusinessList}
+        path={`${match.path}business`}
+        allowedRoles="BUSINESS_MENU"
+      />
       <AuthorizationRoute exact component={EditPage} path={`${match.path}business/:id`} allowedRoles="BUSINESS_MENU" />
       <AuthorizationRoute
         exact

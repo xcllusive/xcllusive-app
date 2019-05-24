@@ -50,8 +50,8 @@ class MarketingReports extends Component {
 
   _confirmReports = (dateFrom, dateTo) => {
     this.props.getMarketingReport(
-      moment(dateFrom).format('YYYY/MM/DD 00:00:00'),
-      moment(dateTo).format('YYYY/MM/DD 23:59:59')
+      moment(dateFrom).format('YYYY-MM-DD 00:00:00'),
+      moment(dateTo).format('YYYY-MM-DD 23:59:59')
     )
   }
 
@@ -72,8 +72,8 @@ class MarketingReports extends Component {
       pathname: `management/ctc/businesses-list-analyst/${leadsPerAnalyst.listingAgentCtc_id}`,
       state: {
         analystObject: leadsPerAnalyst,
-        dateFrom: this.props.values.dateFrom,
-        dateTo: this.props.values.dateTo
+        dateFrom: moment(this.props.values.dateFrom).format('YYYY-MM-DD 00:00:00'),
+        dateTo: moment(this.props.values.dateTo).format('YYYY-MM-DD 23:59:59')
       }
     })
   }
@@ -264,7 +264,7 @@ class MarketingReports extends Component {
                           {arrayLeadsPerSource.map((leadsPerSource, index) => {
                             return (
                               <Table.Row key={index}>
-                                <Table.Cell>{leadsPerSource['source.label']}</Table.Cell>
+                                <Table.Cell>{leadsPerSource['sourceCtc.label']}</Table.Cell>
                                 <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                   {leadsPerSource.count}
                                 </Table.Cell>
@@ -314,8 +314,8 @@ class MarketingReports extends Component {
                       <Table.Body>
                         {arrayTotalPerSource.map(totalPerSource => {
                           return (
-                            <Table.Row key={totalPerSource.sourceId}>
-                              <Table.Cell>{totalPerSource['source.label']}</Table.Cell>
+                            <Table.Row key={totalPerSource.ctcSourceId}>
+                              <Table.Cell>{totalPerSource['sourceCtc.label']}</Table.Cell>
                               <Table.Cell style={{ textAlign: 'right' }}>{totalPerSource.count}</Table.Cell>
                             </Table.Row>
                           )

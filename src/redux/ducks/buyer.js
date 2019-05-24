@@ -994,7 +994,6 @@ export const finaliseBusinessLogFromBuyer = businessLog => async dispatch => {
   })
   try {
     const response = await finaliseBusinessLogFromBuyerAPI(businessLog)
-    console.log(response, businessLog)
     dispatch({
       type: Types.FINALISE_BUSINESS_LOG_FROM_BUYER_SUCCESS
     })

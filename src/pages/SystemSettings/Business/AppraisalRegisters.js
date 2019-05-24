@@ -65,7 +65,6 @@ class AppraisalRegisters extends Component {
   }
 
   _handlePaginationChange = (e, { activePage }, appraisalRegisterType) => {
-    console.log(appraisalRegisterType)
     this.props.listAppraisalRegister(appraisalRegisterType, 5, activePage)
   }
 

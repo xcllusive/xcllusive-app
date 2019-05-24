@@ -434,11 +434,11 @@ class ClientManagerList extends Component {
     // if (this.state.buyer) {
     //   console.log(this.state.buyer.caReceived, this.state.ownersApprovalReceived, this.state.buyer.scanfilePath)
     // }
-    if (this.state.buyer) {
-      console.log(
-        !this.state.buyer.caReceived && (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)
-      )
-    }
+    // if (this.state.buyer) {
+    //   console.log(
+    //     !this.state.buyer.caReceived && (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)
+    //   )
+    // }
     return (
       <Wrapper>
         <Grid padded="horizontally" style={{ marginTop: 0 }}>

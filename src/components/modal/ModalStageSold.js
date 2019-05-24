@@ -219,7 +219,6 @@ class StageSoldForm extends Component {
       listBuyersFromBusiness,
       typeOptions
     } = this.props
-    console.log()
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
