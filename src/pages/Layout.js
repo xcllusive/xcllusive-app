@@ -82,7 +82,8 @@ const Layout = ({ match, logout, menu, user }) => (
       <Route exact component={DashBoardPage} path={`${match.path}`} />
       <AuthorizationRoute
         exact
-        component={user.listingAgent > 0 ? ListPage : CtcBusinessList}
+        // component={ListPage}
+        component={user.listingAgent ? ListPage : CtcBusinessList}
         path={`${match.path}business`}
         allowedRoles="BUSINESS_MENU"
       />
