@@ -73,3 +73,13 @@ export const sendEnquiryToOwner = (buyerId, businessId) =>
       businessId
     }
   })
+
+export const sendBuyerInformationToCtcBusiness = (buyer, business) =>
+  request({
+    method: 'post',
+    url: '/buyer/send-buyer-informations-ctc-business',
+    data: {
+      buyer,
+      business
+    }
+  })

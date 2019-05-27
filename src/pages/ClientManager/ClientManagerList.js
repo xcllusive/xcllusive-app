@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import numeral from 'numeral'
 
-import { Table, Icon, Button, Input, Grid, Dimmer, Loader, Pagination, Message, Form } from 'semantic-ui-react'
+import { Table, Icon, Button, Input, Grid, Dimmer, Loader, Pagination, Message, Form, Label } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -21,7 +21,8 @@ import {
   caReceived,
   emailBuyer,
   requestOwnersApproval,
-  sendEnquiryToOwner
+  sendEnquiryToOwner,
+  sendBuyerInformationToCtcBusiness
 } from '../../redux/ducks/clientManager'
 
 import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
@@ -306,9 +307,10 @@ class ClientManagerList extends Component {
     }
   }
 
-  _newBuyer = () => {
+  _newBuyer = company => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_BUYER, {
-      title: 'New Buyer',
+      title: company === 'Xcllusive' ? 'New Buyer for Xcllusive' : 'New Buyer for CTC',
+      company: company,
       onConfirm: async (values, searchDuplicatedBuyer = false) => {
         if (values) {
           if (searchDuplicatedBuyer) {
@@ -324,6 +326,12 @@ class ClientManagerList extends Component {
 
             this.timer = setTimeout(() => this.props.getBuyers(inputDuplicatedBuyer), 500)
           } else {
+            if (company === 'Xcllusive') {
+              values.xcllusiveBuyer = true
+            }
+            if (company === 'CTC') {
+              values.ctcBuyer = true
+            }
             await this.props.createBuyer(values)
           }
           this.props.closeModal()
@@ -412,6 +420,20 @@ class ClientManagerList extends Component {
     }
   }
 
+  _sendInformations = (buyer, business) => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Send Informations to Buyer',
+        text: 'Are you sure you want to send the informations to the buyer?'
+      },
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.sendBuyerInformationToCtcBusiness(buyer, business)
+        }
+      }
+    })
+  }
+
   render () {
     const {
       listBuyerList,
@@ -459,9 +481,13 @@ class ClientManagerList extends Component {
               />
             </Grid.Column>
             <Grid.Column style={{ marginTop: '47px' }} floated="right">
-              <Button size="small" onClick={this._newBuyer} color="facebook">
+              <Button size="small" onClick={() => this._newBuyer('Xcllusive')} color="facebook">
                 <Icon name="add" />
-                New Buyer
+                New Xcllusive Buyer
+              </Button>
+              <Button size="small" onClick={() => this._newBuyer('CTC')} color="green">
+                <Icon name="add" />
+                New CTC Buyer
               </Button>
             </Grid.Column>
             <Grid.Column floated="left" width={4}>
@@ -578,58 +604,75 @@ class ClientManagerList extends Component {
                       </Table.Row>
                     </Table.Body>
                   </Table>
-                  <Grid.Column floated="left" width={2}>
-                    <Button
-                      size="small"
-                      color="grey"
-                      disabled={!this.state.buyer.attachmentUrl}
-                      onClick={() => this._openFile(this.state.buyer.attachmentUrl)}
-                    >
-                      <Icon name="folder open outline" />
-                      Open CA
-                    </Button>
-                    <Button
-                      size="small"
-                      color="blue"
-                      onClick={() => this._toggleModalCaReceived()}
-                      disabled={!this.state.business || isLoadingCaReceived}
-                      loading={isLoadingCaReceived}
-                    >
-                      <Icon name="mail" />
-                      CA Received
-                    </Button>
-                    <Button
-                      size="small"
-                      color="blue"
-                      disabled={!this.state.business || isLoadingSendCa}
-                      loading={isLoadingSendCa}
-                      onClick={() => this._toggleModalSendCa(this.state.buyer.caSent)}
-                    >
-                      <Icon name="send" />
-                      Send CA
-                    </Button>
-                    <Button
-                      size="small"
-                      color="blue"
-                      onClick={() => this._toggleModalSendIm()}
-                      disabled={
-                        (!this.state.buyer.caReceived &&
-                          (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
-                        !this.state.business ||
-                        (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
-                        this.state.business.stageId === 5 || // Under Offer
-                        this.state.business.productId === 2 // Seller Assist
-                      }
-                      loading={isLoadingSendIm}
-                    >
-                      <Icon name="send" />
-                      Send IM
-                    </Button>
-                    <Button size="small" color="green" onClick={() => this._backToSearch()}>
-                      <Icon name="backward" />
-                      Back to Search
-                    </Button>
-                  </Grid.Column>
+                  {this.state.business && this.state.business.company_id === 2 ? (
+                    <Grid.Column floated="left" width={2}>
+                      <Button
+                        size="small"
+                        color="blue"
+                        onClick={() => this._sendInformations(this.state.buyer, this.state.business)}
+                      >
+                        <Icon name="send" />
+                        Send Information
+                      </Button>
+                      <Button size="small" color="green" onClick={() => this._backToSearch()}>
+                        <Icon name="backward" />
+                        Back to Search
+                      </Button>
+                    </Grid.Column>
+                  ) : (
+                    <Grid.Column floated="left" width={2}>
+                      <Button
+                        size="small"
+                        color="grey"
+                        disabled={!this.state.buyer.attachmentUrl}
+                        onClick={() => this._openFile(this.state.buyer.attachmentUrl)}
+                      >
+                        <Icon name="folder open outline" />
+                        Open CA
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        onClick={() => this._toggleModalCaReceived()}
+                        disabled={!this.state.business || isLoadingCaReceived}
+                        loading={isLoadingCaReceived}
+                      >
+                        <Icon name="mail" />
+                        CA Received
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        disabled={!this.state.business || isLoadingSendCa}
+                        loading={isLoadingSendCa}
+                        onClick={() => this._toggleModalSendCa(this.state.buyer.caSent)}
+                      >
+                        <Icon name="send" />
+                        Send CA
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        onClick={() => this._toggleModalSendIm()}
+                        disabled={
+                          (!this.state.buyer.caReceived &&
+                            (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
+                          !this.state.business ||
+                          (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
+                          this.state.business.stageId === 5 || // Under Offer
+                          this.state.business.productId === 2 // Seller Assist
+                        }
+                        loading={isLoadingSendIm}
+                      >
+                        <Icon name="send" />
+                        Send IM
+                      </Button>
+                      <Button size="small" color="green" onClick={() => this._backToSearch()}>
+                        <Icon name="backward" />
+                        Back to Search
+                      </Button>
+                    </Grid.Column>
+                  )}
                 </Fragment>
               ) : null}
             </Grid.Column>
@@ -644,6 +687,7 @@ class ClientManagerList extends Component {
                       <Table.Row>
                         <Table.HeaderCell>ID</Table.HeaderCell>
                         <Table.HeaderCell>Name</Table.HeaderCell>
+                        <Table.HeaderCell>Company</Table.HeaderCell>
                         <Table.HeaderCell>Price</Table.HeaderCell>
                         <Table.HeaderCell>Notes</Table.HeaderCell>
                       </Table.Row>
@@ -653,6 +697,7 @@ class ClientManagerList extends Component {
                         <Table.Row active key={business.id} onClick={() => this._renderBusiness(business)}>
                           <Table.Cell>{`BS${business.id}`}</Table.Cell>
                           <Table.Cell>{business.businessName}</Table.Cell>
+                          <Table.Cell>{business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}</Table.Cell>
                           <Table.Cell>{numeral(business.listedPrice).format('0,0.00')}</Table.Cell>
                           <Table.Cell>{business.description}</Table.Cell>
                         </Table.Row>
@@ -668,6 +713,15 @@ class ClientManagerList extends Component {
               ) : null}
               {this.state.business && this.state.business.id && listBusinessList.length > 0 ? (
                 <Fragment>
+                  <Label
+                    style={{ marginBottom: '0px' }}
+                    as="a"
+                    color={this.state.business.company_id === 1 ? 'blue' : 'green'}
+                    pointing="below"
+                    size="large"
+                  >
+                    {this.state.business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}
+                  </Label>
                   <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
                     <Table.Body>
                       <Table.Row>
@@ -901,7 +955,8 @@ ClientManagerList.propTypes = {
   newBuyerObject: PropTypes.object,
   isSentCa: PropTypes.bool,
   isReceivedCa: PropTypes.bool,
-  newBusinessObject: PropTypes.object
+  newBusinessObject: PropTypes.object,
+  sendBuyerInformationToCtcBusiness: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -954,7 +1009,8 @@ const mapDispatchToProps = dispatch =>
       updateBuyer,
       createBusiness,
       closeModal,
-      updateBusiness
+      updateBusiness,
+      sendBuyerInformationToCtcBusiness
     },
     dispatch
   )

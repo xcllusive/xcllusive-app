@@ -311,7 +311,8 @@ ModalNewBuyer.propTypes = {
   verifyDuplicatedBuyer: PropTypes.func,
   duplicatedBuyerObject: PropTypes.object,
   disableButton: PropTypes.bool,
-  clearBuyer: PropTypes.func
+  clearBuyer: PropTypes.func,
+  company: PropTypes.string
 }
 
 const mapPropsToValues = () => ({

@@ -246,7 +246,7 @@ class BusinessEditPage extends Component {
                   menuItem: 'Business Detail',
                   render: () => (
                     <Tab.Pane style={{ backgroundColor: '#f1f1f1' }} className="BusinessDetail" attached={false}>
-                      <Segment size="mini" inverted color="blue">
+                      <Segment size="mini" inverted color={this.props.business.company_id === 1 ? 'blue' : 'green'}>
                         <Grid>
                           <Grid.Row columns={3}>
                             <Grid.Column>
@@ -255,7 +255,7 @@ class BusinessEditPage extends Component {
                               </Header>
                             </Grid.Column>
                             <Grid.Column>
-                              <Header color="yellow" as="h2" textAlign="center" inverted>
+                              <Header as="h2" textAlign="center" inverted>
                                 {this.props.business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}
                               </Header>
                             </Grid.Column>

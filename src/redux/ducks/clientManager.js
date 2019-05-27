@@ -7,7 +7,8 @@ import {
   caReceived as caReceivedAPI,
   emailBuyer as emailBuyerAPI,
   requestOwnersApproval as requestOwnersApprovalAPI,
-  sendEnquiryToOwner as sendEnquiryToOwnerAPI
+  sendEnquiryToOwner as sendEnquiryToOwnerAPI,
+  sendBuyerInformationToCtcBusiness as sendBuyerInformationToCtcBusinessAPI
 } from '../../services/api/clientManager'
 
 export const Types = {
@@ -31,7 +32,10 @@ export const Types = {
   REQUEST_OWNERS_APPROVAL_FAILURE: 'REQUEST_OWNERS_APPROVAL_FAILURE',
   SEND_ENQUIRY_ONWER_LOADING: 'SEND_ENQUIRY_ONWER_LOADING',
   SEND_ENQUIRY_ONWER_SUCCESS: 'SEND_ENQUIRY_ONWER_SUCCESS',
-  SEND_ENQUIRY_ONWER_FAILURE: 'SEND_ENQUIRY_ONWER_FAILURE'
+  SEND_ENQUIRY_ONWER_FAILURE: 'SEND_ENQUIRY_ONWER_FAILURE',
+  SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING: 'SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING',
+  SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS: 'SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS',
+  SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE: 'SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE'
 }
 
 // Reducer
@@ -68,6 +72,11 @@ const initialState = {
     error: null
   },
   sendEnquiryToOwner: {
+    isLoading: false,
+    isSent: false,
+    error: null
+  },
+  sendBuyerInformationsToCtcBusiness: {
     isLoading: false,
     isSent: false,
     error: null
@@ -272,6 +281,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING:
+      return {
+        ...state,
+        sendBuyerInformationsToCtcBusiness: {
+          ...state.sendBuyerInformationsToCtcBusiness,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        sendBuyerInformationsToCtcBusiness: {
+          ...state.sendBuyerInformationsToCtcBusiness,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE:
+      return {
+        ...state,
+        sendBuyerInformationsToCtcBusiness: {
+          ...state.sendBuyerInformationsToCtcBusiness,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -411,6 +448,26 @@ export const sendEnquiryToOwner = (buyerId, businessId) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.SEND_ENQUIRY_ONWER_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const sendBuyerInformationToCtcBusiness = (buyer, business) => async dispatch => {
+  dispatch({
+    type: Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING,
+    payload: true
+  })
+  try {
+    const response = await sendBuyerInformationToCtcBusinessAPI(buyer, business)
+    dispatch({
+      type: Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE,
       payload: error
     })
     toast.error(error)
