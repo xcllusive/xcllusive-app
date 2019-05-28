@@ -330,6 +330,7 @@ class ClientManagerList extends Component {
               values.xcllusiveBuyer = true
             }
             if (company === 'CTC') {
+              values.xcllusiveBuyer = false
               values.ctcBuyer = true
             }
             await this.props.createBuyer(values)
@@ -375,7 +376,7 @@ class ClientManagerList extends Component {
             } else {
               values.company = 2
               values.willReassign = willReassign
-              values.ctcSourceId = 1
+              if (willReassign) values.ctcSourceId = 1
             }
             await this.props.createBusiness(values)
             this.setState({
