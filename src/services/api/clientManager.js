@@ -74,12 +74,24 @@ export const sendEnquiryToOwner = (buyerId, businessId) =>
     }
   })
 
-export const sendBuyerInformationToCtcBusiness = (buyer, business) =>
+export const sendEmailCtcBusiness = (buyer, business) =>
   request({
     method: 'post',
-    url: '/buyer/send-buyer-informations-ctc-business',
+    url: '/business/send-email-ctc-business',
     data: {
       buyer,
       business
+    }
+  })
+
+export const sendSms = (buyer, business, phone, message) =>
+  request({
+    method: 'post',
+    url: '/business/send-sms',
+    data: {
+      buyer,
+      business,
+      phone,
+      message
     }
   })

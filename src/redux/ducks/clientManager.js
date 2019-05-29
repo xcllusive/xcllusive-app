@@ -8,7 +8,8 @@ import {
   emailBuyer as emailBuyerAPI,
   requestOwnersApproval as requestOwnersApprovalAPI,
   sendEnquiryToOwner as sendEnquiryToOwnerAPI,
-  sendBuyerInformationToCtcBusiness as sendBuyerInformationToCtcBusinessAPI
+  sendEmailCtcBusiness as sendEmailCtcBusinessAPI,
+  sendSms as sendSmsAPI
 } from '../../services/api/clientManager'
 
 export const Types = {
@@ -33,9 +34,12 @@ export const Types = {
   SEND_ENQUIRY_ONWER_LOADING: 'SEND_ENQUIRY_ONWER_LOADING',
   SEND_ENQUIRY_ONWER_SUCCESS: 'SEND_ENQUIRY_ONWER_SUCCESS',
   SEND_ENQUIRY_ONWER_FAILURE: 'SEND_ENQUIRY_ONWER_FAILURE',
-  SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING: 'SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING',
-  SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS: 'SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS',
-  SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE: 'SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE'
+  SEND_EMAIL_CTC_BUSINESS_LOADING: 'SEND_EMAIL_CTC_BUSINESS_LOADING',
+  SEND_EMAIL_CTC_BUSINESS_SUCCESS: 'SEND_EMAIL_CTC_BUSINESS_SUCCESS',
+  SEND_EMAIL_CTC_BUSINESS_FAILURE: 'SEND_EMAIL_CTC_BUSINESS_FAILURE',
+  SEND_SMS_LOADING: 'SEND_SMS_LOADING',
+  SEND_SMS_SUCCESS: 'SEND_SMS_SUCCESS',
+  SEND_SMS_FAILURE: 'SEND_SMS_FAILURE'
 }
 
 // Reducer
@@ -76,7 +80,12 @@ const initialState = {
     isSent: false,
     error: null
   },
-  sendBuyerInformationsToCtcBusiness: {
+  sendEmailCtcBusiness: {
+    isLoading: false,
+    isSent: false,
+    error: null
+  },
+  sendSms: {
     isLoading: false,
     isSent: false,
     error: null
@@ -281,30 +290,58 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING:
+    case Types.SEND_EMAIL_CTC_BUSINESS_LOADING:
       return {
         ...state,
-        sendBuyerInformationsToCtcBusiness: {
-          ...state.sendBuyerInformationsToCtcBusiness,
+        sendEmailCtcBusiness: {
+          ...state.sendEmailCtcBusiness,
           isLoading: action.payload,
           isSent: false,
           error: null
         }
       }
-    case Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS:
+    case Types.SEND_EMAIL_CTC_BUSINESS_SUCCESS:
       return {
         ...state,
-        sendBuyerInformationsToCtcBusiness: {
-          ...state.sendBuyerInformationsToCtcBusiness,
+        sendEmailCtcBusiness: {
+          ...state.sendEmailCtcBusiness,
           isLoading: false,
           isSent: true
         }
       }
-    case Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE:
+    case Types.SEND_EMAIL_CTC_BUSINESS_FAILURE:
       return {
         ...state,
-        sendBuyerInformationsToCtcBusiness: {
-          ...state.sendBuyerInformationsToCtcBusiness,
+        sendEmailCtcBusiness: {
+          ...state.sendEmailCtcBusiness,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.SEND_SMS_LOADING:
+      return {
+        ...state,
+        sendSms: {
+          ...state.sendSms,
+          isLoading: action.payload,
+          isSent: false,
+          error: null
+        }
+      }
+    case Types.SEND_SMS_SUCCESS:
+      return {
+        ...state,
+        sendSms: {
+          ...state.sendSms,
+          isLoading: false,
+          isSent: true
+        }
+      }
+    case Types.SEND_SMS_FAILURE:
+      return {
+        ...state,
+        sendSms: {
+          ...state.sendSms,
           isLoading: false,
           error: action.payload
         }
@@ -454,20 +491,40 @@ export const sendEnquiryToOwner = (buyerId, businessId) => async dispatch => {
   }
 }
 
-export const sendBuyerInformationToCtcBusiness = (buyer, business) => async dispatch => {
+export const sendEmailCtcBusiness = (buyer, business) => async dispatch => {
   dispatch({
-    type: Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_LOADING,
+    type: Types.SEND_EMAIL_CTC_BUSINESS_LOADING,
     payload: true
   })
   try {
-    const response = await sendBuyerInformationToCtcBusinessAPI(buyer, business)
+    const response = await sendEmailCtcBusinessAPI(buyer, business)
     dispatch({
-      type: Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_SUCCESS
+      type: Types.SEND_EMAIL_CTC_BUSINESS_SUCCESS
     })
     toast.success(response.message)
   } catch (error) {
     dispatch({
-      type: Types.SEND_BUYER_INFORMATIONS_CTC_BUSINESS_FAILURE,
+      type: Types.SEND_EMAIL_CTC_BUSINESS_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const sendSms = (buyer, business, phone, message) => async dispatch => {
+  dispatch({
+    type: Types.SEND_SMS_LOADING,
+    payload: true
+  })
+  try {
+    const response = await sendSmsAPI(buyer, business, phone, message)
+    dispatch({
+      type: Types.SEND_SMS_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SEND_SMS_FAILURE,
       payload: error
     })
     toast.error(error)

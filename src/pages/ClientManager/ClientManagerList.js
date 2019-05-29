@@ -3,7 +3,20 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import numeral from 'numeral'
 
-import { Table, Icon, Button, Input, Grid, Dimmer, Loader, Pagination, Message, Form, Label } from 'semantic-ui-react'
+import {
+  Table,
+  Icon,
+  Button,
+  Input,
+  Grid,
+  Dimmer,
+  Loader,
+  Pagination,
+  Message,
+  Form,
+  Label,
+  Segment
+} from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -22,7 +35,8 @@ import {
   emailBuyer,
   requestOwnersApproval,
   sendEnquiryToOwner,
-  sendBuyerInformationToCtcBusiness
+  sendEmailCtcBusiness,
+  sendSms
 } from '../../redux/ducks/clientManager'
 
 import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
@@ -421,7 +435,7 @@ class ClientManagerList extends Component {
     }
   }
 
-  _sendInformations = (buyer, business) => {
+  _sendEmailCtcBusiness = (buyer, business) => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Send Informations to Buyer',
@@ -429,7 +443,39 @@ class ClientManagerList extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          this.props.sendBuyerInformationToCtcBusiness(buyer, business)
+          this.props.sendEmailCtcBusiness(buyer, business)
+        }
+      }
+    })
+  }
+
+  _sendSms = (buyer, business) => {
+    const numPhone1 = parseInt(business.vendorPhone1.replace(/[^0-9]/g, ''), 10)
+    const numPhone2 = parseInt(business.vendorPhone2.replace(/[^0-9]/g, ''), 10)
+    const numPhone3 = parseInt(business.vendorPhone3.replace(/[^0-9]/g, ''), 10)
+    let arrayNumbers = []
+
+    if (numPhone1.toString().substr(0, 1) === '4' && numPhone1.toString().length === 9) {
+      arrayNumbers.push({ id: 1, number: numPhone1 })
+    }
+    if (numPhone2.toString().substr(0, 1) === '4' && numPhone2.toString().length === 9) {
+      arrayNumbers.push({ id: 2, number: numPhone2 })
+    }
+    if (numPhone3.toString().substr(0, 1) === '4' && numPhone3.toString().length === 9) {
+      arrayNumbers.push({ id: 3, number: numPhone3 })
+    }
+
+    this.props.openModal(TypesModal.MODAL_SEND_SMS, {
+      options: {
+        title: 'Sending SMS',
+        arrayNumbers: arrayNumbers.length > 0 ? arrayNumbers : []
+      },
+      onConfirm: phone => {
+        if (phone) {
+          const message = `\nPlease find below enquiry for your business: \n\nBuyer Name: ${buyer.firstName} ${
+            buyer.surname
+          } \nPhone: ${buyer.telephone1} \nEmail: ${buyer.email} \n\nRegards, \nTeam Xcllusive.`
+          this.props.sendSms(buyer, business, phone, message)
         }
       }
     })
@@ -531,319 +577,331 @@ class ClientManagerList extends Component {
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column>
-              {!this.state.buyer && listBuyerList.length > 0 ? (
-                <Dimmer.Dimmable dimmed>
-                  <Dimmer inverted active={isLoadingBuyerList}>
-                    <Loader>Loading</Loader>
-                  </Dimmer>
-                  <Table size="small" compact color="blue" celled inverted selectable>
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Name</Table.HeaderCell>
-                        <Table.HeaderCell>Phone</Table.HeaderCell>
-                        <Table.HeaderCell>Email</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {listBuyerList.map(buyer => (
-                        <Table.Row active key={buyer.id} onClick={() => this._renderBuyer(buyer)}>
-                          <Table.Cell>
-                            {buyer.firstName} {buyer.surname}
-                          </Table.Cell>
-                          <Table.Cell>{buyer.telephone1}</Table.Cell>
-                          <Table.Cell>{buyer.email}</Table.Cell>
+              <Segment style={{ backgroundColor: '#f7f7f7' }}>
+                {!this.state.buyer && listBuyerList.length > 0 ? (
+                  <Dimmer.Dimmable dimmed>
+                    <Dimmer inverted active={isLoadingBuyerList}>
+                      <Loader>Loading</Loader>
+                    </Dimmer>
+                    <Table size="small" compact color="blue" celled inverted selectable>
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell>Name</Table.HeaderCell>
+                          <Table.HeaderCell>Phone</Table.HeaderCell>
+                          <Table.HeaderCell>Email</Table.HeaderCell>
                         </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
-                </Dimmer.Dimmable>
-              ) : null}
-              {this.state.buyer && listBuyerList.length > 0 ? (
-                <Fragment>
-                  <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
-                    <Table.Body>
-                      <Table.Row>
-                        <Table.HeaderCell>BuyerID</Table.HeaderCell>
-                        <Table.Cell onClick={() => this._editBuyer(this.state.buyer)} selectable>
-                          <Icon link name="search" />
-                          {`B${this.state.buyer.id}`}
-                        </Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell color="red">Name</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.buyer.firstName} {this.state.buyer.surname}
-                        </Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Address</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.buyer.streetName}, {this.state.buyer.suburb} {this.state.buyer.state}{' '}
-                          {this.state.buyer.postCode}
-                        </Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Phone</Table.HeaderCell>
-                        <Table.Cell>{this.state.buyer.telephone1}</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Email</Table.HeaderCell>
-                        <Table.Cell>{this.state.buyer.email}</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>CA sent</Table.HeaderCell>
-                        <Table.Cell>{this.state.buyer.caSent ? 'Yes' : 'No'}</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>CA returned</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.buyer.caReceived ||
-                          (this.state.buyer.scanfilePath !== '' && this.state.buyer.scanfilePath !== null)
-                            ? 'Yes'
-                            : 'No'}
-                        </Table.Cell>
-                      </Table.Row>
-                    </Table.Body>
-                  </Table>
-                  {this.state.business && this.state.business.company_id === 2 ? (
-                    <Grid.Column floated="left" width={2}>
-                      <Button
-                        size="small"
-                        color="blue"
-                        onClick={() => this._sendInformations(this.state.buyer, this.state.business)}
-                      >
-                        <Icon name="send" />
-                        Send Information
-                      </Button>
-                      <Button size="small" color="green" onClick={() => this._backToSearch()}>
-                        <Icon name="backward" />
-                        Back to Search
-                      </Button>
-                    </Grid.Column>
-                  ) : (
-                    <Grid.Column floated="left" width={2}>
-                      <Button
-                        size="small"
-                        color="grey"
-                        disabled={!this.state.buyer.attachmentUrl}
-                        onClick={() => this._openFile(this.state.buyer.attachmentUrl)}
-                      >
-                        <Icon name="folder open outline" />
-                        Open CA
-                      </Button>
-                      <Button
-                        size="small"
-                        color="blue"
-                        onClick={() => this._toggleModalCaReceived()}
-                        disabled={!this.state.business || isLoadingCaReceived}
-                        loading={isLoadingCaReceived}
-                      >
-                        <Icon name="mail" />
-                        CA Received
-                      </Button>
-                      <Button
-                        size="small"
-                        color="blue"
-                        disabled={!this.state.business || isLoadingSendCa}
-                        loading={isLoadingSendCa}
-                        onClick={() => this._toggleModalSendCa(this.state.buyer.caSent)}
-                      >
-                        <Icon name="send" />
-                        Send CA
-                      </Button>
-                      <Button
-                        size="small"
-                        color="blue"
-                        onClick={() => this._toggleModalSendIm()}
-                        disabled={
-                          (!this.state.buyer.caReceived &&
-                            (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
-                          !this.state.business ||
-                          (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
-                          this.state.business.stageId === 5 || // Under Offer
-                          this.state.business.productId === 2 // Seller Assist
-                        }
-                        loading={isLoadingSendIm}
-                      >
-                        <Icon name="send" />
-                        Send IM
-                      </Button>
-                      <Button size="small" color="green" onClick={() => this._backToSearch()}>
-                        <Icon name="backward" />
-                        Back to Search
-                      </Button>
-                    </Grid.Column>
-                  )}
-                </Fragment>
-              ) : null}
+                      </Table.Header>
+                      <Table.Body>
+                        {listBuyerList.map(buyer => (
+                          <Table.Row active key={buyer.id} onClick={() => this._renderBuyer(buyer)}>
+                            <Table.Cell>
+                              {buyer.firstName} {buyer.surname}
+                            </Table.Cell>
+                            <Table.Cell>{buyer.telephone1}</Table.Cell>
+                            <Table.Cell>{buyer.email}</Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table>
+                  </Dimmer.Dimmable>
+                ) : null}
+                {this.state.buyer && listBuyerList.length > 0 ? (
+                  <Fragment>
+                    <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
+                      <Table.Body>
+                        <Table.Row>
+                          <Table.HeaderCell>BuyerID</Table.HeaderCell>
+                          <Table.Cell onClick={() => this._editBuyer(this.state.buyer)} selectable>
+                            <Icon link name="search" />
+                            {`B${this.state.buyer.id}`}
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell color="red">Name</Table.HeaderCell>
+                          <Table.Cell>
+                            {this.state.buyer.firstName} {this.state.buyer.surname}
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>Address</Table.HeaderCell>
+                          <Table.Cell>
+                            {this.state.buyer.streetName}, {this.state.buyer.suburb} {this.state.buyer.state}{' '}
+                            {this.state.buyer.postCode}
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>Phone</Table.HeaderCell>
+                          <Table.Cell>{this.state.buyer.telephone1}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>Email</Table.HeaderCell>
+                          <Table.Cell>{this.state.buyer.email}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>CA sent</Table.HeaderCell>
+                          <Table.Cell>{this.state.buyer.caSent ? 'Yes' : 'No'}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>CA returned</Table.HeaderCell>
+                          <Table.Cell>
+                            {this.state.buyer.caReceived ||
+                            (this.state.buyer.scanfilePath !== '' && this.state.buyer.scanfilePath !== null)
+                              ? 'Yes'
+                              : 'No'}
+                          </Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
+                    {this.state.business && this.state.business.company_id === 2 ? (
+                      <Grid.Column floated="left" width={2}>
+                        <Button
+                          size="small"
+                          color="blue"
+                          onClick={() => this._sendEmailCtcBusiness(this.state.buyer, this.state.business)}
+                        >
+                          <Icon name="mail" />
+                          Send Email
+                        </Button>
+                        <Button
+                          size="small"
+                          color="blue"
+                          onClick={() => this._sendSms(this.state.buyer, this.state.business)}
+                        >
+                          <Icon name="mobile alternate" />
+                          Send SMS
+                        </Button>
+                        <Button size="small" color="grey" onClick={() => this._backToSearch()}>
+                          <Icon name="arrow left" />
+                          Back to Search
+                        </Button>
+                      </Grid.Column>
+                    ) : (
+                      <Grid.Column floated="left" width={2}>
+                        <Button
+                          size="small"
+                          color="teal"
+                          disabled={!this.state.buyer.attachmentUrl}
+                          onClick={() => this._openFile(this.state.buyer.attachmentUrl)}
+                        >
+                          <Icon name="folder open outline" />
+                          Open CA
+                        </Button>
+                        <Button
+                          size="small"
+                          color="blue"
+                          onClick={() => this._toggleModalCaReceived()}
+                          disabled={!this.state.business || isLoadingCaReceived}
+                          loading={isLoadingCaReceived}
+                        >
+                          <Icon name="mail" />
+                          CA Received
+                        </Button>
+                        <Button
+                          size="small"
+                          color="blue"
+                          disabled={!this.state.business || isLoadingSendCa}
+                          loading={isLoadingSendCa}
+                          onClick={() => this._toggleModalSendCa(this.state.buyer.caSent)}
+                        >
+                          <Icon name="send" />
+                          Send CA
+                        </Button>
+                        <Button
+                          size="small"
+                          color="blue"
+                          onClick={() => this._toggleModalSendIm()}
+                          disabled={
+                            (!this.state.buyer.caReceived &&
+                              (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
+                            !this.state.business ||
+                            (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
+                            this.state.business.stageId === 5 || // Under Offer
+                            this.state.business.productId === 2 // Seller Assist
+                          }
+                          loading={isLoadingSendIm}
+                        >
+                          <Icon name="send" />
+                          Send IM
+                        </Button>
+                        <Button size="small" color="grey" onClick={() => this._backToSearch()}>
+                          <Icon name="arrow left" />
+                          Back to Search
+                        </Button>
+                      </Grid.Column>
+                    )}
+                  </Fragment>
+                ) : null}
+              </Segment>
             </Grid.Column>
             <Grid.Column>
-              {!this.state.business && listBusinessList.length > 0 ? (
-                <Dimmer.Dimmable dimmed>
-                  <Dimmer inverted active={isLoadingBusinessList}>
-                    <Loader>Loading</Loader>
-                  </Dimmer>
-                  <Table size="small" compact color="blue" celled inverted selectable>
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>ID</Table.HeaderCell>
-                        <Table.HeaderCell>Name</Table.HeaderCell>
-                        <Table.HeaderCell>Company</Table.HeaderCell>
-                        <Table.HeaderCell>Price</Table.HeaderCell>
-                        <Table.HeaderCell>Notes</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {listBusinessList.map(business => (
-                        <Table.Row active key={business.id} onClick={() => this._renderBusiness(business)}>
-                          <Table.Cell>{`BS${business.id}`}</Table.Cell>
-                          <Table.Cell>{business.businessName}</Table.Cell>
-                          <Table.Cell>{business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}</Table.Cell>
-                          <Table.Cell>{numeral(business.listedPrice).format('0,0.00')}</Table.Cell>
-                          <Table.Cell>{business.description}</Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
-                </Dimmer.Dimmable>
-              ) : null}
-              {listBusinessList.length === 0 && this.state.showMsgBusiness ? (
-                <Message warning>
-                  <Message.Header>Sorry! this business is not `Under Offer` neither `For Sale`</Message.Header>
-                </Message>
-              ) : null}
-              {this.state.business && this.state.business.id && listBusinessList.length > 0 ? (
-                <Fragment>
-                  <Label
-                    style={{ marginBottom: '0px' }}
-                    as="a"
-                    color={this.state.business.company_id === 1 ? 'blue' : 'green'}
-                    pointing="below"
-                    size="large"
-                  >
-                    {this.state.business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}
-                  </Label>
-                  <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
-                    <Table.Body>
-                      <Table.Row>
-                        <Table.HeaderCell>BusinessID</Table.HeaderCell>
-                        <Table.Cell onClick={() => history.push(`business/${this.state.business.id}`)} selectable>
-                          <Icon link name="search" />
-                          {`BS${this.state.business.id}`}
-                        </Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell color="red">Name</Table.HeaderCell>
-                        <Table.Cell>{this.state.business.businessName}</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Address</Table.HeaderCell>
-                        <Table.Cell>
-                          {this.state.business.address1} {','} {this.state.business.suburb} {this.state.business.state}{' '}
-                          {this.state.business.postCode}
-                        </Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Industry</Table.HeaderCell>
-                        <Table.Cell>{this.state.business.industryId}</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Price</Table.HeaderCell>
-                        <Table.Cell>{numeral(this.state.business.listedPrice).format('0,0.00')}</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.HeaderCell>Notes</Table.HeaderCell>
-                        <Table.Cell>{this.state.business.description}</Table.Cell>
-                      </Table.Row>
-                      {this.state.business.BusinessStage ? (
+              <Segment style={{ backgroundColor: '#f7f7f7' }}>
+                {!this.state.business && listBusinessList.length > 0 ? (
+                  <Dimmer.Dimmable dimmed>
+                    <Dimmer inverted active={isLoadingBusinessList}>
+                      <Loader>Loading</Loader>
+                    </Dimmer>
+                    <Table size="small" compact color="blue" celled inverted selectable>
+                      <Table.Header>
                         <Table.Row>
-                          <Table.HeaderCell>Stage</Table.HeaderCell>
-                          <Table.Cell>{this.state.business.BusinessStage.label}</Table.Cell>
+                          <Table.HeaderCell>ID</Table.HeaderCell>
+                          <Table.HeaderCell>Name</Table.HeaderCell>
+                          <Table.HeaderCell>Company</Table.HeaderCell>
+                          <Table.HeaderCell>Price</Table.HeaderCell>
+                          <Table.HeaderCell>Notes</Table.HeaderCell>
                         </Table.Row>
-                      ) : null}
-                      {this.state.business.productId === 2 ? (
+                      </Table.Header>
+                      <Table.Body>
+                        {listBusinessList.map(business => (
+                          <Table.Row active key={business.id} onClick={() => this._renderBusiness(business)}>
+                            <Table.Cell>{`BS${business.id}`}</Table.Cell>
+                            <Table.Cell>{business.businessName}</Table.Cell>
+                            <Table.Cell>{business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}</Table.Cell>
+                            <Table.Cell>{numeral(business.listedPrice).format('0,0.00')}</Table.Cell>
+                            <Table.Cell>{business.description}</Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table>
+                  </Dimmer.Dimmable>
+                ) : null}
+                {listBusinessList.length === 0 && this.state.showMsgBusiness ? (
+                  <Message warning>
+                    <Message.Header>Sorry! this business is not `Under Offer` neither `For Sale`</Message.Header>
+                  </Message>
+                ) : null}
+                {this.state.business && this.state.business.id && listBusinessList.length > 0 ? (
+                  <Fragment>
+                    <Label
+                      style={{ marginBottom: '0px' }}
+                      as="a"
+                      color={this.state.business.company_id === 1 ? 'blue' : 'green'}
+                      pointing="below"
+                      size="large"
+                    >
+                      {this.state.business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}
+                    </Label>
+                    <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
+                      <Table.Body>
                         <Table.Row>
-                          <Table.HeaderCell>Product</Table.HeaderCell>
-                          <Table.Cell>Seller Assist</Table.Cell>
+                          <Table.HeaderCell>BusinessID</Table.HeaderCell>
+                          <Table.Cell onClick={() => history.push(`business/${this.state.business.id}`)} selectable>
+                            <Icon link name="search" />
+                            {`BS${this.state.business.id}`}
+                          </Table.Cell>
                         </Table.Row>
-                      ) : null}
-                    </Table.Body>
-                  </Table>
-                  {this.state.business.notifyOwner ? (
-                    <Message>
-                      <p style={{ color: 'red' }}>
-                        <b>Owners must approve buyers before IM is send to them!</b>
-                      </p>
-                    </Message>
-                  ) : null}
-                  <Grid.Column floated="left" width={2}>
-                    <Button
-                      size="small"
-                      color="grey"
-                      onClick={() => this._toggleModalEnquiryBusiness()}
-                      disabled={!this.state.buyer || isLoadingEnquiryBusiness}
-                      loading={isLoadingEnquiryBusiness}
-                    >
-                      <Icon name="write" />
-                      Enquiry Business
-                    </Button>
-                    <Button
-                      size="small"
-                      color="blue"
-                      onClick={() => this._toggleModalRequestOwnersApproval()}
-                      disabled={
-                        !this.state.buyer ||
-                        isLoadingRequestOwnersApproval ||
-                        (!this.state.buyer.caReceived && !this.state.business.notifyOwner)
-                      }
-                      loading={isLoadingRequestOwnersApproval}
-                    >
-                      <Icon name="mail" />
-                      Request Owners Approval
-                    </Button>
-                    <Button
-                      size="small"
-                      color="blue"
-                      disabled={
-                        !this.state.buyer ||
-                        isLoadingSendEnquiryToOwner ||
-                        !this.state.buyer.caReceived ||
-                        !this.state.business.notifyOwner ||
-                        this.state.business.productId !== 2
-                      }
-                      loading={isLoadingSendEnquiryToOwner}
-                      onClick={() => this._toggleModalSendEnquiryToOwner()}
-                    >
-                      <Icon name="send" />
-                      Send Enquiry to Owner
-                    </Button>
-                    <Button
-                      size="small"
-                      color="blue"
-                      onClick={() => this._ownersApprovalReceived()}
-                      loading={isLoadingEmailBuyer}
-                      disabled={!this.state.business.notifyOwner}
-                    >
-                      <Icon name="mail" />
-                      Owners Approval Received
-                    </Button>
-                    <Button
-                      size="small"
-                      color="blue"
-                      disabled={!this.state.buyer || isLoadingEmailBuyer || this.state.business.stageId !== 5}
-                      onClick={() => this._toggleModalEmailBuyer()}
-                      loading={isLoadingEmailBuyer}
-                    >
-                      <Icon name="mail" />
-                      Email Buyer
-                    </Button>
-                    <Button size="small" color="green" onClick={() => this._renderBusiness(null)}>
-                      <Icon name="backward" />
-                      Back to Search
-                    </Button>
-                  </Grid.Column>
-                </Fragment>
-              ) : null}
+                        <Table.Row>
+                          <Table.HeaderCell color="red">Name</Table.HeaderCell>
+                          <Table.Cell>{this.state.business.businessName}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>Address</Table.HeaderCell>
+                          <Table.Cell>
+                            {this.state.business.address1} {','} {this.state.business.suburb}{' '}
+                            {this.state.business.state} {this.state.business.postCode}
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>Industry</Table.HeaderCell>
+                          <Table.Cell>{this.state.business.industryId}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>Price</Table.HeaderCell>
+                          <Table.Cell>{numeral(this.state.business.listedPrice).format('0,0.00')}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.HeaderCell>Notes</Table.HeaderCell>
+                          <Table.Cell>{this.state.business.description}</Table.Cell>
+                        </Table.Row>
+                        {this.state.business.BusinessStage ? (
+                          <Table.Row>
+                            <Table.HeaderCell>Stage</Table.HeaderCell>
+                            <Table.Cell>{this.state.business.BusinessStage.label}</Table.Cell>
+                          </Table.Row>
+                        ) : null}
+                        {this.state.business.productId === 2 ? (
+                          <Table.Row>
+                            <Table.HeaderCell>Product</Table.HeaderCell>
+                            <Table.Cell>Seller Assist</Table.Cell>
+                          </Table.Row>
+                        ) : null}
+                      </Table.Body>
+                    </Table>
+                    {this.state.business.notifyOwner ? (
+                      <Message>
+                        <p style={{ color: 'red' }}>
+                          <b>Owners must approve buyers before IM is send to them!</b>
+                        </p>
+                      </Message>
+                    ) : null}
+                    <Grid.Column floated="left" width={2}>
+                      <Button
+                        size="small"
+                        color="teal"
+                        onClick={() => this._toggleModalEnquiryBusiness()}
+                        disabled={!this.state.buyer || isLoadingEnquiryBusiness}
+                        loading={isLoadingEnquiryBusiness}
+                      >
+                        <Icon name="write" />
+                        Enquiry Business
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        onClick={() => this._toggleModalRequestOwnersApproval()}
+                        disabled={
+                          !this.state.buyer ||
+                          isLoadingRequestOwnersApproval ||
+                          (!this.state.buyer.caReceived && !this.state.business.notifyOwner)
+                        }
+                        loading={isLoadingRequestOwnersApproval}
+                      >
+                        <Icon name="mail" />
+                        Request Owners Approval
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        disabled={
+                          !this.state.buyer ||
+                          isLoadingSendEnquiryToOwner ||
+                          !this.state.buyer.caReceived ||
+                          !this.state.business.notifyOwner ||
+                          this.state.business.productId !== 2
+                        }
+                        loading={isLoadingSendEnquiryToOwner}
+                        onClick={() => this._toggleModalSendEnquiryToOwner()}
+                      >
+                        <Icon name="send" />
+                        Send Enquiry to Owner
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        onClick={() => this._ownersApprovalReceived()}
+                        loading={isLoadingEmailBuyer}
+                        disabled={!this.state.business.notifyOwner}
+                      >
+                        <Icon name="mail" />
+                        Owners Approval Received
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        disabled={!this.state.buyer || isLoadingEmailBuyer || this.state.business.stageId !== 5}
+                        onClick={() => this._toggleModalEmailBuyer()}
+                        loading={isLoadingEmailBuyer}
+                      >
+                        <Icon name="mail" />
+                        Email Buyer
+                      </Button>
+                      <Button size="small" color="grey" onClick={() => this._renderBusiness(null)}>
+                        <Icon name="arrow left" />
+                        Back to Search
+                      </Button>
+                    </Grid.Column>
+                  </Fragment>
+                ) : null}
+              </Segment>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -858,7 +916,7 @@ class ClientManagerList extends Component {
               </Button>
               <Button
                 size="small"
-                color="green"
+                color="teal"
                 onClick={() =>
                   // history.push(`clientManager/${this.state.buyer.id}`)
                   history.push(`/clientManager/buyer/${this.state.buyer.id}`)
@@ -957,7 +1015,8 @@ ClientManagerList.propTypes = {
   isSentCa: PropTypes.bool,
   isReceivedCa: PropTypes.bool,
   newBusinessObject: PropTypes.object,
-  sendBuyerInformationToCtcBusiness: PropTypes.func
+  sendEmailCtcBusiness: PropTypes.func,
+  sendSms: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -1011,7 +1070,8 @@ const mapDispatchToProps = dispatch =>
       createBusiness,
       closeModal,
       updateBusiness,
-      sendBuyerInformationToCtcBusiness
+      sendEmailCtcBusiness,
+      sendSms
     },
     dispatch
   )
