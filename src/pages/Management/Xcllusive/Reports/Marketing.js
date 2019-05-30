@@ -107,8 +107,10 @@ class MarketingReports extends Component {
       arrayLeadsPerSourceMelbourne,
       arrayLeadsPerSourceSydney,
       arrayLeadsPerSourceQueensland,
-      arrayOffices
+      arrayOffices,
+      arrayCtcLeadsPerOfficeFromXcllusive
     } = this.props
+    console.log(arrayCtcLeadsPerOfficeFromXcllusive)
     return (
       <Wrapper>
         <Form>
@@ -601,29 +603,36 @@ class MarketingReports extends Component {
                           }
                         })}
                       </Table.Body>
-                      {/* <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            <b>TOTAL:</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arraySydney[0].sumLeadsSydney : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arraySydney[0].sumImSydney : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>
+                      {/* cayo */}
+                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
+                        if (ctcLeads['listingAgent.dataRegion'] === 'Sydney Office') {
+                          return (
+                            <Table.Footer fullWidth>
+                              <Table.Row>
+                                <Table.HeaderCell>
+                                  <b>TOTAL CTC:</b>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  <b>{ctcLeads.count}</b>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  {/* <b>{arrayOffices[0] ? arrayOffices[0].arraySydney[0].sumImSydney : 0}</b> */}
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  {/* <b>
                               {arrayOffices[0]
                                 ? `${numeral(
                                   arrayOffices[0].arraySydney[0].sumConvertionRateSydney /
                                       arrayOffices[0].arraySydney[0].indexSydney
                                 ).format('0.0[0]')}%`
                                 : null}
-                            </b>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer> */}
+                            </b> */}
+                                </Table.HeaderCell>
+                              </Table.Row>
+                            </Table.Footer>
+                          )
+                        }
+                      })}
                     </Table>
                     <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
                       <Table.Header>
@@ -1082,7 +1091,8 @@ MarketingReports.propTypes = {
   clearMarketingReports: PropTypes.func,
   history: PropTypes.object,
   location: PropTypes.object,
-  savedRecords: PropTypes.object
+  savedRecords: PropTypes.object,
+  arrayCtcLeadsPerOfficeFromXcllusive: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -1104,6 +1114,7 @@ const mapStateToProps = state => ({
   arrayLeadsPerSourceQueensland: state.reports.getMarketingReport.arrayLeadsPerSourceQueensland,
   totalGeralPerSource: state.reports.getMarketingReport.totalGeralPerSource,
   arrayOffices: state.reports.getMarketingReport.arrayOffices,
+  arrayCtcLeadsPerOfficeFromXcllusive: state.reports.getMarketingReport.arrayCtcLeadsPerOfficeFromXcllusive,
   savedRecords: state.reports.keepMarketingRecords.records
 })
 

@@ -652,83 +652,78 @@ class ClientManagerList extends Component {
                         </Table.Row>
                       </Table.Body>
                     </Table>
-                    {this.state.business && this.state.business.company_id === 2 ? (
-                      <Grid.Column floated="left" width={2}>
-                        <Button
-                          size="small"
-                          color="blue"
-                          onClick={() => this._sendEmailCtcBusiness(this.state.buyer, this.state.business)}
-                        >
-                          <Icon name="mail" />
-                          Send Email
-                        </Button>
-                        <Button
-                          size="small"
-                          color="blue"
-                          onClick={() => this._sendSms(this.state.buyer, this.state.business)}
-                        >
-                          <Icon name="mobile alternate" />
-                          Send SMS
-                        </Button>
-                        <Button size="small" color="grey" onClick={() => this._backToSearch()}>
-                          <Icon name="arrow left" />
-                          Back to Search
-                        </Button>
-                      </Grid.Column>
-                    ) : (
-                      <Grid.Column floated="left" width={2}>
-                        <Button
-                          size="small"
-                          color="teal"
-                          disabled={!this.state.buyer.attachmentUrl}
-                          onClick={() => this._openFile(this.state.buyer.attachmentUrl)}
-                        >
-                          <Icon name="folder open outline" />
-                          Open CA
-                        </Button>
-                        <Button
-                          size="small"
-                          color="blue"
-                          onClick={() => this._toggleModalCaReceived()}
-                          disabled={!this.state.business || isLoadingCaReceived}
-                          loading={isLoadingCaReceived}
-                        >
-                          <Icon name="mail" />
-                          CA Received
-                        </Button>
-                        <Button
-                          size="small"
-                          color="blue"
-                          disabled={!this.state.business || isLoadingSendCa}
-                          loading={isLoadingSendCa}
-                          onClick={() => this._toggleModalSendCa(this.state.buyer.caSent)}
-                        >
-                          <Icon name="send" />
-                          Send CA
-                        </Button>
-                        <Button
-                          size="small"
-                          color="blue"
-                          onClick={() => this._toggleModalSendIm()}
-                          disabled={
-                            (!this.state.buyer.caReceived &&
-                              (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
-                            !this.state.business ||
-                            (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
-                            this.state.business.stageId === 5 || // Under Offer
-                            this.state.business.productId === 2 // Seller Assist
-                          }
-                          loading={isLoadingSendIm}
-                        >
-                          <Icon name="send" />
-                          Send IM
-                        </Button>
-                        <Button size="small" color="grey" onClick={() => this._backToSearch()}>
-                          <Icon name="arrow left" />
-                          Back to Search
-                        </Button>
-                      </Grid.Column>
-                    )}
+                    <Grid.Column floated="left" width={2}>
+                      <Button
+                        size="small"
+                        color="teal"
+                        disabled={!this.state.buyer.attachmentUrl}
+                        onClick={() => this._openFile(this.state.buyer.attachmentUrl)}
+                      >
+                        <Icon name="folder open outline" />
+                        Open CA
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        onClick={() => this._toggleModalCaReceived()}
+                        disabled={!this.state.business || isLoadingCaReceived}
+                        loading={isLoadingCaReceived}
+                      >
+                        <Icon name="mail" />
+                        CA Received
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        disabled={!this.state.business || isLoadingSendCa}
+                        loading={isLoadingSendCa}
+                        onClick={() => this._toggleModalSendCa(this.state.buyer.caSent)}
+                      >
+                        <Icon name="send" />
+                        Send CA
+                      </Button>
+                      <Button
+                        size="small"
+                        color="blue"
+                        onClick={() => this._toggleModalSendIm()}
+                        disabled={
+                          (!this.state.buyer.caReceived &&
+                            (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
+                          !this.state.business ||
+                          (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
+                          this.state.business.stageId === 5 || // Under Offer
+                          this.state.business.productId === 2 // Seller Assist
+                        }
+                        loading={isLoadingSendIm}
+                      >
+                        <Icon name="send" />
+                        Send IM
+                      </Button>
+                      {this.state.business && this.state.business.company_id === 2 ? (
+                        <Fragment>
+                          <Button
+                            size="small"
+                            color="green"
+                            onClick={() => this._sendEmailCtcBusiness(this.state.buyer, this.state.business)}
+                          >
+                            <Icon name="mail" />
+                            Send Email
+                          </Button>
+                          <Button
+                            size="small"
+                            color="green"
+                            onClick={() => this._sendSms(this.state.buyer, this.state.business)}
+                          >
+                            <Icon name="mobile alternate" />
+                            Send SMS
+                          </Button>
+                        </Fragment>
+                      ) : null}
+                      <Button size="small" color="grey" onClick={() => this._backToSearch()}>
+                        <Icon name="arrow left" />
+                        Back to Search
+                      </Button>
+                    </Grid.Column>
                   </Fragment>
                 ) : null}
               </Segment>

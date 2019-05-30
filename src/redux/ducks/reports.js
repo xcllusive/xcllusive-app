@@ -67,6 +67,7 @@ const initialState = {
     arrayLeadsPerSourceQueensland: [],
     totalGeralPerSource: null,
     arrayOffices: [],
+    mergedCtcLeadsPerOfficeFromXcllusive: [],
     error: null
   },
   getAllAnalysts: {
@@ -142,6 +143,7 @@ export default function reducer (state = initialState, action) {
           arrayLeadsPerSourceQueensland: null,
           totalGeralPerSource: null,
           arrayOffices: null,
+          arrayCtcLeadsPerOfficeFromXcllusive: null,
           error: null
         }
       }
@@ -162,6 +164,7 @@ export default function reducer (state = initialState, action) {
           arrayLeadsPerSourceQueensland: action.payload.arrayLeadsPerSourceQueensland,
           totalGeralPerSource: action.payload.totalGeralPerSource,
           arrayOffices: action.payload.arrayOffices,
+          arrayCtcLeadsPerOfficeFromXcllusive: action.payload.arrayCtcLeadsPerOfficeFromXcllusive,
           error: null
         }
       }
