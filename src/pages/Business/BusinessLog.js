@@ -119,7 +119,10 @@ class BusinessLogPage extends Component {
 
   _saveAndReturnToBusiness = values => {
     if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
-      if (this.props.values.newLog) this.props.updateBusinessLogFromBuyer(values)
+      if (this.props.values.newLog) {
+        values.businessLog_followUp = moment(values.businessLog_followUp).format('YYYY-MM-DD hh:mm:ss')
+        this.props.updateBusinessLogFromBuyer(values)
+      }
       this.props.history.push(`/business/${this.props.match.params.id}/from-buyer`)
     } else {
       if (this.props.values.newLog) this.props.updateBusinessLog(values)

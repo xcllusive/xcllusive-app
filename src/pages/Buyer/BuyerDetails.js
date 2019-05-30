@@ -123,7 +123,8 @@ class BuyerDetails extends Component {
       const newLog = {
         ...this.props.values,
         buyer_id: parseInt(this.props.match.params.idBuyer),
-        business_id: this.props.match.params.idBusiness
+        business_id: this.props.match.params.idBusiness,
+        buyerLog_followUp: moment(this.props.values.buyerLog_followUp).format('YYYY-MM-DD hh:mm:ss')
       }
       await this.props.createNewLog(newLog)
       await this.props.updateBuyer(updateBuyer)
