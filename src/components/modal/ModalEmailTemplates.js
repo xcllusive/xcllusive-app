@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Button, Form, Dimmer, Loader, Header } from 'semantic-ui-react'
 import { connect } from 'react-redux'
+import { withFormik } from 'formik'
+
 import { closeModal } from '../../redux/ducks/modal'
 import { bindActionCreators } from 'redux'
 
-import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
-
 import { getEmailTemplates, getEmailTemplate, clearEmailTemplates } from '../../redux/ducks/emailTemplates'
-
 import { sendEmailBuyerBrokersEmail } from '../../redux/ducks/buyer'
+import { getUserLogged } from '../../redux/ducks/user'
 
-import { withFormik } from 'formik'
+import { mapArrayToValuesForDropdownTemplates } from '../../utils/sharedFunctionArray'
 
 class ModalEmailTemplates extends Component {
   constructor () {
@@ -48,6 +48,7 @@ class ModalEmailTemplates extends Component {
   componentDidMount () {
     this.props.getEmailTemplates(true)
     this.props.clearEmailTemplates()
+    this.props.getUserLogged()
   }
 
   // static getDerivedStateFromProps (nextProps) {
@@ -96,7 +97,10 @@ class ModalEmailTemplates extends Component {
       this.props.buyerObject.firstName
     },%0D%0A %0D%0ARecently you inquired about a business we have listed for sale, ${
       this.props.businessObject.businessName
-    }.%0D%0A${this._convertHtmlToRightText(this.props.values.body)}`
+    }.%0D%0A%0D%0A${this._convertHtmlToRightText(
+      this.props.values.body
+    )}%0D%0A Thanks in advance, or please call me for a more detailed discussion on ${this.props.user.phoneMobile ||
+      this.props.user.phoneHome}`
     this.props.closeModal()
   }
 
@@ -178,7 +182,9 @@ ModalEmailTemplates.propTypes = {
   businessObject: PropTypes.object,
   isLoadingSentEmail: PropTypes.bool,
   isSentEmail: PropTypes.bool,
-  isLoadingEmailTemplate: PropTypes.bool
+  isLoadingEmailTemplate: PropTypes.bool,
+  getUserLogged: PropTypes.func,
+  user: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -187,7 +193,8 @@ const mapStateToProps = state => ({
   objectEmailTemplate: state.emailTemplates.get.object,
   isLoadingEmailTemplate: state.emailTemplates.get.isLoading,
   isLoadingSentEmail: state.buyer.sendEmailBuyerBrokersEmail.isLoading,
-  isSentEmail: state.buyer.sendEmailBuyerBrokersEmail.isSent
+  isSentEmail: state.buyer.sendEmailBuyerBrokersEmail.isSent,
+  user: state.user.getLogged.object
 })
 
 const mapPropsToValues = props => {
@@ -204,7 +211,8 @@ const mapDispatchToProps = dispatch =>
       getEmailTemplate,
       closeModal,
       clearEmailTemplates,
-      sendEmailBuyerBrokersEmail
+      sendEmailBuyerBrokersEmail,
+      getUserLogged
     },
     dispatch
   )
