@@ -34,6 +34,7 @@ import BusinessesListPerAnalyst from './Management/Xcllusive/Reports/BusinessesL
 import DailyTimeActivityReports from './Management/Xcllusive/Reports/DailyTimeActivity'
 import BusinessesCtcListPerAnalyst from './Management/CTC/Reports/BusinessesListPerAnalyst'
 import CtcBusinessList from './Business/CtcBusinessList'
+import CtcBusinessesListPerOffice from './Management/Xcllusive/Reports/CtcBusinessesListPerOffice'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
@@ -195,6 +196,12 @@ const Layout = ({ match, logout, menu, user }) => (
         exact
         component={BusinessesListPerAnalyst}
         path={`${match.path}management/businesses-list-analyst/:idUser`}
+        allowedRoles="MANAGEMENT_MENU"
+      />
+      <AuthorizationRoute
+        exact
+        component={CtcBusinessesListPerOffice}
+        path={`${match.path}management/ctc-businesses-list-office/:dataRegion`}
         allowedRoles="MANAGEMENT_MENU"
       />
       <AuthorizationRoute

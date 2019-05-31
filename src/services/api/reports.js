@@ -39,6 +39,14 @@ export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => {
   })
 }
 
+export const getCtcBusinessesPerOffice = (dataRegion, dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: 'reports/ctc-businesses-list-office',
+    params: { dataRegion, dateFrom, dateTo }
+  })
+}
+
 export const getEnquiryReport = (dateFrom, dateTo, listOfIdOfAnalysts) => {
   return request({
     method: 'get',

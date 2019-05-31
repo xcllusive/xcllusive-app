@@ -7,7 +7,8 @@ import {
   getEnquiryReport as getEnquiryReportAPI,
   activityRequestControlPerUser as activityRequestControlPerUserAPI,
   getUsersPerRegion as getUsersPerRegionAPI,
-  getDailyTimeActivityReport as getDailyTimeActivityReportAPI
+  getDailyTimeActivityReport as getDailyTimeActivityReportAPI,
+  getCtcBusinessesPerOffice as getCtcBusinessesPerOfficeAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -49,7 +50,10 @@ export const Types = {
   GET_DAILY_TIME_ACTIVITY_LOADING: 'GET_DAILY_TIME_ACTIVITY_LOADING',
   GET_DAILY_TIME_ACTIVITY_SUCCESS: 'GET_DAILY_TIME_ACTIVITY_SUCCESS',
   GET_DAILY_TIME_ACTIVITY_FAILURE: 'GET_DAILY_TIME_ACTIVITY_FAILURE',
-  SET_LAST_XCLLUSIVE_TAB_SELECTED: 'SET_LAST_XCLLUSIVE_TAB_SELECTED'
+  SET_LAST_XCLLUSIVE_TAB_SELECTED: 'SET_LAST_XCLLUSIVE_TAB_SELECTED',
+  GET_CTC_BUSINESSES_PER_OFFICE_LOADING: 'GET_CTC_BUSINESSES_PER_OFFICE_LOADING',
+  GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS: 'GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS',
+  GET_CTC_BUSINESSES_PER_OFFICE_FAILURE: 'GET_CTC_BUSINESSES_PER_OFFICE_FAILURE'
 }
 
 // Reducer
@@ -68,6 +72,7 @@ const initialState = {
     totalGeralPerSource: null,
     arrayOffices: [],
     mergedCtcLeadsPerOfficeFromXcllusive: [],
+    totalBusinessesCtc: 0,
     error: null
   },
   getAllAnalysts: {
@@ -122,6 +127,11 @@ const initialState = {
     array: [],
     error: null,
     user: null
+  },
+  getCtcBusinessesOffice: {
+    isLoading: false,
+    object: {},
+    error: null
   }
 }
 
@@ -144,6 +154,7 @@ export default function reducer (state = initialState, action) {
           totalGeralPerSource: null,
           arrayOffices: null,
           arrayCtcLeadsPerOfficeFromXcllusive: null,
+          totalBusinessesCtc: null,
           error: null
         }
       }
@@ -165,6 +176,7 @@ export default function reducer (state = initialState, action) {
           totalGeralPerSource: action.payload.totalGeralPerSource,
           arrayOffices: action.payload.arrayOffices,
           arrayCtcLeadsPerOfficeFromXcllusive: action.payload.arrayCtcLeadsPerOfficeFromXcllusive,
+          totalBusinessesCtc: action.payload.totalBusinessesCtc,
           error: null
         }
       }
@@ -465,6 +477,34 @@ export default function reducer (state = initialState, action) {
           objectEnquiry: null
         }
       }
+    case Types.GET_CTC_BUSINESSES_PER_OFFICE_LOADING:
+      return {
+        ...state,
+        getCtcBusinessesOffice: {
+          ...state.getCtcBusinessesOffice,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS:
+      return {
+        ...state,
+        getCtcBusinessesOffice: {
+          ...state.getCtcBusinessesOffice,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_CTC_BUSINESSES_PER_OFFICE_FAILURE:
+      return {
+        ...state,
+        getCtcBusinessesOffice: {
+          ...state.getCtcBusinessesOffice,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -580,6 +620,26 @@ export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => async di
   } catch (error) {
     dispatch({
       type: Types.GET_BUSINESSES_PER_ANALYST_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getCtcBusinessesPerOffice = (dataRegion, dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.GET_CTC_BUSINESSES_PER_OFFICE_LOADING,
+    payload: true
+  })
+  try {
+    const getCtcBusinessesOffice = await getCtcBusinessesPerOfficeAPI(dataRegion, dateFrom, dateTo)
+    dispatch({
+      type: Types.GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS,
+      payload: getCtcBusinessesOffice.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_CTC_BUSINESSES_PER_OFFICE_FAILURE,
       payload: error
     })
     toast.error(error)

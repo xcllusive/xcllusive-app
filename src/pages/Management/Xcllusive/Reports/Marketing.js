@@ -15,7 +15,9 @@ import numeral from 'numeral'
 class MarketingReports extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      dateTime: ''
+    }
   }
 
   componentDidMount = () => {
@@ -59,11 +61,12 @@ class MarketingReports extends Component {
     return (
       arrayOffices.arrayAdelaide[0].sumLeadsAdelaide +
       arrayOffices.arrayCamberra[0].sumLeadsCamberra +
-      arrayOffices.arrayCowra[0].sumLeadsCowra +
+      // arrayOffices.arrayCowra[0].sumLeadsCowra +
       arrayOffices.arrayGosford[0].sumLeadsGosford +
       arrayOffices.arrayMelbourne[0].sumLeadsMelbourne +
       arrayOffices.arraySydney[0].sumLeadsSydney +
-      arrayOffices.arrayQueensland[0].sumLeadsQueensland
+      arrayOffices.arrayQueensland[0].sumLeadsQueensland +
+      this.props.totalBusinessesCtc
     )
   }
 
@@ -71,7 +74,7 @@ class MarketingReports extends Component {
     return (
       arrayOffices.arrayAdelaide[0].sumImAdelaide +
       arrayOffices.arrayCamberra[0].sumImCamberra +
-      arrayOffices.arrayCowra[0].sumImCowra +
+      // arrayOffices.arrayCowra[0].sumImCowra +
       arrayOffices.arrayGosford[0].sumImGosford +
       arrayOffices.arrayMelbourne[0].sumImMelbourne +
       arrayOffices.arraySydney[0].sumImSydney +
@@ -94,6 +97,17 @@ class MarketingReports extends Component {
     })
   }
 
+  _goToCtcBusinessesPerOffice = ctcLeads => {
+    this.props.history.push({
+      pathname: `management/ctc-businesses-list-office/${ctcLeads['listingAgent.dataRegion']}`,
+      state: {
+        officeObject: ctcLeads,
+        dateFrom: this.props.values.dateFrom,
+        dateTo: this.props.values.dateTo
+      }
+    })
+  }
+
   render () {
     const {
       values,
@@ -102,7 +116,7 @@ class MarketingReports extends Component {
       totalGeralPerSource,
       arrayLeadsPerSourceAdelaide,
       arrayLeadsPerSourceCamberra,
-      arrayLeadsPerSourceCowra,
+      // arrayLeadsPerSourceCowra,
       arrayLeadsPerSourceGosford,
       arrayLeadsPerSourceMelbourne,
       arrayLeadsPerSourceSydney,
@@ -110,7 +124,6 @@ class MarketingReports extends Component {
       arrayOffices,
       arrayCtcLeadsPerOfficeFromXcllusive
     } = this.props
-    console.log(arrayCtcLeadsPerOfficeFromXcllusive)
     return (
       <Wrapper>
         <Form>
@@ -233,29 +246,37 @@ class MarketingReports extends Component {
                           }
                         })}
                       </Table.Body>
-                      {/* <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            <b>TOTAL:</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayAdelaide[0].sumLeadsAdelaide : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayAdelaide[0].sumImAdelaide : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>
-                              {arrayOffices[0]
-                                ? numeral(
-                                  arrayOffices[0].arrayAdelaide[0].sumConvertionRateAdelaide /
-                                      arrayOffices[0].arrayAdelaide[0].indexAdelaide
-                                ).format('0.0[0]')
-                                : null}
-                            </b>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer> */}
+                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
+                        if (ctcLeads['listingAgent.dataRegion'] === 'Adelaide Office') {
+                          return (
+                            <Table.Footer key={ctcLeads.company_id} fullWidth>
+                              <Table.Row>
+                                <Table.HeaderCell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column style={{ color: 'green' }}>
+                                        <b>CTC Business</b>
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  <b>{ctcLeads.count}</b>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right" />
+                                <Table.HeaderCell textAlign="right" />
+                              </Table.Row>
+                            </Table.Footer>
+                          )
+                        }
+                      })}
                     </Table>
                     <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
                       <Table.Header>
@@ -307,31 +328,39 @@ class MarketingReports extends Component {
                           }
                         })}
                       </Table.Body>
-                      {/* <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            <b>TOTAL:</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayCamberra[0].sumLeadsCamberra : null}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayCamberra[0].sumImCamberra : null}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>
-                              {arrayOffices[0]
-                                ? numeral(
-                                  arrayOffices[0].arrayCamberra[0].sumConvertionRateCamberra /
-                                      arrayOffices[0].arrayCamberra[0].indexCamberra
-                                ).format('0.0[0]')
-                                : null}
-                            </b>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer> */}
+                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
+                        if (ctcLeads['listingAgent.dataRegion'] === 'Camberra Office') {
+                          return (
+                            <Table.Footer key={ctcLeads.company_id} fullWidth>
+                              <Table.Row>
+                                <Table.HeaderCell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column style={{ color: 'green' }}>
+                                        <b>CTC Business</b>
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  <b>{ctcLeads.count}</b>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right" />
+                                <Table.HeaderCell textAlign="right" />
+                              </Table.Row>
+                            </Table.Footer>
+                          )
+                        }
+                      })}
                     </Table>
-                    <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
+                    {/* <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
                       <Table.Header>
                         <Table.Row>
                           <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
@@ -372,16 +401,16 @@ class MarketingReports extends Component {
                                 <Table.Cell style={{ textAlign: 'right' }}>
                                   {leadsPerAnalyst.countImStage > 0
                                     ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0'
-                                    )}%`
+                                        '0.0'
+                                      )}%`
                                     : 0}
                                 </Table.Cell>
                               </Table.Row>
                             )
                           }
                         })}
-                      </Table.Body>
-                      {/* <Table.Footer fullWidth>
+                      </Table.Body> */}
+                    {/* <Table.Footer fullWidth>
                         <Table.Row>
                           <Table.HeaderCell>
                             <b>TOTAL:</b>
@@ -404,7 +433,7 @@ class MarketingReports extends Component {
                           </Table.HeaderCell>
                         </Table.Row>
                       </Table.Footer> */}
-                    </Table>
+                    {/* </Table> */}
                     <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
                       <Table.Header>
                         <Table.Row>
@@ -455,29 +484,37 @@ class MarketingReports extends Component {
                           }
                         })}
                       </Table.Body>
-                      {/* <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            <b>TOTAL:</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayGosford[0].sumLeadsGosford : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayGosford[0].sumImGosford : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>
-                              {arrayOffices[0]
-                                ? numeral(
-                                  arrayOffices[0].arrayGosford[0].sumConvertionRateGosford /
-                                      arrayOffices[0].arrayGosford[0].indexGosford
-                                ).format('0.0[0]')
-                                : null}
-                            </b>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer> */}
+                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
+                        if (ctcLeads['listingAgent.dataRegion'] === 'Gosford Office') {
+                          return (
+                            <Table.Footer key={ctcLeads.company_id} fullWidth>
+                              <Table.Row>
+                                <Table.HeaderCell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column style={{ color: 'green' }}>
+                                        <b>CTC Business</b>
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  <b>{ctcLeads.count}</b>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right" />
+                                <Table.HeaderCell textAlign="right" />
+                              </Table.Row>
+                            </Table.Footer>
+                          )
+                        }
+                      })}
                     </Table>
                     <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
                       <Table.Header>
@@ -529,29 +566,37 @@ class MarketingReports extends Component {
                           }
                         })}
                       </Table.Body>
-                      {/* <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            <b>TOTAL:</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayMelbourne[0].sumLeadsMelbourne : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayMelbourne[0].sumImMelbourne : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>
-                              {arrayOffices[0]
-                                ? numeral(
-                                  arrayOffices[0].arrayMelbourne[0].sumConvertionRateMelbourne /
-                                      arrayOffices[0].arrayMelbourne[0].indexMelbourne
-                                ).format('0.0[0]')
-                                : null}
-                            </b>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer> */}
+                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
+                        if (ctcLeads['listingAgent.dataRegion'] === 'Melbourne Office') {
+                          return (
+                            <Table.Footer key={ctcLeads.company_id} fullWidth>
+                              <Table.Row>
+                                <Table.HeaderCell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column style={{ color: 'green' }}>
+                                        <b>CTC Business</b>
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  <b>{ctcLeads.count}</b>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right" />
+                                <Table.HeaderCell textAlign="right" />
+                              </Table.Row>
+                            </Table.Footer>
+                          )
+                        }
+                      })}
                     </Table>
                     <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
                       <Table.Header>
@@ -603,31 +648,32 @@ class MarketingReports extends Component {
                           }
                         })}
                       </Table.Body>
-                      {/* cayo */}
                       {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
                         if (ctcLeads['listingAgent.dataRegion'] === 'Sydney Office') {
                           return (
-                            <Table.Footer fullWidth>
+                            <Table.Footer key={ctcLeads.company_id} fullWidth>
                               <Table.Row>
                                 <Table.HeaderCell>
-                                  <b>TOTAL CTC:</b>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column style={{ color: 'green' }}>
+                                        <b>CTC Business</b>
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
                                 </Table.HeaderCell>
                                 <Table.HeaderCell textAlign="right">
                                   <b>{ctcLeads.count}</b>
                                 </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right">
-                                  {/* <b>{arrayOffices[0] ? arrayOffices[0].arraySydney[0].sumImSydney : 0}</b> */}
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right">
-                                  {/* <b>
-                              {arrayOffices[0]
-                                ? `${numeral(
-                                  arrayOffices[0].arraySydney[0].sumConvertionRateSydney /
-                                      arrayOffices[0].arraySydney[0].indexSydney
-                                ).format('0.0[0]')}%`
-                                : null}
-                            </b> */}
-                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right" />
+                                <Table.HeaderCell textAlign="right" />
                               </Table.Row>
                             </Table.Footer>
                           )
@@ -684,29 +730,37 @@ class MarketingReports extends Component {
                           }
                         })}
                       </Table.Body>
-                      {/* <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            <b>TOTAL:</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayQueensland[0].sumLeadsQueensland : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayQueensland[0].sumImQueensland : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>
-                              {arrayOffices[0]
-                                ? numeral(
-                                  arrayOffices[0].arrayQueensland[0].sumConvertionRateQueensland /
-                                      arrayOffices[0].arrayQueensland[0].indexQueensland
-                                ).format('0.0[0]')
-                                : null}
-                            </b>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer> */}
+                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
+                        if (ctcLeads['listingAgent.dataRegion'] === 'Queensland Office') {
+                          return (
+                            <Table.Footer key={ctcLeads.company_id} fullWidth>
+                              <Table.Row>
+                                <Table.HeaderCell>
+                                  <Grid>
+                                    <Grid.Row columns={2}>
+                                      <Grid.Column width={1}>
+                                        <Icon
+                                          link
+                                          name="magnify"
+                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
+                                        />
+                                      </Grid.Column>
+                                      <Grid.Column style={{ color: 'green' }}>
+                                        <b>CTC Business</b>
+                                      </Grid.Column>
+                                    </Grid.Row>
+                                  </Grid>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right">
+                                  <b>{ctcLeads.count}</b>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell textAlign="right" />
+                                <Table.HeaderCell textAlign="right" />
+                              </Table.Row>
+                            </Table.Footer>
+                          )
+                        }
+                      })}
                     </Table>
                     <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
                       <Table.Header>
@@ -825,7 +879,7 @@ class MarketingReports extends Component {
                           })}
                         </Table.Body>
                       </Table>
-                      <Table celled striped selectable compact size="small">
+                      {/* <Table celled striped selectable compact size="small">
                         <Table.Header>
                           <Table.Row>
                             <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
@@ -860,7 +914,7 @@ class MarketingReports extends Component {
                             )
                           })}
                         </Table.Body>
-                      </Table>
+                      </Table> */}
                       <Table celled striped selectable compact size="small">
                         <Table.Header>
                           <Table.Row>
@@ -1081,7 +1135,7 @@ MarketingReports.propTypes = {
   arrayTotalPerSource: PropTypes.array,
   arrayLeadsPerSourceAdelaide: PropTypes.array,
   arrayLeadsPerSourceCamberra: PropTypes.array,
-  arrayLeadsPerSourceCowra: PropTypes.array,
+  // arrayLeadsPerSourceCowra: PropTypes.array,
   arrayLeadsPerSourceGosford: PropTypes.array,
   arrayLeadsPerSourceMelbourne: PropTypes.array,
   arrayLeadsPerSourceSydney: PropTypes.array,
@@ -1092,7 +1146,8 @@ MarketingReports.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
   savedRecords: PropTypes.object,
-  arrayCtcLeadsPerOfficeFromXcllusive: PropTypes.array
+  arrayCtcLeadsPerOfficeFromXcllusive: PropTypes.array,
+  totalBusinessesCtc: PropTypes.number
 }
 
 const mapPropsToValues = props => {
@@ -1107,7 +1162,7 @@ const mapStateToProps = state => ({
   arrayTotalPerSource: state.reports.getMarketingReport.arrayTotalPerSource,
   arrayLeadsPerSourceAdelaide: state.reports.getMarketingReport.arrayLeadsPerSourceAdelaide,
   arrayLeadsPerSourceCamberra: state.reports.getMarketingReport.arrayLeadsPerSourceCamberra,
-  arrayLeadsPerSourceCowra: state.reports.getMarketingReport.arrayLeadsPerSourceCowra,
+  // arrayLeadsPerSourceCowra: state.reports.getMarketingReport.arrayLeadsPerSourceCowra,
   arrayLeadsPerSourceGosford: state.reports.getMarketingReport.arrayLeadsPerSourceGosford,
   arrayLeadsPerSourceMelbourne: state.reports.getMarketingReport.arrayLeadsPerSourceMelbourne,
   arrayLeadsPerSourceSydney: state.reports.getMarketingReport.arrayLeadsPerSourceSydney,
@@ -1115,6 +1170,7 @@ const mapStateToProps = state => ({
   totalGeralPerSource: state.reports.getMarketingReport.totalGeralPerSource,
   arrayOffices: state.reports.getMarketingReport.arrayOffices,
   arrayCtcLeadsPerOfficeFromXcllusive: state.reports.getMarketingReport.arrayCtcLeadsPerOfficeFromXcllusive,
+  totalBusinessesCtc: state.reports.getMarketingReport.totalBusinessesCtc,
   savedRecords: state.reports.keepMarketingRecords.records
 })
 

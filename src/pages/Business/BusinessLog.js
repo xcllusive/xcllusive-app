@@ -23,6 +23,7 @@ import {
 } from '../../redux/ducks/buyer'
 
 import { Statistic, Grid, Input, Table, Form, Label, Button, Icon, Segment } from 'semantic-ui-react'
+import { TimeInput } from 'semantic-ui-calendar-react'
 
 class BusinessLogPage extends Component {
   constructor (props) {
@@ -120,12 +121,15 @@ class BusinessLogPage extends Component {
   _saveAndReturnToBusiness = values => {
     if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
       if (this.props.values.newLog) {
-        values.businessLog_followUp = moment(values.businessLog_followUp).format('YYYY-MM-DD hh:mm:ss')
+        values.businessLog_followUp = new Date(values.businessLog_followUp)
         this.props.updateBusinessLogFromBuyer(values)
       }
       this.props.history.push(`/business/${this.props.match.params.id}/from-buyer`)
     } else {
-      if (this.props.values.newLog) this.props.updateBusinessLog(values)
+      if (this.props.values.newLog) {
+        values.businessLog_followUp = new Date(values.businessLog_followUp)
+        this.props.updateBusinessLog(values)
+      }
 
       this.props.history.push(`/business/${this.props.match.params.id}`)
     }
@@ -136,6 +140,12 @@ class BusinessLogPage extends Component {
       this.props.finaliseBusinessLogFromBuyer(values)
     } else {
       this.props.finaliseBusinessLog(values)
+    }
+  }
+
+  _handleChange = (event, { name, value }) => {
+    if (this.state.hasOwnProperty(name)) {
+      this.setState({ [name]: value })
     }
   }
 
@@ -199,7 +209,7 @@ class BusinessLogPage extends Component {
                       </Form.Field>
                     </Form.Group>
                     <Form.Group>
-                      <Form.Field style={{ marginLeft: '90%' }}>
+                      <Form.Field style={{ marginLeft: '70%' }}>
                         <h5>Follow Up Date</h5>
                         <DatePicker
                           selected={
@@ -211,6 +221,15 @@ class BusinessLogPage extends Component {
                           onChange={this._handleDateChange}
                           popperPlacement="top-end"
                           form
+                        />
+                      </Form.Field>
+                      <Form.Field style={{ marginTop: '32px' }}>
+                        <TimeInput
+                          name="time"
+                          placeholder="Time"
+                          value={this.state.time}
+                          iconPosition="left"
+                          onChange={this._handleChange}
                         />
                       </Form.Field>
                     </Form.Group>
