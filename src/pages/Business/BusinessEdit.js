@@ -300,6 +300,7 @@ class BusinessEditPage extends Component {
                     <Table.Row>
                       <Table.HeaderCell>Log</Table.HeaderCell>
                       <Table.HeaderCell>Follow Up</Table.HeaderCell>
+                      <Table.HeaderCell>Time</Table.HeaderCell>
                       <Table.HeaderCell>Status</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
@@ -313,6 +314,7 @@ class BusinessEditPage extends Component {
                         >
                           <Table.Cell>{logBusiness.text}</Table.Cell>
                           <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
+                          <Table.Cell>{logBusiness.time}</Table.Cell>
                           <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
                         </Table.Row>
                       )

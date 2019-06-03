@@ -36,7 +36,8 @@ class BusinessLogPage extends Component {
       businessLog: null,
       businessLog_id: null,
       businessLog_followUp: null,
-      businessLog_text: null
+      businessLog_text: null,
+      businessLog_time: null
     }
   }
 
@@ -51,13 +52,14 @@ class BusinessLogPage extends Component {
 
   static getDerivedStateFromProps (nextProps) {
     if (nextProps.arrayLogBusiness && nextProps.arrayLogBusiness.length && !nextProps.isLoadingarrayLogBusiness) {
-      const { newLog, id, followUp, text } = nextProps.arrayLogBusiness[0]
+      const { newLog, id, followUp, text, time } = nextProps.arrayLogBusiness[0]
 
       return {
         newLog: !!newLog,
         businessLog_id: id,
         businessLog_followUp: followUp,
-        businessLog_text: text
+        businessLog_text: text,
+        businessLog_time: time
       }
     }
     return null
@@ -99,7 +101,7 @@ class BusinessLogPage extends Component {
   }
 
   _selectLog = businessLog => {
-    const { newLog, id, followUp, text } = businessLog
+    const { newLog, id, followUp, text, time } = businessLog
 
     if (newLog) {
       this.props.setFieldValue('newLog', true)
@@ -116,19 +118,20 @@ class BusinessLogPage extends Component {
     this.props.setFieldValue('businessLog_id', id)
     this.props.setFieldValue('businessLog_followUp', followUp)
     this.props.setFieldValue('businessLog_text', text)
+    this.props.setFieldValue('businessLog_time', time)
   }
 
-  _saveAndReturnToBusiness = values => {
+  _saveAndReturnToBusiness = async values => {
     if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
       if (this.props.values.newLog) {
         values.businessLog_followUp = new Date(values.businessLog_followUp)
-        this.props.updateBusinessLogFromBuyer(values)
+        await this.props.updateBusinessLogFromBuyer(values)
       }
       this.props.history.push(`/business/${this.props.match.params.id}/from-buyer`)
     } else {
       if (this.props.values.newLog) {
         values.businessLog_followUp = new Date(values.businessLog_followUp)
-        this.props.updateBusinessLog(values)
+        await this.props.updateBusinessLog(values)
       }
 
       this.props.history.push(`/business/${this.props.match.params.id}`)
@@ -144,8 +147,8 @@ class BusinessLogPage extends Component {
   }
 
   _handleChange = (event, { name, value }) => {
-    if (this.state.hasOwnProperty(name)) {
-      this.setState({ [name]: value })
+    if (this.props.values.hasOwnProperty(name)) {
+      this.props.setFieldValue(name, value)
     }
   }
 
@@ -225,10 +228,11 @@ class BusinessLogPage extends Component {
                       </Form.Field>
                       <Form.Field style={{ marginTop: '32px' }}>
                         <TimeInput
-                          name="time"
+                          name="businessLog_time"
                           placeholder="Time"
-                          value={this.state.time}
+                          value={values.businessLog_time === null ? '' : values.businessLog_time}
                           iconPosition="left"
+                          closable
                           onChange={this._handleChange}
                         />
                       </Form.Field>
@@ -261,7 +265,8 @@ class BusinessLogPage extends Component {
                         newLog: true,
                         id: 1,
                         followUp: moment().add(1, 'day'),
-                        text: ' '
+                        text: ' ',
+                        time: ''
                       })
                     }
                   >
@@ -313,6 +318,7 @@ class BusinessLogPage extends Component {
                   <Table.HeaderCell>Date Created</Table.HeaderCell>
                   <Table.HeaderCell>Text</Table.HeaderCell>
                   <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
+                  <Table.HeaderCell>Time</Table.HeaderCell>
                   <Table.HeaderCell>Status</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -327,6 +333,7 @@ class BusinessLogPage extends Component {
                       </Table.Cell>
                       <Table.Cell>{logBusiness.text}</Table.Cell>
                       <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
+                      <Table.Cell>{logBusiness.time}</Table.Cell>
                       <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
                     </Table.Row>
                   )
@@ -354,7 +361,7 @@ class BusinessLogPage extends Component {
                 <Form.Input
                   label="Modified By"
                   placeholder={
-                    this.state.businessLog.ModifiedB
+                    this.state.businessLog.ModifiedBy
                       ? `${this.state.businessLog.ModifiedBy.firstName} ${this.state.businessLog.ModifiedBy.lastName}`
                       : ''
                   }
@@ -407,7 +414,8 @@ const mapPropsToValues = props => {
     businessLog_id: '',
     businessLog_followUp: moment(),
     businessLog_text: '',
-    newLog: false
+    newLog: false,
+    businessLog_time: ''
   }
 }
 
