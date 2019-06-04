@@ -199,6 +199,7 @@ class CtcBusinessList extends Component {
                       <Table.HeaderCell>Contact Name</Table.HeaderCell>
                       <Table.HeaderCell>Log Text</Table.HeaderCell>
                       <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
+                      <Table.HeaderCell>Time</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
@@ -290,6 +291,7 @@ class CtcBusinessList extends Component {
                         >
                           {moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}
                         </Table.Cell>
+                        <Table.Cell>{business.BusinessLog[0].time}</Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>

@@ -130,3 +130,10 @@ export const verifyDuplicatedBusiness = values => {
     params: values
   })
 }
+
+export const verifyBusinessFirstOpenByAgent = businessId => {
+  return request({
+    method: 'put',
+    url: `/business/${businessId}/verify-first-open-by-agent`
+  })
+}

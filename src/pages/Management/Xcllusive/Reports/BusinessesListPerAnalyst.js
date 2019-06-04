@@ -7,6 +7,7 @@ import { Grid, Table, Segment, Header, Button, Icon } from 'semantic-ui-react'
 import Wrapper from '../../../../components/content/Wrapper'
 import { getBusinessesPerAnalyst } from '../../../../redux/ducks/reports'
 import moment from 'moment'
+import numeral from 'numeral'
 
 class BusinessesListPerAnalyst extends Component {
   constructor (props) {
@@ -34,6 +35,25 @@ class BusinessesListPerAnalyst extends Component {
 
   _backToMarketingReport () {
     this.props.history.goBack()
+  }
+
+  _avgFirstContact = businessesLeads => {
+    let total = 0
+    businessesLeads.map(item => {
+      if (item.dateTimeFirstOpenByAgent) {
+        total = total + moment(item.dateTimeFirstOpenByAgent).diff(moment(item.dateTimeAssignToAgent), 'hour')
+      } else {
+        if (item.dateTimeAssignToAgent) {
+          total = total + moment(new Date()).diff(moment(item.dateTimeAssignToAgent), 'hour')
+        }
+      }
+    })
+
+    return numeral(total / businessesLeads.length).format('0,0.[99]')
+  }
+
+  _diffTillToday = business => {
+    return moment(new Date()).diff(moment(business.dateTimeAssignToAgent), 'hour')
   }
 
   render () {
@@ -79,6 +99,7 @@ class BusinessesListPerAnalyst extends Component {
                     <Table.HeaderCell>Business ID</Table.HeaderCell>
                     <Table.HeaderCell>Business Name</Table.HeaderCell>
                     <Table.HeaderCell>Vendor Name</Table.HeaderCell>
+                    <Table.HeaderCell>First Contact</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -97,10 +118,28 @@ class BusinessesListPerAnalyst extends Component {
                         </Table.Cell>
                         <Table.Cell>{business.businessName}</Table.Cell>
                         <Table.Cell>{`${business.firstNameV} ${business.lastNameV} `}</Table.Cell>
+                        <Table.Cell>
+                          {business.dateTimeAssignToAgent
+                            ? business.dateTimeFirstOpenByAgent
+                              ? `${moment(business.dateTimeFirstOpenByAgent).diff(
+                                moment(business.dateTimeAssignToAgent),
+                                'hour'
+                              )} hours`
+                              : `Has not opened yet [ ${this._diffTillToday(business)} hours ] `
+                            : ''}
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })}
                 </Table.Body>
+                <Table.Footer fullWidth>
+                  <Table.Row>
+                    <Table.HeaderCell />
+                    <Table.HeaderCell />
+                    <Table.HeaderCell />
+                    <Table.HeaderCell>{this._avgFirstContact(businessesLeads)}</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Footer>
               </Table>
             ) : null}
           </Fragment>

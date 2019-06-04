@@ -12,7 +12,8 @@ import {
   getQtdeBusinessEachStagePerUser as getQtdeBusinessEachStagePerUserAPI,
   getAllPerUser,
   uploadIM as uploadIMAPI,
-  verifyDuplicatedBusiness as verifyDuplicatedBusinessAPI
+  verifyDuplicatedBusiness as verifyDuplicatedBusinessAPI,
+  verifyBusinessFirstOpenByAgent as verifyBusinessFirstOpenByAgentAPI
 } from '../../services/api/business'
 
 import { getAllFromBusiness } from '../../services/api/businessLog'
@@ -62,7 +63,10 @@ export const Types = {
   VERIFY_DUPLICATED_BUSINESS_LOADING: 'VERIFY_DUPLICATED_BUSINESS_LOADING',
   VERIFY_DUPLICATED_BUSINESS_SUCCESS: 'VERIFY_DUPLICATED_BUSINESS_SUCCESS',
   VERIFY_DUPLICATED_BUSINESS_FAILURE: 'VERIFY_DUPLICATED_BUSINESS_FAILURE',
-  CLEAR_DUPLICATED_BUSINESS: 'CLEAR_DUPLICATED_BUSINESS'
+  CLEAR_DUPLICATED_BUSINESS: 'CLEAR_DUPLICATED_BUSINESS',
+  VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_LOADING: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_LOADING',
+  VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_SUCCESS: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_SUCCESS',
+  VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE'
 }
 
 // Reducer
@@ -146,6 +150,11 @@ const initialState = {
     isLoading: false,
     object: null,
     disableButton: false,
+    error: null
+  },
+  verifyBusinessFirstOpenByAgent: {
+    isLoading: false,
+    object: null,
     error: null
   }
 }
@@ -581,6 +590,35 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_LOADING:
+      return {
+        ...state,
+        verifyBusinessFirstOpenByAgent: {
+          ...state.verifyBusinessFirstOpenByAgent,
+          isLoading: action.payload,
+          disableButton: false,
+          error: null
+        }
+      }
+    case Types.VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_SUCCESS:
+      return {
+        ...state,
+        verifyBusinessFirstOpenByAgent: {
+          ...state.verifyBusinessFirstOpenByAgent,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE:
+      return {
+        ...state,
+        verifyBusinessFirstOpenByAgent: {
+          ...state.verifyBusinessFirstOpenByAgent,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_DUPLICATED_BUSINESS:
       return {
         ...state,
@@ -884,4 +922,24 @@ export const clearBusiness = () => async dispatch => {
   dispatch({
     type: Types.CLEAR_DUPLICATED_BUSINESS
   })
+}
+
+export const verifyBusinessFirstOpenByAgent = businessId => async dispatch => {
+  dispatch({
+    type: Types.VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_LOADING,
+    payload: true
+  })
+  try {
+    const verifyBusinessFirstOpenByAgent = await verifyBusinessFirstOpenByAgentAPI(businessId)
+    dispatch({
+      type: Types.VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_SUCCESS,
+      payload: verifyBusinessFirstOpenByAgent.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
 }

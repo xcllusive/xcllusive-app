@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Header, Segment, Statistic, Grid, Form, Table, Button, Icon, Tab, Dimmer, Loader } from 'semantic-ui-react'
+import { Header, Segment, Statistic, Grid, Form, Button, Icon, Tab, Dimmer, Loader } from 'semantic-ui-react'
 import moment from 'moment'
 import numeral from 'numeral'
 import _ from 'lodash'
@@ -10,9 +10,10 @@ import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
 import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
 
-import { getBusiness, cleanBusiness } from '../../redux/ducks/business'
+import { getBusiness, cleanBusiness, verifyBusinessFirstOpenByAgent } from '../../redux/ducks/business'
 import { getBusinessFromBuyer, getBusinessLogFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+import BusinessLogList from './BusinessLogList'
 
 class BusinessEditPage extends Component {
   constructor (props) {
@@ -49,6 +50,7 @@ class BusinessEditPage extends Component {
     } else {
       this.props.getBusiness(id)
       this.props.getLogFromBusiness(id)
+      this.props.verifyBusinessFirstOpenByAgent(id)
     }
     this.setState({ isUserClientManager: this._isUserClientManager() })
   }
@@ -149,7 +151,7 @@ class BusinessEditPage extends Component {
   }
 
   render () {
-    const { arrayLogsFromBusiness, isLoading, business, history, isLoadingGetFromBuyer, match } = this.props
+    const { isLoading, business, history, isLoadingGetFromBuyer, match } = this.props
     if (isLoading && isLoadingGetFromBuyer) {
       return (
         <Dimmer
@@ -292,7 +294,12 @@ class BusinessEditPage extends Component {
               Open Logs
             </Button>
           </Grid.Row>
-          {arrayLogsFromBusiness ? (
+          <Grid.Row>
+            <Grid.Column>
+              <BusinessLogList business={business} history={history} />
+            </Grid.Column>
+          </Grid.Row>
+          {/* {arrayLogsFromBusiness ? (
             <Grid.Row>
               <Grid.Column>
                 <Table size={'small'} color="blue" celled inverted selectable>
@@ -323,7 +330,7 @@ class BusinessEditPage extends Component {
                 </Table>
               </Grid.Column>
             </Grid.Row>
-          ) : null}
+          ) : null} */}
           {business && business.CreatedBy ? (
             <Grid.Row style={{ justifyContent: 'center' }}>
               <Form>
@@ -376,12 +383,20 @@ BusinessEditPage.propTypes = {
   getBusinessFromBuyer: PropTypes.func,
   isLoadingGetFromBuyer: PropTypes.bool,
   getBusinessLogFromBuyer: PropTypes.func,
-  userRoles: PropTypes.array
+  userRoles: PropTypes.array,
+  verifyBusinessFirstOpenByAgent: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { getBusiness, cleanBusiness, getLogFromBusiness, getBusinessFromBuyer, getBusinessLogFromBuyer },
+    {
+      getBusiness,
+      cleanBusiness,
+      getLogFromBusiness,
+      getBusinessFromBuyer,
+      getBusinessLogFromBuyer,
+      verifyBusinessFirstOpenByAgent
+    },
     dispatch
   )
 }
