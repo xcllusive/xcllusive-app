@@ -296,41 +296,9 @@ class BusinessEditPage extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              <BusinessLogList business={business} history={history} />
+              <BusinessLogList business={business} history={history} match={match} />
             </Grid.Column>
           </Grid.Row>
-          {/* {arrayLogsFromBusiness ? (
-            <Grid.Row>
-              <Grid.Column>
-                <Table size={'small'} color="blue" celled inverted selectable>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Log</Table.HeaderCell>
-                      <Table.HeaderCell>Follow Up</Table.HeaderCell>
-                      <Table.HeaderCell>Time</Table.HeaderCell>
-                      <Table.HeaderCell>Status</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {arrayLogsFromBusiness.map(logBusiness => {
-                      return (
-                        <Table.Row
-                          active
-                          key={logBusiness.id}
-                          onClick={() => this.props.history.push(`${this.props.match.url}/log`)}
-                        >
-                          <Table.Cell>{logBusiness.text}</Table.Cell>
-                          <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
-                          <Table.Cell>{logBusiness.time}</Table.Cell>
-                          <Table.Cell>{logBusiness.followUpStatus}</Table.Cell>
-                        </Table.Row>
-                      )
-                    })}
-                  </Table.Body>
-                </Table>
-              </Grid.Column>
-            </Grid.Row>
-          ) : null} */}
           {business && business.CreatedBy ? (
             <Grid.Row style={{ justifyContent: 'center' }}>
               <Form>

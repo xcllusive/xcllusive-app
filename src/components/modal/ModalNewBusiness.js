@@ -103,8 +103,9 @@ class ModalNewBusiness extends Component {
     if (where === 'Client Manager') {
       this.props.onConfirm(values, duplicatedBusinessObject)
     } else {
-      this.props.closeModal(values)
-      this.props.history.push(`/business/${duplicatedBusinessObject.id}`)
+      // this.props.closeModal(values)
+      // this.props.history.push(`/business/${duplicatedBusinessObject.id}`)
+      window.open(`/business/${duplicatedBusinessObject.id}`)
     }
   }
 
