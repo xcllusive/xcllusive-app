@@ -214,10 +214,6 @@ class BusinessEditPage extends Component {
                 <Statistic.Label>Price</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
-                <Statistic.Value>{this._getProduct(this.props.business.productId)}</Statistic.Value>
-                <Statistic.Label>Type of Business Sale</Statistic.Label>
-              </Statistic>
-              <Statistic color="blue">
                 <Statistic.Value>{this.props.totalEnquiry}</Statistic.Value>
                 <Statistic.Label>Enquiries</Statistic.Label>
               </Statistic>
@@ -230,8 +226,8 @@ class BusinessEditPage extends Component {
                 <Statistic.Label>Days on the market</Statistic.Label>
               </Statistic>
               <Statistic color="blue">
-                <Statistic.Value>{this.props.totalLastScore ? this.props.totalLastScore : '#'}</Statistic.Value>
-                <Statistic.Label>Last Feedback Score</Statistic.Label>
+                <Statistic.Value>{moment().diff(moment(business.dateTimeCreated), 'days')} Days</Statistic.Value>
+                <Statistic.Label>Age</Statistic.Label>
               </Statistic>
               <Statistic color="green">
                 <Statistic.Value>{this._getStage(this.props.business.stageId)}</Statistic.Value>

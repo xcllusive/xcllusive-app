@@ -64,9 +64,7 @@ class DailyTimeActivityReports extends Component {
                         <Header as="h2">{`${userAnalised.firstName} ${userAnalised.lastName}`}</Header>
                       </Grid.Column>
                       <Grid.Column>
-                        <Header as="h2">{`${data.dateCreated} - ${moment(this.state.dateFormatted).format(
-                          'dddd'
-                        )}`}</Header>
+                        <Header as="h2">{data.dateCreated}</Header>
                       </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>

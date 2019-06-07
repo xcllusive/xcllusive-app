@@ -60,6 +60,8 @@ class BusinessListPage extends Component {
           } else {
             values.company = 2
           }
+          values.dateTimeAssignToAgent = moment().format('YYYY-MM-DD hh:mm:ss')
+          values.dateTimeFirstOpenByAgent = moment().format('YYYY-MM-DD hh:mm:ss')
           await this.props.createBusiness(values)
           this.props.closeModal()
           await this.props.getBusinessesPerUser(false, this.state.stageSelected, true)

@@ -148,7 +148,9 @@ class BusinessLogPage extends Component {
 
   _handleChange = (event, { name, value }) => {
     if (this.props.values.hasOwnProperty(name)) {
-      this.props.setFieldValue(name, value)
+      console.log(value)
+      if (name === 'businessLog_followUp') this.props.setFieldValue(name, moment(value).format('DD-MM-YYYY'))
+      else this.props.setFieldValue(name, value)
     }
   }
 
@@ -225,6 +227,17 @@ class BusinessLogPage extends Component {
                           popperPlacement="top-end"
                           form
                         />
+                        {/* <DateInput
+                          value={
+                            values.businessLog_followUp
+                              ? moment(values.businessLog_followUp).format('DD-MM-YYYY')
+                              : moment(this.state.businessLog_followUp).format('DD-MM-YYYY')
+                          }
+                          name="businessLog_followUp"
+                          // startDate={moment().subtract(10, 'days')}
+                          onChange={this._handleChange}
+                          iconPosition="left"
+                        /> */}
                       </Form.Field>
                       <Form.Field style={{ marginTop: '32px' }}>
                         <TimeInput
@@ -412,7 +425,7 @@ const mapPropsToValues = props => {
     businessId: props.match ? props.match.params.id : null,
     textLog: '',
     businessLog_id: '',
-    businessLog_followUp: moment(),
+    businessLog_followUp: moment().format('DD-MM-YYYY'),
     businessLog_text: '',
     newLog: false,
     businessLog_time: ''

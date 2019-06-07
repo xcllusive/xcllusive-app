@@ -80,6 +80,7 @@ class BusinessesListPerAnalyst extends Component {
                     <Table.HeaderCell>Business ID</Table.HeaderCell>
                     <Table.HeaderCell>Business Name</Table.HeaderCell>
                     <Table.HeaderCell>Vendor Name</Table.HeaderCell>
+                    <Table.HeaderCell>First Contact</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -98,6 +99,16 @@ class BusinessesListPerAnalyst extends Component {
                         </Table.Cell>
                         <Table.Cell>{business.businessName}</Table.Cell>
                         <Table.Cell>{`${business.firstNameV} ${business.lastNameV} `}</Table.Cell>
+                        <Table.Cell>
+                          {business.dateTimeAssignToAgent
+                            ? business.dateTimeFirstOpenByAgent
+                              ? `${moment(business.dateTimeFirstOpenByAgent).diff(
+                                moment(business.dateTimeAssignToAgent),
+                                'hour'
+                              )} hours`
+                              : `Has not opened yet [ ${this._diffTillToday(business)} hours ] `
+                            : ''}
+                        </Table.Cell>
                       </Table.Row>
                     )
                   })}
