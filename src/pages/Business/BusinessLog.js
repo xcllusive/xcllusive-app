@@ -76,6 +76,18 @@ class BusinessLogPage extends Component {
     if (this.props.arrayLogBusiness.length) {
       this._selectLog(this.props.arrayLogBusiness[0])
     }
+    if (this.props.location.state && this.props.location.state.logBusiness) {
+      this._selectLog(this.props.location.state.logBusiness)
+    }
+    if (this.props.location.state && this.props.location.state.newCommunication) {
+      this._selectLog({
+        newLog: true,
+        id: 1,
+        followUp: moment().add(1, 'day'),
+        text: ' ',
+        time: ''
+      })
+    }
   }
 
   componentWillUnmount () {
@@ -123,13 +135,21 @@ class BusinessLogPage extends Component {
 
   _saveAndReturnToBusiness = async values => {
     if (this.props.location.state && this.props.location.state.fromBuyerMenu) {
-      if (this.props.values.newLog) {
+      if (
+        this.props.values.newLog &&
+        this.props.values.businessLog_text !== '' &&
+        this.props.values.businessLog_text !== ' '
+      ) {
         values.businessLog_followUp = new Date(values.businessLog_followUp)
         await this.props.updateBusinessLogFromBuyer(values)
       }
       this.props.history.push(`/business/${this.props.match.params.id}/from-buyer`)
     } else {
-      if (this.props.values.newLog) {
+      if (
+        this.props.values.newLog &&
+        this.props.values.businessLog_text !== '' &&
+        this.props.values.businessLog_text !== ' '
+      ) {
         values.businessLog_followUp = new Date(values.businessLog_followUp)
         await this.props.updateBusinessLog(values)
       }
@@ -148,8 +168,7 @@ class BusinessLogPage extends Component {
 
   _handleChange = (event, { name, value }) => {
     if (this.props.values.hasOwnProperty(name)) {
-      console.log(value)
-      if (name === 'businessLog_followUp') this.props.setFieldValue(name, moment(value).format('DD-MM-YYYY'))
+      if (name === 'businessLog_followUp') this.props.setFieldValue(name, value)
       else this.props.setFieldValue(name, value)
     }
   }
@@ -209,6 +228,7 @@ class BusinessLogPage extends Component {
                           autoComplete="businessLog_text"
                           value={values.businessLog_text}
                           onChange={handleChange}
+                          placeholder="Time"
                         />
                         {errors.text && touched.text && <Label basic color="red" pointing content={errors.text} />}
                       </Form.Field>
@@ -230,7 +250,7 @@ class BusinessLogPage extends Component {
                         {/* <DateInput
                           value={
                             values.businessLog_followUp
-                              ? moment(values.businessLog_followUp).format('DD-MM-YYYY')
+                              ? moment(values.businessLog_followUp).format('MM-DD-YYYY')
                               : moment(this.state.businessLog_followUp).format('DD-MM-YYYY')
                           }
                           name="businessLog_followUp"
@@ -270,22 +290,24 @@ class BusinessLogPage extends Component {
               </Grid.Column>
               <Grid.Column textAlign="right">
                 <Form.Group widths="equal">
-                  <Button
-                    color="blue"
-                    size="small"
-                    onClick={() =>
-                      this._selectLog({
-                        newLog: true,
-                        id: 1,
-                        followUp: moment().add(1, 'day'),
-                        text: ' ',
-                        time: ''
-                      })
-                    }
-                  >
-                    <Icon name="commenting" />
-                    New Communication
-                  </Button>
+                  {this.props.location.state && !this.props.location.state.newCommunication ? (
+                    <Button
+                      color="blue"
+                      size="small"
+                      onClick={() =>
+                        this._selectLog({
+                          newLog: true,
+                          id: 1,
+                          followUp: moment().add(1, 'day'),
+                          text: ' ',
+                          time: ''
+                        })
+                      }
+                    >
+                      <Icon name="commenting" />
+                      New Communication
+                    </Button>
+                  ) : null}
                   {/* <Button
                     color="yellow"
                     loading={loadingUpdateStatus}

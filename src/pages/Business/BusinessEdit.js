@@ -142,11 +142,17 @@ class BusinessEditPage extends Component {
       return this.props.history.push({
         pathname: `/business/${this.props.business.id}/log/from-buyer`,
         state: {
-          fromBuyerMenu: true
+          fromBuyerMenu: true,
+          newCommunication: true
         }
       })
     } else {
-      return this.props.history.push(`${this.props.match.url}/log`)
+      return this.props.history.push({
+        pathname: `${this.props.match.url}/log`,
+        state: {
+          newCommunication: true
+        }
+      })
     }
   }
 
@@ -287,7 +293,7 @@ class BusinessEditPage extends Component {
           <Grid.Row style={{ justifyContent: 'flex-end', padding: '0 15px' }}>
             <Button color="facebook" onClick={() => this._openBusinessLog()}>
               <Icon name="commenting" />
-              Open Logs
+              New Communication
             </Button>
           </Grid.Row>
           <Grid.Row>

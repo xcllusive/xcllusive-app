@@ -34,7 +34,12 @@ class BusinessLogList extends Component {
                       <Table.Row
                         active
                         key={logBusiness.id}
-                        onClick={() => this.props.history.push(`${this.props.match.url}/log`)}
+                        onClick={() =>
+                          this.props.history.push({
+                            pathname: `${this.props.match.url}/log`,
+                            state: { logBusiness }
+                          })
+                        }
                       >
                         <Table.Cell>{logBusiness.text}</Table.Cell>
                         <Table.Cell>{moment(logBusiness.followUp).format('DD/MM/YYYY')}</Table.Cell>
