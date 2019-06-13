@@ -66,7 +66,7 @@ Reports.propTypes = {
 const mapDispatchToProps = dispatch => bindActionCreators({ setLastXcllusiveTabSelected }, dispatch)
 
 const mapStateToProps = state => ({
-  setLastXcllusiveTabSelected: state.reports.setLastXcllusiveTabSelected.index
+  indexLastTabSelected: state.reports.setLastXcllusiveTabSelected.index
 })
 
 export default connect(

@@ -28,8 +28,6 @@ class ManagementPage extends Component {
     this.props.setLastTabSelected(activeIndex)
   }
 
-  componentDidMount () {}
-
   render () {
     return (
       <div>
@@ -48,7 +46,8 @@ class ManagementPage extends Component {
 ManagementPage.propTypes = {
   history: PropTypes.object,
   indexLastTabSelected: PropTypes.number,
-  setLastTabSelected: PropTypes.func
+  setLastTabSelected: PropTypes.func,
+  location: PropTypes.object
 }
 
 const mapStateToProps = state => ({

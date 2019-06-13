@@ -29,6 +29,7 @@ class Reports extends Component {
   }
 
   render () {
+    console.log(this.props.indexLastTabSelected)
     return (
       <div>
         <Tab
