@@ -31,7 +31,8 @@ class AboutPage extends Component {
   _updateBusiness = values => {
     const business = {
       id: values.business_id,
-      typeId: values.typeId
+      businessType: values.typeId,
+      industry: values.industry
     }
     this.props.updateBusiness(business)
   }
@@ -210,7 +211,7 @@ class AboutPage extends Component {
                         onClick={() => this.props.confirmsCompleteSteps('confirmAbout', !values.confirmAbout)}
                         disabled={
                           values.businessType === '' ||
-                          values.businessIndustry === '' ||
+                          values.industry === '' ||
                           values.productsServices === '' ||
                           values.businessCommenced === '' ||
                           values.currentOwner === '' ||
@@ -388,7 +389,7 @@ const mapStateToProps = state => {
 
 const validationSchema = Yup.object().shape({
   businessType: Yup.string().required('Business Type is required'),
-  businessIndustry: Yup.string().required('Business Industry is required'),
+  industry: Yup.string().required('Business Industry is required'),
   businessCommenced: Yup.string().required('Business Commenced is required'),
   currentOwner: Yup.string().required('Current Owner is required'),
   productsServices: Yup.string()
