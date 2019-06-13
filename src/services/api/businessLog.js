@@ -1,8 +1,10 @@
 import request from './'
 
-export const getAllFromBusiness = (businessId, search) => {
+export const getAllFromBusiness = (businessId, search, orderByDefault, descAsc) => {
   const params = {
-    businessId
+    businessId,
+    orderByDefault,
+    descAsc
   }
   if (search && search.length > 0) params.search = search
   return request({

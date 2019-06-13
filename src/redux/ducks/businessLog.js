@@ -131,12 +131,17 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getLogFromBusiness = (businessId, search = false) => async dispatch => {
+export const getLogFromBusiness = (
+  businessId,
+  search = false,
+  orderByDefault = true,
+  descAsc = true
+) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESS_LOG_LOADING
   })
   try {
-    const response = await getAllFromBusiness(businessId, search)
+    const response = await getAllFromBusiness(businessId, search, orderByDefault, descAsc)
     dispatch({
       type: Types.GET_BUSINESS_LOG_SUCCESS,
       payload: response.data

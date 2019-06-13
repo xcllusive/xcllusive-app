@@ -37,7 +37,9 @@ class BusinessLogPage extends Component {
       businessLog_id: null,
       businessLog_followUp: null,
       businessLog_text: null,
-      businessLog_time: null
+      businessLog_time: null,
+      orderByDateTimeCreatedDesc: false,
+      orderByFollowUpDesc: false
     }
   }
 
@@ -171,6 +173,20 @@ class BusinessLogPage extends Component {
       if (name === 'businessLog_followUp') this.props.setFieldValue(name, value)
       else this.props.setFieldValue(name, value)
     }
+  }
+
+  _orderByDateTimeCreated = () => {
+    this.setState({
+      orderByDateTimeCreatedDesc: !this.state.orderByDateTimeCreatedDesc
+    })
+    this.props.getLogFromBusiness(this.props.match.params.id, false, false, this.state.orderByDateTimeCreatedDesc)
+  }
+
+  _orderByFollowUp = () => {
+    this.setState({
+      orderByFollowUpDesc: !this.state.orderByFollowUpDesc
+    })
+    this.props.getLogFromBusiness(this.props.match.params.id, false, false, this.state.orderByFollowUpDesc)
   }
 
   render () {
@@ -350,9 +366,23 @@ class BusinessLogPage extends Component {
             <Table color="blue" celled inverted selectable compact size="small">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Date Created</Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <Icon
+                      link
+                      name={this.state.orderByDateTimeCreatedDesc ? 'arrow down' : 'arrow up'}
+                      onClick={() => this._orderByDateTimeCreated()}
+                    />
+                    Date Created
+                  </Table.HeaderCell>
                   <Table.HeaderCell>Text</Table.HeaderCell>
-                  <Table.HeaderCell>Follow Up Date</Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <Icon
+                      link
+                      name={this.state.orderByFollowUpDesc ? 'arrow down' : 'arrow up'}
+                      onClick={() => this._orderByFollowUp()}
+                    />
+                    Follow Up Date
+                  </Table.HeaderCell>
                   <Table.HeaderCell>Time</Table.HeaderCell>
                   <Table.HeaderCell>Status</Table.HeaderCell>
                 </Table.Row>
