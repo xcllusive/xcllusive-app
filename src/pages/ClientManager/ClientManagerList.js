@@ -392,6 +392,8 @@ class ClientManagerList extends Component {
               values.willReassign = willReassign
               if (willReassign) values.ctcSourceId = 1
             }
+            values.dateTimeAssignToAgent = moment().format('YYYY-MM-DD hh:mm:ss')
+            values.dateTimeFirstOpenByAgent = moment().format('YYYY-MM-DD hh:mm:ss')
             await this.props.createBusiness(values)
             this.setState({
               inputSearchBusiness: `BS${this.props.newBusinessObject.id}`
