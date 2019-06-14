@@ -107,7 +107,7 @@ class CtcBusinessList extends Component {
     return (
       <Wrapper>
         <GridBusinessStage>
-          <Statistic.Group size="mini" color="blue" widths={6}>
+          <Statistic.Group size="mini" color="blue" widths={7}>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(2, 'New')}>
               <Statistic.Value>
                 {objectQtdeBusinessStage
@@ -137,6 +137,12 @@ class CtcBusinessList extends Component {
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(6, 'Engaged')}>
               <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessEngaged : 0}</Statistic.Value>
               <Statistic.Label>Engaged</Statistic.Label>
+            </Statistic>
+            <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(8, 'Reffered to Xcllusive')}>
+              <Statistic.Value>
+                {objectQtdeBusinessStage ? objectQtdeBusinessStage.businessReferredToXcllusive : 0}
+              </Statistic.Value>
+              <Statistic.Label>Reffered to Xcllusive</Statistic.Label>
             </Statistic>
             <Statistic style={{ cursor: 'pointer' }} onClick={() => this._getBusinesses(7, 'Lost')}>
               <Statistic.Value>{objectQtdeBusinessStage ? objectQtdeBusinessStage.businessLost : 0}</Statistic.Value>
