@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Icon, Button, Label, Message } from 'semantic-ui-react'
+import { Modal, Form, Icon, Button, Label, Message, Dropdown } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { getBuyerRegister } from '../../redux/ducks/buyerRegister'
 import { verifyDuplicatedBuyer, clearBuyer } from '../../redux/ducks/buyer'
@@ -205,16 +205,18 @@ class ModalNewBuyer extends Component {
             </Form.Group>
             <Form.Group widths="equal">
               <Form.Field>
-                <Form.Select
-                  required
-                  label="Source"
-                  options={mapArrayToValuesForDropdown(sourceOptions)}
+                <label>Source</label>
+                <Dropdown
                   name="sourceId"
-                  autoComplete="sourceId"
+                  placeholder="Source"
+                  fluid
+                  search
+                  selection
                   loading={dropDownLoading}
-                  disabled={dropDownLoading}
+                  options={mapArrayToValuesForDropdown(sourceOptions)}
                   value={values.sourceId}
                   onChange={this._handleSelectChange}
+                  onSearchChange={this._handleSearchChange}
                 />
                 {errors.sourceId && touched.sourceId && <Label basic color="red" pointing content={errors.sourceId} />}
               </Form.Field>

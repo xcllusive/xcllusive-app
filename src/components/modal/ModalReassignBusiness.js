@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Icon, Button, Message } from 'semantic-ui-react'
+import { Modal, Form, Icon, Button, Message, Dropdown } from 'semantic-ui-react'
 import { closeModal } from '../../redux/ducks/modal'
 
 import { reassignBusiness } from '../../redux/ducks/business'
@@ -62,27 +62,33 @@ class ModalReassignBusiness extends Component {
           <Form>
             <Form.Group>
               {company === 'Xcllusive' ? (
-                <Form.Field width={8}>
-                  <Form.Select
-                    required
-                    label="Reassign Business To New Xcllusive Listing Agent"
+                <Form.Field>
+                  <label>Reassign Business To New Xcllusive Listing Agent</label>
+                  <Dropdown
                     name="listingAgent"
+                    placeholder="Listing Agent"
+                    fluid
+                    search
+                    selection
                     options={this._mapValuesToArray(xcllusiveAnalysts)}
-                    autoComplete="listingAgent"
                     value={values.listingAgent}
                     onChange={this._handleSelectChange}
+                    onSearchChange={this._handleSearchChange}
                   />
                 </Form.Field>
               ) : (
                 <Form.Field>
-                  <Form.Select
-                    required
-                    label="Reassign Business To New CTC Listing Agent"
+                  <label>Reassign Business To New CTC Listing Agent</label>
+                  <Dropdown
                     name="listingAgentCtc"
+                    placeholder="Listing Agent"
+                    fluid
+                    search
+                    selection
                     options={this._mapValuesToArray(ctcAnalysts)}
-                    autoComplete="listingAgentCtc"
                     value={values.listingAgentCtc}
                     onChange={this._handleSelectChange}
+                    onSearchChange={this._handleSearchChange}
                   />
                 </Form.Field>
               )}

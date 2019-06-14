@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import { withFormik } from 'formik'
-import { Form, Icon, Grid, Radio, Label, Button, Dimmer, Loader } from 'semantic-ui-react'
+import { Form, Icon, Grid, Radio, Label, Button, Dimmer, Loader, Dropdown } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness, uploadIM } from '../../redux/ducks/business'
 import { getBusinessFromBuyer, updateBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+// import SelectSearch from 'react-select-search'
 
 import { theme } from '../../styles'
 
@@ -391,14 +392,17 @@ class EditBusinessDetailForm extends Component {
                   </Form.Field>
                   {this.props.business.company_id === 1 ? (
                     <Form.Field>
-                      <Form.Select
-                        required
-                        label="Source"
-                        options={sourceOptions}
+                      <label>Source</label>
+                      <Dropdown
                         name="businessSource"
-                        autoComplete="businessSource"
+                        placeholder="Source"
+                        fluid
+                        search
+                        selection
+                        options={sourceOptions}
                         value={values.businessSource}
                         onChange={this._handleSelectChange}
+                        onSearchChange={this._handleSearchChange}
                       />
                       {errors.businessSource && touched.businessSource && (
                         <Label basic color="red" pointing content={errors.businessSource} />
@@ -406,14 +410,17 @@ class EditBusinessDetailForm extends Component {
                     </Form.Field>
                   ) : (
                     <Form.Field>
-                      <Form.Select
-                        required
-                        label="Source"
-                        options={ctcSourceOptions}
+                      <label>Source</label>
+                      <Dropdown
                         name="ctcSourceId"
-                        autoComplete="ctcSourceId"
+                        placeholder="Source"
+                        fluid
+                        search
+                        selection
+                        options={ctcSourceOptions}
                         value={values.ctcSourceId}
                         onChange={this._handleSelectChange}
+                        onSearchChange={this._handleSearchChange}
                       />
                       {errors.ctcSourceId && touched.ctcSourceId && (
                         <Label basic color="red" pointing content={errors.ctcSourceId} />
@@ -754,13 +761,17 @@ class EditBusinessDetailForm extends Component {
                     )}
                   </Form.Field>
                   <Form.Field>
-                    <Form.Select
-                      label="Broker"
+                    <label>Broker</label>
+                    <Dropdown
+                      name="businessType"
+                      placeholder="Business Type"
+                      fluid
+                      search
+                      selection
                       options={usersBroker}
-                      name="brokerAccountName"
-                      autoComplete="brokerAccountName"
                       value={values.brokerAccountName}
                       onChange={this._handleSelectChange}
+                      onSearchChange={this._handleSearchChange}
                     />
                     {errors.brokerAccountName && touched.brokerAccountName && (
                       <Label basic color="red" pointing content={errors.brokerAccountName} />
@@ -769,13 +780,17 @@ class EditBusinessDetailForm extends Component {
                 </Form.Group>
                 <Form.Group widths="equal">
                   <Form.Field>
-                    <Form.Select
-                      label="Business Type"
-                      options={typeOptions}
+                    <label>Business Type</label>
+                    <Dropdown
                       name="businessType"
-                      autoComplete="businessType"
+                      placeholder="Business Type"
+                      fluid
+                      search
+                      selection
+                      options={typeOptions}
                       value={values.businessType}
                       onChange={this._handleSelectChange}
+                      onSearchChange={this._handleSearchChange}
                     />
                     {errors.businessType && touched.businessType && (
                       <Label basic color="red" pointing content={errors.businessType} />

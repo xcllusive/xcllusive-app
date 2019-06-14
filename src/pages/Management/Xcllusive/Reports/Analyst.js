@@ -3,7 +3,19 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Button, Statistic, Dimmer, Loader, Table, Segment, Header, Icon } from 'semantic-ui-react'
+import {
+  Grid,
+  Form,
+  Button,
+  Statistic,
+  Dimmer,
+  Loader,
+  Table,
+  Segment,
+  Header,
+  Icon,
+  Dropdown
+} from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TypesModal, openModal } from '../../../../redux/ducks/modal'
@@ -96,14 +108,18 @@ class AnalystReports extends Component {
             <Grid.Row style={{ paddingBottom: '0px' }}>
               <Grid.Column>
                 <Form.Group>
-                  <Form.Field>
-                    <Form.Select
-                      required
-                      label="Select One Analyst"
+                  <Form.Field width={3}>
+                    <label>Select One Analyst</label>
+                    <Dropdown
                       name="analyst"
+                      placeholder="Analyst"
+                      fluid
+                      search
+                      selection
                       options={arrayAnalysts}
                       value={values.analyst}
                       onChange={this._handleSelectChange}
+                      onSearchChange={this._handleSearchChange}
                     />
                   </Form.Field>
                   {values.analyst !== '' ? (

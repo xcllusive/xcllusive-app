@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import _ from 'lodash'
-import { Grid, Form, Button, Segment, Statistic, Header, Divider } from 'semantic-ui-react'
+import { Grid, Form, Button, Segment, Statistic, Header, Divider, Dropdown } from 'semantic-ui-react'
 import Wrapper from '../../../../components/content/Wrapper'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -148,15 +148,20 @@ class DailyActivityReports extends Component {
                       style={{
                         marginTop: '5px'
                       }}
+                      width={3}
                     >
-                      <Form.Select
-                        label="Select One User"
-                        options={usersPerRegion}
+                      <label>Select One User</label>
+                      <Dropdown
                         name="userAccountName"
-                        autoComplete="userAccountName"
+                        placeholder="User"
+                        fluid
+                        search
+                        selection
+                        loading={isLoadingUser}
+                        options={usersPerRegion}
                         value={values.userAccountName}
                         onChange={this._handleSelectChange}
-                        loading={isLoadingUser}
+                        onSearchChange={this._handleSearchChange}
                       />
                     </Form.Field>
                   ) : null}

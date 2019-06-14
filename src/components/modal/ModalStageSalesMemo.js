@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { updateStageSalesMemo } from '../../redux/ducks/business'
 import { closeModal } from '../../redux/ducks/modal'
-import { Modal, Form, Label, Icon, Button, Radio, Divider, Message } from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Radio, Divider, Message, Dropdown } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import numeral from 'numeral'
 
@@ -109,14 +109,17 @@ class ModalStageSalesMemo extends Component {
                 )}
               </Form.Field>
               <Form.Field width={5}>
-                <Form.Select
-                  required
-                  label="Agent"
-                  options={usersBroker}
+                <label>Agent</label>
+                <Dropdown
                   name="brokerAccountName"
-                  autoComplete="brokerAccountName"
+                  placeholder="Listing Agent"
+                  fluid
+                  search
+                  selection
+                  options={usersBroker}
                   value={values.brokerAccountName}
                   onChange={this._handleSelectChange}
+                  onSearchChange={this._handleSearchChange}
                 />
                 {errors.brokerAccountName && touched.brokerAccountName && (
                   <Label basic color="red" pointing content={errors.brokerAccountName} />
@@ -144,14 +147,17 @@ class ModalStageSalesMemo extends Component {
             </Form.Group>
             <Form.Group>
               <Form.Field width={5}>
-                <Form.Select
-                  required
-                  label="Business Type"
-                  options={typeOptions}
+                <label>Business Type</label>
+                <Dropdown
                   name="typeId"
-                  autoComplete="typeId"
+                  placeholder="Business Type"
+                  fluid
+                  search
+                  selection
+                  options={typeOptions}
                   value={values.typeId}
                   onChange={this._handleSelectChange}
+                  onSearchChange={this._handleSearchChange}
                 />
                 {errors.typeId && touched.typeId && <Label basic color="red" pointing content={errors.typeId} />}
               </Form.Field>

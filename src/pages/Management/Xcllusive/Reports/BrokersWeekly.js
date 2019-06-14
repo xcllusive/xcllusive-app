@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Table, Segment, Header, Dimmer, Loader, Button, Icon, Label } from 'semantic-ui-react'
+import { Grid, Form, Table, Segment, Header, Dimmer, Loader, Button, Icon, Label, Dropdown } from 'semantic-ui-react'
 import moment from 'moment'
 import numeral from 'numeral'
 import _ from 'lodash'
@@ -146,16 +146,19 @@ class BrokersWeeklyReports extends Component {
                     />
                   </Form.Field>
                   {brokersPerRegion.length > 0 ? (
-                    <Form.Field>
-                      <Form.Select
-                        required
-                        label="Select One Broker"
-                        options={brokersPerRegion}
+                    <Form.Field width={6}>
+                      <label>Select One Broker</label>
+                      <Dropdown
                         name="brokerAccountName"
-                        autoComplete="brokerAccountName"
+                        placeholder="Broker"
+                        fluid
+                        search
+                        selection
+                        loading={isLoadingBroker}
+                        options={brokersPerRegion}
                         value={values.brokerAccountName}
                         onChange={this._handleSelectChange}
-                        loading={isLoadingBroker}
+                        onSearchChange={this._handleSearchChange}
                       />
                     </Form.Field>
                   ) : null}

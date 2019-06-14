@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Message, Step, Grid, Header, Segment, Icon } from 'semantic-ui-react'
+import { Form, Label, Message, Step, Grid, Header, Segment, Dropdown } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
@@ -93,26 +93,19 @@ class AboutPage extends Component {
                 <Segment style={{ marginLeft: '-15px', backgroundColor: 'aliceblue' }}>
                   <Form.Group widths="equal">
                     <Form.Field>
-                      <Form.Select
-                        label="Business Type"
-                        options={typeOptions}
+                      <label>Business Type</label>
+                      <Dropdown
                         name="typeId"
-                        autoComplete="typeId"
+                        placeholder="Business Type"
+                        fluid
+                        search
+                        selection
+                        options={typeOptions}
                         value={values.typeId}
                         onChange={this._handleSelectChange}
+                        onSearchChange={this._handleSearchChange}
                       />
                       {errors.typeId && touched.typeId && <Label basic color="red" pointing content={errors.typeId} />}
-                    </Form.Field>
-                    <Form.Field width={1}>
-                      <Icon
-                        style={{ marginTop: '27px', marginLeft: '-10px' }}
-                        name="add"
-                        color="green"
-                        inverted
-                        circular
-                        link
-                        onClick={() => this._newBusinessRegister(5)}
-                      />
                     </Form.Field>
                     <Form.Field>
                       <Form.Input

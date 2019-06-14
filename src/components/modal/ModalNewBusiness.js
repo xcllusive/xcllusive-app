@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Modal, Form, Icon, Button, Label, Message } from 'semantic-ui-react'
+import { Modal, Form, Icon, Button, Label, Message, Dropdown } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import _ from 'lodash'
 import { closeModal } from '../../redux/ducks/modal'
@@ -270,16 +270,18 @@ class ModalNewBusiness extends Component {
               </Form.Field>
               {company === 'Xcllusive' ? (
                 <Form.Field>
-                  <Form.Select
-                    required
-                    label="Source"
-                    options={mapArrayToValuesForDropdown(sourceOptions)}
+                  <label>Source</label>
+                  <Dropdown
                     name="businessSource"
-                    autoComplete="businessSource"
+                    placeholder="Source"
+                    fluid
+                    search
+                    selection
                     loading={dropDownLoading}
-                    disabled={dropDownLoading}
+                    options={mapArrayToValuesForDropdown(sourceOptions)}
                     value={values.businessSource}
                     onChange={this._handleSelectChange}
+                    onSearchChange={this._handleSearchChange}
                   />
                   {errors.businessSource && touched.businessSource && (
                     <Label basic color="red" pointing content={errors.businessSource} />
@@ -287,16 +289,18 @@ class ModalNewBusiness extends Component {
                 </Form.Field>
               ) : (
                 <Form.Field>
-                  <Form.Select
-                    required
-                    label="Source"
-                    options={mapArrayToValuesForDropdown(sourceCtcOptions)}
+                  <label>Source</label>
+                  <Dropdown
                     name="ctcSourceId"
-                    autoComplete="ctcSourceId"
+                    placeholder="Source"
+                    fluid
+                    search
+                    selection
                     loading={dropDownCtcLoading}
-                    disabled={dropDownCtcLoading}
+                    options={mapArrayToValuesForDropdown(sourceCtcOptions)}
                     value={values.ctcSourceId}
                     onChange={this._handleSelectChange}
+                    onSearchChange={this._handleSearchChange}
                   />
                   {errors.ctcSourceId && touched.ctcSourceId && (
                     <Label basic color="red" pointing content={errors.ctcSourceId} />
@@ -358,16 +362,18 @@ class ModalNewBusiness extends Component {
                   <Fragment>
                     <Form.Group>
                       <Form.Field width={8}>
-                        <Form.Select
-                          required
-                          label="Listing Agent"
+                        <label>Listing Agent</label>
+                        <Dropdown
                           name="listingAgent"
+                          placeholder="Listing Agent"
+                          fluid
+                          search
+                          selection
+                          loading={isLoadingUser}
                           options={this._mapValuesToArray(xcllusiveAnalysts)}
-                          autoComplete="listingAgent"
                           value={values.listingAgent}
                           onChange={this._handleSelectChange}
-                          loading={isLoadingUser}
-                          disabled={isLoadingUser}
+                          onSearchChange={this._handleSearchChange}
                         />
                         {errors.listingAgent && touched.listingAgent && (
                           <Label basic color="red" pointing content={errors.listingAgent} />
@@ -406,14 +412,17 @@ class ModalNewBusiness extends Component {
                             />
                           </Form.Field>
                           <Form.Field width={7}>
-                            <Form.Select
-                              required
-                              label="CTC Listing Agent"
+                            <label>Listing Agent</label>
+                            <Dropdown
                               name="listingAgentCtc"
+                              placeholder="Listing Agent"
+                              fluid
+                              search
+                              selection
                               options={this._mapValuesToArray(ctcAnalysts)}
-                              autoComplete="listingAgentCtc"
                               value={values.listingAgentCtc}
                               onChange={this._handleSelectChange}
+                              onSearchChange={this._handleSearchChange}
                             />
                             {errors.listingAgentCtc && touched.listingAgentCtc && (
                               <Label basic color="red" pointing content={errors.listingAgentCtc} />
@@ -426,14 +435,17 @@ class ModalNewBusiness extends Component {
                 ) : (
                   <Form.Group>
                     <Form.Field width={8}>
-                      <Form.Select
-                        required
-                        label="Listing Agent"
+                      <label>Listing Agent</label>
+                      <Dropdown
                         name="listingAgentCtc"
+                        placeholder="Listing Agent"
+                        fluid
+                        search
+                        selection
                         options={this._mapValuesToArray(ctcAnalysts)}
-                        autoComplete="listingAgentCtc"
                         value={values.listingAgentCtc}
                         onChange={this._handleSelectChange}
+                        onSearchChange={this._handleSearchChange}
                       />
                       {errors.listingAgentCtc && touched.listingAgentCtc && (
                         <Label basic color="red" pointing content={errors.listingAgentCtc} />

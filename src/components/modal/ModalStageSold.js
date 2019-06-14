@@ -6,7 +6,7 @@ import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment'
 import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
-import { Modal, Form, Label, Icon, Button, Divider, Header, Dimmer, Loader } from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Divider, Header, Dimmer, Loader, Dropdown } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import numeral from 'numeral'
@@ -234,17 +234,19 @@ class StageSoldForm extends Component {
               <Divider horizontal>Business Details</Divider>
               <Form.Group widths="equal">
                 <Form.Field>
-                  <Form.Select
-                    label="Business Type"
+                  <label>Business Type</label>
+                  <Dropdown
+                    name="typeId"
+                    placeholder="Business Type"
+                    fluid
+                    search
+                    selection
                     options={typeOptions}
-                    name="businessType"
-                    autoComplete="businessType"
-                    value={values.businessType}
+                    value={values.typeId}
                     onChange={this._handleSelectChange}
+                    onSearchChange={this._handleSearchChange}
                   />
-                  {errors.businessType && touched.businessType && (
-                    <Label basic color="red" pointing content={errors.businessType} />
-                  )}
+                  {errors.typeId && touched.typeId && <Label basic color="red" pointing content={errors.typeId} />}
                 </Form.Field>
                 <Form.Field>
                   <Form.Input
