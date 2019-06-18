@@ -325,6 +325,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
 
   render () {
     const { values, handleBlur, financialYear, appraisalObject } = this.props
+    console.log(this.state.totalAdjusments1)
     return (
       <Fragment>
         <Grid.Row
@@ -427,37 +428,91 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <b> Total Adjustments </b>
           </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments1).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments2).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments3).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments4).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments5).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments6).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjusments7).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjusments1) > 0 ? numeral(this.state.totalAdjusments1).format('$0,0') : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjusments2) > 0 ? numeral(this.state.totalAdjusments2).format('$0,0') : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjusments3) > 0 ? numeral(this.state.totalAdjusments3).format('$0,0') : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjusments4) > 0 ? numeral(this.state.totalAdjusments4).format('$0,0') : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjusments5) > 0 ? numeral(this.state.totalAdjusments5).format('$0,0') : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjusments6) > 0 ? numeral(this.state.totalAdjusments6).format('$0,0') : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjusments7) > 0 ? numeral(this.state.totalAdjusments7).format('$0,0') : ''}
+          </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
             <b> Total Adjusted Profit INCL.Owners Wages </b>
           </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit1).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit2).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit3).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit4).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit5).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit6).format('$0,0')} </CustomColumn>
-          <CustomColumn textAlign="right"> {numeral(this.state.totalAdjustedProfit7).format('$0,0')} </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjustedProfit1) > 0
+              ? numeral(this.state.totalAdjustedProfit1).format('$0,0')
+              : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjustedProfit2) > 0
+              ? numeral(this.state.totalAdjustedProfit2).format('$0,0')
+              : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjustedProfit3) > 0
+              ? numeral(this.state.totalAdjustedProfit3).format('$0,0')
+              : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjustedProfit4) > 0
+              ? numeral(this.state.totalAdjustedProfit4).format('$0,0')
+              : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjustedProfit5) > 0
+              ? numeral(this.state.totalAdjustedProfit5).format('$0,0')
+              : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjustedProfit6) > 0
+              ? numeral(this.state.totalAdjustedProfit6).format('$0,0')
+              : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {parseInt(this.state.totalAdjustedProfit7) > 0
+              ? numeral(this.state.totalAdjustedProfit7).format('$0,0')
+              : ''}
+          </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
           <CustomColumn>
             <b> Adjusted Profit % </b>
           </CustomColumn>
           <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit1Perc} % </CustomColumn>
-          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit2Perc} % </CustomColumn>
-          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit3Perc} % </CustomColumn>
-          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit4Perc} % </CustomColumn>
-          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit5Perc} % </CustomColumn>
-          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit6Perc} % </CustomColumn>
-          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit7Perc} %</CustomColumn>
+          <CustomColumn textAlign="right">
+            {this.state.totalAdjustedProfit2Perc > 0 ? `${this.state.totalAdjustedProfit2Perc} %` : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {this.state.totalAdjustedProfit3Perc > 0 ? `${this.state.totalAdjustedProfit3Perc} %` : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {this.state.totalAdjustedProfit4Perc > 0 ? `${this.state.totalAdjustedProfit4Perc} %` : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {this.state.totalAdjustedProfit5Perc > 0 ? `${this.state.totalAdjustedProfit5Perc} %` : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {this.state.totalAdjustedProfit6Perc > 0 ? `${this.state.totalAdjustedProfit6Perc} %` : ''}
+          </CustomColumn>
+          <CustomColumn textAlign="right">
+            {this.state.totalAdjustedProfit7Perc > 0 ? `${this.state.totalAdjustedProfit7Perc} %` : ''}
+          </CustomColumn>
         </Grid.Row>
       </Fragment>
     )

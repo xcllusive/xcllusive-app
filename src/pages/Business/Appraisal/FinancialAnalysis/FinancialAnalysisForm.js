@@ -694,7 +694,6 @@ const FinancialAnalysisForm = ({
       name
     })
   }
-
   return (
     <Fragment>
       <Grid.Row>
@@ -833,7 +832,7 @@ const FinancialAnalysisForm = ({
             tabIndex={1}
             name="sales1"
             autoComplete="sales1"
-            value={numeral(values.sales1).format('$0,0.[99]')}
+            value={values.sales1 ? numeral(values.sales1).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeSales(e, 1)}
           />
@@ -846,7 +845,7 @@ const FinancialAnalysisForm = ({
             tabIndex={10}
             name="sales2"
             autoComplete="sales2"
-            value={numeral(values.sales2).format('$0,0.[99]')}
+            value={values.sales2 ? numeral(values.sales2).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeSales(e, 2)}
           />
@@ -859,7 +858,7 @@ const FinancialAnalysisForm = ({
             tabIndex={20}
             name="sales3"
             autoComplete="sales3"
-            value={numeral(values.sales3).format('$0,0.[99]')}
+            value={values.sales3 ? numeral(values.sales3).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeSales(e, 3)}
           />
@@ -872,7 +871,7 @@ const FinancialAnalysisForm = ({
             tabIndex={30}
             name="sales4"
             autoComplete="sales4"
-            value={numeral(values.sales4).format('$0,0.[99]')}
+            value={values.sales4 ? numeral(values.sales4).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeSales(e, 4)}
           />
@@ -885,7 +884,7 @@ const FinancialAnalysisForm = ({
             tabIndex={40}
             name="sales5"
             autoComplete="sales5"
-            value={numeral(values.sales5).format('$0,0.[99]')}
+            value={values.sales5 ? numeral(values.sales5).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeSales(e, 5)}
           />
@@ -898,7 +897,7 @@ const FinancialAnalysisForm = ({
             tabIndex={50}
             name="sales6"
             autoComplete="sales6"
-            value={numeral(values.sales6).format('$0,0.[99]')}
+            value={values.sales6 ? numeral(values.sales6).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeSales(e, 6)}
           />
@@ -933,7 +932,7 @@ const FinancialAnalysisForm = ({
             tabIndex={2}
             name="cogs1"
             autoComplete="cogs1"
-            value={numeral(values.cogs1).format('$0,0.[99]')}
+            value={values.cogs1 ? numeral(values.cogs1).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeCogs(e, 1)}
           />
@@ -946,7 +945,7 @@ const FinancialAnalysisForm = ({
             tabIndex={11}
             name="cogs2"
             autoComplete="cogs2"
-            value={numeral(values.cogs2).format('$0,0.[99]')}
+            value={values.cogs2 ? numeral(values.cogs2).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeCogs(e, 2)}
           />
@@ -959,7 +958,7 @@ const FinancialAnalysisForm = ({
             tabIndex={21}
             name="cogs3"
             autoComplete="cogs3"
-            value={numeral(values.cogs3).format('$0,0.[99]')}
+            value={values.cogs3 ? numeral(values.cogs3).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeCogs(e, 3)}
           />
@@ -972,7 +971,7 @@ const FinancialAnalysisForm = ({
             tabIndex={31}
             name="cogs4"
             autoComplete="cogs4"
-            value={numeral(values.cogs4).format('$0,0.[99]')}
+            value={values.cogs4 ? numeral(values.cogs4).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeCogs(e, 4)}
           />
@@ -985,7 +984,7 @@ const FinancialAnalysisForm = ({
             tabIndex={41}
             name="cogs5"
             autoComplete="cogs5"
-            value={numeral(values.cogs5).format('$0,0.[99]')}
+            value={values.cogs5 ? numeral(values.cogs5).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeCogs(e, 5)}
           />
@@ -998,7 +997,7 @@ const FinancialAnalysisForm = ({
             tabIndex={51}
             name="cogs6"
             autoComplete="cogs6"
-            value={numeral(values.cogs6).format('$0,0.[99]')}
+            value={values.cogs6 ? numeral(values.cogs6).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeCogs(e, 6)}
           />
@@ -1022,13 +1021,39 @@ const FinancialAnalysisForm = ({
           <b> Gross Margin </b>
         </CustomColumn>
         {/* <CustomColumn textAlign="center">{_calcGrossMargin(values.sales1, values.cogs1)} %</CustomColumn> */}
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin1).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin2).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin3).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin4).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin5).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin6).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossMargin7).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMargin1 > 0 || values.sales1 > 0 || values.cogs1 > 0
+            ? numeral(values.calcGrossMargin1).format('$0,0')
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMargin2 > 0 || values.sales2 > 0 || values.cogs2 > 0
+            ? numeral(values.calcGrossMargin2).format('$0,0')
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMargin3 > 0 || values.sales3 > 0 || values.cogs3 > 0
+            ? numeral(values.calcGrossMargin3).format('$0,0')
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMargin4 > 0 || values.sales4 > 0 || values.cogs4 > 0
+            ? numeral(values.calcGrossMargin4).format('$0,0')
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMargin5 > 0 || values.sales5 > 0 || values.cogs5 > 0
+            ? numeral(values.calcGrossMargin5).format('$0,0')
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMargin6 > 0 || values.sales6 > 0 || values.cogs6 > 0
+            ? numeral(values.calcGrossMargin6).format('$0,0')
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMargin7 > 0 ? numeral(values.calcGrossMargin7).format('$0,0') : ''}
+        </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
       <Grid.Row columns={9}>
@@ -1036,13 +1061,39 @@ const FinancialAnalysisForm = ({
           <b> Gross Margin % </b>
         </CustomColumn>
         {/* <CustomColumn textAlign="center">{_calcGrossMarginPerc(values.sales1, values.cogs1)} %</CustomColumn> */}
-        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc1)} %</CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc2)} %</CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc3)} %</CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc4)} %</CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc5)} %</CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc6)} %</CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcGrossMarginPerc7)} %</CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMarginPerc1 > 0 || (values.sales1 > 0 && values.cogs1 > 0)
+            ? `${Math.round(values.calcGrossMarginPerc1)} %`
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMarginPerc2 > 0 || (values.sales2 > 0 && values.cogs2 > 0)
+            ? `${Math.round(values.calcGrossMarginPerc2)} %`
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMarginPerc3 > 0 || (values.sales3 > 0 && values.cogs3 > 0)
+            ? `${Math.round(values.calcGrossMarginPerc3)} %`
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMarginPerc4 > 0 || (values.sales4 > 0 && values.cogs4 > 0)
+            ? `${Math.round(values.calcGrossMarginPerc4)} %`
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMarginPerc5 > 0 || (values.sales5 > 0 && values.cogs5 > 0)
+            ? `${Math.round(values.calcGrossMarginPerc5)} %`
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMarginPerc6 > 0 || (values.sales5 > 0 && values.cogs5 > 0)
+            ? `${Math.round(values.calcGrossMarginPerc6)} %`
+            : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossMarginPerc7 > 0 ? `${Math.round(values.calcGrossMarginPerc7)} %` : ''}
+        </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
       <Grid.Row
@@ -1061,7 +1112,7 @@ const FinancialAnalysisForm = ({
             column={1}
             name="otherIncome1"
             autoComplete="otherIncome1"
-            value={numeral(values.otherIncome1).format('$0,0.[99]')}
+            value={values.otherIncome1 ? numeral(values.otherIncome1).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeOtherIncome(e, 1)}
           />
@@ -1076,7 +1127,7 @@ const FinancialAnalysisForm = ({
             column={2}
             name="otherIncome2"
             autoComplete="otherIncome2"
-            value={numeral(values.otherIncome2).format('$0,0.[99]')}
+            value={values.otherIncome2 ? numeral(values.otherIncome2).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeOtherIncome(e, 2)}
           />
@@ -1091,7 +1142,7 @@ const FinancialAnalysisForm = ({
             tabIndex={22}
             name="otherIncome3"
             autoComplete="otherIncome3"
-            value={numeral(values.otherIncome3).format('$0,0.[99]')}
+            value={values.otherIncome3 ? numeral(values.otherIncome3).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeOtherIncome(e, 3)}
           />
@@ -1106,7 +1157,7 @@ const FinancialAnalysisForm = ({
             tabIndex={32}
             name="otherIncome4"
             autoComplete="otherIncome4"
-            value={numeral(values.otherIncome4).format('$0,0.[99]')}
+            value={values.otherIncome4 ? numeral(values.otherIncome4).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeOtherIncome(e, 4)}
           />
@@ -1121,7 +1172,7 @@ const FinancialAnalysisForm = ({
             column={5}
             name="otherIncome5"
             autoComplete="otherIncome5"
-            value={numeral(values.otherIncome5).format('$0,0.[99]')}
+            value={values.otherIncome5 ? numeral(values.otherIncome5).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeOtherIncome(e, 5)}
           />
@@ -1136,7 +1187,7 @@ const FinancialAnalysisForm = ({
             column={6}
             name="otherIncome6"
             autoComplete="otherIncome6"
-            value={numeral(values.otherIncome6).format('$0,0.[99]')}
+            value={values.otherIncome6 ? numeral(values.otherIncome6).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeOtherIncome(e, 6)}
           />
@@ -1169,13 +1220,27 @@ const FinancialAnalysisForm = ({
         {/* <CustomColumn textAlign="center">
                       {_calcGrossProfit(_calcGrossMargin(values.sales1, values.cogs1), values.otherIncome1)}
                       </CustomColumn> */}
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit1).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit2).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit3).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit4).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit5).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit6).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcGrossProfit7).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossProfit1 > 0 ? numeral(values.calcGrossProfit1).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossProfit2 > 0 ? numeral(values.calcGrossProfit2).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossProfit3 > 0 ? numeral(values.calcGrossProfit3).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossProfit4 > 0 ? numeral(values.calcGrossProfit4).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossProfit5 > 0 ? numeral(values.calcGrossProfit5).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossProfit6 > 0 ? numeral(values.calcGrossProfit6).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcGrossProfit7 > 0 ? numeral(values.calcGrossProfit7).format('$0,0') : ''}
+        </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
       <Grid.Row
@@ -1194,7 +1259,7 @@ const FinancialAnalysisForm = ({
             column={1}
             name="expenses1"
             autoComplete="expenses1"
-            value={numeral(values.expenses1).format('$0,0.[99]')}
+            value={values.expenses1 ? numeral(values.expenses1).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeExpense(e, 1)}
           />
@@ -1207,7 +1272,7 @@ const FinancialAnalysisForm = ({
             column={2}
             name="expenses2"
             autoComplete="expenses2"
-            value={numeral(values.expenses2).format('$0,0.[99]')}
+            value={values.expenses2 ? numeral(values.expenses2).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeExpense(e, 2)}
           />
@@ -1220,7 +1285,7 @@ const FinancialAnalysisForm = ({
             column={3}
             name="expenses3"
             autoComplete="expenses3"
-            value={numeral(values.expenses3).format('$0,0.[99]')}
+            value={values.expenses3 ? numeral(values.expenses3).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeExpense(e, 3)}
           />
@@ -1233,7 +1298,7 @@ const FinancialAnalysisForm = ({
             column={4}
             name="expenses4"
             autoComplete="expenses4"
-            value={numeral(values.expenses4).format('$0,0.[99]')}
+            value={values.expenses4 ? numeral(values.expenses4).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeExpense(e, 4)}
           />
@@ -1246,7 +1311,7 @@ const FinancialAnalysisForm = ({
             column={5}
             name="expenses5"
             autoComplete="expenses5"
-            value={numeral(values.expenses5).format('$0,0.[99]')}
+            value={values.expenses5 ? numeral(values.expenses5).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeExpense(e, 5)}
           />
@@ -1259,7 +1324,7 @@ const FinancialAnalysisForm = ({
             column={6}
             name="expenses6"
             autoComplete="expenses6"
-            value={numeral(values.expenses6).format('$0,0.[99]')}
+            value={values.expenses6 ? numeral(values.expenses6).format('$0,0.[99]') : ''}
             onChange={_handleChange}
             onBlur={e => _handleChangeExpense(e, 6)}
           />
@@ -1285,13 +1350,27 @@ const FinancialAnalysisForm = ({
         {/* <CustomColumn textAlign="center">
                                   {_calcOperatingProfit(values.sales1, values.cogs1, values.otherIncome1, values.expenses1, '1')}
                                 </CustomColumn> */}
-        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit1).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit2).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit3).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit4).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit5).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit6).format('$0,0')} </CustomColumn>
-        <CustomColumn textAlign="right"> {numeral(values.calcOperatingProfit7).format('$0,0')} </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfit1 > 0 ? numeral(values.calcOperatingProfit1).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfit2 > 0 ? numeral(values.calcOperatingProfit2).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfit3 > 0 ? numeral(values.calcOperatingProfit3).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfit4 > 0 ? numeral(values.calcOperatingProfit4).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfit5 > 0 ? numeral(values.calcOperatingProfit5).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfit6 > 0 ? numeral(values.calcOperatingProfit6).format('$0,0') : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfit7 > 0 ? numeral(values.calcOperatingProfit7).format('$0,0') : ''}
+        </CustomColumn>
         <CustomColumn textAlign="right" />
       </Grid.Row>
       <Grid.Row columns={9}>
@@ -1301,13 +1380,27 @@ const FinancialAnalysisForm = ({
         {/* <CustomColumn textAlign="center">
                                   {_calcOperatingProfitPerc(values.sales1, values.cogs1, values.otherIncome1, values.expenses1)} %
                                 </CustomColumn> */}
-        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc1)} % </CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc2)} % </CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc3)} % </CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc4)} % </CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc5)} % </CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc6)} % </CustomColumn>
-        <CustomColumn textAlign="right"> {Math.round(values.calcOperatingProfitPerc7)} % </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfitPerc1 > 0 ? `${Math.round(values.calcOperatingProfitPerc1)} %` : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfitPerc2 > 0 ? `${Math.round(values.calcOperatingProfitPerc2)} %` : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfitPerc3 > 0 ? `${Math.round(values.calcOperatingProfitPerc3)} %` : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfitPerc4 > 0 ? `${Math.round(values.calcOperatingProfitPerc4)} %` : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfitPerc5 > 0 ? `${Math.round(values.calcOperatingProfitPerc5)} %` : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfitPerc6 > 0 ? `${Math.round(values.calcOperatingProfitPerc6)} %` : ''}
+        </CustomColumn>
+        <CustomColumn textAlign="right">
+          {values.calcOperatingProfitPerc7 > 0 ? `${Math.round(values.calcOperatingProfitPerc7)} %` : ''}
+        </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
     </Fragment>
