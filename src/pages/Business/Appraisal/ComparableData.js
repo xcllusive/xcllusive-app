@@ -18,7 +18,9 @@ import {
   Header,
   Dimmer,
   Loader,
-  Button
+  Button,
+  Dropdown,
+  Radio
 } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
@@ -359,12 +361,11 @@ class ComparableDataPage extends Component {
     return Object.assign(this.props.values, objectSum)
   }
 
-  async _handleSelectChange (data) {
-    await this.props.setFieldValue(data.name, data.value)
-    this.props.getBusinessesSold(this.props.values)
+  _handleSelectChange = (e, { name, value }) => {
+    this.props.setFieldValue(name, value)
   }
 
-  async _handleChangeCheckBox (data) {
+  async _handleChangeCheckBoxTrend (data) {
     this.setState({
       optionsSearch: {
         ...this.state.optionsSearch,
@@ -390,7 +391,11 @@ class ComparableDataPage extends Component {
       _.remove(this.state.trendOptions, item => item === 'steady')
     }
     await this.props.setFieldValue('trend', this.state.trendOptions)
-    this.props.getBusinessesSold(this.props.values)
+    // this.props.getBusinessesSold(this.props.values)
+  }
+
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
   }
 
   _onSearch = (e, { value }) => {
@@ -555,8 +560,20 @@ class ComparableDataPage extends Component {
     return businessSold.soldPrice / (this._pebitdaAvg(businessSold) + businessSold.stockValue)
   }
 
+  _handleSearch = () => {
+    this.props.getBusinessesSold(this.props.values)
+  }
+
   render () {
-    const { values, errors, touched, listBusinessesSold, isLoadingBusinessesSold, listSelected } = this.props
+    const {
+      values,
+      errors,
+      touched,
+      listBusinessesSold,
+      isLoadingBusinessesSold,
+      listSelected,
+      typeOptions
+    } = this.props
     const { priceOptions, lastBusinessOptions } = this.state
     return (
       <Wrapper>
@@ -579,26 +596,116 @@ class ComparableDataPage extends Component {
                   autoComplete="lastBusiness"
                   options={lastBusinessOptions}
                   value={values.lastBusiness}
-                  onChange={async (e, data) => {
-                    this._handleSelectChange(data)
-                  }}
+                  onChange={this._handleSelectChange}
                 />
                 {errors.lastBusiness && touched.lastBusiness && (
                   <Label basic color="red" pointing content={errors.lastBusiness} />
                 )}
               </Form.Field>
               <Form.Field width={5}>
-                <Form.Input
-                  fluid
-                  icon="search"
-                  label="Business Type"
+                <label>Business Type</label>
+                <Dropdown
                   name="businessType"
-                  placeholder="Ex: Coffee, Restaurant..."
+                  placeholder="Business Type"
+                  fluid
+                  search
+                  selection
                   loading={this.state.isLoadingBusinessesSold}
-                  onChange={this._onSearch}
-                  value={this.state.inputSearch}
+                  options={typeOptions}
+                  value={values.businessType}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.businessType && touched.businessType && (
+                  <Label basic color="red" pointing content={errors.businessType} />
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Button
+                  positive
+                  icon="search"
+                  labelPosition="right"
+                  content="Search"
+                  loading={this.state.isLoadingBusinessesSold}
+                  disabled={this.state.isLoadingBusinessesSold}
+                  onClick={this._handleSearch}
                 />
               </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field>
+                <Form.Select
+                  label="PEBITDA From"
+                  options={priceOptions}
+                  name="pebitdaFrom"
+                  autoComplete="pebitdaFrom"
+                  value={values.pebitdaFrom}
+                  onChange={this._handleSelectChange}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  label="PEBITDA To"
+                  options={priceOptions}
+                  name="pebitdaTo"
+                  autoComplete="pebitdaTo"
+                  value={values.pebitdaTo}
+                  onChange={this._handleSelectChange}
+                />
+              </Form.Field>
+              <Form.Field
+                style={{ marginLeft: '10px', marginTop: '35px' }}
+                control={Radio}
+                label="Last Year"
+                name="pebitdaLastYearAvg"
+                onChange={this._handleChangeCheckBox}
+                checked={values.pebitdaLastYearAvg}
+              />
+              <Form.Field
+                style={{ marginLeft: '10px', marginTop: '35px' }}
+                control={Radio}
+                label="Avg"
+                name="pebitdaLastYearAvg"
+                onChange={this._handleChangeCheckBox}
+                checked={!values.pebitdaLastYearAvg}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Field>
+                <Form.Select
+                  label="EBITDA From"
+                  options={priceOptions}
+                  name="ebitdaFrom"
+                  autoComplete="ebitdaFrom"
+                  value={values.ebitdaFrom}
+                  onChange={this._handleSelectChange}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  label="EBITDA To"
+                  options={priceOptions}
+                  name="ebitdaTo"
+                  autoComplete="ebitdaTo"
+                  value={values.ebitdaTo}
+                  onChange={this._handleSelectChange}
+                />
+              </Form.Field>
+              <Form.Field
+                style={{ marginLeft: '10px', marginTop: '35px' }}
+                control={Radio}
+                label="Last Year"
+                name="ebitdaLastYearAvg"
+                onChange={this._handleChangeCheckBox}
+                checked={values.ebitdaLastYearAvg}
+              />
+              <Form.Field
+                style={{ marginLeft: '10px', marginTop: '35px' }}
+                control={Radio}
+                label="Avg"
+                name="ebitdaLastYearAvg"
+                onChange={this._handleChangeCheckBox}
+                checked={!values.ebitdaLastYearAvg}
+              />
             </Form.Group>
             <Form.Group>
               <Form.Field>
@@ -608,9 +715,7 @@ class ComparableDataPage extends Component {
                   name="priceFrom"
                   autoComplete="priceFrom"
                   value={values.priceFrom}
-                  onChange={async (e, data) => {
-                    this._handleSelectChange(data)
-                  }}
+                  onChange={this._handleSelectChange}
                 />
               </Form.Field>
               <Form.Field>
@@ -620,9 +725,7 @@ class ComparableDataPage extends Component {
                   name="priceTo"
                   autoComplete="priceTo"
                   value={values.priceTo}
-                  onChange={async (e, data) => {
-                    this._handleSelectChange(data)
-                  }}
+                  onChange={this._handleSelectChange}
                 />
               </Form.Field>
               <label style={{ fontSize: '.92857143em', color: 'rgba(0,0,0,.87)', fontWeight: '700' }}>Trend</label>
@@ -634,7 +737,7 @@ class ComparableDataPage extends Component {
                   value="up"
                   checked={this.state.optionsSearch.up === true}
                   onChange={async (e, data) => {
-                    this._handleChangeCheckBox(data)
+                    this._handleChangeCheckBoxTrend(data)
                   }}
                   // onChange={this._handleChangeCheckBox}
                 />
@@ -647,7 +750,7 @@ class ComparableDataPage extends Component {
                   checked={this.state.optionsSearch.down === true}
                   // onChange={this._handleChangeCheckBox}
                   onChange={async (e, data) => {
-                    this._handleChangeCheckBox(data)
+                    this._handleChangeCheckBoxTrend(data)
                   }}
                 />
                 <Icon style={{ marginLeft: '-12px', marginRight: '20px' }} name="arrow down" color="red" />
@@ -658,7 +761,7 @@ class ComparableDataPage extends Component {
                   checked={this.state.optionsSearch.steady === true}
                   // onChange={this._handleChangeCheckBox}
                   onChange={async (e, data) => {
-                    this._handleChangeCheckBox(data)
+                    this._handleChangeCheckBoxTrend(data)
                   }}
                 />
                 <Icon style={{ marginLeft: '5px' }} name="arrow right" color="yellow" />
@@ -996,7 +1099,8 @@ ComparableDataPage.propTypes = {
   addSelectedList: PropTypes.func,
   removeSelectedList: PropTypes.func,
   isLoadingListSelected: PropTypes.bool,
-  confirmsCompleteSteps: PropTypes.func
+  confirmsCompleteSteps: PropTypes.func,
+  typeOptions: PropTypes.array
 }
 
 const mapPropsToValues = props => ({
@@ -1006,6 +1110,12 @@ const mapPropsToValues = props => ({
   businessType: '',
   priceFrom: 0,
   priceTo: 0,
+  pebitdaFrom: 0,
+  pebitdaTo: 0,
+  pebitdaLastYearAvg: true,
+  ebitdaFrom: 0,
+  ebitdaTo: 0,
+  ebitdaLastYearAvg: true,
   trend: ['up', 'down', 'steady'],
   sumMEbitdaLastYear: 0
 })
@@ -1015,7 +1125,8 @@ const mapStateToProps = state => {
     listBusinessesSold: state.businessSold.getAll.array,
     isLoadingBusinessesSold: state.businessSold.getAll.isLoading,
     listSelected: state.businessSold.getList.array,
-    isLoadingListSelected: state.businessSold.getList.isLoading
+    isLoadingListSelected: state.businessSold.getList.isLoading,
+    typeOptions: state.business.get.typeOptions
   }
 }
 
