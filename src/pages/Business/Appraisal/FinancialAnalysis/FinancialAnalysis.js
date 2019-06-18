@@ -171,6 +171,7 @@ class FinancialAnalysisPage extends Component {
                       name="confirmFinancialAnalysis"
                       onChange={this._handleChangeCheckBox}
                       checked={values.confirmFinancialAnalysis}
+                      disabled={!values.financialInfoSource}
                       onClick={() =>
                         this.props.confirmsCompleteSteps('confirmFinancialAnalysis', !values.confirmFinancialAnalysis)
                       }
@@ -295,7 +296,8 @@ const mapPropsToValues = props => ({
   totalAdjustedProfit4Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit4Perc : 0,
   totalAdjustedProfit5Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit5Perc : 0,
   totalAdjustedProfit6Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit6Perc : 0,
-  totalAdjustedProfit7Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit7Perc : 0
+  totalAdjustedProfit7Perc: props.appraisalObject ? props.appraisalObject.totalAdjustedProfit7Perc : 0,
+  financialInfoSource: props.appraisalObject ? props.appraisalObject.financialInfoSource : ''
 })
 
 const validationSchema = Yup.object().shape({})

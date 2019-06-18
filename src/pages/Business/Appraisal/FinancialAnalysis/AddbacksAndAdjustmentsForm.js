@@ -139,8 +139,9 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
         )
       )
     } else {
-      this.props.setFieldValue(`aaRow${item.row}Year7`, 0)
+      this.props.setFieldValue(`aaRow${item.row}Year7`, this.props.values[`aaRow${item.row}Year6`])
     }
+
     this._setCalcTotalAdjusment()
     this._calcTotalAdjustedProfit()
     this._calcAdjustedProfit()
@@ -325,7 +326,6 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
 
   render () {
     const { values, handleBlur, financialYear, appraisalObject } = this.props
-    console.log(this.state.totalAdjusments1)
     return (
       <Fragment>
         <Grid.Row

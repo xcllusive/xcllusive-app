@@ -740,7 +740,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="center">
           <Form.Field>
             <Form.Checkbox
-              label="Show in PDF"
+              label="Included"
               name="renderPdfYear1"
               checked={values.renderPdfYear1}
               onChange={_handleChangeCheckBoxPdf}
@@ -751,7 +751,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="center">
           <Form.Field>
             <Form.Checkbox
-              label="Show in PDF"
+              label="Included"
               name="renderPdfYear2"
               checked={values.renderPdfYear2}
               onChange={_handleChangeCheckBoxPdf}
@@ -762,7 +762,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="center">
           <Form.Field>
             <Form.Checkbox
-              label="Show in PDF"
+              label="Included"
               name="renderPdfYear3"
               checked={values.renderPdfYear3}
               onChange={_handleChangeCheckBoxPdf}
@@ -773,7 +773,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="center">
           <Form.Field>
             <Form.Checkbox
-              label="Show in PDF"
+              label="Included"
               name="renderPdfYear4"
               checked={values.renderPdfYear4}
               onChange={_handleChangeCheckBoxPdf}
@@ -784,7 +784,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="center">
           <Form.Field>
             <Form.Checkbox
-              label="Show in PDF"
+              label="Included"
               name="renderPdfYear5"
               checked={values.renderPdfYear5}
               onChange={_handleChangeCheckBoxPdf}
@@ -801,7 +801,7 @@ const FinancialAnalysisForm = ({
         <CustomColumn textAlign="center">
           <Form.Field>
             <Form.Checkbox
-              label="Show in PDF"
+              label="Included"
               name="renderPdfYear7"
               checked={values.renderPdfYear7}
               onChange={_handleChangeCheckBoxPdf}
