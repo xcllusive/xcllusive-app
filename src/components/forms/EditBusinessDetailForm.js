@@ -11,6 +11,7 @@ import Wrapper from '../../components/content/Wrapper'
 import { updateBusiness, getBusiness, uploadIM } from '../../redux/ducks/business'
 import { getBusinessFromBuyer, updateBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
+import { getUserLogged } from '../../redux/ducks/user'
 // import SelectSearch from 'react-select-search'
 
 import { theme } from '../../styles'
@@ -41,6 +42,9 @@ class EditBusinessDetailForm extends Component {
   // componentWillUnmount () {
   //   this.props.updateBusiness(this.props.values)
   // }
+  componentDidMount () {
+    this.props.getUserLogged()
+  }
 
   async componentWillUnmount () {
     // console.log(this.props.isSubmitting, this.props.isValid)
@@ -68,6 +72,9 @@ class EditBusinessDetailForm extends Component {
     }
     if (this.props.isUpdatedBusiness && nextProps.isUpdatedBusiness !== this.props.isUpdatedBusiness) {
       this.props.getBusiness(this.props.business.id)
+    }
+    if (this.props.updateStageSalesMemo && nextProps.updateStageSalesMemo !== this.props.updateStageSalesMemo) {
+      nextProps.getBusiness(this.props.business.id)
     }
   }
 
@@ -271,7 +278,8 @@ class EditBusinessDetailForm extends Component {
       isLoadingIM,
       isLoadingGet,
       ctcSourceOptions,
-      ctcStageOptions
+      ctcStageOptions,
+      userLogged
     } = this.props
     const { state } = this.state
     return (
@@ -764,10 +772,11 @@ class EditBusinessDetailForm extends Component {
                     <label>Broker</label>
                     <Dropdown
                       name="businessType"
-                      placeholder="Business Type"
+                      placeholder="Select a Broker"
                       fluid
                       search
                       selection
+                      disabled={userLogged && userLogged.userType !== 'Admin'}
                       options={usersBroker}
                       value={values.brokerAccountName}
                       onChange={this._handleSelectChange}
@@ -927,7 +936,9 @@ EditBusinessDetailForm.propTypes = {
   match: PropTypes.object,
   ctcSourceOptions: PropTypes.array,
   ctcStageOptions: PropTypes.array,
-  isLoadingCtcStage: PropTypes.bool
+  isLoadingCtcStage: PropTypes.bool,
+  getUserLogged: PropTypes.func,
+  userLogged: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -1129,7 +1140,8 @@ const mapStateToProps = (state, props) => {
     ctcStageOptions:
       props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.ctcStageOptions
-        : state.business.get.ctcStageOptions
+        : state.business.get.ctcStageOptions,
+    userLogged: state.user.getLogged.object
   }
 }
 
@@ -1142,7 +1154,8 @@ const mapDispatchToProps = dispatch => {
       openModal,
       uploadIM,
       updateBusinessFromBuyer,
-      getBusinessFromBuyer
+      getBusinessFromBuyer,
+      getUserLogged
     },
     dispatch
   )
