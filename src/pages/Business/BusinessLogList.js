@@ -16,7 +16,7 @@ class BusinessLogList extends Component {
     const { arrayLogsFromBusiness } = this.props
     return (
       <Wrapper>
-        {arrayLogsFromBusiness.length > 0 ? (
+        {arrayLogsFromBusiness && arrayLogsFromBusiness.length > 0 ? (
           <Grid.Row>
             <Grid.Column>
               <Table size={'small'} color="blue" celled inverted selectable>
