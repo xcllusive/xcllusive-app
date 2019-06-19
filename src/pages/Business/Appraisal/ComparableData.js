@@ -561,6 +561,7 @@ class ComparableDataPage extends Component {
   }
 
   _handleSearch = () => {
+    console.log(this.props.values)
     this.props.getBusinessesSold(this.props.values)
   }
 
@@ -572,7 +573,8 @@ class ComparableDataPage extends Component {
       listBusinessesSold,
       isLoadingBusinessesSold,
       listSelected,
-      typeOptions
+      typeOptions,
+      handleChange
     } = this.props
     const { priceOptions, lastBusinessOptions } = this.state
     return (
@@ -602,7 +604,7 @@ class ComparableDataPage extends Component {
                   <Label basic color="red" pointing content={errors.lastBusiness} />
                 )}
               </Form.Field>
-              <Form.Field width={5}>
+              <Form.Field width={4}>
                 <label>Business Type</label>
                 <Dropdown
                   name="businessType"
@@ -618,6 +620,17 @@ class ComparableDataPage extends Component {
                 {errors.businessType && touched.businessType && (
                   <Label basic color="red" pointing content={errors.businessType} />
                 )}
+              </Form.Field>
+              <Form.Field width={3}>
+                <Form.Input
+                  label="Industry"
+                  name="industry"
+                  placeholder="Type anything to match..."
+                  autoComplete="industry"
+                  value={values.industry}
+                  onChange={handleChange}
+                />
+                {errors.industry && touched.industry && <Label basic color="red" pointing content={errors.industry} />}
               </Form.Field>
               <Form.Field>
                 <Button
@@ -1117,7 +1130,8 @@ const mapPropsToValues = props => ({
   ebitdaTo: 0,
   ebitdaLastYearAvg: true,
   trend: ['up', 'down', 'steady'],
-  sumMEbitdaLastYear: 0
+  sumMEbitdaLastYear: 0,
+  industry: ''
 })
 
 const mapStateToProps = state => {
