@@ -39,6 +39,9 @@ export const getAll = objectValues => {
 
   if (objectValues.lastBusiness) params.limit = objectValues.lastBusiness
   if (objectValues.businessType) params.type = objectValues.businessType
+  if (objectValues.industry) params.industry = objectValues.industry
+  if (objectValues.pebitdaFrom) params.pebitdaFrom = objectValues.pebitdaFrom
+  if (objectValues.pebitdaTo) params.pebitdaTo = objectValues.pebitdaTo
   if (objectValues.priceFrom && objectValues.priceFrom > 0) params.priceRangeStart = objectValues.priceFrom
   if (objectValues.priceTo && objectValues.priceTo > 0) params.priceRangeEnd = objectValues.priceTo
   if (objectValues.trend && objectValues.trend.length > 0) params.trend = JSON.stringify(objectValues.trend)
