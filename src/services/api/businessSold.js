@@ -42,6 +42,10 @@ export const getAll = objectValues => {
   if (objectValues.industry) params.industry = objectValues.industry
   if (objectValues.pebitdaFrom) params.pebitdaFrom = objectValues.pebitdaFrom
   if (objectValues.pebitdaTo) params.pebitdaTo = objectValues.pebitdaTo
+  if (objectValues.pebitdaLastYearOrAvg) params.pebitdaLastYearOrAvg = objectValues.pebitdaLastYearOrAvg
+  if (objectValues.ebitdaFrom) params.ebitdaFrom = objectValues.ebitdaFrom
+  if (objectValues.ebitdaTo) params.ebitdaTo = objectValues.ebitdaTo
+  if (objectValues.ebitdaLastYearOrAvg) params.ebitdaLastYearOrAvg = objectValues.ebitdaLastYearOrAvg
   if (objectValues.priceFrom && objectValues.priceFrom > 0) params.priceRangeStart = objectValues.priceFrom
   if (objectValues.priceTo && objectValues.priceTo > 0) params.priceRangeEnd = objectValues.priceTo
   if (objectValues.trend && objectValues.trend.length > 0) params.trend = JSON.stringify(objectValues.trend)
@@ -66,5 +70,11 @@ export const saveList = (selectedList, appraisalId) => {
 export const getList = appraisalId => {
   return request({
     url: `comparable-data/selected-list/${appraisalId}`
+  })
+}
+
+export const getBusinessTypeAny = () => {
+  return request({
+    url: 'comparable-data/business-type-any'
   })
 }

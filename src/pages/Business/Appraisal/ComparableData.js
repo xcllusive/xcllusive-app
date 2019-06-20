@@ -31,7 +31,8 @@ import {
   saveSelectedList,
   getSelectedList,
   addSelectedList,
-  removeSelectedList
+  removeSelectedList,
+  getBusinessTypeAny
 } from '../../../redux/ducks/businessSold'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import numeral from 'numeral'
@@ -80,6 +81,7 @@ class ComparableDataPage extends Component {
   componentDidMount () {
     this.props.getBusinessesSold(this.props.values)
     this.props.getSelectedList(this.props.appraisalObject.id)
+    this.props.getBusinessTypeAny()
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -561,7 +563,6 @@ class ComparableDataPage extends Component {
   }
 
   _handleSearch = () => {
-    console.log(this.props.values)
     this.props.getBusinessesSold(this.props.values)
   }
 
@@ -669,17 +670,17 @@ class ComparableDataPage extends Component {
                 style={{ marginLeft: '10px', marginTop: '35px' }}
                 control={Radio}
                 label="Last Year"
-                name="pebitdaLastYearAvg"
+                name="pebitdaLastYearOrAvg"
                 onChange={this._handleChangeCheckBox}
-                checked={values.pebitdaLastYearAvg}
+                checked={values.pebitdaLastYearOrAvg}
               />
               <Form.Field
                 style={{ marginLeft: '10px', marginTop: '35px' }}
                 control={Radio}
                 label="Avg"
-                name="pebitdaLastYearAvg"
+                name="pebitdaLastYearOrAvg"
                 onChange={this._handleChangeCheckBox}
-                checked={!values.pebitdaLastYearAvg}
+                checked={!values.pebitdaLastYearOrAvg}
               />
             </Form.Group>
             <Form.Group>
@@ -707,17 +708,17 @@ class ComparableDataPage extends Component {
                 style={{ marginLeft: '10px', marginTop: '35px' }}
                 control={Radio}
                 label="Last Year"
-                name="ebitdaLastYearAvg"
+                name="ebitdaLastYearOrAvg"
                 onChange={this._handleChangeCheckBox}
-                checked={values.ebitdaLastYearAvg}
+                checked={values.ebitdaLastYearOrAvg}
               />
               <Form.Field
                 style={{ marginLeft: '10px', marginTop: '35px' }}
                 control={Radio}
                 label="Avg"
-                name="ebitdaLastYearAvg"
+                name="ebitdaLastYearOrAvg"
                 onChange={this._handleChangeCheckBox}
-                checked={!values.ebitdaLastYearAvg}
+                checked={!values.ebitdaLastYearOrAvg}
               />
             </Form.Group>
             <Form.Group>
@@ -832,11 +833,7 @@ class ComparableDataPage extends Component {
               <Table.Body>
                 {listSelected.map(selectedList => (
                   <Table.Row active key={selectedList.id}>
-                    <Table.Cell>
-                      {selectedList['BusinessType.label']
-                        ? selectedList['BusinessType.label']
-                        : selectedList.BusinessType.label}
-                    </Table.Cell>
+                    <Table.Cell>{selectedList.label ? selectedList.label : selectedList.BusinessType.label}</Table.Cell>
                     <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
@@ -1031,43 +1028,50 @@ class ComparableDataPage extends Component {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {listBusinessesSold.map(businessSold => (
-                  <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
-                    <Table.Cell>{businessSold['BusinessType.label']}</Table.Cell>
-                    <Table.Cell>{businessSold.industry}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(this._ebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(this._ebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(this._pebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(this._pebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
-                    <Table.Cell>
-                      <Icon color={this._colorArrow(businessSold)} name={this._nameArrow(businessSold)} />
-                    </Table.Cell>
-                    <Table.Cell>{numeral(businessSold.soldPrice).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.stockValue).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.assetValue).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(businessSold.soldPrice + businessSold.stockValue).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(this._turnOver(businessSold)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierEbitdaLastYear(businessSold)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierEbitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierPebitdaLastYear(businessSold)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierPebitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>
-                      {numeral(this._multiplierEbitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {numeral(this._multiplierEbitdaAvgWithStock(businessSold)).format('0,0.[99]')}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {numeral(this._multiplierPebitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {numeral(this._multiplierPebitdaAvgWithStock(businessSold)).format('0,0.[99]')}
-                    </Table.Cell>
-                    <Table.Cell>{businessSold.termsOfDeal} </Table.Cell>
-                    <Table.Cell>{businessSold.specialNotes} </Table.Cell>
-                  </Table.Row>
-                ))}
+                {listBusinessesSold &&
+                  listBusinessesSold.map(businessSold => (
+                    <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
+                      <Table.Cell>{businessSold.label}</Table.Cell>
+                      <Table.Cell>{businessSold.industry}</Table.Cell>
+                      <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
+                      <Table.Cell>{numeral(this._ebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
+                      <Table.Cell>{numeral(this._ebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
+                      <Table.Cell>{numeral(this._pebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
+                      <Table.Cell>{numeral(this._pebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
+                      <Table.Cell>
+                        <Icon color={this._colorArrow(businessSold)} name={this._nameArrow(businessSold)} />
+                      </Table.Cell>
+                      <Table.Cell>{numeral(businessSold.soldPrice).format('$0,0')}</Table.Cell>
+                      <Table.Cell>{numeral(businessSold.stockValue).format('$0,0')}</Table.Cell>
+                      <Table.Cell>{numeral(businessSold.assetValue).format('$0,0')}</Table.Cell>
+                      <Table.Cell>
+                        {numeral(businessSold.soldPrice + businessSold.stockValue).format('$0,0')}
+                      </Table.Cell>
+                      <Table.Cell>{numeral(this._turnOver(businessSold)).format('0,0.[99]')}</Table.Cell>
+                      <Table.Cell>
+                        {numeral(this._multiplierEbitdaLastYear(businessSold)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell>{numeral(this._multiplierEbitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
+                      <Table.Cell>
+                        {numeral(this._multiplierPebitdaLastYear(businessSold)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell>{numeral(this._multiplierPebitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
+                      <Table.Cell>
+                        {numeral(this._multiplierEbitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {numeral(this._multiplierEbitdaAvgWithStock(businessSold)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {numeral(this._multiplierPebitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {numeral(this._multiplierPebitdaAvgWithStock(businessSold)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell>{businessSold.termsOfDeal} </Table.Cell>
+                      <Table.Cell>{businessSold.specialNotes} </Table.Cell>
+                    </Table.Row>
+                  ))}
               </Table.Body>
             </Table>
           </Dimmer.Dimmable>
@@ -1113,7 +1117,8 @@ ComparableDataPage.propTypes = {
   removeSelectedList: PropTypes.func,
   isLoadingListSelected: PropTypes.bool,
   confirmsCompleteSteps: PropTypes.func,
-  typeOptions: PropTypes.array
+  typeOptions: PropTypes.array,
+  getBusinessTypeAny: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -1125,10 +1130,10 @@ const mapPropsToValues = props => ({
   priceTo: 0,
   pebitdaFrom: 0,
   pebitdaTo: 0,
-  pebitdaLastYearAvg: true,
+  pebitdaLastYearOrAvg: true,
   ebitdaFrom: 0,
   ebitdaTo: 0,
-  ebitdaLastYearAvg: true,
+  ebitdaLastYearOrAvg: true,
   trend: ['up', 'down', 'steady'],
   sumMEbitdaLastYear: 0,
   industry: ''
@@ -1140,7 +1145,7 @@ const mapStateToProps = state => {
     isLoadingBusinessesSold: state.businessSold.getAll.isLoading,
     listSelected: state.businessSold.getList.array,
     isLoadingListSelected: state.businessSold.getList.isLoading,
-    typeOptions: state.business.get.typeOptions
+    typeOptions: state.businessSold.getBusinessTypeAny.array
   }
 }
 
@@ -1155,7 +1160,8 @@ const mapDispatchToProps = dispatch => {
       saveSelectedList,
       getSelectedList,
       addSelectedList,
-      removeSelectedList
+      removeSelectedList,
+      getBusinessTypeAny
     },
     dispatch
   )

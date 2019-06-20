@@ -1,4 +1,13 @@
-import { create, get, update, finalise, getAll, saveList, getList } from '../../services/api/businessSold'
+import {
+  create,
+  get,
+  update,
+  finalise,
+  getAll,
+  saveList,
+  getList,
+  getBusinessTypeAny as getBusinessTypeAnyAPI
+} from '../../services/api/businessSold'
 import { getBuyersFromBusiness } from '../../services/api/business'
 import { toast } from 'react-toastify'
 import _ from 'lodash'
@@ -32,7 +41,10 @@ export const Types = {
   GET_SELECTED_LIST_FAILURE: 'GET_SELECTED_LIST_FAILURE',
   ADD_SELECTED_LIST: 'ADD_SELECTED_LIST',
   REMOVE_SELECTED_LIST: 'REMOVE_SELECTED_LIST',
-  CALC_MIN_MAX_CHART: 'CALC_MIN_MAX_CHART'
+  CALC_MIN_MAX_CHART: 'CALC_MIN_MAX_CHART',
+  GET_BUSINESS_TYPE_ANY_LOADING: 'GET_BUSINESS_TYPE_ANY_LOADING',
+  GET_BUSINESS_TYPE_ANY_SUCCESS: 'GET_BUSINESS_TYPE_ANY_SUCCESS',
+  GET_BUSINESS_TYPE_ANY_FAILURE: 'GET_BUSINESS_TYPE_ANY_FAILURE'
 }
 
 // Reducer
@@ -84,6 +96,11 @@ const initialState = {
   getCalcMinMax: {
     smallestMultiplier: 0,
     biggestMultiplier: 0
+  },
+  getBusinessTypeAny: {
+    isLoading: true,
+    array: [],
+    error: null
   }
 }
 
@@ -249,7 +266,7 @@ export default function reducer (state = initialState, action) {
         getAll: {
           ...state.getAll,
           isLoading: false,
-          array: action.payload.data.rows,
+          array: action.payload.data,
           error: null
         }
       }
@@ -343,6 +360,34 @@ export default function reducer (state = initialState, action) {
         getList: {
           ...state.getList,
           array: [..._.remove(state.getList.array, item => item.id !== action.payload.id)]
+        }
+      }
+    case Types.GET_BUSINESS_TYPE_ANY_LOADING:
+      return {
+        ...state,
+        getBusinessTypeAny: {
+          ...state.getBusinessTypeAny,
+          isLoading: true,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_TYPE_ANY_SUCCESS:
+      return {
+        ...state,
+        getBusinessTypeAny: {
+          ...state.getBusinessTypeAny,
+          array: action.payload.data,
+          isLoading: false,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_TYPE_ANY_FAILURE:
+      return {
+        ...state,
+        getBusinessTypeAny: {
+          ...state.getBusinessTypeAny,
+          isLoading: false,
+          error: action.payload
         }
       }
     default:
@@ -552,4 +597,24 @@ export const removeSelectedList = objectList => async dispatch => {
     type: Types.REMOVE_SELECTED_LIST,
     payload: objectList
   })
+}
+
+export const getBusinessTypeAny = () => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESS_TYPE_ANY_LOADING,
+    payload: true
+  })
+  try {
+    const businessTypeAny = await getBusinessTypeAnyAPI()
+    dispatch({
+      type: Types.GET_BUSINESS_TYPE_ANY_SUCCESS,
+      payload: businessTypeAny
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESS_TYPE_ANY_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
 }
