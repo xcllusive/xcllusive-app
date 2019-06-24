@@ -20,12 +20,13 @@ import {
   Loader,
   Button,
   Dropdown,
-  Radio
+  Radio,
+  Popup
 } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal } from '../../../redux/ducks/appraisal'
-import { OptionsPriceSelectBuyer } from '../../../constants/OptionsPriceSelect'
+import { OptionsPriceSelectBuyer, OptionsStockValue } from '../../../constants/OptionsPriceSelect'
 import {
   getBusinessesSold,
   saveSelectedList,
@@ -51,6 +52,7 @@ class ComparableDataPage extends Component {
         { key: 3, text: '50 Businesses', value: 50 }
       ],
       priceOptions: OptionsPriceSelectBuyer,
+      stockValueOptions: OptionsStockValue,
       optionsSearch: {
         up: true,
         down: true,
@@ -577,7 +579,7 @@ class ComparableDataPage extends Component {
       typeOptions,
       handleChange
     } = this.props
-    const { priceOptions, lastBusinessOptions } = this.state
+    const { priceOptions, lastBusinessOptions, stockValueOptions } = this.state
     return (
       <Wrapper>
         <Step.Group size="large">
@@ -632,17 +634,6 @@ class ComparableDataPage extends Component {
                   onChange={handleChange}
                 />
                 {errors.industry && touched.industry && <Label basic color="red" pointing content={errors.industry} />}
-              </Form.Field>
-              <Form.Field>
-                <Button
-                  positive
-                  icon="search"
-                  labelPosition="right"
-                  content="Search"
-                  loading={this.state.isLoadingBusinessesSold}
-                  disabled={this.state.isLoadingBusinessesSold}
-                  onClick={this._handleSearch}
-                />
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -781,16 +772,42 @@ class ComparableDataPage extends Component {
                 <Icon style={{ marginLeft: '5px' }} name="arrow right" color="yellow" />
               </Grid.Column>
             </Form.Group>
+            <Form.Group>
+              <Form.Field>
+                <Form.Select
+                  label="Stock Value"
+                  options={stockValueOptions}
+                  name="stockValue"
+                  autoComplete="stockValue"
+                  value={values.stockValue}
+                  onChange={this._handleSelectChange}
+                />
+              </Form.Field>
+              <Form.Field style={{ marginTop: '22px', marginLeft: '50px' }}>
+                <Button
+                  positive
+                  icon="search"
+                  labelPosition="right"
+                  content="Search"
+                  loading={this.state.isLoadingBusinessesSold}
+                  disabled={this.state.isLoadingBusinessesSold}
+                  onClick={this._handleSearch}
+                />
+              </Form.Field>
+            </Form.Group>
           </Segment>
         </Form>
-        <Segment style={{ backgroundColor: 'darkgrey' }} size="tiny">
-          <Header as="h3" textAlign="center">
+        <Segment style={{ backgroundColor: '#bcbdbd' }} size="tiny">
+          <Header style={{ marginBottom: '0px' }} as="h4" textAlign="right">
+            (E) = EBITDA / (P) = PEBITDA
+          </Header>
+          <Header style={{ marginTop: '0px' }} as="h3" textAlign="center">
             Your Selected List
           </Header>
-          <Table color="blue" celled size="small" compact inverted striped>
+          <Table color="blue" celled inverted size="small" compact selectable structured collapsing>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="11">
+                <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="12">
                   Sold Business Information
                 </Table.HeaderCell>
                 <Table.HeaderCell color="red" textAlign="center" colSpan="5">
@@ -799,33 +816,33 @@ class ComparableDataPage extends Component {
                 <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} color="red" textAlign="center" colSpan="4">
                   Multiplier with Stock
                 </Table.HeaderCell>
-                <Table.HeaderCell textAlign="center" colSpan="3">
+                <Table.HeaderCell textAlign="center" colSpan="2">
                   Notes
                 </Table.HeaderCell>
               </Table.Row>
               <Table.Row>
                 <Table.HeaderCell rowSpan="1">Business Type</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">Industry</Table.HeaderCell>
                 <Table.HeaderCell rowSpan="1">T/O</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="1">EBITDA Last year</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="1">EBITDA Avg</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="1">PEBITDA Last Year</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="1">PEBITDA Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">(E) Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">(E) Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">(P) Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="1">(P) Avg</Table.HeaderCell>
                 <Table.HeaderCell rowSpan="1">Trend</Table.HeaderCell>
                 <Table.HeaderCell rowSpan="1">Sold Price</Table.HeaderCell>
                 <Table.HeaderCell rowSpan="1">Stock Value</Table.HeaderCell>
                 <Table.HeaderCell rowSpan="2">Assets Value</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="2">Price with Stock</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">Price w. Stock</Table.HeaderCell>
                 <Table.HeaderCell rowSpan="2">T/O</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="2">EBITDA Last Year</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="2">EBITDA Avg</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="2">PEBITDA Last Year</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="2">PEBITDA Avg</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="3">EBITDA Last Year with Stock</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="3">EBITDA Avg with Stock</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="3">PEBITDA Last Year with Stock</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="3">PEBITDA Avg with Stock</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="4">Terms of Deal</Table.HeaderCell>
-                <Table.HeaderCell rowSpan="4">Special Notes</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">(E) Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">(E) Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">(P) Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="2">(P) Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">(E) Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">(E) Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">(P) Last Year</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="3">(P) Avg</Table.HeaderCell>
+                <Table.HeaderCell rowSpan="4" />
                 <Table.HeaderCell rowSpan="4">Delete</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -833,7 +850,11 @@ class ComparableDataPage extends Component {
               <Table.Body>
                 {listSelected.map(selectedList => (
                   <Table.Row active key={selectedList.id}>
-                    <Table.Cell>{selectedList.label ? selectedList.label : selectedList.BusinessType.label}</Table.Cell>
+                    <Table.Cell>
+                      <Icon link name="search" onClick={() => window.open(`/business/${selectedList.business_id}`)} />
+                      {selectedList.label ? selectedList.label : selectedList.BusinessType.label}
+                    </Table.Cell>
+                    <Table.Cell>{selectedList.industry.substr(0, 10)}</Table.Cell>
                     <Table.Cell>{numeral(selectedList.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaLastYear(selectedList)).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(this._ebitdaAvg(selectedList)).format('$0,0')}</Table.Cell>
@@ -846,25 +867,45 @@ class ComparableDataPage extends Component {
                     <Table.Cell>{numeral(selectedList.stockValue).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(selectedList.assetValue).format('$0,0')}</Table.Cell>
                     <Table.Cell>{numeral(selectedList.soldPrice + selectedList.stockValue).format('$0,0')}</Table.Cell>
-                    <Table.Cell>{numeral(this._turnOver(selectedList)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierEbitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierEbitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierPebitdaLastYear(selectedList)).format('0,0.[99]')}</Table.Cell>
-                    <Table.Cell>{numeral(this._multiplierPebitdaAvg(selectedList)).format('0,0.[99]')}</Table.Cell>
+                    <Table.Cell>{numeral(this._turnOver(selectedList).toFixed(1)).format('0,0.[99]')}</Table.Cell>
                     <Table.Cell>
-                      {numeral(this._multiplierEbitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
+                      {numeral(this._multiplierEbitdaLastYear(selectedList).toFixed(1)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(this._multiplierEbitdaAvgWithStock(selectedList)).format('0,0.[99]')}
+                      {numeral(this._multiplierEbitdaAvg(selectedList).toFixed(1)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(this._multiplierPebitdaLastYearWithStock(selectedList)).format('0,0.[99]')}
+                      {numeral(this._multiplierPebitdaLastYear(selectedList).toFixed(1)).format('0,0.[99]')}
                     </Table.Cell>
                     <Table.Cell>
-                      {numeral(this._multiplierPebitdaAvgWithStock(selectedList)).format('0,0.[99]')}
+                      {numeral(this._multiplierPebitdaAvg(selectedList).toFixed(1)).format('0,0.[99]')}
                     </Table.Cell>
-                    <Table.Cell>{selectedList.termsOfDeal} </Table.Cell>
-                    <Table.Cell>{selectedList.specialNotes} </Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierEbitdaLastYearWithStock(selectedList).toFixed(1)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierEbitdaAvgWithStock(selectedList).toFixed(1)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierPebitdaLastYearWithStock(selectedList).toFixed(1)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {numeral(this._multiplierPebitdaAvgWithStock(selectedList).toFixed(1)).format('0,0.[99]')}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {selectedList.termsOfDeal ? (
+                        <Popup
+                          content={selectedList.termsOfDeal}
+                          trigger={<Button size="mini" color="green" icon="comment outline" />}
+                        />
+                      ) : null}
+                      {selectedList.specialNotes ? (
+                        <Popup
+                          content={selectedList.specialNotes}
+                          trigger={<Button size="mini" color="olive" icon="comment outline" />}
+                        />
+                      ) : null}
+                    </Table.Cell>
                     <Table.Cell>
                       <Button icon onClick={() => this._toggleModalConfirmDelete(selectedList)}>
                         <Icon link color="red" name="trash" />
@@ -879,6 +920,7 @@ class ComparableDataPage extends Component {
                 <Table.Cell>
                   <b>SUMMARY</b>
                 </Table.Cell>
+                <Table.Cell />
                 <Table.Cell>
                   {this.state.sumTO ? (
                     <b>{numeral(this.state.sumTO / listSelected.length).format('$0,0.[99]')}</b>
@@ -972,16 +1014,15 @@ class ComparableDataPage extends Component {
                 </Table.Cell>
                 <Table.Cell />
                 <Table.Cell />
-                <Table.Cell />
               </Table.Row>
             </Table.Footer>
           </Table>
         </Segment>
-        <Segment style={{ backgroundColor: 'linen' }} size="tiny">
+        <Segment style={{ backgroundColor: '#bcbdbd' }} size="tiny">
           <Header as="h3" textAlign="center">
             Database`s List
           </Header>
-          <Dimmer.Dimmable dimmed={isLoadingBusinessesSold} style={{ width: '100%' }}>
+          <Dimmer.Dimmable dimmed={isLoadingBusinessesSold}>
             <Dimmer inverted active={isLoadingBusinessesSold}>
               <Loader>Loading</Loader>
             </Dimmer>
@@ -997,79 +1038,105 @@ class ComparableDataPage extends Component {
                   <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} color="red" textAlign="center" colSpan="4">
                     Multiplier with Stock
                   </Table.HeaderCell>
-                  <Table.HeaderCell textAlign="center" colSpan="2">
+                  <Table.HeaderCell textAlign="center" colSpan="1">
                     Notes
                   </Table.HeaderCell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.HeaderCell rowSpan="1">Business Type</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1" width={2}>
+                    Business Type
+                  </Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">Industry</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">T/O</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">EBITDA Last year</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">EBITDA Avg</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">PEBITDA Last Year</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="1">PEBITDA Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">(E) Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">(E) Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">(P) Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="1">(P) Avg</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">Trend</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">Sold Price</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="1">Stock Value</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="2">Assets Value</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">Price with Stock</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">Price</Table.HeaderCell>
                   <Table.HeaderCell rowSpan="2">T/O</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">EBITDA Last Year</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">EBITDA Avg</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">PEBITDA Last Year</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="2">PEBITDA Avg</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">EBITDA Last Year with Stock</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">EBITDA Avg with Stock</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">PEBITDA Last Year with Stock</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="3">PEBITDA Avg with Stock</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="4">Terms of Deal</Table.HeaderCell>
-                  <Table.HeaderCell rowSpan="4">Special Notes</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">(E) Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">(E) Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">(P) Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="2">(P) Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">(E) Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">(E) Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">(P) Last Year</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="3">(P) Avg</Table.HeaderCell>
+                  <Table.HeaderCell rowSpan="4" />
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {listBusinessesSold &&
                   listBusinessesSold.map(businessSold => (
                     <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
-                      <Table.Cell>{businessSold.label}</Table.Cell>
-                      <Table.Cell>{businessSold.industry}</Table.Cell>
+                      <Table.Cell>
+                        <Icon link name="search" onClick={() => window.open(`/business/${businessSold.business_id}`)} />
+                        {businessSold.label}
+                      </Table.Cell>
+                      <Table.Cell>{businessSold.industry.substr(0, 10)}</Table.Cell>
                       <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
                       <Table.Cell>{numeral(this._ebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
                       <Table.Cell>{numeral(this._ebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
-                      <Table.Cell>{numeral(this._pebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._pebitdaLastYear(businessSold)).format('$0,0')}
+                      </Table.Cell>
                       <Table.Cell>{numeral(this._pebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
                       <Table.Cell>
                         <Icon color={this._colorArrow(businessSold)} name={this._nameArrow(businessSold)} />
                       </Table.Cell>
-                      <Table.Cell>{numeral(businessSold.soldPrice).format('$0,0')}</Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(businessSold.soldPrice).format('$0,0')}
+                      </Table.Cell>
                       <Table.Cell>{numeral(businessSold.stockValue).format('$0,0')}</Table.Cell>
                       <Table.Cell>{numeral(businessSold.assetValue).format('$0,0')}</Table.Cell>
                       <Table.Cell>
                         {numeral(businessSold.soldPrice + businessSold.stockValue).format('$0,0')}
                       </Table.Cell>
-                      <Table.Cell>{numeral(this._turnOver(businessSold)).format('0,0.[99]')}</Table.Cell>
-                      <Table.Cell>
-                        {numeral(this._multiplierEbitdaLastYear(businessSold)).format('0,0.[99]')}
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._turnOver(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell>{numeral(this._multiplierEbitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
-                      <Table.Cell>
-                        {numeral(this._multiplierPebitdaLastYear(businessSold)).format('0,0.[99]')}
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierEbitdaLastYear(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell>{numeral(this._multiplierPebitdaAvg(businessSold)).format('0,0.[99]')}</Table.Cell>
-                      <Table.Cell>
-                        {numeral(this._multiplierEbitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierEbitdaAvg(businessSold).toFixed(1)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierPebitdaLastYear(businessSold).toFixed(1)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierPebitdaAvg(businessSold).toFixed(1)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierEbitdaLastYearWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierEbitdaAvgWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierPebitdaLastYearWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
+                      </Table.Cell>
+                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                        {numeral(this._multiplierPebitdaAvgWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
                       <Table.Cell>
-                        {numeral(this._multiplierEbitdaAvgWithStock(businessSold)).format('0,0.[99]')}
+                        {businessSold.termsOfDeal ? (
+                          <Popup
+                            content={businessSold.termsOfDeal}
+                            trigger={<Button size="mini" color="green" icon="comment outline" />}
+                          />
+                        ) : null}
+                        {businessSold.specialNotes ? (
+                          <Popup
+                            content={businessSold.specialNotes}
+                            trigger={<Button size="mini" color="olive" icon="comment outline" />}
+                          />
+                        ) : null}
                       </Table.Cell>
-                      <Table.Cell>
-                        {numeral(this._multiplierPebitdaLastYearWithStock(businessSold)).format('0,0.[99]')}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {numeral(this._multiplierPebitdaAvgWithStock(businessSold)).format('0,0.[99]')}
-                      </Table.Cell>
-                      <Table.Cell>{businessSold.termsOfDeal} </Table.Cell>
-                      <Table.Cell>{businessSold.specialNotes} </Table.Cell>
                     </Table.Row>
                   ))}
               </Table.Body>
@@ -1136,7 +1203,8 @@ const mapPropsToValues = props => ({
   ebitdaLastYearOrAvg: true,
   trend: ['up', 'down', 'steady'],
   sumMEbitdaLastYear: 0,
-  industry: ''
+  industry: '',
+  stockValue: 0
 })
 
 const mapStateToProps = state => {

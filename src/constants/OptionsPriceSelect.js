@@ -16,3 +16,10 @@ export const OptionsPriceSelectBuyer = [
   { key: 14, text: '3M', value: 3000000 },
   { key: 15, text: '3M +', value: -1 }
 ]
+
+export const OptionsStockValue = [
+  { key: 0, text: 'Any', value: 0 },
+  { key: 1, text: '>= 300k', value: 300000 },
+  { key: 2, text: '>= 500k', value: 500000 },
+  { key: 3, text: '>= 1M', value: 1000000 }
+]

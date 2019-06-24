@@ -17,7 +17,7 @@ class SummaryOfFinancialPage extends Component {
   render () {
     // const {} = this.state
     return (
-      <Segment style={{ backgroundColor: '#d4d4d53b' }} size="tiny">
+      <Segment style={{ backgroundColor: '#d4d4d53b' }} size="tiny" compact>
         <Header as="h4" textAlign="center" color="blue">
           Summary of Financial
         </Header>

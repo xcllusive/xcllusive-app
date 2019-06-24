@@ -49,6 +49,7 @@ export const getAll = objectValues => {
   if (objectValues.priceFrom && objectValues.priceFrom > 0) params.priceRangeStart = objectValues.priceFrom
   if (objectValues.priceTo && objectValues.priceTo > 0) params.priceRangeEnd = objectValues.priceTo
   if (objectValues.trend && objectValues.trend.length > 0) params.trend = JSON.stringify(objectValues.trend)
+  if (objectValues.stockValue && objectValues.stockValue > 0) params.stockValue = objectValues.stockValue
 
   return request({
     url: '/comparable-data/',
