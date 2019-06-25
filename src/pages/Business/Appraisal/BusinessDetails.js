@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Message, Step, Icon } from 'semantic-ui-react'
+import { Form, Label, Message, Step, Icon, Segment } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateBusiness } from '../../../redux/ducks/business'
@@ -59,19 +59,21 @@ class BusinessDetailsPage extends Component {
     const { state } = this.state
     return (
       <Wrapper loading={isLoadingCreating}>
-        <Step.Group size="large">
-          <Step active icon="address card" title="Step 1" description="Please Confirm the Business Details" />
-          <Message info size="large">
-            <p>
-              From this section of the database you can enter all of the information necessary to complete a business
-              appraisal. The process will take place over 7 steps. If at any time you wish to save your work and come
-              back later, you can click <b>`Save and Complete Later`</b>. To quickly save your work, simply hit the
-              [Enter] or [Return] key on your keyboard. Once you have completed a step, review your work then click the
-              confirmation check box with the red text next to it. Then, simply click the [Next Stage] button to advance
-              through the appraisal process.
-            </p>
-          </Message>
-        </Step.Group>
+        <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
+          <Step.Group size="large">
+            <Step active icon="address card" title="Step 1" description="Please Confirm the Business Details" />
+            <Message style={{ marginTop: '0px' }} info size="large">
+              <p>
+                From this section of the database you can enter all of the information necessary to complete a business
+                appraisal. The process will take place over 7 steps. If at any time you wish to save your work and come
+                back later, you can click <b>`Save and Complete Later`</b>. To quickly save your work, simply hit the
+                [Enter] or [Return] key on your keyboard. Once you have completed a step, review your work then click
+                the confirmation check box with the red text next to it. Then, simply click the [Next Stage] button to
+                advance through the appraisal process.
+              </p>
+            </Message>
+          </Step.Group>
+        </Segment>
         <Form>
           <Form.Group>
             <Form.Field width={7}>
@@ -83,8 +85,9 @@ class BusinessDetailsPage extends Component {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.businessName &&
-                touched.businessName && <Label basic color="red" pointing content={errors.businessName} />}
+              {errors.businessName && touched.businessName && (
+                <Label basic color="red" pointing content={errors.businessName} />
+              )}
             </Form.Field>
             <Form.Field width={7}>
               <Form.Input
@@ -95,8 +98,9 @@ class BusinessDetailsPage extends Component {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.businessABN &&
-                touched.businessABN && <Label basic color="red" pointing content={errors.businessABN} />}
+              {errors.businessABN && touched.businessABN && (
+                <Label basic color="red" pointing content={errors.businessABN} />
+              )}
             </Form.Field>
             <Form.Field width={2}>
               <label>ABN LOOKUP</label>
@@ -120,8 +124,9 @@ class BusinessDetailsPage extends Component {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.firstNameV &&
-                touched.firstNameV && <Label basic color="red" pointing content={errors.firstNameV} />}
+              {errors.firstNameV && touched.firstNameV && (
+                <Label basic color="red" pointing content={errors.firstNameV} />
+              )}
             </Form.Field>
             <Form.Field>
               <Form.Input

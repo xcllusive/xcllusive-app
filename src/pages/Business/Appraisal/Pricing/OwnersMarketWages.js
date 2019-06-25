@@ -46,122 +46,126 @@ class OwnersMarketWagesPage extends Component {
     const { appraisalObject } = this.props
     // const {} = this.state
     return (
-      <Segment style={{ backgroundColor: '#ecf4fb' }} size="tiny">
-        <Header as="h4" textAlign="center" color="blue">
+      <Segment style={{ backgroundColor: '#daf3e4' }} size="small">
+        <Header as="h3" textAlign="center" color="blue">
           Owners Market Wages
         </Header>
-        <Grid celled="internally" divided>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              <b>Position</b>
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <b>Hours per Week</b>
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <b>Annual Wage inc Super</b>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              {appraisalObject && appraisalObject.owner1Position ? appraisalObject.owner1Position : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner1HoursPWeek ? appraisalObject.owner1HoursPWeek : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner1AnnualWage
-                ? numeral(appraisalObject.owner1AnnualWage).format('$0,0')
-                : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              {appraisalObject && appraisalObject.owner2Position ? appraisalObject.owner2Position : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner2HoursPWeek ? appraisalObject.owner2HoursPWeek : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner2AnnualWage
-                ? numeral(appraisalObject.owner2AnnualWage).format('$0,0')
-                : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              {appraisalObject && appraisalObject.owner3Position ? appraisalObject.owner3Position : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner3HoursPWeek ? appraisalObject.owner3HoursPWeek : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner3AnnualWage
-                ? numeral(appraisalObject.owner3AnnualWage).format('$0,0')
-                : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              {appraisalObject && appraisalObject.owner4Position ? appraisalObject.owner4Position : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner4HoursPWeek ? appraisalObject.owner4HoursPWeek : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner4AnnualWage
-                ? numeral(appraisalObject.owner4AnnualWage).format('$0,0')
-                : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              {appraisalObject && appraisalObject.owner5Position ? appraisalObject.owner5Position : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner5HoursPWeek ? appraisalObject.owner5HoursPWeek : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner5AnnualWage
-                ? numeral(appraisalObject.owner5AnnualWage).format('$0,0')
-                : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              {appraisalObject && appraisalObject.owner6Position ? appraisalObject.owner6Position : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner6HoursPWeek ? appraisalObject.owner6HoursPWeek : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner6AnnualWage
-                ? numeral(appraisalObject.owner6AnnualWage).format('$0,0')
-                : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
-              {appraisalObject && appraisalObject.owner7Position ? appraisalObject.owner7Position : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner7HoursPWeek ? appraisalObject.owner7HoursPWeek : null}
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              {appraisalObject && appraisalObject.owner7AnnualWage
-                ? numeral(appraisalObject.owner7AnnualWage).format('$0,0')
-                : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={3}>
-            <Grid.Column textAlign="center" />
-            <Grid.Column textAlign="center">
-              <b>Total Wages</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">
-              <b>{numeral(this._totalWages(appraisalObject)).format('$0,0')}</b>
-            </Grid.Column>
-          </Grid.Row>
+        <Grid celled="internally" divided centered columns={2}>
+          <Grid.Column>
+            <Grid celled="internally" divided>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  <b>Position</b>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <b>Hours per Week</b>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <b>Annual Wage inc Super</b>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  {appraisalObject && appraisalObject.owner1Position ? appraisalObject.owner1Position : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner1HoursPWeek ? appraisalObject.owner1HoursPWeek : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner1AnnualWage
+                    ? numeral(appraisalObject.owner1AnnualWage).format('$0,0')
+                    : null}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  {appraisalObject && appraisalObject.owner2Position ? appraisalObject.owner2Position : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner2HoursPWeek ? appraisalObject.owner2HoursPWeek : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner2AnnualWage
+                    ? numeral(appraisalObject.owner2AnnualWage).format('$0,0')
+                    : null}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  {appraisalObject && appraisalObject.owner3Position ? appraisalObject.owner3Position : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner3HoursPWeek ? appraisalObject.owner3HoursPWeek : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner3AnnualWage
+                    ? numeral(appraisalObject.owner3AnnualWage).format('$0,0')
+                    : null}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  {appraisalObject && appraisalObject.owner4Position ? appraisalObject.owner4Position : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner4HoursPWeek ? appraisalObject.owner4HoursPWeek : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner4AnnualWage
+                    ? numeral(appraisalObject.owner4AnnualWage).format('$0,0')
+                    : null}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  {appraisalObject && appraisalObject.owner5Position ? appraisalObject.owner5Position : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner5HoursPWeek ? appraisalObject.owner5HoursPWeek : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner5AnnualWage
+                    ? numeral(appraisalObject.owner5AnnualWage).format('$0,0')
+                    : null}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  {appraisalObject && appraisalObject.owner6Position ? appraisalObject.owner6Position : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner6HoursPWeek ? appraisalObject.owner6HoursPWeek : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner6AnnualWage
+                    ? numeral(appraisalObject.owner6AnnualWage).format('$0,0')
+                    : null}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center">
+                  {appraisalObject && appraisalObject.owner7Position ? appraisalObject.owner7Position : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner7HoursPWeek ? appraisalObject.owner7HoursPWeek : null}
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  {appraisalObject && appraisalObject.owner7AnnualWage
+                    ? numeral(appraisalObject.owner7AnnualWage).format('$0,0')
+                    : null}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column textAlign="center" />
+                <Grid.Column textAlign="center">
+                  <b>Total Wages</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">
+                  <b>{numeral(this._totalWages(appraisalObject)).format('$0,0')}</b>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Grid.Column>
         </Grid>
       </Segment>
     )

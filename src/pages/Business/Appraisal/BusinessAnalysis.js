@@ -17,7 +17,7 @@ class BusinessAnalysisPage extends Component {
     super(props)
     this.state = {
       modules: {
-        toolbar: [[{}], ['', '', '', '', ''], [{}, {}, {}, {}], ['', ''], ['']]
+        toolbar: null
       },
       formats: ['', '', '', '', '', '', '', '', '', '', ''],
       stage: [
@@ -104,26 +104,32 @@ class BusinessAnalysisPage extends Component {
     const { values } = this.props
     return (
       <Wrapper>
-        <Step.Group size="large">
-          <Step active icon="tasks" title="Step 3" description="Business Analysis" />
-          <Message info size="large">
-            <p>
-              The information you enter on this page will be shown on the `Business Analysis` page of the appraisal.
-              This information will be used to calculate the capitalisation rate/multiplier for the final appraisal
-              value. You will have the option to manually set the capitalisation rate from the Pricing page. The column
-              on the left allows you to rate different business aspects and the column on the right allows you to select
-              the degree of impact you feel that each aspect has on the business value.
-            </p>
-          </Message>
-        </Step.Group>
-        <Form>
+        <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
+          <Step.Group size="large">
+            <Step active icon="tasks" title="Step 3" description="Business Analysis" />
+            <Message style={{ marginTop: '0px' }} info size="large">
+              <p>
+                The information you enter on this page will be shown on the `Business Analysis` page of the appraisal.
+                This information will be used to calculate the capitalisation rate/multiplier for the final appraisal
+                value. You will have the option to manually set the capitalisation rate from the Pricing page. The
+                column on the left allows you to rate different business aspects and the column on the right allows you
+                to select the degree of impact you feel that each aspect has on the business value.
+              </p>
+            </Message>
+          </Step.Group>
+        </Segment>
+        <Segment style={{ backgroundColor: '#008eff26' }} size="small">
           <Grid>
-            <Header style={{ marginTop: '25px' }} as="h3" textAlign="center" color="blue">
-              Risks
-            </Header>
-            <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
+            <Grid.Row style={{ paddingBottom: '0px' }}>
+              <Grid.Column>
+                <Header as="h3" textAlign="left" color="blue">
+                  Risks
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
               <Grid.Column width={9}>
-                <Form.Field style={{ height: '20vh' }}>
+                <Form.Field style={{ backgroundColor: 'white' }}>
                   <ReactQuill
                     ref={el => {
                       this.reactQuillRef = el
@@ -168,12 +174,20 @@ class BusinessAnalysisPage extends Component {
                 />
               </Grid.Column>
             </Grid.Row>
-            <Header style={{ marginTop: '25px' }} as="h3" textAlign="center" color="blue">
-              Value Drivers
-            </Header>
-            <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
+          </Grid>
+        </Segment>
+        <Segment style={{ backgroundColor: '#daf3e4' }} size="small">
+          <Grid>
+            <Grid.Row style={{ paddingBottom: '0px' }}>
+              <Grid.Column>
+                <Header as="h3" textAlign="left" color="blue">
+                  Value Drivers
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
               <Grid.Column width={9}>
-                <Form.Field style={{ height: '20vh' }}>
+                <Form.Field style={{ backgroundColor: 'white' }}>
                   <ReactQuill
                     ref={el => {
                       this.reactQuillRef = el
@@ -218,105 +232,105 @@ class BusinessAnalysisPage extends Component {
                 />
               </Grid.Column>
             </Grid.Row>
-            <Header style={{ marginTop: '25px' }} as="h3" textAlign="center" color="blue">
-              Critical Issues
-            </Header>
-            <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
-              <Grid.Column width={9}>
-                <Form.Field style={{ height: '20vh' }}>
-                  <ReactQuill
-                    ref={el => {
-                      this.reactQuillRef = el
-                    }}
-                    value={values.criticalIssuesList}
-                    onChange={this._handleChangeIssues}
-                    style={{ height: '80%' }}
-                    modules={this.state.modules}
-                    formats={this.state.formats}
-                    onKeyDown={this._handleChangeTextArea}
-                  />
-                </Form.Field>
-              </Grid.Column>
-              <Grid.Column width={7}>
-                <Table color="blue" celled inverted selectable compact size="small">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Label</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {this.props.criticalIssuesOptions.array.map(criticalIssuesOptions => {
-                      return (
-                        <Table.Row
-                          active
-                          key={criticalIssuesOptions.id}
-                          onClick={() => this._insertOnTextArea('criticalIssuesList', criticalIssuesOptions.label)}
-                        >
-                          <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
-                        </Table.Row>
-                      )
-                    })}
-                  </Table.Body>
-                </Table>
-                <Pagination
-                  size="mini"
-                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 'criticalIssues')}
-                  defaultActivePage={this.props.criticalIssuesOptions.activePage}
-                  totalPages={this.props.criticalIssuesOptions.pages}
-                  firstItem={null}
-                  lastItem={null}
-                />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
-                <Header as="h3" textAlign="center" color="blue">
-                  Business Risk
-                </Header>
-                {values.valueSliderBR || values.valueSliderBR === 0 ? (
-                  <Segment>
-                    <SliderComponent
-                      value={values.valueSliderBR}
-                      type="businessRisk"
-                      descriptionArray={this.props.descriptionBusinessRiskArray}
-                      onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
-                    />
-                  </Segment>
-                ) : null}
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
-                <Header as="h3" textAlign="center" color="blue">
-                  Market
-                </Header>
-                {values.valueSliderMarket || values.valueSliderMarket === 0 ? (
-                  <Segment>
-                    <SliderComponent
-                      value={values.valueSliderMarket}
-                      type="market"
-                      descriptionArray={this.props.descriptionMarketArray}
-                      onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
-                    />
-                  </Segment>
-                ) : null}
-              </Grid.Column>
-            </Grid.Row>
-            <Form.Group>
-              <Form.Field>
-                <Form.Checkbox
-                  label="Please confirm that you have completed the above information"
-                  name="confirmBusinessAnalysis"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.confirmBusinessAnalysis}
-                  onClick={() =>
-                    this.props.confirmsCompleteSteps('confirmBusinessAnalysis', !values.confirmBusinessAnalysis)
-                  }
-                />
-              </Form.Field>
-            </Form.Group>
           </Grid>
-        </Form>
+        </Segment>
+        <Header style={{ marginTop: '25px' }} as="h3" textAlign="center" color="blue">
+          Critical Issues
+        </Header>
+        <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
+          <Grid.Column width={9}>
+            <Form.Field style={{ backgroundColor: 'white' }}>
+              <ReactQuill
+                ref={el => {
+                  this.reactQuillRef = el
+                }}
+                value={values.criticalIssuesList}
+                onChange={this._handleChangeIssues}
+                style={{ height: '80%' }}
+                modules={this.state.modules}
+                formats={this.state.formats}
+                onKeyDown={this._handleChangeTextArea}
+              />
+            </Form.Field>
+          </Grid.Column>
+          <Grid.Column width={7}>
+            <Table color="blue" celled inverted selectable compact size="small">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Label</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {this.props.criticalIssuesOptions.array.map(criticalIssuesOptions => {
+                  return (
+                    <Table.Row
+                      active
+                      key={criticalIssuesOptions.id}
+                      onClick={() => this._insertOnTextArea('criticalIssuesList', criticalIssuesOptions.label)}
+                    >
+                      <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
+                    </Table.Row>
+                  )
+                })}
+              </Table.Body>
+            </Table>
+            <Pagination
+              size="mini"
+              onPageChange={(e, data) => this._handlePaginationChange(e, data, 'criticalIssues')}
+              defaultActivePage={this.props.criticalIssuesOptions.activePage}
+              totalPages={this.props.criticalIssuesOptions.pages}
+              firstItem={null}
+              lastItem={null}
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+            <Header as="h3" textAlign="center" color="blue">
+              Business Risk
+            </Header>
+            {values.valueSliderBR || values.valueSliderBR === 0 ? (
+              <Segment>
+                <SliderComponent
+                  value={values.valueSliderBR}
+                  type="businessRisk"
+                  descriptionArray={this.props.descriptionBusinessRiskArray}
+                  onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
+                />
+              </Segment>
+            ) : null}
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+            <Header as="h3" textAlign="center" color="blue">
+              Market
+            </Header>
+            {values.valueSliderMarket || values.valueSliderMarket === 0 ? (
+              <Segment>
+                <SliderComponent
+                  value={values.valueSliderMarket}
+                  type="market"
+                  descriptionArray={this.props.descriptionMarketArray}
+                  onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
+                />
+              </Segment>
+            ) : null}
+          </Grid.Column>
+        </Grid.Row>
+        <Form.Group>
+          <Form.Field>
+            <Form.Checkbox
+              label="Please confirm that you have completed the above information"
+              name="confirmBusinessAnalysis"
+              onChange={this._handleChangeCheckBox}
+              checked={values.confirmBusinessAnalysis}
+              onClick={() =>
+                this.props.confirmsCompleteSteps('confirmBusinessAnalysis', !values.confirmBusinessAnalysis)
+              }
+            />
+          </Form.Field>
+        </Form.Group>
       </Wrapper>
     )
   }

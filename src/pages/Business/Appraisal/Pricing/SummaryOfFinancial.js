@@ -17,53 +17,57 @@ class SummaryOfFinancialPage extends Component {
   render () {
     // const {} = this.state
     return (
-      <Segment style={{ backgroundColor: '#d4d4d53b' }} size="tiny" compact>
-        <Header as="h4" textAlign="center" color="blue">
+      <Segment style={{ backgroundColor: '#008eff26' }} size="small" compact>
+        <Header as="h3" textAlign="center" color="blue">
           Summary of Financial
         </Header>
-        <Grid celled="internally" divided>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="center">
-              <b>EBITDA Last Year</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">{numeral(this.props._ebitdaLastYear).format('$0,0')}</Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="center">
-              <b>EBITDA Avg</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">{numeral(this.props._ebitdaAvg).format('$0,0')}</Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="center">
-              <b>PEBITDA Last Year</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">{numeral(this.props._pebitdaLastYear).format('$0,0')}</Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="center">
-              <b>PEBITDA Avg</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">{numeral(this.props._pebitdaAvg).format('$0,0')}</Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="center">
-              <b>Stock Value</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">{numeral(this.props._stockValue).format('$0,0')}</Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="center">
-              <b>Necessary Stock Value</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">{numeral(this.props._necessaryStockValue).format('$0,0')}</Grid.Column>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="center">
-              <b>Assets Value</b>
-            </Grid.Column>
-            <Grid.Column textAlign="right">{numeral(this.props._assetsValue).format('$0,0')}</Grid.Column>
-          </Grid.Row>
+        <Grid celled="internally" divided centered columns={2}>
+          <Grid.Column>
+            <Grid celled="internally" divided>
+              <Grid.Row columns={2}>
+                <Grid.Column textAlign="left">
+                  <b>EBITDA Last Year</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">{numeral(this.props._ebitdaLastYear).format('$0,0')}</Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column textAlign="left">
+                  <b>EBITDA Avg</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">{numeral(this.props._ebitdaAvg).format('$0,0')}</Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column textAlign="left">
+                  <b>PEBITDA Last Year</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">{numeral(this.props._pebitdaLastYear).format('$0,0')}</Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column textAlign="left">
+                  <b>PEBITDA Avg</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">{numeral(this.props._pebitdaAvg).format('$0,0')}</Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column textAlign="left">
+                  <b>Stock Value</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">{numeral(this.props._stockValue).format('$0,0')}</Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column textAlign="left">
+                  <b>Necessary Stock Value</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">{numeral(this.props._necessaryStockValue).format('$0,0')}</Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={2}>
+                <Grid.Column textAlign="left">
+                  <b>Assets Value</b>
+                </Grid.Column>
+                <Grid.Column textAlign="right">{numeral(this.props._assetsValue).format('$0,0')}</Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Grid.Column>
         </Grid>
       </Segment>
     )

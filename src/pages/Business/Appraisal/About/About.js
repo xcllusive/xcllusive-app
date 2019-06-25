@@ -74,23 +74,25 @@ class AboutPage extends Component {
     const { businessCommencedOptions, currentOwnerOptions } = this.state
     return (
       <Wrapper>
-        <Step.Group size="large">
-          <Step active icon="pencil alternate" title="Step 2" description="About This Business" />
-          <Message info size="large">
-            <p>
-              The information you enter on this page will be used on the `About This Business` page of the appraisal.
-              Though it won`t be used in any specific calculations it is important to complete in full as it will
-              demonstrate to the vendor that care has been taken in assessing their business. A number of these fields
-              will also update fields on the business database and our agents may use parts of it in the Sales
-              Memorandum. Anything not entered will be left as blank.
-            </p>
-          </Message>
-        </Step.Group>
+        <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
+          <Step.Group size="large">
+            <Step active icon="pencil alternate" title="Step 2" description="About This Business" />
+            <Message style={{ marginTop: '0px' }} info size="large">
+              <p>
+                The information you enter on this page will be used on the `About This Business` page of the appraisal.
+                Though it won`t be used in any specific calculations it is important to complete in full as it will
+                demonstrate to the vendor that care has been taken in assessing their business. A number of these fields
+                will also update fields on the business database and our agents may use parts of it in the Sales
+                Memorandum. Anything not entered will be left as blank.
+              </p>
+            </Message>
+          </Step.Group>
+        </Segment>
         <Form>
           <Grid celled="internally" divided>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment style={{ marginLeft: '-15px', backgroundColor: 'aliceblue' }}>
+                <Segment style={{ marginLeft: '-15px', backgroundColor: '#008eff26' }}>
                   <Form.Group widths="equal">
                     <Form.Field>
                       <label>Business Type</label>
@@ -219,7 +221,7 @@ class AboutPage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <Segment style={{ backgroundColor: 'linen' }}>
+                <Segment style={{ backgroundColor: '#daf3e4' }}>
                   <Header as="h3" textAlign="center" color="blue">
                     Customers and Suppliers
                   </Header>
@@ -250,7 +252,7 @@ class AboutPage extends Component {
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment style={{ marginLeft: '-15px', backgroundColor: 'linen' }}>
+                <Segment style={{ marginLeft: '-15px', backgroundColor: '#daf3e4' }}>
                   <Header as="h3" textAlign="center" color="blue">
                     Premises and Employees
                   </Header>
@@ -279,7 +281,7 @@ class AboutPage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <Segment style={{ backgroundColor: 'aliceblue' }}>
+                <Segment style={{ backgroundColor: '#008eff26' }}>
                   <Header as="h3" textAlign="center" color="blue">
                     Ownership and Final Notes
                   </Header>
