@@ -629,10 +629,10 @@ class PricingPage extends Component {
             </p>
           </Message>
         </Step.Group>
-        <Grid container justify="center">
+        <Grid>
           <Grid.Row>
-            <Grid.Column>
-              <Segment style={{ backgroundColor: '#d4d4d53b' }} size="tiny" compact>
+            <Grid.Column width={10}>
+              <Segment style={{ backgroundColor: '#d4d4d53b' }} size="tiny">
                 <SalesGPProfit appraisalObject={appraisalObject} />
               </Segment>
             </Grid.Column>
@@ -712,7 +712,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMEbitdaLastYear).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -736,7 +736,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMEbitdaAvg).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -758,7 +758,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMPebitdaLastYear).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -782,7 +782,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMPebitdaAvg).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -804,7 +804,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMEbitdaLastYearWithStock).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -828,7 +828,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMEbitdaAvgWithStock).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -852,7 +852,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMPebitdaLastYearWithStock).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -876,7 +876,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMPebitdaAvgWithStock).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -900,7 +900,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2}>
+                  <Grid.Column textAlign="right" width={2}>
                     {appraisalObject ? numeral(appraisalObject.sumMTO).format('0,0.[99]') : 0}
                   </Grid.Column>
                   <Grid.Column textAlign="right" width={3}>
@@ -922,7 +922,7 @@ class PricingPage extends Component {
                       </Form.Field>
                     </Form>
                   </Grid.Column>
-                  <Grid.Column textAlign="center" width={2} />
+                  <Grid.Column textAlign="right" width={2} />
                   <Grid.Column textAlign="right" width={3}>
                     {appraisalObject ? numeral(this._assetsValue(appraisalObject)).format('$0,0') : 0}
                   </Grid.Column>
@@ -965,10 +965,10 @@ class PricingPage extends Component {
             </Segment>
           ) : null}
         </Grid>
-        <Grid>
+        <Grid container justify="center">
           <Grid.Row>
-            <Grid.Column style={{ margin: '0 auto' }} textAlign="center">
-              <Segment style={{ backgroundColor: '#ecf4fb' }}>
+            <Grid.Column style={{ margin: '0 auto', paddingLeft: '0px' }} textAlign="center">
+              <Segment style={{ backgroundColor: '#ecf4fb' }} size="small">
                 <Grid celled="internally" divided>
                   <Grid.Row columns={14}>
                     <Grid.Column>{this._labelPricingMethod(values.pricingMethod)}</Grid.Column>
@@ -1186,59 +1186,61 @@ class PricingPage extends Component {
             </Grid>
           </Segment>
         </Grid>
-        <Segment style={{ backgroundColor: '#ecf4fb' }}>
-          <Grid>
-            <Grid.Row columns={1}>
-              <Grid.Column>
-                <LineChart
-                  width={1000}
-                  height={500}
-                  data={this.state.data}
-                  layout="vertical"
-                  margin={{ top: 20, right: 50, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" domain={['dataMin', 'dataMax']} />
-                  <YAxis dataKey="name" type="category" />
-                  <Tooltip />
-                  <Legend />
-                  {/* <ReferenceLine y="25%" stroke="red" label="Test" /> */}
-                  <ReferenceLine
-                    x={this._chart('90% Chance of Selling')}
-                    label={this._chart('90% Chance of Selling').toString()}
-                    stroke="blue"
-                  />
-                  <ReferenceLine
-                    x={this._chart('Avg Multiplier')}
-                    label={this._chart('Avg Multiplier').toString()}
-                    stroke="black"
-                  />
-                  <ReferenceLine
-                    x={this._chart('Risk Premium')}
-                    label={this._chart('Risk Premium').toString()}
-                    stroke="purple"
-                  />
-                  <ReferenceLine
-                    x={this._chart('Market Premium')}
-                    label={this._chart('Market Premium').toString()}
-                    stroke="orange"
-                  />
-                  <ReferenceLine
-                    x={this._chart('Asking Price')}
-                    label={this._chart('Asking Price').toString()}
-                    stroke="green"
-                  />
-                  <ReferenceLine
-                    x={this._chart('Less than 5% Chance of Selling')}
-                    label={this._chart('Less than 5% Chance of Selling').toString()}
-                    stroke="violet"
-                  />
-                  <Line type="monotone" dataKey="value" stroke="red" />
-                </LineChart>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+        <Grid container justify="center">
+          <Segment style={{ backgroundColor: '#ecf4fb' }}>
+            <Grid>
+              <Grid.Row columns={1}>
+                <Grid.Column>
+                  <LineChart
+                    width={1000}
+                    height={500}
+                    data={this.state.data}
+                    layout="vertical"
+                    margin={{ top: 20, right: 50, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" domain={['dataMin', 'dataMax']} />
+                    <YAxis dataKey="name" type="category" />
+                    <Tooltip />
+                    <Legend />
+                    {/* <ReferenceLine y="25%" stroke="red" label="Test" /> */}
+                    <ReferenceLine
+                      x={this._chart('90% Chance of Selling')}
+                      label={this._chart('90% Chance of Selling').toString()}
+                      stroke="blue"
+                    />
+                    <ReferenceLine
+                      x={this._chart('Avg Multiplier')}
+                      label={this._chart('Avg Multiplier').toString()}
+                      stroke="black"
+                    />
+                    <ReferenceLine
+                      x={this._chart('Risk Premium')}
+                      label={this._chart('Risk Premium').toString()}
+                      stroke="purple"
+                    />
+                    <ReferenceLine
+                      x={this._chart('Market Premium')}
+                      label={this._chart('Market Premium').toString()}
+                      stroke="orange"
+                    />
+                    <ReferenceLine
+                      x={this._chart('Asking Price')}
+                      label={this._chart('Asking Price').toString()}
+                      stroke="green"
+                    />
+                    <ReferenceLine
+                      x={this._chart('Less than 5% Chance of Selling')}
+                      label={this._chart('Less than 5% Chance of Selling').toString()}
+                      stroke="violet"
+                    />
+                    <Line type="monotone" dataKey="value" stroke="red" />
+                  </LineChart>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+        </Grid>
         <Form.Group>
           <Form.Field>
             <Form.Checkbox

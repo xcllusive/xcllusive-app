@@ -21,7 +21,7 @@ class SalesGPProfitPage extends Component {
     const { appraisalObject } = this.props
     // const {} = this.state
     return (
-      <Grid celled="internally" divided>
+      <Grid celled="internally" divided justify="left">
         <Grid.Row columns={7}>
           <Grid.Column textAlign="center">
             <b>Summary</b>
