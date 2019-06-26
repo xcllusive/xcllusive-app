@@ -7,7 +7,7 @@ import { Message, Step, Grid, Header, Form, Segment } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import moment from 'moment'
 
-import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+import { updateAppraisal, moveFinancialYear, getAppraisal } from '../../../../redux/ducks/appraisal'
 
 import Wrapper from '../../../../components/content/Wrapper'
 import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
@@ -17,6 +17,8 @@ import StockForm from './StockForm'
 import PhysicalAssetValueForm from './PhysicalAssetValueForm'
 import FinancialInformationSourceForm from './FinancialInformationSourceForm'
 import CustomColumn from '../../../../components/content/CustomGridColumn'
+
+import { openModal } from '../../../../redux/ducks/modal'
 
 class FinancialAnalysisPage extends Component {
   constructor (props) {
@@ -44,6 +46,12 @@ class FinancialAnalysisPage extends Component {
 
   componentDidMount () {
     if (this.props.appraisalObject && !this.props.appraisalObject.year6) this._calculateFinancialYear()
+  }
+
+  componentDidUpdate (nextProps) {
+    if (this.props.isMoved && nextProps.isMoved !== this.props.isMoved) {
+      this.props.getAppraisal(this.props.appraisalObject.id)
+    }
   }
 
   componentWillUnmount () {
@@ -87,7 +95,8 @@ class FinancialAnalysisPage extends Component {
   }
 
   render () {
-    const { values, appraisalObject } = this.props
+    const { values, appraisalObject, testAppraisal } = this.props
+    console.log(testAppraisal)
     return (
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
@@ -119,6 +128,9 @@ class FinancialAnalysisPage extends Component {
               sendCalcs={this._getCalcs}
               setFieldValue={this.props.setFieldValue}
               setFieldTouched={this.props.setFieldTouched}
+              openModal={this.props.openModal}
+              moveFinancialYear={this.props.moveFinancialYear}
+              getAppraisal={this.props.getAppraisal}
             />
           </Grid>
         </Segment>
@@ -203,7 +215,12 @@ FinancialAnalysisPage.propTypes = {
   appraisalObject: PropTypes.object,
   business: PropTypes.object,
   confirmsCompleteSteps: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  openModal: PropTypes.func,
+  moveFinancialYear: PropTypes.func,
+  getAppraisal: PropTypes.func,
+  testAppraisal: PropTypes.object,
+  isMoved: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -307,11 +324,14 @@ const validationSchema = Yup.object().shape({})
 const handleSubmit = (values, { props, setSubmitting }) => {}
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    testAppraisal: state.appraisal.moveFinancialYear.appraisal,
+    isMoved: state.appraisal.moveFinancialYear.isMoved
+  }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal }, dispatch)
+  return bindActionCreators({ updateAppraisal, openModal, moveFinancialYear, getAppraisal }, dispatch)
 }
 
 export default connect(

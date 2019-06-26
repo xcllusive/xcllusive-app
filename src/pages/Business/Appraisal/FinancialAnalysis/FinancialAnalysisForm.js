@@ -4,9 +4,11 @@ import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import { Checkbox, Label, Grid, Button, Icon, Input, Form } from 'semantic-ui-react'
 import numeral from 'numeral'
+import moment from 'moment'
 
 import { calcAnnualisedWhenChangeMonthsAndSeasonal } from '../../../../redux/ducks/appraisal'
 import CustomColumn from '../../../../components/content/CustomGridColumn'
+import { TypesModal } from '../../../../redux/ducks/modal'
 // import { connect } from 'http2'
 
 const FinancialAnalysisForm = ({
@@ -22,7 +24,10 @@ const FinancialAnalysisForm = ({
   sendCalcs,
   setFieldValue,
   setFieldTouched,
-  calcAnnualisedWhenChangeMonthsAndSeasonal
+  calcAnnualisedWhenChangeMonthsAndSeasonal,
+  openModal,
+  moveFinancialYear,
+  getAppraisal
 }) => {
   const _calcGrossMargin = (sales, cogs) => sales - cogs
 
@@ -694,6 +699,23 @@ const FinancialAnalysisForm = ({
       name
     })
   }
+  const todayDate = moment().format('MM-DD')
+
+  const _moveFinancialYear = () => {
+    openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Move Financial Year',
+        text: 'Are you sure you want to move the financial year?'
+      },
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          await moveFinancialYear(appraisalObject)
+          // await getAppraisal(appraisalObject.id)
+        }
+      }
+    })
+  }
+
   return (
     <Fragment>
       <Grid.Row>
@@ -722,7 +744,12 @@ const FinancialAnalysisForm = ({
           {errors.seasonalAdjustment && touched.seasonalAdjustment && (
             <Label basic color="red" pointing content={errors.seasonalAdjustment} />
           )}
-          <Button color="facebook" size="small">
+          <Button
+            color="facebook"
+            size="small"
+            disabled={moment(todayDate).isSameOrAfter('06-30', 'day')}
+            onClick={_moveFinancialYear}
+          >
             <Icon name="forward" />
             Move Financial Year
           </Button>
@@ -1422,7 +1449,10 @@ FinancialAnalysisForm.propTypes = {
   handleChangeCheckBox: PropTypes.func,
   handleChangeCheckBoxPdf: PropTypes.func,
   setFieldTouched: PropTypes.func,
-  calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func
+  calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func,
+  openModal: PropTypes.func,
+  moveFinancialYear: PropTypes.func,
+  getAppraisal: PropTypes.func
 }
 
 const mapStateToProps = state => ({

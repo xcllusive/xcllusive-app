@@ -1,6 +1,16 @@
 import { toast } from 'react-toastify'
 import download from '../../utils/file-download'
-import { create, getAll, get, update, downloadAppr, send, remove, duplicate } from '../../services/api/appraisal'
+import {
+  create,
+  getAll,
+  get,
+  update,
+  downloadAppr,
+  send,
+  remove,
+  duplicate,
+  moveFinancialYear as moveFinancialYearAPI
+} from '../../services/api/appraisal'
 
 // Action Types
 
@@ -31,7 +41,10 @@ export const Types = {
   DUPLICATE_APPRAISAL_SUCCESS: 'DUPLICATE_APPRAISAL_SUCCESS',
   DUPLICATE_APPRAISAL_FAILURE: 'DUPLICATE_APPRAISAL_FAILURE',
   CALC_COMPLETE_STEPS: 'CALC_COMPLETE_STEPS',
-  SEND_MONTHS_SEASONAL: 'SEND_MONTHS_SEASONAL'
+  SEND_MONTHS_SEASONAL: 'SEND_MONTHS_SEASONAL',
+  MOVE_FINANCIAL_YEAR_LOADING: 'MOVE_FINANCIAL_YEAR_LOADING',
+  MOVE_FINANCIAL_YEAR_SUCCESS: 'MOVE_FINANCIAL_YEAR_SUCCESS',
+  MOVE_FINANCIAL_YEAR_FAILURE: 'MOVE_FINANCIAL_YEAR_FAILURE'
 }
 
 // Reducer
@@ -128,6 +141,12 @@ const initialState = {
   sendMonthsSeasonal: {
     isLoading: false,
     object: null
+  },
+  moveFinancialYear: {
+    isLoading: false,
+    isMoved: false,
+    appraisal: {},
+    error: null
   }
 }
 
@@ -387,6 +406,35 @@ export default function reducer (state = initialState, action) {
         ...state,
         sendMonthsSeasonal: action.payload
       }
+    case Types.MOVE_FINANCIAL_YEAR_LOADING:
+      return {
+        ...state,
+        moveFinancialYear: {
+          ...state.moveFinancialYear,
+          isLoading: true,
+          isMoved: false
+        }
+      }
+    case Types.MOVE_FINANCIAL_YEAR_SUCCESS:
+      return {
+        ...state,
+        moveFinancialYear: {
+          ...state.moveFinancialYear,
+          isLoading: false,
+          appraisal: action.payload,
+          isMoved: true
+        }
+      }
+    case Types.MOVE_FINANCIAL_YEAR_FAILURE:
+      return {
+        ...state,
+        moveFinancialYear: {
+          ...state.moveFinancialYear,
+          isLoading: false,
+          isMoved: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_APPRAISAL:
       return initialState
     default:
@@ -618,5 +666,27 @@ const addTodo = (confirmName, confirm) => {
     isConfirm: confirm,
     completedPerc,
     confirmName
+  }
+}
+
+export const moveFinancialYear = appraisal => async dispatch => {
+  dispatch({
+    type: Types.MOVE_FINANCIAL_YEAR_LOADING,
+    payload: true
+  })
+  try {
+    const response = await moveFinancialYearAPI(appraisal)
+    const getAppraisal = await get(appraisal.id)
+    dispatch({
+      type: Types.MOVE_FINANCIAL_YEAR_SUCCESS,
+      payload: getAppraisal
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.MOVE_FINANCIAL_YEAR_FAILURE,
+      payload: error
+    })
+    toast.error(error)
   }
 }

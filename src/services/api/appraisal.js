@@ -72,3 +72,11 @@ export const duplicate = appraisalId => {
   //   url: `/appraisal/duplicate${appraisalId}`
   // })
 }
+
+export const moveFinancialYear = appraisal => {
+  return request({
+    method: 'put',
+    url: `/appraisal/${appraisal.id}/move-financial-year`,
+    data: appraisal
+  })
+}
