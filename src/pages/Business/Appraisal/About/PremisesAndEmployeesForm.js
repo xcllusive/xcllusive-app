@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Label } from 'semantic-ui-react'
+import numeral from 'numeral'
 
 const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, touched, isValid, setFieldValue }) => {
   const state = {
@@ -26,8 +27,9 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
             value={values.premisesOwnedRented}
             onChange={_handleSelectChange}
           />
-          {errors.premisesOwnedRented &&
-            touched.premisesOwnedRented && <Label basic color="red" pointing content={errors.premisesOwnedRented} />}
+          {errors.premisesOwnedRented && touched.premisesOwnedRented && (
+            <Label basic color="red" pointing content={errors.premisesOwnedRented} />
+          )}
         </Form.Field>
         {values.premisesOwnedRented === 'Rented' ? (
           <Fragment>
@@ -36,7 +38,7 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
                 label="Rent Cost"
                 name="rentCost"
                 autoComplete="rentCost"
-                value={values.rentCost}
+                value={numeral(values.rentCost).format('$0,0')}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
@@ -51,8 +53,9 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {errors.timeRemLease &&
-                touched.timeRemLease && <Label basic color="red" pointing content={errors.timeRemLease} />}
+              {errors.timeRemLease && touched.timeRemLease && (
+                <Label basic color="red" pointing content={errors.timeRemLease} />
+              )}
             </Form.Field>
           </Fragment>
         ) : null}
@@ -67,8 +70,9 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.premisesNotes &&
-            touched.premisesNotes && <Label basic color="red" pointing content={errors.premisesNotes} />}
+          {errors.premisesNotes && touched.premisesNotes && (
+            <Label basic color="red" pointing content={errors.premisesNotes} />
+          )}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -106,8 +110,9 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.subContractors &&
-            touched.subContractors && <Label basic color="red" pointing content={errors.subContractors} />}
+          {errors.subContractors && touched.subContractors && (
+            <Label basic color="red" pointing content={errors.subContractors} />
+          )}
         </Form.Field>
         <Form.Field width={4}>
           <Form.Input
