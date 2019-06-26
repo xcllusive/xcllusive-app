@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Form } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { updateAppraisal } from '../../../../redux/ducks/appraisal'
 import numeral from 'numeral'
@@ -17,8 +17,12 @@ class SalesGPProfitPage extends Component {
     }
   }
 
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
+  }
+
   render () {
-    const { appraisalObject } = this.props
+    const { appraisalObject, values } = this.props
     // const {} = this.state
     return (
       <Grid celled="internally" divided centered columns={2}>
@@ -29,76 +33,71 @@ class SalesGPProfitPage extends Component {
                 <b>Summary</b>
               </Grid.Column>
               <Grid.Column textAlign="center">
-                {appraisalObject && appraisalObject.sales1 > 0 ? (
-                  appraisalObject.renderPdfYear1 ? (
-                    <b>
-                      {appraisalObject.year1} <br />
-                      [Used]
-                    </b>
-                  ) : (
-                    <b>{appraisalObject.year1}</b>
-                  )
-                ) : null}
+                <Form.Field style={{ marginLeft: '-10px' }}>
+                  <Form.Checkbox
+                    label="Included"
+                    name="renderPdfYear1"
+                    checked={values.renderPdfYear1}
+                    onChange={this._handleChangeCheckBox}
+                  />
+                </Form.Field>
+                <b>{appraisalObject.year1}</b> <br />
               </Grid.Column>
               <Grid.Column textAlign="center">
-                {appraisalObject && appraisalObject.sales2 > 0 ? (
-                  appraisalObject.renderPdfYear2 ? (
-                    <b>
-                      {appraisalObject.year2} <br />
-                      [Used]
-                    </b>
-                  ) : (
-                    <b>{appraisalObject.year2}</b>
-                  )
-                ) : null}
+                <Form.Field style={{ marginLeft: '-10px' }}>
+                  <Form.Checkbox
+                    label="Included"
+                    name="renderPdfYear2"
+                    checked={values.renderPdfYear2}
+                    onChange={this._handleChangeCheckBox}
+                  />
+                </Form.Field>
+                <b>{appraisalObject.year2}</b> <br />
               </Grid.Column>
               <Grid.Column textAlign="center">
-                {appraisalObject && appraisalObject.sales3 > 0 ? (
-                  appraisalObject.renderPdfYear3 ? (
-                    <b>
-                      {appraisalObject.year3} <br />
-                      [Used]
-                    </b>
-                  ) : (
-                    <b>{appraisalObject.year3}</b>
-                  )
-                ) : null}
+                <Form.Field style={{ marginLeft: '-10px' }}>
+                  <Form.Checkbox
+                    label="Included"
+                    name="renderPdfYear3"
+                    checked={values.renderPdfYear3}
+                    onChange={this._handleChangeCheckBox}
+                  />
+                </Form.Field>
+                <b>{appraisalObject.year3}</b> <br />
               </Grid.Column>
               <Grid.Column textAlign="center">
-                {appraisalObject && appraisalObject.sales4 > 0 ? (
-                  appraisalObject.renderPdfYear4 ? (
-                    <b>
-                      {appraisalObject.year4} <br />
-                      [Used]
-                    </b>
-                  ) : (
-                    <b>{appraisalObject.year4}</b>
-                  )
-                ) : null}
+                <Form.Field style={{ marginLeft: '-10px' }}>
+                  <Form.Checkbox
+                    label="Included"
+                    name="renderPdfYear4"
+                    checked={values.renderPdfYear4}
+                    onChange={this._handleChangeCheckBox}
+                  />
+                </Form.Field>
+                <b>{appraisalObject.year4}</b>
+                <br />
               </Grid.Column>
               <Grid.Column textAlign="center">
-                {appraisalObject && appraisalObject.sales5 > 0 ? (
-                  appraisalObject.renderPdfYear5 ? (
-                    <b>
-                      {appraisalObject.year5} <br />
-                      [Used]
-                    </b>
-                  ) : (
-                    <b>{appraisalObject.year5}</b>
-                  )
-                ) : null}
+                <Form.Field style={{ marginLeft: '-10px' }}>
+                  <Form.Checkbox
+                    label="Included"
+                    name="renderPdfYear5"
+                    checked={values.renderPdfYear5}
+                    onChange={this._handleChangeCheckBox}
+                  />
+                </Form.Field>
+                <b>{appraisalObject.year5}</b> <br />
               </Grid.Column>
               <Grid.Column textAlign="center">
-                {appraisalObject && appraisalObject.sales6 > 0 ? (
-                  appraisalObject.renderPdfYear7 ? (
-                    <b>
-                      {appraisalObject.year7} Annualised <br />
-                      [Used]
-                    </b>
-                  ) : (
-                    <b>{appraisalObject.year7} Annualised</b>
-                  )
-                ) : null}
+                <Form.Field style={{ marginLeft: '-10px' }}>
+                  <Form.Checkbox
+                    label="Included"
+                    name="renderPdfYear7"
+                    checked={values.renderPdfYear7}
+                    onChange={this._handleChangeCheckBox}
+                  />
+                </Form.Field>
+                <b>{appraisalObject.year7} Annualised </b> <br />
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={7}>
@@ -282,7 +281,13 @@ SalesGPProfitPage.propTypes = {
 
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
-  id: props.appraisalObject ? props.appraisalObject.id : ''
+  id: props.appraisalObject ? props.appraisalObject.id : '',
+  renderPdfYear1: props.appraisalObject ? props.appraisalObject.renderPdfYear1 : '',
+  renderPdfYear2: props.appraisalObject ? props.appraisalObject.renderPdfYear2 : '',
+  renderPdfYear3: props.appraisalObject ? props.appraisalObject.renderPdfYear3 : '',
+  renderPdfYear4: props.appraisalObject ? props.appraisalObject.renderPdfYear4 : '',
+  renderPdfYear5: props.appraisalObject ? props.appraisalObject.renderPdfYear5 : '',
+  renderPdfYear7: props.appraisalObject ? props.appraisalObject.renderPdfYear7 : ''
 })
 
 const mapStateToProps = state => {
