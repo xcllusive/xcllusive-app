@@ -818,7 +818,7 @@ const FinancialAnalysisForm = ({
       </Grid.Row>
       <Grid.Row
         style={{
-          backgroundColor: '#dae4ef'
+          backgroundColor: '#daf3e4'
         }}
         columns={9}
       >
@@ -918,7 +918,7 @@ const FinancialAnalysisForm = ({
       </Grid.Row>
       <Grid.Row
         style={{
-          backgroundColor: '#dae4ef'
+          backgroundColor: '#daf3e4'
         }}
         columns={9}
       >
@@ -1098,7 +1098,7 @@ const FinancialAnalysisForm = ({
       </Grid.Row>
       <Grid.Row
         style={{
-          backgroundColor: '#dae4ef'
+          backgroundColor: '#daf3e4'
         }}
         columns={9}
       >
@@ -1245,7 +1245,7 @@ const FinancialAnalysisForm = ({
       </Grid.Row>
       <Grid.Row
         style={{
-          backgroundColor: '#dae4ef'
+          backgroundColor: '#daf3e4'
         }}
         columns={9}
       >

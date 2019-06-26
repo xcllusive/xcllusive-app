@@ -79,18 +79,20 @@ class GenerateAndSendPage extends Component {
 
     return (
       <Wrapper>
-        <Step.Group size="large">
-          <Step active icon="download" title="Step 7" description="Generate And Send" />
-          <Message info size="large">
-            <p>
-              Welcome to the final stage of the appraisal process. Here you can check that all stages have been
-              completed and preview the final product. If a section has not been marked as complete, it will display as
-              `red`. You can click on the heading to be taken to that section. Once all sections have been marked as
-              done you can click the button Send Appraisal to send the appraisal to the vendor.
-            </p>
-          </Message>
-        </Step.Group>
-        <Segment style={{ backgroundColor: '#ecf4fb' }}>
+        <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
+          <Step.Group size="large">
+            <Step active icon="download" title="Step 7" description="Generate And Send" />
+            <Message style={{ marginTop: '0px' }} info size="large">
+              <p>
+                Welcome to the final stage of the appraisal process. Here you can check that all stages have been
+                completed and preview the final product. If a section has not been marked as complete, it will display
+                as `red`. You can click on the heading to be taken to that section. Once all sections have been marked
+                as done you can click the button Send Appraisal to send the appraisal to the vendor.
+              </p>
+            </Message>
+          </Step.Group>
+        </Segment>
+        <Segment style={{ backgroundColor: '#008eff26' }}>
           <Grid>
             <Grid.Row>
               <Grid.Column width={5} style={{ margin: '0 auto' }} textAlign="center">
@@ -274,7 +276,7 @@ class GenerateAndSendPage extends Component {
             </Grid.Row>
           </Grid>
         </Segment>
-        <Segment style={{ backgroundColor: '#d4d4d53b' }}>
+        <Segment style={{ backgroundColor: '#daf3e4' }}>
           <Grid>
             <Grid.Row>
               <Grid.Column width={5} style={{ margin: '0 auto' }} textAlign="center">

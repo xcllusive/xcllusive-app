@@ -582,14 +582,16 @@ class ComparableDataPage extends Component {
     const { priceOptions, lastBusinessOptions, stockValueOptions } = this.state
     return (
       <Wrapper>
-        <Step.Group size="large">
-          <Step active icon="balance scale" title="Step 5" description="Comparable Data" />
-          <Message info size="large">
-            <p>We need to write some instructions here for comparable data</p>
-          </Message>
-        </Step.Group>
+        <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
+          <Step.Group size="large">
+            <Step active icon="balance scale" title="Step 5" description="Comparable Data" />
+            <Message style={{ marginTop: '0px' }} info size="large">
+              <p>We need to write some instructions here for comparable data</p>
+            </Message>
+          </Step.Group>
+        </Segment>
         <Form>
-          <Segment style={{ backgroundColor: 'aliceblue' }}>
+          <Segment style={{ backgroundColor: '#008eff26' }}>
             <Header as="h3" textAlign="center">
               Filters
             </Header>
@@ -797,7 +799,7 @@ class ComparableDataPage extends Component {
             </Form.Group>
           </Segment>
         </Form>
-        <Segment style={{ backgroundColor: '#bcbdbd' }} size="tiny">
+        <Segment style={{ backgroundColor: '#daf3e4' }} size="tiny">
           <Header style={{ marginBottom: '0px' }} as="h4" textAlign="right">
             (E) = EBITDA / (P) = PEBITDA
           </Header>
@@ -1018,7 +1020,7 @@ class ComparableDataPage extends Component {
             </Table.Footer>
           </Table>
         </Segment>
-        <Segment style={{ backgroundColor: '#bcbdbd' }} size="tiny">
+        <Segment style={{ backgroundColor: '#008eff26' }} size="tiny">
           <Header as="h3" textAlign="center">
             Database`s List
           </Header>

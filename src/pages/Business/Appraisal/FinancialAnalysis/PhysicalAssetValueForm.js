@@ -58,7 +58,7 @@ class AddbacksAndAdjustmentsForm extends Component {
     const { handleChange, handleBlur, errors, touched } = this.props
     return (
       <Fragment>
-        <Segment>
+        <Segment style={{ backgroundColor: '#008eff26' }}>
           <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
             Physical Asset Value
           </Header>

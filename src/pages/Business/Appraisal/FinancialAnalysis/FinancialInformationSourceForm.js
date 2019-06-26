@@ -50,7 +50,7 @@ class FinancialInformationSourceForm extends Component {
     const { values, errors, touched, financialInfoSourceOptions } = this.props
     return (
       <Fragment>
-        <Segment style={{ marginLeft: '-10px' }}>
+        <Segment style={{ marginLeft: '-10px', backgroundColor: '#daf3e4' }}>
           <Form>
             <Form.Group>
               <Form.Field width={15}>

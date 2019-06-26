@@ -135,7 +135,7 @@ class AddbacksAndAdjustmentsForm extends Component {
     const { values, handleChange, handleBlur, errors, touched } = this.props
     return (
       <Fragment>
-        <Segment>
+        <Segment style={{ backgroundColor: '#008eff26' }}>
           <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
             Owners Market Wages
           </Header>
@@ -152,7 +152,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                 <b>Annual Wage inc Super</b>
               </CustomColumn>
             </Grid.Row>
-            <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={6}>
+            <Grid.Row style={{ backgroundColor: '#daf3e4' }} columns={6}>
               <CustomColumn width={4}>Owner 1/New Owner</CustomColumn>
               <CustomColumn width={6}>
                 <Form size="tiny">
@@ -256,7 +256,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                 </Form>
               </CustomColumn>
             </Grid.Row>
-            <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={4}>
+            <Grid.Row style={{ backgroundColor: '#daf3e4' }} columns={4}>
               <CustomColumn width={4}>Owner 3</CustomColumn>
               <CustomColumn textAlign="center" width={6}>
                 <Form size="tiny">
@@ -360,7 +360,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                 </Form>
               </CustomColumn>
             </Grid.Row>
-            <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={4}>
+            <Grid.Row style={{ backgroundColor: '#daf3e4' }} columns={4}>
               <CustomColumn width={4}>Owner 5</CustomColumn>
               <CustomColumn textAlign="center" width={6}>
                 <Form size="tiny">
@@ -462,7 +462,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                 </Form>
               </CustomColumn>
             </Grid.Row>
-            <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={4}>
+            <Grid.Row style={{ backgroundColor: '#daf3e4' }} columns={4}>
               <CustomColumn width={4}>Owner 7</CustomColumn>
               <CustomColumn textAlign="center" width={6}>
                 <Form size="tiny">

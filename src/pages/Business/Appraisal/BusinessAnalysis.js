@@ -234,90 +234,100 @@ class BusinessAnalysisPage extends Component {
             </Grid.Row>
           </Grid>
         </Segment>
-        <Header style={{ marginTop: '25px' }} as="h3" textAlign="center" color="blue">
-          Critical Issues
-        </Header>
-        <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
-          <Grid.Column width={9}>
-            <Form.Field style={{ backgroundColor: 'white' }}>
-              <ReactQuill
-                ref={el => {
-                  this.reactQuillRef = el
-                }}
-                value={values.criticalIssuesList}
-                onChange={this._handleChangeIssues}
-                style={{ height: '80%' }}
-                modules={this.state.modules}
-                formats={this.state.formats}
-                onKeyDown={this._handleChangeTextArea}
-              />
-            </Form.Field>
-          </Grid.Column>
-          <Grid.Column width={7}>
-            <Table color="blue" celled inverted selectable compact size="small">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Label</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {this.props.criticalIssuesOptions.array.map(criticalIssuesOptions => {
-                  return (
-                    <Table.Row
-                      active
-                      key={criticalIssuesOptions.id}
-                      onClick={() => this._insertOnTextArea('criticalIssuesList', criticalIssuesOptions.label)}
-                    >
-                      <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
+        <Segment style={{ backgroundColor: '#008eff26' }} size="small">
+          <Grid>
+            <Grid.Row style={{ paddingBottom: '0px' }}>
+              <Grid.Column>
+                <Header as="h3" textAlign="left" color="blue">
+                  Critical Issues
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row style={{ marginTop: '-15px' }} columns={2}>
+              <Grid.Column width={9}>
+                <Form.Field style={{ backgroundColor: 'white' }}>
+                  <ReactQuill
+                    ref={el => {
+                      this.reactQuillRef = el
+                    }}
+                    value={values.criticalIssuesList}
+                    onChange={this._handleChangeIssues}
+                    style={{ height: '80%' }}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
+                    onKeyDown={this._handleChangeTextArea}
+                  />
+                </Form.Field>
+              </Grid.Column>
+              <Grid.Column width={7}>
+                <Table color="blue" celled inverted selectable compact size="small">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Label</Table.HeaderCell>
                     </Table.Row>
-                  )
-                })}
-              </Table.Body>
-            </Table>
-            <Pagination
-              size="mini"
-              onPageChange={(e, data) => this._handlePaginationChange(e, data, 'criticalIssues')}
-              defaultActivePage={this.props.criticalIssuesOptions.activePage}
-              totalPages={this.props.criticalIssuesOptions.pages}
-              firstItem={null}
-              lastItem={null}
-            />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
-            <Header as="h3" textAlign="center" color="blue">
-              Business Risk
-            </Header>
-            {values.valueSliderBR || values.valueSliderBR === 0 ? (
-              <Segment>
-                <SliderComponent
-                  value={values.valueSliderBR}
-                  type="businessRisk"
-                  descriptionArray={this.props.descriptionBusinessRiskArray}
-                  onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.criticalIssuesOptions.array.map(criticalIssuesOptions => {
+                      return (
+                        <Table.Row
+                          active
+                          key={criticalIssuesOptions.id}
+                          onClick={() => this._insertOnTextArea('criticalIssuesList', criticalIssuesOptions.label)}
+                        >
+                          <Table.Cell>{criticalIssuesOptions.label}</Table.Cell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 'criticalIssues')}
+                  defaultActivePage={this.props.criticalIssuesOptions.activePage}
+                  totalPages={this.props.criticalIssuesOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
                 />
-              </Segment>
-            ) : null}
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
-            <Header as="h3" textAlign="center" color="blue">
-              Market
-            </Header>
-            {values.valueSliderMarket || values.valueSliderMarket === 0 ? (
-              <Segment>
-                <SliderComponent
-                  value={values.valueSliderMarket}
-                  type="market"
-                  descriptionArray={this.props.descriptionMarketArray}
-                  onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
-                />
-              </Segment>
-            ) : null}
-          </Grid.Column>
-        </Grid.Row>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+              <Header as="h3" textAlign="center" color="blue">
+                Business Risk
+              </Header>
+              {values.valueSliderBR || values.valueSliderBR === 0 ? (
+                <Segment>
+                  <SliderComponent
+                    value={values.valueSliderBR}
+                    type="businessRisk"
+                    descriptionArray={this.props.descriptionBusinessRiskArray}
+                    onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
+                  />
+                </Segment>
+              ) : null}
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+              <Header as="h3" textAlign="center" color="blue">
+                Market
+              </Header>
+              {values.valueSliderMarket || values.valueSliderMarket === 0 ? (
+                <Segment>
+                  <SliderComponent
+                    value={values.valueSliderMarket}
+                    type="market"
+                    descriptionArray={this.props.descriptionMarketArray}
+                    onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
+                  />
+                </Segment>
+              ) : null}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <Form.Group>
           <Form.Field>
             <Form.Checkbox

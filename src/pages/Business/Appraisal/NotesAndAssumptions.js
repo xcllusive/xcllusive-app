@@ -27,13 +27,15 @@ class NotesAndAssumptionsPage extends Component {
     // const {} = this.state
     return (
       <Wrapper>
-        <Step.Group size="large">
-          <Step active icon="comment alternate outline" title="Step 7" description="Notes And Assumptions" />
-          <Message info size="large">
-            <p>Now that the value has been established, you need to complete the final step of information entry.</p>
-          </Message>
-        </Step.Group>
-        <Segment style={{ backgroundColor: '#d4d4d53b' }} size="tiny">
+        <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
+          <Step.Group size="large">
+            <Step active icon="comment alternate outline" title="Step 7" description="Notes And Assumptions" />
+            <Message style={{ marginTop: '0px' }} info size="large">
+              <p>Now that the value has been established, you need to complete the final step of information entry.</p>
+            </Message>
+          </Step.Group>
+        </Segment>
+        <Segment style={{ backgroundColor: '#008eff26' }} size="tiny">
           <Form>
             <Grid>
               <Grid.Row>
@@ -64,8 +66,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions1 &&
-                      touched.notesAndAssumptions1 && (
+                    {errors.notesAndAssumptions1 && touched.notesAndAssumptions1 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions1} />
                     )}
                   </Grid.Column>
@@ -88,8 +89,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions2 &&
-                      touched.notesAndAssumptions2 && (
+                    {errors.notesAndAssumptions2 && touched.notesAndAssumptions2 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions2} />
                     )}
                   </Grid.Column>
@@ -112,8 +112,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions3 &&
-                      touched.notesAndAssumptions3 && (
+                    {errors.notesAndAssumptions3 && touched.notesAndAssumptions3 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions3} />
                     )}
                   </Grid.Column>
@@ -136,8 +135,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions4 &&
-                      touched.notesAndAssumptions4 && (
+                    {errors.notesAndAssumptions4 && touched.notesAndAssumptions4 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions4} />
                     )}
                   </Grid.Column>
@@ -160,8 +158,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions5 &&
-                      touched.notesAndAssumptions5 && (
+                    {errors.notesAndAssumptions5 && touched.notesAndAssumptions5 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions5} />
                     )}
                   </Grid.Column>
@@ -184,8 +181,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions6 &&
-                      touched.notesAndAssumptions6 && (
+                    {errors.notesAndAssumptions6 && touched.notesAndAssumptions6 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions6} />
                     )}
                   </Grid.Column>
@@ -208,8 +204,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions7 &&
-                      touched.notesAndAssumptions7 && (
+                    {errors.notesAndAssumptions7 && touched.notesAndAssumptions7 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions7} />
                     )}
                   </Grid.Column>
@@ -232,8 +227,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions8 &&
-                      touched.notesAndAssumptions8 && (
+                    {errors.notesAndAssumptions8 && touched.notesAndAssumptions8 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions8} />
                     )}
                   </Grid.Column>
@@ -256,8 +250,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions9 &&
-                      touched.notesAndAssumptions9 && (
+                    {errors.notesAndAssumptions9 && touched.notesAndAssumptions9 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions9} />
                     )}
                   </Grid.Column>
@@ -280,8 +273,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions10 &&
-                      touched.notesAndAssumptions10 && (
+                    {errors.notesAndAssumptions10 && touched.notesAndAssumptions10 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions10} />
                     )}
                   </Grid.Column>
@@ -304,8 +296,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions11 &&
-                      touched.notesAndAssumptions11 && (
+                    {errors.notesAndAssumptions11 && touched.notesAndAssumptions11 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions11} />
                     )}
                   </Grid.Column>
@@ -328,8 +319,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions12 &&
-                      touched.notesAndAssumptions12 && (
+                    {errors.notesAndAssumptions12 && touched.notesAndAssumptions12 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions12} />
                     )}
                   </Grid.Column>
@@ -352,8 +342,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions13 &&
-                      touched.notesAndAssumptions13 && (
+                    {errors.notesAndAssumptions13 && touched.notesAndAssumptions13 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions13} />
                     )}
                   </Grid.Column>
@@ -376,8 +365,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions14 &&
-                      touched.notesAndAssumptions14 && (
+                    {errors.notesAndAssumptions14 && touched.notesAndAssumptions14 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions14} />
                     )}
                   </Grid.Column>
@@ -400,8 +388,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions15 &&
-                      touched.notesAndAssumptions15 && (
+                    {errors.notesAndAssumptions15 && touched.notesAndAssumptions15 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions15} />
                     )}
                   </Grid.Column>
@@ -424,8 +411,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions16 &&
-                      touched.notesAndAssumptions16 && (
+                    {errors.notesAndAssumptions16 && touched.notesAndAssumptions16 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions16} />
                     )}
                   </Grid.Column>
@@ -448,8 +434,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions17 &&
-                      touched.notesAndAssumptions17 && (
+                    {errors.notesAndAssumptions17 && touched.notesAndAssumptions17 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions17} />
                     )}
                   </Grid.Column>
@@ -472,8 +457,7 @@ class NotesAndAssumptionsPage extends Component {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.notesAndAssumptions18 &&
-                      touched.notesAndAssumptions18 && (
+                    {errors.notesAndAssumptions18 && touched.notesAndAssumptions18 && (
                       <Label basic pointing color="red" content={errors.notesAndAssumptions18} />
                     )}
                   </Grid.Column>

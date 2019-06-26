@@ -90,19 +90,21 @@ class FinancialAnalysisPage extends Component {
     const { values, appraisalObject } = this.props
     return (
       <Wrapper>
-        <Step.Group size="large">
-          <Step active icon="chart line" title="Step 4" description="Financial Analysis" />
-          <Message info size="large">
-            <p>
-              The data you enter on this page will be used on the `Financial Analysis` page of the appraisal.This
-              information will also be used to calculate the value of the business.Enter data as you would on a
-              spreadsheet, using the[tab] key to switch quickly between cells.This page can be left open for longer than
-              most other pages, but it is recommended that you manually save regularly to ensure that you don `t lose
-              any work. This is done by clicking the [Save] button at the bottom of this page.
-            </p>
-          </Message>
-        </Step.Group>
-        <Segment size="small" style={{ backgroundColor: '#f5f5f5' }}>
+        <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
+          <Step.Group size="large">
+            <Step active icon="chart line" title="Step 4" description="Financial Analysis" />
+            <Message style={{ marginTop: '0px' }} info size="large">
+              <p>
+                The data you enter on this page will be used on the `Financial Analysis` page of the appraisal.This
+                information will also be used to calculate the value of the business.Enter data as you would on a
+                spreadsheet, using the[tab] key to switch quickly between cells.This page can be left open for longer
+                than most other pages, but it is recommended that you manually save regularly to ensure that you don `t
+                lose any work. This is done by clicking the [Save] button at the bottom of this page.
+              </p>
+            </Message>
+          </Step.Group>
+        </Segment>
+        <Segment size="small" style={{ backgroundColor: '#008eff26' }}>
           <Grid celled="internally" divided>
             <FinancialAnalysisForm
               handleChangeCheckBox={this._handleChangeCheckBox}
@@ -120,7 +122,7 @@ class FinancialAnalysisPage extends Component {
             />
           </Grid>
         </Segment>
-        <Segment size="small" style={{ backgroundColor: '#f5f5f5' }}>
+        <Segment size="small" style={{ backgroundColor: '#daf3e4' }}>
           <Grid celled="internally" divided>
             <Grid.Row>
               <Grid.Column>

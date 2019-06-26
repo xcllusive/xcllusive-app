@@ -68,7 +68,7 @@ class StockForm extends Component {
     const { values, handleChange, handleBlur, errors, touched } = this.props
     return (
       <Fragment>
-        <Segment>
+        <Segment style={{ backgroundColor: '#daf3e4' }}>
           <Header style={{ marginTop: '10px', marginBottom: '10px' }} as="h3" textAlign="center" color="blue">
             Stock
           </Header>
@@ -78,7 +78,7 @@ class StockForm extends Component {
               <CustomColumn />
               <CustomColumn textAlign="center">Select to use in Valuation</CustomColumn>
             </Grid.Row>
-            <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
+            <Grid.Row style={{ backgroundColor: '#dcefff' }} columns={3}>
               <CustomColumn />
               <CustomColumn textAlign="center">No Stock</CustomColumn>
               <CustomColumn textAlign="center">
@@ -125,7 +125,7 @@ class StockForm extends Component {
                 </Form>
               </CustomColumn>
             </Grid.Row>
-            <Grid.Row style={{ backgroundColor: 'lightblue' }} columns={3}>
+            <Grid.Row style={{ backgroundColor: '#dcefff' }} columns={3}>
               <CustomColumn textAlign="center">Stock necessary for Operation of the business</CustomColumn>
               <CustomColumn>
                 <Form size="tiny">
