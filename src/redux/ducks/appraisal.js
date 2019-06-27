@@ -44,7 +44,8 @@ export const Types = {
   SEND_MONTHS_SEASONAL: 'SEND_MONTHS_SEASONAL',
   MOVE_FINANCIAL_YEAR_LOADING: 'MOVE_FINANCIAL_YEAR_LOADING',
   MOVE_FINANCIAL_YEAR_SUCCESS: 'MOVE_FINANCIAL_YEAR_SUCCESS',
-  MOVE_FINANCIAL_YEAR_FAILURE: 'MOVE_FINANCIAL_YEAR_FAILURE'
+  MOVE_FINANCIAL_YEAR_FAILURE: 'MOVE_FINANCIAL_YEAR_FAILURE',
+  CLEAR_MOVED_FINANCIAL_YEAR: 'CLEAR_MOVED_FINANCIAL_YEAR'
 }
 
 // Reducer
@@ -435,6 +436,14 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_MOVED_FINANCIAL_YEAR:
+      return {
+        ...state,
+        moveFinancialYear: {
+          ...state.moveFinancialYear,
+          isMoved: false
+        }
+      }
     case Types.CLEAR_APPRAISAL:
       return initialState
     default:
@@ -676,10 +685,8 @@ export const moveFinancialYear = appraisal => async dispatch => {
   })
   try {
     const response = await moveFinancialYearAPI(appraisal)
-    const getAppraisal = await get(appraisal.id)
     dispatch({
-      type: Types.MOVE_FINANCIAL_YEAR_SUCCESS,
-      payload: getAppraisal
+      type: Types.MOVE_FINANCIAL_YEAR_SUCCESS
     })
     toast.success(response.message)
   } catch (error) {
@@ -689,4 +696,9 @@ export const moveFinancialYear = appraisal => async dispatch => {
     })
     toast.error(error)
   }
+}
+export const clearMovedFinancialYear = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_MOVED_FINANCIAL_YEAR
+  })
 }

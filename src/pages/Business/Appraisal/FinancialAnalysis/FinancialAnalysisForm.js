@@ -490,6 +490,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfit()
   }
 
   const _handleChangeCogs = (e, column) => {
@@ -700,6 +701,7 @@ const FinancialAnalysisForm = ({
     })
   }
   const todayDate = moment().format('MM-DD')
+  const todayYear = moment().format('YYYY')
 
   const _moveFinancialYear = () => {
     openModal(TypesModal.MODAL_TYPE_CONFIRM, {
@@ -710,10 +712,28 @@ const FinancialAnalysisForm = ({
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
           await moveFinancialYear(appraisalObject)
-          // await getAppraisal(appraisalObject.id)
+          await getAppraisal(appraisalObject.id)
         }
       }
     })
+  }
+
+  const _calcTotal = column => {
+    let total = 0
+    for (let i = 1; i <= 30; i++) {
+      total = total + numeral(appraisalObject[`aaRow${i}Year${column}`]).value()
+    }
+
+    return total
+  }
+
+  const _calcAdjustedProfit = () => {
+    const total1 = _calcTotal(1) + numeral(appraisalObject[`calcOperatingProfit${1}`]).value()
+    const totalAdjustedProfit1Perc = (numeral(total1).value() / numeral(appraisalObject[`sales${1}`]).value()) * 100
+
+    console.log(totalAdjustedProfit1Perc)
+
+    // this.setState({ totalAdjustedProfit1Perc: numeral(totalAdjustedProfit1Perc).format('0,0') })
   }
 
   return (
@@ -747,7 +767,9 @@ const FinancialAnalysisForm = ({
           <Button
             color="facebook"
             size="small"
-            disabled={moment(todayDate).isSameOrAfter('06-30', 'day')}
+            disabled={
+              moment(todayDate).isSameOrAfter('06-30', 'day') || appraisalObject.year5 + 1 > parseInt(todayYear)
+            }
             onClick={_moveFinancialYear}
           >
             <Icon name="forward" />

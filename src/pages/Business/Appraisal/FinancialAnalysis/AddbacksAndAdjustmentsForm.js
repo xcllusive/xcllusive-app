@@ -9,7 +9,11 @@ import numeral from 'numeral'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
 
-import { updateAppraisal, calcAnnualisedWhenChangeMonthsAndSeasonal } from '../../../../redux/ducks/appraisal'
+import {
+  updateAppraisal,
+  calcAnnualisedWhenChangeMonthsAndSeasonal,
+  clearMovedFinancialYear
+} from '../../../../redux/ducks/appraisal'
 
 class AddbacksAndAdjustmentsForm extends PureComponent {
   constructor (props) {
@@ -83,7 +87,11 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this.props.values.totalAdjustedProfit6 = this._replaceDollarAndComma(this.state.totalAdjustedProfit6)
     this.props.values.totalAdjustedProfit7 = this._replaceDollarAndComma(this.state.totalAdjustedProfit7)
 
-    this.props.updateAppraisal(this.props.values, false)
+    // this.props.updateAppraisal(this.props.values, false)
+    if (!this.props.isMovedFinancialYear) {
+      this.props.updateAppraisal(this.props.values, false)
+    }
+    this.props.clearMovedFinancialYear()
   }
 
   async componentDidUpdate (nextProps, prevState) {
@@ -164,27 +172,27 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
         columns: [
           {
             name: `aaRow${row}Year1`,
-            tabIndex: 200 + 1
+            tabIndex: 200 + row
           },
           {
             name: `aaRow${row}Year2`,
-            tabIndex: 300 + 1
+            tabIndex: 300 + row
           },
           {
             name: `aaRow${row}Year3`,
-            tabIndex: 400 + 1
+            tabIndex: 400 + row
           },
           {
             name: `aaRow${row}Year4`,
-            tabIndex: 500 + 1
+            tabIndex: 500 + row
           },
           {
             name: `aaRow${row}Year5`,
-            tabIndex: 600 + 1
+            tabIndex: 600 + row
           },
           {
             name: `aaRow${row}Year6`,
-            tabIndex: 700 + 1
+            tabIndex: 700 + row
           }
         ],
         row: row
@@ -387,7 +395,6 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
               <CustomColumn key={subKey}>
                 <Input
                   size="small"
-                  style={{ textAlign: 'right' }}
                   fluid
                   tabIndex={item.tabIndex}
                   name={subItem.name}
@@ -534,7 +541,9 @@ AddbacksAndAdjustmentsForm.propTypes = {
   monthsCovered: PropTypes.number,
   seasonalAdjustment: PropTypes.number,
   monthsCoveredAndSeasonalAdjusment: PropTypes.object,
-  calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func
+  calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func,
+  clearMovedFinancialYear: PropTypes.func,
+  isMovedFinancialYear: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -582,7 +591,8 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  monthsCoveredAndSeasonalAdjusment: state.appraisal.sendMonthsSeasonal
+  monthsCoveredAndSeasonalAdjusment: state.appraisal.sendMonthsSeasonal,
+  isMovedFinancialYear: state.appraisal.moveFinancialYear.isMoved
 })
 
 const validationSchema = Yup.object().shape({})
@@ -591,7 +601,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       updateAppraisal,
-      calcAnnualisedWhenChangeMonthsAndSeasonal
+      calcAnnualisedWhenChangeMonthsAndSeasonal,
+      clearMovedFinancialYear
     },
     dispatch
   )

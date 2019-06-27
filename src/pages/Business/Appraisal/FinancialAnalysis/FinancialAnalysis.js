@@ -7,7 +7,12 @@ import { Message, Step, Grid, Header, Form, Segment } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import moment from 'moment'
 
-import { updateAppraisal, moveFinancialYear, getAppraisal } from '../../../../redux/ducks/appraisal'
+import {
+  updateAppraisal,
+  moveFinancialYear,
+  getAppraisal,
+  clearMovedFinancialYear
+} from '../../../../redux/ducks/appraisal'
 
 import Wrapper from '../../../../components/content/Wrapper'
 import AddbacksAndAdjustmentsForm from './AddbacksAndAdjustmentsForm'
@@ -48,14 +53,11 @@ class FinancialAnalysisPage extends Component {
     if (this.props.appraisalObject && !this.props.appraisalObject.year6) this._calculateFinancialYear()
   }
 
-  componentDidUpdate (nextProps) {
-    if (this.props.isMoved && nextProps.isMoved !== this.props.isMoved) {
-      this.props.getAppraisal(this.props.appraisalObject.id)
-    }
-  }
-
   componentWillUnmount () {
-    this.props.updateAppraisal(this.props.values)
+    if (!this.props.isMovedFinancialYear) {
+      this.props.updateAppraisal(this.props.values)
+    }
+    this.props.clearMovedFinancialYear()
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -95,8 +97,8 @@ class FinancialAnalysisPage extends Component {
   }
 
   render () {
-    const { values, appraisalObject, testAppraisal } = this.props
-    console.log(testAppraisal)
+    const { values, appraisalObject } = this.props
+    // console.log(testAppraisal)
     return (
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
@@ -219,8 +221,8 @@ FinancialAnalysisPage.propTypes = {
   openModal: PropTypes.func,
   moveFinancialYear: PropTypes.func,
   getAppraisal: PropTypes.func,
-  testAppraisal: PropTypes.object,
-  isMoved: PropTypes.bool
+  isMovedFinancialYear: PropTypes.bool,
+  clearMovedFinancialYear: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -325,13 +327,15 @@ const handleSubmit = (values, { props, setSubmitting }) => {}
 
 const mapStateToProps = state => {
   return {
-    testAppraisal: state.appraisal.moveFinancialYear.appraisal,
-    isMoved: state.appraisal.moveFinancialYear.isMoved
+    isMovedFinancialYear: state.appraisal.moveFinancialYear.isMoved
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal, openModal, moveFinancialYear, getAppraisal }, dispatch)
+  return bindActionCreators(
+    { updateAppraisal, openModal, moveFinancialYear, getAppraisal, clearMovedFinancialYear },
+    dispatch
+  )
 }
 
 export default connect(
