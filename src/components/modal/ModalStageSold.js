@@ -127,6 +127,7 @@ class StageSoldForm extends Component {
       this.props.closeModal()
       this.props.callBack(isConfirmed)
       if (!this.props.values.sold) {
+        if (this.props.edit) this.props.values.sold = true
         if (this.props.businessSold === null) this.props.createBusinessSold(this.props.values)
         else this.props.updateBusinessSold(this.props.values)
       }
