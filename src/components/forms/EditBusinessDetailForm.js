@@ -131,7 +131,8 @@ class EditBusinessDetailForm extends Component {
     })
   }
 
-  _openModalStageSold = () => {
+  _openModalStageSold = (edit = false) => {
+    console.log(edit)
     this.props.openModal(TypesModal.MODAL_TYPE_STAGE_SOLD, {
       options: {
         title: 'Change the business stage to `Sold`'
@@ -141,7 +142,8 @@ class EditBusinessDetailForm extends Component {
           this.props.setFieldValue('stage', this.props.business.stageId)
         }
       },
-      business: this.props.business
+      business: this.props.business,
+      edit
     })
   }
 
@@ -255,6 +257,10 @@ class EditBusinessDetailForm extends Component {
         }
       }
     })
+  }
+
+  _editSoldDetails = () => {
+    this._openModalStageSold(true)
   }
 
   render () {
@@ -887,6 +893,15 @@ class EditBusinessDetailForm extends Component {
                   >
                     <Icon name="download" />
                     Download IM
+                  </Form.Button>
+                  <Form.Button
+                    disabled={!this._isUserClientManager()}
+                    color="grey"
+                    size="small"
+                    onClick={() => this._editSoldDetails()}
+                  >
+                    <Icon name="edit" />
+                    Edit Sold Details
                   </Form.Button>
                 </Form.Group>
               </Form>

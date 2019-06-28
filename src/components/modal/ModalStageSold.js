@@ -153,7 +153,9 @@ class StageSoldForm extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Changing Stage to Sold',
-        text: 'Are you sure you want to change the stage to SOLD? Once you have changed you can NOT go back.'
+        text: !this.props.edit
+          ? 'Are you sure you want to change the stage to SOLD? Once you have changed you can NOT go back.'
+          : 'Are you sure you filled the new details correctly?'
       },
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
@@ -546,7 +548,7 @@ class StageSoldForm extends Component {
           </Dimmer.Dimmable>
         </Modal.Content>
         <Modal.Actions>
-          <Button color="blue" disabled={values.sold} onClick={() => this._handleConfirm(false)}>
+          <Button color="blue" disabled={values.sold || this.props.edit} onClick={() => this._handleConfirm(false)}>
             <Icon name="save" />
             Save and Return
           </Button>
@@ -601,7 +603,8 @@ StageSoldForm.propTypes = {
   getBuyersBusinessSold: PropTypes.func,
   listBuyersFromBusiness: PropTypes.array,
   businessSoldCreated: PropTypes.object,
-  typeOptions: PropTypes.array
+  typeOptions: PropTypes.array,
+  edit: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -629,7 +632,7 @@ const mapPropsToValues = props => ({
   latestFullYearTotalRevenue: props.businessSold ? props.businessSold.latestFullYearTotalRevenue : 0,
   termsOfDeal: props.businessSold ? props.businessSold.termsOfDeal : '',
   specialNotes: props.businessSold ? props.businessSold.specialNotes : '',
-  sold: props.businessSold ? props.businessSold.sold : false,
+  sold: props.edit ? false : props.businessSold ? props.businessSold.sold : false,
   trend: props.businessSold ? props.businessSold.trend : 'up',
   year1Label: props.businessSold ? props.businessSold.year1Label : moment() > moment('30/06', 'DD/MM') ? 4 : 3,
   year2Label: props.businessSold ? props.businessSold.year2Label : moment() > moment('30/06', 'DD/MM') ? 3 : 2,
