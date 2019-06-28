@@ -164,6 +164,7 @@ class StageSoldForm extends Component {
               const createBusinessSold = await this.props.createBusinessSold(this.props.values)
               this.props.finaliseStageSold(createBusinessSold.id, this.props.business.id)
             } else {
+              this.props.values.sold = true
               await this.props.updateBusinessSold(this.props.values)
               this.props.finaliseStageSold(this.props.values.id, this.props.business.id)
             }
