@@ -210,11 +210,27 @@ class StageLostForm extends Component {
                 checked={values.addLeadNurtureList === 'No'}
               />
             </Form.Group>
-            {/* <Form.Group>
-              <label>Do you want to to add to Lead Nurture List</label>
-              <Form.Checkbox label="Yes" name="test" onChange={this._handleChangeCheckBox} checked={values.test} />
-              <Form.Checkbox label="No" name="test" onChange={this._handleChangeCheckBox} checked={!values.test} />
-            </Form.Group> */}
+            {!this.props.business.email && values.addLeadNurtureList === 'Yes' ? (
+              <Form.Group>
+                <Form.Field>
+                  <Message info>
+                    This business does not have an email address. If you want to add to Lead Nurture you must type a
+                    valid email
+                  </Message>
+                </Form.Field>
+                <Form.Field width={10}>
+                  <Form.Input
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.email && touched.email && <Label basic color="red" pointing content={errors.email} />}
+                </Form.Field>
+              </Form.Group>
+            ) : null}
             <Divider horizontal>(Optional) Set Follow up date</Divider>
             <Form.Group>
               <Form.Checkbox
@@ -292,7 +308,19 @@ const validationSchema = Yup.object().shape({
     otherwise: Yup.string().notRequired()
   }),
   addLeadNurtureList: Yup.string().required(),
-  date: Yup.string().required('This field is required.')
+  date: Yup.string().required('This field is required.'),
+  // vendorEmail: Yup.string().when('addLeadNurtureList', {
+  //   is: addLeadNurtureList => addLeadNurtureList === 'Yes',
+  //   then: Yup.string().email('Invalid email address.'),
+  //   otherwise: Yup.string().notRequired
+  // })
+  email: Yup.string()
+    .notRequired()
+    .when('addLeadNurtureList', {
+      is: addLeadNurtureList => addLeadNurtureList === 'Yes',
+      then: Yup.string().email('Invalid email address.'),
+      otherwise: Yup.string().notRequired()
+    })
 })
 
 StageLostForm.propTypes = {
@@ -312,7 +340,8 @@ StageLostForm.propTypes = {
     title: PropTypes.string.isRequired
   }).isRequired,
   callBack: PropTypes.func.isRequired,
-  updateStageLost: PropTypes.func
+  updateStageLost: PropTypes.func,
+  business: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
@@ -325,7 +354,8 @@ const mapPropsToValues = props => ({
   followUpLog: false,
   businessId: props.business.id ? props.business.id : '',
   text: '',
-  addLeadNurtureList: ''
+  addLeadNurtureList: '',
+  email: ''
 })
 
 const mapStateToProps = state => ({
