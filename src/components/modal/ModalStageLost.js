@@ -225,7 +225,7 @@ class StageLostForm extends Component {
               />
               {this.props.values.followUpLog ? (
                 <Form.Field>
-                  <DatePicker selected={values.date} onChange={this._handleDateChange} popperPlacement="top-end" />
+                  <DatePicker selected={values.date} onChange={this._handleDateChange} />
                 </Form.Field>
               ) : (
                 <Form.Field>

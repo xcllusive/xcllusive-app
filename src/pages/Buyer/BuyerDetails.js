@@ -337,7 +337,6 @@ class BuyerDetails extends Component {
                                   : moment(this.state.buyerLog_followUp)
                               }
                               onChange={this._handleDateChange}
-                              popperPlacement="top-end"
                               form
                             />
                           </Form.Field>

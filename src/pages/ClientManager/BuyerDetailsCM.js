@@ -241,7 +241,6 @@ class BuyerDetailsCM extends Component {
                                   <DatePicker
                                     selected={moment(values.buyerLog_followUp)}
                                     onChange={this._handleDateChange}
-                                    popperPlacement="top-end"
                                     form
                                   />
                                 </Form.Field>

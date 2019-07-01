@@ -115,11 +115,7 @@ class EnquiryReports extends Component {
                     >
                       Date From:
                     </label>
-                    <DatePicker
-                      selected={values.dateFrom}
-                      onChange={this._handleDateFromChange}
-                      popperPlacement="top-end"
-                    />
+                    <DatePicker selected={values.dateFrom} onChange={this._handleDateFromChange} />
                   </Form.Field>
                   <Form.Field>
                     <label
@@ -133,11 +129,7 @@ class EnquiryReports extends Component {
                     >
                       Date To:
                     </label>
-                    <DatePicker
-                      selected={values.dateTo}
-                      onChange={this._handleDateToChange}
-                      popperPlacement="top-end"
-                    />
+                    <DatePicker selected={values.dateTo} onChange={this._handleDateToChange} />
                   </Form.Field>
                   <Form.Field
                     style={{ marginTop: '35px' }}

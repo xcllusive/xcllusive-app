@@ -260,7 +260,6 @@ class BusinessLogPage extends Component {
                           }
                           startDate={moment().subtract(10, 'days')}
                           onChange={this._handleDateChange}
-                          popperPlacement="top-end"
                           form
                         />
                         {/* <DateInput
