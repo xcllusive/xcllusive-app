@@ -96,9 +96,12 @@ class FinancialAnalysisPage extends Component {
     this.props.setFieldValue(`${obj.field}${obj.year}`, obj.calc)
   }
 
+  _handleChangeTotalAdjustedProfitPerc (changeTotalsAdjustedProfitPerc, setFieldValue) {
+    setFieldValue('totalsAdjustedProfitPerc', changeTotalsAdjustedProfitPerc)
+  }
+
   render () {
     const { values, appraisalObject } = this.props
-    // console.log(testAppraisal)
     return (
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
@@ -133,6 +136,7 @@ class FinancialAnalysisPage extends Component {
               openModal={this.props.openModal}
               moveFinancialYear={this.props.moveFinancialYear}
               getAppraisal={this.props.getAppraisal}
+              changeTotalAdjustedProfitPerc={this._handleChangeTotalAdjustedProfitPerc}
             />
           </Grid>
         </Segment>
@@ -152,6 +156,7 @@ class FinancialAnalysisPage extends Component {
               handleChange={this.props.handleChange}
               monthsCovered={parseInt(this.props.values.monthsCovered)}
               seasonalAdjustment={parseInt(this.props.values.seasonalAdjustment)}
+              totalsAdjustedProfitPerc={this.props.values.totalsAdjustedProfitPerc}
             />
           </Grid>
         </Segment>

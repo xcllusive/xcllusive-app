@@ -40,7 +40,8 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
       totalAdjustedProfit4Perc: 0,
       totalAdjustedProfit5Perc: 0,
       totalAdjustedProfit6Perc: 0,
-      totalAdjustedProfit7Perc: 0
+      totalAdjustedProfit7Perc: 0,
+      testando: false
     }
   }
 
@@ -48,7 +49,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this._setCalcTotalAdjusment()
     this._calcTotalAdjustedProfit()
     this._calcAdjustedProfit()
-    this.setState({ monthsCoveredState: this.props.monthsCovered })
+    this.setState({ monthsCoveredState: this.props.monthsCovered, testando: false })
   }
 
   componentWillUnmount () {
@@ -92,6 +93,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
       this.props.updateAppraisal(this.props.values, false)
     }
     this.props.clearMovedFinancialYear()
+    this.setState({ testando: false })
   }
 
   async componentDidUpdate (nextProps, prevState) {
@@ -127,6 +129,72 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
       this._calcTotalAdjustedProfit()
       this._calcAdjustedProfit()
     }
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    // console.log('prevState.testando', prevState.testando)
+    if (
+      nextProps.totalsAdjustedProfitPerc &&
+      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc &&
+      prevState.totalAdjustedProfit1Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc &&
+      !prevState.testando
+    ) {
+      return {
+        totalAdjustedProfit1Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc).format('0,0')
+      }
+    }
+    if (
+      nextProps.totalsAdjustedProfitPerc &&
+      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc &&
+      prevState.totalAdjustedProfit2Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc &&
+      !prevState.testando
+    ) {
+      return {
+        totalAdjustedProfit2Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc).format('0,0')
+      }
+    }
+    if (
+      nextProps.totalsAdjustedProfitPerc &&
+      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit3Perc &&
+      prevState.totalAdjustedProfit3Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit3Perc &&
+      !prevState.testando
+    ) {
+      return {
+        totalAdjustedProfit3Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit3Perc).format('0,0')
+      }
+    }
+    if (
+      nextProps.totalsAdjustedProfitPerc &&
+      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit4Perc &&
+      prevState.totalAdjustedProfit4Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit4Perc &&
+      !prevState.testando
+    ) {
+      return {
+        totalAdjustedProfit4Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit4Perc).format('0,0')
+      }
+    }
+    if (
+      nextProps.totalsAdjustedProfitPerc &&
+      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit5Perc &&
+      prevState.totalAdjustedProfit5Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit5Perc &&
+      !prevState.testando
+    ) {
+      return {
+        totalAdjustedProfit5Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit5Perc).format('0,0')
+      }
+    }
+    if (
+      nextProps.totalsAdjustedProfitPerc &&
+      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit6Perc &&
+      prevState.totalAdjustedProfit6Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit6Perc &&
+      !prevState.testando
+    ) {
+      return {
+        totalAdjustedProfit6Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit6Perc).format('0,0')
+      }
+    }
+
+    return null
   }
 
   _replaceDollarAndComma (replace) {
@@ -255,6 +323,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     const total1 = this._calcTotal(1) + numeral(this.props.appraisalObject[`calcOperatingProfit${1}`]).value()
     const totalAdjustedProfit1Perc =
       (numeral(total1).value() / numeral(this.props.appraisalObject[`sales${1}`]).value()) * 100
+
     const total2 = this._calcTotal(2) + numeral(this.props.appraisalObject[`calcOperatingProfit${2}`]).value()
     const totalAdjustedProfit2Perc =
       (numeral(total2).value() / numeral(this.props.appraisalObject[`sales${2}`]).value()) * 100
@@ -284,6 +353,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   _handleChangeAddbackAndAdjusments = async (e, row, name) => {
+    this.setState({ testando: true })
     e.preventDefault()
     if (
       (name.length === 11 && name.substring(10, 11) === '6') ||
@@ -502,10 +572,16 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <b> Adjusted Profit % </b>
           </CustomColumn>
           <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit1Perc} % </CustomColumn>
-          <CustomColumn textAlign="right">
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit2Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit3Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit4Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit5Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit6Perc} % </CustomColumn>
+          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit7Perc} % </CustomColumn>
+          {/* <CustomColumn textAlign="right">
             {this.state.totalAdjustedProfit2Perc > 0 ? `${this.state.totalAdjustedProfit2Perc} %` : ''}
-          </CustomColumn>
-          <CustomColumn textAlign="right">
+          </CustomColumn> */}
+          {/* <CustomColumn textAlign="right">
             {this.state.totalAdjustedProfit3Perc > 0 ? `${this.state.totalAdjustedProfit3Perc} %` : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
@@ -519,7 +595,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           </CustomColumn>
           <CustomColumn textAlign="right">
             {this.state.totalAdjustedProfit7Perc > 0 ? `${this.state.totalAdjustedProfit7Perc} %` : ''}
-          </CustomColumn>
+          </CustomColumn> */}
         </Grid.Row>
       </Fragment>
     )
@@ -543,7 +619,8 @@ AddbacksAndAdjustmentsForm.propTypes = {
   monthsCoveredAndSeasonalAdjusment: PropTypes.object,
   calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func,
   clearMovedFinancialYear: PropTypes.func,
-  isMovedFinancialYear: PropTypes.bool
+  isMovedFinancialYear: PropTypes.bool,
+  totalsAdjustedProfitPerc: PropTypes.object
 }
 
 const mapPropsToValues = props => {
