@@ -76,6 +76,9 @@ class EditBusinessDetailForm extends Component {
     if (this.props.updateStageSalesMemo && nextProps.updateStageSalesMemo !== this.props.updateStageSalesMemo) {
       nextProps.getBusiness(this.props.business.id)
     }
+    if (this.props.updateStageSold && nextProps.updateStageSold !== this.props.updateStageSold) {
+      nextProps.getBusiness(this.props.business.id)
+    }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -953,7 +956,8 @@ EditBusinessDetailForm.propTypes = {
   ctcStageOptions: PropTypes.array,
   isLoadingCtcStage: PropTypes.bool,
   getUserLogged: PropTypes.func,
-  userLogged: PropTypes.object
+  userLogged: PropTypes.object,
+  updateStageSold: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -1149,6 +1153,7 @@ const mapStateToProps = (state, props) => {
         : state.business.get.usersBroker,
     updateStageSalesMemo: state.business.updateStageSalesMemo.isUpdated,
     updateStageLost: state.business.updateStageLost.isUpdated,
+    updateStageSold: state.businessSold.updateSold.isLoading,
     userRoles: state.auth.user.roles,
     isUploadedIM: state.business.uploadIM.isUploaded,
     isLoadingIM: state.business.uploadIM.isLoading,
