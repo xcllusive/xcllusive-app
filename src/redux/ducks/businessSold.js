@@ -171,6 +171,7 @@ export default function reducer (state = initialState, action) {
         updateSold: {
           ...state.updateSold,
           isLoading: action.payload,
+          isUpdated: false,
           error: null
         }
       }
