@@ -491,7 +491,6 @@ const FinancialAnalysisForm = ({
         )
       )
     }
-    console.log('oii', _calcOperatingProfit(sales, cogs, otherIncome, expense, column))
     _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
@@ -568,6 +567,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
   const _handleChangeOtherIncome = (e, column) => {
@@ -645,6 +645,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
   const _handleChangeExpense = (e, column) => {
@@ -695,6 +696,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
   const _handleChangeCheckBoxPdf = (e, { name }) => {
@@ -735,25 +737,6 @@ const FinancialAnalysisForm = ({
     const total = _calcTotal(column) + _calcOperatingProfit(sales, cogs, otherIncome, expense, column)
     changeTotalsAdjustedProfitPerc[`totalAdjustedProfit${column}Perc`] =
       (numeral(total).value() / numeral(values[`sales${column}`]).value()) * 100
-
-    // const total2 = _calcTotal(2) + numeral(appraisalObject[`calcOperatingProfit${2}`]).value()
-    // changeTotalsAdjustedProfitPerc.totalAdjustedProfit2Perc =
-    //   (numeral(total2).value() / numeral(values.sales2).value()) * 100
-    // const total3 = _calcTotal(3) + numeral(appraisalObject[`calcOperatingProfit${3}`]).value()
-    // changeTotalsAdjustedProfitPerc.totalAdjustedProfit3Perc =
-    //   (numeral(total3).value() / numeral(values.sales3).value()) * 100
-    // const total4 = _calcTotal(4) + numeral(appraisalObject[`calcOperatingProfit${4}`]).value()
-    // changeTotalsAdjustedProfitPerc.totalAdjustedProfit4Perc =
-    //   (numeral(total4).value() / numeral(values.sales4).value()) * 100
-    // const total5 = _calcTotal(5) + numeral(appraisalObject[`calcOperatingProfit${5}`]).value()
-    // changeTotalsAdjustedProfitPerc.totalAdjustedProfit5Perc =
-    //   (numeral(total5).value() / numeral(values.sales5).value()) * 100
-    // const total6 = _calcTotal(6) + numeral(appraisalObject[`calcOperatingProfit${6}`]).value()
-    // changeTotalsAdjustedProfitPerc.totalAdjustedProfit6Perc =
-    //   (numeral(total6).value() / numeral(values.sales6).value()) * 100
-    // const total7 = _calcTotal(1) + numeral(appraisalObject[`calcOperatingProfit${1}`]).value()
-    // changeTotalsAdjustedProfitPerc.totalAdjustedProfit1Perc = (numeral(total1).value() / numeral(values.sales).value()) * 100
-    // console.log(values.calcOperatingProfit1)
 
     changeTotalAdjustedProfitPerc(changeTotalsAdjustedProfitPerc, setFieldValue)
   }

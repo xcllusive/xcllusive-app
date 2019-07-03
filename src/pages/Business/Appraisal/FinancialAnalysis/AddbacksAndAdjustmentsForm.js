@@ -72,13 +72,13 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this.props.values.totalAdjusments6 = this._replaceDollarAndComma(this.state.totalAdjusments6)
     this.props.values.totalAdjusments7 = this._replaceDollarAndComma(this.state.totalAdjusments7)
 
-    this.props.values.adjustedProfitPerc1 = this._replaceDollarAndComma(this.state.totalAdjustedProfit1Perc)
-    this.props.values.adjustedProfitPerc2 = this._replaceDollarAndComma(this.state.totalAdjustedProfit2Perc)
-    this.props.values.adjustedProfitPerc3 = this._replaceDollarAndComma(this.state.totalAdjustedProfit3Perc)
-    this.props.values.adjustedProfitPerc4 = this._replaceDollarAndComma(this.state.totalAdjustedProfit4Perc)
-    this.props.values.adjustedProfitPerc5 = this._replaceDollarAndComma(this.state.totalAdjustedProfit5Perc)
-    this.props.values.adjustedProfitPerc6 = this._replaceDollarAndComma(this.state.totalAdjustedProfit6Perc)
-    this.props.values.adjustedProfitPerc7 = this._replaceDollarAndComma(this.state.totalAdjustedProfit7Perc)
+    this.props.values.adjustedProfitPerc1 = this.state.totalAdjustedProfit1Perc
+    this.props.values.adjustedProfitPerc2 = this.state.totalAdjustedProfit2Perc
+    this.props.values.adjustedProfitPerc3 = this.state.totalAdjustedProfit3Perc
+    this.props.values.adjustedProfitPerc4 = this.state.totalAdjustedProfit4Perc
+    this.props.values.adjustedProfitPerc5 = this.state.totalAdjustedProfit5Perc
+    this.props.values.adjustedProfitPerc6 = this.state.totalAdjustedProfit6Perc
+    this.props.values.adjustedProfitPerc7 = this.state.totalAdjustedProfit7Perc
 
     this.props.values.totalAdjustedProfit1 = this._replaceDollarAndComma(this.state.totalAdjustedProfit1)
     this.props.values.totalAdjustedProfit2 = this._replaceDollarAndComma(this.state.totalAdjustedProfit2)
@@ -140,7 +140,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
       !prevState.testando
     ) {
       return {
-        totalAdjustedProfit1Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc).format('0,0')
+        totalAdjustedProfit1Perc: Math.trunc(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc)
       }
     }
     if (
@@ -150,7 +150,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
       !prevState.testando
     ) {
       return {
-        totalAdjustedProfit2Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc).format('0,0')
+        totalAdjustedProfit2Perc: Math.trunc(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc)
       }
     }
     if (
@@ -201,6 +201,12 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     replace = replace.replace('$', ',')
     replace = replace.replace(/,/g, '')
     return replace
+  }
+
+  _replaceCommaPerDoth (replace) {
+    let test = replace
+    test = test.replace(',', '.')
+    return test
   }
 
   _handleChangeCheckBox = async (e, { name, item, checked }) => {
@@ -343,13 +349,13 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     const totalAdjustedProfit7Perc =
       (numeral(total7).value() / numeral(this.props.appraisalObject.calcAnnualised1).value()) * 100
 
-    this.setState({ totalAdjustedProfit1Perc: numeral(totalAdjustedProfit1Perc).format('0,0') })
-    this.setState({ totalAdjustedProfit2Perc: numeral(totalAdjustedProfit2Perc).format('0,0') })
-    this.setState({ totalAdjustedProfit3Perc: numeral(totalAdjustedProfit3Perc).format('0,0') })
-    this.setState({ totalAdjustedProfit4Perc: numeral(totalAdjustedProfit4Perc).format('0,0') })
-    this.setState({ totalAdjustedProfit5Perc: numeral(totalAdjustedProfit5Perc).format('0,0') })
-    this.setState({ totalAdjustedProfit6Perc: numeral(totalAdjustedProfit6Perc).format('0,0') })
-    this.setState({ totalAdjustedProfit7Perc: numeral(totalAdjustedProfit7Perc).format('0,0') })
+    this.setState({ totalAdjustedProfit1Perc: Math.trunc(totalAdjustedProfit1Perc) })
+    this.setState({ totalAdjustedProfit2Perc: Math.trunc(totalAdjustedProfit2Perc) })
+    this.setState({ totalAdjustedProfit3Perc: Math.trunc(totalAdjustedProfit3Perc) })
+    this.setState({ totalAdjustedProfit4Perc: Math.trunc(totalAdjustedProfit4Perc) })
+    this.setState({ totalAdjustedProfit5Perc: Math.trunc(totalAdjustedProfit5Perc) })
+    this.setState({ totalAdjustedProfit6Perc: Math.trunc(totalAdjustedProfit6Perc) })
+    this.setState({ totalAdjustedProfit7Perc: Math.trunc(totalAdjustedProfit7Perc) })
   }
 
   _handleChangeAddbackAndAdjusments = async (e, row, name) => {
@@ -571,7 +577,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
           <CustomColumn>
             <b> Adjusted Profit % </b>
           </CustomColumn>
-          <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit1Perc} % </CustomColumn>
+          <CustomColumn textAlign="right">{this.state.totalAdjustedProfit1Perc} %</CustomColumn>
           <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit2Perc} % </CustomColumn>
           <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit3Perc} % </CustomColumn>
           <CustomColumn textAlign="right"> {this.state.totalAdjustedProfit4Perc} % </CustomColumn>
