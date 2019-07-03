@@ -121,10 +121,15 @@ class BusinessesListPerAnalyst extends Component {
                         <Table.Cell>
                           {business.dateTimeAssignToAgent
                             ? business.dateTimeFirstOpenByAgent
-                              ? `${moment(business.dateTimeFirstOpenByAgent).diff(
+                              ? moment(business.dateTimeFirstOpenByAgent).diff(
                                 moment(business.dateTimeAssignToAgent),
                                 'hour'
-                              )} hours`
+                              ) < 1
+                                ? 'Less than 1 hour'
+                                : `${moment(business.dateTimeFirstOpenByAgent).diff(
+                                  moment(business.dateTimeAssignToAgent),
+                                  'hour'
+                                )} hours`
                               : `Has not opened yet [ ${this._diffTillToday(business)} hours ] `
                             : ''}
                         </Table.Cell>
