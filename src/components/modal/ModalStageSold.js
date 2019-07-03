@@ -223,6 +223,7 @@ class StageSoldForm extends Component {
       listBuyersFromBusiness,
       typeOptions
     } = this.props
+    console.log(this.props.values.sold, isValid)
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -240,17 +241,19 @@ class StageSoldForm extends Component {
                 <Form.Field>
                   <label>Business Type</label>
                   <Dropdown
-                    name="typeId"
+                    name="businessType"
                     placeholder="Business Type"
                     fluid
                     search
                     selection
                     options={typeOptions}
-                    value={values.typeId}
+                    value={values.businessType}
                     onChange={this._handleSelectChange}
                     onSearchChange={this._handleSearchChange}
                   />
-                  {errors.typeId && touched.typeId && <Label basic color="red" pointing content={errors.typeId} />}
+                  {errors.businessType && touched.businessType && (
+                    <Label basic color="red" pointing content={errors.businessType} />
+                  )}
                 </Form.Field>
                 <Form.Field>
                   <Form.Input
@@ -570,14 +573,28 @@ class StageSoldForm extends Component {
 }
 
 const validationSchema = Yup.object().shape({
-  businessType: Yup.string().required('This field is required.'),
+  // businessType: Yup.string().required('This field is required.'),
   buyerName: Yup.string().required('This field is required.'),
   // settlementDate: Yup.string().required(' is required.'),
   nOfWorkingOwners: Yup.number()
     .required('This field required.')
     .typeError('You must type only numbers.'),
-  termsOfDeal: Yup.string().required('This field is required.'),
-  specialNotes: Yup.string().required('This field is required.')
+  // termsOfDeal: Yup.string().required('This field is required.'),
+  specialNotes: Yup.string()
+    .notRequired()
+    .when('sold', {
+      is: sold => sold === true,
+      then: Yup.string().required(),
+      otherwise: Yup.string().notRequired()
+    }),
+  sold: Yup.bool().notRequired(),
+  termsOfDeal: Yup.string()
+    .notRequired()
+    .when('sold', {
+      is: sold => sold === true,
+      then: Yup.string().required(),
+      otherwise: Yup.string().notRequired()
+    })
 })
 
 StageSoldForm.propTypes = {
