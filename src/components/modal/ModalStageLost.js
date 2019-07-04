@@ -210,7 +210,7 @@ class StageLostForm extends Component {
                 checked={values.addLeadNurtureList === 'No'}
               />
             </Form.Group>
-            {!this.props.business.email && values.addLeadNurtureList === 'Yes' ? (
+            {!this.props.business.vendorEmail && values.addLeadNurtureList === 'Yes' ? (
               <Form.Group>
                 <Form.Field>
                   <Message info>
