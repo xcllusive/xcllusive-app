@@ -47,7 +47,6 @@ class EditBusinessDetailForm extends Component {
   }
 
   async componentWillUnmount () {
-    // console.log(this.props.isSubmitting, this.props.isValid)
     if (this.props.isSubmitting || this.props.isValid) {
       if (
         this.props.history.location &&
@@ -135,7 +134,6 @@ class EditBusinessDetailForm extends Component {
   }
 
   _openModalStageSold = (edit = false) => {
-    console.log(edit)
     this.props.openModal(TypesModal.MODAL_TYPE_STAGE_SOLD, {
       options: {
         title: 'Change the business stage to `Sold`'
@@ -899,7 +897,7 @@ class EditBusinessDetailForm extends Component {
                   </Form.Button>
                   <Form.Button
                     disabled={!this._isUserClientManager()}
-                    color="grey"
+                    color="yellow"
                     size="small"
                     onClick={() => this._editSoldDetails()}
                   >
