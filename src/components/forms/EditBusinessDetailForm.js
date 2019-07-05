@@ -265,6 +265,7 @@ class EditBusinessDetailForm extends Component {
   }
 
   render () {
+    console.log('cayo', this.props.business.stageId)
     const {
       values,
       handleChange,
@@ -895,15 +896,17 @@ class EditBusinessDetailForm extends Component {
                     <Icon name="download" />
                     Download IM
                   </Form.Button>
-                  <Form.Button
-                    disabled={!this._isUserClientManager()}
-                    color="yellow"
-                    size="small"
-                    onClick={() => this._editSoldDetails()}
-                  >
-                    <Icon name="edit" />
-                    Edit Sold Details
-                  </Form.Button>
+                  {this.props.business && this.props.business.stageId === 6 ? (
+                    <Form.Button
+                      disabled={!this._isUserClientManager()}
+                      color="red"
+                      size="small"
+                      onClick={() => this._editSoldDetails()}
+                    >
+                      <Icon name="edit" />
+                      Edit Sold Details
+                    </Form.Button>
+                  ) : null}
                 </Form.Group>
               </Form>
             </Grid.Column>
