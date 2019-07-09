@@ -104,7 +104,7 @@ FinancialInformationSourceForm.propTypes = {
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  financialInfoSource: props.appraisalObject ? props.appraisalObject.financialInfoSource : 0
+  financialInfoSource: props.appraisalObject ? parseInt(props.appraisalObject.financialInfoSource) : 0
 })
 
 const mapStateToProps = state => {
