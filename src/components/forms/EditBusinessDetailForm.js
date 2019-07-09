@@ -265,7 +265,6 @@ class EditBusinessDetailForm extends Component {
   }
 
   render () {
-    console.log('cayo', this.props.business.stageId)
     const {
       values,
       handleChange,

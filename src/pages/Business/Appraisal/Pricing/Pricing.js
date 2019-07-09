@@ -76,7 +76,6 @@ class PricingPage extends Component {
     }
     Object.assign(this.props.values, obj)
 
-    // cayo
     const objFormula = {
       formulaValuePricingMethod: numeral(
         this._pricingMethod(this.props.values.pricingMethod, this.props.appraisalObject)
