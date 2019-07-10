@@ -210,7 +210,6 @@ class AboutPage extends Component {
                           values.productsServices === '' ||
                           values.businessCommenced === '' ||
                           values.currentOwner === '' ||
-                          parseInt(values.tradingHours) === 0 ||
                           values.tradingHours === '' ||
                           parseInt(values.nOfBusinessLocations) === 0 ||
                           values.nOfBusinessLocations === ''
@@ -344,7 +343,7 @@ const mapPropsToValues = props => ({
   productsServices: props.appraisalObject ? props.appraisalObject.productsServices : '',
   businessCommenced: props.appraisalObject ? props.appraisalObject.businessCommenced : '',
   currentOwner: props.appraisalObject ? props.appraisalObject.currentOwner : '',
-  tradingHours: props.appraisalObject ? props.appraisalObject.tradingHours : 0,
+  tradingHours: props.appraisalObject ? props.appraisalObject.tradingHours : '',
   nOfBusinessLocations: props.appraisalObject ? props.appraisalObject.nOfBusinessLocations : 0,
   confirmAbout: props.appraisalObject ? props.appraisalObject.confirmAbout : false,
   /* CustomersSuppliersForm */
@@ -390,7 +389,7 @@ const validationSchema = Yup.object().shape({
   productsServices: Yup.string()
     .required('This field is required.')
     .max(130, 'This field require max 130 characters.'),
-  tradingHours: Yup.number().typeError('You must type only numbers here!'),
+  tradingHours: Yup.string().required('Trading Hours is required.'),
   nOfBusinessLocations: Yup.number().typeError('You must type only numbers here!'),
   /* CustomersSuppliersForm */
   descriptionCustomers: Yup.string().required('Description & Customers is required'),

@@ -153,7 +153,7 @@ class AddbacksAndAdjustmentsForm extends Component {
               </CustomColumn>
             </Grid.Row>
             <Grid.Row style={{ backgroundColor: '#daf3e4' }} columns={6}>
-              <CustomColumn width={4}>Owner 1/New Owner</CustomColumn>
+              <CustomColumn width={4}>Owner 1</CustomColumn>
               <CustomColumn width={6}>
                 <Form size="tiny">
                   <Form.Field>

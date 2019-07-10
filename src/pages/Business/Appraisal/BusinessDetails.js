@@ -247,9 +247,7 @@ const validationSchema = Yup.object().shape({
   lastNameV: Yup.string()
     .required('Last name is required.')
     .max(40, 'Last name require max 40 characters.'),
-  businessABN: Yup.string()
-    .min(11, 'ABN require min 11 integers.')
-    .max(11, 'ABN require max 11 integers.'),
+  businessABN: Yup.string().required('ABN is required.'),
   address1: Yup.string().max(100, 'Street require max 100 characters.'),
   suburb: Yup.string().max(100, 'Suburb require max 100 characters.'),
   postCode: Yup.string()
