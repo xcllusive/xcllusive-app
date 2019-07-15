@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Label } from 'semantic-ui-react'
-import numeral from 'numeral'
 
 const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, touched, isValid, setFieldValue }) => {
   const state = {
@@ -15,6 +14,12 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
   const _handleSelectChange = (e, { name, value }) => {
     setFieldValue(name, value)
   }
+  const _handleChangeTextArea = e => {
+    if (e.target.type === 'textarea' && e.which === 13 /* Enter */) {
+      e.preventDefault()
+    }
+  }
+
   return (
     <Fragment>
       <Form.Group>
@@ -38,7 +43,7 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
                 label="Rent Cost"
                 name="rentCost"
                 autoComplete="rentCost"
-                value={numeral(values.rentCost).format('$0,0')}
+                value={values.rentCost}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
@@ -69,6 +74,7 @@ const PremisesAndEmployeesForm = ({ values, handleChange, handleBlur, errors, to
             value={values.premisesNotes}
             onChange={handleChange}
             onBlur={handleBlur}
+            onKeyDown={_handleChangeTextArea}
           />
           {errors.premisesNotes && touched.premisesNotes && (
             <Label basic color="red" pointing content={errors.premisesNotes} />

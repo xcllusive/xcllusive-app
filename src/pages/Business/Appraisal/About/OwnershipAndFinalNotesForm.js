@@ -16,6 +16,12 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
   const _handleSelectChange = (e, { name, value }) => {
     setFieldValue(name, value)
   }
+  const _handleChangeTextArea = e => {
+    if (e.target.type === 'textarea' && e.which === 13 /* Enter */) {
+      e.preventDefault()
+    }
+  }
+
   return (
     <Fragment>
       <Form.Group>
@@ -28,8 +34,9 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.numberOwners &&
-            touched.numberOwners && <Label basic color="red" pointing content={errors.numberOwners} />}
+          {errors.numberOwners && touched.numberOwners && (
+            <Label basic color="red" pointing content={errors.numberOwners} />
+          )}
         </Form.Field>
         <Form.Field width={10}>
           <Form.Select
@@ -40,8 +47,9 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
             value={values.owners1sHours}
             onChange={_handleSelectChange}
           />
-          {errors.owners1sHours &&
-            touched.owners1sHours && <Label basic color="red" pointing content={errors.owners1sHours} />}
+          {errors.owners1sHours && touched.owners1sHours && (
+            <Label basic color="red" pointing content={errors.owners1sHours} />
+          )}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -53,9 +61,11 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
             value={values.owners1sRole}
             onChange={handleChange}
             onBlur={handleBlur}
+            onKeyDown={_handleChangeTextArea}
           />
-          {errors.owners1sRole &&
-            touched.owners1sRole && <Label basic color="red" pointing content={errors.owners1sRole} />}
+          {errors.owners1sRole && touched.owners1sRole && (
+            <Label basic color="red" pointing content={errors.owners1sRole} />
+          )}
         </Form.Field>
         <Form.Field width={6}>
           <Form.Select
@@ -66,8 +76,9 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
             value={values.otherOwnersHours}
             onChange={_handleSelectChange}
           />
-          {errors.otherOwnersHours &&
-            touched.otherOwnersHours && <Label basic color="red" pointing content={errors.otherOwnersHours} />}
+          {errors.otherOwnersHours && touched.otherOwnersHours && (
+            <Label basic color="red" pointing content={errors.otherOwnersHours} />
+          )}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -79,9 +90,11 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
             value={values.otherOwnersRole}
             onChange={handleChange}
             onBlur={handleBlur}
+            onKeyDown={_handleChangeTextArea}
           />
-          {errors.otherOwnersRole &&
-            touched.otherOwnersRole && <Label basic color="red" pointing content={errors.otherOwnersRole} />}
+          {errors.otherOwnersRole && touched.otherOwnersRole && (
+            <Label basic color="red" pointing content={errors.otherOwnersRole} />
+          )}
         </Form.Field>
         <Form.Field width={10}>
           <Form.TextArea
@@ -91,9 +104,11 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
             value={values.otherRelevantNotes}
             onChange={handleChange}
             onBlur={handleBlur}
+            onKeyDown={_handleChangeTextArea}
           />
-          {errors.otherRelevantNotes &&
-            touched.otherRelevantNotes && <Label basic color="red" pointing content={errors.otherRelevantNotes} />}
+          {errors.otherRelevantNotes && touched.otherRelevantNotes && (
+            <Label basic color="red" pointing content={errors.otherRelevantNotes} />
+          )}
         </Form.Field>
       </Form.Group>
     </Fragment>

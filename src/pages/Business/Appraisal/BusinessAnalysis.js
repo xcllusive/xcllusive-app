@@ -123,64 +123,6 @@ class BusinessAnalysisPage extends Component {
             <Grid.Row style={{ paddingBottom: '0px' }}>
               <Grid.Column>
                 <Header as="h3" textAlign="left" color="blue">
-                  Risks
-                </Header>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={2}>
-              <Grid.Column width={9}>
-                <Form.Field style={{ backgroundColor: 'white' }}>
-                  <ReactQuill
-                    ref={el => {
-                      this.reactQuillRef = el
-                    }}
-                    value={values.riskList}
-                    onChange={this._handleChangeRisk}
-                    style={{ height: '80%' }}
-                    modules={this.state.modules}
-                    formats={this.state.formats}
-                    onKeyDown={this._handleChangeTextArea}
-                  />
-                </Form.Field>
-              </Grid.Column>
-              <Grid.Column width={7}>
-                <Table color="blue" celled inverted selectable compact size="small">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Label</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {this.props.risksOptions.array.map(risksOptions => {
-                      return (
-                        <Table.Row
-                          active
-                          key={risksOptions.id}
-                          onClick={() => this._insertOnTextArea('riskList', risksOptions.label)}
-                        >
-                          <Table.Cell>{risksOptions.label}</Table.Cell>
-                        </Table.Row>
-                      )
-                    })}
-                  </Table.Body>
-                </Table>
-                <Pagination
-                  size="mini"
-                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 'risks')}
-                  defaultActivePage={this.props.risksOptions.activePage}
-                  totalPages={this.props.risksOptions.pages}
-                  firstItem={null}
-                  lastItem={null}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-        <Segment style={{ backgroundColor: '#daf3e4' }} size="small">
-          <Grid>
-            <Grid.Row style={{ paddingBottom: '0px' }}>
-              <Grid.Column>
-                <Header as="h3" textAlign="left" color="blue">
                   Value Drivers
                 </Header>
               </Grid.Column>
@@ -234,6 +176,65 @@ class BusinessAnalysisPage extends Component {
             </Grid.Row>
           </Grid>
         </Segment>
+        <Segment style={{ backgroundColor: '#daf3e4' }} size="small">
+          <Grid>
+            <Grid.Row style={{ paddingBottom: '0px' }}>
+              <Grid.Column>
+                <Header as="h3" textAlign="left" color="blue">
+                  Risks
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column width={9}>
+                <Form.Field style={{ backgroundColor: 'white' }}>
+                  <ReactQuill
+                    ref={el => {
+                      this.reactQuillRef = el
+                    }}
+                    value={values.riskList}
+                    onChange={this._handleChangeRisk}
+                    style={{ height: '80%' }}
+                    modules={this.state.modules}
+                    formats={this.state.formats}
+                    onKeyDown={this._handleChangeTextArea}
+                  />
+                </Form.Field>
+              </Grid.Column>
+              <Grid.Column width={7}>
+                <Table color="blue" celled inverted selectable compact size="small">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Label</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {this.props.risksOptions.array.map(risksOptions => {
+                      return (
+                        <Table.Row
+                          active
+                          key={risksOptions.id}
+                          onClick={() => this._insertOnTextArea('riskList', risksOptions.label)}
+                        >
+                          <Table.Cell>{risksOptions.label}</Table.Cell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+                <Pagination
+                  size="mini"
+                  onPageChange={(e, data) => this._handlePaginationChange(e, data, 'risks')}
+                  defaultActivePage={this.props.risksOptions.activePage}
+                  totalPages={this.props.risksOptions.pages}
+                  firstItem={null}
+                  lastItem={null}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+
         <Segment style={{ backgroundColor: '#008eff26' }} size="small">
           <Grid>
             <Grid.Row style={{ paddingBottom: '0px' }}>

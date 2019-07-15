@@ -22,6 +22,13 @@ const CustomersSuppliersForm = ({ values, handleChange, handleBlur, errors, touc
   const _handleSelectChange = (e, { name, value }) => {
     setFieldValue(name, value)
   }
+
+  const _handleChangeTextArea = e => {
+    if (e.target.type === 'textarea' && e.which === 13 /* Enter */) {
+      e.preventDefault()
+    }
+  }
+
   return (
     <Fragment>
       <Form.Group widths="equal">
@@ -33,9 +40,11 @@ const CustomersSuppliersForm = ({ values, handleChange, handleBlur, errors, touc
             value={values.descriptionCustomers}
             onChange={handleChange}
             onBlur={handleBlur}
+            onKeyDown={_handleChangeTextArea}
           />
-          {errors.descriptionCustomers &&
-            touched.descriptionCustomers && <Label basic color="red" pointing content={errors.descriptionCustomers} />}
+          {errors.descriptionCustomers && touched.descriptionCustomers && (
+            <Label basic color="red" pointing content={errors.descriptionCustomers} />
+          )}
         </Form.Field>
       </Form.Group>
       <Form.Group>
@@ -84,9 +93,9 @@ const CustomersSuppliersForm = ({ values, handleChange, handleBlur, errors, touc
               value={values.descriptionClient10TO}
               onChange={handleChange}
               onBlur={handleBlur}
+              onKeyDown={_handleChangeTextArea}
             />
-            {errors.descriptionClient10TO &&
-              touched.descriptionClient10TO && (
+            {errors.descriptionClient10TO && touched.descriptionClient10TO && (
               <Label basic color="red" pointing content={errors.descriptionClient10TO} />
             )}
           </Form.Field>
@@ -112,9 +121,11 @@ const CustomersSuppliersForm = ({ values, handleChange, handleBlur, errors, touc
             value={values.descriptionSuppliers}
             onChange={handleChange}
             onBlur={handleBlur}
+            onKeyDown={_handleChangeTextArea}
           />
-          {errors.descriptionSuppliers &&
-            touched.descriptionSuppliers && <Label basic color="red" pointing content={errors.descriptionSuppliers} />}
+          {errors.descriptionSuppliers && touched.descriptionSuppliers && (
+            <Label basic color="red" pointing content={errors.descriptionSuppliers} />
+          )}
         </Form.Field>
       </Form.Group>
     </Fragment>

@@ -47,13 +47,13 @@ class AppraisalMenuPage extends Component {
       this.setState({ activeItem: 'About' })
     }
     if (this.state.activeItem === 'About') {
-      this.setState({ activeItem: 'Business Analysis' })
-    }
-    if (this.state.activeItem === 'Business Analysis') {
       this.setState({ activeItem: 'Financial Analysis' })
     }
-    if (this.state.activeItem === 'Financial Analysis') {
+    if (this.state.activeItem === 'Business Analysis') {
       this.setState({ activeItem: 'Comparable Data' })
+    }
+    if (this.state.activeItem === 'Financial Analysis') {
+      this.setState({ activeItem: 'Business Analysis' })
     }
     if (this.state.activeItem === 'Comparable Data') {
       this.setState({ activeItem: 'Pricing' })
@@ -71,13 +71,13 @@ class AppraisalMenuPage extends Component {
       this.setState({ activeItem: 'Business Details' })
     }
     if (this.state.activeItem === 'Business Analysis') {
-      this.setState({ activeItem: 'About' })
+      this.setState({ activeItem: 'Financial Analysis' })
     }
     if (this.state.activeItem === 'Financial Analysis') {
-      this.setState({ activeItem: 'Business Analysis' })
+      this.setState({ activeItem: 'About' })
     }
     if (this.state.activeItem === 'Comparable Data') {
-      this.setState({ activeItem: 'Financial Analysis' })
+      this.setState({ activeItem: 'Business Analysis' })
     }
     if (this.state.activeItem === 'Pricing') {
       this.setState({ activeItem: 'Comparable Data' })
@@ -182,24 +182,24 @@ class AppraisalMenuPage extends Component {
               )}
           </Menu.Item>
           <Menu.Item
-            name="Business Analysis"
-            active={activeItem === 'Business Analysis'}
-            onClick={() => this._handleItemClick('Business Analysis')}
-          >
-            Business Analysis
-            {isConfirmBusinessAnalysis ? (
-              <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
-            ) : (
-              <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
-            )}
-          </Menu.Item>
-          <Menu.Item
             name="Financial Analysis"
             active={activeItem === 'Financial Analysis'}
             onClick={() => this._handleItemClick('Financial Analysis')}
           >
             Financial Analysis
             {isConfirmFinancialAnalysis ? (
+              <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
+            ) : (
+              <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />
+            )}
+          </Menu.Item>
+          <Menu.Item
+            name="Business Analysis"
+            active={activeItem === 'Business Analysis'}
+            onClick={() => this._handleItemClick('Business Analysis')}
+          >
+            Business Analysis
+            {isConfirmBusinessAnalysis ? (
               <Label style={{ marginLeft: '5px' }} circular empty color="green" size="medium" />
             ) : (
               <Label style={{ marginLeft: '5px' }} circular empty color="red" size="medium" />

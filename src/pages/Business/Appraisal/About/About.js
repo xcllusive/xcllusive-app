@@ -69,6 +69,12 @@ class AboutPage extends Component {
     this.props.setFieldValue('currentOwner', this.props.values.businessCommenced)
   }
 
+  _handleChangeTextArea = e => {
+    if (e.target.type === 'textarea' && e.which === 13 /* Enter */) {
+      e.preventDefault()
+    }
+  }
+
   render () {
     const { values, handleChange, handleBlur, errors, touched, typeOptions } = this.props
     const { businessCommencedOptions, currentOwnerOptions } = this.state
@@ -131,6 +137,7 @@ class AboutPage extends Component {
                         value={values.productsServices}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        onKeyDown={this._handleChangeTextArea}
                       />
                       {errors.productsServices && touched.productsServices && (
                         <Label basic color="red" pointing content={errors.productsServices} />
@@ -388,18 +395,22 @@ const validationSchema = Yup.object().shape({
   currentOwner: Yup.string().required('Current Owner is required'),
   productsServices: Yup.string()
     .required('This field is required.')
-    .max(130, 'This field require max 130 characters.'),
+    .max(150, 'This field require max 150 characters.'),
   tradingHours: Yup.string().required('Trading Hours is required.'),
   nOfBusinessLocations: Yup.number().typeError('You must type only numbers here!'),
   /* CustomersSuppliersForm */
-  descriptionCustomers: Yup.string().required('Description & Customers is required'),
+  descriptionCustomers: Yup.string()
+    .required('Description & Customers is required')
+    .max(150, 'This field require max 150 characters.'),
   client5TO: Yup.string().required('Largest 5 clients % of T/O is required'),
   descriptionSuppliers: Yup.string()
     .required('Description of Suppliers is required.')
-    .max(130, 'Description of Suppliers require max 130 characters.'),
+    .max(150, 'Description of Suppliers require max 150 characters.'),
   /* PremisesAndEmployeesForm */
   premisesOwnedRented: Yup.string().required('Premises Owned or Rented is required'),
-  premisesNotes: Yup.string().required('Premises Notes is required'),
+  premisesNotes: Yup.string()
+    .required('Premises Notes is required')
+    .max(150, 'Premises Notes require max 150 characters.'),
   fullTime: Yup.number().typeError('You must type only numbers.'),
   partTime: Yup.number().typeError('You must type only numbers.'),
   subContractors: Yup.number().typeError('You must type only numbers.'),
@@ -409,10 +420,16 @@ const validationSchema = Yup.object().shape({
     .required('Number of Owners is required')
     .typeError('You must type only numbers.'),
   owners1sHours: Yup.string().required('Owner 1`s Hours is required'),
-  owners1sRole: Yup.string().required('Owner 1`s Role is required'),
+  owners1sRole: Yup.string()
+    .required('Owner 1`s Role is required')
+    .max(75, 'Owner 1`s Role require max 75 characters.'),
   otherOwnersHours: Yup.string().required('Other Owners` Hours is required'),
-  otherOwnersRole: Yup.string().required('Other Owners` Role is required'),
-  otherRelevantNotes: Yup.string().required('Other Relevant Notes is required')
+  otherOwnersRole: Yup.string()
+    .required('Other Owners` Role is required')
+    .max(75, 'Other Owners` Role require max 75 characters.'),
+  otherRelevantNotes: Yup.string()
+    .required('Other Relevant Notes is required')
+    .max(75, 'Other Relevant Notes require max 75 characters.')
 })
 
 const mapDispatchToProps = dispatch => {

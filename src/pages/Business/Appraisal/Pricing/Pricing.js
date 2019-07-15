@@ -526,8 +526,8 @@ class PricingPage extends Component {
     return (
       this._priceBasedOnComparable(values.pricingMethod, appraisalObject) +
       this._riskPremium(values, appraisalObject) +
-      this._marketPremium(values, appraisalObject) +
-      this._negotiationPremium(values, appraisalObject)
+      this._marketPremium(values, appraisalObject)
+      // this._negotiationPremium(values, appraisalObject)
     )
   }
 
@@ -1286,7 +1286,7 @@ const mapPropsToValues = props => ({
   sliderMarketPremium: props.appraisalObject ? props.appraisalObject.sliderMarketPremium : 0,
   sliderNegotiationPremium: props.appraisalObject ? props.appraisalObject.sliderNegotiationPremium : 0,
   agreedValue: props.appraisalObject ? numeral(props.appraisalObject.agreedValue).format('0,0.[99]') : 0,
-  sliderLowRange: -10,
+  sliderLowRange: props.appraisalObject ? props.appraisalObject.sliderLowRange : -10,
   inclStock: props.appraisalObject ? props.appraisalObject.inclStock : true,
   reducePriceForStockValue: true,
   confirmPricing: props.appraisalObject ? props.appraisalObject.confirmPricing : false

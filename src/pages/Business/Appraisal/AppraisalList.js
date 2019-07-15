@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Table, Grid, Header, Button, Icon } from 'semantic-ui-react'
+import { Table, Grid, Header, Button, Icon, Dimmer, Loader } from 'semantic-ui-react'
 import moment from 'moment'
 
 import { theme } from '../../../styles'
@@ -91,98 +91,109 @@ class AppraisalListPage extends Component {
   }
 
   render () {
-    const { history, listAppraisalList } = this.props
+    const { history, listAppraisalList, isLoadingList } = this.props
     const { business } = this.props.location.state
     return (
       <Wrapper>
-        <Grid style={{ marginTop: 0 }}>
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <Header as="h2" color="blue" content={`Appraisal Log: ${business.businessName}`} />
-            </Grid.Column>
-            <Grid.Column>
-              <Button color={theme.buttonNew} onClick={() => this._newAppraisal()} size="small" floated="right">
-                <Icon name="add" />
-                New Appraisal
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        {listAppraisalList.length > 0 ? (
-          <Grid padded="horizontally" style={{ marginTop: 0 }}>
-            <Grid.Row>
-              <Table color="blue" celled inverted selectable size="small" compact>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Created</Table.HeaderCell>
-                    <Table.HeaderCell>Appr. Low</Table.HeaderCell>
-                    <Table.HeaderCell>Appr. High</Table.HeaderCell>
-                    <Table.HeaderCell>% Completed</Table.HeaderCell>
-                    <Table.HeaderCell>Sent</Table.HeaderCell>
-                    <Table.HeaderCell>Resend</Table.HeaderCell>
-                    <Table.HeaderCell>Duplicate</Table.HeaderCell>
-                    <Table.HeaderCell>Downloaded</Table.HeaderCell>
-                    <Table.HeaderCell>Edit</Table.HeaderCell>
-                    <Table.HeaderCell>Delete</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {listAppraisalList.map((listAppraisal, key) => (
-                    <Table.Row active key={listAppraisal.id}>
-                      <Table.Cell>{moment(listAppraisal.dateTimeCreated).format('DD/MM/YYYY')}</Table.Cell>
-                      <Table.Cell>TBD with Zoran</Table.Cell>
-                      <Table.Cell>TBD with Zoran</Table.Cell>
-                      <Table.Cell>
-                        {listAppraisal.completed === 100 ? 'Completed' : `${listAppraisal.completed}%`}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {listAppraisal.sentDate ? moment(listAppraisal.sentDate).format('DD/MM/YYYY') : 'No'}
-                      </Table.Cell>
-                      <Table.Cell />
-                      <Table.Cell>
-                        <Button disabled icon onClick={() => this._duplicateAppraisal(listAppraisal.id)}>
-                          <Icon link size="large" name="copy" />
-                        </Button>
-                      </Table.Cell>
-                      <Table.Cell>{listAppraisal.downloaded ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>
-                        <Button
-                          icon
-                          disabled={listAppraisal.sentDate !== null}
-                          onClick={() =>
-                            history.push({
-                              pathname: 'appraisalMenu',
-                              state: {
-                                business: this.props.location.state.business,
-                                isLoadingCreating: this.props.isLoadingCreating,
-                                appraisalObject: listAppraisal
-                              }
-                            })
-                          }
-                        >
-                          <Icon link size="large" name="edit" />
-                        </Button>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Button icon onClick={() => this._deleteAppraisal(listAppraisal.id)}>
-                          <Icon link color="red" size="large" name="trash" />
-                        </Button>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
+        <Dimmer.Dimmable dimmed={isLoadingList}>
+          <Dimmer inverted active={isLoadingList}>
+            <Loader>Loading</Loader>
+          </Dimmer>
+          <Grid style={{ marginTop: 0 }}>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Header as="h2" color="blue" content={`Appraisal Log: ${business.businessName}`} />
+              </Grid.Column>
+              <Grid.Column>
+                <Button color={theme.buttonNew} onClick={() => this._newAppraisal()} size="small" floated="right">
+                  <Icon name="add" />
+                  New Appraisal
+                </Button>
+              </Grid.Column>
             </Grid.Row>
           </Grid>
-        ) : null}
-        <Grid style={{ marginTop: 0 }}>
-          <Grid.Column>
-            <Button color="green" onClick={() => history.push(`/business/${business.id}`)} size="small" floated="left">
-              <Icon name="backward" />
-              Return to Business
-            </Button>
-          </Grid.Column>
-        </Grid>
+
+          {listAppraisalList.length > 0 ? (
+            <Grid padded="horizontally" style={{ marginTop: 0 }}>
+              <Grid.Row>
+                <Table color="blue" celled inverted selectable size="small" compact>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Created</Table.HeaderCell>
+                      {/* <Table.HeaderCell>Appr. Low</Table.HeaderCell>
+                    <Table.HeaderCell>Appr. High</Table.HeaderCell> */}
+                      <Table.HeaderCell>% Completed</Table.HeaderCell>
+                      <Table.HeaderCell>Sent</Table.HeaderCell>
+                      <Table.HeaderCell>Resend</Table.HeaderCell>
+                      <Table.HeaderCell>Duplicate</Table.HeaderCell>
+                      <Table.HeaderCell>Downloaded</Table.HeaderCell>
+                      <Table.HeaderCell>Edit</Table.HeaderCell>
+                      <Table.HeaderCell>Delete</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {listAppraisalList.map((listAppraisal, key) => (
+                      <Table.Row active key={listAppraisal.id}>
+                        <Table.Cell>{moment(listAppraisal.dateTimeCreated).format('DD/MM/YYYY')}</Table.Cell>
+                        {/* <Table.Cell>TBD with Zoran</Table.Cell>
+                      <Table.Cell>TBD with Zoran</Table.Cell> */}
+                        <Table.Cell>
+                          {listAppraisal.completed === 100 ? 'Completed' : `${listAppraisal.completed}%`}
+                        </Table.Cell>
+                        <Table.Cell>
+                          {listAppraisal.sentDate ? moment(listAppraisal.sentDate).format('DD/MM/YYYY') : 'No'}
+                        </Table.Cell>
+                        <Table.Cell />
+                        <Table.Cell>
+                          <Button disabled icon onClick={() => this._duplicateAppraisal(listAppraisal.id)}>
+                            <Icon link size="large" name="copy" />
+                          </Button>
+                        </Table.Cell>
+                        <Table.Cell>{listAppraisal.downloaded ? 'Yes' : 'No'}</Table.Cell>
+                        <Table.Cell>
+                          <Button
+                            icon
+                            disabled={listAppraisal.sentDate !== null}
+                            onClick={() =>
+                              history.push({
+                                pathname: 'appraisalMenu',
+                                state: {
+                                  business: this.props.location.state.business,
+                                  isLoadingCreating: this.props.isLoadingCreating,
+                                  appraisalObject: listAppraisal
+                                }
+                              })
+                            }
+                          >
+                            <Icon link size="large" name="edit" />
+                          </Button>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Button icon onClick={() => this._deleteAppraisal(listAppraisal.id)}>
+                            <Icon link color="red" size="large" name="trash" />
+                          </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              </Grid.Row>
+            </Grid>
+          ) : null}
+          <Grid style={{ marginTop: 0 }}>
+            <Grid.Column>
+              <Button
+                color="green"
+                onClick={() => history.push(`/business/${business.id}`)}
+                size="small"
+                floated="left"
+              >
+                <Icon name="backward" />
+                Return to Business
+              </Button>
+            </Grid.Column>
+          </Grid>
+        </Dimmer.Dimmable>
       </Wrapper>
     )
   }
@@ -202,7 +213,8 @@ AppraisalListPage.propTypes = {
   removeAppraisal: PropTypes.func,
   createdAppraisal: PropTypes.object,
   percPricing: PropTypes.number,
-  duplicateAppraisal: PropTypes.func
+  duplicateAppraisal: PropTypes.func,
+  isLoadingList: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -217,6 +229,7 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => ({
   isLoadingCreating: state.appraisal.create.isLoading,
   listAppraisalList: state.appraisal.getAll.array,
+  isLoadingList: state.appraisal.getAll.isLoading,
   createdAppraisal: state.appraisal.create.appraisal,
   percPricing: state.appraisal.getCalcCompleteSteps.confirm.confirmPricing.completedPerc
 })
