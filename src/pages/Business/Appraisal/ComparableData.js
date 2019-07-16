@@ -568,6 +568,17 @@ class ComparableDataPage extends Component {
     this.props.getBusinessesSold(this.props.values)
   }
 
+  _checkBusinessAlreadySelected = id => {
+    // for (let i = 0; i < this.props.listSelected.length; i++) {
+    //   console.log('test')
+    // }
+    const test = _.find(this.props.listSelected, o => {
+      return o.id === id
+    })
+
+    return test
+  }
+
   render () {
     const {
       values,
@@ -580,6 +591,7 @@ class ComparableDataPage extends Component {
       handleChange
     } = this.props
     const { priceOptions, lastBusinessOptions, stockValueOptions } = this.state
+    // console.log(listSelected)
     return (
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
@@ -1075,57 +1087,155 @@ class ComparableDataPage extends Component {
                 {listBusinessesSold &&
                   listBusinessesSold.map(businessSold => (
                     <Table.Row active key={businessSold.id} onClick={() => this._addToSelectedList(businessSold)}>
-                      <Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
                         <Icon link name="search" onClick={() => window.open(`/business/${businessSold.business_id}`)} />
                         {businessSold.label}
                       </Table.Cell>
-                      <Table.Cell>{businessSold.industry.substr(0, 10)}</Table.Cell>
-                      <Table.Cell>{numeral(businessSold.latestFullYearTotalRevenue).format('$0,0')}</Table.Cell>
-                      <Table.Cell>{numeral(this._ebitdaLastYear(businessSold)).format('$0,0')}</Table.Cell>
-                      <Table.Cell>{numeral(this._ebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
+                        {businessSold.industry.substr(0, 10)}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
+                        {numeral(businessSold.latestFullYearTotalRevenue).format('$0,0')}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
+                        {numeral(this._ebitdaLastYear(businessSold)).format('$0,0')}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
+                        {numeral(this._ebitdaAvg(businessSold)).format('$0,0')}
+                      </Table.Cell>
                       <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
                         {numeral(this._pebitdaLastYear(businessSold)).format('$0,0')}
                       </Table.Cell>
-                      <Table.Cell>{numeral(this._pebitdaAvg(businessSold)).format('$0,0')}</Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
+                        {numeral(this._pebitdaAvg(businessSold)).format('$0,0')}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
                         <Icon color={this._colorArrow(businessSold)} name={this._nameArrow(businessSold)} />
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(businessSold.soldPrice).format('$0,0')}
                       </Table.Cell>
-                      <Table.Cell>{numeral(businessSold.stockValue).format('$0,0')}</Table.Cell>
-                      <Table.Cell>{numeral(businessSold.assetValue).format('$0,0')}</Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
+                        {numeral(businessSold.stockValue).format('$0,0')}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
+                        {numeral(businessSold.assetValue).format('$0,0')}
+                      </Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
                         {numeral(businessSold.soldPrice + businessSold.stockValue).format('$0,0')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._turnOver(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierEbitdaLastYear(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierEbitdaAvg(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierPebitdaLastYear(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierPebitdaAvg(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierEbitdaLastYearWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierEbitdaAvgWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierPebitdaLastYearWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell style={{ backgroundColor: '#c5bfbf' }}>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : '#c5bfbf'
+                        }}
+                      >
                         {numeral(this._multiplierPebitdaAvgWithStock(businessSold).toFixed(1)).format('0,0.[99]')}
                       </Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell
+                        style={{
+                          backgroundColor: this._checkBusinessAlreadySelected(businessSold.id) ? 'grey' : null
+                        }}
+                      >
                         {businessSold.termsOfDeal ? (
                           <Popup
                             content={businessSold.termsOfDeal}

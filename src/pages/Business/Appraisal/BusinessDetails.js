@@ -74,132 +74,138 @@ class BusinessDetailsPage extends Component {
             </Message>
           </Step.Group>
         </Segment>
-        <Form>
-          <Form.Group>
-            <Form.Field width={7}>
-              <Form.Input
-                label="Business name"
-                name="businessName"
-                autoComplete="businessName"
-                value={values.businessName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.businessName && touched.businessName && (
-                <Label basic color="red" pointing content={errors.businessName} />
-              )}
-            </Form.Field>
-            <Form.Field width={7}>
-              <Form.Input
-                label="ABN"
-                name="businessABN"
-                autoComplete="businessABN"
-                value={values.businessABN}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.businessABN && touched.businessABN && (
-                <Label basic color="red" pointing content={errors.businessABN} />
-              )}
-            </Form.Field>
-            <Form.Field width={2}>
-              <label>ABN LOOKUP</label>
-              <Icon
-                style={{ marginLeft: '30px' }}
-                name="chrome"
-                inverted
-                circular
-                link
-                onClick={() => window.open('https://abr.business.gov.au/')}
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field>
-              <Form.Input
-                label="First name"
-                name="firstNameV"
-                autoComplete="firstNameV"
-                value={values.firstNameV}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.firstNameV && touched.firstNameV && (
-                <Label basic color="red" pointing content={errors.firstNameV} />
-              )}
-            </Form.Field>
-            <Form.Field>
-              <Form.Input
-                label="Last name"
-                name="lastNameV"
-                autoComplete="lastNameV"
-                value={values.lastNameV}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.lastNameV && touched.lastNameV && <Label basic color="red" pointing content={errors.lastNameV} />}
-            </Form.Field>
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field>
-              <Form.Input
-                label="Street"
-                name="address1"
-                autoComplete="address1"
-                value={values.address1}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.address1 && touched.address1 && <Label basic color="red" pointing content={errors.address1} />}
-            </Form.Field>
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field>
-              <Form.Input
-                label="Suburb"
-                name="suburb"
-                autoComplete="suburb"
-                value={values.suburb}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.suburb && touched.suburb && <Label basic color="red" pointing content={errors.suburb} />}
-            </Form.Field>
-            <Form.Field>
-              <Form.Select
-                label="State"
-                name="state"
-                options={state}
-                autoComplete="state"
-                value={values.state}
-                onChange={this._handleSelectChange}
-              />
-              {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
-            </Form.Field>
-            <Form.Field>
-              <Form.Input
-                label="Post Code"
-                name="postCode"
-                autoComplete="postCode"
-                value={values.postCode}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {errors.postCode && touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
-            </Form.Field>
-          </Form.Group>
-          <Form.Group>
-            <Form.Field>
-              <Form.Checkbox
-                label="Please confirm that you have completed the above information"
-                name="confirmBusinessDetail"
-                onChange={this._handleChangeCheckBox}
-                checked={values.confirmBusinessDetail}
-                onClick={() => this.props.confirmsCompleteSteps('confirmBusinessDetail', !values.confirmBusinessDetail)}
-              />
-            </Form.Field>
-          </Form.Group>
-        </Form>
+        <Segment style={{ backgroundColor: '#008eff26', marginTop: '0px' }} size="small">
+          <Form>
+            <Form.Group>
+              <Form.Field width={7}>
+                <Form.Input
+                  label="Business name"
+                  name="businessName"
+                  autoComplete="businessName"
+                  value={values.businessName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.businessName && touched.businessName && (
+                  <Label basic color="red" pointing content={errors.businessName} />
+                )}
+              </Form.Field>
+              <Form.Field width={7}>
+                <Form.Input
+                  label="ABN"
+                  name="businessABN"
+                  autoComplete="businessABN"
+                  value={values.businessABN}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.businessABN && touched.businessABN && (
+                  <Label basic color="red" pointing content={errors.businessABN} />
+                )}
+              </Form.Field>
+              <Form.Field width={2}>
+                <label>ABN LOOKUP</label>
+                <Icon
+                  style={{ marginLeft: '30px' }}
+                  name="chrome"
+                  inverted
+                  circular
+                  link
+                  onClick={() => window.open('https://abr.business.gov.au/')}
+                />
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  label="First name"
+                  name="firstNameV"
+                  autoComplete="firstNameV"
+                  value={values.firstNameV}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.firstNameV && touched.firstNameV && (
+                  <Label basic color="red" pointing content={errors.firstNameV} />
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label="Last name"
+                  name="lastNameV"
+                  autoComplete="lastNameV"
+                  value={values.lastNameV}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.lastNameV && touched.lastNameV && (
+                  <Label basic color="red" pointing content={errors.lastNameV} />
+                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  label="Street"
+                  name="address1"
+                  autoComplete="address1"
+                  value={values.address1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.address1 && touched.address1 && <Label basic color="red" pointing content={errors.address1} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  label="Suburb"
+                  name="suburb"
+                  autoComplete="suburb"
+                  value={values.suburb}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.suburb && touched.suburb && <Label basic color="red" pointing content={errors.suburb} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  label="State"
+                  name="state"
+                  options={state}
+                  autoComplete="state"
+                  value={values.state}
+                  onChange={this._handleSelectChange}
+                />
+                {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label="Post Code"
+                  name="postCode"
+                  autoComplete="postCode"
+                  value={values.postCode}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.postCode && touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group>
+              <Form.Field>
+                <Form.Checkbox
+                  label="Please confirm that you have completed the above information"
+                  name="confirmBusinessDetail"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.confirmBusinessDetail}
+                  onClick={() =>
+                    this.props.confirmsCompleteSteps('confirmBusinessDetail', !values.confirmBusinessDetail)
+                  }
+                />
+              </Form.Field>
+            </Form.Group>
+          </Form>
+        </Segment>
       </Wrapper>
     )
   }
