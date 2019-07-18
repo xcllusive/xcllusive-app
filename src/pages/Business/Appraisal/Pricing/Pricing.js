@@ -1165,7 +1165,7 @@ class PricingPage extends Component {
                           <h3>{numeral(this._askingPrice(values, appraisalObject)).format('$0,0')}</h3>
                         )}
                       </Form.Field>
-                      {appraisalObject.stockNecessary > 0 ? (
+                      {appraisalObject.stockNecessary > 0 || appraisalObject.currentStockLevel > 0 ? (
                         <Fragment>
                           <Form.Field>
                             <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
