@@ -475,7 +475,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
                   tabIndex={item.tabIndex}
                   name={subItem.name}
                   autoComplete={subItem.name}
-                  value={parseInt(values[subItem.name]) > 0 ? `$${values[subItem.name]}` : ''}
+                  value={parseInt(values[subItem.name]) !== 0 ? `$${values[subItem.name]}` : ''}
                   onChange={this._handleChangeInputCurrency}
                   onBlur={e => this._handleChangeAddbackAndAdjusments(e, item.row, subItem.name)}
                 />
@@ -512,25 +512,25 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <b> Total Adjustments </b>
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjusments1) > 0 ? numeral(this.state.totalAdjusments1).format('$0,0') : ''}
+            {parseInt(this.state.totalAdjusments1) !== 0 ? numeral(this.state.totalAdjusments1).format('$0,0') : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjusments2) > 0 ? numeral(this.state.totalAdjusments2).format('$0,0') : ''}
+            {parseInt(this.state.totalAdjusments2) !== 0 ? numeral(this.state.totalAdjusments2).format('$0,0') : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjusments3) > 0 ? numeral(this.state.totalAdjusments3).format('$0,0') : ''}
+            {parseInt(this.state.totalAdjusments3) !== 0 ? numeral(this.state.totalAdjusments3).format('$0,0') : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjusments4) > 0 ? numeral(this.state.totalAdjusments4).format('$0,0') : ''}
+            {parseInt(this.state.totalAdjusments4) !== 0 ? numeral(this.state.totalAdjusments4).format('$0,0') : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjusments5) > 0 ? numeral(this.state.totalAdjusments5).format('$0,0') : ''}
+            {parseInt(this.state.totalAdjusments5) !== 0 ? numeral(this.state.totalAdjusments5).format('$0,0') : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjusments6) > 0 ? numeral(this.state.totalAdjusments6).format('$0,0') : ''}
+            {parseInt(this.state.totalAdjusments6) !== 0 ? numeral(this.state.totalAdjusments6).format('$0,0') : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjusments7) > 0 ? numeral(this.state.totalAdjusments7).format('$0,0') : ''}
+            {parseInt(this.state.totalAdjusments7) !== 0 ? numeral(this.state.totalAdjusments7).format('$0,0') : ''}
           </CustomColumn>
         </Grid.Row>
         <Grid.Row columns={9}>
@@ -538,37 +538,37 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
             <b> Total Adjusted Profit INCL.Owners Wages </b>
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjustedProfit1) > 0
+            {parseInt(this.state.totalAdjustedProfit1) !== 0
               ? numeral(this.state.totalAdjustedProfit1).format('$0,0')
               : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjustedProfit2) > 0
+            {parseInt(this.state.totalAdjustedProfit2) !== 0
               ? numeral(this.state.totalAdjustedProfit2).format('$0,0')
               : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjustedProfit3) > 0
+            {parseInt(this.state.totalAdjustedProfit3) !== 0
               ? numeral(this.state.totalAdjustedProfit3).format('$0,0')
               : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjustedProfit4) > 0
+            {parseInt(this.state.totalAdjustedProfit4) !== 0
               ? numeral(this.state.totalAdjustedProfit4).format('$0,0')
               : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjustedProfit5) > 0
+            {parseInt(this.state.totalAdjustedProfit5) !== 0
               ? numeral(this.state.totalAdjustedProfit5).format('$0,0')
               : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjustedProfit6) > 0
+            {parseInt(this.state.totalAdjustedProfit6) !== 0
               ? numeral(this.state.totalAdjustedProfit6).format('$0,0')
               : ''}
           </CustomColumn>
           <CustomColumn textAlign="right">
-            {parseInt(this.state.totalAdjustedProfit7) > 0
+            {parseInt(this.state.totalAdjustedProfit7) !== 0
               ? numeral(this.state.totalAdjustedProfit7).format('$0,0')
               : ''}
           </CustomColumn>

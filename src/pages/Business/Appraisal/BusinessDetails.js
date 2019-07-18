@@ -27,8 +27,10 @@ class BusinessDetailsPage extends Component {
   }
 
   componentWillUnmount () {
-    this.props.updateAppraisal(this.props.values)
-    this._updateBusiness(this.props.values)
+    if (this.props.values && this.props.values.business_id) {
+      this.props.updateAppraisal(this.props.values)
+      this._updateBusiness(this.props.values)
+    }
   }
 
   _updateBusiness = values => {

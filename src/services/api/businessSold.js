@@ -51,6 +51,8 @@ export const getAll = objectValues => {
   if (objectValues.trend && objectValues.trend.length > 0) params.trend = JSON.stringify(objectValues.trend)
   if (objectValues.stockValue && objectValues.stockValue > 0) params.stockValue = objectValues.stockValue
 
+  console.log(params)
+
   return request({
     url: '/comparable-data/',
     params

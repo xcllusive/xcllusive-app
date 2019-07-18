@@ -255,6 +255,7 @@ class GenerateAndSendPage extends Component {
                   color="orange"
                   onClick={this._modalConfirmDownloadDraftAppraisal}
                   size="small"
+                  disabled={true}
                   // disabled={
                   //   !appraisalObject.confirmBusinessDetail ||
                   //   !appraisalObject.confirmAbout ||

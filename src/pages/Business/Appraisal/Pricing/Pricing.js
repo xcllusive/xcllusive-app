@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -526,8 +526,8 @@ class PricingPage extends Component {
     return (
       this._priceBasedOnComparable(values.pricingMethod, appraisalObject) +
       this._riskPremium(values, appraisalObject) +
-      this._marketPremium(values, appraisalObject)
-      // this._negotiationPremium(values, appraisalObject)
+      this._marketPremium(values, appraisalObject) +
+      this._negotiationPremium(values, appraisalObject)
     )
   }
 
@@ -615,6 +615,20 @@ class PricingPage extends Component {
     }
   }
 
+  _replaceDollarAndComma = replace => {
+    replace = replace.replace('$', ',')
+    replace = replace.replace(/,/g, '')
+    return replace
+  }
+
+  _calculatedPriceBetween = (values, appraisalObject) => {
+    return (
+      this._priceBasedOnComparable(values.pricingMethod, appraisalObject) +
+      this._riskPremium(values, appraisalObject) +
+      this._marketPremium(values, appraisalObject)
+    )
+  }
+
   render () {
     const { appraisalObject, values, handleChange, handleBlur, errors, touched } = this.props
     return (
@@ -683,7 +697,7 @@ class PricingPage extends Component {
                   <Grid.Row columns={3}>
                     <Grid.Column>
                       <Header as="h4" textAlign="center" color="blue">
-                        Select Pricing Method
+                        Select Pricing Method <br /> (Multipliers)
                       </Header>
                     </Grid.Column>
                     <Grid.Column>
@@ -702,7 +716,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier EBITDA Last Year"
+                            label="EBITDA Last Year"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 1)}
                             checked={values.pricingMethod === 1}
@@ -726,7 +740,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier EBITDA Avg"
+                            label="EBITDA Avg"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 2)}
                             checked={values.pricingMethod === 2}
@@ -748,7 +762,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier PEBITDA Last Year"
+                            label="PEBITDA Last Year"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 3)}
                             checked={values.pricingMethod === 3}
@@ -772,7 +786,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier PEBITDA Avg"
+                            label="PEBITDA Avg"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 4)}
                             checked={values.pricingMethod === 4}
@@ -794,7 +808,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier EBITDA Last Year with Stock"
+                            label="EBITDA Last Year with Stock"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 5)}
                             checked={values.pricingMethod === 5}
@@ -818,7 +832,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier EBITDA Avg with Stock"
+                            label="EBITDA Avg with Stock"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 6)}
                             checked={values.pricingMethod === 6}
@@ -842,7 +856,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier PEBITDA Last Year with Stock"
+                            label="PEBITDA Last Year with Stock"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 7)}
                             checked={values.pricingMethod === 7}
@@ -866,7 +880,7 @@ class PricingPage extends Component {
                       <Form size="tiny">
                         <Form.Field>
                           <Form.Checkbox
-                            label="Multiplier PEBITDA Avg with Stock"
+                            label="PEBITDA Avg with Stock"
                             name="pricingMethod"
                             onChange={() => this._handleChangeCheckBox('pricingMethod', 8)}
                             checked={values.pricingMethod === 8}
@@ -1098,20 +1112,21 @@ class PricingPage extends Component {
                   <Form>
                     <Form.Group>
                       <Form.Field>
-                        <h4>Price Range Between: </h4>
+                        <h4>Calculated Value Between: </h4>
                       </Form.Field>
                       <Form.Field>
                         <h3>
                           {values.reducePriceForStockValue
                             ? numeral(
-                              this._askingPrice(values, appraisalObject) -
-                                  this._stockValue(appraisalObject) +
-                                  ((this._askingPrice(values, appraisalObject) - this._stockValue(appraisalObject)) *
-                                    values.sliderLowRange) /
-                                    100
+                              this._calculatedPriceBetween(values, appraisalObject) -
+                                  appraisalObject.currentStockLevel +
+                                  (this._calculatedPriceBetween(values, appraisalObject) -
+                                    appraisalObject.currentStockLevel) *
+                                    (values.sliderLowRange / 100)
                             ).format('$0,0')
                             : numeral(
-                              this._askingPrice(values, appraisalObject) + this._percLowRange(values, appraisalObject)
+                              this._calculatedPriceBetween(values, appraisalObject) +
+                                  this._calculatedPriceBetween(values, appraisalObject) * (values.sliderLowRange / 100)
                             ).format('$0,0')}
                         </h3>
                       </Form.Field>
@@ -1122,23 +1137,50 @@ class PricingPage extends Component {
                         <h3>
                           {values.reducePriceForStockValue
                             ? numeral(
-                              this._askingPrice(values, appraisalObject) - this._stockValue(appraisalObject)
+                              this._askingPrice(values, appraisalObject) -
+                                  this._negotiationPremium(values, appraisalObject) -
+                                  this._stockValue(appraisalObject)
                             ).format('$0,0')
-                            : numeral(this._askingPrice(values, appraisalObject)).format('$0,0')}
+                            : numeral(
+                              this._askingPrice(values, appraisalObject) -
+                                  this._negotiationPremium(values, appraisalObject)
+                            ).format('$0,0')}
                         </h3>
                       </Form.Field>
-                      <Form.Field>
-                        <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
-                      </Form.Field>
+                    </Form.Group>
+                    <Form.Group>
                       <Form.Field>
                         <h3>
-                          {appraisalObject.stockValuationOption === 2
-                            ? numeral(this._stockValue(appraisalObject)).format('$0,0')
-                            : appraisalObject.stockValuationOption === 3
-                              ? numeral(appraisalObject.stockNecessary).format('$0,0')
-                              : 'No Stock'}
+                          <b>Asking Price:</b>
                         </h3>
                       </Form.Field>
+                      <Form.Field>
+                        {values.reducePriceForStockValue ? (
+                          <h3>
+                            {numeral(
+                              this._askingPrice(values, appraisalObject) - appraisalObject.currentStockLevel
+                            ).format('$0,0')}
+                          </h3>
+                        ) : (
+                          <h3>{numeral(this._askingPrice(values, appraisalObject)).format('$0,0')}</h3>
+                        )}
+                      </Form.Field>
+                      {appraisalObject.stockNecessary > 0 ? (
+                        <Fragment>
+                          <Form.Field>
+                            <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
+                          </Form.Field>
+                          <Form.Field>
+                            <h3>
+                              {appraisalObject.stockValuationOption === 2
+                                ? numeral(this._stockValue(appraisalObject)).format('$0,0')
+                                : appraisalObject.stockValuationOption === 3
+                                  ? numeral(appraisalObject.stockNecessary).format('$0,0')
+                                  : 'No Stock'}
+                            </h3>
+                          </Form.Field>
+                        </Fragment>
+                      ) : null}
                     </Form.Group>
                   </Form>
                 </Grid.Row>
@@ -1288,7 +1330,7 @@ const mapPropsToValues = props => ({
   agreedValue: props.appraisalObject ? numeral(props.appraisalObject.agreedValue).format('0,0.[99]') : 0,
   sliderLowRange: props.appraisalObject ? props.appraisalObject.sliderLowRange : -10,
   inclStock: props.appraisalObject ? props.appraisalObject.inclStock : true,
-  reducePriceForStockValue: true,
+  reducePriceForStockValue: props.appraisalObject ? props.appraisalObject.reducePriceForStockValue : false,
   confirmPricing: props.appraisalObject ? props.appraisalObject.confirmPricing : false
 })
 
