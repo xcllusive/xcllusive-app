@@ -41,7 +41,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
       totalAdjustedProfit5Perc: 0,
       totalAdjustedProfit6Perc: 0,
       totalAdjustedProfit7Perc: 0,
-      testando: false
+      controlEntryAndExitComponent: false
     }
   }
 
@@ -49,7 +49,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this._setCalcTotalAdjusment()
     this._calcTotalAdjustedProfit()
     this._calcAdjustedProfit()
-    this.setState({ monthsCoveredState: this.props.monthsCovered, testando: false })
+    this.setState({ monthsCoveredState: this.props.monthsCovered, controlEntryAndExitComponent: false })
   }
 
   componentWillUnmount () {
@@ -80,20 +80,20 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this.props.values.adjustedProfitPerc6 = this.state.totalAdjustedProfit6Perc
     this.props.values.adjustedProfitPerc7 = this.state.totalAdjustedProfit7Perc
 
-    this.props.values.totalAdjustedProfit1 = this._replaceDollarAndComma(this.state.totalAdjustedProfit1)
-    this.props.values.totalAdjustedProfit2 = this._replaceDollarAndComma(this.state.totalAdjustedProfit2)
-    this.props.values.totalAdjustedProfit3 = this._replaceDollarAndComma(this.state.totalAdjustedProfit3)
-    this.props.values.totalAdjustedProfit4 = this._replaceDollarAndComma(this.state.totalAdjustedProfit4)
-    this.props.values.totalAdjustedProfit5 = this._replaceDollarAndComma(this.state.totalAdjustedProfit5)
-    this.props.values.totalAdjustedProfit6 = this._replaceDollarAndComma(this.state.totalAdjustedProfit6)
-    this.props.values.totalAdjustedProfit7 = this._replaceDollarAndComma(this.state.totalAdjustedProfit7)
+    this.props.values.totalAdjustedProfit1 = this.state.totalAdjustedProfit1
+    this.props.values.totalAdjustedProfit2 = this.state.totalAdjustedProfit2
+    this.props.values.totalAdjustedProfit3 = this.state.totalAdjustedProfit3
+    this.props.values.totalAdjustedProfit4 = this.state.totalAdjustedProfit4
+    this.props.values.totalAdjustedProfit5 = this.state.totalAdjustedProfit5
+    this.props.values.totalAdjustedProfit6 = this.state.totalAdjustedProfit6
+    this.props.values.totalAdjustedProfit7 = this.state.totalAdjustedProfit7
 
     // this.props.updateAppraisal(this.props.values, false)
     if (!this.props.isMovedFinancialYear) {
       this.props.updateAppraisal(this.props.values, false)
     }
     this.props.clearMovedFinancialYear()
-    this.setState({ testando: false })
+    this.setState({ controlEntryAndExitComponent: false })
   }
 
   async componentDidUpdate (nextProps, prevState) {
@@ -132,65 +132,23 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    // console.log('prevState.testando', prevState.testando)
-    if (
-      nextProps.totalsAdjustedProfitPerc &&
-      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc &&
-      prevState.totalAdjustedProfit1Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc &&
-      !prevState.testando
-    ) {
-      return {
-        totalAdjustedProfit1Perc: Math.trunc(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit1Perc)
-      }
-    }
-    if (
-      nextProps.totalsAdjustedProfitPerc &&
-      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc &&
-      prevState.totalAdjustedProfit2Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc &&
-      !prevState.testando
-    ) {
-      return {
-        totalAdjustedProfit2Perc: Math.trunc(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit2Perc)
-      }
-    }
-    if (
-      nextProps.totalsAdjustedProfitPerc &&
-      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit3Perc &&
-      prevState.totalAdjustedProfit3Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit3Perc &&
-      !prevState.testando
-    ) {
-      return {
-        totalAdjustedProfit3Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit3Perc).format('0,0')
-      }
-    }
-    if (
-      nextProps.totalsAdjustedProfitPerc &&
-      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit4Perc &&
-      prevState.totalAdjustedProfit4Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit4Perc &&
-      !prevState.testando
-    ) {
-      return {
-        totalAdjustedProfit4Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit4Perc).format('0,0')
-      }
-    }
-    if (
-      nextProps.totalsAdjustedProfitPerc &&
-      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit5Perc &&
-      prevState.totalAdjustedProfit5Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit5Perc &&
-      !prevState.testando
-    ) {
-      return {
-        totalAdjustedProfit5Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit5Perc).format('0,0')
-      }
-    }
-    if (
-      nextProps.totalsAdjustedProfitPerc &&
-      nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit6Perc &&
-      prevState.totalAdjustedProfit6Perc !== nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit6Perc &&
-      !prevState.testando
-    ) {
-      return {
-        totalAdjustedProfit6Perc: numeral(nextProps.totalsAdjustedProfitPerc.totalAdjustedProfit6Perc).format('0,0')
+    if (nextProps.totalsAdjustedProfit && nextProps.totalsAdjustedProfitPerc) {
+      for (let i = 1; i < 7; i++) {
+        if (nextProps.totalsAdjustedProfit[`totalAdjustedProfit${i}`]) {
+          if (
+            prevState[`totalAdjustedProfit${i}`] !== nextProps.totalsAdjustedProfit[`totalAdjustedProfit${i}`] &&
+            prevState[`totalAdjustedProfit${i}Perc`] !==
+              nextProps.totalsAdjustedProfitPerc[`totalAdjustedProfit${i}Perc`] &&
+            !prevState.controlEntryAndExitComponent
+          ) {
+            return {
+              [`totalAdjustedProfit${i}`]: Math.trunc(nextProps.totalsAdjustedProfit[`totalAdjustedProfit${i}`]),
+              [`totalAdjustedProfit${i}Perc`]: Math.trunc(
+                nextProps.totalsAdjustedProfitPerc[`totalAdjustedProfit${i}Perc`]
+              )
+            }
+          }
+        }
       }
     }
 
@@ -359,7 +317,7 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   _handleChangeAddbackAndAdjusments = async (e, row, name) => {
-    this.setState({ testando: true })
+    this.setState({ controlEntryAndExitComponent: true })
     e.preventDefault()
     if (
       (name.length === 11 && name.substring(10, 11) === '6') ||
@@ -396,7 +354,10 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   // }
 
   _handleChangeInputCurrency = (e, { value, name }) => {
-    this.props.setFieldValue(name, numeral(value).format('0,0') || 0)
+    if (value.substring(0, 1) === '-') {
+      if (value.length === 1) this.props.setFieldValue(name, `${value}$`)
+      else this.props.setFieldValue(name, numeral(value).format('$0,0') || 0)
+    } else this.props.setFieldValue(name, numeral(value).format('0,0') || 0)
   }
 
   _handleChangeDescription = async (name, data, item) => {
@@ -475,7 +436,13 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
                   tabIndex={item.tabIndex}
                   name={subItem.name}
                   autoComplete={subItem.name}
-                  value={parseInt(values[subItem.name]) !== 0 ? `$${values[subItem.name]}` : ''}
+                  value={
+                    parseInt(values[subItem.name]) !== 0
+                      ? values[subItem.name].substring(0, 1) === '-'
+                        ? `${values[subItem.name]}`
+                        : `$${values[subItem.name]}`
+                      : ''
+                  }
                   onChange={this._handleChangeInputCurrency}
                   onBlur={e => this._handleChangeAddbackAndAdjusments(e, item.row, subItem.name)}
                 />
@@ -626,7 +593,8 @@ AddbacksAndAdjustmentsForm.propTypes = {
   calcAnnualisedWhenChangeMonthsAndSeasonal: PropTypes.func,
   clearMovedFinancialYear: PropTypes.func,
   isMovedFinancialYear: PropTypes.bool,
-  totalsAdjustedProfitPerc: PropTypes.object
+  totalsAdjustedProfitPerc: PropTypes.object,
+  totalsAdjustedProfit: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -640,22 +608,34 @@ const mapPropsToValues = props => {
       ? numeral(props.appraisalObject[`aaRow${row}Year1`]).format('0,0')
       : 0
     values[`aaRow${row}Year2`] = props.appraisalObject
-      ? numeral(props.appraisalObject[`aaRow${row}Year2`]).format('0,0')
+      ? props.appraisalObject[`aaRow${row}Year2`] < 0
+        ? numeral(props.appraisalObject[`aaRow${row}Year2`]).format('$0,0')
+        : numeral(props.appraisalObject[`aaRow${row}Year2`]).format('0,0')
       : 0
     values[`aaRow${row}Year3`] = props.appraisalObject
-      ? numeral(props.appraisalObject[`aaRow${row}Year3`]).format('0,0')
+      ? props.appraisalObject[`aaRow${row}Year3`] < 0
+        ? numeral(props.appraisalObject[`aaRow${row}Year3`]).format('$0,0')
+        : numeral(props.appraisalObject[`aaRow${row}Year3`]).format('0,0')
       : 0
     values[`aaRow${row}Year4`] = props.appraisalObject
-      ? numeral(props.appraisalObject[`aaRow${row}Year4`]).format('0,0')
+      ? props.appraisalObject[`aaRow${row}Year4`] < 0
+        ? numeral(props.appraisalObject[`aaRow${row}Year4`]).format('$0,0')
+        : numeral(props.appraisalObject[`aaRow${row}Year4`]).format('0,0')
       : 0
     values[`aaRow${row}Year5`] = props.appraisalObject
-      ? numeral(props.appraisalObject[`aaRow${row}Year5`]).format('0,0')
+      ? props.appraisalObject[`aaRow${row}Year5`] < 0
+        ? numeral(props.appraisalObject[`aaRow${row}Year5`]).format('$0,0')
+        : numeral(props.appraisalObject[`aaRow${row}Year5`]).format('0,0')
       : 0
     values[`aaRow${row}Year6`] = props.appraisalObject
-      ? numeral(props.appraisalObject[`aaRow${row}Year6`]).format('0,0')
+      ? props.appraisalObject[`aaRow${row}Year6`] < 0
+        ? numeral(props.appraisalObject[`aaRow${row}Year6`]).format('$0,0')
+        : numeral(props.appraisalObject[`aaRow${row}Year6`]).format('0,0')
       : 0
     values[`aaRow${row}Year7`] = props.appraisalObject
-      ? numeral(props.appraisalObject[`aaRow${row}Year7`]).format('0,0')
+      ? props.appraisalObject[`aaRow${row}Year7`] < 0
+        ? numeral(props.appraisalObject[`aaRow${row}Year7`]).format('$0,0')
+        : numeral(props.appraisalObject[`aaRow${row}Year7`]).format('0,0')
       : 0
     values[`aaRow${row}YesNo`] = props.appraisalObject ? props.appraisalObject[`aaRow${row}YesNo`] : 0
   }

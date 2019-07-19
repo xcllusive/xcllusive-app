@@ -100,6 +100,10 @@ class FinancialAnalysisPage extends Component {
     setFieldValue('totalsAdjustedProfitPerc', changeTotalsAdjustedProfitPerc)
   }
 
+  _handleChangeTotalAdjustedProfit (changeTotalsAdjustedProfit, setFieldValue) {
+    setFieldValue('totalsAdjustedProfit', changeTotalsAdjustedProfit)
+  }
+
   render () {
     const { values, appraisalObject } = this.props
     return (
@@ -137,6 +141,7 @@ class FinancialAnalysisPage extends Component {
               moveFinancialYear={this.props.moveFinancialYear}
               getAppraisal={this.props.getAppraisal}
               changeTotalAdjustedProfitPerc={this._handleChangeTotalAdjustedProfitPerc}
+              changeTotalAdjustedProfit={this._handleChangeTotalAdjustedProfit}
             />
           </Grid>
         </Segment>
@@ -157,6 +162,7 @@ class FinancialAnalysisPage extends Component {
               monthsCovered={parseInt(this.props.values.monthsCovered)}
               seasonalAdjustment={parseInt(this.props.values.seasonalAdjustment)}
               totalsAdjustedProfitPerc={this.props.values.totalsAdjustedProfitPerc}
+              totalsAdjustedProfit={this.props.values.totalsAdjustedProfit}
             />
           </Grid>
         </Segment>

@@ -28,7 +28,8 @@ const FinancialAnalysisForm = ({
   openModal,
   moveFinancialYear,
   getAppraisal,
-  changeTotalAdjustedProfitPerc
+  changeTotalAdjustedProfitPerc,
+  changeTotalAdjustedProfit
 }) => {
   const _calcGrossMargin = (sales, cogs) => sales - cogs
 
@@ -491,6 +492,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfitPerc(sales, cogs, otherIncome, expense, column)
     _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
@@ -567,6 +569,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfitPerc(sales, cogs, otherIncome, expense, column)
     _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
@@ -645,6 +648,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfitPerc(sales, cogs, otherIncome, expense, column)
     _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
@@ -696,6 +700,7 @@ const FinancialAnalysisForm = ({
         )
       )
     }
+    _calcAdjustedProfitPerc(sales, cogs, otherIncome, expense, column)
     _calcAdjustedProfit(sales, cogs, otherIncome, expense, column)
   }
 
@@ -731,7 +736,7 @@ const FinancialAnalysisForm = ({
     return total
   }
 
-  const _calcAdjustedProfit = (sales, cogs, otherIncome, expense, column) => {
+  const _calcAdjustedProfitPerc = (sales, cogs, otherIncome, expense, column) => {
     let changeTotalsAdjustedProfitPerc = {}
 
     const total = _calcTotal(column) + _calcOperatingProfit(sales, cogs, otherIncome, expense, column)
@@ -739,6 +744,15 @@ const FinancialAnalysisForm = ({
       (numeral(total).value() / numeral(values[`sales${column}`]).value()) * 100
 
     changeTotalAdjustedProfitPerc(changeTotalsAdjustedProfitPerc, setFieldValue)
+  }
+
+  const _calcAdjustedProfit = (sales, cogs, otherIncome, expense, column) => {
+    let changeTotalsAdjustedProfit = {}
+
+    changeTotalsAdjustedProfit[`totalAdjustedProfit${column}`] =
+      _calcTotal(column) + _calcOperatingProfit(sales, cogs, otherIncome, expense, column)
+
+    changeTotalAdjustedProfit(changeTotalsAdjustedProfit, setFieldValue)
   }
 
   return (
@@ -1564,7 +1578,8 @@ FinancialAnalysisForm.propTypes = {
   openModal: PropTypes.func,
   moveFinancialYear: PropTypes.func,
   getAppraisal: PropTypes.func,
-  changeTotalAdjustedProfitPerc: PropTypes.func
+  changeTotalAdjustedProfitPerc: PropTypes.func,
+  changeTotalAdjustedProfit: PropTypes.func
 }
 
 const mapStateToProps = state => ({
