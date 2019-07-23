@@ -6,25 +6,22 @@ import { withFormik } from 'formik'
 import Wrapper from '../../../../components/content/Wrapper'
 import { Header, Grid, Button, Icon, Segment } from 'semantic-ui-react'
 import { getDailyTimeActivityReport } from '../../../../redux/ducks/reports'
-import moment from 'moment'
+// import moment from 'moment'
 import { BarChart, Bar, XAxis, Tooltip, CartesianGrid, YAxis, Legend } from 'recharts'
 
 class DailyTimeActivityReports extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      data: [],
-      dateFormatted: null
+      data: []
     }
   }
 
   async componentDidMount () {
     await this.props.getDailyTimeActivityReport(
       this.props.location.state.data.userId_logged,
-      this.props.location.state.data.dateCreated
+      this.props.location.state.data.dateRaw
     )
-    const date = moment(this.props.location.state.data.dateCreated).format('YYYY-DD-MM')
-    this.setState({ dateFormatted: date })
   }
 
   _backToWeeklyReport () {
