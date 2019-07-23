@@ -50,7 +50,7 @@ class ComparableDataPage extends Component {
         { key: 1, text: '10 Businesses', value: 10 },
         { key: 2, text: '20 Businesses', value: 20 },
         { key: 3, text: '50 Businesses', value: 50 },
-        { key: 4, text: 'Show All', value: 50000 }
+        { key: 4, text: 'Show All', value: 49 }
       ],
       priceOptions: OptionsPriceSelectBuyer,
       stockValueOptions: OptionsStockValue,
