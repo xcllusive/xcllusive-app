@@ -33,7 +33,9 @@ const FinancialAnalysisForm = ({
 }) => {
   const _calcGrossMargin = (sales, cogs) => sales - cogs
 
-  const _calcGrossMarginPerc = (sales, cogs) => (((sales - cogs) * 100) / sales).toFixed(2) || 0
+  const _calcGrossMarginPerc = (sales, cogs) => {
+    return isNaN((((sales - cogs) * 100) / sales).toFixed(2)) ? 0 : (((sales - cogs) * 100) / sales).toFixed(2)
+  }
 
   const _calcGrossProfit = (grossMargin, other) => numeral(grossMargin).value() + numeral(other).value() || 0
 
@@ -53,8 +55,11 @@ const FinancialAnalysisForm = ({
     return calc
   }
 
-  const _calcOperatingProfitPerc = (sales, cogs, other, expense) =>
-    ((_calcOperatingProfit(sales, cogs, other, expense) / sales) * 100).toFixed(2) || 0
+  const _calcOperatingProfitPerc = (sales, cogs, other, expense) => {
+    return isNaN(((_calcOperatingProfit(sales, cogs, other, expense) / sales) * 100).toFixed(2))
+      ? 0
+      : ((_calcOperatingProfit(sales, cogs, other, expense) / sales) * 100).toFixed(2)
+  }
 
   const _calcAnnualised = (yearValue, monthsCoveredValue, seasonalAdjustmentValue) => {
     const year = numeral(yearValue).value()
@@ -222,7 +227,7 @@ const FinancialAnalysisForm = ({
           parseInt(values.calcAnnualised2) +
           parseInt(values.calcAnnualised5)
       } else {
-        if (values.sales6 > 0) {
+        if (values.sales6 !== 0) {
           setFieldValue(`calcAnnualised${row}`, values.sales6)
           setFieldValue(`calcGrossMargin${7}`, _calcGrossMargin(values.sales6, values.calcAnnualised2))
           setFieldValue(`calcGrossMarginPerc${7}`, _calcGrossMarginPerc(values.sales6, values.calcAnnualised2))
@@ -293,7 +298,7 @@ const FinancialAnalysisForm = ({
           _calcAnnualised(values.cogs6, values.monthsCovered, values.seasonalAdjustment) +
           parseInt(values.calcAnnualised5)
       } else {
-        if (values.cogs6 > 0) {
+        if (values.cogs6 !== 0) {
           setFieldValue(`calcAnnualised${row}`, values.cogs6)
           setFieldValue(`calcGrossMargin${7}`, _calcGrossMargin(values.calcAnnualised1, values.cogs6))
           if (values.salesYesNo) {
@@ -356,7 +361,7 @@ const FinancialAnalysisForm = ({
             ) - values.expenses6
         )
       } else {
-        if (values.otherIncome6 > 0) {
+        if (values.otherIncome6 !== 0) {
           setFieldValue(`calcAnnualised${row}`, values.otherIncome6)
         } else {
           setFieldValue(`calcAnnualised${row}`, 0)
@@ -403,7 +408,7 @@ const FinancialAnalysisForm = ({
           )
         )
       } else {
-        if (values.expenses6 > 0) {
+        if (values.expenses6 !== 0) {
           setFieldValue(`calcAnnualised${row}`, values.expenses6)
         } else {
           setFieldValue(`calcAnnualised${row}`, 0)
@@ -814,7 +819,7 @@ const FinancialAnalysisForm = ({
               onChange={_handleChangeCheckBoxPdf}
             />
           </Form.Field>
-          <b> {appraisalObject && appraisalObject.year1 > 0 ? appraisalObject.year1 : financialYear - 5} </b>
+          <b> {appraisalObject && appraisalObject.year1 !== 0 ? appraisalObject.year1 : financialYear - 5} </b>
         </CustomColumn>
         <CustomColumn textAlign="center">
           <Form.Field>
@@ -825,7 +830,7 @@ const FinancialAnalysisForm = ({
               onChange={_handleChangeCheckBoxPdf}
             />
           </Form.Field>
-          <b> {appraisalObject && appraisalObject.year2 > 0 ? appraisalObject.year2 : financialYear - 4} </b>
+          <b> {appraisalObject && appraisalObject.year2 !== 0 ? appraisalObject.year2 : financialYear - 4} </b>
         </CustomColumn>
         <CustomColumn textAlign="center">
           <Form.Field>
@@ -836,7 +841,7 @@ const FinancialAnalysisForm = ({
               onChange={_handleChangeCheckBoxPdf}
             />
           </Form.Field>
-          <b> {appraisalObject && appraisalObject.year3 > 0 ? appraisalObject.year3 : financialYear - 3} </b>
+          <b> {appraisalObject && appraisalObject.year3 !== 0 ? appraisalObject.year3 : financialYear - 3} </b>
         </CustomColumn>
         <CustomColumn textAlign="center">
           <Form.Field>
@@ -847,7 +852,7 @@ const FinancialAnalysisForm = ({
               onChange={_handleChangeCheckBoxPdf}
             />
           </Form.Field>
-          <b> {appraisalObject && appraisalObject.year4 > 0 ? appraisalObject.year4 : financialYear - 2} </b>
+          <b> {appraisalObject && appraisalObject.year4 !== 0 ? appraisalObject.year4 : financialYear - 2} </b>
         </CustomColumn>
         <CustomColumn textAlign="center">
           <Form.Field>
@@ -858,11 +863,11 @@ const FinancialAnalysisForm = ({
               onChange={_handleChangeCheckBoxPdf}
             />
           </Form.Field>
-          <b> {appraisalObject && appraisalObject.year5 > 0 ? appraisalObject.year5 : financialYear - 1} </b>
+          <b> {appraisalObject && appraisalObject.year5 !== 0 ? appraisalObject.year5 : financialYear - 1} </b>
         </CustomColumn>
         <CustomColumn textAlign="center">
           <b>
-            {appraisalObject && appraisalObject.year6 > 0 ? appraisalObject.year6 : financialYear}
+            {appraisalObject && appraisalObject.year6 !== 0 ? appraisalObject.year6 : financialYear}
             YTD
           </b>
         </CustomColumn>
@@ -1090,37 +1095,25 @@ const FinancialAnalysisForm = ({
         </CustomColumn>
         {/* <CustomColumn textAlign="center">{_calcGrossMargin(values.sales1, values.cogs1)} %</CustomColumn> */}
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin1 > 0 || values.sales1 > 0 || values.cogs1 > 0
-            ? numeral(values.calcGrossMargin1).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin1) !== 0 ? numeral(values.calcGrossMargin1).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin2 > 0 || values.sales2 > 0 || values.cogs2 > 0
-            ? numeral(values.calcGrossMargin2).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin2) !== 0 ? numeral(values.calcGrossMargin2).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin3 > 0 || values.sales3 > 0 || values.cogs3 > 0
-            ? numeral(values.calcGrossMargin3).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin3) !== 0 ? numeral(values.calcGrossMargin3).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin4 > 0 || values.sales4 > 0 || values.cogs4 > 0
-            ? numeral(values.calcGrossMargin4).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin4) !== 0 ? numeral(values.calcGrossMargin4).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin5 > 0 || values.sales5 > 0 || values.cogs5 > 0
-            ? numeral(values.calcGrossMargin5).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin5) !== 0 ? numeral(values.calcGrossMargin5).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin6 > 0 || values.sales6 > 0 || values.cogs6 > 0
-            ? numeral(values.calcGrossMargin6).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin6) !== 0 ? numeral(values.calcGrossMargin6).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin7 > 0 ? numeral(values.calcGrossMargin7).format('$0,0') : ''}
+          {parseInt(values.calcGrossMargin7) !== 0 ? numeral(values.calcGrossMargin7).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -1130,37 +1123,25 @@ const FinancialAnalysisForm = ({
         </CustomColumn>
         {/* <CustomColumn textAlign="center">{_calcGrossMarginPerc(values.sales1, values.cogs1)} %</CustomColumn> */}
         <CustomColumn textAlign="right">
-          {values.calcGrossMarginPerc1 > 0 || (values.sales1 > 0 && values.cogs1 > 0)
-            ? `${Math.round(values.calcGrossMarginPerc1)} %`
-            : ''}
+          {parseInt(values.calcGrossMarginPerc1) !== 0 ? `${Math.round(values.calcGrossMarginPerc1)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMarginPerc2 > 0 || (values.sales2 > 0 && values.cogs2 > 0)
-            ? `${Math.round(values.calcGrossMarginPerc2)} %`
-            : ''}
+          {parseInt(values.calcGrossMarginPerc3) !== 0 ? `${Math.round(values.calcGrossMarginPerc2)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMarginPerc3 > 0 || (values.sales3 > 0 && values.cogs3 > 0)
-            ? `${Math.round(values.calcGrossMarginPerc3)} %`
-            : ''}
+          {parseInt(values.calcGrossMarginPerc3) !== 0 ? `${Math.round(values.calcGrossMarginPerc3)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMarginPerc4 > 0 || (values.sales4 > 0 && values.cogs4 > 0)
-            ? `${Math.round(values.calcGrossMarginPerc4)} %`
-            : ''}
+          {parseInt(values.calcGrossMarginPerc4) !== 0 ? `${Math.round(values.calcGrossMarginPerc4)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMarginPerc5 > 0 || (values.sales5 > 0 && values.cogs5 > 0)
-            ? `${Math.round(values.calcGrossMarginPerc5)} %`
-            : ''}
+          {parseInt(values.calcGrossMarginPerc5) !== 0 ? `${Math.round(values.calcGrossMarginPerc5)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMarginPerc6 > 0 || (values.sales6 > 0 && values.cogs6 > 0)
-            ? `${Math.round(values.calcGrossMarginPerc6)} %`
-            : ''}
+          {parseInt(values.calcGrossMarginPerc6) !== 0 ? `${Math.round(values.calcGrossMarginPerc6)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMarginPerc7 > 0 ? `${Math.round(values.calcGrossMarginPerc7)} %` : ''}
+          {parseInt(values.calcGrossMarginPerc7) !== 0 ? `${Math.round(values.calcGrossMarginPerc7)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -1289,37 +1270,25 @@ const FinancialAnalysisForm = ({
                       {_calcGrossProfit(_calcGrossMargin(values.sales1, values.cogs1), values.otherIncome1)}
                       </CustomColumn> */}
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin1 > 0 || values.sales1 > 0 || values.cogs1 > 0 || values.otherIncome1 > 0
-            ? numeral(values.calcGrossProfit1).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin1) !== 0 ? numeral(values.calcGrossProfit1).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin2 > 0 || values.sales2 > 0 || values.cogs2 > 0 || values.otherIncome2 > 0
-            ? numeral(values.calcGrossProfit2).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin2) !== 0 ? numeral(values.calcGrossProfit2).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin3 > 0 || values.sales3 > 0 || values.cogs3 > 0 || values.otherIncome3 > 0
-            ? numeral(values.calcGrossProfit3).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin3) !== 0 ? numeral(values.calcGrossProfit3).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin4 > 0 || values.sales4 > 0 || values.cogs4 > 0 || values.otherIncome4 > 0
-            ? numeral(values.calcGrossProfit4).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin4) !== 0 ? numeral(values.calcGrossProfit4).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin5 > 0 || values.sales5 > 0 || values.cogs5 > 0 || values.otherIncome5 > 0
-            ? numeral(values.calcGrossProfit5).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin5) !== 0 ? numeral(values.calcGrossProfit5).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin6 > 0 || values.sales6 > 0 || values.cogs6 > 0 || values.otherIncome6 > 0
-            ? numeral(values.calcGrossProfit6).format('$0,0')
-            : ''}
+          {parseInt(values.calcGrossMargin6) !== 0 ? numeral(values.calcGrossProfit6).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin7 > 0 ? numeral(values.calcGrossProfit7).format('$0,0') : ''}
+          {parseInt(values.calcGrossMargin7) !== 0 ? numeral(values.calcGrossProfit7).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
@@ -1431,61 +1400,25 @@ const FinancialAnalysisForm = ({
                                   {_calcOperatingProfit(values.sales1, values.cogs1, values.otherIncome1, values.expenses1, '1')}
                                 </CustomColumn> */}
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin1 > 0 ||
-          values.sales1 > 0 ||
-          values.cogs1 > 0 ||
-          values.otherIncome1 > 0 ||
-          values.expenses1
-            ? numeral(values.calcOperatingProfit1).format('$0,0')
-            : ''}
+          {parseInt(values.calcOperatingProfit1) !== 0 ? numeral(values.calcOperatingProfit1).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin2 > 0 ||
-          values.sales2 > 0 ||
-          values.cogs2 > 0 ||
-          values.otherIncome2 > 0 ||
-          values.expenses2
-            ? numeral(values.calcOperatingProfit2).format('$0,0')
-            : ''}
+          {parseInt(values.calcOperatingProfit2) !== 0 ? numeral(values.calcOperatingProfit2).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin3 > 0 ||
-          values.sales3 > 0 ||
-          values.cogs3 > 0 ||
-          values.otherIncome3 > 0 ||
-          values.expenses3
-            ? numeral(values.calcOperatingProfit3).format('$0,0')
-            : ''}
+          {parseInt(values.calcOperatingProfit3) !== 0 ? numeral(values.calcOperatingProfit3).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin4 > 0 ||
-          values.sales4 > 0 ||
-          values.cogs4 > 0 ||
-          values.otherIncome4 > 0 ||
-          values.expenses4
-            ? numeral(values.calcOperatingProfit4).format('$0,0')
-            : ''}
+          {parseInt(values.calcOperatingProfit4) !== 0 ? numeral(values.calcOperatingProfit4).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin5 > 0 ||
-          values.sales5 > 0 ||
-          values.cogs5 > 0 ||
-          values.otherIncome5 > 0 ||
-          values.expenses5
-            ? numeral(values.calcOperatingProfit5).format('$0,0')
-            : ''}
+          {parseInt(values.calcOperatingProfit5) !== 0 ? numeral(values.calcOperatingProfit5).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin6 > 0 ||
-          values.sales6 > 0 ||
-          values.cogs6 > 0 ||
-          values.otherIncome6 > 0 ||
-          values.expenses6
-            ? numeral(values.calcOperatingProfit6).format('$0,0')
-            : ''}
+          {parseInt(values.calcOperatingProfit6) !== 0 ? numeral(values.calcOperatingProfit6).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcOperatingProfit7 > 0 ? numeral(values.calcOperatingProfit7).format('$0,0') : ''}
+          {parseInt(values.calcOperatingProfit7) !== 0 ? numeral(values.calcOperatingProfit7).format('$0,0') : ''}
         </CustomColumn>
         <CustomColumn textAlign="right" />
       </Grid.Row>
@@ -1497,61 +1430,25 @@ const FinancialAnalysisForm = ({
                                   {_calcOperatingProfitPerc(values.sales1, values.cogs1, values.otherIncome1, values.expenses1)} %
                                 </CustomColumn> */}
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin1 > 0 ||
-          values.sales1 > 0 ||
-          values.cogs1 > 0 ||
-          values.otherIncome1 > 0 ||
-          values.expenses1
-            ? `${Math.round(values.calcOperatingProfitPerc1)} %`
-            : ''}
+          {parseInt(values.calcOperatingProfitPerc1) !== 0 ? `${Math.round(values.calcOperatingProfitPerc1)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin2 > 0 ||
-          values.sales2 > 0 ||
-          values.cogs2 > 0 ||
-          values.otherIncome2 > 0 ||
-          values.expenses2
-            ? `${Math.round(values.calcOperatingProfitPerc2)} %`
-            : ''}
+          {parseInt(values.calcOperatingProfitPerc2) !== 0 ? `${Math.round(values.calcOperatingProfitPerc2)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin3 > 0 ||
-          values.sales3 > 0 ||
-          values.cogs3 > 0 ||
-          values.otherIncome3 > 0 ||
-          values.expenses3
-            ? `${Math.round(values.calcOperatingProfitPerc3)} %`
-            : ''}
+          {parseInt(values.calcOperatingProfitPerc3) !== 0 ? `${Math.round(values.calcOperatingProfitPerc3)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin4 > 0 ||
-          values.sales4 > 0 ||
-          values.cogs4 > 0 ||
-          values.otherIncome4 > 0 ||
-          values.expenses4
-            ? `${Math.round(values.calcOperatingProfitPerc4)} %`
-            : ''}
+          {parseInt(values.calcOperatingProfitPerc4) !== 0 ? `${Math.round(values.calcOperatingProfitPerc4)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin5 > 0 ||
-          values.sales5 > 0 ||
-          values.cogs5 > 0 ||
-          values.otherIncome5 > 0 ||
-          values.expenses5
-            ? `${Math.round(values.calcOperatingProfitPerc5)} %`
-            : ''}
+          {parseInt(values.calcOperatingProfitPerc5) !== 0 ? `${Math.round(values.calcOperatingProfitPerc5)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcGrossMargin6 > 0 ||
-          values.sales6 > 0 ||
-          values.cogs6 > 0 ||
-          values.otherIncome6 > 0 ||
-          values.expenses6
-            ? `${Math.round(values.calcOperatingProfitPerc6)} %`
-            : ''}
+          {parseInt(values.calcOperatingProfitPerc6) !== 0 ? `${Math.round(values.calcOperatingProfitPerc6)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="right">
-          {values.calcOperatingProfitPerc7 > 0 ? `${Math.round(values.calcOperatingProfitPerc7)} %` : ''}
+          {parseInt(values.calcOperatingProfitPerc7) !== 0 ? `${Math.round(values.calcOperatingProfitPerc7)} %` : ''}
         </CustomColumn>
         <CustomColumn textAlign="center" />
       </Grid.Row>
