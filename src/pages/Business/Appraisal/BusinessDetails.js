@@ -234,14 +234,14 @@ BusinessDetailsPage.propTypes = {
 const mapPropsToValues = props => ({
   business_id: props.business ? props.business.id : '',
   id: props.appraisalObject ? props.appraisalObject.id : '',
-  businessName: props.business ? props.business.businessName : '',
-  businessABN: props.business ? props.business.businessABN : '',
-  firstNameV: props.business ? props.business.firstNameV : '',
-  lastNameV: props.business ? props.business.lastNameV : '',
-  address1: props.business ? props.business.address1 : '',
-  suburb: props.business ? props.business.suburb : '',
-  state: props.business ? props.business.state : '',
-  postCode: props.business ? props.business.postCode : '',
+  businessName: props.business && props.business.businessName ? props.business.businessName : '',
+  businessABN: props.business && props.business.businessABN ? props.business.businessABN : '',
+  firstNameV: props.business && props.business.firstNameV ? props.business.firstNameV : '',
+  lastNameV: props.business && props.business.lastNameV ? props.business.lastNameV : '',
+  address1: props.business && props.business.address1 ? props.business.address1 : '',
+  suburb: props.business && props.business.suburb ? props.business.suburb : '',
+  state: props.business && props.business.state ? props.business.state : '',
+  postCode: props.business && props.business.postCode ? props.business.postCode : '',
   confirmBusinessDetail: props.appraisalObject ? props.appraisalObject.confirmBusinessDetail : false
 })
 
