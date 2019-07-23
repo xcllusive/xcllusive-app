@@ -23,19 +23,41 @@ class AddbacksAndAdjustmentsForm extends Component {
     }
   }
 
-  componentWillUnmount () {
+  async componentWillUnmount () {
     const obj = {
       totalAnnualWages: this._replaceDollarAndComma(this.props.values.totalAnnualWages),
-      owner1AnnualWage: this._replaceDollarAndComma(this.props.values.owner1AnnualWage),
-      owner2AnnualWage: this._replaceDollarAndComma(this.props.values.owner2AnnualWage),
-      owner3AnnualWage: this._replaceDollarAndComma(this.props.values.owner3AnnualWage),
-      owner4AnnualWage: this._replaceDollarAndComma(this.props.values.owner4AnnualWage),
-      owner5AnnualWage: this._replaceDollarAndComma(this.props.values.owner5AnnualWage),
-      owner6AnnualWage: this._replaceDollarAndComma(this.props.values.owner6AnnualWage),
-      owner7AnnualWage: this._replaceDollarAndComma(this.props.values.owner7AnnualWage)
+      owner1AnnualWage:
+        this._replaceDollarAndComma(this.props.values.owner1AnnualWage) === ''
+          ? 0
+          : this._replaceDollarAndComma(this.props.values.owner1AnnualWage),
+      owner2AnnualWage:
+        this._replaceDollarAndComma(this.props.values.owner2AnnualWage) === ''
+          ? 0
+          : this._replaceDollarAndComma(this.props.values.owner2AnnualWage),
+      owner3AnnualWage:
+        this._replaceDollarAndComma(this.props.values.owner3AnnualWage) === ''
+          ? 0
+          : this._replaceDollarAndComma(this.props.values.owner3AnnualWage),
+      owner4AnnualWage:
+        this._replaceDollarAndComma(this.props.values.owner4AnnualWage) === ''
+          ? 0
+          : this._replaceDollarAndComma(this.props.values.owner4AnnualWage),
+      owner5AnnualWage:
+        this._replaceDollarAndComma(this.props.values.owner5AnnualWage) === ''
+          ? 0
+          : this._replaceDollarAndComma(this.props.values.owner5AnnualWage),
+      owner6AnnualWage:
+        this._replaceDollarAndComma(this.props.values.owner6AnnualWage) === ''
+          ? 0
+          : this._replaceDollarAndComma(this.props.values.owner6AnnualWage),
+      owner7AnnualWage:
+        this._replaceDollarAndComma(this.props.values.owner7AnnualWage) === ''
+          ? 0
+          : this._replaceDollarAndComma(this.props.values.owner7AnnualWage)
     }
+
     Object.assign(this.props.values, obj)
-    this.props.updateAppraisal(this.props.values, false)
+    await this.props.updateAppraisal(this.props.values, false)
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -176,7 +198,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner1HoursPWeek"
                       autoComplete="owner1HoursPWeek"
-                      value={values.owner1HoursPWeek}
+                      value={numeral(values.owner1HoursPWeek).format('0')}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -228,7 +250,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner2HoursPWeek"
                       autoComplete="owner2HoursPWeek"
-                      value={values.owner2HoursPWeek}
+                      value={numeral(values.owner2HoursPWeek).format('0')}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -280,7 +302,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner3HoursPWeek"
                       autoComplete="owner3HoursPWeek"
-                      value={values.owner3HoursPWeek}
+                      value={numeral(values.owner3HoursPWeek).format('0')}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -332,7 +354,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner4HoursPWeek"
                       autoComplete="owner4HoursPWeek"
-                      value={values.owner4HoursPWeek}
+                      value={numeral(values.owner4HoursPWeek).format('0')}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -384,7 +406,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner5HoursPWeek"
                       autoComplete="owner5HoursPWeek"
-                      value={values.owner5HoursPWeek}
+                      value={numeral(values.owner5HoursPWeek).format('0')}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -435,7 +457,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner6HoursPWeek"
                       autoComplete="owner6HoursPWeek"
-                      value={values.owner6HoursPWeek}
+                      value={numeral(values.owner6HoursPWeek).format('0')}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -486,7 +508,7 @@ class AddbacksAndAdjustmentsForm extends Component {
                     <Form.Input
                       name="owner7HoursPWeek"
                       autoComplete="owner7HoursPWeek"
-                      value={values.owner7HoursPWeek}
+                      value={numeral(values.owner7HoursPWeek).format('0')}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
@@ -563,13 +585,13 @@ const mapPropsToValues = props => ({
   owner5Position: props.appraisalObject ? props.appraisalObject.owner5Position : '',
   owner6Position: props.appraisalObject ? props.appraisalObject.owner6Position : '',
   owner7Position: props.appraisalObject ? props.appraisalObject.owner7Position : '',
-  owner1HoursPWeek: props.appraisalObject ? props.appraisalObject.owner1HoursPWeek : '',
-  owner2HoursPWeek: props.appraisalObject ? props.appraisalObject.owner2HoursPWeek : '',
-  owner3HoursPWeek: props.appraisalObject ? props.appraisalObject.owner3HoursPWeek : '',
-  owner4HoursPWeek: props.appraisalObject ? props.appraisalObject.owner4HoursPWeek : '',
-  owner5HoursPWeek: props.appraisalObject ? props.appraisalObject.owner5HoursPWeek : '',
-  owner6HoursPWeek: props.appraisalObject ? props.appraisalObject.owner6HoursPWeek : '',
-  owner7HoursPWeek: props.appraisalObject ? props.appraisalObject.owner7HoursPWeek : '',
+  owner1HoursPWeek: props.appraisalObject ? props.appraisalObject.owner1HoursPWeek : 0,
+  owner2HoursPWeek: props.appraisalObject ? props.appraisalObject.owner2HoursPWeek : 0,
+  owner3HoursPWeek: props.appraisalObject ? props.appraisalObject.owner3HoursPWeek : 0,
+  owner4HoursPWeek: props.appraisalObject ? props.appraisalObject.owner4HoursPWeek : 0,
+  owner5HoursPWeek: props.appraisalObject ? props.appraisalObject.owner5HoursPWeek : 0,
+  owner6HoursPWeek: props.appraisalObject ? props.appraisalObject.owner6HoursPWeek : 0,
+  owner7HoursPWeek: props.appraisalObject ? props.appraisalObject.owner7HoursPWeek : 0,
   owner1AnnualWage: props.appraisalObject ? numeral(props.appraisalObject.owner1AnnualWage).format('$0,0') : '',
   owner2AnnualWage: props.appraisalObject ? numeral(props.appraisalObject.owner2AnnualWage).format('$0,0') : '',
   owner3AnnualWage: props.appraisalObject ? numeral(props.appraisalObject.owner3AnnualWage).format('$0,0') : '',
@@ -584,7 +606,15 @@ const mapStateToProps = state => {
   return {}
 }
 
-const validationSchema = Yup.object().shape({})
+const validationSchema = Yup.object().shape({
+  owner1HoursPWeek: Yup.number().typeError('It needs to be numeric.'),
+  owner2HoursPWeek: Yup.number().typeError('It needs to be numeric.'),
+  owner3HoursPWeek: Yup.number().typeError('It needs to be numeric.'),
+  owner4HoursPWeek: Yup.number().typeError('It needs to be numeric.'),
+  owner5HoursPWeek: Yup.number().typeError('It needs to be numeric.'),
+  owner6HoursPWeek: Yup.number().typeError('It needs to be numeric.'),
+  owner7HoursPWeek: Yup.number().typeError('It needs to be numeric.')
+})
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({ updateAppraisal }, dispatch)
