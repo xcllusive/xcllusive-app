@@ -694,8 +694,8 @@ class ClientManagerList extends Component {
                             (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)) ||
                           !this.state.business ||
                           (!this.state.ownersApprovalReceived && this.state.business.notifyOwner) ||
-                          this.state.business.stageId === 5 || // Under Offer
-                          this.state.business.productId === 2 // Seller Assist
+                          this.state.business.stageId === 5 // Under Offer
+                          // this.state.business.productId === 2 // Seller Assist
                         }
                         loading={isLoadingSendIm}
                       >
@@ -816,12 +816,12 @@ class ClientManagerList extends Component {
                             <Table.Cell>{this.state.business.BusinessStage.label}</Table.Cell>
                           </Table.Row>
                         ) : null}
-                        {this.state.business.productId === 2 ? (
+                        {/* {this.state.business.productId === 2 ? (
                           <Table.Row>
                             <Table.HeaderCell>Product</Table.HeaderCell>
                             <Table.Cell>Seller Assist</Table.Cell>
                           </Table.Row>
-                        ) : null}
+                        ) : null} */}
                       </Table.Body>
                     </Table>
                     {this.state.business.notifyOwner ? (
