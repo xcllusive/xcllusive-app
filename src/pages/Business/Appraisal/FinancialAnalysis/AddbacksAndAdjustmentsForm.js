@@ -80,13 +80,13 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
     this.props.values.adjustedProfitPerc6 = this.state.totalAdjustedProfit6Perc
     this.props.values.adjustedProfitPerc7 = this.state.totalAdjustedProfit7Perc
 
-    this.props.values.totalAdjustedProfit1 = this.state.totalAdjustedProfit1
-    this.props.values.totalAdjustedProfit2 = this.state.totalAdjustedProfit2
-    this.props.values.totalAdjustedProfit3 = this.state.totalAdjustedProfit3
-    this.props.values.totalAdjustedProfit4 = this.state.totalAdjustedProfit4
-    this.props.values.totalAdjustedProfit5 = this.state.totalAdjustedProfit5
-    this.props.values.totalAdjustedProfit6 = this.state.totalAdjustedProfit6
-    this.props.values.totalAdjustedProfit7 = this.state.totalAdjustedProfit7
+    this.props.values.totalAdjustedProfit1 = this._replaceDollarAndComma(this.state.totalAdjustedProfit1)
+    this.props.values.totalAdjustedProfit2 = this._replaceDollarAndComma(this.state.totalAdjustedProfit2)
+    this.props.values.totalAdjustedProfit3 = this._replaceDollarAndComma(this.state.totalAdjustedProfit3)
+    this.props.values.totalAdjustedProfit4 = this._replaceDollarAndComma(this.state.totalAdjustedProfit4)
+    this.props.values.totalAdjustedProfit5 = this._replaceDollarAndComma(this.state.totalAdjustedProfit5)
+    this.props.values.totalAdjustedProfit6 = this._replaceDollarAndComma(this.state.totalAdjustedProfit6)
+    this.props.values.totalAdjustedProfit7 = this._replaceDollarAndComma(this.state.totalAdjustedProfit7)
 
     // this.props.updateAppraisal(this.props.values, false)
     if (!this.props.isMovedFinancialYear) {
