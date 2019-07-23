@@ -290,25 +290,25 @@ class PricingPage extends Component {
   }
 
   _ebitdaLastYear = appraisalObject => {
-    if (appraisalObject && appraisalObject.totalAdjustedProfit7 > 0 && appraisalObject.renderPdfYear7) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit7 !== 0 && appraisalObject.renderPdfYear7) {
       return appraisalObject.totalAdjustedProfit7 - this._totalWages(appraisalObject)
     }
     // if (appraisalObject && appraisalObject.totalAdjustedProfit6 > 0) {
     //   return appraisalObject.totalAdjustedProfit6 - this._totalWages(appraisalObject)
     // }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit5 > 0 && appraisalObject.renderPdfYear5) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit5 !== 0 && appraisalObject.renderPdfYear5) {
       return appraisalObject.totalAdjustedProfit5 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit4 > 0 && appraisalObject.renderPdfYear4) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit4 !== 0 && appraisalObject.renderPdfYear4) {
       return appraisalObject.totalAdjustedProfit4 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit3 > 0 && appraisalObject.renderPdfYear3) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit3 !== 0 && appraisalObject.renderPdfYear3) {
       return appraisalObject.totalAdjustedProfit3 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit2 > 0 && appraisalObject.renderPdfYear2) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit2 !== 0 && appraisalObject.renderPdfYear2) {
       return appraisalObject.totalAdjustedProfit2 - this._totalWages(appraisalObject)
     }
-    if (appraisalObject && appraisalObject.totalAdjustedProfit1 > 0 && appraisalObject.renderPdfYear1) {
+    if (appraisalObject && appraisalObject.totalAdjustedProfit1 !== 0 && appraisalObject.renderPdfYear1) {
       return appraisalObject.totalAdjustedProfit1 - this._totalWages(appraisalObject)
     }
   }
