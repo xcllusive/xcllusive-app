@@ -8,6 +8,14 @@ export const getMarketingReport = (dateFrom, dateTo) => {
   })
 }
 
+export const getMarketingReportTest = (dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: 'reports/marketing-report-test',
+    params: { dateFrom, dateTo }
+  })
+}
+
 export const getAllAnalysts = () => {
   return request({
     method: 'get',

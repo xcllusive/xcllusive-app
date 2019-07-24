@@ -8,7 +8,8 @@ import {
   activityRequestControlPerUser as activityRequestControlPerUserAPI,
   getUsersPerRegion as getUsersPerRegionAPI,
   getDailyTimeActivityReport as getDailyTimeActivityReportAPI,
-  getCtcBusinessesPerOffice as getCtcBusinessesPerOfficeAPI
+  getCtcBusinessesPerOffice as getCtcBusinessesPerOfficeAPI,
+  getMarketingReportTest as getMarketingReportTestAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -53,7 +54,10 @@ export const Types = {
   SET_LAST_XCLLUSIVE_TAB_SELECTED: 'SET_LAST_XCLLUSIVE_TAB_SELECTED',
   GET_CTC_BUSINESSES_PER_OFFICE_LOADING: 'GET_CTC_BUSINESSES_PER_OFFICE_LOADING',
   GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS: 'GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS',
-  GET_CTC_BUSINESSES_PER_OFFICE_FAILURE: 'GET_CTC_BUSINESSES_PER_OFFICE_FAILURE'
+  GET_CTC_BUSINESSES_PER_OFFICE_FAILURE: 'GET_CTC_BUSINESSES_PER_OFFICE_FAILURE',
+  GET_MARKETING_REPORT_TEST_LOADING: 'GET_MARKETING_REPORT_TEST_LOADING',
+  GET_MARKETING_REPORT_TEST_SUCCESS: 'GET_MARKETING_REPORT_TEST_SUCCESS',
+  GET_MARKETING_REPORT_TEST_FAILURE: 'GET_MARKETING_REPORT_TEST_FAILURE'
 }
 
 // Reducer
@@ -73,6 +77,10 @@ const initialState = {
     arrayOffices: [],
     mergedCtcLeadsPerOfficeFromXcllusive: [],
     totalBusinessesCtc: 0,
+    error: null
+  },
+  getMarketingReportTest: {
+    isLoading: false,
     error: null
   },
   getAllAnalysts: {
@@ -140,7 +148,7 @@ export default function reducer (state = initialState, action) {
     case Types.GET_MARKETING_REPORT_LOADING:
       return {
         ...state,
-        getLastWeeklyReport: {
+        getMarketingReport: {
           ...state.getMarketingReport,
           isLoading: action.payload,
           leadsPerAnalystArray: null,
@@ -185,6 +193,33 @@ export default function reducer (state = initialState, action) {
         ...state,
         getMarketingReport: {
           ...state.getMarketingReport,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_MARKETING_REPORT_TEST_LOADING:
+      return {
+        ...state,
+        getMarketingReportTest: {
+          ...state.getMarketingReportTest,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_MARKETING_REPORT_TEST_SUCCESS:
+      return {
+        ...state,
+        getMarketingReportTest: {
+          ...state.getMarketingReportTest,
+          isLoading: false,
+          error: null
+        }
+      }
+    case Types.GET_MARKETING_REPORT_TEST_FAILURE:
+      return {
+        ...state,
+        getMarketingReportTest: {
+          ...state.getMarketingReportTest,
           isLoading: false,
           error: action.payload
         }
@@ -530,6 +565,30 @@ export const getMarketingReport = (dateFrom, dateTo) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_MARKETING_REPORT_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const getMarketingReportTest = (dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.GET_MARKETING_REPORT_TEST_LOADING,
+    payload: true
+  })
+  try {
+    const getMarketingReport = await getMarketingReportTestAPI(dateFrom, dateTo)
+    dispatch({
+      type: Types.GET_MARKETING_REPORT_TEST_SUCCESS,
+      payload: getMarketingReport.data
+    })
+    // dispatch({
+    //   type: Types.KEEP_MARKETING_RECORDS,
+    //   payload: { dateFrom, dateTo }
+    // })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_MARKETING_REPORT_TEST_FAILURE,
       payload: error
     })
     toast.error(error)
