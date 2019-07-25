@@ -81,6 +81,7 @@ const initialState = {
   },
   getMarketingReportTest: {
     isLoading: false,
+    arrayOffices: [],
     error: null
   },
   getAllAnalysts: {
@@ -212,6 +213,7 @@ export default function reducer (state = initialState, action) {
         getMarketingReportTest: {
           ...state.getMarketingReportTest,
           isLoading: false,
+          arrayOffices: action.payload,
           error: null
         }
       }

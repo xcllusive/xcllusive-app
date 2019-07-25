@@ -126,8 +126,10 @@ class MarketingReports extends Component {
       arrayLeadsPerSourceSydney,
       arrayLeadsPerSourceQueensland,
       arrayOffices,
-      arrayCtcLeadsPerOfficeFromXcllusive
+      arrayCtcLeadsPerOfficeFromXcllusive,
+      testArray
     } = this.props
+    console.log(testArray)
     return (
       <Wrapper>
         <Form>
@@ -1144,7 +1146,8 @@ MarketingReports.propTypes = {
   savedRecords: PropTypes.object,
   arrayCtcLeadsPerOfficeFromXcllusive: PropTypes.array,
   totalBusinessesCtc: PropTypes.number,
-  getMarketingReportTest: PropTypes.func
+  getMarketingReportTest: PropTypes.func,
+  testArray: PropTypes.array
 }
 
 const mapPropsToValues = props => {
@@ -1168,7 +1171,8 @@ const mapStateToProps = state => ({
   arrayOffices: state.reports.getMarketingReport.arrayOffices,
   arrayCtcLeadsPerOfficeFromXcllusive: state.reports.getMarketingReport.arrayCtcLeadsPerOfficeFromXcllusive,
   totalBusinessesCtc: state.reports.getMarketingReport.totalBusinessesCtc,
-  savedRecords: state.reports.keepMarketingRecords.records
+  savedRecords: state.reports.keepMarketingRecords.records,
+  testArray: state.reports.getMarketingReportTest.arrayOffices
 })
 
 const mapDispatchToProps = dispatch =>
