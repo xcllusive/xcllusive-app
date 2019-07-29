@@ -213,7 +213,10 @@ export default function reducer (state = initialState, action) {
         getMarketingReportTest: {
           ...state.getMarketingReportTest,
           isLoading: false,
-          arrayOffices: action.payload,
+          arrayOffices: action.payload.data,
+          totalLeads: action.payload.totalLeads,
+          totalSignedUp: action.payload.totalSignedUp,
+          totalConvertionRate: action.payload.totalConvertionRate,
           error: null
         }
       }
@@ -582,7 +585,7 @@ export const getMarketingReportTest = (dateFrom, dateTo) => async dispatch => {
     const getMarketingReport = await getMarketingReportTestAPI(dateFrom, dateTo)
     dispatch({
       type: Types.GET_MARKETING_REPORT_TEST_SUCCESS,
-      payload: getMarketingReport.data
+      payload: getMarketingReport
     })
     // dispatch({
     //   type: Types.KEEP_MARKETING_RECORDS,

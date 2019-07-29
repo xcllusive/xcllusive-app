@@ -115,7 +115,6 @@ class MarketingReports extends Component {
   render () {
     const {
       values,
-      leadsPerAnalystArray,
       arrayTotalPerSource,
       totalGeralPerSource,
       arrayLeadsPerSourceAdelaide,
@@ -125,11 +124,11 @@ class MarketingReports extends Component {
       arrayLeadsPerSourceMelbourne,
       arrayLeadsPerSourceSydney,
       arrayLeadsPerSourceQueensland,
-      arrayOffices,
-      arrayCtcLeadsPerOfficeFromXcllusive,
-      testArray
+      testArray,
+      totalLeads,
+      totalSignedUp,
+      totalConvertionRate
     } = this.props
-    console.log(testArray)
     return (
       <Wrapper>
         <Form>
@@ -179,75 +178,67 @@ class MarketingReports extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        {leadsPerAnalystArray && leadsPerAnalystArray.length > 0 ? (
+        {testArray && testArray.length > 0 ? (
           <Segment style={{ paddingLeft: '0px', paddingRight: '0px' }} size="small">
             <Fragment>
               <Header style={{ marginLeft: '10px' }} color="red">
-                Leads Per Analyst
+                Leads Per Analyst Test
               </Header>
               <Grid padded="horizontally">
                 <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}>
                   <Grid.Column
                     style={{ paddingBottom: '0px', paddingTop: '0px', paddingLeft: '0px', paddingRight: '0px' }}
                   >
-                    <Table celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Adelaide Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>
-                            Total Leads
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>Signed Up</Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>
-                            Convertion Rate
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
-                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Adelaide Office') {
+                    {testArray.map((leadsPerAnalyst, index) => {
+                      return (
+                        <Table key={index} celled striped selectable compact size="small">
+                          <Table.Header>
+                            <Table.Row >
+                              <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                                <h4 style={{ color: '#2185d0' }}>{leadsPerAnalyst[0].dataRegion}</h4>
+                              </Table.HeaderCell>
+                              <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>
+                                Total Leads
+                              </Table.HeaderCell>
+                              <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>Signed Up</Table.HeaderCell>
+                              <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>
+                                Convertion Rate
+                              </Table.HeaderCell>
+                            </Table.Row>
+                          </Table.Header>
+                          {leadsPerAnalyst.map(item => {
                             return (
-                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                          leadsPerAnalyst['listingAgent.lastName']
-                                        }`}
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0
-                                    ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0'
-                                    )} %`
-                                    : 0}
-                                </Table.Cell>
-                              </Table.Row>
+                              <Table.Body key={item.listingAgent_id}>
+                                <Table.Row >
+                                  <Table.Cell>
+                                    <Grid>
+                                      <Grid.Row columns={2}>
+                                        <Grid.Column width={1}>
+                                          <Icon
+                                            link
+                                            name="magnify"
+                                            onClick={() => this._goToBusinessesListPerAnalyst(item)}
+                                          />
+                                        </Grid.Column>
+                                        <Grid.Column>
+                                          {`${item.firstName} ${item.lastName}`}
+                                        </Grid.Column>
+                                      </Grid.Row>
+                                    </Grid>
+                                  </Table.Cell>
+                                  <Table.Cell style={{ textAlign: 'right' }}>{item.totalLeads}</Table.Cell>
+                                  <Table.Cell style={{ textAlign: 'right' }}>
+                                    {item.signed}
+                                  </Table.Cell>
+                                  <Table.Cell style={{ textAlign: 'right' }}>
+                                    {item.convertionRate}
+                                  </Table.Cell>
+                                </Table.Row>
+                              </Table.Body>
                             )
-                          }
-                        })}
-                      </Table.Body>
-                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
-                        if (ctcLeads['listingAgent.dataRegion'] === 'Adelaide Office') {
-                          return (
-                            <Table.Footer key={ctcLeads.company_id} fullWidth>
+                          })}
+                          {leadsPerAnalyst[0].countCtc ? (
+                            <Table.Footer fullWidth>
                               <Table.Row>
                                 <Table.HeaderCell>
                                   <Grid>
@@ -256,7 +247,7 @@ class MarketingReports extends Component {
                                         <Icon
                                           link
                                           name="magnify"
-                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
+                                          onClick={() => this._goToCtcBusinessesPerOffice(leadsPerAnalyst[0])}
                                         />
                                       </Grid.Column>
                                       <Grid.Column style={{ color: 'green' }}>
@@ -266,518 +257,37 @@ class MarketingReports extends Component {
                                   </Grid>
                                 </Table.HeaderCell>
                                 <Table.HeaderCell textAlign="right">
-                                  <b>{ctcLeads.count}</b>
+                                  <b>{leadsPerAnalyst[0].countCtc}</b>
                                 </Table.HeaderCell>
                                 <Table.HeaderCell textAlign="right" />
                                 <Table.HeaderCell textAlign="right" />
                               </Table.Row>
                             </Table.Footer>
-                          )
-                        }
-                      })}
-                    </Table>
-                    <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Camberra Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
-                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Camberra Office') {
-                            return (
-                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                          leadsPerAnalyst['listingAgent.lastName']
-                                        }`}
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0
-                                    ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0'
-                                    )}%`
-                                    : 0}
-                                </Table.Cell>
-                              </Table.Row>
-                            )
-                          }
-                        })}
-                      </Table.Body>
-                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
-                        if (ctcLeads['listingAgent.dataRegion'] === 'Camberra Office') {
-                          return (
-                            <Table.Footer key={ctcLeads.company_id} fullWidth>
-                              <Table.Row>
-                                <Table.HeaderCell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column style={{ color: 'green' }}>
-                                        <b>CTC Business</b>
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right">
-                                  <b>{ctcLeads.count}</b>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right" />
-                                <Table.HeaderCell textAlign="right" />
-                              </Table.Row>
-                            </Table.Footer>
-                          )
-                        }
-                      })}
-                    </Table>
-                    {/* <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Cowra Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
-                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Cowra Office') {
-                            return (
-                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                          leadsPerAnalyst['listingAgent.lastName']
-                                        }`}
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0
-                                    ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                        '0.0'
-                                      )}%`
-                                    : 0}
-                                </Table.Cell>
-                              </Table.Row>
-                            )
-                          }
-                        })}
-                      </Table.Body> */}
-                    {/* <Table.Footer fullWidth>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            <b>TOTAL:</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayCowra[0].sumLeadsCowra : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{arrayOffices[0] ? arrayOffices[0].arrayCowra[0].sumImCowra : 0}</b>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell textAlign="right">
-                            <b>
-                              {arrayOffices[0]
-                                ? numeral(
-                                  arrayOffices[0].arrayCowra[0].sumConvertionRateCowra /
-                                      arrayOffices[0].arrayCowra[0].indexCowra
-                                ).format('0.0[0]')
-                                : null}
-                            </b>
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Footer> */}
-                    {/* </Table> */}
-                    <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Gosford Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
-                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Gosford Office') {
-                            return (
-                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                          leadsPerAnalyst['listingAgent.lastName']
-                                        }`}
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0
-                                    ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0'
-                                    )}%`
-                                    : 0}
-                                </Table.Cell>
-                              </Table.Row>
-                            )
-                          }
-                        })}
-                      </Table.Body>
-                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
-                        if (ctcLeads['listingAgent.dataRegion'] === 'Gosford Office') {
-                          return (
-                            <Table.Footer key={ctcLeads.company_id} fullWidth>
-                              <Table.Row>
-                                <Table.HeaderCell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column style={{ color: 'green' }}>
-                                        <b>CTC Business</b>
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right">
-                                  <b>{ctcLeads.count}</b>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right" />
-                                <Table.HeaderCell textAlign="right" />
-                              </Table.Row>
-                            </Table.Footer>
-                          )
-                        }
-                      })}
-                    </Table>
-                    <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Melbourne Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
-                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Melbourne Office') {
-                            return (
-                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                          leadsPerAnalyst['listingAgent.lastName']
-                                        }`}
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0
-                                    ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0'
-                                    )}%`
-                                    : 0}
-                                </Table.Cell>
-                              </Table.Row>
-                            )
-                          }
-                        })}
-                      </Table.Body>
-                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
-                        if (ctcLeads['listingAgent.dataRegion'] === 'Melbourne Office') {
-                          return (
-                            <Table.Footer key={ctcLeads.company_id} fullWidth>
-                              <Table.Row>
-                                <Table.HeaderCell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column style={{ color: 'green' }}>
-                                        <b>CTC Business</b>
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right">
-                                  <b>{ctcLeads.count}</b>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right" />
-                                <Table.HeaderCell textAlign="right" />
-                              </Table.Row>
-                            </Table.Footer>
-                          )
-                        }
-                      })}
-                    </Table>
-                    <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Sydney Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
-                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Sydney Office') {
-                            return (
-                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                          leadsPerAnalyst['listingAgent.lastName']
-                                        }`}
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0
-                                    ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0'
-                                    )}%`
-                                    : 0}
-                                </Table.Cell>
-                              </Table.Row>
-                            )
-                          }
-                        })}
-                      </Table.Body>
-                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
-                        if (ctcLeads['listingAgent.dataRegion'] === 'Sydney Office') {
-                          return (
-                            <Table.Footer key={ctcLeads.company_id} fullWidth>
-                              <Table.Row>
-                                <Table.HeaderCell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column style={{ color: 'green' }}>
-                                        <b>CTC Business</b>
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right">
-                                  <b>{ctcLeads.count}</b>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right" />
-                                <Table.HeaderCell textAlign="right" />
-                              </Table.Row>
-                            </Table.Footer>
-                          )
-                        }
-                      })}
-                    </Table>
-                    <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4 style={{ color: '#2185d0' }}>Queensland Office</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                          <Table.HeaderCell style={{ width: '300px' }} />
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {leadsPerAnalystArray.map(leadsPerAnalyst => {
-                          if (leadsPerAnalyst['listingAgent.dataRegion'] === 'Queensland Office') {
-                            return (
-                              <Table.Row key={leadsPerAnalyst.listingAgent_id}>
-                                <Table.Cell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToBusinessesListPerAnalyst(leadsPerAnalyst)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                        {`${leadsPerAnalyst['listingAgent.firstName']} ${
-                                          leadsPerAnalyst['listingAgent.lastName']
-                                        }`}
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>{leadsPerAnalyst.count}</Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0 ? leadsPerAnalyst.countImStage : 0}
-                                </Table.Cell>
-                                <Table.Cell style={{ textAlign: 'right' }}>
-                                  {leadsPerAnalyst.countImStage > 0
-                                    ? `${numeral((leadsPerAnalyst.countImStage / leadsPerAnalyst.count) * 100).format(
-                                      '0.0'
-                                    )}%`
-                                    : 0}
-                                </Table.Cell>
-                              </Table.Row>
-                            )
-                          }
-                        })}
-                      </Table.Body>
-                      {arrayCtcLeadsPerOfficeFromXcllusive.map(ctcLeads => {
-                        if (ctcLeads['listingAgent.dataRegion'] === 'Queensland Office') {
-                          return (
-                            <Table.Footer key={ctcLeads.company_id} fullWidth>
-                              <Table.Row>
-                                <Table.HeaderCell>
-                                  <Grid>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column width={1}>
-                                        <Icon
-                                          link
-                                          name="magnify"
-                                          onClick={() => this._goToCtcBusinessesPerOffice(ctcLeads)}
-                                        />
-                                      </Grid.Column>
-                                      <Grid.Column style={{ color: 'green' }}>
-                                        <b>CTC Business</b>
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right">
-                                  <b>{ctcLeads.count}</b>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell textAlign="right" />
-                                <Table.HeaderCell textAlign="right" />
-                              </Table.Row>
-                            </Table.Footer>
-                          )
-                        }
-                      })}
-                    </Table>
-                    <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
-                            <h4>TOTAL</h4>
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }}>
-                            {this._totalGeralLeads(arrayOffices[0])}
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }}>
-                            {this._totalGeralSignedUp(arrayOffices[0])}
-                          </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }}>
-                            {`${numeral(this._AvgConvertionRate(arrayOffices[0])).format('0,0.0')}%`}
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
-                    </Table>
+                          ) : null}
+                        </Table>
+
+                      )
+                    })}
+                    {totalLeads ? (
+                      <Table style={{ marginTop: '0px' }} celled striped selectable compact size="small">
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
+                              <h4>TOTAL</h4>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }}>
+                              {totalLeads}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }}>
+                              {totalSignedUp}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }}>
+                              {`${totalConvertionRate}%`}
+                            </Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+                      </Table>
+                    ) : null}
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
@@ -1147,7 +657,10 @@ MarketingReports.propTypes = {
   arrayCtcLeadsPerOfficeFromXcllusive: PropTypes.array,
   totalBusinessesCtc: PropTypes.number,
   getMarketingReportTest: PropTypes.func,
-  testArray: PropTypes.array
+  testArray: PropTypes.array,
+  totalLeads: PropTypes.number,
+  totalSignedUp: PropTypes.number,
+  totalConvertionRate: PropTypes.number
 }
 
 const mapPropsToValues = props => {
@@ -1172,7 +685,10 @@ const mapStateToProps = state => ({
   arrayCtcLeadsPerOfficeFromXcllusive: state.reports.getMarketingReport.arrayCtcLeadsPerOfficeFromXcllusive,
   totalBusinessesCtc: state.reports.getMarketingReport.totalBusinessesCtc,
   savedRecords: state.reports.keepMarketingRecords.records,
-  testArray: state.reports.getMarketingReportTest.arrayOffices
+  testArray: state.reports.getMarketingReportTest.arrayOffices,
+  totalLeads: state.reports.getMarketingReportTest.totalLeads,
+  totalSignedUp: state.reports.getMarketingReportTest.totalSignedUp,
+  totalConvertionRate: state.reports.getMarketingReportTest.totalConvertionRate
 })
 
 const mapDispatchToProps = dispatch =>
