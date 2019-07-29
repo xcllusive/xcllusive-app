@@ -92,7 +92,7 @@ class ModalNewAppraisalRegister extends Component {
             </Form.Group>
             <Form.Group>
               <Form.Field width={16}>
-                <Form.Input
+                <Form.TextArea
                   required
                   label="Label"
                   name="label"
@@ -130,7 +130,7 @@ class ModalNewAppraisalRegister extends Component {
             onClick={handleSubmit}
           >
             <Icon name="save" />
-            {this.props.appraisalRegister ? 'Edit Register' : 'Create Register'}
+            {this.props.appraisalRegister ? 'Save Register' : 'Create Register'}
           </Button>
           <Button color="red" onClick={this.props.closeModal}>
             <Icon name="cancel" />
@@ -177,7 +177,7 @@ const validationSchema = Yup.object().shape({
     .when('type', {
       is: type => type === 'risks' || type === 'valueDrivers' || type === 'criticalIssues',
       then: Yup.string().max(100, 'Label require max 100 characters.'),
-      otherwise: Yup.string().max(300, 'Label require max 300 characters.')
+      otherwise: Yup.string().max(320, 'Label require max 320 characters.')
     }),
   type: Yup.string().required('Appraisal Register is required.'),
   points: Yup.number()
