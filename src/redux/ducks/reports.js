@@ -54,10 +54,7 @@ export const Types = {
   SET_LAST_XCLLUSIVE_TAB_SELECTED: 'SET_LAST_XCLLUSIVE_TAB_SELECTED',
   GET_CTC_BUSINESSES_PER_OFFICE_LOADING: 'GET_CTC_BUSINESSES_PER_OFFICE_LOADING',
   GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS: 'GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS',
-  GET_CTC_BUSINESSES_PER_OFFICE_FAILURE: 'GET_CTC_BUSINESSES_PER_OFFICE_FAILURE',
-  GET_MARKETING_REPORT_TEST_LOADING: 'GET_MARKETING_REPORT_TEST_LOADING',
-  GET_MARKETING_REPORT_TEST_SUCCESS: 'GET_MARKETING_REPORT_TEST_SUCCESS',
-  GET_MARKETING_REPORT_TEST_FAILURE: 'GET_MARKETING_REPORT_TEST_FAILURE'
+  GET_CTC_BUSINESSES_PER_OFFICE_FAILURE: 'GET_CTC_BUSINESSES_PER_OFFICE_FAILURE'
 }
 
 // Reducer
@@ -65,23 +62,13 @@ export const Types = {
 const initialState = {
   getMarketingReport: {
     isLoading: false,
-    leadsPerAnalystArray: [],
+    arrayLeadsPerAnalyst: [],
+    arrayLeadsPerSource: [],
+    totalLeads: 0,
+    totalSignedUp: 0,
+    totalConvertionRate: 0,
     arrayTotalPerSource: [],
-    arrayLeadsPerSourceAdelaide: [],
-    arrayLeadsPerSourceCamberra: [],
-    arrayLeadsPerSourceCowra: [],
-    arrayLeadsPerSourceMelbourne: [],
-    arrayLeadsPerSourceSydney: [],
-    arrayLeadsPerSourceQueensland: [],
-    totalGeralPerSource: null,
-    arrayOffices: [],
-    mergedCtcLeadsPerOfficeFromXcllusive: [],
-    totalBusinessesCtc: 0,
-    error: null
-  },
-  getMarketingReportTest: {
-    isLoading: false,
-    arrayOffices: [],
+    totalGeralPerSource: 0,
     error: null
   },
   getAllAnalysts: {
@@ -152,18 +139,6 @@ export default function reducer (state = initialState, action) {
         getMarketingReport: {
           ...state.getMarketingReport,
           isLoading: action.payload,
-          leadsPerAnalystArray: null,
-          arrayTotalPerSource: null,
-          arrayLeadsPerSourceAdelaide: null,
-          arrayLeadsPerSourceCamberra: null,
-          arrayLeadsPerSourceCowra: null,
-          arrayLeadsPerSourceMelbourne: null,
-          arrayLeadsPerSourceSydney: null,
-          arrayLeadsPerSourceQueensland: null,
-          totalGeralPerSource: null,
-          arrayOffices: null,
-          arrayCtcLeadsPerOfficeFromXcllusive: null,
-          totalBusinessesCtc: null,
           error: null
         }
       }
@@ -173,19 +148,13 @@ export default function reducer (state = initialState, action) {
         getMarketingReport: {
           ...state.getMarketingReport,
           isLoading: false,
-          leadsPerAnalystArray: action.payload.arrayFinal,
+          arrayLeadsPerAnalyst: action.payload.leadsPerAnalyst,
+          arrayLeadsPerSource: action.payload.leadsPerSource,
+          totalLeads: action.payload.totalLeads,
+          totalSignedUp: action.payload.totalSignedUp,
+          totalConvertionRate: action.payload.totalConvertionRate,
           arrayTotalPerSource: action.payload.arrayTotalPerSource,
-          arrayLeadsPerSourceAdelaide: action.payload.arrayLeadsPerSourceAdelaide,
-          arrayLeadsPerSourceCamberra: action.payload.arrayLeadsPerSourceCamberra,
-          arrayLeadsPerSourceCowra: action.payload.arrayLeadsPerSourceCowra,
-          arrayLeadsPerSourceGosford: action.payload.arrayLeadsPerSourceGosford,
-          arrayLeadsPerSourceMelbourne: action.payload.arrayLeadsPerSourceMelbourne,
-          arrayLeadsPerSourceSydney: action.payload.arrayLeadsPerSourceSydney,
-          arrayLeadsPerSourceQueensland: action.payload.arrayLeadsPerSourceQueensland,
           totalGeralPerSource: action.payload.totalGeralPerSource,
-          arrayOffices: action.payload.arrayOffices,
-          arrayCtcLeadsPerOfficeFromXcllusive: action.payload.arrayCtcLeadsPerOfficeFromXcllusive,
-          totalBusinessesCtc: action.payload.totalBusinessesCtc,
           error: null
         }
       }
@@ -194,37 +163,6 @@ export default function reducer (state = initialState, action) {
         ...state,
         getMarketingReport: {
           ...state.getMarketingReport,
-          isLoading: false,
-          error: action.payload
-        }
-      }
-    case Types.GET_MARKETING_REPORT_TEST_LOADING:
-      return {
-        ...state,
-        getMarketingReportTest: {
-          ...state.getMarketingReportTest,
-          isLoading: action.payload,
-          error: null
-        }
-      }
-    case Types.GET_MARKETING_REPORT_TEST_SUCCESS:
-      return {
-        ...state,
-        getMarketingReportTest: {
-          ...state.getMarketingReportTest,
-          isLoading: false,
-          arrayOffices: action.payload.data,
-          totalLeads: action.payload.totalLeads,
-          totalSignedUp: action.payload.totalSignedUp,
-          totalConvertionRate: action.payload.totalConvertionRate,
-          error: null
-        }
-      }
-    case Types.GET_MARKETING_REPORT_TEST_FAILURE:
-      return {
-        ...state,
-        getMarketingReportTest: {
-          ...state.getMarketingReportTest,
           isLoading: false,
           error: action.payload
         }
@@ -561,7 +499,7 @@ export const getMarketingReport = (dateFrom, dateTo) => async dispatch => {
     const getMarketingReport = await getMarketingReportAPI(dateFrom, dateTo)
     dispatch({
       type: Types.GET_MARKETING_REPORT_SUCCESS,
-      payload: getMarketingReport.data
+      payload: getMarketingReport
     })
     dispatch({
       type: Types.KEEP_MARKETING_RECORDS,

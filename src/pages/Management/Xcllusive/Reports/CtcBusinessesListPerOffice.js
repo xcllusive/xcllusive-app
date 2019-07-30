@@ -42,7 +42,7 @@ class CtcBusinessesListPerOffice extends Component {
     return (
       <Wrapper>
         <Header style={{ marginTop: '10px' }} textAlign="center">
-          {officeObject['listingAgent.dataRegion']}
+          {officeObject.dataRegion}
         </Header>
         <Grid>
           <Grid.Row columns={1}>
@@ -67,7 +67,7 @@ class CtcBusinessesListPerOffice extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header style={{ marginRight: '10px' }} as="h4" color="red" textAlign="right">
-                    Total: {officeObject.count}
+                    Total: {officeObject.countCtc}
                   </Header>
                 </Grid.Column>
               </Grid.Row>

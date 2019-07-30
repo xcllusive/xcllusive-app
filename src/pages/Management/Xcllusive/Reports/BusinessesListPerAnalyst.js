@@ -62,7 +62,7 @@ class BusinessesListPerAnalyst extends Component {
     return (
       <Wrapper>
         <Header style={{ marginTop: '10px' }} textAlign="center">
-          {`${analystObject['listingAgent.firstName']} ${analystObject['listingAgent.lastName']}`}
+          {`${analystObject.firstName} ${analystObject.lastName}`}
         </Header>
         <Grid>
           <Grid.Row columns={1}>
@@ -87,7 +87,7 @@ class BusinessesListPerAnalyst extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header style={{ marginRight: '10px' }} as="h4" color="red" textAlign="right">
-                    Total: {analystObject.count}
+                    Total: {analystObject.totalLeads}
                   </Header>
                 </Grid.Column>
               </Grid.Row>
@@ -160,7 +160,7 @@ class BusinessesListPerAnalyst extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header style={{ marginRight: '10px' }} as="h4" color="red" textAlign="right">
-                    Total: {analystObject.countImStage}
+                    Total: {analystObject.signed}
                   </Header>
                 </Grid.Column>
               </Grid.Row>

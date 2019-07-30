@@ -773,12 +773,12 @@ export const updateStageSalesMemo = stageSalesMemo => async dispatch => {
     payload: true
   })
   try {
-    const business = await get(stageSalesMemo.business_id)
+    // const business = await get(stageSalesMemo.business_id)
     const response = await updateStageSalesMemoAPI(stageSalesMemo)
     dispatch({
       type: Types.UPDATE_STAGE_SALES_MEMO_SUCCESS
     })
-    dispatch(setGetBusinessReducer(business))
+    // dispatch(setGetBusinessReducer(business))
     toast.success(response.message)
   } catch (error) {
     dispatch({

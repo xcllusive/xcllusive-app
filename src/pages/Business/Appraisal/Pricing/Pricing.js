@@ -553,8 +553,12 @@ class PricingPage extends Component {
     }
   }
 
-  _handleCheckBox = (e, { name }) => {
-    this.props.setFieldValue(name, !this.props.values[name])
+  _handleCheckBox = async (e, { name, value }) => {
+    await this.props.setFieldValue(name, !this.props.values[name])
+
+    if (name === 'reducePriceForStockValue' && this.props.values[name]) {
+      this.props.setFieldValue('inclStock', false)
+    }
   }
 
   _percLowRange = (values, appraisalObject) => {
@@ -995,7 +999,7 @@ class PricingPage extends Component {
               <Grid.Column />
               <Grid.Column>Negotiation Premium</Grid.Column>
               <Grid.Column />
-              <Grid.Column>Asking Price</Grid.Column>
+              <Grid.Column>{values.reducePriceForStockValue ? 'Asking Price Inc. Stock' : 'Asking Price'}</Grid.Column>
               <Grid.Column>
                 {values.pricingMethod === 10 || values.pricingMethod === 11 ? '' : 'Asking Price Multipler'}
               </Grid.Column>
@@ -1204,13 +1208,15 @@ class PricingPage extends Component {
                     </Label>
                   </Grid.Column>
                   <Grid.Column style={{ marginTop: '5px' }} verticalAlign="middle">
-                    <Checkbox
-                      label="Incl. Stock"
-                      name="inclStock"
-                      value="inclStock"
-                      checked={values.inclStock}
-                      onChange={this._handleCheckBox}
-                    />
+                    {!values.reducePriceForStockValue ? (
+                      <Checkbox
+                        label="Incl. Stock"
+                        name="inclStock"
+                        value="inclStock"
+                        checked={values.inclStock}
+                        onChange={this._handleCheckBox}
+                      />
+                    ) : null}
                     <Checkbox
                       style={{ marginLeft: '20px' }}
                       label="Reduce Price For Stock Value"

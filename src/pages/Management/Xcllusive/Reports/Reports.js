@@ -9,17 +9,12 @@ import Analyst from './Analyst'
 import { setLastXcllusiveTabSelected } from '../../../../redux/ducks/reports'
 import Enquiry from './Enquiry'
 import DailyActivity from './DailyActivity'
-import MarketingTest from './MarketingTest'
 
 class Reports extends Component {
   constructor (props) {
     super(props)
     this.state = {
       panes: [
-        {
-          menuItem: 'Test Marketing',
-          render: () => <MarketingTest history={this.props.history} />
-        },
         {
           menuItem: 'Marketing',
           render: () => <Marketing history={this.props.history} />
