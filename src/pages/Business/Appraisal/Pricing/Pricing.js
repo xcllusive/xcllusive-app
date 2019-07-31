@@ -1159,17 +1159,19 @@ class PricingPage extends Component {
                         </h3>
                       </Form.Field>
                       <Form.Field>
-                        {values.reducePriceForStockValue ? (
+                        {values.reducePriceForStockValue && appraisalObject.stockValuationOption !== 1 ? (
                           <h3>
-                            {numeral(
+                            {appraisalObject.stockValuationOption === 2 ? numeral(
                               this._askingPrice(values, appraisalObject) - appraisalObject.currentStockLevel
+                            ).format('$0,0') : numeral(
+                              this._askingPrice(values, appraisalObject) - appraisalObject.stockNecessary
                             ).format('$0,0')}
                           </h3>
                         ) : (
                           <h3>{numeral(this._askingPrice(values, appraisalObject)).format('$0,0')}</h3>
                         )}
                       </Form.Field>
-                      {appraisalObject.stockNecessary > 0 || appraisalObject.currentStockLevel > 0 ? (
+                      {(appraisalObject.stockNecessary > 0 || appraisalObject.currentStockLevel > 0) && appraisalObject.stockValuationOption !== 1 ? (
                         <Fragment>
                           <Form.Field>
                             <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
@@ -1207,25 +1209,28 @@ class PricingPage extends Component {
                       {values.sliderLowRange}%
                     </Label>
                   </Grid.Column>
-                  <Grid.Column style={{ marginTop: '5px' }} verticalAlign="middle">
-                    {!values.reducePriceForStockValue ? (
+                  {appraisalObject.stockValuationOption !== 1 ? (
+
+                    <Grid.Column style={{ marginTop: '5px' }} verticalAlign="middle">
+                      {!values.reducePriceForStockValue ? (
+                        <Checkbox
+                          label="Incl. Stock"
+                          name="inclStock"
+                          value="inclStock"
+                          checked={values.inclStock}
+                          onChange={this._handleCheckBox}
+                        />
+                      ) : null}
                       <Checkbox
-                        label="Incl. Stock"
-                        name="inclStock"
-                        value="inclStock"
-                        checked={values.inclStock}
+                        style={{ marginLeft: '20px' }}
+                        label="Reduce Price For Stock Value"
+                        name="reducePriceForStockValue"
+                        value="reducePriceForStockValue"
+                        checked={values.reducePriceForStockValue}
                         onChange={this._handleCheckBox}
                       />
-                    ) : null}
-                    <Checkbox
-                      style={{ marginLeft: '20px' }}
-                      label="Reduce Price For Stock Value"
-                      name="reducePriceForStockValue"
-                      value="reducePriceForStockValue"
-                      checked={values.reducePriceForStockValue}
-                      onChange={this._handleCheckBox}
-                    />
-                  </Grid.Column>
+                    </Grid.Column>
+                  ) : null}
                 </Grid.Row>
               </Grid>
             </Grid.Column>
@@ -1336,7 +1341,7 @@ const mapPropsToValues = props => ({
   agreedValue: props.appraisalObject ? numeral(props.appraisalObject.agreedValue).format('0,0.[99]') : 0,
   sliderLowRange: props.appraisalObject ? props.appraisalObject.sliderLowRange : -10,
   inclStock: props.appraisalObject ? props.appraisalObject.inclStock : true,
-  reducePriceForStockValue: props.appraisalObject ? props.appraisalObject.reducePriceForStockValue : false,
+  reducePriceForStockValue: props.appraisalObject && props.appraisalObject.stockValuationOption === 1 ? false : props.appraisalObject ? props.appraisalObject.reducePriceForStockValue : false,
   confirmPricing: props.appraisalObject ? props.appraisalObject.confirmPricing : false
 })
 
