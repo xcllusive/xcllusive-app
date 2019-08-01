@@ -41,21 +41,21 @@ export const downloadAppr = object => {
   })
 }
 
-export const send = object => {
-  // const data = new FormData()
-  // data.append('body', object.body)
-  // data.append('appraisalId', object.appraisalId)
-  // data.append('businessId', object.businessId)
+export const send = (object) => {
+  const data = new FormData()
+  data.append('body', object.body)
+  data.append('copy', object.copy)
+  data.append('subject', object.subject)
+  data.append('to', object.to)
+  // data.append('file', file)
   // data.append('mail', JSON.stringify(object.mail))
-  // if (object.mail.attachment) {
-  //   data.append('attachment', object.mail.attachment)
-  // }
-  // return request({
-  //   method: 'post',
-  //   url: '/appraisal/send-email',
-  //   data,
-  //   headers: { 'Content-Type': 'multipart/form-data' }
-  // })
+  data.append('attachmentName', object.attachment)
+  return request({
+    method: 'post',
+    url: '/appraisal/send-email',
+    data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
 }
 
 export const remove = appraisalId => {
@@ -80,3 +80,15 @@ export const moveFinancialYear = appraisal => {
     data: appraisal
   })
 }
+
+// export const uploadAppraisalToS3 = (file, appraisalId) => {
+//   const data = new FormData()
+//   data.append('file', file)
+//   data.append('appraisalId', appraisalId)
+//   return request({
+//     method: 'post',
+//     url: '/appraisal/upload',
+//     data,
+//     headers: { 'Content-Type': 'multipart/form-data' }
+//   })
+// }

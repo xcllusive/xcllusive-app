@@ -1120,12 +1120,18 @@ class PricingPage extends Component {
                       </Form.Field>
                       <Form.Field>
                         <h3>
-                          {values.reducePriceForStockValue
-                            ? numeral(
+                          {values.reducePriceForStockValue && appraisalObject.stockValuationOption !== 1
+                            ? appraisalObject.stockValuationOption === 2 ? numeral(
                               this._calculatedPriceBetween(values, appraisalObject) -
                                   appraisalObject.currentStockLevel +
                                   (this._calculatedPriceBetween(values, appraisalObject) -
                                     appraisalObject.currentStockLevel) *
+                                    (values.sliderLowRange / 100)
+                            ).format('$0,0') : numeral(
+                              this._calculatedPriceBetween(values, appraisalObject) -
+                                  appraisalObject.stockNecessary +
+                                  (this._calculatedPriceBetween(values, appraisalObject) -
+                                    appraisalObject.stockNecessary) *
                                     (values.sliderLowRange / 100)
                             ).format('$0,0')
                             : numeral(
@@ -1139,17 +1145,28 @@ class PricingPage extends Component {
                       </Form.Field>
                       <Form.Field>
                         <h3>
-                          {values.reducePriceForStockValue
-                            ? numeral(
+                          {values.reducePriceForStockValue && appraisalObject.stockValuationOption !== 1
+                            ? appraisalObject.stockValuationOption === 2 ? numeral(
                               this._askingPrice(values, appraisalObject) -
                                   this._negotiationPremium(values, appraisalObject) -
                                   this._stockValue(appraisalObject)
+                            ).format('$0,0') : numeral(
+                              this._askingPrice(values, appraisalObject) -
+                                  this._negotiationPremium(values, appraisalObject) -
+                                  this._necessaryStockValue(appraisalObject)
                             ).format('$0,0')
                             : numeral(
                               this._askingPrice(values, appraisalObject) -
                                   this._negotiationPremium(values, appraisalObject)
                             ).format('$0,0')}
                         </h3>
+                      </Form.Field>
+                      <Form.Field>
+                        {values.reducePriceForStockValue ? (
+                          <h4>+ Stock</h4>
+                        ) : (
+                          <h4>{values.inclStock ? 'Incl. Stock' : '+ Stock' }</h4>
+                        ) }
                       </Form.Field>
                     </Form.Group>
                     <Form.Group>
@@ -1174,7 +1191,7 @@ class PricingPage extends Component {
                       {(appraisalObject.stockNecessary > 0 || appraisalObject.currentStockLevel > 0) && appraisalObject.stockValuationOption !== 1 ? (
                         <Fragment>
                           <Form.Field>
-                            <h4> {values.inclStock ? 'Incl. Stock of' : 'Plus Stock of'}</h4>
+                            <h4> {values.inclStock ? 'Incl. Stock of' : '+ Stock of'}</h4>
                           </Form.Field>
                           <Form.Field>
                             <h3>

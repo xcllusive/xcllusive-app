@@ -8,6 +8,7 @@ import ReactQuill from 'react-quill'
 import * as Yup from 'yup'
 
 import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
+import { sendAppraisal } from '../../redux/ducks/appraisal'
 
 import { closeModal } from '../../redux/ducks/modal'
 import 'react-quill/dist/quill.snow.css'
@@ -44,7 +45,7 @@ class ModalEmailAgreement extends Component {
   }
 
   componentDidMount () {
-    this.props.getEmailTemplate(14)
+    this.props.getEmailTemplate(12)
     this._attachQuillRefs()
   }
 
@@ -67,8 +68,9 @@ class ModalEmailAgreement extends Component {
   _handleConfirm = object => {
     if (!object) {
       this.props.closeModal()
+      return
     }
-    // this.props.onConfirm(this.props.values)
+    this.props.sendAppraisal(this.props.values)
   }
 
   render () {
@@ -174,7 +176,8 @@ ModalEmailAgreement.propTypes = {
   business: PropTypes.object.isRequired,
   appraisalObject: PropTypes.object.isRequired,
   getEmailTemplate: PropTypes.func,
-  objectEmailTemplate: PropTypes.object
+  objectEmailTemplate: PropTypes.object,
+  sendAppraisal: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -184,7 +187,7 @@ const mapStateToProps = state => ({
 const mapPropsToValues = props => ({
   to: props.business ? props.business.vendorEmail : '',
   copy: 'appraisal@xcllusive.com.au',
-  attachment: 'Find something to write down here',
+  attachment: 'appraisalTest.pdf',
   subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
   body: props.objectEmailTemplate ? props.objectEmailTemplate.body : ''
 })
@@ -193,7 +196,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      getEmailTemplate
+      getEmailTemplate,
+      sendAppraisal
     },
     dispatch
   )

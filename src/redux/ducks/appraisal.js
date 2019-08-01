@@ -569,6 +569,7 @@ export const downloadAppraisal = (appraisal, draft = false) => async dispatch =>
       Object.assign(appraisal, draftFalse)
     }
     const response = await downloadAppr(appraisal)
+
     dispatch({
       type: Types.DOWNLOAD_APPRAISAL_SUCCESS
     })
@@ -588,6 +589,7 @@ export const sendAppraisal = appraisal => async dispatch => {
     payload: true
   })
   try {
+    // const file = await downloadAppr(appraisal)
     const response = await send(appraisal)
     dispatch({
       type: Types.SEND_APPRAISAL_SUCCESS

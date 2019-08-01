@@ -68,6 +68,11 @@ class GenerateAndSendPage extends Component {
             business: this.props.business,
             appraisalObject: this.props.appraisalObject
           })
+          // window.location.href = `mailto:${this.props.business.businessName} ?subject=${'test'} &body=Hi ${
+          //   this.props.appraisalObject.businessName
+          // },%0D%0A %0D%0ARecently you inquired about a business we have listed for sale, `
+          // document.location = `mailto:${'bayesrox@gmail.com'} ?subject=${'test'} &body=${'Please Click on this link to download https://xcllusive-im.s3.ap-southeast-2.amazonaws.com/Displays%20Direct%20Australia%20Pty%20Ltd_IM_10093.pdf'} &attachment-url='https://xcllusive-im.s3.ap-southeast-2.amazonaws.com/Displays%20Direct%20Australia%20Pty%20Ltd_IM_10093.pdf'`
+          // this.props.closeModal()
         }
       }
     })
@@ -76,7 +81,6 @@ class GenerateAndSendPage extends Component {
   render () {
     const { appraisalObject, isLoadingDownloading } = this.props
     // const {} = this.state
-
     return (
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
