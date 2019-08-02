@@ -43,8 +43,9 @@ export const downloadAppr = object => {
 
 export const send = (object) => {
   const data = new FormData()
+  data.append('appraisalId', object.appraisalId)
+  data.append('businessId', object.businessId)
   data.append('body', object.body)
-  data.append('copy', object.copy)
   data.append('subject', object.subject)
   data.append('to', object.to)
   // data.append('file', file)
@@ -78,6 +79,14 @@ export const moveFinancialYear = appraisal => {
     method: 'put',
     url: `/appraisal/${appraisal.id}/move-financial-year`,
     data: appraisal
+  })
+}
+
+export const getEmailTemplateAppraisal = (templateId, businessId) => {
+  return request({
+    method: 'get',
+    url: '/appraisal/email-template',
+    params: { templateId, businessId }
   })
 }
 

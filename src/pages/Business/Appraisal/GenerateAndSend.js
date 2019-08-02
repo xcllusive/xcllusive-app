@@ -13,7 +13,9 @@ import { TypesModal, openModal } from '../../../redux/ducks/modal'
 class GenerateAndSendPage extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      draft: false
+    }
   }
 
   componentWillUnmount () {
@@ -46,6 +48,7 @@ class GenerateAndSendPage extends Component {
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
+          this.setState({draft: true})
           this.props.downloadAppraisal(this.props.appraisalObject, true)
         }
       }
@@ -53,28 +56,20 @@ class GenerateAndSendPage extends Component {
   }
 
   _modalSendAppraisal = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+    // this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+    //   options: {
+    //     title: 'Making Sure',
+    //     text:
+    //       'Are you sure you want to send the appraisal? Once you have sent you will be NOT allow to make any changes on this appraisal.'
+    //   },
+    //   onConfirm: isConfirmed => {
+    //     if (isConfirmed) {
+    this.props.openModal(TypesModal.MODAL_TYPE_SEND_APPRAISAL, {
       options: {
-        title: 'Making Sure',
-        text:
-          'Are you sure you want to send the appraisal? Once you have sent you will be NOT allow to make any changes on this appraisal.'
+        title: 'Preparing Appraisal`s Email'
       },
-      onConfirm: isConfirmed => {
-        if (isConfirmed) {
-          this.props.openModal(TypesModal.MODAL_TYPE_SEND_APPRAISAL, {
-            options: {
-              title: 'Preparing Appraisal`s Email'
-            },
-            business: this.props.business,
-            appraisalObject: this.props.appraisalObject
-          })
-          // window.location.href = `mailto:${this.props.business.businessName} ?subject=${'test'} &body=Hi ${
-          //   this.props.appraisalObject.businessName
-          // },%0D%0A %0D%0ARecently you inquired about a business we have listed for sale, `
-          // document.location = `mailto:${'bayesrox@gmail.com'} ?subject=${'test'} &body=${'Please Click on this link to download https://xcllusive-im.s3.ap-southeast-2.amazonaws.com/Displays%20Direct%20Australia%20Pty%20Ltd_IM_10093.pdf'} &attachment-url='https://xcllusive-im.s3.ap-southeast-2.amazonaws.com/Displays%20Direct%20Australia%20Pty%20Ltd_IM_10093.pdf'`
-          // this.props.closeModal()
-        }
-      }
+      business: this.props.business,
+      appraisalObject: this.props.appraisalObject
     })
   }
 
@@ -238,19 +233,19 @@ class GenerateAndSendPage extends Component {
                   color={theme.buttonDownload}
                   onClick={this._modalConfirmDownloadAppraisal}
                   size="small"
-                  // disabled={
-                  //   !appraisalObject.confirmBusinessDetail ||
-                  //   !appraisalObject.confirmAbout ||
-                  //   !appraisalObject.confirmCustomersSuppliers ||
-                  //   !appraisalObject.confirmPremisesEnployees ||
-                  //   !appraisalObject.confirmOwnershipFinalNotes ||
-                  //   !appraisalObject.confirmBusinessAnalysis ||
-                  //   !appraisalObject.confirmFinancialAnalysis ||
-                  //   !appraisalObject.confirmComparableData ||
-                  //   !appraisalObject.confirmPricing ||
-                  //   !appraisalObject.confirmNotesAndAssumptions
-                  // }
-                  loading={isLoadingDownloading}
+                  disabled={
+                    !appraisalObject.confirmBusinessDetail ||
+                    !appraisalObject.confirmAbout ||
+                    !appraisalObject.confirmCustomersSuppliers ||
+                    !appraisalObject.confirmPremisesEnployees ||
+                    !appraisalObject.confirmOwnershipFinalNotes ||
+                    !appraisalObject.confirmBusinessAnalysis ||
+                    !appraisalObject.confirmFinancialAnalysis ||
+                    !appraisalObject.confirmComparableData ||
+                    !appraisalObject.confirmPricing ||
+                    !appraisalObject.confirmNotesAndAssumptions
+                  }
+                  loading={isLoadingDownloading && !this.state.draft}
                 >
                   <Icon name="download" />
                   Download Appraisal
@@ -259,20 +254,19 @@ class GenerateAndSendPage extends Component {
                   color="orange"
                   onClick={this._modalConfirmDownloadDraftAppraisal}
                   size="small"
-                  disabled={true}
-                  // disabled={
-                  //   !appraisalObject.confirmBusinessDetail ||
-                  //   !appraisalObject.confirmAbout ||
-                  //   !appraisalObject.confirmCustomersSuppliers ||
-                  //   !appraisalObject.confirmPremisesEnployees ||
-                  //   !appraisalObject.confirmOwnershipFinalNotes ||
-                  //   !appraisalObject.confirmBusinessAnalysis ||
-                  //   !appraisalObject.confirmFinancialAnalysis ||
-                  //   !appraisalObject.confirmComparableData ||
-                  //   !appraisalObject.confirmPricing ||
-                  //   !appraisalObject.confirmNotesAndAssumptions
-                  // }
-                  // loading={isLoadingDownloading}
+                  disabled={
+                    !appraisalObject.confirmBusinessDetail ||
+                    !appraisalObject.confirmAbout ||
+                    !appraisalObject.confirmCustomersSuppliers ||
+                    !appraisalObject.confirmPremisesEnployees ||
+                    !appraisalObject.confirmOwnershipFinalNotes ||
+                    !appraisalObject.confirmBusinessAnalysis ||
+                    !appraisalObject.confirmFinancialAnalysis ||
+                    !appraisalObject.confirmComparableData ||
+                    !appraisalObject.confirmPricing ||
+                    !appraisalObject.confirmNotesAndAssumptions
+                  }
+                  loading={isLoadingDownloading && this.state.draft}
                 >
                   <Icon name="download" />
                   Download Draft Appraisal

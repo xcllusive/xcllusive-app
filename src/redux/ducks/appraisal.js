@@ -9,6 +9,7 @@ import {
   send,
   remove,
   duplicate,
+  getEmailTemplateAppraisal as getEmailTemplateAppraisalAPI,
   moveFinancialYear as moveFinancialYearAPI
 } from '../../services/api/appraisal'
 
@@ -45,7 +46,10 @@ export const Types = {
   MOVE_FINANCIAL_YEAR_LOADING: 'MOVE_FINANCIAL_YEAR_LOADING',
   MOVE_FINANCIAL_YEAR_SUCCESS: 'MOVE_FINANCIAL_YEAR_SUCCESS',
   MOVE_FINANCIAL_YEAR_FAILURE: 'MOVE_FINANCIAL_YEAR_FAILURE',
-  CLEAR_MOVED_FINANCIAL_YEAR: 'CLEAR_MOVED_FINANCIAL_YEAR'
+  CLEAR_MOVED_FINANCIAL_YEAR: 'CLEAR_MOVED_FINANCIAL_YEAR',
+  GET_EMAIL_TEMPLATE_APPRAISAL_LOADING: 'GET_EMAIL_TEMPLATE_APPRAISAL_LOADING',
+  GET_EMAIL_TEMPLATE_APPRAISAL_SUCCESS: 'GET_EMAIL_TEMPLATE_APPRAISAL_SUCCESS',
+  GET_EMAIL_TEMPLATE_APPRAISAL_FAILURE: 'GET_EMAIL_TEMPLATE_APPRAISAL_FAILURE'
 }
 
 // Reducer
@@ -148,6 +152,11 @@ const initialState = {
     isMoved: false,
     appraisal: {},
     error: null
+  },
+  getEmailTemplateAppraisal: {
+    object: null,
+    isLoading: false,
+    error: null
   }
 }
 
@@ -206,6 +215,35 @@ export default function reducer (state = initialState, action) {
         ...state,
         get: {
           ...state.get,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_APPRAISAL_LOADING:
+      return {
+        ...state,
+        getEmailTemplateAppraisal: {
+          ...state.getEmailTemplateAppraisal,
+          isLoading: true,
+          object: null,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_APPRAISAL_SUCCESS:
+      return {
+        ...state,
+        getEmailTemplateAppraisal: {
+          ...state.getEmailTemplateAppraisal,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_APPRAISAL_FAILURE:
+      return {
+        ...state,
+        getEmailTemplateAppraisal: {
+          ...state.getEmailTemplateAppraisal,
           isLoading: false,
           error: action.payload
         }
@@ -444,6 +482,35 @@ export default function reducer (state = initialState, action) {
           isMoved: false
         }
       }
+    case Types.GET_EMAIL_TEMPLATE_HANDLE_BARS_LOADING:
+      return {
+        ...state,
+        getEmailTemplateWithHandleBars: {
+          ...state.getEmailTemplateWithHandleBars,
+          isLoading: action.payload,
+          object: null,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_HANDLE_BARS_SUCCESS:
+      return {
+        ...state,
+        getEmailTemplateWithHandleBars: {
+          ...state.getEmailTemplateWithHandleBars,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_EMAIL_TEMPLATE_HANDLE_BARS_FAILURE:
+      return {
+        ...state,
+        getEmailTemplateWithHandleBars: {
+          ...state.getEmailTemplateWithHandleBars,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_APPRAISAL:
       return initialState
     default:
@@ -583,14 +650,14 @@ export const downloadAppraisal = (appraisal, draft = false) => async dispatch =>
   }
 }
 
-export const sendAppraisal = appraisal => async dispatch => {
+export const sendAppraisal = (mail) => async dispatch => {
   dispatch({
     type: Types.SEND_APPRAISAL_LOADING,
     payload: true
   })
   try {
     // const file = await downloadAppr(appraisal)
-    const response = await send(appraisal)
+    const response = await send(mail)
     dispatch({
       type: Types.SEND_APPRAISAL_SUCCESS
     })
@@ -703,4 +770,24 @@ export const clearMovedFinancialYear = () => async dispatch => {
   dispatch({
     type: Types.CLEAR_MOVED_FINANCIAL_YEAR
   })
+}
+
+export const getEmailTemplateAppraisal = (templateId, businessId) => async dispatch => {
+  dispatch({
+    type: Types.GET_EMAIL_TEMPLATE_APPRAISAL_LOADING,
+    payload: true
+  })
+  try {
+    const response = await getEmailTemplateAppraisalAPI(templateId, businessId)
+    dispatch({
+      type: Types.GET_EMAIL_TEMPLATE_APPRAISAL_SUCCESS,
+      payload: response.data
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_EMAIL_TEMPLATE_APPRAISAL_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
 }

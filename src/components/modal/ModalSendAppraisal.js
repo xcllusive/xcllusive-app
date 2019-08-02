@@ -6,10 +6,8 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import ReactQuill from 'react-quill'
 import * as Yup from 'yup'
-
-import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
-import { sendAppraisal } from '../../redux/ducks/appraisal'
-
+import { sendAppraisal, getEmailTemplateAppraisal } from '../../redux/ducks/appraisal'
+// import {Editor, EditorState} from 'draft-js'
 import { closeModal } from '../../redux/ducks/modal'
 import 'react-quill/dist/quill.snow.css'
 
@@ -45,7 +43,8 @@ class ModalEmailAgreement extends Component {
   }
 
   componentDidMount () {
-    this.props.getEmailTemplate(12)
+    // this.props.getEmailTemplateWithHandleBars(12, this.props.appraisalObject.id, this.props.appraisalObject.business_id)
+    this.props.getEmailTemplateAppraisal(12, this.props.appraisalObject.business_id)
     this._attachQuillRefs()
   }
 
@@ -65,16 +64,17 @@ class ModalEmailAgreement extends Component {
     this.props.setFieldValue('body', value)
   }
 
-  _handleConfirm = object => {
+  _handleConfirm = async object => {
     if (!object) {
       this.props.closeModal()
       return
     }
-    this.props.sendAppraisal(this.props.values)
+    await this.props.sendAppraisal(this.props.values)
+    this.props.closeModal()
   }
 
   render () {
-    const { options, values, touched, errors, isValid, handleChange, handleBlur } = this.props
+    const { options, values, touched, errors, handleChange, handleBlur, isLoading } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -91,19 +91,6 @@ class ModalEmailAgreement extends Component {
                   onBlur={handleBlur}
                 />
                 {errors.to && touched.to && <Label basic color="red" pointing content={errors.to} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
-              <Form.Field width={16}>
-                <Form.Input
-                  label="Copy"
-                  name="copy"
-                  autoComplete="copy"
-                  value={values.copy}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.copy && touched.copy && <Label basic color="red" pointing content={errors.copy} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -152,8 +139,8 @@ class ModalEmailAgreement extends Component {
             labelPosition="right"
             content="Send"
             onClick={this._handleConfirm}
-            // loading={isLoading || isLoadingInvoice}
-            disabled={!isValid}
+            loading={isLoading}
+            // disabled={!isValid}
           />
         </Modal.Actions>
       </Modal>
@@ -177,27 +164,31 @@ ModalEmailAgreement.propTypes = {
   appraisalObject: PropTypes.object.isRequired,
   getEmailTemplate: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
-  sendAppraisal: PropTypes.func
+  sendAppraisal: PropTypes.func,
+  getEmailTemplateAppraisal: PropTypes.func,
+  isLoading: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-  objectEmailTemplate: state.emailTemplates.get.object
+  objectEmailTemplate: state.appraisal.getEmailTemplateAppraisal.object,
+  isLoading: state.appraisal.send.isLoading
 })
 
 const mapPropsToValues = props => ({
   to: props.business ? props.business.vendorEmail : '',
-  copy: 'appraisal@xcllusive.com.au',
-  attachment: 'appraisalTest.pdf',
+  attachment: props.business ? `${props.business.businessName}.pdf` : '',
   subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
-  body: props.objectEmailTemplate ? props.objectEmailTemplate.body : ''
+  body: props.objectEmailTemplate ? props.objectEmailTemplate.body : '',
+  appraisalId: props.appraisalObject ? props.appraisalObject.id : null,
+  businessId: props.appraisalObject ? props.appraisalObject.business_id : null
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      getEmailTemplate,
-      sendAppraisal
+      sendAppraisal,
+      getEmailTemplateAppraisal
     },
     dispatch
   )
