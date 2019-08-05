@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Button } from 'semantic-ui-react'
+import { Modal, Button, Message } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { closeModal } from '../../redux/ducks/modal'
 
-const ModalConfirm = ({ onConfirm, closeModal, options }) => {
+const ModalConfirm = ({ onConfirm, closeModal, options, message }) => {
   const handleConfirm = isConfirmed => {
     closeModal()
     onConfirm(isConfirmed)
@@ -13,6 +13,11 @@ const ModalConfirm = ({ onConfirm, closeModal, options }) => {
   return (
     <Modal open size="tiny" onClose={() => handleConfirm(false)}>
       <Modal.Header>{options.title}</Modal.Header>
+      {message ? (
+        <Message style={{marginBottom: '0px'}} warning>
+          <Message.Header>{message}</Message.Header>
+        </Message>
+      ) : null}
       <Modal.Content>
         <p>{options.text}</p>
       </Modal.Content>
@@ -36,7 +41,8 @@ ModalConfirm.propTypes = {
   options: PropTypes.shape({
     title: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  message: PropTypes.string
 }
 
 export default connect(null, { closeModal })(ModalConfirm)

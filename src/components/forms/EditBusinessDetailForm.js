@@ -494,7 +494,7 @@ class EditBusinessDetailForm extends Component {
                     Reassign to Xcllusive
                   </Button>
                   <Button
-                    color="facebook"
+                    color="green"
                     size="small"
                     onClick={() => this._openModalReassignBusiness(values.id, 'CTC')}
                     disabled={
@@ -522,7 +522,7 @@ class EditBusinessDetailForm extends Component {
                     }
                   >
                     <Icon name="edit" />
-                    Appraisal Mgmt
+                    Appraisal
                   </Button>
                 </Form.Group>
                 {values.listingAgentCtc ? (

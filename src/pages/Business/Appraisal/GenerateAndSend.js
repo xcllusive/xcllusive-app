@@ -26,15 +26,17 @@ class GenerateAndSendPage extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
-  _modalConfirmDownloadAppraisal = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+  _modalConfirmDownloadAppraisal = async () => {
+    await this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Download Appraisal',
         text: 'Are you sure you want to download the appraisal?'
       },
-      onConfirm: isConfirmed => {
+      message: 'Once you download it, you will NOT be allow to edit anymore!',
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this.props.downloadAppraisal(this.props.appraisalObject)
+          await this.props.downloadAppraisal(this.props.appraisalObject)
+          this.props.history.push(`/business/${this.props.appraisalObject.business_id}`)
         }
       }
     })
@@ -46,30 +48,38 @@ class GenerateAndSendPage extends Component {
         title: 'Download Draft Appraisal',
         text: 'Are you sure you want to download the draft appraisal?'
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
           this.setState({draft: true})
-          this.props.downloadAppraisal(this.props.appraisalObject, true)
+          await this.props.downloadAppraisal(this.props.appraisalObject, true)
+          this.props.history.push(`/business/${this.props.appraisalObject.business_id}`)
         }
       }
     })
   }
 
-  _modalSendAppraisal = () => {
-    // this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
-    //   options: {
-    //     title: 'Making Sure',
-    //     text:
-    //       'Are you sure you want to send the appraisal? Once you have sent you will be NOT allow to make any changes on this appraisal.'
-    //   },
-    //   onConfirm: isConfirmed => {
-    //     if (isConfirmed) {
-    this.props.openModal(TypesModal.MODAL_TYPE_SEND_APPRAISAL, {
+  _modalSendAppraisal = async () => {
+    await this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
-        title: 'Preparing Appraisal`s Email'
+        title: 'Making Sure',
+        text:
+          'Are you sure you want to send the appraisal? '
       },
-      business: this.props.business,
-      appraisalObject: this.props.appraisalObject
+      message: 'Once you send it, you will NOT be allow to edit anymore!',
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          await this.props.openModal(TypesModal.MODAL_TYPE_SEND_APPRAISAL, {
+            options: {
+              title: 'Preparing Appraisal`s Email'
+            },
+            business: this.props.business,
+            appraisalObject: this.props.appraisalObject,
+            onConfirm: async isConfirmed => {
+              if (isConfirmed) this.props.history.push(`/business/${this.props.appraisalObject.business_id}`)
+            }
+          })
+        }
+      }
     })
   }
 
@@ -243,7 +253,8 @@ class GenerateAndSendPage extends Component {
                     !appraisalObject.confirmFinancialAnalysis ||
                     !appraisalObject.confirmComparableData ||
                     !appraisalObject.confirmPricing ||
-                    !appraisalObject.confirmNotesAndAssumptions
+                    !appraisalObject.confirmNotesAndAssumptions ||
+                    !appraisalObject.downloadedDraft
                   }
                   loading={isLoadingDownloading && !this.state.draft}
                 >
@@ -284,7 +295,7 @@ class GenerateAndSendPage extends Component {
                 </Header>
               </Grid.Column>
             </Grid.Row>
-            {!appraisalObject.downloaded ? (
+            {!appraisalObject.downloadedDraft ? (
               <Grid.Row columns={1}>
                 <Grid.Column style={{ margin: '0 auto' }} textAlign="center">
                   <font size="2" color="red">
@@ -300,7 +311,7 @@ class GenerateAndSendPage extends Component {
                   size="small"
                   onClick={this._modalSendAppraisal}
                   // loading={isLoadingSendEmail}
-                  // disabled={!appraisalObject.downloaded}
+                  disabled={!appraisalObject.downloadedDraft}
                 >
                   <Icon name="send" />
                   Send Appraisal
@@ -331,7 +342,8 @@ GenerateAndSendPage.propTypes = {
   confirmsCompleteSteps: PropTypes.func,
   openModal: PropTypes.func,
   downloadAppraisal: PropTypes.func,
-  isLoadingDownloading: PropTypes.bool
+  isLoadingDownloading: PropTypes.bool,
+  history: PropTypes.object
 }
 
 const mapPropsToValues = props => ({

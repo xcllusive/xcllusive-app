@@ -143,7 +143,7 @@ class AppraisalMenuPage extends Component {
                   Business Appraisal Wizard
                 </Header>
                 <Header style={{ marginTop: '-10px' }} as="h3" textAlign="center" color="blue">
-                  {business.businessName}
+                  BS{business.id} - {business.businessName}
                 </Header>
               </Grid.Column>
               <Grid.Column width={5}>
@@ -323,6 +323,7 @@ class AppraisalMenuPage extends Component {
                 business={business}
                 appraisalObject={appraisal}
                 handleItemClick={this._handleItemClick}
+                history={this.props.history}
               />
             ) : null}
           </Segment>

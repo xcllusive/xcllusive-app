@@ -47,7 +47,7 @@ class AppraisalListPage extends Component {
   _deleteAppraisal (id) {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
-        title: 'Creating Appraisal',
+        title: 'Deleting Appraisal',
         text: 'Are you sure you want to delete the appraisal? Once you have delete you can not get back.'
       },
       onConfirm: async isConfirmed => {
@@ -76,18 +76,18 @@ class AppraisalListPage extends Component {
 
   _duplicateAppraisal = id => {
     // It needs to talk to zoran to define how we gonna make it
-    // this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
-    //   options: {
-    //     title: 'Duplicating Appraisal',
-    //     text: 'Are you sure you want to duplicate this appraisal?'
-    //   },
-    //   onConfirm: async isConfirmed => {
-    //     if (isConfirmed) {
-    //       await this.props.duplicateAppraisal(id)
-    //       this.props.getAppraisals(this.props.location.state.business.id)
-    //     }
-    //   }
-    // })
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Duplicating Appraisal',
+        text: 'Are you sure you want to duplicate this appraisal?'
+      },
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          await this.props.duplicateAppraisal(id)
+          this.props.getAppraisals(this.props.location.state.business.id)
+        }
+      }
+    })
   }
 
   render () {
@@ -122,9 +122,7 @@ class AppraisalListPage extends Component {
                       <Table.HeaderCell>Created</Table.HeaderCell>
                       {/* <Table.HeaderCell>Appr. Low</Table.HeaderCell>
                     <Table.HeaderCell>Appr. High</Table.HeaderCell> */}
-                      <Table.HeaderCell>% Completed</Table.HeaderCell>
-                      <Table.HeaderCell>Sent</Table.HeaderCell>
-                      <Table.HeaderCell>Resend</Table.HeaderCell>
+                      <Table.HeaderCell>Status</Table.HeaderCell>
                       <Table.HeaderCell>Duplicate</Table.HeaderCell>
                       <Table.HeaderCell>Downloaded</Table.HeaderCell>
                       <Table.HeaderCell>Edit</Table.HeaderCell>
@@ -141,11 +139,7 @@ class AppraisalListPage extends Component {
                           {listAppraisal.completed === 100 ? 'Completed' : `${listAppraisal.completed}%`}
                         </Table.Cell>
                         <Table.Cell>
-                          {listAppraisal.sentDate ? moment(listAppraisal.sentDate).format('DD/MM/YYYY') : 'No'}
-                        </Table.Cell>
-                        <Table.Cell />
-                        <Table.Cell>
-                          <Button disabled icon onClick={() => this._duplicateAppraisal(listAppraisal.id)}>
+                          <Button icon onClick={() => this._duplicateAppraisal(listAppraisal.id)}>
                             <Icon link size="large" name="copy" />
                           </Button>
                         </Table.Cell>
@@ -153,7 +147,7 @@ class AppraisalListPage extends Component {
                         <Table.Cell>
                           <Button
                             icon
-                            disabled={listAppraisal.sentDate !== null}
+                            disabled={listAppraisal.downloaded}
                             onClick={() =>
                               history.push({
                                 pathname: 'appraisalMenu',
@@ -169,7 +163,7 @@ class AppraisalListPage extends Component {
                           </Button>
                         </Table.Cell>
                         <Table.Cell>
-                          <Button icon onClick={() => this._deleteAppraisal(listAppraisal.id)}>
+                          <Button icon disabled={listAppraisal.downloaded} onClick={() => this._deleteAppraisal(listAppraisal.id)}>
                             <Icon link color="red" size="large" name="trash" />
                           </Button>
                         </Table.Cell>

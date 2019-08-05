@@ -70,6 +70,7 @@ class ModalEmailAgreement extends Component {
       return
     }
     await this.props.sendAppraisal(this.props.values)
+    this.props.onConfirm(true)
     this.props.closeModal()
   }
 
@@ -166,7 +167,8 @@ ModalEmailAgreement.propTypes = {
   objectEmailTemplate: PropTypes.object,
   sendAppraisal: PropTypes.func,
   getEmailTemplateAppraisal: PropTypes.func,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  onConfirm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
