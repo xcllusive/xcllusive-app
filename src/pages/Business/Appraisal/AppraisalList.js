@@ -9,7 +9,7 @@ import moment from 'moment'
 import { theme } from '../../../styles'
 import Wrapper from '../../../components/content/Wrapper'
 
-import { createAppraisal, getAppraisals, removeAppraisal, duplicateAppraisal } from '../../../redux/ducks/appraisal'
+import { createAppraisal, getAppraisals, removeAppraisal, duplicateAppraisal, downloadAppraisal } from '../../../redux/ducks/appraisal'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
 class AppraisalListPage extends Component {
@@ -84,14 +84,22 @@ class AppraisalListPage extends Component {
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
           await this.props.duplicateAppraisal(id)
-          this.props.getAppraisals(this.props.location.state.business.id)
+          this.props.history.push({
+            pathname: 'appraisalMenu',
+            state: {
+              business: this.props.location.state.business,
+              isLoadingCreating: this.props.isLoadingCreating,
+              appraisalObject: this.props.newAppraisalDuplicated
+            }
+          })
+          // this.props.getAppraisals(this.props.location.state.business.id)
         }
       }
     })
   }
 
   render () {
-    const { history, listAppraisalList, isLoadingList } = this.props
+    const { history, listAppraisalList, isLoadingList, isLoadingDownloading } = this.props
     const { business } = this.props.location.state
     return (
       <Wrapper>
@@ -120,11 +128,10 @@ class AppraisalListPage extends Component {
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Created</Table.HeaderCell>
-                      {/* <Table.HeaderCell>Appr. Low</Table.HeaderCell>
-                    <Table.HeaderCell>Appr. High</Table.HeaderCell> */}
+                      <Table.HeaderCell>Complete Date</Table.HeaderCell>
                       <Table.HeaderCell>Status</Table.HeaderCell>
                       <Table.HeaderCell>Duplicate</Table.HeaderCell>
-                      <Table.HeaderCell>Downloaded</Table.HeaderCell>
+                      <Table.HeaderCell>Download</Table.HeaderCell>
                       <Table.HeaderCell>Edit</Table.HeaderCell>
                       <Table.HeaderCell>Delete</Table.HeaderCell>
                     </Table.Row>
@@ -133,8 +140,7 @@ class AppraisalListPage extends Component {
                     {listAppraisalList.map((listAppraisal, key) => (
                       <Table.Row active key={listAppraisal.id}>
                         <Table.Cell>{moment(listAppraisal.dateTimeCreated).format('DD/MM/YYYY')}</Table.Cell>
-                        {/* <Table.Cell>TBD with Zoran</Table.Cell>
-                      <Table.Cell>TBD with Zoran</Table.Cell> */}
+                        <Table.Cell>{listAppraisal.sentDate ? moment(listAppraisal.sentDate).format('DD/MM/YYYY') : 'Not Completed'}</Table.Cell>
                         <Table.Cell>
                           {listAppraisal.completed === 100 ? 'Completed' : `${listAppraisal.completed}%`}
                         </Table.Cell>
@@ -143,7 +149,18 @@ class AppraisalListPage extends Component {
                             <Icon link size="large" name="copy" />
                           </Button>
                         </Table.Cell>
-                        <Table.Cell>{listAppraisal.downloaded ? 'Yes' : 'No'}</Table.Cell>
+                        <Table.Cell>
+                          <Button
+                            icon
+                            disabled={!listAppraisal.downloaded}
+                            loading={isLoadingDownloading}
+                            onClick={() =>
+                              this.props.downloadAppraisal(listAppraisal, false, true)
+                            }
+                          >
+                            <Icon link size="large" name="download" />
+                          </Button>
+                        </Table.Cell>
                         <Table.Cell>
                           <Button
                             icon
@@ -208,7 +225,10 @@ AppraisalListPage.propTypes = {
   createdAppraisal: PropTypes.object,
   percPricing: PropTypes.number,
   duplicateAppraisal: PropTypes.func,
-  isLoadingList: PropTypes.bool
+  isLoadingList: PropTypes.bool,
+  downloadAppraisal: PropTypes.func,
+  isLoadingDownloading: PropTypes.bool,
+  newAppraisalDuplicated: PropTypes.object
 }
 
 const mapPropsToValues = props => {
@@ -218,14 +238,16 @@ const mapPropsToValues = props => {
 }
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ createAppraisal, openModal, getAppraisals, removeAppraisal, duplicateAppraisal }, dispatch)
+  bindActionCreators({ createAppraisal, openModal, getAppraisals, removeAppraisal, duplicateAppraisal, downloadAppraisal }, dispatch)
 
 const mapStateToProps = state => ({
   isLoadingCreating: state.appraisal.create.isLoading,
   listAppraisalList: state.appraisal.getAll.array,
   isLoadingList: state.appraisal.getAll.isLoading,
   createdAppraisal: state.appraisal.create.appraisal,
-  percPricing: state.appraisal.getCalcCompleteSteps.confirm.confirmPricing.completedPerc
+  percPricing: state.appraisal.getCalcCompleteSteps.confirm.confirmPricing.completedPerc,
+  isLoadingDownloading: state.appraisal.download.isLoading,
+  newAppraisalDuplicated: state.appraisal.duplicate.appraisal
 })
 
 export default connect(

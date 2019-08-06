@@ -7,6 +7,7 @@ import { Message, Step, Segment, Grid, Header, Button, Icon } from 'semantic-ui-
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
 import { updateAppraisal, downloadAppraisal } from '../../../redux/ducks/appraisal'
+import { getBusiness } from '../../../redux/ducks/business'
 import { theme } from '../../../styles'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 
@@ -20,6 +21,10 @@ class GenerateAndSendPage extends Component {
 
   componentWillUnmount () {
     this.props.updateAppraisal(this.props.values)
+  }
+
+  componentDidMount () {
+    this.props.getBusiness(this.props.appraisalObject.business_id)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
@@ -36,7 +41,12 @@ class GenerateAndSendPage extends Component {
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
           await this.props.downloadAppraisal(this.props.appraisalObject)
-          this.props.history.push(`/business/${this.props.appraisalObject.business_id}`)
+          this.props.history.push({
+            pathname: `/business/${this.props.appraisalObject.business_id}/appraisalList`,
+            state: {
+              business: this.props.business
+            }
+          })
         }
       }
     })
@@ -52,7 +62,12 @@ class GenerateAndSendPage extends Component {
         if (isConfirmed) {
           this.setState({draft: true})
           await this.props.downloadAppraisal(this.props.appraisalObject, true)
-          this.props.history.push(`/business/${this.props.appraisalObject.business_id}`)
+          this.props.history.push({
+            pathname: `/business/${this.props.appraisalObject.business_id}/appraisalList`,
+            state: {
+              business: this.props.business
+            }
+          })
         }
       }
     })
@@ -75,7 +90,14 @@ class GenerateAndSendPage extends Component {
             business: this.props.business,
             appraisalObject: this.props.appraisalObject,
             onConfirm: async isConfirmed => {
-              if (isConfirmed) this.props.history.push(`/business/${this.props.appraisalObject.business_id}`)
+              if (isConfirmed) {
+                this.props.history.push({
+                  pathname: `/business/${this.props.appraisalObject.business_id}/appraisalList`,
+                  state: {
+                    business: this.props.business
+                  }
+                })
+              }
             }
           })
         }
@@ -96,7 +118,7 @@ class GenerateAndSendPage extends Component {
                 Welcome to the final stage of the appraisal process. Here you can check that all stages have been
                 completed and preview the final product. If a section has not been marked as complete, it will display
                 as `red`. You can click on the heading to be taken to that section. Once all sections have been marked
-                as done you can click the button Send Appraisal to send the appraisal to the vendor.
+                as done you can send the appraisal to the vendor or download it.
               </p>
             </Message>
           </Step.Group>
@@ -149,7 +171,7 @@ class GenerateAndSendPage extends Component {
             </Grid.Row>
             <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px' }} columns={2}>
               <Grid.Column textAlign="right">
-                <b>Step 3: </b>
+                <b>Step 4: </b>
               </Grid.Column>
               <Grid.Column textAlign="left" onClick={() => this.props.handleItemClick('Business Analysis')}>
                 {appraisalObject.confirmBusinessAnalysis ? (
@@ -165,7 +187,7 @@ class GenerateAndSendPage extends Component {
             </Grid.Row>
             <Grid.Row style={{ paddingBottom: '0px', paddingTop: '0px' }} columns={2}>
               <Grid.Column textAlign="right">
-                <b>Step 4: </b>
+                <b>Step 3: </b>
               </Grid.Column>
               <Grid.Column textAlign="left" onClick={() => this.props.handleItemClick('Financial Analysis')}>
                 {appraisalObject.confirmFinancialAnalysis ? (
@@ -343,7 +365,8 @@ GenerateAndSendPage.propTypes = {
   openModal: PropTypes.func,
   downloadAppraisal: PropTypes.func,
   isLoadingDownloading: PropTypes.bool,
-  history: PropTypes.object
+  history: PropTypes.object,
+  getBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -353,7 +376,8 @@ const mapPropsToValues = props => ({
 
 const mapStateToProps = state => {
   return {
-    isLoadingDownloading: state.appraisal.download.isLoading
+    isLoadingDownloading: state.appraisal.download.isLoading,
+    business: state.business.get.object
   }
 }
 
@@ -364,7 +388,8 @@ const mapDispatchToProps = dispatch => {
     {
       updateAppraisal,
       openModal,
-      downloadAppraisal
+      downloadAppraisal,
+      getBusiness
     },
     dispatch
   )

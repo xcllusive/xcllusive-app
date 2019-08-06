@@ -599,7 +599,8 @@ class ComparableDataPage extends Component {
           <Step.Group size="large">
             <Step active icon="balance scale" title="Step 5" description="Comparable Data" />
             <Message style={{ marginTop: '0px' }} info size="large">
-              <p>We need to write some instructions here for comparable data</p>
+              <p>Using the search function, enter in suitable criteria to generate a list of suggested comparable sales.  Select the businesses that you think are most appropriate to use or delete by clicking the bin icon.
+              </p>
             </Message>
           </Step.Group>
         </Segment>

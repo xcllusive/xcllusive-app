@@ -31,7 +31,7 @@ class NotesAndAssumptionsPage extends Component {
           <Step.Group size="large">
             <Step active icon="comment alternate outline" title="Step 7" description="Notes And Assumptions" />
             <Message style={{ marginTop: '0px' }} info size="large">
-              <p>Now that the value has been established, you need to complete the final step of information entry.</p>
+              <p>Ensure that all suggested notes are relevant.  Amend as required.  There are a number of empty (yellow) fields where you can enter all assumptions used in the appraisal. Check the boxes on the right to include the note as required.</p>
             </Message>
           </Step.Group>
         </Segment>
@@ -359,6 +359,7 @@ class NotesAndAssumptionsPage extends Component {
                 <Grid.Row columns={2}>
                   <Grid.Column>
                     <Form.TextArea
+                      style={{backgroundColor: 'lightyellow'}}
                       name="notesAndAssumptions14"
                       autoComplete="notesAndAssumptions14"
                       value={values.notesAndAssumptions14}
@@ -382,6 +383,7 @@ class NotesAndAssumptionsPage extends Component {
                 <Grid.Row columns={2}>
                   <Grid.Column>
                     <Form.TextArea
+                      style={{backgroundColor: 'lightyellow'}}
                       name="notesAndAssumptions15"
                       autoComplete="notesAndAssumptions15"
                       value={values.notesAndAssumptions15}
@@ -405,6 +407,7 @@ class NotesAndAssumptionsPage extends Component {
                 <Grid.Row columns={2}>
                   <Grid.Column>
                     <Form.TextArea
+                      style={{backgroundColor: 'lightyellow'}}
                       name="notesAndAssumptions16"
                       autoComplete="notesAndAssumptions16"
                       value={values.notesAndAssumptions16}
@@ -428,6 +431,7 @@ class NotesAndAssumptionsPage extends Component {
                 <Grid.Row columns={2}>
                   <Grid.Column>
                     <Form.TextArea
+                      style={{backgroundColor: 'lightyellow'}}
                       name="notesAndAssumptions17"
                       autoComplete="notesAndAssumptions17"
                       value={values.notesAndAssumptions17}
@@ -451,6 +455,7 @@ class NotesAndAssumptionsPage extends Component {
                 <Grid.Row columns={2}>
                   <Grid.Column>
                     <Form.TextArea
+                      style={{backgroundColor: 'lightyellow'}}
                       name="notesAndAssumptions18"
                       autoComplete="notesAndAssumptions18"
                       value={values.notesAndAssumptions18}

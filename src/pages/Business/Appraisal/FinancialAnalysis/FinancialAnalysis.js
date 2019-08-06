@@ -110,7 +110,7 @@ class FinancialAnalysisPage extends Component {
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
           <Step.Group size="large">
-            <Step active icon="chart line" title="Step 4" description="Financial Analysis" />
+            <Step active icon="chart line" title="Step 3" description="Financial Analysis" />
             <Message style={{ marginTop: '0px' }} info size="large">
               <p>
                 The data you enter on this page will be used on the `Financial Analysis` page of the appraisal.This

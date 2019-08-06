@@ -106,14 +106,10 @@ class BusinessAnalysisPage extends Component {
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
           <Step.Group size="large">
-            <Step active icon="tasks" title="Step 3" description="Business Analysis" />
+            <Step active icon="tasks" title="Step 4" description="Business Analysis" />
             <Message style={{ marginTop: '0px' }} info size="large">
               <p>
-                The information you enter on this page will be shown on the `Business Analysis` page of the appraisal.
-                This information will be used to calculate the capitalisation rate/multiplier for the final appraisal
-                value. You will have the option to manually set the capitalisation rate from the Pricing page. The
-                column on the left allows you to rate different business aspects and the column on the right allows you
-                to select the degree of impact you feel that each aspect has on the business value.
+              This section does not affect the appraisal calculation.  It allows you to add content to the report in relation to the businesses value drivers, risk factors and any critical issues.  Suggestions are provided in the boxes on the right.  Selecting them copies them to the box on the left where you can amend the suggested entry as required.  If you wish to add in additional commentary you can do so in the left box.  Business risk and market is selected at the end using the most appropriate slider.
               </p>
             </Message>
           </Step.Group>

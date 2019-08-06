@@ -413,6 +413,7 @@ export default function reducer (state = initialState, action) {
         duplicate: {
           ...state.duplicate,
           isLoading: false,
+          appraisal: action.payload,
           isDuplicated: true
         }
       }
@@ -618,7 +619,7 @@ export const updateAppraisal = (appraisal, showToast = true) => async dispatch =
   }
 }
 
-export const downloadAppraisal = (appraisal, draft = false) => async dispatch => {
+export const downloadAppraisal = (appraisal, draft = false, fromAppraisalList = false) => async dispatch => {
   dispatch({
     type: Types.DOWNLOAD_APPRAISAL_LOADING,
     payload: true
@@ -635,7 +636,7 @@ export const downloadAppraisal = (appraisal, draft = false) => async dispatch =>
       }
       Object.assign(appraisal, draftFalse)
     }
-    const response = await downloadAppr(appraisal)
+    const response = await downloadAppr(appraisal, fromAppraisalList)
 
     dispatch({
       type: Types.DOWNLOAD_APPRAISAL_SUCCESS
@@ -699,7 +700,8 @@ export const duplicateAppraisal = appraisalId => async dispatch => {
   try {
     const response = await duplicate(appraisalId)
     dispatch({
-      type: Types.DUPLICATE_APPRAISAL_SUCCESS
+      type: Types.DUPLICATE_APPRAISAL_SUCCESS,
+      payload: response.data
     })
     toast.success(response.message)
   } catch (error) {

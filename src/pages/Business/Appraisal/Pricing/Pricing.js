@@ -642,8 +642,7 @@ class PricingPage extends Component {
             <Step active icon="calculator" title="Step 6" description="Pricing" />
             <Message style={{ marginTop: '0px' }} info size="large">
               <p>
-                On this page you can assess the results of your financial inputs and Financial Analysis in order to
-                identify the best pricing method for the business.
+              Use the most appropriate method to appraise the business.  Adjust the Market Value and Asking Price for risk, market and negotiation premium using the sliders as you see appropriate.  Adjust the bottom range of market value by using the slider (default is -20%).  Choose including or plus stock option and whether you want to reduce asking price by stock value.
               </p>
             </Message>
           </Step.Group>
@@ -1057,7 +1056,7 @@ class PricingPage extends Component {
                         start: values.sliderRiskPremium,
                         min: -20,
                         max: 20,
-                        step: 1,
+                        step: 5,
                         onChange: value => this._handleChangeSlider(value, 'sliderRiskPremium')
                       }}
                     />
@@ -1076,7 +1075,7 @@ class PricingPage extends Component {
                         start: values.sliderMarketPremium,
                         min: -20,
                         max: 20,
-                        step: 1,
+                        step: 5,
                         onChange: value => this._handleChangeSlider(value, 'sliderMarketPremium')
                       }}
                     />
@@ -1095,7 +1094,7 @@ class PricingPage extends Component {
                         start: values.sliderNegotiationPremium,
                         min: 0,
                         max: 20,
-                        step: 1,
+                        step: 5,
                         onChange: value => this._handleChangeSlider(value, 'sliderNegotiationPremium')
                       }}
                     />
@@ -1356,7 +1355,7 @@ const mapPropsToValues = props => ({
   sliderMarketPremium: props.appraisalObject ? props.appraisalObject.sliderMarketPremium : 0,
   sliderNegotiationPremium: props.appraisalObject ? props.appraisalObject.sliderNegotiationPremium : 0,
   agreedValue: props.appraisalObject ? numeral(props.appraisalObject.agreedValue).format('0,0.[99]') : 0,
-  sliderLowRange: props.appraisalObject ? props.appraisalObject.sliderLowRange : -10,
+  sliderLowRange: props.appraisalObject ? props.appraisalObject.sliderLowRange : -20,
   inclStock: props.appraisalObject ? props.appraisalObject.inclStock : true,
   reducePriceForStockValue: props.appraisalObject && props.appraisalObject.stockValuationOption === 1 ? false : props.appraisalObject ? props.appraisalObject.reducePriceForStockValue : false,
   confirmPricing: props.appraisalObject ? props.appraisalObject.confirmPricing : false

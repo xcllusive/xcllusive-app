@@ -30,13 +30,14 @@ export const getAll = businessId => {
   })
 }
 
-export const downloadAppr = object => {
+export const downloadAppr = (object, fromAppraisalList) => {
   return request({
     method: 'post',
     url: `/appraisal/${object.id}/generate`,
     responseType: 'blob',
     data: {
-      draft: object.draft
+      draft: object.draft,
+      fromAppraisalList: fromAppraisalList
     }
   })
 }
