@@ -106,7 +106,7 @@ class ModalEmailAgreement extends Component {
       fromAgreement
     } = this.props
     return (
-      <Modal open size="small" onClose={() => this._handleConfirm(false)}>
+      <Modal open size="large" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
         <Modal.Content scrolling>
           <Form>

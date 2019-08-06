@@ -290,7 +290,7 @@ class MakeTaxInvoice extends Component {
         if (isConfirmed) {
           this.props.downloadInvoice({
             id: this.props.values.id,
-            fileName: `${this.props.values.ref}.pdf`
+            fileName: `invoice_${this.props.values.ref}.pdf`
           })
         }
       }
