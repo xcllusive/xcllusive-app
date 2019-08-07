@@ -607,6 +607,26 @@ class EditBusinessDetailForm extends Component {
                     <Icon name="file" />
                     Invoice
                   </Button>
+                  <Button
+                    color="red"
+                    disabled={
+                      this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    }
+                    onClick={() =>
+                      this.props.history.push({
+                        pathname: `/business/${this.props.business.id}/agreementInvoice`,
+                        state: {
+                          business: this.props.business
+                        }
+                      })
+                    }
+                    size="small"
+                    floated="left"
+                  >
+                    <Icon name="file" />
+                    Agreement/Invoice
+                  </Button>
                 </Form.Group>
               </Form>
             </Grid.Column>

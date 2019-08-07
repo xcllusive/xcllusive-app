@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import { Form, Header, Grid, Segment, Label, Message, Button, Icon } from 'semantic-ui-react'
 
-import { getBusiness } from '../../../redux/ducks/business'
+import { getBusiness, updateBusiness } from '../../../redux/ducks/business'
 import { getAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 
 import ContractFields from '../../../components/content/Agreement/ContractFields'
@@ -30,7 +30,13 @@ class BusinessAgreementFields extends Component {
     this.props.getAgreementTemplate(this.props.match.params.idAgreement)
   }
 
-  _previewAgreement () {
+  _replaceDollarAndComma = replace => {
+    replace = replace.replace('$', ',')
+    replace = replace.replace(/,/g, '')
+    return replace
+  }
+
+  _previewAgreement = async () => {
     const obj = {
       listedPrice: numeral(this.props.values.listedPrice).format('$0,0.[99]'),
       appraisalHigh: numeral(this.props.values.appraisalHigh).format('$0,0.[99]'),
@@ -40,6 +46,14 @@ class BusinessAgreementFields extends Component {
       priceProperty: numeral(this.props.values.priceProperty).format('$0,0.[99]')
     }
     Object.assign(this.props.values, obj)
+    const objBusiness = {
+      id: this.props.objectBusiness.id,
+      listedPrice: this.props.values.listedPrice !== 0 ? this._replaceDollarAndComma(this.props.values.listedPrice) : this.props.values.listedPrice,
+      appraisalHigh: this.props.values.appraisalHigh !== 0 ? this._replaceDollarAndComma(this.props.values.appraisalHigh) : this.props.values.appraisalHigh,
+      appraisalLow: this.props.values.appraisalLow !== 0 ? this._replaceDollarAndComma(this.props.values.appraisalLow) : this.props.values.appraisalLow,
+      engagementFee: this.props.values.engagementFee !== 0 ? this._replaceDollarAndComma(this.props.values.engagementFee) : this.props.values.engagementFee
+    }
+    await this.props.updateBusiness(objBusiness)
 
     this.props.history.push({
       pathname: `/business/${this.props.objectBusiness.id}/agreement/${this.props.objectAgreementTemplate.id}/preview`,
@@ -250,7 +264,8 @@ BusinessAgreementFields.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.object,
   objectBusinessIsLoading: PropTypes.bool,
-  objectAgreementIsLoading: PropTypes.bool
+  objectAgreementIsLoading: PropTypes.bool,
+  updateBusiness: PropTypes.func
 }
 
 const validationSchema = Yup.object().shape({
@@ -337,7 +352,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getBusiness,
-      getAgreementTemplate
+      getAgreementTemplate,
+      updateBusiness
     },
     dispatch
   )

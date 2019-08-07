@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Icon, Grid, Segment, Dimmer, Loader, Header, Button } from 'semantic-ui-react'
+import styled from 'styled-components'
+import { Form, Label, Icon, Grid, Segment, Dimmer, Loader, Header, Button, Checkbox } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -19,6 +20,10 @@ import {
 import { mapArrayToValuesForDropdownTemplates } from '../../../utils/sharedFunctionArray'
 import OptionIntroductionBuyer from '../../../components/content/Agreement/OptionIntroductionBuyer'
 // import PropertyOption from '../../../components/content/Agreement/PropertyOption'
+
+const CheckboxFormatted = styled.div`
+  padding-right: 1em;
+`
 
 class AgreementTemplates extends Component {
   constructor (props) {
@@ -159,6 +164,11 @@ class AgreementTemplates extends Component {
     this.props.setFieldValue(name, !this.props.values[name])
   }
 
+  _handleChangeCheckBoxType = (e, { name }) => {
+    if (name === 'business') this.props.setFieldValue('type', 0)
+    if (name === 'property') this.props.setFieldValue('type', 1)
+  }
+
   render () {
     const {
       values,
@@ -216,6 +226,29 @@ class AgreementTemplates extends Component {
                   onChange={this._handleSelectChangeState}
                 />
                 {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
+              </Form.Field>
+              <Form.Field style={{marginLeft: '50px', marginTop: '30px'}}>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label="Business"
+                  name="business"
+                  value="type"
+                  checked={values.type === 0}
+                  onChange={this._handleChangeCheckBoxType}
+                // onChange={async (e, data) => {
+                //   this._handleChangeCheckBoxType(data)
+                // }}
+                />
+                <Checkbox
+                  label="Property"
+                  name="property"
+                  value="type"
+                  checked={values.type === 1}
+                  onChange={this._handleChangeCheckBoxType}
+                // onChange={async (e, data) => {
+                //   this._handleChangeCheckBoxType(data)
+                // }}
+                />
               </Form.Field>
             </Form.Group>
             {objectAgreementTemplate &&
@@ -495,7 +528,8 @@ const mapPropsToValues = props => ({
   optionIntroductionBuyer: props.objectAgreementTemplate
     ? props.objectAgreementTemplate.optionIntroductionBuyer
     : false,
-  minimumCommission: props.objectAgreementTemplate ? props.objectAgreementTemplate.minimumCommission : 0
+  minimumCommission: props.objectAgreementTemplate ? props.objectAgreementTemplate.minimumCommission : 0,
+  type: props.objectAgreementTemplate ? props.objectAgreementTemplate.type : 0
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

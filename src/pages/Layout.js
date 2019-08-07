@@ -35,6 +35,7 @@ import DailyTimeActivityReports from './Management/Xcllusive/Reports/DailyTimeAc
 import BusinessesCtcListPerAnalyst from './Management/CTC/Reports/BusinessesListPerAnalyst'
 import CtcBusinessList from './Business/CtcBusinessList'
 import CtcBusinessesListPerOffice from './Management/Xcllusive/Reports/CtcBusinessesListPerOffice'
+import AgreementInvoice from './Business/AgreementInvoice'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
@@ -123,6 +124,12 @@ const Layout = ({ match, logout, menu, user }) => (
         exact
         component={AppraisalMenu}
         path={`${match.path}business/:id/appraisalMenu`}
+        allowedRoles="BUSINESS_MENU"
+      />
+      <AuthorizationRoute
+        exact
+        component={AgreementInvoice}
+        path={`${match.path}business/:id/agreementInvoice`}
         allowedRoles="BUSINESS_MENU"
       />
       {/* <Route
