@@ -168,35 +168,37 @@ class MarketingReports extends Component {
                               </Table.Row>
                             </Table.Header>
                             {leadsPerAnalyst.map(item => {
-                              return (
-                                <Table.Body key={item.listingAgent_id}>
-                                  <Table.Row >
-                                    <Table.Cell>
-                                      <Grid>
-                                        <Grid.Row columns={2}>
-                                          <Grid.Column width={1}>
-                                            <Icon
-                                              link
-                                              name="magnify"
-                                              onClick={() => this._goToBusinessesListPerAnalyst(item)}
-                                            />
-                                          </Grid.Column>
-                                          <Grid.Column>
-                                            {`${item.firstName} ${item.lastName}`}
-                                          </Grid.Column>
-                                        </Grid.Row>
-                                      </Grid>
-                                    </Table.Cell>
-                                    <Table.Cell style={{ textAlign: 'right' }}>{item.totalLeads}</Table.Cell>
-                                    <Table.Cell style={{ textAlign: 'right' }}>
-                                      {item.signed}
-                                    </Table.Cell>
-                                    <Table.Cell style={{ textAlign: 'right' }}>
-                                      {item.convertionRate}
-                                    </Table.Cell>
-                                  </Table.Row>
-                                </Table.Body>
-                              )
+                              if (item.listingAgent_id) {
+                                return (
+                                  <Table.Body key={item.listingAgent_id}>
+                                    <Table.Row >
+                                      <Table.Cell>
+                                        <Grid>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column width={1}>
+                                              <Icon
+                                                link
+                                                name="magnify"
+                                                onClick={() => this._goToBusinessesListPerAnalyst(item)}
+                                              />
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                              {`${item.firstName} ${item.lastName}`}
+                                            </Grid.Column>
+                                          </Grid.Row>
+                                        </Grid>
+                                      </Table.Cell>
+                                      <Table.Cell style={{ textAlign: 'right' }}>{item.totalLeads}</Table.Cell>
+                                      <Table.Cell style={{ textAlign: 'right' }}>
+                                        {item.signed}
+                                      </Table.Cell>
+                                      <Table.Cell style={{ textAlign: 'right' }}>
+                                        {item.convertionRate}
+                                      </Table.Cell>
+                                    </Table.Row>
+                                  </Table.Body>
+                                )
+                              }
                             })}
                             {leadsPerAnalyst[0].countCtc ? (
                               <Table.Footer fullWidth>
