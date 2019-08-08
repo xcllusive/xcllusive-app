@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Segment, Form, Label } from 'semantic-ui-react'
+import { Segment, Form, Label, Header } from 'semantic-ui-react'
 import numeral from 'numeral'
 
 class ContractFields extends Component {
@@ -8,7 +8,8 @@ class ContractFields extends Component {
     const { values, handleBlur, handleChange, errors, touched } = this.props
     return (
       <Fragment>
-        <Segment>
+        <Segment style={{ backgroundColor: '#daf3e4' }} size="small">
+          <Header as="h3" content="Contract Fields" />
           <Form.Group widths="equal">
             <Form.Field>
               <Form.Input

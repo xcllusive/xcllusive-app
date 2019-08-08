@@ -21,7 +21,10 @@ export const downloadAgree = object => {
     data: {
       body: object.body,
       businessId: object.businessId,
-      mail: object.mail
+      mail: object.mail,
+      values: object.values,
+      typeAgreement: object.typeAgreement,
+      title: object.title
     },
     responseType: 'blob'
   })

@@ -19,7 +19,7 @@ class ModalListAgreements extends Component {
   }
 
   componentDidMount () {
-    this.props.getAgreementTemplates(this.props.state)
+    this.props.getAgreementTemplates(this.props.state, this.props.typeAgreement)
     this.props.clearAgreementTemplates()
   }
 
@@ -139,6 +139,7 @@ ModalListAgreements.propTypes = {
   objectAgreementTemplate: PropTypes.object,
   clearAgreementTemplates: PropTypes.func,
   state: PropTypes.string.isRequired,
+  typeAgreement: PropTypes.string.isRequired,
   agreementLoading: PropTypes.bool,
   callBack: PropTypes.func.isRequired,
   allAgreementsLoading: PropTypes.bool

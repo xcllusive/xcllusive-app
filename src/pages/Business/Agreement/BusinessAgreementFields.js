@@ -45,7 +45,7 @@ class BusinessAgreementFields extends Component {
       minimumCommission: numeral(this.props.values.minimumCommission).format('$0,0.[99]'),
       priceProperty: numeral(this.props.values.priceProperty).format('$0,0.[99]')
     }
-    Object.assign(this.props.values, obj)
+    await Object.assign(this.props.values, obj)
     const objBusiness = {
       id: this.props.objectBusiness.id,
       listedPrice: this.props.values.listedPrice !== 0 ? this._replaceDollarAndComma(this.props.values.listedPrice) : this.props.values.listedPrice,
@@ -54,10 +54,9 @@ class BusinessAgreementFields extends Component {
       engagementFee: this.props.values.engagementFee !== 0 ? this._replaceDollarAndComma(this.props.values.engagementFee) : this.props.values.engagementFee
     }
     await this.props.updateBusiness(objBusiness)
-
     this.props.history.push({
       pathname: `/business/${this.props.objectBusiness.id}/agreement/${this.props.objectAgreementTemplate.id}/preview`,
-      state: { business: this.props.objectBusiness, values: this.props.values }
+      state: { business: this.props.objectBusiness, values: this.props.values, typeAgreement: this.props.location.state.typeAgreement, title: this.props.objectAgreementTemplate.title }
     })
   }
 
@@ -83,8 +82,8 @@ class BusinessAgreementFields extends Component {
             ) : null}
             <Grid.Row>
               <Grid.Column>
-                <Header as="h3" content="Business Details" />
-                <Segment>
+                <Segment style={{ backgroundColor: '#008eff26' }} size="small">
+                  <Header as="h3" content="Business Details" />
                   <Form.Group widths="equal">
                     <Form.Input
                       label="Principal"
@@ -158,7 +157,6 @@ class BusinessAgreementFields extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <Header as="h3" content="Contract Fields" />
                 <ContractFields
                   values={values}
                   handleChange={handleChange}
@@ -186,7 +184,6 @@ class BusinessAgreementFields extends Component {
             ) : (
               <Grid.Row>
                 <Grid.Column>
-                  <Header as="h3" content="Option For Principal Introduction Of Buyer" />
                   <OptionIntroductionBuyer
                     values={values}
                     handleChange={handleChange}
@@ -197,22 +194,7 @@ class BusinessAgreementFields extends Component {
                 </Grid.Column>
               </Grid.Row>
             )}
-            {values.propertyOptions ? (
-              <Grid.Row>
-                <Grid.Column>
-                  <Header as="h3" content="Property Option" />
-                  <Message info>
-                    <Message.Header>
-                      This section has been disabled by the office for this specific agreement.
-                    </Message.Header>
-                    <p>
-                      If you wish to use these fields in the agreement, please get in contact with the office or just
-                      try choose agreement template.
-                    </p>
-                  </Message>
-                </Grid.Column>
-              </Grid.Row>
-            ) : (
+            {this.props.location.state.typeAgreement === 'propertyAgreement' ? (
               <Grid.Row>
                 <Grid.Column>
                   <Header as="h3" content="Property Option" />
@@ -225,7 +207,7 @@ class BusinessAgreementFields extends Component {
                   />
                 </Grid.Column>
               </Grid.Row>
-            )}
+            ) : null}
             <Grid.Row>
               <Grid.Column>
                 <Button
@@ -265,7 +247,8 @@ BusinessAgreementFields.propTypes = {
   touched: PropTypes.object,
   objectBusinessIsLoading: PropTypes.bool,
   objectAgreementIsLoading: PropTypes.bool,
-  updateBusiness: PropTypes.func
+  updateBusiness: PropTypes.func,
+  location: PropTypes.object
 }
 
 const validationSchema = Yup.object().shape({

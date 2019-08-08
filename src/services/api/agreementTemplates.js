@@ -8,10 +8,11 @@ export const create = template => {
   })
 }
 
-export const getAll = state => {
+export const getAll = (state, typeAgreement) => {
   const params = {}
 
   if (state && state.length > 0) params.state = state
+  params.typeAgreement = typeAgreement
 
   return request({
     method: 'get',

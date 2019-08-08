@@ -125,7 +125,10 @@ class PreviewAgreement extends Component {
             fileName: `agreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
               'DD_MM_YYYY'
             )}.pdf`,
-            body: this.state.body
+            body: this.state.body,
+            values: this.props.location.state.values,
+            typeAgreement: this.props.location.state.typeAgreement,
+            title: this.props.location.state.title
           })
         }
       }
@@ -188,20 +191,6 @@ class PreviewAgreement extends Component {
               >
                 <Icon name="backward" />
                 Return to Business
-              </Button>
-              <Button
-                color="grey"
-                onClick={() =>
-                  this.props.history.push({
-                    pathname: `/business/${this.props.location.state.business.id}/invoice`,
-                    state: { business: this.props.location.state.business }
-                  })
-                }
-                size="small"
-                floated="left"
-              >
-                <Icon name="file" />
-                Invoice
               </Button>
               <Button
                 color={theme.buttonSave}

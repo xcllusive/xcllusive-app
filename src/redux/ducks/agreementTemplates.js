@@ -235,13 +235,13 @@ export const createAgreementTemplate = template => async dispatch => {
   }
 }
 
-export const getAgreementTemplates = (state = false) => async dispatch => {
+export const getAgreementTemplates = (state = false, typeAgreement) => async dispatch => {
   dispatch({
     type: Types.GET_AGREEMENT_TEMPLATES_LOADING,
     payload: true
   })
   try {
-    const agreementTemplate = await getAll(state)
+    const agreementTemplate = await getAll(state, typeAgreement)
     dispatch({
       type: Types.GET_AGREEMENT_TEMPLATES_SUCCESS,
       payload: agreementTemplate.data
