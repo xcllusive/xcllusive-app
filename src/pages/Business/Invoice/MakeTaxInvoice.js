@@ -24,7 +24,7 @@ import {
   sendInvoice
 } from '../../../redux/ducks/invoice'
 import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
-import { getAgreementBody, sendAgreementInvoice, sendAgreement } from '../../../redux/ducks/agreement'
+import { sendAgreementInvoice } from '../../../redux/ducks/agreement'
 
 import Wrapper from '../../../components/content/Wrapper'
 import { theme } from '../../../styles'
@@ -78,12 +78,14 @@ class MakeTaxInvoice extends Component {
     this.reactQuillRef = null
   }
 
-  componentDidMount () {
-    this.props.getInvoiceTemplateState(this.props.location.state.business.state)
-    this.props.getInvoices(this.props.match.params.id)
-    this.props.getLastInvoice(this.props.match.params.id)
-    if (this.props.location.state.business.agreement_id) {
-      this.props.getAgreementBody(this.props.location.state.business.agreement_id)
+  async componentDidMount () {
+    await this.props.getInvoiceTemplateState(this.props.location.state.business.state)
+
+    await this.props.getLastInvoice(this.props.match.params.id)
+    if (this.props.location.state.newInvoice) {
+      this._newInvoice()
+    } else {
+      this.props.getInvoices(this.props.match.params.id)
     }
   }
 
@@ -162,35 +164,27 @@ class MakeTaxInvoice extends Component {
   }
 
   _newInvoice = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
-      options: {
-        title: 'Tax Invoice',
-        text: 'Are you sure you want to make a new invoice?'
-      },
-      onConfirm: isConfirmed => {
-        this.props.setFieldValue('id', null)
-        this.props.setFieldValue('officeDetails', this.props.objectInvoiceTemplate.officeDetails)
-        this.props.setFieldValue('fromOfficeDescription', this.props.objectInvoiceTemplate.fromOfficeDescription)
-        this.props.setFieldValue('bankDetails', this.props.objectInvoiceTemplate.bankDetails)
-        this.props.setFieldValue('ref', '')
-        this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
-        this.props.setFieldValue(
-          'to',
-          `${this.props.location.state.business.businessName} <br/>${
-            this.props.location.state.business.address1
-          } <br/>${this.props.location.state.business.suburb} ${this.props.location.state.business.state}, ${
-            this.props.location.state.business.postCode
-          }`
-        )
-        this.props.setFieldValue('description', this.props.objectInvoiceTemplate.description)
-        this.props.setFieldValue('paymentTerms', this.props.objectInvoiceTemplate.paymentTerms)
-        this.props.setFieldValue('amount', null)
-        this.props.setFieldValue('total', 0.0)
-        this.props.setFieldValue('state', this.props.location.state.business.state)
+    this.props.setFieldValue('id', null)
+    this.props.setFieldValue('officeDetails', this.props.objectInvoiceTemplate.officeDetails)
+    this.props.setFieldValue('fromOfficeDescription', this.props.objectInvoiceTemplate.fromOfficeDescription)
+    this.props.setFieldValue('bankDetails', this.props.objectInvoiceTemplate.bankDetails)
+    this.props.setFieldValue('ref', '')
+    this.props.setFieldValue('date', moment().format('DD/MM/YYYY'))
+    this.props.setFieldValue(
+      'to',
+      `${this.props.location.state.business.businessName} <br/>${
+        this.props.location.state.business.address1
+      } <br/>${this.props.location.state.business.suburb} ${this.props.location.state.business.state}, ${
+        this.props.location.state.business.postCode
+      }`
+    )
+    this.props.setFieldValue('description', this.props.objectInvoiceTemplate.description)
+    this.props.setFieldValue('paymentTerms', this.props.objectInvoiceTemplate.paymentTerms)
+    this.props.setFieldValue('amount', null)
+    this.props.setFieldValue('total', 0.0)
+    this.props.setFieldValue('state', this.props.location.state.business.state)
 
-        this.setState({ newInvoice: true })
-      }
-    })
+    this.setState({ newInvoice: true })
   }
 
   _replaceDollarAndComma (replace) {
@@ -200,14 +194,6 @@ class MakeTaxInvoice extends Component {
   }
 
   _saveInvoice = async () => {
-    // if (this.props.values.amount.toString().search(',') !== -1) {
-    //   const obj = {
-    //     amount: await this._replaceDollarAndComma(this.props.values.amount),
-    //     total: await this._replaceDollarAndComma(this.props.values.total)
-    //   }
-    //   Object.assign(this.props.values, obj)
-    // }
-
     const obj = {
       amount: await this._replaceDollarAndComma(this.props.values.amount),
       total: await this._replaceDollarAndComma(this.props.values.total)
@@ -223,29 +209,6 @@ class MakeTaxInvoice extends Component {
     await this.props.getLastInvoice(this.props.match.params.id)
 
     this.setState({ newInvoice: false })
-    // this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT_INVOICE, {
-    //   options: {
-    //     title: 'Preparing Agreement/Invoice Email'
-    //   },
-    //   vendorEmail: this.props.location.state.business.vendorEmail,
-    //   businessId: this.props.location.state.business.id,
-    //   fileNameAgreement: this.props.agreementExisted
-    //     ? `agreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
-    //       'DD_MM_YYYY'
-    //     )}.pdf`
-    //     : '',
-    //   fileNameInvoice: `${this.props.values.ref}.pdf`,
-    //   fromInvoice: true,
-    //   onConfirm: async object => {
-    //     if (object) {
-    //       await this.props.sendInvoice({
-    //         invoiceId: this.state.currentInvoice.id,
-    //         mail: object
-    //       })
-    //     }
-    //     this.props.closeModal()
-    //   }
-    // })
   }
 
   _sendInvoice = async () => {
@@ -255,11 +218,6 @@ class MakeTaxInvoice extends Component {
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
-      fileNameAgreement: this.props.agreementExisted
-        ? `agreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
-          'DD_MM_YYYY'
-        )}.pdf`
-        : '',
       fileNameInvoice: `${this.props.values.ref}.pdf`,
       fromInvoice: true,
       onConfirm: async object => {
@@ -320,7 +278,7 @@ class MakeTaxInvoice extends Component {
             <Grid.Row>
               <Grid.Column>
                 <Header as="h2" content="Tax Invoice" />
-                <Segment>
+                <Segment style={{ backgroundColor: '#008eff26' }} size="small">
                   <Form.Group widths="equal">
                     <Form.Field>
                       <Form.Input
@@ -338,7 +296,7 @@ class MakeTaxInvoice extends Component {
           <Grid>
             <Grid.Row columns={1}>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#daf3e4'}} size="small">
                   <Header as="h3" content="Details" />
                   <Form.Group widths="equal">
                     <Form.Field>
@@ -396,7 +354,7 @@ class MakeTaxInvoice extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column>
-                <Segment style={{ backgroundColor: '#ecf4fb' }}>
+                <Segment style={{ backgroundColor: '#008eff26' }} size="small">
                   <Header as="h3" content="Description" />
                   <Form.Group widths="equal">
                     <Form.Field
@@ -426,7 +384,7 @@ class MakeTaxInvoice extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column>
-                <Segment style={{ backgroundColor: '#ecf4fb' }}>
+                <Segment style={{ backgroundColor: '#daf3e4'}} size="small">
                   <Header as="h3" content="Values $" />
                   <Form.Group widths="equal">
                     <Form.Field>
@@ -467,7 +425,7 @@ class MakeTaxInvoice extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#008eff26' }} size="small">
                   <Form.Group>
                     <Form.Field width={8}>
                       <Form.Select
@@ -493,7 +451,7 @@ class MakeTaxInvoice extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column>
-                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
+                <Segment style={{ backgroundColor: '#daf3e4'}} size="small">
                   <Header as="h3" content="Payment Terms" />
                   <Form.Group widths="equal">
                     <Form.Field>
@@ -546,16 +504,6 @@ class MakeTaxInvoice extends Component {
                   Back to Business
                 </Button>
                 <Button
-                  color={theme.buttonNew}
-                  size="small"
-                  floated="right"
-                  disabled={!this.props.objectLastInvoice}
-                  onClick={this._newInvoice}
-                >
-                  <Icon name="add" />
-                  New
-                </Button>
-                <Button
                   color={theme.buttonDownload}
                   onClick={this._modalConfirmDownloadInvoice}
                   size="small"
@@ -569,7 +517,7 @@ class MakeTaxInvoice extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          {listInvoices.length ? (
+          {!newInvoice && listInvoices.length ? (
             <Grid>
               <Grid.Row>
                 <Table color="blue" celled inverted selectable compact size="small">
@@ -632,8 +580,6 @@ MakeTaxInvoice.propTypes = {
   isValid: PropTypes.bool,
   downloadInvoice: PropTypes.func,
   isLoadingDownloading: PropTypes.bool,
-  getAgreementBody: PropTypes.func,
-  agreementExisted: PropTypes.object,
   sendInvoice: PropTypes.func,
   onChange: PropTypes.func
 }
@@ -742,8 +688,7 @@ const mapStateToProps = state => ({
   objectInvoiceTemplateChangeState: state.invoiceTemplates.getChangeState.object,
   isCreateLoading: state.invoice.create.isLoading,
   isUpdateLoading: state.invoice.update.isLoading,
-  isLoadingDownloading: state.invoice.download.isLoading,
-  agreementExisted: state.agreement.get.object
+  isLoadingDownloading: state.invoice.download.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -759,10 +704,8 @@ const mapDispatchToProps = dispatch =>
       updateInvoice,
       getInvoiceTemplateChangeState,
       downloadInvoice,
-      getAgreementBody,
       sendAgreementInvoice,
       sendInvoice,
-      sendAgreement,
       closeModal
     },
     dispatch

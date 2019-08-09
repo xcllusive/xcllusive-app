@@ -59,7 +59,7 @@ class PreviewAgreement extends Component {
 
   componentDidMount () {
     if (this.props.location.state.editAgreement) {
-      this.props.getAgreementBody(this.props.match.params.idAgreement)
+      this.props.getAgreementBody(this.props.location.state.business.id)
     } else {
       this.props.previewAgreementTemplate({
         business: this.props.location.state.business,
@@ -68,13 +68,14 @@ class PreviewAgreement extends Component {
     }
     this._attachQuillRefs()
 
-    this.props.getLastInvoice(this.props.match.params.id)
+    // this.props.getLastInvoice(this.props.match.params.id)
   }
 
   static getDerivedStateFromProps (props, state) {
+  // cayo
     if (props.agreementExisted && !state.bodyUpdate && props.location.state.editAgreement) {
       return {
-        body: props.agreementExisted.body,
+        body: props.location.state.typeAgreement === 'businessAgreement' ? props.agreementExisted.body : props.agreementPropertyExisted.body,
         bodyUpdate: true
       }
     }
@@ -238,7 +239,8 @@ PreviewAgreement.propTypes = {
   agreementExisted: PropTypes.object,
   isLoadingDownloading: PropTypes.bool,
   getLastInvoice: PropTypes.func,
-  objectLastInvoice: PropTypes.object
+  objectLastInvoice: PropTypes.object,
+  agreementPropertyExisted: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -246,6 +248,7 @@ const mapStateToProps = state => ({
   isLoading: state.agreementTemplates.preview.isLoading,
   isSent: state.agreement.send.isSent,
   agreementExisted: state.agreement.get.object,
+  agreementPropertyExisted: state.agreement.get.objectProperty,
   isLoadingDownloading: state.agreement.download.isLoading,
   objectLastInvoice: state.invoice.getLastInvoice.object
 })

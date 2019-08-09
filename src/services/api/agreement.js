@@ -1,10 +1,11 @@
 import request from './'
 
-export const get = id =>
-  request({
+export const get = businessId => {
+  return request({
     method: 'get',
-    url: `/agreement/${id}`
+    url: `/agreement/${businessId}`
   })
+}
 
 export const update = agreement => {
   return request({

@@ -102,8 +102,8 @@ class ModalEmailAgreement extends Component {
       handleBlur,
       isLoading,
       isLoadingInvoice,
-      fromInvoice,
-      fromAgreement
+      fromInvoice
+      // fromAgreement
     } = this.props
     return (
       <Modal open size="large" onClose={() => this._handleConfirm(false)}>
@@ -147,54 +147,73 @@ class ModalEmailAgreement extends Component {
                 )}
               </Form.Field>
             </Form.Group>
-            <Form.Group inline>
-              <h4 style={{ marginRight: '-18px', fontSize: '.92857143em' }}>
+            {this.props.fileNameAgreement ? (
+              <Form.Group inline>
+                <h4 style={{ marginRight: '-18px', fontSize: '.92857143em' }}>
                 Attachment Agreement
-              </h4>
-              <Form.Input
-                name="attachmentAgreement"
-                autoComplete="attachmentAgreement"
-                value={values.attachmentAgreement}
-                readOnly
-                disabled={
-                  !values.attachAgreement || this.props.fileNameAgreement === ''
-                }
-                width={14}
-              />
-              <Header as="h4" style={{ marginTop: 0 }}>
-                <Form.Checkbox
-                  readOnly={fromAgreement}
-                  label="Attach Agreement"
-                  name="attachAgreement"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.attachAgreement}
-                  disabled={this.props.fileNameAgreement === ''}
+                </h4>
+                <Form.Input
+                  name="attachmentAgreement"
+                  autoComplete="attachmentAgreement"
+                  value={values.attachmentAgreement}
+                  readOnly
+                  width={14}
                 />
-              </Header>
-            </Form.Group>
-            <Form.Group inline>
-              <h4 style={{ fontSize: '.92857143em' }}>Attachment Invoice</h4>
-              <Form.Input
-                name="attachmentInvoice"
-                autoComplete="attachmentInvoice"
-                value={values.attachmentInvoice}
-                readOnly
-                disabled={
-                  !values.attachInvoice || this.props.fileNameInvoice === ''
-                }
-                width={14}
-              />
-              <Header as="h4" style={{ marginTop: 0 }}>
-                <Form.Checkbox
-                  readOnly={fromInvoice}
-                  label="Attach Invoice"
-                  name="attachInvoice"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.attachInvoice}
-                  disabled={this.props.fileNameInvoice === ''}
+                <Header as="h4" style={{ marginTop: 0 }}>
+                  <Form.Checkbox
+                    // readOnly={fromAgreement}
+                    label="Attach Agreement"
+                    name="attachAgreement"
+                    onChange={this._handleChangeCheckBox}
+                    checked={values.attachAgreement}
+                  />
+                </Header>
+              </Form.Group>
+            ) : null}
+            {this.props.fileNamePropertyAgreement ? (
+              <Form.Group inline>
+                <h4 style={{ marginRight: '-18px', fontSize: '.92857143em' }}>
+                Attachment Agreement
+                </h4>
+                <Form.Input
+                  name="attachmentPropertyAgreement"
+                  autoComplete="attachmentPropertyAgreement"
+                  value={values.attachmentPropertyAgreement}
+                  readOnly
+                  width={14}
                 />
-              </Header>
-            </Form.Group>
+                <Header as="h4" style={{ marginTop: 0 }}>
+                  <Form.Checkbox
+                    // readOnly={fromAgreement}
+                    label="Attach Property Agreement"
+                    name="attachPropertyAgreement"
+                    onChange={this._handleChangeCheckBox}
+                    checked={values.attachPropertyAgreement}
+                  />
+                </Header>
+              </Form.Group>
+            ) : null}
+            {this.props.fileNameInvoice ? (
+              <Form.Group inline>
+                <h4 style={{ fontSize: '.92857143em' }}>Attachment Invoice</h4>
+                <Form.Input
+                  name="attachmentInvoice"
+                  autoComplete="attachmentInvoice"
+                  value={values.attachmentInvoice}
+                  readOnly
+                  width={14}
+                />
+                <Header as="h4" style={{ marginTop: 0 }}>
+                  <Form.Checkbox
+                    readOnly={fromInvoice}
+                    label="Attach Invoice"
+                    name="attachInvoice"
+                    onChange={this._handleChangeCheckBox}
+                    checked={values.attachInvoice}
+                  />
+                </Header>
+              </Form.Group>
+            ) : null}
             <Form.Group>
               <Form.Field width={11}>
                 <Form.Input
@@ -281,13 +300,15 @@ ModalEmailAgreement.propTypes = {
   sendAgreement: PropTypes.func,
   vendorEmail: PropTypes.string.isRequired,
   businessId: PropTypes.number.isRequired,
-  fileNameAgreement: PropTypes.string.isRequired,
-  fileNameInvoice: PropTypes.string.isRequired,
+  fileNameAgreement: PropTypes.string,
+  fileNameInvoice: PropTypes.string,
   onConfirm: PropTypes.func,
   isLoading: PropTypes.bool,
   isLoadingInvoice: PropTypes.bool,
   fromInvoice: PropTypes.bool,
-  fromAgreement: PropTypes.bool
+  fromAgreement: PropTypes.bool,
+  fileNamePropertyAgreement: PropTypes.string
+
 }
 
 const mapStateToProps = state => ({
@@ -303,8 +324,10 @@ const mapPropsToValues = props => ({
   attachmentInvoice: props.fileNameInvoice,
   body: props.objectEmailTemplate ? props.objectEmailTemplate.body : '',
   attachment: '',
-  attachAgreement: props.fileNameAgreement !== '',
-  attachInvoice: props.fileNameInvoice !== ''
+  attachAgreement: props.fileNameAgreement !== null,
+  attachInvoice: props.fileNameInvoice !== null,
+  attachPropertyAgreement: props.fileNamePropertyAgreement !== null,
+  attachmentPropertyAgreement: props.fileNamePropertyAgreement
 })
 
 const mapDispatchToProps = dispatch =>

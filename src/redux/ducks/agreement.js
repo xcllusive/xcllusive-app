@@ -22,7 +22,8 @@ export const Types = {
   GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE: 'GET_EMAIL_TEMPLATE_AGREEMENT_FAILURE',
   SEND_AGREEMENT_INVOICE_LOADING: 'SEND_AGREEMENT_INVOICE_LOADING',
   SEND_AGREEMENT_INVOICE_SUCCESS: 'SEND_AGREEMENT_INVOICE_SUCCESS',
-  SEND_AGREEMENT_INVOICE_FAILURE: 'SEND_AGREEMENT_INVOICE_FAILURE'
+  SEND_AGREEMENT_INVOICE_FAILURE: 'SEND_AGREEMENT_INVOICE_FAILURE',
+  CLEAR_AGREEMENT: 'CLEAR_AGREEMENT'
 }
 
 // Reducer
@@ -30,6 +31,7 @@ export const Types = {
 const initialState = {
   get: {
     object: null,
+    objectProperty: null,
     isLoading: false,
     error: null
   },
@@ -78,7 +80,8 @@ export default function reducer (state = initialState, action) {
         get: {
           ...state.get,
           isLoading: false,
-          object: action.payload,
+          object: action.payload.data,
+          objectProperty: action.payload.propertyAgreement,
           error: null
         }
       }
@@ -234,6 +237,8 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_AGREEMENT:
+      return initialState
     default:
       return state
   }
@@ -245,16 +250,22 @@ export const agreementBodyLoading = (value, type) => ({
   payload: value
 })
 
-export const getAgreementBody = id => async dispatch => {
+export const clearAgreement = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_AGREEMENT
+  })
+}
+
+export const getAgreementBody = businessId => async dispatch => {
   dispatch({
     type: Types.GET_AGREEMENT_BODY_LOADING,
     payload: true
   })
   try {
-    const agreementTemplate = await get(id)
+    const agreementTemplate = await get(businessId)
     dispatch({
       type: Types.GET_AGREEMENT_BODY_SUCCESS,
-      payload: agreementTemplate.data
+      payload: agreementTemplate
     })
   } catch (error) {
     dispatch({
