@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
+import 'jodit'
+import 'jodit/build/jodit.min.css'
+import JoditEditor from 'jodit-react'
 
-import { Form, Grid, Button, Icon } from 'semantic-ui-react'
+import { Grid, Button, Icon } from 'semantic-ui-react'
 
 import { previewAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
 import { downloadAgreement, sendAgreement, getAgreementBody } from '../../../redux/ducks/agreement'
@@ -45,8 +46,6 @@ class PreviewAgreement extends Component {
       body: '',
       bodyUpdate: false
     }
-    this.quillRef = null
-    this.reactQuillRef = null
   }
 
   shouldComponentUpdate (nextProps) {
@@ -72,7 +71,6 @@ class PreviewAgreement extends Component {
   }
 
   static getDerivedStateFromProps (props, state) {
-  // cayo
     if (props.agreementExisted && !state.bodyUpdate && props.location.state.editAgreement) {
       return {
         body: props.location.state.typeAgreement === 'businessAgreement' ? props.agreementExisted.body : props.agreementPropertyExisted.body,
@@ -87,10 +85,6 @@ class PreviewAgreement extends Component {
       }
     }
     return null
-  }
-
-  componentDidUpdate () {
-    this._attachQuillRefs()
   }
 
   _handleChangeBody = value => {
@@ -143,11 +137,14 @@ class PreviewAgreement extends Component {
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
-      fileNameAgreement: `agreement_${this.props.location.state.business.businessName.substring(
+      fileNameAgreement: this.props.location.state.typeAgreement === 'businessAgreement' ? `agreement_${this.props.location.state.business.businessName.substring(
         0,
         10
-      )}_${moment().format('DD_MM_YYYY')}.pdf`,
-      fileNameInvoice: this.props.objectLastInvoice ? `${this.props.objectLastInvoice.ref}.pdf` : '',
+      )}_${moment().format('DD_MM_YYYY')}.pdf` : null,
+      fileNamePropertyAgreement: this.props.location.state.typeAgreement === 'propertyAgreement' ? `propertyagreement_${this.props.location.state.business.businessName.substring(
+        0,
+        10
+      )}_${moment().format('DD_MM_YYYY')}.pdf` : null,
       fromAgreement: true,
       onConfirm: object => {
         if (object) {
@@ -161,37 +158,42 @@ class PreviewAgreement extends Component {
     })
   }
 
+  _config = () => {
+  }
+
   render () {
     const { isLoading, isLoadingDownloading } = this.props
     return (
       <Wrapper loading={isLoading}>
-        <Grid padded>
+        <Grid>
           <Grid.Row>
-            <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
-              <Form.Field>
-                <ReactQuill
-                  ref={el => {
-                    this.reactQuillRef = el
-                  }}
-                  value={this.state.body}
-                  onChange={this._handleChangeBody}
-                  style={{ height: '75vh' }}
-                  modules={this.state.modules}
-                  formats={this.state.formats}
-                />
-              </Form.Field>
+            <Grid.Column>
+              <JoditEditor
+                value={this.state.body}
+                config={this._config}
+                onChange={this._handleChangeBody}
+              />
             </Grid.Column>
           </Grid.Row>
+        </Grid>
+        <Grid padded>
           <Grid.Row>
             <Grid.Column style={{ marginTop: '50px' }}>
               <Button
                 color="green"
-                onClick={() => this.props.history.push(`/business/${this.props.location.state.business.id}`)}
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: `/business/${this.props.location.state.business.id}/agreementInvoice`,
+                    state: {
+                      business: this.props.location.state.business
+                    }
+                  })
+                }
                 size="small"
                 floated="left"
               >
                 <Icon name="backward" />
-                Return to Business
+                Return
               </Button>
               <Button
                 color={theme.buttonSave}

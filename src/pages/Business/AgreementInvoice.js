@@ -144,11 +144,11 @@ class AgreementInvoice extends Component {
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
-      fileNameAgreement: (whereFrom !== 'invoice' && this.props.businessAgreement) || (whereFrom === 'all' && this.props.businessAgreement) ? `agreement_${this.props.location.state.business.businessName.substring(
+      fileNameAgreement: (whereFrom === 'businessAgreement' && this.props.businessAgreement) || (whereFrom === 'all' && this.props.businessAgreement) ? `agreement_${this.props.location.state.business.businessName.substring(
         0,
         10
       )}_${moment().format('DD_MM_YYYY')}.pdf` : null,
-      fileNamePropertyAgreement: whereFrom === 'all' && this.props.propertyAgreement ? `propertyagreement_${this.props.location.state.business.businessName.substring(
+      fileNamePropertyAgreement: (whereFrom === 'all' && this.props.propertyAgreement) || (whereFrom === 'propertyAgreement' && this.props.propertyAgreement) ? `propertyagreement_${this.props.location.state.business.businessName.substring(
         0,
         10
       )}_${moment().format('DD_MM_YYYY')}.pdf` : null,

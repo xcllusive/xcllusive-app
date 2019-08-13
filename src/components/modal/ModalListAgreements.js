@@ -38,7 +38,7 @@ class ModalListAgreements extends Component {
 
   _showAll = () => {
     this.props.clearAgreementTemplates()
-    this.props.getAgreementTemplates()
+    this.props.getAgreementTemplates(false, this.props.typeAgreement)
   }
 
   render () {

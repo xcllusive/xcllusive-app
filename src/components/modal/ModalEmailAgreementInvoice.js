@@ -275,7 +275,7 @@ class ModalEmailAgreement extends Component {
             content="Send"
             onClick={this._handleConfirm}
             loading={isLoading || isLoadingInvoice}
-            disabled={!isValid}
+            disabled={!isValid || !values.to}
           />
         </Modal.Actions>
       </Modal>
@@ -325,7 +325,7 @@ const mapPropsToValues = props => ({
   body: props.objectEmailTemplate ? props.objectEmailTemplate.body : '',
   attachment: '',
   attachAgreement: props.fileNameAgreement !== null,
-  attachInvoice: props.fileNameInvoice !== null,
+  attachInvoice: props.fileNameInvoice !== null && props.fileNameInvoice !== undefined,
   attachPropertyAgreement: props.fileNamePropertyAgreement !== null,
   attachmentPropertyAgreement: props.fileNamePropertyAgreement
 })

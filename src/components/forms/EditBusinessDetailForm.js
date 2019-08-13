@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -535,99 +535,26 @@ class EditBusinessDetailForm extends Component {
                     />
                   </Form.Group>
                 ) : null}
-                <Form.Group>
-                  {!this.props.business.agreement_id ? (
-                    <Form.Button
-                      size="small"
-                      color="brown"
-                      disabled={
-                        this.props.history.location &&
-                        this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                <Button
+                  color="twitter"
+                  disabled={
+                    this.props.history.location &&
+                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                  }
+                  onClick={() =>
+                    this.props.history.push({
+                      pathname: `/business/${this.props.business.id}/agreementInvoice`,
+                      state: {
+                        business: this.props.business
                       }
-                      onClick={() => this._openModalListAgreement(values.state)}
-                    >
-                      <Icon name="file" />
-                      Agreement
-                    </Form.Button>
-                  ) : (
-                    <Fragment>
-                      <Form.Button
-                        size="small"
-                        color={theme.buttonEdit}
-                        disabled={
-                          this.props.history.location &&
-                          this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
-                        }
-                        onClick={() =>
-                          this.props.history.push({
-                            pathname: `/business/${this.props.business.id}/agreement/${
-                              this.props.business.agreement_id
-                            }/preview`,
-                            state: {
-                              business: this.props.business,
-                              editAgreement: this.state.editAgreement
-                            }
-                          })
-                        }
-                      >
-                        <Icon name="edit" />
-                        Edit Agreement
-                      </Form.Button>
-                      <Form.Button
-                        size="small"
-                        color={theme.buttonNew}
-                        disabled={
-                          this.props.history.location &&
-                          this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
-                        }
-                        onClick={() => this._openModalListAgreement(values.state)}
-                      >
-                        <Icon name="file" />
-                        New Agreement
-                      </Form.Button>
-                    </Fragment>
-                  )}
-                  <Button
-                    color="grey"
-                    disabled={
-                      this.props.history.location &&
-                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
-                    }
-                    onClick={() =>
-                      this.props.history.push({
-                        pathname: `/business/${this.props.business.id}/invoice`,
-                        state: {
-                          business: this.props.business
-                        }
-                      })
-                    }
-                    size="small"
-                    floated="left"
-                  >
-                    <Icon name="file" />
-                    Invoice
-                  </Button>
-                  <Button
-                    color="red"
-                    disabled={
-                      this.props.history.location &&
-                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
-                    }
-                    onClick={() =>
-                      this.props.history.push({
-                        pathname: `/business/${this.props.business.id}/agreementInvoice`,
-                        state: {
-                          business: this.props.business
-                        }
-                      })
-                    }
-                    size="small"
-                    floated="left"
-                  >
-                    <Icon name="file" />
+                    })
+                  }
+                  size="small"
+                  floated="center"
+                >
+                  <Icon name="file" />
                     Agreement/Invoice
-                  </Button>
-                </Form.Group>
+                </Button>
               </Form>
             </Grid.Column>
             <Grid.Column>

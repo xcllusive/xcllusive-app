@@ -496,12 +496,19 @@ class MakeTaxInvoice extends Component {
                 </Button>
                 <Button
                   color={theme.buttonBack}
-                  onClick={() => history.push(`/business/${this.props.location.state.business.id}`)}
+                  onClick={() =>
+                    history.push({
+                      pathname: `/business/${this.props.location.state.business.id}/agreementInvoice`,
+                      state: {
+                        business: this.props.location.state.business
+                      }
+                    })
+                  }
                   size="small"
                   floated="left"
                 >
                   <Icon name="backward" />
-                  Back to Business
+                  Return
                 </Button>
                 <Button
                   color={theme.buttonDownload}

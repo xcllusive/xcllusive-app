@@ -6,8 +6,10 @@ import { withFormik } from 'formik'
 import styled from 'styled-components'
 import { Form, Label, Icon, Grid, Segment, Dimmer, Loader, Header, Button, Checkbox } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
+import 'jodit'
+import 'jodit/build/jodit.min.css'
+import JoditEditor from 'jodit-react'
+
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import numeral from 'numeral'
 
@@ -64,18 +66,11 @@ class AgreementTemplates extends Component {
       ],
       engagementFee: 0
     }
-    this.quillRef = null
-    this.reactQuillRef = null
   }
 
   componentDidMount () {
     this.props.getAgreementTemplates()
     this.props.clearAgreementTemplates()
-    this._attachQuillRefs()
-  }
-
-  componentDidUpdate () {
-    this._attachQuillRefs()
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -167,6 +162,9 @@ class AgreementTemplates extends Component {
   _handleChangeCheckBoxType = (e, { name }) => {
     if (name === 'business') this.props.setFieldValue('type', 0)
     if (name === 'property') this.props.setFieldValue('type', 1)
+  }
+
+  _config = () => {
   }
 
   render () {
@@ -388,12 +386,10 @@ class AgreementTemplates extends Component {
               <Grid.Row columns={1}>
                 <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
-                    <ReactQuill
+                    <JoditEditor
                       value={values.header}
+                      config={this._config}
                       onChange={this._handleChangeHeader}
-                      style={{ height: '10vh' }}
-                      modules={this.state.modules}
-                      formats={this.state.formats}
                     />
                   </Form.Field>
                 </Grid.Column>
@@ -429,15 +425,10 @@ class AgreementTemplates extends Component {
               <Grid.Row columns={1}>
                 <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
-                    <ReactQuill
-                      ref={el => {
-                        this.reactQuillRef = el
-                      }}
+                    <JoditEditor
                       value={values.body}
+                      config={this._config}
                       onChange={this._handleChangeBody}
-                      style={{ height: '50vh' }}
-                      modules={this.state.modules}
-                      formats={this.state.formats}
                     />
                   </Form.Field>
                 </Grid.Column>
@@ -456,12 +447,10 @@ class AgreementTemplates extends Component {
               <Grid.Row columns={1}>
                 <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
-                    <ReactQuill
+                    <JoditEditor
                       value={values.footer}
+                      config={this._config}
                       onChange={this._handleChangeFooter}
-                      style={{ height: '10vh' }}
-                      modules={this.state.modules}
-                      formats={this.state.formats}
                     />
                   </Form.Field>
                 </Grid.Column>
@@ -473,7 +462,7 @@ class AgreementTemplates extends Component {
                       floated="right"
                       type="submit"
                       color="red"
-                      disabled={isSubmitting || !isValid}
+                      disabled={isSubmitting || !isValid || !values.header || !values.body || !values.footer}
                       loading={isLoadingUpdate}
                       onClick={handleSubmit}
                     >
@@ -514,12 +503,12 @@ AgreementTemplates.propTypes = {
 
 const mapPropsToValues = props => ({
   state: props.objectAgreementTemplate ? props.objectAgreementTemplate.state : '',
-  header: props.objectAgreementTemplate ? props.objectAgreementTemplate.header : '',
-  body: props.objectAgreementTemplate ? props.objectAgreementTemplate.body : '',
-  footer: props.objectAgreementTemplate ? props.objectAgreementTemplate.footer : '',
+  header: props.objectAgreementTemplate && props.objectAgreementTemplate.header !== null ? props.objectAgreementTemplate.header : '',
+  body: props.objectAgreementTemplate && props.objectAgreementTemplate.body !== null ? props.objectAgreementTemplate.body : '',
+  footer: props.objectAgreementTemplate && props.objectAgreementTemplate.footer !== null ? props.objectAgreementTemplate.footer : '',
   id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : '',
   engagementFee: props.objectAgreementTemplate ? props.objectAgreementTemplate.engagementFee : 0,
-  commissionPerc: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionPerc : 0,
+  commissionPerc: props.objectAgreementTemplate && props.objectAgreementTemplate.commissionPerc !== null ? props.objectAgreementTemplate.commissionPerc : 0,
   commissionDiscount: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionDiscount : 0,
   introductionParties: props.objectAgreementTemplate ? props.objectAgreementTemplate.introductionParties : '',
   commissionProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionProperty : 0,
