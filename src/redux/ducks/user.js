@@ -29,6 +29,7 @@ const initialState = {
   get: {
     isLoading: false,
     array: [],
+    usersActive: [],
     error: null,
     xcllusiveAnalysts: [],
     ctcAnalysts: []
@@ -72,6 +73,9 @@ export default function reducer (state = initialState, action) {
           ...state.get,
           isLoading: false,
           array: action.payload,
+          usersActive: action.payload.filter(user => {
+            return user.active === true
+          }),
           xcllusiveAnalysts: action.payload.filter(user => {
             return user.listingAgent === true
           }),

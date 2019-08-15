@@ -6,7 +6,7 @@ export const get = id => {
   })
 }
 
-export const getAll = (options, search) => {
+export const getAll = (options, search, active) => {
   if (search && search.length > 0) options.search = search
   if (search.length < 1) delete options.search
   return request({

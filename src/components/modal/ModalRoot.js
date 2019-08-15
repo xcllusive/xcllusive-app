@@ -32,6 +32,8 @@ import ModalOfficeRegister from './ModalOfficeRegister'
 import ModalNewHelpDesk from './ModalNewHelpDesk'
 import ModalPickAnalysts from './ModalPickAnalysts'
 import ModalSendSms from './ModalSendSms'
+import ModalNewResource from './ModalNewResource'
+import ModalGroupEmailSmsUsers from './ModalGroupEmailSmsUsers'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -66,7 +68,9 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_BROKERS_WEEKLY_REPORT_TO_DO]: ModalBrokersWeeklyReportToDo,
   [TypesModal.MODAL_TYPE_NEW_HELP_DESK]: ModalNewHelpDesk,
   [TypesModal.MODAL_PICK_ANALYSTS]: ModalPickAnalysts,
-  [TypesModal.MODAL_SEND_SMS]: ModalSendSms
+  [TypesModal.MODAL_SEND_SMS]: ModalSendSms,
+  [TypesModal.MODAL_NEW_RESOURCE]: ModalNewResource,
+  [TypesModal.MODAL_TYPE_GROUP_EMAIL_SMS_USER]: ModalGroupEmailSmsUsers
 }
 
 const ModalRoot = ({ type, props }) => {

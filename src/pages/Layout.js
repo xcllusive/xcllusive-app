@@ -36,6 +36,7 @@ import BusinessesCtcListPerAnalyst from './Management/CTC/Reports/BusinessesList
 import CtcBusinessList from './Business/CtcBusinessList'
 import CtcBusinessesListPerOffice from './Management/Xcllusive/Reports/CtcBusinessesListPerOffice'
 import AgreementInvoice from './Business/AgreementInvoice'
+import ToolsAndDocs from './ToolsAndDocs/ToolsAndDocs'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
@@ -56,7 +57,7 @@ const Layout = ({ match, logout, menu, user }) => (
           return <Menu.Item key={item} name="pre sale" as={NavLink} to={`${match.url}presale`} />
         }
         if (item === 'RESOURCES_MENU') {
-          return <Menu.Item key={item} name="resources" as={NavLink} to={`${match.url}resources`} />
+          return <Menu.Item key={item} name="tools and docs" as={NavLink} to={`${match.url}resources`} />
         }
         if (item === 'CLIENT_MANAGER_MENU') {
           return <Menu.Item key={item} name="client manager" as={NavLink} to={`${match.url}clientManager`} />
@@ -187,7 +188,8 @@ const Layout = ({ match, logout, menu, user }) => (
         allowedRoles="BUYER_MENU"
       />
       <Route render={() => <span>presale</span>} path={`${match.path}presale`} />
-      <Route render={() => <span>resources</span>} path={`${match.path}resources`} />
+      {/* <Route render={() => <span>resources</span>} path={`${match.path}resources`} /> */}
+      <AuthorizationRoute component={ToolsAndDocs} path={`${match.path}resources`} allowedRoles="RESOURCES_MENU" />
       <AuthorizationRoute
         component={ClientManagerList}
         path={`${match.path}clientManager`}

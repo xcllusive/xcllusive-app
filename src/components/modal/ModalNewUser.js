@@ -328,6 +328,22 @@ class ModalNewUser extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  required
+                  label="Role"
+                  name="role"
+                  autoComplete="role"
+                  value={values.role}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.role && touched.role && (
+                  <Label basic color="red" pointing content={errors.role} />
+                )}
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths="equal">
               <Form.Field width={9}>
                 <label>Menu Access:</label>
               </Form.Field>
@@ -483,6 +499,7 @@ const mapPropsToValues = props => {
       userType: props.user.userType ? props.user.userType : '',
       levelOfInfoAccess: props.user ? props.user.levelOfInfoAccess : false,
       active: props.user.active ? props.user.active : false,
+      role: props.user.role ? props.user.role : '',
       buyerMenu: _.includes(roles, 'BUYER_MENU'),
       businessMenu: _.includes(roles, 'BUSINESS_MENU'),
       preSaleMenu: _.includes(roles, 'PRESALE_MENU'),
@@ -509,6 +526,7 @@ const mapPropsToValues = props => {
     broker: false,
     userType: '',
     levelOfInfoAccess: false,
+    role: '',
     buyerMenu: false,
     businessMenu: false,
     preSaleMenu: false,
@@ -541,7 +559,8 @@ const validationSchema = Yup.object().shape({
   postCode: Yup.number().integer('Only numbers are permitted.'),
   officeId: Yup.number().required('Office Region is required.'),
   // listingAgent: Yup.number().required('Listing Agent is required.'),
-  userType: Yup.string().required('User Type is required.')
+  userType: Yup.string().required('User Type is required.'),
+  role: Yup.string().required('Role is required.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
