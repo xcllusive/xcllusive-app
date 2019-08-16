@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
 import Resources from './Resources'
 import Contacts from './Contacts'
+import DocumentFolder from './DocumentFolder'
 // import { setLastTabSelected } from '../../redux/ducks/reports'
 
 class ToolsAndDocs extends Component {
@@ -12,6 +13,10 @@ class ToolsAndDocs extends Component {
     super(props)
     this.state = {
       panes: [
+        {
+          menuItem: 'Documents',
+          render: () => <DocumentFolder history={this.props.history} />
+        },
         {
           menuItem: 'Contacts',
           render: () => <Contacts history={this.props.history} />

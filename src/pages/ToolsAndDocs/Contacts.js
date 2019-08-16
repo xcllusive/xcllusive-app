@@ -74,7 +74,7 @@ class Contacts extends React.Component {
                 Group Email
               </Button>
               <Button onClick={() => this._sendGroupEmailSms(users, 'sms')} color="twitter" floated="right">
-                <Icon name="mobile" />
+                <Icon name="mobile alternate" />
                 SMS
               </Button>
             </Grid.Column>

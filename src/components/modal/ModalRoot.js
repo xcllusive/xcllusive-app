@@ -34,6 +34,7 @@ import ModalPickAnalysts from './ModalPickAnalysts'
 import ModalSendSms from './ModalSendSms'
 import ModalNewResource from './ModalNewResource'
 import ModalGroupEmailSmsUsers from './ModalGroupEmailSmsUsers'
+import ModalNewDocumentFolder from './ModalNewDocumentFolder'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -70,7 +71,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_PICK_ANALYSTS]: ModalPickAnalysts,
   [TypesModal.MODAL_SEND_SMS]: ModalSendSms,
   [TypesModal.MODAL_NEW_RESOURCE]: ModalNewResource,
-  [TypesModal.MODAL_TYPE_GROUP_EMAIL_SMS_USER]: ModalGroupEmailSmsUsers
+  [TypesModal.MODAL_TYPE_GROUP_EMAIL_SMS_USER]: ModalGroupEmailSmsUsers,
+  [TypesModal.MODAL_TYPE_NEW_DOCUMENT_FOLDER]: ModalNewDocumentFolder
 }
 
 const ModalRoot = ({ type, props }) => {

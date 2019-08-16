@@ -130,12 +130,18 @@ class ModalGroupEmailSmsUsers extends Component {
                               checked={this.state.array.some(item => item.id === groupEmail.id)}
                               values={groupEmail}
                               onChange={this._checkBoxArray}
+                              disabled={!groupEmail.phoneMobile}
                             />
                           </Table.Cell>
-                          <Table.Cell>
+                          <Table.Cell style={{ backgroundColor: !groupEmail.phoneMobile ? 'grey' : null }}>
                             {groupEmail.firstName} {groupEmail.lastName}
                           </Table.Cell>
-                          <Table.Cell>{emailOrSms === 'email' ? groupEmail.email : groupEmail.phoneMobile}</Table.Cell>
+                          {emailOrSms === 'sms' ? (
+                            <Table.Cell style={{ backgroundColor: !groupEmail.phoneMobile ? 'grey' : null }}>
+                              {groupEmail.phoneMobile}
+                            </Table.Cell>
+                          ) : null}
+                          {/* <Table.Cell>{emailOrSms === 'email' ? groupEmail.email : groupEmail.phoneMobile}</Table.Cell> */}
                         </Table.Row>
                       ))}
                     </Table.Body>
