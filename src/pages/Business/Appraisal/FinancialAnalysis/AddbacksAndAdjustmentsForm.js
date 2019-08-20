@@ -12,7 +12,8 @@ import CustomColumn from '../../../../components/content/CustomGridColumn'
 import {
   updateAppraisal,
   calcAnnualisedWhenChangeMonthsAndSeasonal,
-  clearMovedFinancialYear
+  clearMovedFinancialYear,
+  getAppraisal
 } from '../../../../redux/ducks/appraisal'
 
 class AddbacksAndAdjustmentsForm extends PureComponent {
@@ -90,7 +91,11 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
 
     // this.props.updateAppraisal(this.props.values, false)
     if (!this.props.isMovedFinancialYear) {
+      if (this.props.isValid && this.props.appraisalObject.confirmPricing) this.props.values.confirmPricing = false
       this.props.updateAppraisal(this.props.values, false)
+      if (this.props.isValid && this.props.appraisalObject.confirmPricing) {
+        this.props.getAppraisal(this.props.appraisalObject.id)
+      }
     }
     this.props.clearMovedFinancialYear()
     this.setState({ controlEntryAndExitComponent: false })
@@ -156,8 +161,8 @@ class AddbacksAndAdjustmentsForm extends PureComponent {
   }
 
   _replaceDollarAndComma (replace) {
-    replace = replace.replace('$', ',')
-    replace = replace.replace(/,/g, '')
+    replace = replace.toString().replace('$', ',')
+    replace = replace.toString().replace(/,/g, '')
     return replace
   }
 
@@ -594,7 +599,8 @@ AddbacksAndAdjustmentsForm.propTypes = {
   clearMovedFinancialYear: PropTypes.func,
   isMovedFinancialYear: PropTypes.bool,
   totalsAdjustedProfitPerc: PropTypes.object,
-  totalsAdjustedProfit: PropTypes.object
+  totalsAdjustedProfit: PropTypes.object,
+  getAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -665,7 +671,8 @@ const mapDispatchToProps = dispatch => {
     {
       updateAppraisal,
       calcAnnualisedWhenChangeMonthsAndSeasonal,
-      clearMovedFinancialYear
+      clearMovedFinancialYear,
+      getAppraisal
     },
     dispatch
   )

@@ -8,7 +8,7 @@ import * as Yup from 'yup'
 import { listAppraisalRegister } from '../../../../redux/ducks/appraisalRegister'
 import { mapArrayToValuesForDropdown } from '../../../../utils/sharedFunctionArray'
 import { TypesModal, openModal } from '../../../../redux/ducks/modal'
-import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+import { updateAppraisal, getAppraisal } from '../../../../redux/ducks/appraisal'
 
 class FinancialInformationSourceForm extends Component {
   constructor (props) {
@@ -21,7 +21,12 @@ class FinancialInformationSourceForm extends Component {
   }
 
   componentWillUnmount () {
+    if (this.props.isValid && this.props.appraisalObject.confirmPricing) this.props.values.confirmPricing = false
     this.props.updateAppraisal(this.props.values, false)
+
+    if (this.props.isValid && this.props.appraisalObject.confirmPricing) {
+      this.props.getAppraisal(this.props.appraisalObject.id)
+    }
   }
 
   _handleSelectChange = (e, { name, value }) => {
@@ -98,7 +103,8 @@ FinancialInformationSourceForm.propTypes = {
   openModal: PropTypes.func,
   updateAppraisal: PropTypes.func,
   appraisalObject: PropTypes.object,
-  business: PropTypes.object
+  business: PropTypes.object,
+  getAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -116,7 +122,7 @@ const mapStateToProps = state => {
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ listAppraisalRegister, openModal, updateAppraisal }, dispatch)
+  return bindActionCreators({ listAppraisalRegister, openModal, updateAppraisal, getAppraisal }, dispatch)
 }
 
 export default connect(

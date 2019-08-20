@@ -7,7 +7,7 @@ import { Grid, Segment, Header, Form, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import numeral from 'numeral'
 import CustomColumn from '../../../../components/content/CustomGridColumn'
-import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+import { updateAppraisal, getAppraisal } from '../../../../redux/ducks/appraisal'
 
 class AddbacksAndAdjustmentsForm extends Component {
   constructor (props) {
@@ -57,7 +57,13 @@ class AddbacksAndAdjustmentsForm extends Component {
     }
 
     Object.assign(this.props.values, obj)
+
+    if (this.props.isValid && this.props.appraisalObject.confirmPricing) this.props.values.confirmPricing = false
     await this.props.updateAppraisal(this.props.values, false)
+
+    if (this.props.isValid && this.props.appraisalObject.confirmPricing) {
+      this.props.getAppraisal(this.props.appraisalObject.id)
+    }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -572,7 +578,8 @@ AddbacksAndAdjustmentsForm.propTypes = {
   financialYear: PropTypes.string,
   appraisalObject: PropTypes.object,
   updateAppraisal: PropTypes.func,
-  business: PropTypes.object
+  business: PropTypes.object,
+  getAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -617,7 +624,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal }, dispatch)
+  return bindActionCreators({ updateAppraisal, getAppraisal }, dispatch)
 }
 
 export default connect(

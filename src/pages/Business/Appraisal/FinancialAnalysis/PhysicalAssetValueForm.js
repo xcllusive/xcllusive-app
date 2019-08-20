@@ -6,7 +6,7 @@ import { withFormik } from 'formik'
 import { Grid, Segment, Header, Form, Label } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { updateAppraisal } from '../../../../redux/ducks/appraisal'
+import { updateAppraisal, getAppraisal } from '../../../../redux/ducks/appraisal'
 
 import CustomColumn from '../../../../components/content/CustomGridColumn'
 
@@ -23,7 +23,13 @@ class AddbacksAndAdjustmentsForm extends Component {
       physicalAssetValue: this._replaceDollarAndComma(this.props.values.physicalAssetValue)
     }
     Object.assign(this.props.values, obj)
+
+    if (this.props.isValid && this.props.appraisalObject.confirmPricing) this.props.values.confirmPricing = false
     this.props.updateAppraisal(this.props.values, false)
+
+    if (this.props.isValid && this.props.appraisalObject.confirmPricing) {
+      this.props.getAppraisal(this.props.appraisalObject.id)
+    }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -101,7 +107,8 @@ AddbacksAndAdjustmentsForm.propTypes = {
   financialYear: PropTypes.string,
   updateAppraisal: PropTypes.func,
   appraisalObject: PropTypes.object,
-  business: PropTypes.object
+  business: PropTypes.object,
+  getAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -117,7 +124,7 @@ const mapStateToProps = state => {
 const validationSchema = Yup.object().shape({})
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateAppraisal }, dispatch)
+  return bindActionCreators({ updateAppraisal, getAppraisal }, dispatch)
 }
 
 export default connect(

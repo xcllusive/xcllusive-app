@@ -25,7 +25,7 @@ import {
 } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../../components/content/Wrapper'
-import { updateAppraisal } from '../../../redux/ducks/appraisal'
+import { updateAppraisal, getAppraisal } from '../../../redux/ducks/appraisal'
 import { OptionsPriceSelectBuyer, OptionsStockValue } from '../../../constants/OptionsPriceSelect'
 import {
   getBusinessesSold,
@@ -318,12 +318,31 @@ class ComparableDataPage extends Component {
     return null
   }
 
-  componentWillUnmount () {
+  async componentWillUnmount () {
     if (this.props.appraisalObject.comparableDataSelectedList !== null) {
       const mergeObjects = this._assignObject()
-      this.props.updateAppraisal(mergeObjects)
+      if (this.props.appraisalObject.confirmPricing && this._hasTheListBeenChanged()) {
+        mergeObjects.confirmPricing = false
+      }
+      await this.props.updateAppraisal(mergeObjects)
+      if (this.props.appraisalObject.confirmPricing && this._hasTheListBeenChanged()) {
+        this.props.getAppraisal(this.props.appraisalObject.id)
+      }
+
       this.props.saveSelectedList(this.props.listSelected, this.props.appraisalObject.id)
     }
+  }
+
+  _hasTheListBeenChanged () {
+    const currentList = this.props.listSelected.map(item => {
+      return item.id
+    })
+    const savedList = JSON.parse(this.props.appraisalObject.comparableDataSelectedList).sort(function (a, b) {
+      return a - b
+    })
+
+    if (!_.isEqual(currentList, savedList)) return true
+    else return false
   }
 
   _handleCheckBox = (e, { name }) => {
@@ -599,7 +618,9 @@ class ComparableDataPage extends Component {
           <Step.Group size="large">
             <Step active icon="balance scale" title="Step 5" description="Comparable Data" />
             <Message style={{ marginTop: '0px' }} info size="large">
-              <p>Using the search function, enter in suitable criteria to generate a list of suggested comparable sales.  Select the businesses that you think are most appropriate to use or delete by clicking the bin icon.
+              <p>
+                Using the search function, enter in suitable criteria to generate a list of suggested comparable sales.
+                Select the businesses that you think are most appropriate to use or delete by clicking the bin icon.
               </p>
             </Message>
           </Step.Group>
@@ -1303,7 +1324,8 @@ ComparableDataPage.propTypes = {
   isLoadingListSelected: PropTypes.bool,
   confirmsCompleteSteps: PropTypes.func,
   typeOptions: PropTypes.array,
-  getBusinessTypeAny: PropTypes.func
+  getBusinessTypeAny: PropTypes.func,
+  getAppraisal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -1347,7 +1369,8 @@ const mapDispatchToProps = dispatch => {
       getSelectedList,
       addSelectedList,
       removeSelectedList,
-      getBusinessTypeAny
+      getBusinessTypeAny,
+      getAppraisal
     },
     dispatch
   )

@@ -55,7 +55,12 @@ class FinancialAnalysisPage extends Component {
 
   componentWillUnmount () {
     if (!this.props.isMovedFinancialYear) {
+      if (this.props.isValid && this.props.appraisalObject.confirmPricing) this.props.values.confirmPricing = false
       this.props.updateAppraisal(this.props.values)
+
+      if (this.props.isValid && this.props.appraisalObject.confirmPricing) {
+        this.props.getAppraisal(this.props.appraisalObject.id)
+      }
     }
     this.props.clearMovedFinancialYear()
   }
