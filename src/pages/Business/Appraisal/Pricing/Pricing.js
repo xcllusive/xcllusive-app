@@ -277,6 +277,10 @@ class PricingPage extends Component {
     if (value === 9) {
       await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierTurnOverChart)
     }
+    if (value === 10) {
+      await this.props.calcMinMaxChart(this.props.listSelected, this._multiplierPebitdaLastYearChart)
+    }
+
     this.setState({
       data: [
         { name: '90% Chance of Selling', value: this._chart('90% Chance of Selling') },
@@ -475,7 +479,9 @@ class PricingPage extends Component {
   _pricingMethod = (pricingMethod, appraisalObject) => {
     if (pricingMethod === 1 || pricingMethod === 5) return this._ebitdaLastYear(appraisalObject)
     if (pricingMethod === 2 || pricingMethod === 6) return this._ebitdaAvg(appraisalObject)
-    if (pricingMethod === 3 || pricingMethod === 7) return this._pebitdaLastYear(appraisalObject)
+    if (pricingMethod === 3 || pricingMethod === 7 || pricingMethod === 10) {
+      return this._pebitdaLastYear(appraisalObject)
+    }
     if (pricingMethod === 4 || pricingMethod === 8) return this._pebitdaAvg(appraisalObject)
     if (pricingMethod === 9) return this._turnOver(appraisalObject)
     // if (pricingMethod === 10) return this._ebitdaAvg(appraisalObject)
@@ -485,7 +491,7 @@ class PricingPage extends Component {
   _comparableMultiplier = (pricingMethod, appraisalObject) => {
     if (pricingMethod === 1) return appraisalObject.sumMEbitdaLastYear
     if (pricingMethod === 2) return appraisalObject.sumMEbitdaAvg
-    if (pricingMethod === 3) return appraisalObject.sumMPebitdaLastYear
+    if (pricingMethod === 3 || pricingMethod === 10) return appraisalObject.sumMPebitdaLastYear
     if (pricingMethod === 4) return appraisalObject.sumMPebitdaAvg
     if (pricingMethod === 5) return appraisalObject.sumMEbitdaLastYearWithStock
     if (pricingMethod === 6) return appraisalObject.sumMEbitdaAvgWithStock
@@ -634,7 +640,7 @@ class PricingPage extends Component {
   }
 
   render () {
-    const { appraisalObject, values, handleChange, handleBlur, errors, touched } = this.props
+    const { appraisalObject, values } = this.props
     return (
       <Wrapper>
         <Segment style={{ backgroundColor: '#ffe7a273', marginTop: '0px' }} size="small">
@@ -943,40 +949,6 @@ class PricingPage extends Component {
                     <Grid.Column textAlign="right" />
                     <Grid.Column textAlign="right">
                       {appraisalObject ? numeral(this._assetsValue(appraisalObject)).format('$0,0') : 0}
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row columns={3}>
-                    <Grid.Column>
-                      <Form size="tiny">
-                        <Form.Field>
-                          <Form.Checkbox
-                            label="Agreed Value"
-                            name="pricingMethod"
-                            onChange={() => this._handleChangeCheckBox('pricingMethod', 11)}
-                            checked={values.pricingMethod === 11}
-                          />
-                        </Form.Field>
-                      </Form>
-                    </Grid.Column>
-                    <Grid.Column />
-                    <Grid.Column textAlign="right">
-                      <Form>
-                        <Form.Group>
-                          <Form.Field>
-                            <Form.Input
-                              style={{ textAlign: 'right' }}
-                              name="agreedValue"
-                              value={numeral(values.agreedValue).format('$0,0')}
-                              autoComplete="agreedValue"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            />
-                            {errors.agreedValue && touched.agreedValue && (
-                              <Label basic color="red" pointing content={errors.agreedValue} />
-                            )}
-                          </Form.Field>
-                        </Form.Group>
-                      </Form>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
