@@ -9,23 +9,23 @@ const SliderComponent = ({ value, onChange, type, descriptionArray }) => {
 
   let option = { label: '', color: 'white' }
   if (value >= 0 && value <= 20) {
-    option.label = type === 'businessRisk' ? 'Unsustainable Risk' : 'Weak'
+    option.label = type === 'businessRisk' ? 'Extreme' : 'Weak'
     option.color = 'red'
   }
   if (value >= 21 && value <= 40) {
-    option.label = type === 'businessRisk' ? 'Challenge Risk' : 'Challenging'
+    option.label = type === 'businessRisk' ? 'High' : 'Challenging'
     option.color = 'orange'
   }
   if (value >= 41 && value <= 60) {
-    option.label = type === 'businessRisk' ? 'Acceptable Risk' : 'Fair'
+    option.label = type === 'businessRisk' ? 'Moderate' : 'Fair'
     option.color = 'yellow'
   }
   if (value >= 61 && value <= 80) {
-    option.label = type === 'businessRisk' ? 'Attractive' : 'Good'
+    option.label = type === 'businessRisk' ? 'Low' : 'Good'
     option.color = 'teal'
   }
   if (value >= 81 && value <= 100) {
-    option.label = type === 'businessRisk' ? 'Highly Attractive' : 'Bullish'
+    option.label = type === 'businessRisk' ? 'Very Low' : 'Bullish'
     option.color = 'green'
   }
   return (
