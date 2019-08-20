@@ -103,22 +103,34 @@ class SalesGPProfitPage extends Component {
             <Grid.Row columns={7}>
               <Grid.Column textAlign="center">Sales</Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.sales1 > 0 ? numeral(appraisalObject.sales1).format('$0,0') : null}
+                {appraisalObject && appraisalObject.sales1 !== 0
+                  ? numeral(appraisalObject.sales1).format('$0,0')
+                  : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.sales2 > 0 ? numeral(appraisalObject.sales2).format('$0,0') : null}
+                {appraisalObject && appraisalObject.sales2 !== 0
+                  ? numeral(appraisalObject.sales2).format('$0,0')
+                  : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.sales3 > 0 ? numeral(appraisalObject.sales3).format('$0,0') : null}
+                {appraisalObject && appraisalObject.sales3 !== 0
+                  ? numeral(appraisalObject.sales3).format('$0,0')
+                  : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.sales4 > 0 ? numeral(appraisalObject.sales4).format('$0,0') : null}
+                {appraisalObject && appraisalObject.sales4 !== 0
+                  ? numeral(appraisalObject.sales4).format('$0,0')
+                  : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.sales5 > 0 ? numeral(appraisalObject.sales5).format('$0,0') : null}
+                {appraisalObject && appraisalObject.sales5 !== 0
+                  ? numeral(appraisalObject.sales5).format('$0,0')
+                  : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcAnnualised1 > 0
+                {appraisalObject &&
+                parseInt(appraisalObject.calcAnnualised1) !== 0 &&
+                appraisalObject.calcAnnualised1 !== null
                   ? numeral(appraisalObject.calcAnnualised1).format('$0,0')
                   : null}
               </Grid.Column>
@@ -126,32 +138,32 @@ class SalesGPProfitPage extends Component {
             <Grid.Row columns={7}>
               <Grid.Column textAlign="center">Gross Profit ($)</Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcGrossProfit1 > 0
+                {appraisalObject && parseInt(appraisalObject.calcGrossProfit1) !== 0
                   ? numeral(appraisalObject.calcGrossProfit1).format('$0,0')
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcGrossProfit2 > 0
+                {appraisalObject && parseInt(appraisalObject.calcGrossProfit2) !== 0
                   ? numeral(appraisalObject.calcGrossProfit2).format('$0,0')
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcGrossProfit3 > 0
+                {appraisalObject && parseInt(appraisalObject.calcGrossProfit3) !== 0
                   ? numeral(appraisalObject.calcGrossProfit3).format('$0,0')
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcGrossProfit4 > 0
+                {appraisalObject && parseInt(appraisalObject.calcGrossProfit4) !== 0
                   ? numeral(appraisalObject.calcGrossProfit4).format('$0,0')
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcGrossProfit5 > 0
+                {appraisalObject && parseInt(appraisalObject.calcGrossProfit5) !== 0
                   ? numeral(appraisalObject.calcGrossProfit5).format('$0,0')
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcGrossProfit7 > 0
+                {appraisalObject && parseInt(appraisalObject.calcGrossProfit7) !== 0
                   ? numeral(appraisalObject.calcGrossProfit7).format('$0,0')
                   : null}
               </Grid.Column>
@@ -159,32 +171,32 @@ class SalesGPProfitPage extends Component {
             <Grid.Row columns={7}>
               <Grid.Column textAlign="center">Gross Profit (%)</Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcOperatingProfitPerc1 > 0
+                {appraisalObject && parseInt(appraisalObject.calcOperatingProfitPerc1) !== 0
                   ? `${Math.round(appraisalObject.calcOperatingProfitPerc1)}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcOperatingProfitPerc2 > 0
+                {appraisalObject && parseInt(appraisalObject.calcOperatingProfitPerc2) !== 0
                   ? `${Math.round(appraisalObject.calcOperatingProfitPerc2)}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcOperatingProfitPerc3 > 0
+                {appraisalObject && parseInt(appraisalObject.calcOperatingProfitPerc3) !== 0
                   ? `${Math.round(appraisalObject.calcOperatingProfitPerc3)}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcOperatingProfitPerc4 > 0
+                {appraisalObject && parseInt(appraisalObject.calcOperatingProfitPerc4) !== 0
                   ? `${Math.round(appraisalObject.calcOperatingProfitPerc4)}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcOperatingProfitPerc5 > 0
+                {appraisalObject && parseInt(appraisalObject.calcOperatingProfitPerc5) !== 0
                   ? `${Math.round(appraisalObject.calcOperatingProfitPerc5)}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.calcOperatingProfitPerc7 > 0
+                {appraisalObject && parseInt(appraisalObject.calcOperatingProfitPerc7) !== 0
                   ? `${Math.round(appraisalObject.calcOperatingProfitPerc7)}%`
                   : null}
               </Grid.Column>
@@ -194,32 +206,32 @@ class SalesGPProfitPage extends Component {
                 <b>Adjusted Profit ($)</b>
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.totalAdjustedProfit1 > 0 ? (
+                {appraisalObject && parseInt(appraisalObject.totalAdjustedProfit1) !== 0 ? (
                   <b>{numeral(appraisalObject.totalAdjustedProfit1).format('$0,0')}</b>
                 ) : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.totalAdjustedProfit2 > 0 ? (
+                {appraisalObject && parseInt(appraisalObject.totalAdjustedProfit2) !== 0 ? (
                   <b>{numeral(appraisalObject.totalAdjustedProfit2).format('$0,0')}</b>
                 ) : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.totalAdjustedProfit3 > 0 ? (
+                {appraisalObject && parseInt(appraisalObject.totalAdjustedProfit3) !== 0 ? (
                   <b>{numeral(appraisalObject.totalAdjustedProfit3).format('$0,0')}</b>
                 ) : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.totalAdjustedProfit4 > 0 ? (
+                {appraisalObject && parseInt(appraisalObject.totalAdjustedProfit4) !== 0 ? (
                   <b>{numeral(appraisalObject.totalAdjustedProfit4).format('$0,0')}</b>
                 ) : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.totalAdjustedProfit5 > 0 ? (
+                {appraisalObject && parseInt(appraisalObject.totalAdjustedProfit5) !== 0 ? (
                   <b>{numeral(appraisalObject.totalAdjustedProfit5).format('$0,0')}</b>
                 ) : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.totalAdjustedProfit7 > 0 ? (
+                {appraisalObject && parseInt(appraisalObject.totalAdjustedProfit7) !== 0 ? (
                   <b>{numeral(appraisalObject.totalAdjustedProfit7).format('$0,0')}</b>
                 ) : null}
               </Grid.Column>
@@ -227,32 +239,44 @@ class SalesGPProfitPage extends Component {
             <Grid.Row columns={7}>
               <Grid.Column textAlign="center">Adjusted Profit (%)</Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.adjustedProfitPerc1 > 0
+                {appraisalObject &&
+                parseInt(appraisalObject.adjustedProfitPerc1) !== 0 &&
+                appraisalObject.adjustedProfitPerc1 !== null
                   ? `${appraisalObject.adjustedProfitPerc1}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.adjustedProfitPerc2 > 0
+                {appraisalObject &&
+                parseInt(appraisalObject.adjustedProfitPerc2) !== 0 &&
+                appraisalObject.adjustedProfitPerc2 !== null
                   ? `${appraisalObject.adjustedProfitPerc2}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.adjustedProfitPerc3 > 0
+                {appraisalObject &&
+                parseInt(appraisalObject.adjustedProfitPerc3) !== 0 &&
+                appraisalObject.adjustedProfitPerc3 !== null
                   ? `${appraisalObject.adjustedProfitPerc3}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.adjustedProfitPerc4 > 0
+                {appraisalObject &&
+                parseInt(appraisalObject.adjustedProfitPerc4) !== 0 &&
+                appraisalObject.adjustedProfitPerc4 !== null
                   ? `${appraisalObject.adjustedProfitPerc4}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.adjustedProfitPerc5 > 0
+                {appraisalObject &&
+                parseInt(appraisalObject.adjustedProfitPerc5) !== 0 &&
+                appraisalObject.adjustedProfitPerc5 !== null
                   ? `${appraisalObject.adjustedProfitPerc5}%`
                   : null}
               </Grid.Column>
               <Grid.Column textAlign="right">
-                {appraisalObject && appraisalObject.adjustedProfitPerc7 > 0
+                {appraisalObject &&
+                parseInt(appraisalObject.adjustedProfitPerc7) !== 0 &&
+                appraisalObject.adjustedProfitPerc7 !== null
                   ? `${appraisalObject.adjustedProfitPerc7}%`
                   : null}
               </Grid.Column>
