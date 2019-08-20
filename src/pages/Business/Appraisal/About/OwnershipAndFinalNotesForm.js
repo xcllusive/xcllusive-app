@@ -9,7 +9,8 @@ const OwnershipAndFinalNotesForm = ({ values, handleChange, handleBlur, errors, 
       { key: '2', text: '5 days', value: '5 days' },
       { key: '3', text: '6 days', value: '6 days' },
       { key: '4', text: '7 days', value: '7 days' },
-      { key: '5', text: 'Under Management', value: 'Under Management' }
+      { key: '5', text: 'Under Management', value: 'Under Management' },
+      { key: '6', text: 'Not Applicable', value: 'Not Applicable' }
     ]
   }
 
