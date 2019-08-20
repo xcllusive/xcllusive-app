@@ -10,9 +10,8 @@ import JoditEditor from 'jodit-react'
 import { Grid, Button, Icon } from 'semantic-ui-react'
 
 import { previewAgreementTemplate } from '../../../redux/ducks/agreementTemplates'
-import { downloadAgreement, sendAgreement, getAgreementBody } from '../../../redux/ducks/agreement'
+import { downloadAgreement, sendAgreement, getAgreementBody, saveAgreement } from '../../../redux/ducks/agreement'
 import { TypesModal, openModal, closeModal } from '../../../redux/ducks/modal'
-import { getLastInvoice } from '../../../redux/ducks/invoice'
 
 import Wrapper from '../../../components/content/Wrapper'
 import { theme } from '../../../styles'
@@ -65,15 +64,15 @@ class PreviewAgreement extends Component {
         values: this.props.location.state.values
       })
     }
-    this._attachQuillRefs()
-
-    // this.props.getLastInvoice(this.props.match.params.id)
   }
 
   static getDerivedStateFromProps (props, state) {
     if (props.agreementExisted && !state.bodyUpdate && props.location.state.editAgreement) {
       return {
-        body: props.location.state.typeAgreement === 'businessAgreement' ? props.agreementExisted.body : props.agreementPropertyExisted.body,
+        body:
+          props.location.state.typeAgreement === 'businessAgreement'
+            ? props.agreementExisted.body
+            : props.agreementPropertyExisted.body,
         bodyUpdate: true
       }
     }
@@ -93,18 +92,6 @@ class PreviewAgreement extends Component {
 
   _handleSelectChangeState = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-  }
-
-  _attachQuillRefs = () => {
-    // Ensure React-Quill reference is available:
-    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
-      return false
-    }
-    // Skip if Quill reference is defined:
-    if (this.quillRef !== null) return false
-
-    const quillRef = this.reactQuillRef.getEditor()
-    if (quillRef !== null) this.quillRef = quillRef
   }
 
   _modalConfirmDownloadAgreement = () => {
@@ -137,14 +124,18 @@ class PreviewAgreement extends Component {
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
-      fileNameAgreement: this.props.location.state.typeAgreement === 'businessAgreement' ? `agreement_${this.props.location.state.business.businessName.substring(
-        0,
-        10
-      )}_${moment().format('DD_MM_YYYY')}.pdf` : null,
-      fileNamePropertyAgreement: this.props.location.state.typeAgreement === 'propertyAgreement' ? `propertyagreement_${this.props.location.state.business.businessName.substring(
-        0,
-        10
-      )}_${moment().format('DD_MM_YYYY')}.pdf` : null,
+      fileNameAgreement:
+        this.props.location.state.typeAgreement === 'businessAgreement'
+          ? `agreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
+            'DD_MM_YYYY'
+          )}.pdf`
+          : null,
+      fileNamePropertyAgreement:
+        this.props.location.state.typeAgreement === 'propertyAgreement'
+          ? `propertyagreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
+            'DD_MM_YYYY'
+          )}.pdf`
+          : null,
       fromAgreement: true,
       onConfirm: object => {
         if (object) {
@@ -158,52 +149,47 @@ class PreviewAgreement extends Component {
     })
   }
 
-  _config = () => {
+  _saveReturnAgreement = async () => {
+    await this.props.saveAgreement({
+      businessId: this.props.location.state.business.id,
+      body: this.state.body,
+      values: this.props.location.state.values,
+      typeAgreement: this.props.location.state.typeAgreement,
+      title: this.props.location.state.title
+    })
+    this.props.history.push({
+      pathname: `/business/${this.props.location.state.business.id}/agreementInvoice`,
+      state: {
+        business: this.props.location.state.business
+      }
+    })
   }
 
+  _config = () => {}
+
   render () {
+    // const { isValid } = this.props.location.state
     const { isLoading, isLoadingDownloading } = this.props
     return (
       <Wrapper loading={isLoading}>
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              <JoditEditor
-                value={this.state.body}
-                config={this._config}
-                onChange={this._handleChangeBody}
-              />
+              <JoditEditor value={this.state.body} config={this._config} onChange={this._handleChangeBody} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
         <Grid padded>
           <Grid.Row>
             <Grid.Column style={{ marginTop: '50px' }}>
-              <Button
-                color="green"
-                onClick={() =>
-                  this.props.history.push({
-                    pathname: `/business/${this.props.location.state.business.id}/agreementInvoice`,
-                    state: {
-                      business: this.props.location.state.business
-                    }
-                  })
-                }
-                size="small"
-                floated="left"
-              >
-                <Icon name="backward" />
-                Return
+              <Button color="red" onClick={() => this._saveReturnAgreement()} size="small" floated="left">
+                <Icon name="save" />
+                Save and Return
               </Button>
-              <Button
-                color={theme.buttonSave}
-                onClick={() => this._openModalEmailAgreement()}
-                size="small"
-                floated="right"
-              >
-                <Icon name="mail" />
-                Send Agreement
-              </Button>
+              {/* <Button color={theme.buttonSave} onClick={() => this._saveReturnAgreement()} size="small" floated="right">
+                <Icon name="save" />
+                Save Agreement
+              </Button> */}
               <Button
                 color={theme.buttonDownload}
                 onClick={this._modalConfirmDownloadAgreement}
@@ -240,9 +226,9 @@ PreviewAgreement.propTypes = {
   getAgreementBody: PropTypes.func,
   agreementExisted: PropTypes.object,
   isLoadingDownloading: PropTypes.bool,
-  getLastInvoice: PropTypes.func,
-  objectLastInvoice: PropTypes.object,
-  agreementPropertyExisted: PropTypes.object
+  agreementPropertyExisted: PropTypes.object,
+  saveAgreement: PropTypes.func,
+  isValid: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
@@ -251,8 +237,7 @@ const mapStateToProps = state => ({
   isSent: state.agreement.send.isSent,
   agreementExisted: state.agreement.get.object,
   agreementPropertyExisted: state.agreement.get.objectProperty,
-  isLoadingDownloading: state.agreement.download.isLoading,
-  objectLastInvoice: state.invoice.getLastInvoice.object
+  isLoadingDownloading: state.agreement.download.isLoading
 })
 
 const mapDispatchToProps = dispatch =>
@@ -264,7 +249,7 @@ const mapDispatchToProps = dispatch =>
       downloadAgreement,
       sendAgreement,
       getAgreementBody,
-      getLastInvoice
+      saveAgreement
     },
     dispatch
   )

@@ -64,24 +64,14 @@ class ModalListAgreements extends Component {
                   name="title"
                   autoComplete="title"
                   loading={agreementLoading || allAgreementsLoading}
-                  options={mapArrayToValuesForDropdownTemplates(
-                    listAgreementTemplates
-                  )}
+                  options={mapArrayToValuesForDropdownTemplates(listAgreementTemplates)}
                   value={values.title}
                   onChange={this._handleSelectChange}
                 />
-                {errors.title &&
-                  touched.title && (
-                  <Label basic color="red" pointing content={errors.title} />
-                )}
+                {errors.title && touched.title && <Label basic color="red" pointing content={errors.title} />}
               </Form.Field>
               <Form.Field style={{ marginTop: '24px' }} width={3}>
-                <Button
-                  color="facebook"
-                  size="small"
-                  onClick={() => this._showAll()}
-                  loading={allAgreementsLoading}
-                >
+                <Button color="facebook" size="small" onClick={() => this._showAll()} loading={allAgreementsLoading}>
                   <Icon name="backward" />
                   Show all
                 </Button>
@@ -90,13 +80,7 @@ class ModalListAgreements extends Component {
             {objectAgreementTemplate ? (
               <Form.Group>
                 <Form.Field>
-                  <Form.Input
-                    readOnly
-                    label="State"
-                    name="state"
-                    autoComplete="state"
-                    value={values.state}
-                  />
+                  <Form.Input readOnly label="State" name="state" autoComplete="state" value={values.state} />
                 </Form.Field>
               </Form.Group>
             ) : null}

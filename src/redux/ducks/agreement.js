@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import download from '../../utils/file-download'
-import { get, update, send, downloadAgree, getEmailTemplate, sendAgreeInvo } from '../../services/api/agreement'
+import { get, update, send, downloadAgree, getEmailTemplate, sendAgreeInvo, save } from '../../services/api/agreement'
 
 // Action Types
 
@@ -23,6 +23,9 @@ export const Types = {
   SEND_AGREEMENT_INVOICE_LOADING: 'SEND_AGREEMENT_INVOICE_LOADING',
   SEND_AGREEMENT_INVOICE_SUCCESS: 'SEND_AGREEMENT_INVOICE_SUCCESS',
   SEND_AGREEMENT_INVOICE_FAILURE: 'SEND_AGREEMENT_INVOICE_FAILURE',
+  SAVE_AGREEMENT_LOADING: 'SAVE_AGREEMENT_LOADING',
+  SAVE_AGREEMENT_SUCCESS: 'SAVE_AGREEMENT_SUCCESS',
+  SAVE_AGREEMENT_FAILURE: 'SAVE_AGREEMENT_FAILURE',
   CLEAR_AGREEMENT: 'CLEAR_AGREEMENT'
 }
 
@@ -58,6 +61,11 @@ const initialState = {
   sendAgreeInvo: {
     isLoading: false,
     isSent: false,
+    error: null
+  },
+  save: {
+    isLoading: false,
+    isSaved: false,
     error: null
   }
 }
@@ -237,6 +245,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SAVE_AGREEMENT_LOADING:
+      return {
+        ...state,
+        save: {
+          ...state.save,
+          isLoading: action.payload,
+          isSaved: false,
+          error: null
+        }
+      }
+    case Types.SAVE_AGREEMENT_SUCCESS:
+      return {
+        ...state,
+        save: {
+          ...state.save,
+          isLoading: false,
+          isSaved: true
+        }
+      }
+    case Types.SAVE_AGREEMENT_FAILURE:
+      return {
+        ...state,
+        save: {
+          ...state.save,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_AGREEMENT:
       return initialState
     default:
@@ -290,6 +326,26 @@ export const updateAgreementBody = body => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_AGREEMENT_BODY_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const saveAgreement = agreement => async dispatch => {
+  dispatch({
+    type: Types.SAVE_AGREEMENT_LOADING,
+    payload: true
+  })
+  try {
+    const response = await save(agreement)
+    dispatch({
+      type: Types.SAVE_AGREEMENT_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.SAVE_AGREEMENT_FAILURE,
       payload: error
     })
     toast.error(error)

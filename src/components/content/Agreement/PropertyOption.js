@@ -31,19 +31,7 @@ class PropertyOption extends Component {
               <Label basic pointing color="red" content={errors.commissionProperty} />
             )}
             <Form.Input
-              label="Address"
-              name="addressProperty"
-              autoComplete="addressProperty"
-              value={values.addressProperty}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              disabled={values.propertyOptions}
-            />
-            {errors.addressProperty && touched.addressProperty && (
-              <Label basic pointing color="red" content={errors.addressProperty} />
-            )}
-            <Form.Input
-              label="Price $"
+              label="Asking Price $"
               name="priceProperty"
               autoComplete="priceProperty"
               value={numeral(values.priceProperty).format('$0,0.[99]')}

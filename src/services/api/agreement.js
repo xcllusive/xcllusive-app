@@ -15,6 +15,14 @@ export const update = agreement => {
   })
 }
 
+export const save = agreement => {
+  return request({
+    method: 'post',
+    url: `/agreement/${agreement.id}`,
+    data: agreement
+  })
+}
+
 export const downloadAgree = object => {
   return request({
     method: 'post',

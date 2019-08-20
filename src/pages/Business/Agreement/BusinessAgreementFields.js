@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -48,15 +48,32 @@ class BusinessAgreementFields extends Component {
     await Object.assign(this.props.values, obj)
     const objBusiness = {
       id: this.props.objectBusiness.id,
-      listedPrice: this.props.values.listedPrice !== 0 ? this._replaceDollarAndComma(this.props.values.listedPrice) : this.props.values.listedPrice,
-      appraisalHigh: this.props.values.appraisalHigh !== 0 ? this._replaceDollarAndComma(this.props.values.appraisalHigh) : this.props.values.appraisalHigh,
-      appraisalLow: this.props.values.appraisalLow !== 0 ? this._replaceDollarAndComma(this.props.values.appraisalLow) : this.props.values.appraisalLow,
-      engagementFee: this.props.values.engagementFee !== 0 ? this._replaceDollarAndComma(this.props.values.engagementFee) : this.props.values.engagementFee
+      listedPrice:
+        this.props.values.listedPrice !== 0
+          ? this._replaceDollarAndComma(this.props.values.listedPrice)
+          : this.props.values.listedPrice,
+      appraisalHigh:
+        this.props.values.appraisalHigh !== 0
+          ? this._replaceDollarAndComma(this.props.values.appraisalHigh)
+          : this.props.values.appraisalHigh,
+      appraisalLow:
+        this.props.values.appraisalLow !== 0
+          ? this._replaceDollarAndComma(this.props.values.appraisalLow)
+          : this.props.values.appraisalLow,
+      engagementFee:
+        this.props.values.engagementFee !== 0
+          ? this._replaceDollarAndComma(this.props.values.engagementFee)
+          : this.props.values.engagementFee
     }
     await this.props.updateBusiness(objBusiness)
     this.props.history.push({
       pathname: `/business/${this.props.objectBusiness.id}/agreement/${this.props.objectAgreementTemplate.id}/preview`,
-      state: { business: this.props.objectBusiness, values: this.props.values, typeAgreement: this.props.location.state.typeAgreement, title: this.props.objectAgreementTemplate.title }
+      state: {
+        business: this.props.objectBusiness,
+        values: this.props.values,
+        typeAgreement: this.props.location.state.typeAgreement,
+        title: this.props.objectAgreementTemplate.title
+      }
     })
   }
 
@@ -118,27 +135,46 @@ class BusinessAgreementFields extends Component {
                     )}
                   </Form.Group>
                   <Form.Group widths="equal">
-                    <Form.Input
-                      label="For sale of the businesses known as"
-                      name="businessKnownAs"
-                      autoComplete="businessKnownAs"
-                      value={values.businessKnownAs}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    {errors.businessKnownAs && touched.businessKnownAs && (
-                      <Label basic pointing color="red" content={errors.businessKnownAs} />
-                    )}
-                    <Form.Input
-                      label="Conducted at"
-                      name="conductedAt"
-                      autoComplete="conductedAt"
-                      value={values.conductedAt}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    {errors.conductedAt && touched.conductedAt && (
-                      <Label basic pointing color="red" content={errors.conductedAt} />
+                    {this.props.location.state.typeAgreement === 'businessAgreement' ? (
+                      <Fragment>
+                        <Form.Input
+                          label="For sale of the businesses known as"
+                          name="businessKnownAs"
+                          autoComplete="businessKnownAs"
+                          value={values.businessKnownAs}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        {errors.businessKnownAs && touched.businessKnownAs && (
+                          <Label basic pointing color="red" content={errors.businessKnownAs} />
+                        )}
+                        <Form.Input
+                          label="Conducted at"
+                          name="conductedAt"
+                          autoComplete="conductedAt"
+                          value={values.conductedAt}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        {errors.conductedAt && touched.conductedAt && (
+                          <Label basic pointing color="red" content={errors.conductedAt} />
+                        )}
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <Form.Input
+                          label="Property Address"
+                          name="addressProperty"
+                          autoComplete="addressProperty"
+                          value={values.addressProperty}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          disabled={values.propertyOptions}
+                        />
+                        {errors.addressProperty && touched.addressProperty && (
+                          <Label basic pointing color="red" content={errors.addressProperty} />
+                        )}
+                      </Fragment>
                     )}
                     <Form.Input
                       label="ABN/ACN"
@@ -163,6 +199,7 @@ class BusinessAgreementFields extends Component {
                   handleBlur={handleBlur}
                   errors={errors}
                   touched={touched}
+                  typeAgreement={this.props.location.state.typeAgreement}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -212,12 +249,19 @@ class BusinessAgreementFields extends Component {
               <Grid.Column>
                 <Button
                   color="green"
-                  onClick={() => history.push(`/business/${objectBusiness.id}`)}
+                  onClick={() =>
+                    history.push({
+                      pathname: `/business/${objectBusiness.id}/agreementInvoice`,
+                      state: {
+                        business: objectBusiness
+                      }
+                    })
+                  }
                   size="small"
                   floated="left"
                 >
                   <Icon name="backward" />
-                  Back to Business
+                  Return
                 </Button>
                 <Button color="red" onClick={() => this._previewAgreement()} size="small" floated="right">
                   <Icon name="edit" />
@@ -312,11 +356,17 @@ const mapPropsToValues = props => ({
   minimumCommission: props.objectAgreementTemplate
     ? numeral(props.objectAgreementTemplate.minimumCommission).format('$0,0.[99]')
     : 0,
-  commissionPerc: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionPerc : 0,
+  commissionPerc:
+    props.objectAgreementTemplate && props.objectAgreementTemplate.commissionPerc
+      ? props.objectAgreementTemplate.commissionPerc
+      : 0,
   commissionDiscount: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionDiscount : 0,
   introductionParties: props.objectAgreementTemplate ? props.objectAgreementTemplate.introductionParties : '',
   commissionProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionProperty : 0,
-  addressProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.addressProperty : '',
+  addressProperty:
+    props.objectAgreementTemplate && props.objectAgreementTemplate.addressProperty
+      ? props.objectAgreementTemplate.addressProperty
+      : '',
   priceProperty: props.objectAgreementTemplate
     ? numeral(props.objectAgreementTemplate.priceProperty).format('$0,0.[99]')
     : 0,

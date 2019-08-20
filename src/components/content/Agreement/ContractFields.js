@@ -57,28 +57,32 @@ class ContractFields extends Component {
             {errors.minimumCommission && touched.minimumCommission && (
               <Label basic pointing color="red" content={errors.minimumCommission} />
             )}
-            <Form.Input
-              label="Appraisal High $"
-              name="appraisalHigh"
-              autoComplete="appraisalHigh"
-              value={numeral(values.appraisalHigh).format('$0,0')}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.appraisalHigh && touched.appraisalHigh && (
-              <Label basic pointing color="red" content={errors.appraisalHigh} />
-            )}
-            <Form.Input
-              label="Appraisal Low $"
-              name="appraisalLow"
-              autoComplete="appraisalLow"
-              value={numeral(values.appraisalLow).format('$0,0.[99]')}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.appraisalLow && touched.appraisalLow && (
-              <Label basic pointing color="red" content={errors.appraisalLow} />
-            )}
+            {this.props.typeAgreement && this.props.typeAgreement === 'businessAgreement' ? (
+              <Fragment>
+                <Form.Input
+                  label="Appraisal High $"
+                  name="appraisalHigh"
+                  autoComplete="appraisalHigh"
+                  value={numeral(values.appraisalHigh).format('$0,0')}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.appraisalHigh && touched.appraisalHigh && (
+                  <Label basic pointing color="red" content={errors.appraisalHigh} />
+                )}
+                <Form.Input
+                  label="Appraisal Low $"
+                  name="appraisalLow"
+                  autoComplete="appraisalLow"
+                  value={numeral(values.appraisalLow).format('$0,0.[99]')}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.appraisalLow && touched.appraisalLow && (
+                  <Label basic pointing color="red" content={errors.appraisalLow} />
+                )}
+              </Fragment>
+            ) : null}
           </Form.Group>
         </Segment>
       </Fragment>
@@ -91,7 +95,8 @@ ContractFields.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
-  touched: PropTypes.object
+  touched: PropTypes.object,
+  typeAgreement: PropTypes.string
 }
 
 export default ContractFields

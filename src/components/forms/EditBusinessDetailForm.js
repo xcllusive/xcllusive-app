@@ -550,7 +550,7 @@ class EditBusinessDetailForm extends Component {
                     })
                   }
                   size="small"
-                  floated="center"
+                  floated="left"
                 >
                   <Icon name="file" />
                     Agreement/Invoice
