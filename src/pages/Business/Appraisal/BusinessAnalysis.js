@@ -109,7 +109,11 @@ class BusinessAnalysisPage extends Component {
             <Step active icon="tasks" title="Step 4" description="Business Analysis" />
             <Message style={{ marginTop: '0px' }} info size="large">
               <p>
-              This section does not affect the appraisal calculation.  It allows you to add content to the report in relation to the businesses value drivers, risk factors and any critical issues.  Suggestions are provided in the boxes on the right.  Selecting them copies them to the box on the left where you can amend the suggested entry as required.  If you wish to add in additional commentary you can do so in the left box.  Business risk and market is selected at the end using the most appropriate slider.
+                This section does not affect the appraisal calculation. It allows you to add content to the report in
+                relation to the businesses value drivers, risk factors and any critical issues. Suggestions are provided
+                in the boxes on the right. Selecting them copies them to the box on the left where you can amend the
+                suggested entry as required. If you wish to add in additional commentary you can do so in the left box.
+                Business risk and market is selected at the end using the most appropriate slider.
               </p>
             </Message>
           </Step.Group>
@@ -289,42 +293,44 @@ class BusinessAnalysisPage extends Component {
             </Grid.Row>
           </Grid>
         </Segment>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
-              <Header as="h3" textAlign="center" color="blue">
-                Business Risk
-              </Header>
-              {values.valueSliderBR || values.valueSliderBR === 0 ? (
-                <Segment>
-                  <SliderComponent
-                    value={values.valueSliderBR}
-                    type="businessRisk"
-                    descriptionArray={this.props.descriptionBusinessRiskArray}
-                    onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
-                  />
-                </Segment>
-              ) : null}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
-              <Header as="h3" textAlign="center" color="blue">
-                Market
-              </Header>
-              {values.valueSliderMarket || values.valueSliderMarket === 0 ? (
-                <Segment>
-                  <SliderComponent
-                    value={values.valueSliderMarket}
-                    type="market"
-                    descriptionArray={this.props.descriptionMarketArray}
-                    onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
-                  />
-                </Segment>
-              ) : null}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Segment style={{ backgroundColor: '#daf3e4' }} size="small">
+          <Header as="h3" textAlign="center" color="blue">
+            Business Risk
+          </Header>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+                {values.valueSliderBR || values.valueSliderBR === 0 ? (
+                  <Segment>
+                    <SliderComponent
+                      value={values.valueSliderBR}
+                      type="businessRisk"
+                      descriptionArray={this.props.descriptionBusinessRiskArray}
+                      onChange={value => this._handleChangeSlider(value, 'valueSliderBR')}
+                    />
+                  </Segment>
+                ) : null}
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column style={{ margin: '0 auto' }} textAlign="center" width={8}>
+                <Header as="h3" textAlign="center" color="blue">
+                  Market
+                </Header>
+                {values.valueSliderMarket || values.valueSliderMarket === 0 ? (
+                  <Segment>
+                    <SliderComponent
+                      value={values.valueSliderMarket}
+                      type="market"
+                      descriptionArray={this.props.descriptionMarketArray}
+                      onChange={value => this._handleChangeSlider(value, 'valueSliderMarket')}
+                    />
+                  </Segment>
+                ) : null}
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
         <Form.Group>
           <Form.Field>
             <Form.Checkbox
