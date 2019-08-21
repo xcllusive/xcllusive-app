@@ -849,13 +849,18 @@ export const getQtdeBusinessEachStagePerUser = () => async dispatch => {
   }
 }
 
-export const getBusinessesPerUser = (search = false, stageId = false, filterLog = false) => async dispatch => {
+export const getBusinessesPerUser = (
+  search = false,
+  stageId = false,
+  filterLog = false,
+  orderByDateTimeCreated = false
+) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_PER_USER_LOADING,
     payload: true
   })
   try {
-    const businesses = await getAllPerUser(search, stageId, filterLog)
+    const businesses = await getAllPerUser(search, stageId, filterLog, orderByDateTimeCreated)
     dispatch({
       type: Types.GET_BUSINESSES_PER_USER_SUCCESS,
       payload: businesses

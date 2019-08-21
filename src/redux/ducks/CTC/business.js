@@ -94,13 +94,18 @@ export default function reducer (state = initialState, action) {
 }
 
 // Action Creators
-export const getCtcBusinessesPerUser = (search = false, stageId = false, filterLog = false) => async dispatch => {
+export const getCtcBusinessesPerUser = (
+  search = false,
+  stageId = false,
+  filterLog = false,
+  orderByDateTimeCreated = false
+) => async dispatch => {
   dispatch({
     type: Types.GET_CTC_BUSINESSES_PER_USER_LOADING,
     payload: true
   })
   try {
-    const businesses = await getCtcAllPerUser(search, stageId, filterLog)
+    const businesses = await getCtcAllPerUser(search, stageId, filterLog, orderByDateTimeCreated)
     dispatch({
       type: Types.GET_CTC_BUSINESSES_PER_USER_SUCCESS,
       payload: businesses

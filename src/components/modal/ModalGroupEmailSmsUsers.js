@@ -133,15 +133,18 @@ class ModalGroupEmailSmsUsers extends Component {
                               disabled={!groupEmail.phoneMobile}
                             />
                           </Table.Cell>
-                          <Table.Cell style={{ backgroundColor: !groupEmail.phoneMobile ? 'grey' : null }}>
+                          <Table.Cell
+                            style={{ backgroundColor: emailOrSms === 'sms' && !groupEmail.phoneMobile ? 'grey' : null }}
+                          >
                             {groupEmail.firstName} {groupEmail.lastName}
                           </Table.Cell>
                           {emailOrSms === 'sms' ? (
                             <Table.Cell style={{ backgroundColor: !groupEmail.phoneMobile ? 'grey' : null }}>
                               {groupEmail.phoneMobile}
                             </Table.Cell>
-                          ) : null}
-                          {/* <Table.Cell>{emailOrSms === 'email' ? groupEmail.email : groupEmail.phoneMobile}</Table.Cell> */}
+                          ) : (
+                            <Table.Cell>{groupEmail.email}</Table.Cell>
+                          )}
                         </Table.Row>
                       ))}
                     </Table.Body>

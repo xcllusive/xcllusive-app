@@ -50,6 +50,12 @@ class DocumentFolder extends Component {
     })
   }
 
+  _newDocumentFile = () => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_DOCUMENT_FILE, {
+      titleModal: 'New File'
+    })
+  }
+
   render () {
     const { listFolder } = this.props
     return (
@@ -59,6 +65,10 @@ class DocumentFolder extends Component {
             <Button size="small" color="facebook" onClick={() => this._newDocumentFolder()}>
               <Icon name="add" />
               New Folder
+            </Button>
+            <Button size="small" color="twitter" onClick={() => this._newDocumentFile()}>
+              <Icon name="file" />
+              New File
             </Button>
           </Header>
         ) : null}

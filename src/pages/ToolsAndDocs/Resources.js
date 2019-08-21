@@ -11,7 +11,9 @@ import { getResource, removeResource } from '../../redux/ducks/resource'
 class Resource extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      editMode: false
+    }
   }
 
   componentDidMount () {
@@ -50,15 +52,25 @@ class Resource extends Component {
     })
   }
 
+  _editMode = () => {
+    this.setState({
+      editMode: true
+    })
+  }
+
   render () {
     const { listResources } = this.props
     return (
       <Wrapper>
         {this._isUserSystemSettings() ? (
           <Header textAlign="right">
-            <Button size="small" color="facebook" onClick={() => this._newResource()}>
-              <Icon name="add" />
-              New Link
+            <Button
+              size="small"
+              color={!this.state.editMode ? 'yellow' : 'facebook'}
+              onClick={() => (!this.state.editMode ? this._editMode() : this._newResource())}
+            >
+              <Icon name={!this.state.editMode ? 'edit' : 'add'} />
+              {!this.state.editMode ? 'Edit Mode' : 'New Link'}
             </Button>
           </Header>
         ) : null}
@@ -73,7 +85,7 @@ class Resource extends Component {
                       style={{ paddingBottom: '0px', paddingTop: '0px' }}
                       columns={this._isUserSystemSettings() ? 3 : 2}
                     >
-                      {this._isUserSystemSettings() ? (
+                      {this._isUserSystemSettings() && this.state.editMode ? (
                         <Grid.Column width={2}>
                           <Icon
                             name="edit"

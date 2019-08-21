@@ -26,7 +26,8 @@ class BusinessListPage extends Component {
       inputSearch: '',
       stageSelected: 1,
       stageSelectedName: 'Potential Listing',
-      showAll: true
+      showAll: true,
+      orderByDateTimeCreatedDesc: true
     }
   }
 
@@ -72,7 +73,7 @@ class BusinessListPage extends Component {
   }
 
   _getBusinesses = (stage, name) => {
-    if (stage === 4) this.props.getBusinessesPerUser(false, stage, false)
+    if (stage === 4) this.props.getBusinessesPerUser(false, stage, false, this.state.orderByDateTimeCreatedDesc)
     else this.props.getBusinessesPerUser(false, stage, true)
 
     this.setState({
@@ -85,12 +86,24 @@ class BusinessListPage extends Component {
 
   _showAll () {
     this.setState({ showAll: false })
-    this.props.getBusinessesPerUser(false, this.state.stageSelected, false)
+    this.props.getBusinessesPerUser(false, this.state.stageSelected, false, this.state.orderByDateTimeCreatedDesc)
   }
 
   _showLess () {
     this.setState({ showAll: true })
-    this.props.getBusinessesPerUser(false, this.state.stageSelected, true)
+    this.props.getBusinessesPerUser(false, this.state.stageSelected, true, this.state.orderByDateTimeCreatedDesc)
+  }
+
+  _orderByDateTimeCreated = () => {
+    this.props.getBusinessesPerUser(
+      false,
+      this.state.stageSelected,
+      this.state.showAll,
+      this.state.orderByDateTimeCreatedDesc
+    )
+    this.setState({
+      orderByDateTimeCreatedDesc: !this.state.orderByDateTimeCreatedDesc
+    })
   }
 
   render () {
@@ -195,6 +208,14 @@ class BusinessListPage extends Component {
                 <Table color="blue" inverted celled selectable compact size="small">
                   <Table.Header>
                     <Table.Row>
+                      <Table.HeaderCell>
+                        <Icon
+                          link
+                          name={this.state.orderByDateTimeCreatedDesc ? 'arrow down' : 'arrow up'}
+                          onClick={() => this._orderByDateTimeCreated()}
+                        />
+                        Date Created
+                      </Table.HeaderCell>
                       <Table.HeaderCell>Business ID</Table.HeaderCell>
                       <Table.HeaderCell>Business Name</Table.HeaderCell>
                       <Table.HeaderCell>Contact Name</Table.HeaderCell>
@@ -206,6 +227,26 @@ class BusinessListPage extends Component {
                   <Table.Body>
                     {businesses.map(business => (
                       <Table.Row active key={business.id} onClick={() => history.push(`${match.path}/${business.id}`)}>
+                        <Table.Cell
+                          style={{
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                          }}
+                          warning={
+                            !business.BusinessLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                              )
+                            }, false)
+                          }
+                        >
+                          {business.dateTimeCreated === null
+                            ? moment(business.dateTimeModified).format('DD/MM/YYYY')
+                            : moment(business.dateTimeCreated).format('DD/MM/YYYY')}
+                        </Table.Cell>
                         <Table.Cell
                           style={{
                             backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
@@ -292,7 +333,24 @@ class BusinessListPage extends Component {
                         >
                           {moment(business.BusinessLog[0].followUp).format('DD/MM/YYYY')}
                         </Table.Cell>
-                        <Table.Cell>{business.BusinessLog[0].time}</Table.Cell>
+                        <Table.Cell
+                          style={{
+                            backgroundColor: business.stageId === 8 && this.state.stageSelected === 1 ? '#bbf5bb' : null
+                          }}
+                          warning={
+                            !business.BusinessLog.reduce((last, log) => {
+                              if (last === true) {
+                                return true
+                              }
+                              return (
+                                log.followUpStatus === 'Pending' &&
+                                moment(log.followUp).format('YYYY/MM/DD') <= moment(new Date()).format('YYYY/MM/DD')
+                              )
+                            }, false)
+                          }
+                        >
+                          {business.BusinessLog[0].time}
+                        </Table.Cell>
                       </Table.Row>
                     ))}
                   </Table.Body>

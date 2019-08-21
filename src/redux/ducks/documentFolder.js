@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { list, create, update, remove } from '../../services/api/documentFolder'
+import { list, create, update, remove, listFolders, uploadFile } from '../../services/api/documentFolder'
 
 // Action Types
 
@@ -16,7 +16,13 @@ export const Types = {
   UPDATE_DOCUMENT_FOLDER_FAILURE: 'UPDATE_DOCUMENT_FOLDER_FAILURE',
   REMOVE_DOCUMENT_FOLDER_LOADING: 'REMOVE_DOCUMENT_FOLDER_LOADING',
   REMOVE_DOCUMENT_FOLDER_SUCCESS: 'REMOVE_DOCUMENT_FOLDER_SUCCESS',
-  REMOVE_DOCUMENT_FOLDER_FAILURE: 'REMOVE_DOCUMENT_FOLDER_FAILURE'
+  REMOVE_DOCUMENT_FOLDER_FAILURE: 'REMOVE_DOCUMENT_FOLDER_FAILURE',
+  GET_FOLDERS_LOADING: 'GET_FOLDERS_LOADING',
+  GET_FOLDERS_SUCCESS: 'GET_FOLDERS_SUCCESS',
+  GET_FOLDERS_FAILURE: 'GET_FOLDERS_FAILURE',
+  UPLOAD_FILE_LOADING: 'UPLOAD_FILE_LOADING',
+  UPLOAD_FILE_SUCCESS: 'UPLOAD_FILE_SUCCESS',
+  UPLOAD_FILE_FAILURE: 'UPLOAD_FILE_FAILURE'
 }
 
 // Reducer
@@ -42,6 +48,16 @@ const initialState = {
   delete: {
     isLoading: false,
     isDeleted: false,
+    error: null
+  },
+  listFolders: {
+    isLoading: true,
+    array: [],
+    error: null
+  },
+  uploadFile: {
+    isLoading: false,
+    isUploaded: false,
     error: null
   }
 }
@@ -164,6 +180,64 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_FOLDERS_LOADING:
+      return {
+        ...state,
+        listFolders: {
+          ...state.listFolders,
+          isLoading: true,
+          error: null
+        }
+      }
+    case Types.GET_FOLDERS_SUCCESS:
+      return {
+        ...state,
+        listFolders: {
+          ...state.listFolders,
+          isLoading: false,
+          array: action.payload.data,
+          error: null
+        }
+      }
+    case Types.GET_FOLDERS_FAILURE:
+      return {
+        ...state,
+        listFolders: {
+          ...state.listFolders,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.UPLOAD_FILE_LOADING:
+      return {
+        ...state,
+        uploadIM: {
+          ...state.uploadFile,
+          isLoading: action.payload,
+          isUploaded: false,
+          error: null
+        }
+      }
+    case Types.UPLOAD_FILE_SUCCESS:
+      return {
+        ...state,
+        uploadIM: {
+          ...state.uploadFile,
+          isLoading: false,
+          isUploaded: true,
+          error: null
+        }
+      }
+    case Types.UPLOAD_FILE_FAILURE:
+      return {
+        ...state,
+        uploadIM: {
+          ...state.uploadFile,
+          isLoading: false,
+          isUploaded: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -252,5 +326,47 @@ export const removeDocumentFolder = documentFolder => async dispatch => {
       payload: error
     })
     toast.error(error)
+  }
+}
+
+export const getFolderPerOffice = officeId => async dispatch => {
+  dispatch({
+    type: Types.GET_FOLDERS_LOADING,
+    payload: true
+  })
+  try {
+    const folders = await listFolders(officeId)
+    dispatch({
+      type: Types.GET_FOLDERS_SUCCESS,
+      payload: folders
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_FOLDERS_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const uploadDocumentFile = (file, folderId, fileName) => async dispatch => {
+  dispatch({
+    type: Types.UPLOAD_FILE_LOADING,
+    payload: true
+  })
+  try {
+    const businesses = await uploadFile(file, folderId, fileName)
+    dispatch({
+      type: Types.UPLOAD_FILE_SUCCESS,
+      payload: businesses
+    })
+    toast.success(businesses.message)
+  } catch (error) {
+    dispatch({
+      type: Types.UPLOAD_FILE_FAILURE,
+      payload: error
+    })
+    // toast.error(error.message)
+    toast.error('Error trying to uploading file. Please get in contact with IT department.')
   }
 }

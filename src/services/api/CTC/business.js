@@ -1,6 +1,6 @@
 import request from '.././'
 
-export const getCtcAllPerUser = (search, stageId, filterLog) => {
+export const getCtcAllPerUser = (search, stageId, filterLog, orderByDateTimeCreated) => {
   const params = {}
 
   if (search && search.length > 0) params.search = search
@@ -12,6 +12,9 @@ export const getCtcAllPerUser = (search, stageId, filterLog) => {
   }
   if (filterLog) {
     params.filterLog = filterLog
+  }
+  if (orderByDateTimeCreated) {
+    params.orderByDateTimeCreated = orderByDateTimeCreated
   }
 
   return request({
