@@ -211,7 +211,7 @@ export default function reducer (state = initialState, action) {
     case Types.UPLOAD_FILE_LOADING:
       return {
         ...state,
-        uploadIM: {
+        uploadFile: {
           ...state.uploadFile,
           isLoading: action.payload,
           isUploaded: false,
@@ -221,7 +221,7 @@ export default function reducer (state = initialState, action) {
     case Types.UPLOAD_FILE_SUCCESS:
       return {
         ...state,
-        uploadIM: {
+        uploadFile: {
           ...state.uploadFile,
           isLoading: false,
           isUploaded: true,
@@ -231,7 +231,7 @@ export default function reducer (state = initialState, action) {
     case Types.UPLOAD_FILE_FAILURE:
       return {
         ...state,
-        uploadIM: {
+        uploadFile: {
           ...state.uploadFile,
           isLoading: false,
           isUploaded: false,
@@ -355,18 +355,23 @@ export const uploadDocumentFile = (file, folderId, fileName) => async dispatch =
     payload: true
   })
   try {
-    const businesses = await uploadFile(file, folderId, fileName)
+    const upload = await uploadFile(file, folderId, fileName)
     dispatch({
       type: Types.UPLOAD_FILE_SUCCESS,
-      payload: businesses
+      payload: upload
     })
-    toast.success(businesses.message)
+    dispatch({
+      type: ModalTypes.MODAL_CLOSE
+    })
+    toast.success(upload.message)
   } catch (error) {
     dispatch({
       type: Types.UPLOAD_FILE_FAILURE,
       payload: error
     })
-    // toast.error(error.message)
-    toast.error('Error trying to uploading file. Please get in contact with IT department.')
+    dispatch({
+      type: ModalTypes.MODAL_CLOSE
+    })
+    toast.error('Error trying to upload the file: The file is too big or the format is not permitted!')
   }
 }

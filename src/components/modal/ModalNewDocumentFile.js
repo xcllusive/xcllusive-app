@@ -24,7 +24,7 @@ class ModalNewDocumentFile extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isCreated || nextProps.isUpdated) {
+    if (nextProps.isUpdated) {
       nextProps.getDocumentFile()
     }
     return null
@@ -49,8 +49,7 @@ class ModalNewDocumentFile extends Component {
       handleBlur,
       handleSubmit,
       isValid,
-      createLoading,
-      updateLoading,
+      isLoading,
       officeOptions,
       foldersPerOffice
     } = this.props
@@ -122,8 +121,8 @@ class ModalNewDocumentFile extends Component {
           <Button
             color="blue"
             type="submit"
-            disabled={createLoading || updateLoading || !isValid || !values.attachment}
-            loading={createLoading || updateLoading}
+            disabled={isLoading || !isValid || !values.attachment}
+            loading={isLoading}
             onClick={handleSubmit}
           >
             <Icon name="save" />
@@ -150,13 +149,10 @@ ModalNewDocumentFile.propTypes = {
   handleSubmit: PropTypes.func,
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
-  createLoading: PropTypes.bool,
-  updateLoading: PropTypes.bool,
+  isLoading: PropTypes.bool,
   getDocumentFile: PropTypes.func,
   uploadDocumentFile: PropTypes.func,
-  updateDocumentFile: PropTypes.func,
-  isCreated: PropTypes.bool,
-  isUpdated: PropTypes.bool,
+  isUploaded: PropTypes.bool,
   documentFile: PropTypes.object,
   getOfficeRegister: PropTypes.func,
   officeOptions: PropTypes.array,
@@ -178,17 +174,15 @@ const validationSchema = Yup.object().shape({
 
 const handleSubmit = (values, { props, setSubmitting }) => {
   if (props.documentFolder) {
-    props.updateDocumentFile(values)
+    // props.updateDocumentFile(values)
   } else {
     props.uploadDocumentFile(values.attachment, values.folderId, values.name)
   }
 }
 
 const mapStateToProps = state => ({
-  createLoading: state.documentFolder.create.isLoading,
-  isCreated: state.documentFolder.create.isCreated,
-  updateLoading: state.documentFolder.update.isLoading,
-  isUpdated: state.documentFolder.update.isUpdated,
+  isLoading: state.documentFolder.uploadFile.isLoading,
+  isUploaded: state.documentFolder.uploadFile.isUploaded,
   officeOptions: state.officeRegister.get.array,
   foldersPerOffice: state.documentFolder.listFolders.array
 })
