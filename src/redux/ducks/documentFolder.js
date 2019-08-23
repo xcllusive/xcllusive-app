@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { list, create, update, remove, listFolders, uploadFile } from '../../services/api/documentFolder'
+import { list, create, update, remove, listFolders, uploadFile, listFiles } from '../../services/api/documentFolder'
 
 // Action Types
 
@@ -22,7 +22,10 @@ export const Types = {
   GET_FOLDERS_FAILURE: 'GET_FOLDERS_FAILURE',
   UPLOAD_FILE_LOADING: 'UPLOAD_FILE_LOADING',
   UPLOAD_FILE_SUCCESS: 'UPLOAD_FILE_SUCCESS',
-  UPLOAD_FILE_FAILURE: 'UPLOAD_FILE_FAILURE'
+  UPLOAD_FILE_FAILURE: 'UPLOAD_FILE_FAILURE',
+  GET_FILES_LOADING: 'GET_FILES_LOADING',
+  GET_FILES_SUCCESS: 'GET_FILES_SUCCESS',
+  GET_FILES_FAILURE: 'GET_FILES_FAILURE'
 }
 
 // Reducer
@@ -31,6 +34,7 @@ const initialState = {
   get: {
     isLoading: true,
     array: [],
+    folderAllOffices: [],
     error: null,
     pages: 0,
     activePage: 1
@@ -59,6 +63,11 @@ const initialState = {
     isLoading: false,
     isUploaded: false,
     error: null
+  },
+  listFiles: {
+    isLoading: true,
+    array: [],
+    error: null
   }
 }
 
@@ -80,6 +89,7 @@ export default function reducer (state = initialState, action) {
           ...state.get,
           isLoading: false,
           array: action.payload.data,
+          folderAllOffices: action.payload.folderAllOfficesWithAccess,
           error: null
         }
       }
@@ -238,6 +248,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_FILES_LOADING:
+      return {
+        ...state,
+        listFiles: {
+          ...state.listFiles,
+          isLoading: true,
+          error: null
+        }
+      }
+    case Types.GET_FILES_SUCCESS:
+      return {
+        ...state,
+        listFiles: {
+          ...state.listFiles,
+          isLoading: false,
+          array: action.payload.data,
+          error: null
+        }
+      }
+    case Types.GET_FILES_FAILURE:
+      return {
+        ...state,
+        listFiles: {
+          ...state.listFiles,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -373,5 +411,25 @@ export const uploadDocumentFile = (file, folderId, fileName) => async dispatch =
       type: ModalTypes.MODAL_CLOSE
     })
     toast.error('Error trying to upload the file: The file is too big or the format is not permitted!')
+  }
+}
+
+export const getFilesPerOffice = folderId => async dispatch => {
+  dispatch({
+    type: Types.GET_FILES_LOADING,
+    payload: true
+  })
+  try {
+    const files = await listFiles(folderId)
+    dispatch({
+      type: Types.GET_FILES_SUCCESS,
+      payload: files
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_FILES_FAILURE,
+      payload: error
+    })
+    toast.error(error)
   }
 }

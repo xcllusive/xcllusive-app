@@ -36,10 +36,14 @@ class ModalNewDocumentFolder extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
+    this.props.setFieldValue('allOffices', false)
   }
 
   _handleChangeCheckBox = (e, { name }) => {
     this.props.setFieldValue(name, !this.props.values[name])
+    if (name === 'allOffices') {
+      this.props.setFieldValue('officeId', null)
+    }
   }
 
   render () {
@@ -50,7 +54,7 @@ class ModalNewDocumentFolder extends Component {
       handleChange,
       handleBlur,
       handleSubmit,
-      isValid,
+      // isValid,
       createLoading,
       updateLoading,
       officeOptions
@@ -87,6 +91,14 @@ class ModalNewDocumentFolder extends Component {
                 />
                 {errors.officeId && touched.officeId && <Label basic color="red" pointing content={errors.officeId} />}
               </Form.Field>
+              <Form.Field
+                style={{ marginTop: '30px', marginLeft: '15px' }}
+                control={Radio}
+                label="All Offices"
+                name="allOffices"
+                onChange={this._handleChangeCheckBox}
+                checked={values.allOffices}
+              />
             </Form.Group>
             <Divider horizontal clearing>
               Giving Access
@@ -168,7 +180,7 @@ class ModalNewDocumentFolder extends Component {
                   onChange={this._handleChangeCheckBox}
                 />
               </Form.Field>
-              <Form.Field width={11}>
+              <Form.Field width={4}>
                 <Checkbox
                   as={CheckboxFormatted}
                   name="preSaleMenu"
@@ -178,33 +190,13 @@ class ModalNewDocumentFolder extends Component {
                   onChange={this._handleChangeCheckBox}
                 />
               </Form.Field>
-              <Form.Field width={10}>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  name="resourcesMenu"
-                  label="Resources"
-                  value="resourcesMenu"
-                  checked={values.resourcesMenu === true}
-                  onChange={this._handleChangeCheckBox}
-                />
-              </Form.Field>
-              <Form.Field width={14}>
+              <Form.Field width={6}>
                 <Checkbox
                   as={CheckboxFormatted}
                   name="clientManagerMenu"
                   label="Client Manager"
                   value="clientManagerMenu"
                   checked={values.clientManagerMenu === true}
-                  onChange={this._handleChangeCheckBox}
-                />
-              </Form.Field>
-              <Form.Field width={14}>
-                <Checkbox
-                  as={CheckboxFormatted}
-                  name="managementMenu"
-                  label="Management"
-                  value="managementMenu"
-                  checked={values.managementMenu === true}
                   onChange={this._handleChangeCheckBox}
                 />
               </Form.Field>
@@ -225,7 +217,7 @@ class ModalNewDocumentFolder extends Component {
           <Button
             color="blue"
             type="submit"
-            disabled={createLoading || updateLoading || !isValid}
+            disabled={createLoading || updateLoading || (!values.officeId && !values.allOffices)}
             loading={createLoading || updateLoading}
             onClick={handleSubmit}
           >
@@ -269,6 +261,7 @@ const mapPropsToValues = props => ({
   id: props.documentFolder ? props.documentFolder.id : null,
   name: props.documentFolder ? props.documentFolder.name : '',
   officeId: props.documentFolder ? props.documentFolder.officeId : '',
+  allOffices: props.documentFolder ? props.documentFolder.allOffices : false,
   accessListingAgentXcllusive: props.documentFolder ? props.documentFolder.accessListingAgentXcllusive : false,
   accessListingAgentCtc: props.documentFolder ? props.documentFolder.accessListingAgentCtc : false,
   accesslevelOfInfo: props.documentFolder ? props.documentFolder.accesslevelOfInfo : false,
@@ -283,8 +276,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required.')
     .min(2, 'Name required minimum 2 characters.')
-    .max(200, 'Name require max 200 characters.'),
-  officeId: Yup.number().required('Office is required.')
+    .max(200, 'Name require max 200 characters.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {

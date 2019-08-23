@@ -98,7 +98,14 @@ class Contacts extends React.Component {
                   return (
                     <Table.Row active key={user.id}>
                       <Table.Cell>{`${user.firstName} ${user.lastName}`}</Table.Cell>
-                      <Table.Cell>{user.email}</Table.Cell>
+                      <Table.Cell>
+                        <Icon
+                          link
+                          name="mail"
+                          onClick={() => (window.location.href = `mailto:${user.email.toString()}`)}
+                        />
+                        {user.email}
+                      </Table.Cell>
                       <Table.Cell>{user.phoneWork}</Table.Cell>
                       <Table.Cell>{user.phoneMobile}</Table.Cell>
                       <Table.Cell>{user.role}</Table.Cell>

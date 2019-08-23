@@ -51,3 +51,10 @@ export const uploadFile = (file, folderId, fileName) => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const listFiles = folderId => {
+  return request({
+    method: 'get',
+    url: `/document/listFiles/${folderId}`
+  })
+}

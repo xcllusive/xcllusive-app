@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
-import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Radio } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import * as Yup from 'yup'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
@@ -32,12 +32,25 @@ class ModalNewDocumentFile extends Component {
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-    if (name === 'officeId') this.props.getFolderPerOffice(value)
+
+    if (name === 'officeId') {
+      this.props.getFolderPerOffice(value)
+      this.props.setFieldValue('allOffices', false)
+    }
   }
 
   _handleFileUpload = e => {
     const file = e.target.files[0]
     this.props.setFieldValue('attachment', file)
+  }
+
+  _handleChangeCheckBox = (e, { name, value }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
+    if (name === 'allOffices') {
+      this.props.setFieldValue('officeId', null)
+      this.props.setFieldValue('folderId', null)
+      this.props.getFolderPerOffice(false)
+    }
   }
 
   render () {
@@ -59,18 +72,31 @@ class ModalNewDocumentFile extends Component {
         <Modal.Content>
           <Form>
             <Fragment>
-              <Form.Field>
-                <Form.Select
-                  required
-                  label="Office Region"
-                  name="officeId"
-                  options={mapArrayToValuesForDropdown(officeOptions)}
-                  value={values.officeId}
-                  onChange={this._handleSelectChange}
+              <Form.Group>
+                <Form.Field width={6}>
+                  <Form.Select
+                    required
+                    label="Office Region"
+                    name="officeId"
+                    options={mapArrayToValuesForDropdown(officeOptions)}
+                    value={values.officeId}
+                    onChange={this._handleSelectChange}
+                  />
+                  {errors.officeId && touched.officeId && (
+                    <Label basic color="red" pointing content={errors.officeId} />
+                  )}
+                </Form.Field>
+                <Form.Field
+                  width={6}
+                  style={{ marginTop: '30px', marginLeft: '15px' }}
+                  control={Radio}
+                  label="All Offices"
+                  name="allOffices"
+                  onChange={this._handleChangeCheckBox}
+                  checked={values.allOffices}
                 />
-                {errors.officeId && touched.officeId && <Label basic color="red" pointing content={errors.officeId} />}
-              </Form.Field>
-              {values.officeId ? (
+              </Form.Group>
+              {values.officeId || values.allOffices ? (
                 <Fragment>
                   <Form.Field>
                     <Form.Select
