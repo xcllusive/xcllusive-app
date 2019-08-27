@@ -24,11 +24,11 @@ class ModalNewDocumentFolder extends Component {
 
   componentDidMount () {
     this.props.getOfficeRegister()
-    this.props.getDocumentFolder()
+    // this.props.getDocumentFolder()
   }
 
   static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isCreated || nextProps.isUpdated) {
+    if (nextProps.isCreated || nextProps.isUpdated || nextProps.isDeleted || nextProps.isDeletedFile) {
       nextProps.getDocumentFolder()
     }
     return null
@@ -58,7 +58,6 @@ class ModalNewDocumentFolder extends Component {
       createLoading,
       updateLoading,
       officeOptions
-      // documentFolder
     } = this.props
     return (
       <Modal open dimmer="blurring">
@@ -254,7 +253,9 @@ ModalNewDocumentFolder.propTypes = {
   isUpdated: PropTypes.bool,
   officeOptions: PropTypes.array,
   getOfficeRegister: PropTypes.func,
-  documentFolder: PropTypes.object
+  documentFolder: PropTypes.object,
+  isDeleted: PropTypes.bool,
+  isDeletedFile: PropTypes.bool
 }
 
 const mapPropsToValues = props => ({
@@ -292,7 +293,9 @@ const mapStateToProps = state => ({
   isCreated: state.documentFolder.create.isCreated,
   updateLoading: state.documentFolder.update.isLoading,
   isUpdated: state.documentFolder.update.isUpdated,
-  officeOptions: state.officeRegister.get.array
+  officeOptions: state.officeRegister.get.array,
+  isDeleted: state.documentFolder.remove.isDeleted,
+  isDeletedFile: state.documentFolder.removeFile.isDeleted
 })
 
 const mapDispatchToProps = dispatch =>

@@ -121,7 +121,7 @@ class ModalGroupEmailSmsUsers extends Component {
                   />
                 </Form.Group>
                 <Form.Group>
-                  <Table celled compact definition>
+                  <Table striped celled compact definition>
                     <Table.Body>
                       {users.map((groupEmail, index) => (
                         <Table.Row key={index}>
@@ -130,7 +130,7 @@ class ModalGroupEmailSmsUsers extends Component {
                               checked={this.state.array.some(item => item.id === groupEmail.id)}
                               values={groupEmail}
                               onChange={this._checkBoxArray}
-                              disabled={!groupEmail.phoneMobile}
+                              disabled={emailOrSms === 'sms' && !groupEmail.phoneMobile}
                             />
                           </Table.Cell>
                           <Table.Cell

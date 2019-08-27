@@ -66,11 +66,21 @@ class AgreementTemplates extends Component {
       ],
       engagementFee: 0
     }
+    this.quillRef = null
+    this.reactQuillRef = null
+    this.editor = null
+    this.editorRef = React.createRef()
   }
 
   componentDidMount () {
     this.props.getAgreementTemplates()
     this.props.clearAgreementTemplates()
+    this._attachQuillRefs()
+    this.createEditor()
+  }
+
+  componentDidUpdate () {
+    this._attachQuillRefs()
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -128,20 +138,22 @@ class AgreementTemplates extends Component {
 
   _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
+    if (!this.reactQuillRef || typeof this.reactQuillRef.oldConfig !== 'function') {
       return false
     }
     // Skip if Quill reference is defined:
     if (this.quillRef !== null) return false
 
-    const quillRef = this.reactQuillRef.getEditor()
+    console.log(this.reactQuillRef)
+    const quillRef = this.reactQuillRef.oldConfig()
     if (quillRef !== null) this.quillRef = quillRef
   }
 
   insertTextQuill = word => {
-    const range = this.quillRef.selection.savedRange
-    const position = range ? range.index : 0
-    this.quillRef.insertText(position, ` {{${word}}} `)
+    console.log(this.editorRef)
+    // const range = this.quillRef.selection.savedRange
+    // const position = range ? range.index : 0
+    // this.quillRef.insertText(position, ` {{${word}}} `)
   }
 
   _openModalNewAgreementTemplate = () => {
@@ -164,7 +176,16 @@ class AgreementTemplates extends Component {
     if (name === 'property') this.props.setFieldValue('type', 1)
   }
 
-  _config = () => {
+  _config = () => {}
+
+  createEditor () {
+    this.editor && this.editor.destruct()
+    this.editor = new JoditEditor(this.editorRef.current, this.config)
+
+    // ref={this.editorRef}
+
+    // this.editor.value = this.props.content
+    // this.editor.events.on('change', this.props.onChange)
   }
 
   render () {
@@ -225,7 +246,7 @@ class AgreementTemplates extends Component {
                 />
                 {errors.state && touched.state && <Label basic color="red" pointing content={errors.state} />}
               </Form.Field>
-              <Form.Field style={{marginLeft: '50px', marginTop: '30px'}}>
+              <Form.Field style={{ marginLeft: '50px', marginTop: '30px' }}>
                 <Checkbox
                   as={CheckboxFormatted}
                   label="Business"
@@ -233,9 +254,9 @@ class AgreementTemplates extends Component {
                   value="type"
                   checked={values.type === 0}
                   onChange={this._handleChangeCheckBoxType}
-                // onChange={async (e, data) => {
-                //   this._handleChangeCheckBoxType(data)
-                // }}
+                  // onChange={async (e, data) => {
+                  //   this._handleChangeCheckBoxType(data)
+                  // }}
                 />
                 <Checkbox
                   label="Property"
@@ -243,9 +264,9 @@ class AgreementTemplates extends Component {
                   value="type"
                   checked={values.type === 1}
                   onChange={this._handleChangeCheckBoxType}
-                // onChange={async (e, data) => {
-                //   this._handleChangeCheckBoxType(data)
-                // }}
+                  // onChange={async (e, data) => {
+                  //   this._handleChangeCheckBoxType(data)
+                  // }}
                 />
               </Form.Field>
             </Form.Group>
@@ -386,11 +407,7 @@ class AgreementTemplates extends Component {
               <Grid.Row columns={1}>
                 <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
-                    <JoditEditor
-                      value={values.header}
-                      config={this._config}
-                      onChange={this._handleChangeHeader}
-                    />
+                    <JoditEditor value={values.header} config={this._config} onChange={this._handleChangeHeader} />
                   </Form.Field>
                 </Grid.Column>
               </Grid.Row>
@@ -426,6 +443,10 @@ class AgreementTemplates extends Component {
                 <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
                     <JoditEditor
+                      // ref={el => {
+                      //   this.reactQuillRef = el
+                      // }}
+                      ref={this.editorRef}
                       value={values.body}
                       config={this._config}
                       onChange={this._handleChangeBody}
@@ -447,11 +468,7 @@ class AgreementTemplates extends Component {
               <Grid.Row columns={1}>
                 <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                   <Form.Field>
-                    <JoditEditor
-                      value={values.footer}
-                      config={this._config}
-                      onChange={this._handleChangeFooter}
-                    />
+                    <JoditEditor value={values.footer} config={this._config} onChange={this._handleChangeFooter} />
                   </Form.Field>
                 </Grid.Column>
               </Grid.Row>
@@ -503,12 +520,24 @@ AgreementTemplates.propTypes = {
 
 const mapPropsToValues = props => ({
   state: props.objectAgreementTemplate ? props.objectAgreementTemplate.state : '',
-  header: props.objectAgreementTemplate && props.objectAgreementTemplate.header !== null ? props.objectAgreementTemplate.header : '',
-  body: props.objectAgreementTemplate && props.objectAgreementTemplate.body !== null ? props.objectAgreementTemplate.body : '',
-  footer: props.objectAgreementTemplate && props.objectAgreementTemplate.footer !== null ? props.objectAgreementTemplate.footer : '',
+  header:
+    props.objectAgreementTemplate && props.objectAgreementTemplate.header !== null
+      ? props.objectAgreementTemplate.header
+      : '',
+  body:
+    props.objectAgreementTemplate && props.objectAgreementTemplate.body !== null
+      ? props.objectAgreementTemplate.body
+      : '',
+  footer:
+    props.objectAgreementTemplate && props.objectAgreementTemplate.footer !== null
+      ? props.objectAgreementTemplate.footer
+      : '',
   id: props.objectAgreementTemplate ? props.objectAgreementTemplate.id : '',
   engagementFee: props.objectAgreementTemplate ? props.objectAgreementTemplate.engagementFee : 0,
-  commissionPerc: props.objectAgreementTemplate && props.objectAgreementTemplate.commissionPerc !== null ? props.objectAgreementTemplate.commissionPerc : 0,
+  commissionPerc:
+    props.objectAgreementTemplate && props.objectAgreementTemplate.commissionPerc !== null
+      ? props.objectAgreementTemplate.commissionPerc
+      : 0,
   commissionDiscount: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionDiscount : 0,
   introductionParties: props.objectAgreementTemplate ? props.objectAgreementTemplate.introductionParties : '',
   commissionProperty: props.objectAgreementTemplate ? props.objectAgreementTemplate.commissionProperty : 0,

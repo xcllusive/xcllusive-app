@@ -16,6 +16,14 @@ export const create = documentFolder => {
   })
 }
 
+export const get = documentFolder => {
+  return request({
+    method: 'get',
+    url: `/document/documentFolder/${documentFolder.id}`,
+    data: documentFolder
+  })
+}
+
 export const update = documentFolder => {
   return request({
     method: 'put',
@@ -27,7 +35,7 @@ export const update = documentFolder => {
 export const remove = documentFolder => {
   return request({
     method: 'delete',
-    url: `/documentFolder/${documentFolder.id}`,
+    url: `/document/documentFolder/${documentFolder.id}`,
     data: documentFolder
   })
 }
@@ -56,5 +64,13 @@ export const listFiles = folderId => {
   return request({
     method: 'get',
     url: `/document/listFiles/${folderId}`
+  })
+}
+
+export const removeFile = documentFile => {
+  return request({
+    method: 'delete',
+    url: `/document/documentFile/${documentFile.id}`,
+    data: documentFile
   })
 }

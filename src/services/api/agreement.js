@@ -48,7 +48,6 @@ export const send = object => {
   if (object.mail.attachment) {
     data.append('attachment', object.mail.attachment)
   }
-
   return request({
     method: 'post',
     url: '/agreement/send-email',

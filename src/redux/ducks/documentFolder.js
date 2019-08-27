@@ -1,6 +1,15 @@
 import { toast } from 'react-toastify'
 import { Types as ModalTypes } from './modal'
-import { list, create, update, remove, listFolders, uploadFile, listFiles } from '../../services/api/documentFolder'
+import {
+  list,
+  create,
+  update,
+  remove,
+  listFolders,
+  uploadFile,
+  listFiles,
+  removeFile
+} from '../../services/api/documentFolder'
 
 // Action Types
 
@@ -25,7 +34,10 @@ export const Types = {
   UPLOAD_FILE_FAILURE: 'UPLOAD_FILE_FAILURE',
   GET_FILES_LOADING: 'GET_FILES_LOADING',
   GET_FILES_SUCCESS: 'GET_FILES_SUCCESS',
-  GET_FILES_FAILURE: 'GET_FILES_FAILURE'
+  GET_FILES_FAILURE: 'GET_FILES_FAILURE',
+  REMOVE_DOCUMENT_FILE_LOADING: 'REMOVE_DOCUMENT_FILE_LOADING',
+  REMOVE_DOCUMENT_FILE_SUCCESS: 'REMOVE_DOCUMENT_FILE_SUCCESS',
+  REMOVE_DOCUMENT_FILE_FAILURE: 'REMOVE_DOCUMENT_FILE_FAILURE'
 }
 
 // Reducer
@@ -67,6 +79,11 @@ const initialState = {
   listFiles: {
     isLoading: true,
     array: [],
+    error: null
+  },
+  deleteFile: {
+    isLoading: false,
+    isDeleted: false,
     error: null
   }
 }
@@ -276,6 +293,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.REMOVE_DOCUMENT_FILE_LOADING:
+      return {
+        ...state,
+        deleteFile: {
+          ...state.deleteFile,
+          isLoading: action.payload,
+          isDeleted: false,
+          error: null
+        }
+      }
+    case Types.REMOVE_DOCUMENT_FILE_SUCCESS:
+      return {
+        ...state,
+        deleteFile: {
+          ...state.deleteFile,
+          isLoading: false,
+          isDeleted: true
+        }
+      }
+    case Types.REMOVE_DOCUMENT_FILE_FAILURE:
+      return {
+        ...state,
+        deleteFile: {
+          ...state.deleteFile,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -428,6 +473,26 @@ export const getFilesPerOffice = folderId => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_FILES_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const removeDocumentFile = documentFile => async dispatch => {
+  dispatch({
+    type: Types.REMOVE_DOCUMENT_FILE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await removeFile(documentFile)
+    dispatch({
+      type: Types.REMOVE_DOCUMENT_FILE_SUCCESS
+    })
+    toast.success(response.message)
+  } catch (error) {
+    dispatch({
+      type: Types.REMOVE_DOCUMENT_FILE_FAILURE,
       payload: error
     })
     toast.error(error)

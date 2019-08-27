@@ -8,10 +8,7 @@ import ReactQuill from 'react-quill'
 import * as Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
-import {
-  sendAgreement,
-  getEmailTemplateAgreement
-} from '../../redux/ducks/agreement'
+import { sendAgreement, getEmailTemplateAgreement } from '../../redux/ducks/agreement'
 import 'react-quill/dist/quill.snow.css'
 
 class ModalEmailAgreement extends Component {
@@ -22,12 +19,7 @@ class ModalEmailAgreement extends Component {
         toolbar: [
           [{ header: [1, 2, false] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' }
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
           ['link', 'image'],
           ['clean']
         ]
@@ -51,7 +43,7 @@ class ModalEmailAgreement extends Component {
   }
 
   componentDidMount () {
-    this.props.getEmailTemplateAgreement(13, this.props.businessId)
+    this.props.getEmailTemplateAgreement(15, this.props.businessId)
     this._attachQuillRefs()
   }
 
@@ -73,10 +65,7 @@ class ModalEmailAgreement extends Component {
 
   _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (
-      !this.reactQuillRef ||
-      typeof this.reactQuillRef.getEditor !== 'function'
-    ) {
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
       return false
     }
     // Skip if Quill reference is defined:
@@ -120,10 +109,7 @@ class ModalEmailAgreement extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.to &&
-                  touched.to && (
-                  <Label basic color="red" pointing content={errors.to} />
-                )}
+                {errors.to && touched.to && <Label basic color="red" pointing content={errors.to} />}
               </Form.Field>
             </Form.Group>
             <Form.Group>
@@ -136,22 +122,12 @@ class ModalEmailAgreement extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.subject &&
-                  touched.subject && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.subject}
-                  />
-                )}
+                {errors.subject && touched.subject && <Label basic color="red" pointing content={errors.subject} />}
               </Form.Field>
             </Form.Group>
             {this.props.fileNameAgreement ? (
               <Form.Group inline>
-                <h4 style={{ marginRight: '-18px', fontSize: '.92857143em' }}>
-                Attachment Agreement
-                </h4>
+                <h4 style={{ marginRight: '-18px', fontSize: '.92857143em' }}>Attachment Agreement</h4>
                 <Form.Input
                   name="attachmentAgreement"
                   autoComplete="attachmentAgreement"
@@ -172,9 +148,7 @@ class ModalEmailAgreement extends Component {
             ) : null}
             {this.props.fileNamePropertyAgreement ? (
               <Form.Group inline>
-                <h4 style={{ marginRight: '-18px', fontSize: '.92857143em' }}>
-                Attachment Agreement
-                </h4>
+                <h4 style={{ marginRight: '-18px', fontSize: '.92857143em' }}>Attachment Agreement</h4>
                 <Form.Input
                   name="attachmentPropertyAgreement"
                   autoComplete="attachmentPropertyAgreement"
@@ -224,28 +198,16 @@ class ModalEmailAgreement extends Component {
                   onChange={this._handleFileUpload}
                 />
 
-                {errors.attachment &&
-                  touched.attachment && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.attachment}
-                  />
+                {errors.attachment && touched.attachment && (
+                  <Label basic color="red" pointing content={errors.attachment} />
                 )}
               </Form.Field>
             </Form.Group>
             <Form.Group>
-              <h5 style={{ fontSize: '.92857143em', paddingLeft: '8px' }}>
-                Body
-              </h5>
+              <h5 style={{ fontSize: '.92857143em', paddingLeft: '8px' }}>Body</h5>
             </Form.Group>
             <Grid.Row columns={1}>
-              <Grid.Column
-                floated="left"
-                width={16}
-                style={{ paddingLeft: '0px', paddingRight: 0 }}
-              >
+              <Grid.Column floated="left" width={16} style={{ paddingLeft: '0px', paddingRight: 0 }}>
                 <Form.Field style={{ height: '40vh' }}>
                   <ReactQuill
                     ref={el => {
@@ -263,11 +225,7 @@ class ModalEmailAgreement extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button
-            negative
-            content="Cancel"
-            onClick={() => this._handleConfirm(false)}
-          />
+          <Button negative content="Cancel" onClick={() => this._handleConfirm(false)} />
           <Button
             positive
             icon="send"
@@ -308,7 +266,6 @@ ModalEmailAgreement.propTypes = {
   fromInvoice: PropTypes.bool,
   fromAgreement: PropTypes.bool,
   fileNamePropertyAgreement: PropTypes.string
-
 }
 
 const mapStateToProps = state => ({

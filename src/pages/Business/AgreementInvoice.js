@@ -31,7 +31,10 @@ class AgreementInvoice extends Component {
   }
 
   _openModalListAgreement = (state, typeAgreement) => {
-    if ((this.props.location.state.business.agreement_id && typeAgreement === 'businessAgreement') || (this.props.location.state.business.agreementProperty_id && typeAgreement === 'propertyAgreement')) {
+    if (
+      (this.props.location.state.business.agreement_id && typeAgreement === 'businessAgreement') ||
+      (this.props.location.state.business.agreementProperty_id && typeAgreement === 'propertyAgreement')
+    ) {
       this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
         options: {
           title: 'Agreement',
@@ -49,7 +52,7 @@ class AgreementInvoice extends Component {
                 if (isConfirmed) {
                   this.props.history.push({
                     pathname: `/business/${this.props.location.state.business.id}/agreement/${idAgreement}`,
-                    state: {typeAgreement}
+                    state: { typeAgreement }
                   })
                 }
               }
@@ -68,7 +71,7 @@ class AgreementInvoice extends Component {
           if (isConfirmed) {
             this.props.history.push({
               pathname: `/business/${this.props.location.state.business.id}/agreement/${idAgreement}`,
-              state: {typeAgreement}
+              state: { typeAgreement }
             })
           }
         }
@@ -76,7 +79,7 @@ class AgreementInvoice extends Component {
     }
   }
 
-  _modalConfirmDownloadAgreement = (typeAgreement) => {
+  _modalConfirmDownloadAgreement = typeAgreement => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Download Agreement',
@@ -89,7 +92,10 @@ class AgreementInvoice extends Component {
             fileName: `agreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
               'DD_MM_YYYY'
             )}.pdf`,
-            body: typeAgreement === 'businessAgreement' ? this.props.businessAgreement.body : this.props.propertyAgreement.body,
+            body:
+              typeAgreement === 'businessAgreement'
+                ? this.props.businessAgreement.body
+                : this.props.propertyAgreement.body,
             typeAgreement
           })
         }
@@ -137,22 +143,31 @@ class AgreementInvoice extends Component {
     }
   }
 
-  _sendEmail = (whereFrom) => {
+  _sendEmail = whereFrom => {
     this.props.openModal(TypesModal.MODAL_TYPE_EMAIL_AGREEMENT_INVOICE, {
       options: {
         title: 'Preparing Agreement/Invoice Email'
       },
       vendorEmail: this.props.location.state.business.vendorEmail,
       businessId: this.props.location.state.business.id,
-      fileNameAgreement: (whereFrom === 'businessAgreement' && this.props.businessAgreement) || (whereFrom === 'all' && this.props.businessAgreement) ? `agreement_${this.props.location.state.business.businessName.substring(
-        0,
-        10
-      )}_${moment().format('DD_MM_YYYY')}.pdf` : null,
-      fileNamePropertyAgreement: (whereFrom === 'all' && this.props.propertyAgreement) || (whereFrom === 'propertyAgreement' && this.props.propertyAgreement) ? `propertyagreement_${this.props.location.state.business.businessName.substring(
-        0,
-        10
-      )}_${moment().format('DD_MM_YYYY')}.pdf` : null,
-      fileNameInvoice: whereFrom === 'invoice' || (whereFrom === 'all' && this.props.objectLastInvoice) ? `${this.props.objectLastInvoice.ref}.pdf` : null,
+      fileNameAgreement:
+        (whereFrom === 'businessAgreement' && this.props.businessAgreement) ||
+        (whereFrom === 'all' && this.props.businessAgreement)
+          ? `agreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
+            'DD_MM_YYYY'
+          )}.pdf`
+          : null,
+      fileNamePropertyAgreement:
+        (whereFrom === 'all' && this.props.propertyAgreement) ||
+        (whereFrom === 'propertyAgreement' && this.props.propertyAgreement)
+          ? `propertyagreement_${this.props.location.state.business.businessName.substring(0, 10)}_${moment().format(
+            'DD_MM_YYYY'
+          )}.pdf`
+          : null,
+      fileNameInvoice:
+        whereFrom === 'invoice' || (whereFrom === 'all' && this.props.objectLastInvoice)
+          ? `${this.props.objectLastInvoice.ref}.pdf`
+          : null,
       fromAgreement: true,
       onConfirm: async object => {
         if (object) {
@@ -191,17 +206,24 @@ class AgreementInvoice extends Component {
 
   render () {
     const { business } = this.props.location.state
-    const { isLoadingDownloading, objectAgreementIsLoading, businessAgreement, propertyAgreement, objectLastInvoice, isLoadingDownloadingInvoice } = this.props
+    const {
+      isLoadingDownloading,
+      objectAgreementIsLoading,
+      businessAgreement,
+      propertyAgreement,
+      objectLastInvoice,
+      isLoadingDownloadingInvoice
+    } = this.props
     return (
       <Wrapper loading={objectAgreementIsLoading}>
-        <Grid style={{marginTop: '10px'}}>
+        <Grid style={{ marginTop: '10px' }}>
           <Grid.Row columns={3}>
             <Grid.Column>
               <Segment style={{ backgroundColor: '#008eff26' }} size="small">
                 <Header as="h3" textAlign="center">
                   {'BUSINESS AGREEMENT'}
                 </Header>
-                <Divider></Divider>
+                <Divider />
                 <Grid>
                   <Grid.Row columns={3}>
                     <Grid.Column>
@@ -211,7 +233,7 @@ class AgreementInvoice extends Component {
                         onClick={() => this._openModalListAgreement(business.state, 'businessAgreement')}
                       >
                         <Icon name="file" />
-                      New
+                        New
                       </Button>
                     </Grid.Column>
                     <Grid.Column>
@@ -221,9 +243,7 @@ class AgreementInvoice extends Component {
                         disabled={!businessAgreement}
                         onClick={() =>
                           this.props.history.push({
-                            pathname: `/business/${business.id}/agreement/${
-                              business.agreement_id
-                            }/preview`,
+                            pathname: `/business/${business.id}/agreement/${business.agreement_id}/preview`,
                             state: {
                               business: business,
                               editAgreement: this.state.editAgreement,
@@ -233,7 +253,7 @@ class AgreementInvoice extends Component {
                         }
                       >
                         <Icon name="edit" />
-                    Edit
+                        Edit
                       </Button>
                     </Grid.Column>
                     <Grid.Column>
@@ -245,13 +265,13 @@ class AgreementInvoice extends Component {
                         loading={isLoadingDownloading}
                       >
                         <Icon name="download" />
-                    Download
+                        Download
                       </Button>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-                <Divider></Divider>
-                <Grid.Row textAlign="center" style={{paddingBottom: '10px'}}>
+                <Divider />
+                <Grid.Row textAlign="center" style={{ paddingBottom: '10px' }}>
                   <Header as="h4" textAlign="center">
                     {businessAgreement ? businessAgreement.title : null}
                   </Header>
@@ -284,15 +304,11 @@ class AgreementInvoice extends Component {
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                    <Divider></Divider>
-                    <Header style={{marginTop: '0px'}} as="h3" textAlign="center">
-                      <Button
-                        size="small"
-                        color="green"
-                        onClick={() => this._sendEmail('businessAgreement')}
-                      >
+                    <Divider />
+                    <Header style={{ marginTop: '0px' }} as="h3" textAlign="center">
+                      <Button size="small" color="green" onClick={() => this._sendEmail('businessAgreement')}>
                         <Icon name="send" />
-                      Send
+                        Send
                       </Button>
                     </Header>
                   </Fragment>
@@ -304,19 +320,17 @@ class AgreementInvoice extends Component {
                 <Header as="h3" textAlign="center">
                   {'INVOICE'}
                 </Header>
-                <Divider></Divider>
+                <Divider />
                 <Grid>
                   <Grid.Row columns={3}>
                     <Grid.Column>
                       <Button
                         size="small"
                         color={theme.buttonNew}
-                        onClick={() => this._newEditInvoice(business, 'new')
-
-                        }
+                        onClick={() => this._newEditInvoice(business, 'new')}
                       >
                         <Icon name="file" />
-                      New
+                        New
                       </Button>
                     </Grid.Column>
                     <Grid.Column>
@@ -327,7 +341,7 @@ class AgreementInvoice extends Component {
                         onClick={() => this._newEditInvoice(business, 'edit')}
                       >
                         <Icon name="edit" />
-                    Edit
+                        Edit
                       </Button>
                     </Grid.Column>
                     <Grid.Column>
@@ -336,18 +350,20 @@ class AgreementInvoice extends Component {
                         color={theme.buttonDownload}
                         loading={isLoadingDownloadingInvoice}
                         disabled={!objectLastInvoice}
-                        onClick={() => this.props.downloadInvoice({
-                          id: objectLastInvoice.id,
-                          fileName: `invoice_${objectLastInvoice.ref}.pdf`
-                        })}
+                        onClick={() =>
+                          this.props.downloadInvoice({
+                            id: objectLastInvoice.id,
+                            fileName: `invoice_${objectLastInvoice.ref}.pdf`
+                          })
+                        }
                       >
                         <Icon name="download" />
-                    Download
+                        Download
                       </Button>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-                <Divider></Divider>
+                <Divider />
                 {objectLastInvoice ? (
                   <Fragment>
                     <Grid celled="internally">
@@ -360,15 +376,11 @@ class AgreementInvoice extends Component {
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                    <Divider></Divider>
-                    <Header style={{marginTop: '130px'}} as="h3" textAlign="center">
-                      <Button
-                        size="small"
-                        color="green"
-                        onClick={() => this._sendEmail('invoice')}
-                      >
+                    <Divider />
+                    <Header style={{ marginTop: '130px' }} as="h3" textAlign="center">
+                      <Button size="small" color="green" onClick={() => this._sendEmail('invoice')}>
                         <Icon name="send" />
-                      Send
+                        Send
                       </Button>
                     </Header>
                   </Fragment>
@@ -380,7 +392,7 @@ class AgreementInvoice extends Component {
                 <Header as="h3" textAlign="center">
                   {'PROPERTY AGREEMENT'}
                 </Header>
-                <Divider></Divider>
+                <Divider />
                 <Grid>
                   <Grid.Row columns={3}>
                     <Grid.Column>
@@ -390,7 +402,7 @@ class AgreementInvoice extends Component {
                         onClick={() => this._openModalListAgreement(business.state, 'propertyAgreement')}
                       >
                         <Icon name="file" />
-                      New
+                        New
                       </Button>
                     </Grid.Column>
                     <Grid.Column>
@@ -400,9 +412,7 @@ class AgreementInvoice extends Component {
                         disabled={!propertyAgreement}
                         onClick={() =>
                           this.props.history.push({
-                            pathname: `/business/${business.id}/agreement/${
-                              business.agreementProperty_id
-                            }/preview`,
+                            pathname: `/business/${business.id}/agreement/${business.agreementProperty_id}/preview`,
                             state: {
                               business: business,
                               editAgreement: this.state.editAgreement,
@@ -412,7 +422,7 @@ class AgreementInvoice extends Component {
                         }
                       >
                         <Icon name="edit" />
-                    Edit
+                        Edit
                       </Button>
                     </Grid.Column>
                     <Grid.Column>
@@ -424,13 +434,13 @@ class AgreementInvoice extends Component {
                         onClick={() => this._modalConfirmDownloadAgreement('propertyAgreement')}
                       >
                         <Icon name="download" />
-                    Download
+                        Download
                       </Button>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-                <Divider></Divider>
-                <Grid.Row textAlign="center" style={{paddingBottom: '10px'}}>
+                <Divider />
+                <Grid.Row textAlign="center" style={{ paddingBottom: '10px' }}>
                   <Header as="h4" textAlign="center">
                     {propertyAgreement ? propertyAgreement.title : null}
                   </Header>
@@ -463,15 +473,11 @@ class AgreementInvoice extends Component {
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                    <Divider></Divider>
-                    <Header style={{marginTop: '0px'}} as="h3" textAlign="center">
-                      <Button
-                        size="small"
-                        color="green"
-                        onClick={() => this._sendEmail('propertyAgreement')}
-                      >
+                    <Divider />
+                    <Header style={{ marginTop: '0px' }} as="h3" textAlign="center">
+                      <Button size="small" color="green" onClick={() => this._sendEmail('propertyAgreement')}>
                         <Icon name="send" />
-                      Send
+                        Send
                       </Button>
                     </Header>
                   </Fragment>
@@ -480,19 +486,18 @@ class AgreementInvoice extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        {(businessAgreement && propertyAgreement) || (businessAgreement && objectLastInvoice) || (objectLastInvoice && propertyAgreement) || (objectLastInvoice && businessAgreement) || (businessAgreement && propertyAgreement && objectLastInvoice) ? (
-
-          <Header as="h3" textAlign="center">
-            <Button
-              size="small"
-              color="red"
-              onClick={() => this._sendEmail('all')}
-            >
-              <Icon name="send" />
-                      Send All
-            </Button>
-          </Header>
-        ) : null}
+        {(businessAgreement && propertyAgreement) ||
+        (businessAgreement && objectLastInvoice) ||
+        (objectLastInvoice && propertyAgreement) ||
+        (objectLastInvoice && businessAgreement) ||
+        (businessAgreement && propertyAgreement && objectLastInvoice) ? (
+            <Header as="h3" textAlign="center">
+              <Button size="small" color="red" onClick={() => this._sendEmail('all')}>
+                <Icon name="send" />
+              Send All
+              </Button>
+            </Header>
+          ) : null}
         <Grid>
           <Grid.Row>
             <Grid.Column>
@@ -535,7 +540,22 @@ AgreementInvoice.propTypes = {
   clearInvoice: PropTypes.func
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({openModal, downloadAgreement, getAgreementBody, clearAgreement, getLastInvoice, downloadInvoice, sendAgreement, sendInvoice, closeModal, clearInvoice }, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      openModal,
+      downloadAgreement,
+      getAgreementBody,
+      clearAgreement,
+      getLastInvoice,
+      downloadInvoice,
+      sendAgreement,
+      sendInvoice,
+      closeModal,
+      clearInvoice
+    },
+    dispatch
+  )
 
 const mapStateToProps = state => ({
   businessAgreement: state.agreement.get.object,
