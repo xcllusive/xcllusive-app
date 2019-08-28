@@ -338,9 +338,7 @@ class ModalNewUser extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.role && touched.role && (
-                  <Label basic color="red" pointing content={errors.role} />
-                )}
+                {errors.role && touched.role && <Label basic color="red" pointing content={errors.role} />}
               </Form.Field>
             </Form.Group>
             <Form.Group widths="equal">
@@ -414,6 +412,16 @@ class ModalNewUser extends Component {
                   label="System Settings"
                   value="systemSettingsMenu"
                   checked={values.systemSettingsMenu === true}
+                  onChange={this._handleChangeCheckBox}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  name="ctcMenu"
+                  label="CTC"
+                  value="ctcMenu"
+                  checked={values.ctcMenu === true}
                   onChange={this._handleChangeCheckBox}
                 />
               </Form.Field>
@@ -506,7 +514,8 @@ const mapPropsToValues = props => {
       resourcesMenu: _.includes(roles, 'RESOURCES_MENU'),
       clientManagerMenu: _.includes(roles, 'CLIENT_MANAGER_MENU'),
       managementMenu: _.includes(roles, 'MANAGEMENT_MENU'),
-      systemSettingsMenu: _.includes(roles, 'SYSTEM_SETTINGS_MENU')
+      systemSettingsMenu: _.includes(roles, 'SYSTEM_SETTINGS_MENU'),
+      ctcMenu: _.includes(roles, 'CTC_MENU')
     }
   }
   return {
@@ -533,7 +542,8 @@ const mapPropsToValues = props => {
     resourcesMenu: false,
     clientManagerMenu: false,
     managementMenu: false,
-    systemSettingsMenu: false
+    systemSettingsMenu: false,
+    ctcMenu: false
   }
 }
 

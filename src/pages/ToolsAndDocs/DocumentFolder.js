@@ -37,8 +37,6 @@ class DocumentFolder extends Component {
 
   _editDocumentFolder = documentFolder => {
     documentFolder.allOffices = documentFolder.allOffices !== 0
-    documentFolder.accessListingAgentXcllusive = documentFolder.accessListingAgentXcllusive !== 0
-    documentFolder.accessListingAgentCtc = documentFolder.accessListingAgentCtc !== 0
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_DOCUMENT_FOLDER, {
       titleModal: 'Edit Folder',
       documentFolder
@@ -87,15 +85,15 @@ class DocumentFolder extends Component {
     this.props.getFilesPerOffice(folderId)
   }
 
-  _downloadFile = fileUrl => {
+  _downloadFile = file => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Download File',
-        text: 'Are you sure you want to download this file?'
+        text: `Are you sure you want to download this file (${file.name})`
       },
       onConfirm: isConfirmed => {
         if (isConfirmed) {
-          window.open(fileUrl, '_blank')
+          window.open(file.url, '_blank')
         }
       }
     })
@@ -134,19 +132,12 @@ class DocumentFolder extends Component {
           <Segment style={{ backgroundColor: '#f7f7f7' }} size="tiny">
             <Grid style={{ marginTop: '10px' }}>
               <Fragment>
-                <Grid.Row style={{ paddingBottom: '0px' }}>
-                  <Grid.Column>
-                    <Divider horizontal>
-                      <Header as="h3" color="blue" textAlign="center" content="All Offices" />
-                    </Divider>
-                  </Grid.Column>
-                </Grid.Row>
                 {listFolderAllOffices.map((folderOffice, index) => {
                   if (folderOffice) {
                     return (
                       <Fragment key={index}>
                         <Grid.Row
-                          style={{ paddingBottom: '0px', paddingTop: '0px' }}
+                          style={{ paddingTop: '0px' }}
                           columns={this._isUserSystemSettings() && this.state.editMode ? 2 : 1}
                         >
                           {this._isUserSystemSettings() && this.state.editMode ? (
@@ -207,13 +198,13 @@ class DocumentFolder extends Component {
                                         link
                                         name="download"
                                         // color="blue"
-                                        onClick={() => this._downloadFile(files.url)}
+                                        onClick={() => this._downloadFile(files)}
                                       />
                                       <Label
                                         style={{ backgroundColor: '#f7f7f7', color: 'blue', paddingLeft: '5px' }}
                                         as="a"
                                         size="large"
-                                        onClick={() => this._downloadFile(files.url)}
+                                        onClick={() => this._downloadFile(files)}
                                       >
                                         <u>{files.name}</u>
                                       </Label>
@@ -306,13 +297,13 @@ class DocumentFolder extends Component {
                                             link
                                             name="download"
                                             // color="blue"
-                                            onClick={() => this._downloadFile(files.url)}
+                                            onClick={() => this._downloadFile(files)}
                                           />
                                           <Label
                                             style={{ backgroundColor: '#f7f7f7', color: 'blue', paddingLeft: '5px' }}
                                             as="a"
                                             size="large"
-                                            onClick={() => this._downloadFile(files.url)}
+                                            onClick={() => this._downloadFile(files)}
                                           >
                                             <u>{files.name}</u>
                                           </Label>

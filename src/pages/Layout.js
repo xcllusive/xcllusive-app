@@ -68,6 +68,9 @@ const Layout = ({ match, logout, menu, user }) => (
         if (item === 'SYSTEM_SETTINGS_MENU') {
           return <Menu.Item key={item} name="system settings" as={NavLink} to={`${match.url}systemSettings`} />
         }
+        if (item === 'CTC_MENU') {
+          return <Menu.Item key={item} name="ctc" as={NavLink} to={`${match.url}ctc`} />
+        }
         // if (item === 'HELP_DESK_MENU') {
         //   return <Menu.Item key={item} name="help desk" as={NavLink} to={`${match.url}helpDesk`} />
         // }
@@ -237,6 +240,8 @@ const Layout = ({ match, logout, menu, user }) => (
         path={`${match.path}systemSettings`}
         allowedRoles="SYSTEM_SETTINGS_MENU"
       />
+      <Route render={() => <span>ctc</span>} path={`${match.path}ctc`} />
+      {/* <AuthorizationRoute exact component={<span>ctc</span>} path={`${match.path}ctc`} allowedRoles="CTC_MENU" /> */}
       {/* <AuthorizationRoute exact component={HelpDesk} path={`${match.path}helpDesk`} allowedRoles="HELP_DESK_MENU" /> */}
       <Route
         render={() => <span>Sorry, You don`t have permission to access this page!</span>}

@@ -75,12 +75,6 @@ class AgreementTemplates extends Component {
   componentDidMount () {
     this.props.getAgreementTemplates()
     this.props.clearAgreementTemplates()
-    this._attachQuillRefs()
-    this.createEditor()
-  }
-
-  componentDidUpdate () {
-    this._attachQuillRefs()
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -136,24 +130,16 @@ class AgreementTemplates extends Component {
     this.props.setFieldValue(name, value)
   }
 
-  _attachQuillRefs = () => {
-    // Ensure React-Quill reference is available:
-    if (!this.reactQuillRef || typeof this.reactQuillRef.oldConfig !== 'function') {
-      return false
-    }
-    // Skip if Quill reference is defined:
-    if (this.quillRef !== null) return false
-
-    console.log(this.reactQuillRef)
-    const quillRef = this.reactQuillRef.oldConfig()
-    if (quillRef !== null) this.quillRef = quillRef
-  }
-
   insertTextQuill = word => {
-    console.log(this.editorRef)
+    // console.log(this.editorRef)
+    const test = this.editorRef.editor.selection.current()
+    console.log(test)
+    this.editorRef.editor.selection.insertHTML(` {{${word}}} `)
+    // const test = this.editorRef.current.editor.selection.focusAfter()
+    // console.log(test)
     // const range = this.quillRef.selection.savedRange
     // const position = range ? range.index : 0
-    // this.quillRef.insertText(position, ` {{${word}}} `)
+    // this.editor.insertText(2, ` {{${word}}} `)
   }
 
   _openModalNewAgreementTemplate = () => {
@@ -178,16 +164,6 @@ class AgreementTemplates extends Component {
 
   _config = () => {}
 
-  createEditor () {
-    this.editor && this.editor.destruct()
-    this.editor = new JoditEditor(this.editorRef.current, this.config)
-
-    // ref={this.editorRef}
-
-    // this.editor.value = this.props.content
-    // this.editor.events.on('change', this.props.onChange)
-  }
-
   render () {
     const {
       values,
@@ -205,6 +181,14 @@ class AgreementTemplates extends Component {
       handleBlur
     } = this.props
     const { state } = this.state
+    // if (this.editorRef.editor && this.editorRef.editor.selection) {
+    //   this.editorRef.editor.selection.insertAtPoint(10, 5)
+    //   // const uba = this.editorRef.editor.selection.current()
+    //   // if (uba) {
+    //   //   // this.editorRef.editor.selection.focusAfter(uba)
+    //   //   console.log(uba)
+    //   // }
+    // }
     return (
       <Wrapper>
         <Form>
@@ -446,7 +430,9 @@ class AgreementTemplates extends Component {
                       // ref={el => {
                       //   this.reactQuillRef = el
                       // }}
-                      ref={this.editorRef}
+                      ref={el => {
+                        this.editorRef = el
+                      }}
                       value={values.body}
                       config={this._config}
                       onChange={this._handleChangeBody}
