@@ -48,7 +48,7 @@ class ModalReassignBusiness extends Component {
   }
 
   render () {
-    const { values, isValid, createLoading, options, xcllusiveAnalysts, ctcAnalysts, company } = this.props
+    const { values, createLoading, options, xcllusiveAnalysts, ctcAnalysts, company } = this.props
     return (
       <Modal open size="small" onClose={() => this._handleConfirm(false)}>
         <Modal.Header>{options.title}</Modal.Header>
@@ -98,7 +98,7 @@ class ModalReassignBusiness extends Component {
         <Modal.Actions>
           <Button
             color="blue"
-            disabled={createLoading || !isValid}
+            disabled={createLoading || company === 'Xcllusive' ? !values.listingAgent : !values.listingAgentCtc}
             loading={createLoading}
             onClick={this._handleConfirm}
           >
