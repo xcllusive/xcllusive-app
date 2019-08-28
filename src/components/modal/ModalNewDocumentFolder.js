@@ -294,8 +294,8 @@ const mapStateToProps = state => ({
   updateLoading: state.documentFolder.update.isLoading,
   isUpdated: state.documentFolder.update.isUpdated,
   officeOptions: state.officeRegister.get.array,
-  isDeleted: state.documentFolder.remove.isDeleted,
-  isDeletedFile: state.documentFolder.removeFile.isDeleted
+  isDeleted: state.documentFolder.delete.isDeleted,
+  isDeletedFile: state.documentFolder.deleteFile.isDeleted
 })
 
 const mapDispatchToProps = dispatch =>
