@@ -47,6 +47,7 @@ const initialState = {
     isLoading: true,
     array: [],
     folderAllOffices: [],
+    totalFilesPerFolder: [],
     error: null,
     pages: 0,
     activePage: 1
@@ -107,6 +108,7 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           array: action.payload.data,
           folderAllOffices: action.payload.folderAllOfficesWithAccess,
+          totalFilesPerFolder: action.payload.totalFilesPerFolder,
           error: null
         }
       }
@@ -328,12 +330,12 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const getDocumentFolder = () => async dispatch => {
+export const getDocumentFolder = (editMode = false) => async dispatch => {
   dispatch({
     type: Types.GET_DOCUMENT_FOLDER_LOADING
   })
   try {
-    const documentFolder = await list()
+    const documentFolder = await list(editMode)
     dispatch({
       type: Types.GET_DOCUMENT_FOLDER_SUCCESS,
       payload: documentFolder

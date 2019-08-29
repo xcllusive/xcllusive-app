@@ -1,21 +1,28 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Wrapper from '../../components/content/Wrapper'
+import Wrapper from '../../../components/content/Wrapper'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Header, Segment, Grid, Icon, Divider, Label } from 'semantic-ui-react'
+import { Header, Segment, Grid, Button, Icon, Divider, Label } from 'semantic-ui-react'
 import _ from 'lodash'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import {
   getDocumentFolder,
   removeDocumentFolder,
   getFilesPerOffice,
   removeDocumentFile
-} from '../../redux/ducks/documentFolder'
+} from '../../../redux/ducks/documentFolder'
 
-class DocumentFolder extends Component {
+class DocumentFolderEdit extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      editMode: false
+    }
+  }
+
   componentDidMount () {
-    this.props.getDocumentFolder()
+    this.props.getDocumentFolder(true)
   }
 
   _isUserSystemSettings = () => {
@@ -104,6 +111,18 @@ class DocumentFolder extends Component {
     const { listFolder, listFiles, listFolderAllOffices } = this.props
     return (
       <Wrapper>
+        <Header textAlign="right">
+          <Fragment>
+            <Button size="small" color="facebook" onClick={() => this._newDocumentFolder()}>
+              <Icon name="add" />
+              New Folder
+            </Button>
+            <Button size="small" color="twitter" onClick={() => this._newDocumentFile()}>
+              <Icon name="file" />
+              New File
+            </Button>
+          </Fragment>
+        </Header>
         {listFolder && listFolder.length > 0 ? (
           <Segment style={{ backgroundColor: '#f7f7f7' }} size="tiny">
             <Grid style={{ marginTop: '10px' }}>
@@ -112,7 +131,23 @@ class DocumentFolder extends Component {
                   if (folderOffice) {
                     return (
                       <Fragment key={index}>
-                        <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
+                          <Grid.Column style={{ marginTop: '10px' }} width={2}>
+                            <Icon
+                              name="edit"
+                              color="green"
+                              size="large"
+                              link
+                              onClick={() => this._editDocumentFolder(folderOffice)}
+                            />
+                            <Icon
+                              name="trash"
+                              color="red"
+                              size="large"
+                              link
+                              onClick={() => this._removeDocumentFolder(folderOffice)}
+                            />
+                          </Grid.Column>
                           <Grid.Column>
                             <Icon name="folder" />
                             <Label
@@ -132,10 +167,21 @@ class DocumentFolder extends Component {
                                 return (
                                   <Grid.Row
                                     style={{ paddingTop: '0px', paddingBottom: '0px' }}
-                                    columns={1}
+                                    columns={2}
                                     key={index2}
                                   >
-                                    <Grid.Column style={{ marginLeft: '50px', color: 'blue' }}>
+                                    <Grid.Column style={{ marginLeft: '50px', marginTop: '10px' }} width={1}>
+                                      <Icon
+                                        name="trash"
+                                        color="red"
+                                        size="large"
+                                        link
+                                        onClick={() => this._removeDocumentFile(files)}
+                                      />
+                                    </Grid.Column>
+                                    <Grid.Column
+                                      style={{ marginLeft: this.state.editMode ? null : '50px', color: 'blue' }}
+                                    >
                                       <Icon
                                         link
                                         name="download"
@@ -177,7 +223,23 @@ class DocumentFolder extends Component {
                       {folder.map((folderOffice, index1) => {
                         return (
                           <Fragment key={index1}>
-                            <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
+                            <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
+                              <Grid.Column style={{ marginTop: '10px' }} width={2}>
+                                <Icon
+                                  name="edit"
+                                  color="green"
+                                  size="large"
+                                  link
+                                  onClick={() => this._editDocumentFolder(folderOffice)}
+                                />
+                                <Icon
+                                  name="trash"
+                                  color="red"
+                                  size="large"
+                                  link
+                                  onClick={() => this._removeDocumentFolder(folderOffice)}
+                                />
+                              </Grid.Column>
                               <Grid.Column>
                                 <Icon name="folder" />
                                 <Label
@@ -197,10 +259,21 @@ class DocumentFolder extends Component {
                                     return (
                                       <Grid.Row
                                         style={{ paddingTop: '0px', paddingBottom: '0px' }}
-                                        columns={1}
+                                        columns={2}
                                         key={index2}
                                       >
-                                        <Grid.Column style={{ marginLeft: '50px', color: 'blue' }}>
+                                        <Grid.Column style={{ marginLeft: '50px', marginTop: '10px' }} width={1}>
+                                          <Icon
+                                            name="trash"
+                                            color="red"
+                                            size="large"
+                                            link
+                                            onClick={() => this._removeDocumentFile(files)}
+                                          />
+                                        </Grid.Column>
+                                        <Grid.Column
+                                          style={{ marginLeft: this.state.editMode ? null : '50px', color: 'blue' }}
+                                        >
                                           <Icon
                                             link
                                             name="download"
@@ -238,7 +311,7 @@ class DocumentFolder extends Component {
   }
 }
 
-DocumentFolder.propTypes = {
+DocumentFolderEdit.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
   userRoles: PropTypes.array,
@@ -257,8 +330,6 @@ DocumentFolder.propTypes = {
 const mapStateToProps = state => ({
   userRoles: state.auth.user.roles,
   listFolder: state.documentFolder.get.array,
-  isCreated: state.resource.create.isCreated,
-  isUpdated: state.resource.create.isUpdated,
   listFiles: state.documentFolder.listFiles.array,
   listFolderAllOffices: state.documentFolder.get.folderAllOffices,
   totalFilesPerFolder: state.documentFolder.get.totalFilesPerFolder
@@ -273,4 +344,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DocumentFolder)
+)(DocumentFolderEdit)

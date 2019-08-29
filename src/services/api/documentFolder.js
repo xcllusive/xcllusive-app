@@ -1,10 +1,10 @@
 import request from '.'
 
-export const list = (limit = null, page = null) => {
+export const list = editMode => {
   return request({
     method: 'get',
     url: '/document/documentFolder',
-    params: { limit, page }
+    params: {editMode}
   })
 }
 

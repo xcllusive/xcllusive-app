@@ -134,11 +134,12 @@ class UserList extends React.Component {
                   <Table.HeaderCell>Name</Table.HeaderCell>
                   <Table.HeaderCell>Situation</Table.HeaderCell>
                   <Table.HeaderCell>User Type</Table.HeaderCell>
+                  <Table.HeaderCell>Role</Table.HeaderCell>
                   <Table.HeaderCell>Listing Agent</Table.HeaderCell>
                   <Table.HeaderCell>Buyer</Table.HeaderCell>
                   <Table.HeaderCell>Business</Table.HeaderCell>
                   <Table.HeaderCell>Pre Sale</Table.HeaderCell>
-                  <Table.HeaderCell>Resources</Table.HeaderCell>
+                  <Table.HeaderCell>Tools And Docs</Table.HeaderCell>
                   <Table.HeaderCell>Client Manager</Table.HeaderCell>
                   <Table.HeaderCell>Management</Table.HeaderCell>
                   <Table.HeaderCell>Systems Settings</Table.HeaderCell>
@@ -155,14 +156,31 @@ class UserList extends React.Component {
                         {user.active ? 'Active' : 'Inactive'}
                       </Table.Cell>
                       <Table.Cell>{user.userType}</Table.Cell>
-                      <Table.Cell>{user.listingAgent ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{_.includes(roles, 'BUYER_MENU') ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{_.includes(roles, 'BUSINESS_MENU') ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{_.includes(roles, 'PRESALE_MENU') ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{_.includes(roles, 'RESOURCES_MENU') ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{_.includes(roles, 'CLIENT_MANAGER_MENU') ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{_.includes(roles, 'MANAGEMENT_MENU') ? 'Yes' : 'No'}</Table.Cell>
-                      <Table.Cell>{_.includes(roles, 'SYSTEM_SETTINGS_MENU') ? 'Yes' : 'No'}</Table.Cell>
+                      <Table.Cell>{user.role}</Table.Cell>
+                      <Table.Cell style={{ color: user.listingAgent ? 'green' : 'red' }}>
+                        {user.listingAgent ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell style={{ color: _.includes(roles, 'BUYER_MENU') ? 'green' : 'red' }}>
+                        {_.includes(roles, 'BUYER_MENU') ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell style={{ color: _.includes(roles, 'BUSINESS_MENU') ? 'green' : 'red' }}>
+                        {_.includes(roles, 'BUSINESS_MENU') ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell style={{ color: _.includes(roles, 'PRESALE_MENU') ? 'green' : 'red' }}>
+                        {_.includes(roles, 'PRESALE_MENU') ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell style={{ color: _.includes(roles, 'TOOLS_AND_DOCS_MENU') ? 'green' : 'red' }}>
+                        {_.includes(roles, 'TOOLS_AND_DOCS_MENU') ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell style={{ color: _.includes(roles, 'CLIENT_MANAGER_MENU') ? 'green' : 'red' }}>
+                        {_.includes(roles, 'CLIENT_MANAGER_MENU') ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell style={{ color: _.includes(roles, 'MANAGEMENT_MENU') ? 'green' : 'red' }}>
+                        {_.includes(roles, 'MANAGEMENT_MENU') ? 'Yes' : 'No'}
+                      </Table.Cell>
+                      <Table.Cell style={{ color: _.includes(roles, 'SYSTEM_SETTINGS_MENU') ? 'green' : 'red' }}>
+                        {_.includes(roles, 'SYSTEM_SETTINGS_MENU') ? 'Yes' : 'No'}
+                      </Table.Cell>
                     </Table.Row>
                   )
                 })}

@@ -56,8 +56,8 @@ const Layout = ({ match, logout, menu, user }) => (
         if (item === 'PRESALE_MENU') {
           return <Menu.Item key={item} name="pre sale" as={NavLink} to={`${match.url}presale`} />
         }
-        if (item === 'RESOURCES_MENU') {
-          return <Menu.Item key={item} name="tools and docs" as={NavLink} to={`${match.url}resources`} />
+        if (item === 'TOOLS_AND_DOCS_MENU') {
+          return <Menu.Item key={item} name="tools and docs" as={NavLink} to={`${match.url}toolsAndDocs`} />
         }
         if (item === 'CLIENT_MANAGER_MENU') {
           return <Menu.Item key={item} name="client manager" as={NavLink} to={`${match.url}clientManager`} />
@@ -192,7 +192,11 @@ const Layout = ({ match, logout, menu, user }) => (
       />
       <Route render={() => <span>presale</span>} path={`${match.path}presale`} />
       {/* <Route render={() => <span>resources</span>} path={`${match.path}resources`} /> */}
-      <AuthorizationRoute component={ToolsAndDocs} path={`${match.path}resources`} allowedRoles="RESOURCES_MENU" />
+      <AuthorizationRoute
+        component={ToolsAndDocs}
+        path={`${match.path}toolsAndDocs`}
+        allowedRoles="TOOLS_AND_DOCS_MENU"
+      />
       <AuthorizationRoute
         component={ClientManagerList}
         path={`${match.path}clientManager`}

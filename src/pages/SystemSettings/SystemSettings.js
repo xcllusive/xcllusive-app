@@ -16,6 +16,7 @@ import { getSystemSettings } from '../../redux/ducks/systemSettings'
 import Admin from './Admin/Admin'
 import Emails from './Emails/Emails'
 import Buyers from './Export/Buyers'
+import DocumentFolderEdit from './FolderAndFiles/DocumentFolderEdit'
 
 class SystemSettingsPage extends Component {
   constructor (props) {
@@ -41,6 +42,10 @@ class SystemSettingsPage extends Component {
         {
           menuItem: 'Emails',
           render: () => <Emails />
+        },
+        {
+          menuItem: 'Folders And Files',
+          render: () => <DocumentFolderEdit />
         },
         {
           menuItem: 'Export',

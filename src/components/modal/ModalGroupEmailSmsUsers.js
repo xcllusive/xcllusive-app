@@ -51,6 +51,12 @@ class ModalGroupEmailSmsUsers extends Component {
   }
 
   _markAllcheckBoxArray = (e, { checked }) => {
+    if (!checked) {
+      this.setState({
+        array: [],
+        arrayEmailsOrSms: []
+      })
+    }
     this.setState(prevState => ({
       checkboxMarkAll: !prevState.checkboxMarkAll
     }))
