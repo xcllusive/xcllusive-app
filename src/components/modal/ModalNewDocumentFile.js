@@ -81,6 +81,7 @@ class ModalNewDocumentFile extends Component {
                     options={mapArrayToValuesForDropdown(officeOptions)}
                     value={values.officeId}
                     onChange={this._handleSelectChange}
+                    disabled={this.props.folderObject !== undefined}
                   />
                   {errors.officeId && touched.officeId && (
                     <Label basic color="red" pointing content={errors.officeId} />
@@ -94,6 +95,7 @@ class ModalNewDocumentFile extends Component {
                   name="allOffices"
                   onChange={this._handleChangeCheckBox}
                   checked={values.allOffices}
+                  disabled={this.props.folderObject !== undefined}
                 />
               </Form.Group>
               {values.officeId || values.allOffices ? (
@@ -106,6 +108,7 @@ class ModalNewDocumentFile extends Component {
                       options={mapArrayToValuesForDropdown(foldersPerOffice)}
                       value={values.folderId}
                       onChange={this._handleSelectChange}
+                      disabled={this.props.folderObject !== undefined}
                     />
                     {errors.folderId && touched.folderId && (
                       <Label basic color="red" pointing content={errors.folderId} />
@@ -183,12 +186,14 @@ ModalNewDocumentFile.propTypes = {
   getOfficeRegister: PropTypes.func,
   officeOptions: PropTypes.array,
   getFolderPerOffice: PropTypes.func,
-  foldersPerOffice: PropTypes.array
+  foldersPerOffice: PropTypes.array,
+  folderObject: PropTypes.object
 }
 
 const mapPropsToValues = props => ({
-  id: props.documentFolder ? props.documentFolder.id : null,
-  name: props.documentFolder ? props.documentFolder.name : ''
+  officeId: props.folderObject ? props.folderObject.officeId : null,
+  allOffices: props.folderObject ? JSON.parse(props.folderObject.allOffices) : null,
+  folderId: props.folderObject ? props.folderObject.folder_id : null
 })
 
 const validationSchema = Yup.object().shape({

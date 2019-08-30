@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
@@ -19,7 +19,13 @@ const CheckboxFormatted = styled.div`
 class ModalNewDocumentFolder extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      optionsSearch: {
+        Brokers: false,
+        Analysts: false,
+        General: false
+      }
+    }
   }
 
   componentDidMount () {
@@ -44,6 +50,10 @@ class ModalNewDocumentFolder extends Component {
     if (name === 'allOffices') {
       this.props.setFieldValue('officeId', null)
     }
+  }
+
+  _handleChangeCheckBoxSubFolder (type) {
+    this.props.setFieldValue('subFolder', type)
   }
 
   render () {
@@ -99,6 +109,40 @@ class ModalNewDocumentFolder extends Component {
                 checked={values.allOffices}
               />
             </Form.Group>
+            {values.allOffices ? (
+              <Fragment>
+                <Divider horizontal clearing>
+                  Sub Folder
+                </Divider>
+                <Form.Group>
+                  <Form.Field>
+                    <Checkbox
+                      as={CheckboxFormatted}
+                      label="Brokers"
+                      name="subFolder"
+                      value={values.subFolder}
+                      checked={values.subFolder === 'Brokers'}
+                      onChange={() => this._handleChangeCheckBoxSubFolder('Brokers')}
+                    />
+                    <Checkbox
+                      as={CheckboxFormatted}
+                      label="Analysts"
+                      name="subFolder"
+                      value={values.subFolder}
+                      checked={values.subFolder === 'Analysts'}
+                      onChange={() => this._handleChangeCheckBoxSubFolder('Analysts')}
+                    />
+                    <Checkbox
+                      label="General"
+                      name="subFolder"
+                      value={values.subFolder}
+                      checked={values.subFolder === 'General'}
+                      onChange={() => this._handleChangeCheckBoxSubFolder('General')}
+                    />
+                  </Form.Field>
+                </Form.Group>
+              </Fragment>
+            ) : null}
             <Divider horizontal clearing>
               Menu Access
             </Divider>
@@ -180,7 +224,19 @@ class ModalNewDocumentFolder extends Component {
           <Button
             color="blue"
             type="submit"
-            disabled={createLoading || updateLoading || (!values.officeId && !values.allOffices)}
+            disabled={
+              createLoading ||
+              updateLoading ||
+              !values.name ||
+              (!values.buyerMenu &&
+                !values.businessMenu &&
+                !values.preSaleMenu &&
+                !values.clientManagerMenu &&
+                !values.managementMenu &&
+                !values.systemSettingsMenu &&
+                !values.ctcMenu) ||
+              (values.allOffices && !values.subFolder)
+            }
             loading={createLoading || updateLoading}
             onClick={handleSubmit}
           >

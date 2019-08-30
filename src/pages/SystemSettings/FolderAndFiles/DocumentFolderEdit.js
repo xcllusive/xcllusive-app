@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Wrapper from '../../../components/content/Wrapper'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Header, Segment, Grid, Button, Icon, Divider, Label } from 'semantic-ui-react'
+import { Header, Segment, Grid, Button, Icon, Divider, Label, Table } from 'semantic-ui-react'
 import _ from 'lodash'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
 import {
@@ -59,9 +59,10 @@ class DocumentFolderEdit extends Component {
     })
   }
 
-  _newDocumentFile = () => {
+  _newDocumentFile = folderObject => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_DOCUMENT_FILE, {
-      titleModal: 'New File'
+      titleModal: 'New File',
+      folderObject
     })
   }
 
@@ -107,6 +108,22 @@ class DocumentFolderEdit extends Component {
     return `${folderOffice.name} [${total}]`
   }
 
+  _iconColorName = (format, type) => {
+    if (format === 'pdf') {
+      return type === 'icon' ? 'file pdf outline' : 'red'
+    } else if (format === 'jpeg' || format === 'png' || format === 'jpg') {
+      return type === 'icon' ? 'file image outline' : 'orange'
+    } else if (format === 'vnd.openxmlformats-officedocument.wordprocess') {
+      return type === 'icon' ? 'file word outline' : 'blue'
+    } else if (format === 'vnd.openxmlformats-officedocument.spreadsheet') {
+      return type === 'icon' ? 'file excel outline' : 'green'
+    } else if (format === 'vnd.openxmlformats-officedocument.presentationml.presentation') {
+      return type === 'icon' ? 'file powerpoint outline' : 'purple'
+    } else {
+      return type === 'icon' ? 'file text outline' : 'grey'
+    }
+  }
+
   render () {
     const { listFolder, listFiles, listFolderAllOffices } = this.props
     return (
@@ -124,36 +141,158 @@ class DocumentFolderEdit extends Component {
           </Fragment>
         </Header>
         {listFolder && listFolder.length > 0 ? (
-          <Segment style={{ backgroundColor: '#f7f7f7' }} size="tiny">
+          <Segment size="tiny">
             <Grid style={{ marginTop: '10px' }}>
               <Fragment>
                 {listFolderAllOffices.map((folderOffice, index) => {
-                  if (folderOffice) {
+                  if (folderOffice && folderOffice.subFolder === 'Analysts') {
                     return (
                       <Fragment key={index}>
-                        <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
-                          <Grid.Column style={{ marginTop: '10px' }} width={2}>
-                            <Icon
-                              name="edit"
-                              color="green"
-                              size="large"
-                              link
-                              onClick={() => this._editDocumentFolder(folderOffice)}
-                            />
-                            <Icon
-                              name="trash"
-                              color="red"
-                              size="large"
-                              link
-                              onClick={() => this._removeDocumentFolder(folderOffice)}
-                            />
-                          </Grid.Column>
+                        <Grid.Row style={{ paddingBottom: '0px' }}>
                           <Grid.Column>
-                            <Icon name="folder" />
+                            <Divider horizontal>
+                              <Header as="h3" color="blue" textAlign="center" content={folderOffice.subFolder} />
+                            </Divider>
+                          </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
+                          <Grid.Column>
+                            <Icon name="folder" color="yellow" size="big" />
                             <Label
-                              style={{ backgroundColor: '#f7f7f7', color: 'black', paddingLeft: '5px' }}
+                              style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px' }}
                               as="a"
-                              size="big"
+                              size="large"
+                              onClick={() => this._listFiles(folderOffice.id)}
+                            >
+                              {this._folderNameTotalFiles(folderOffice)}{' '}
+                              <Icon
+                                style={{ marginLeft: '5px' }}
+                                onClick={() => this._newDocumentFile(folderOffice)}
+                                name="add"
+                                color="blue"
+                                size="large"
+                              />
+                            </Label>
+                          </Grid.Column>
+                        </Grid.Row>
+                        {listFiles && listFiles.length > 0 ? (
+                          <Fragment>
+                            {listFiles.map((files, index2) => {
+                              if (files.folder_id === folderOffice.id) {
+                                return (
+                                  <Table style={{ marginLeft: '50px' }} key={index2} basic="very" celled size="large">
+                                    <Table.Header>
+                                      <Table.Row>
+                                        <Table.HeaderCell>
+                                          <Icon
+                                            link
+                                            name={this._iconColorName(files.format, 'icon')}
+                                            color={this._iconColorName(files.format, 'color')}
+                                            size="big"
+                                            onClick={() => this._downloadFile(files)}
+                                          />
+                                          <Label
+                                            style={{
+                                              backgroundColor: 'white',
+                                              paddingLeft: '5px'
+                                            }}
+                                            as="a"
+                                            size="large"
+                                            onClick={() => this._downloadFile(files)}
+                                          >
+                                            {files.name}
+                                          </Label>
+                                        </Table.HeaderCell>
+                                      </Table.Row>
+                                    </Table.Header>
+                                  </Table>
+                                )
+                              }
+                            })}
+                          </Fragment>
+                        ) : null}
+                      </Fragment>
+                    )
+                  }
+                  if (folderOffice && folderOffice.subFolder === 'Brokers') {
+                    return (
+                      <Fragment key={index}>
+                        <Grid.Row style={{ paddingBottom: '0px' }}>
+                          <Grid.Column>
+                            <Divider horizontal>
+                              <Header as="h3" color="blue" textAlign="center" content={folderOffice.subFolder} />
+                            </Divider>
+                          </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
+                          <Grid.Column>
+                            <Icon name="folder" color="yellow" size="big" />
+                            <Label
+                              style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px' }}
+                              as="a"
+                              size="large"
+                              onClick={() => this._listFiles(folderOffice.id)}
+                            >
+                              {this._folderNameTotalFiles(folderOffice)}
+                            </Label>
+                          </Grid.Column>
+                        </Grid.Row>
+                        {listFiles && listFiles.length > 0 ? (
+                          <Fragment>
+                            {listFiles.map((files, index2) => {
+                              if (files.folder_id === folderOffice.id) {
+                                return (
+                                  <Table style={{ marginLeft: '50px' }} key={index2} basic="very" celled size="large">
+                                    <Table.Header>
+                                      <Table.Row>
+                                        <Table.HeaderCell>
+                                          <Icon
+                                            link
+                                            name={this._iconColorName(files.format, 'icon')}
+                                            color={this._iconColorName(files.format, 'color')}
+                                            size="big"
+                                            onClick={() => this._downloadFile(files)}
+                                          />
+                                          <Label
+                                            style={{
+                                              backgroundColor: 'white',
+                                              paddingLeft: '5px'
+                                            }}
+                                            as="a"
+                                            size="large"
+                                            onClick={() => this._downloadFile(files)}
+                                          >
+                                            {files.name}
+                                          </Label>
+                                        </Table.HeaderCell>
+                                      </Table.Row>
+                                    </Table.Header>
+                                  </Table>
+                                )
+                              }
+                            })}
+                          </Fragment>
+                        ) : null}
+                      </Fragment>
+                    )
+                  }
+                  if (folderOffice && folderOffice.subFolder === 'General') {
+                    return (
+                      <Fragment key={index}>
+                        <Grid.Row style={{ paddingBottom: '0px' }}>
+                          <Grid.Column>
+                            <Divider horizontal>
+                              <Header as="h3" color="blue" textAlign="center" content={folderOffice.subFolder} />
+                            </Divider>
+                          </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
+                          <Grid.Column>
+                            <Icon name="folder" color="yellow" size="big" />
+                            <Label
+                              style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px' }}
+                              as="a"
+                              size="large"
                               onClick={() => this._listFiles(folderOffice.id)}
                             >
                               {this._folderNameTotalFiles(folderOffice)}
@@ -167,21 +306,10 @@ class DocumentFolderEdit extends Component {
                                 return (
                                   <Grid.Row
                                     style={{ paddingTop: '0px', paddingBottom: '0px' }}
-                                    columns={2}
+                                    columns={1}
                                     key={index2}
                                   >
-                                    <Grid.Column style={{ marginLeft: '50px', marginTop: '10px' }} width={1}>
-                                      <Icon
-                                        name="trash"
-                                        color="red"
-                                        size="large"
-                                        link
-                                        onClick={() => this._removeDocumentFile(files)}
-                                      />
-                                    </Grid.Column>
-                                    <Grid.Column
-                                      style={{ marginLeft: this.state.editMode ? null : '50px', color: 'blue' }}
-                                    >
+                                    <Grid.Column style={{ marginLeft: '50px', color: 'blue' }}>
                                       <Icon
                                         link
                                         name="download"
