@@ -36,6 +36,8 @@ import ModalNewResource from './ModalNewResource'
 import ModalGroupEmailSmsUsers from './ModalGroupEmailSmsUsers'
 import ModalNewDocumentFolder from './ModalNewDocumentFolder'
 import ModalNewDocumentFile from './ModalNewDocumentFile'
+import ModalNewGroupEmailFolder from './ModalNewGroupEmailFolder'
+import ModalNewGroupEmailTemplate from './ModalNewGroupEmailTemplate'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -74,7 +76,9 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_NEW_RESOURCE]: ModalNewResource,
   [TypesModal.MODAL_TYPE_GROUP_EMAIL_SMS_USER]: ModalGroupEmailSmsUsers,
   [TypesModal.MODAL_TYPE_NEW_DOCUMENT_FOLDER]: ModalNewDocumentFolder,
-  [TypesModal.MODAL_TYPE_NEW_DOCUMENT_FILE]: ModalNewDocumentFile
+  [TypesModal.MODAL_TYPE_NEW_DOCUMENT_FILE]: ModalNewDocumentFile,
+  [TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_FOLDER]: ModalNewGroupEmailFolder,
+  [TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_TEMPLATE]: ModalNewGroupEmailTemplate
 }
 
 const ModalRoot = ({ type, props }) => {
