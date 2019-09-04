@@ -37,7 +37,8 @@ export const Types = {
   GET_FILES_FAILURE: 'GET_FILES_FAILURE',
   REMOVE_DOCUMENT_FILE_LOADING: 'REMOVE_DOCUMENT_FILE_LOADING',
   REMOVE_DOCUMENT_FILE_SUCCESS: 'REMOVE_DOCUMENT_FILE_SUCCESS',
-  REMOVE_DOCUMENT_FILE_FAILURE: 'REMOVE_DOCUMENT_FILE_FAILURE'
+  REMOVE_DOCUMENT_FILE_FAILURE: 'REMOVE_DOCUMENT_FILE_FAILURE',
+  CLEAR_FILES: 'CLEAR_FILES'
 }
 
 // Reducer
@@ -48,6 +49,9 @@ const initialState = {
     array: [],
     folderAllOffices: [],
     totalFilesPerFolder: [],
+    folderAnalystsWithAccess: [],
+    folderBrokersWithAccess: [],
+    folderGeneralWithAccess: [],
     error: null,
     pages: 0,
     activePage: 1
@@ -108,6 +112,9 @@ export default function reducer (state = initialState, action) {
           isLoading: false,
           array: action.payload.data,
           folderAllOffices: action.payload.folderAllOfficesWithAccess,
+          folderAnalystsWithAccess: action.payload.folderAnalystsWithAccess,
+          folderBrokersWithAccess: action.payload.folderBrokersWithAccess,
+          folderGeneralWithAccess: action.payload.folderGeneralWithAccess,
           totalFilesPerFolder: action.payload.totalFilesPerFolder,
           error: null
         }
@@ -323,6 +330,16 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.CLEAR_FILES:
+      return {
+        ...state,
+        listFiles: {
+          ...state.listFiles,
+          isLoading: false,
+          error: action.payload,
+          array: null
+        }
+      }
     default:
       return state
   }
@@ -499,4 +516,10 @@ export const removeDocumentFile = documentFile => async dispatch => {
     })
     toast.error(error)
   }
+}
+
+export const clearFiles = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_FILES
+  })
 }

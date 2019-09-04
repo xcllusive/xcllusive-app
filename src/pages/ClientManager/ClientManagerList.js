@@ -600,7 +600,7 @@ class ClientManagerList extends Component {
                             <Table.Cell>
                               {buyer.firstName} {buyer.surname}
                             </Table.Cell>
-                            <Table.Cell>{buyer.telephone1}</Table.Cell>
+                            <Table.Cell>{buyer.telephone1 ? buyer.telephone1 : buyer.telephone2}</Table.Cell>
                             <Table.Cell>{buyer.email}</Table.Cell>
                           </Table.Row>
                         ))}
@@ -610,6 +610,15 @@ class ClientManagerList extends Component {
                 ) : null}
                 {this.state.buyer && listBuyerList.length > 0 ? (
                   <Fragment>
+                    <Label
+                      style={{ marginBottom: '0px' }}
+                      as="a"
+                      color={this.state.buyer.xcllusiveBuyer ? 'blue' : 'green'}
+                      pointing="below"
+                      size="large"
+                    >
+                      {this.state.buyer.xcllusiveBuyer ? 'Xcllusive Buyer' : 'CTC Buyer'}
+                    </Label>
                     <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
                       <Table.Body>
                         <Table.Row>
@@ -634,7 +643,9 @@ class ClientManagerList extends Component {
                         </Table.Row>
                         <Table.Row>
                           <Table.HeaderCell>Phone</Table.HeaderCell>
-                          <Table.Cell>{this.state.buyer.telephone1}</Table.Cell>
+                          <Table.Cell>
+                            {this.state.buyer.telephone1 ? this.state.buyer.telephone1 : this.state.buyer.telephone2}
+                          </Table.Cell>
                         </Table.Row>
                         <Table.Row>
                           <Table.HeaderCell>Email</Table.HeaderCell>

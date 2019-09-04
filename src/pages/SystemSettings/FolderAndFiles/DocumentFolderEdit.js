@@ -10,7 +10,8 @@ import {
   getDocumentFolder,
   removeDocumentFolder,
   getFilesPerOffice,
-  removeDocumentFile
+  removeDocumentFile,
+  clearFiles
 } from '../../../redux/ducks/documentFolder'
 
 class DocumentFolderEdit extends Component {
@@ -82,8 +83,14 @@ class DocumentFolderEdit extends Component {
     })
   }
 
-  _listFiles = folderId => {
-    this.props.getFilesPerOffice(folderId)
+  _listFiles = async folderId => {
+    if (folderId === this.state.folderId) {
+      this.props.clearFiles()
+      this.setState({ folderId: null })
+    } else {
+      await this.props.getFilesPerOffice(folderId)
+      this.setState({ folderId: folderId })
+    }
   }
 
   _downloadFile = file => {
@@ -113,11 +120,20 @@ class DocumentFolderEdit extends Component {
       return type === 'icon' ? 'file pdf outline' : 'red'
     } else if (format === 'jpeg' || format === 'png' || format === 'jpg') {
       return type === 'icon' ? 'file image outline' : 'orange'
-    } else if (format === 'vnd.openxmlformats-officedocument.wordprocess') {
+    } else if (
+      format === 'vnd.openxmlformats-officedocument.wordprocess' ||
+      format === 'vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      format === 'docx'
+    ) {
       return type === 'icon' ? 'file word outline' : 'blue'
-    } else if (format === 'vnd.openxmlformats-officedocument.spreadsheet') {
+    } else if (
+      format === 'vnd.openxmlformats-officedocument.spreadsheet' ||
+      format === 'xml' ||
+      format === 'csv' ||
+      format === 'xlsx'
+    ) {
       return type === 'icon' ? 'file excel outline' : 'green'
-    } else if (format === 'vnd.openxmlformats-officedocument.presentationml.presentation') {
+    } else if (format === 'vnd.openxmlformats-officedocument.presentationml.presentation' || format === 'pptx') {
       return type === 'icon' ? 'file powerpoint outline' : 'purple'
     } else {
       return type === 'icon' ? 'file text outline' : 'grey'
@@ -125,7 +141,14 @@ class DocumentFolderEdit extends Component {
   }
 
   render () {
-    const { listFolder, listFiles, listFolderAllOffices } = this.props
+    const {
+      listFolder,
+      listFiles,
+      // listFolderAllOffices,
+      folderAnalystsWithAccess,
+      folderBrokersWithAccess,
+      folderGeneralWithAccess
+    } = this.props
     return (
       <Wrapper>
         <Header textAlign="right">
@@ -144,20 +167,28 @@ class DocumentFolderEdit extends Component {
           <Segment size="tiny">
             <Grid style={{ marginTop: '10px' }}>
               <Fragment>
-                {listFolderAllOffices.map((folderOffice, index) => {
-                  if (folderOffice && folderOffice.subFolder === 'Analysts') {
+                {folderAnalystsWithAccess.map((folderOffice, index) => {
+                  if (folderOffice) {
                     return (
                       <Fragment key={index}>
-                        <Grid.Row style={{ paddingBottom: '0px' }}>
-                          <Grid.Column>
-                            <Divider horizontal>
-                              <Header as="h3" color="blue" textAlign="center" content={folderOffice.subFolder} />
-                            </Divider>
-                          </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
-                          <Grid.Column>
-                            <Icon name="folder" color="yellow" size="big" />
+                        {index === 0 ? (
+                          <Grid.Row style={{ paddingBottom: '0px' }}>
+                            <Grid.Column>
+                              <Divider horizontal>
+                                <Header as="h3" color="blue" textAlign="center" content={'Analysts'} />
+                              </Divider>
+                            </Grid.Column>
+                          </Grid.Row>
+                        ) : null}
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                            <Icon
+                              onClick={() => this._listFiles(folderOffice.id)}
+                              link
+                              name="folder"
+                              color="yellow"
+                              size="big"
+                            />
                             <Label
                               style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px' }}
                               as="a"
@@ -165,14 +196,30 @@ class DocumentFolderEdit extends Component {
                               onClick={() => this._listFiles(folderOffice.id)}
                             >
                               {this._folderNameTotalFiles(folderOffice)}{' '}
-                              <Icon
-                                style={{ marginLeft: '5px' }}
-                                onClick={() => this._newDocumentFile(folderOffice)}
-                                name="add"
-                                color="blue"
-                                size="large"
-                              />
                             </Label>
+                          </Grid.Column>
+                          <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                            <Icon
+                              style={{ marginLeft: '5px' }}
+                              onClick={() => this._newDocumentFile(folderOffice)}
+                              name="add"
+                              color="blue"
+                              size="large"
+                            />
+                            <Icon
+                              name="edit"
+                              color="green"
+                              size="large"
+                              link
+                              onClick={() => this._editDocumentFolder(folderOffice)}
+                            />
+                            <Icon
+                              name="trash"
+                              color="red"
+                              size="large"
+                              link
+                              onClick={() => this._removeDocumentFolder(folderOffice)}
+                            />
                           </Grid.Column>
                         </Grid.Row>
                         {listFiles && listFiles.length > 0 ? (
@@ -184,6 +231,13 @@ class DocumentFolderEdit extends Component {
                                     <Table.Header>
                                       <Table.Row>
                                         <Table.HeaderCell>
+                                          <Icon
+                                            name="trash"
+                                            color="red"
+                                            size="large"
+                                            link
+                                            onClick={() => this._removeDocumentFile(folderOffice)}
+                                          />
                                           <Icon
                                             link
                                             name={this._iconColorName(files.format, 'icon')}
@@ -214,27 +268,60 @@ class DocumentFolderEdit extends Component {
                       </Fragment>
                     )
                   }
-                  if (folderOffice && folderOffice.subFolder === 'Brokers') {
+                })}
+                {folderBrokersWithAccess.map((folderOffice, index) => {
+                  if (folderOffice) {
                     return (
                       <Fragment key={index}>
-                        <Grid.Row style={{ paddingBottom: '0px' }}>
-                          <Grid.Column>
-                            <Divider horizontal>
-                              <Header as="h3" color="blue" textAlign="center" content={folderOffice.subFolder} />
-                            </Divider>
-                          </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
-                          <Grid.Column>
-                            <Icon name="folder" color="yellow" size="big" />
+                        {index === 0 ? (
+                          <Grid.Row style={{ paddingBottom: '0px' }}>
+                            <Grid.Column>
+                              <Divider horizontal>
+                                <Header as="h3" color="blue" textAlign="center" content={'Brokers'} />
+                              </Divider>
+                            </Grid.Column>
+                          </Grid.Row>
+                        ) : null}
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                            <Icon
+                              onClick={() => this._listFiles(folderOffice.id)}
+                              link
+                              name="folder"
+                              color="yellow"
+                              size="big"
+                            />
                             <Label
                               style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px' }}
                               as="a"
                               size="large"
                               onClick={() => this._listFiles(folderOffice.id)}
                             >
-                              {this._folderNameTotalFiles(folderOffice)}
+                              {this._folderNameTotalFiles(folderOffice)}{' '}
                             </Label>
+                          </Grid.Column>
+                          <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                            <Icon
+                              style={{ marginLeft: '5px' }}
+                              onClick={() => this._newDocumentFile(folderOffice)}
+                              name="add"
+                              color="blue"
+                              size="large"
+                            />
+                            <Icon
+                              name="edit"
+                              color="green"
+                              size="large"
+                              link
+                              onClick={() => this._editDocumentFolder(folderOffice)}
+                            />
+                            <Icon
+                              name="trash"
+                              color="red"
+                              size="large"
+                              link
+                              onClick={() => this._removeDocumentFolder(folderOffice)}
+                            />
                           </Grid.Column>
                         </Grid.Row>
                         {listFiles && listFiles.length > 0 ? (
@@ -246,6 +333,13 @@ class DocumentFolderEdit extends Component {
                                     <Table.Header>
                                       <Table.Row>
                                         <Table.HeaderCell>
+                                          <Icon
+                                            name="trash"
+                                            color="red"
+                                            size="large"
+                                            link
+                                            onClick={() => this._removeDocumentFile(folderOffice)}
+                                          />
                                           <Icon
                                             link
                                             name={this._iconColorName(files.format, 'icon')}
@@ -276,27 +370,60 @@ class DocumentFolderEdit extends Component {
                       </Fragment>
                     )
                   }
-                  if (folderOffice && folderOffice.subFolder === 'General') {
+                })}
+                {folderGeneralWithAccess.map((folderOffice, index) => {
+                  if (folderOffice) {
                     return (
                       <Fragment key={index}>
-                        <Grid.Row style={{ paddingBottom: '0px' }}>
-                          <Grid.Column>
-                            <Divider horizontal>
-                              <Header as="h3" color="blue" textAlign="center" content={folderOffice.subFolder} />
-                            </Divider>
-                          </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
-                          <Grid.Column>
-                            <Icon name="folder" color="yellow" size="big" />
+                        {index === 0 ? (
+                          <Grid.Row style={{ paddingBottom: '0px' }}>
+                            <Grid.Column>
+                              <Divider horizontal>
+                                <Header as="h3" color="blue" textAlign="center" content={'General'} />
+                              </Divider>
+                            </Grid.Column>
+                          </Grid.Row>
+                        ) : null}
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                            <Icon
+                              onClick={() => this._listFiles(folderOffice.id)}
+                              link
+                              name="folder"
+                              color="yellow"
+                              size="big"
+                            />
                             <Label
                               style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px' }}
                               as="a"
                               size="large"
                               onClick={() => this._listFiles(folderOffice.id)}
                             >
-                              {this._folderNameTotalFiles(folderOffice)}
+                              {this._folderNameTotalFiles(folderOffice)}{' '}
                             </Label>
+                          </Grid.Column>
+                          <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                            <Icon
+                              style={{ marginLeft: '5px' }}
+                              onClick={() => this._newDocumentFile(folderOffice)}
+                              name="add"
+                              color="blue"
+                              size="large"
+                            />
+                            <Icon
+                              name="edit"
+                              color="green"
+                              size="large"
+                              link
+                              onClick={() => this._editDocumentFolder(folderOffice)}
+                            />
+                            <Icon
+                              name="trash"
+                              color="red"
+                              size="large"
+                              link
+                              onClick={() => this._removeDocumentFolder(folderOffice)}
+                            />
                           </Grid.Column>
                         </Grid.Row>
                         {listFiles && listFiles.length > 0 ? (
@@ -304,28 +431,39 @@ class DocumentFolderEdit extends Component {
                             {listFiles.map((files, index2) => {
                               if (files.folder_id === folderOffice.id) {
                                 return (
-                                  <Grid.Row
-                                    style={{ paddingTop: '0px', paddingBottom: '0px' }}
-                                    columns={1}
-                                    key={index2}
-                                  >
-                                    <Grid.Column style={{ marginLeft: '50px', color: 'blue' }}>
-                                      <Icon
-                                        link
-                                        name="download"
-                                        // color="blue"
-                                        onClick={() => this._downloadFile(files)}
-                                      />
-                                      <Label
-                                        style={{ backgroundColor: '#f7f7f7', color: 'blue', paddingLeft: '5px' }}
-                                        as="a"
-                                        size="large"
-                                        onClick={() => this._downloadFile(files)}
-                                      >
-                                        <u>{files.name}</u>
-                                      </Label>
-                                    </Grid.Column>
-                                  </Grid.Row>
+                                  <Table style={{ marginLeft: '50px' }} key={index2} basic="very" celled size="large">
+                                    <Table.Header>
+                                      <Table.Row>
+                                        <Table.HeaderCell>
+                                          <Icon
+                                            name="trash"
+                                            color="red"
+                                            size="large"
+                                            link
+                                            onClick={() => this._removeDocumentFile(folderOffice)}
+                                          />
+                                          <Icon
+                                            link
+                                            name={this._iconColorName(files.format, 'icon')}
+                                            color={this._iconColorName(files.format, 'color')}
+                                            size="big"
+                                            onClick={() => this._downloadFile(files)}
+                                          />
+                                          <Label
+                                            style={{
+                                              backgroundColor: 'white',
+                                              paddingLeft: '5px'
+                                            }}
+                                            as="a"
+                                            size="large"
+                                            onClick={() => this._downloadFile(files)}
+                                          >
+                                            {files.name}
+                                          </Label>
+                                        </Table.HeaderCell>
+                                      </Table.Row>
+                                    </Table.Header>
+                                  </Table>
                                 )
                               }
                             })}
@@ -352,7 +490,31 @@ class DocumentFolderEdit extends Component {
                         return (
                           <Fragment key={index1}>
                             <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
-                              <Grid.Column style={{ marginTop: '10px' }} width={2}>
+                              <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                                <Icon
+                                  onClick={() => this._listFiles(folderOffice.id)}
+                                  link
+                                  name="folder"
+                                  color="yellow"
+                                  size="big"
+                                />
+                                <Label
+                                  style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px' }}
+                                  as="a"
+                                  size="large"
+                                  onClick={() => this._listFiles(folderOffice.id)}
+                                >
+                                  {this._folderNameTotalFiles(folderOffice)}{' '}
+                                </Label>
+                              </Grid.Column>
+                              <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                                <Icon
+                                  style={{ marginLeft: '5px' }}
+                                  onClick={() => this._newDocumentFile(folderOffice)}
+                                  name="add"
+                                  color="blue"
+                                  size="large"
+                                />
                                 <Icon
                                   name="edit"
                                   color="green"
@@ -368,56 +530,52 @@ class DocumentFolderEdit extends Component {
                                   onClick={() => this._removeDocumentFolder(folderOffice)}
                                 />
                               </Grid.Column>
-                              <Grid.Column>
-                                <Icon name="folder" />
-                                <Label
-                                  style={{ backgroundColor: '#f7f7f7', color: 'black', paddingLeft: '5px' }}
-                                  as="a"
-                                  size="big"
-                                  onClick={() => this._listFiles(folderOffice.id)}
-                                >
-                                  {this._folderNameTotalFiles(folderOffice)}
-                                </Label>
-                              </Grid.Column>
                             </Grid.Row>
+
                             {listFiles && listFiles.length > 0 ? (
                               <Fragment>
                                 {listFiles.map((files, index2) => {
                                   if (files.folder_id === folderOffice.id) {
                                     return (
-                                      <Grid.Row
-                                        style={{ paddingTop: '0px', paddingBottom: '0px' }}
-                                        columns={2}
+                                      <Table
+                                        style={{ marginLeft: '50px' }}
                                         key={index2}
+                                        basic="very"
+                                        celled
+                                        size="large"
                                       >
-                                        <Grid.Column style={{ marginLeft: '50px', marginTop: '10px' }} width={1}>
-                                          <Icon
-                                            name="trash"
-                                            color="red"
-                                            size="large"
-                                            link
-                                            onClick={() => this._removeDocumentFile(files)}
-                                          />
-                                        </Grid.Column>
-                                        <Grid.Column
-                                          style={{ marginLeft: this.state.editMode ? null : '50px', color: 'blue' }}
-                                        >
-                                          <Icon
-                                            link
-                                            name="download"
-                                            // color="blue"
-                                            onClick={() => this._downloadFile(files)}
-                                          />
-                                          <Label
-                                            style={{ backgroundColor: '#f7f7f7', color: 'blue', paddingLeft: '5px' }}
-                                            as="a"
-                                            size="large"
-                                            onClick={() => this._downloadFile(files)}
-                                          >
-                                            <u>{files.name}</u>
-                                          </Label>
-                                        </Grid.Column>
-                                      </Grid.Row>
+                                        <Table.Header>
+                                          <Table.Row>
+                                            <Table.HeaderCell>
+                                              <Icon
+                                                name="trash"
+                                                color="red"
+                                                size="large"
+                                                link
+                                                onClick={() => this._removeDocumentFile(folderOffice)}
+                                              />
+                                              <Icon
+                                                link
+                                                name={this._iconColorName(files.format, 'icon')}
+                                                color={this._iconColorName(files.format, 'color')}
+                                                size="big"
+                                                onClick={() => this._downloadFile(files)}
+                                              />
+                                              <Label
+                                                style={{
+                                                  backgroundColor: 'white',
+                                                  paddingLeft: '5px'
+                                                }}
+                                                as="a"
+                                                size="large"
+                                                onClick={() => this._downloadFile(files)}
+                                              >
+                                                {files.name}
+                                              </Label>
+                                            </Table.HeaderCell>
+                                          </Table.Row>
+                                        </Table.Header>
+                                      </Table>
                                     )
                                   }
                                 })}
@@ -452,7 +610,11 @@ DocumentFolderEdit.propTypes = {
   listFolderAllOffices: PropTypes.array,
   removeDocumentFile: PropTypes.func,
   totalFiles: PropTypes.number,
-  totalFilesPerFolder: PropTypes.array
+  totalFilesPerFolder: PropTypes.array,
+  clearFiles: PropTypes.func,
+  folderAnalystsWithAccess: PropTypes.array,
+  folderBrokersWithAccess: PropTypes.array,
+  folderGeneralWithAccess: PropTypes.array
 }
 
 const mapStateToProps = state => ({
@@ -460,12 +622,15 @@ const mapStateToProps = state => ({
   listFolder: state.documentFolder.get.array,
   listFiles: state.documentFolder.listFiles.array,
   listFolderAllOffices: state.documentFolder.get.folderAllOffices,
-  totalFilesPerFolder: state.documentFolder.get.totalFilesPerFolder
+  totalFilesPerFolder: state.documentFolder.get.totalFilesPerFolder,
+  folderAnalystsWithAccess: state.documentFolder.get.folderAnalystsWithAccess,
+  folderBrokersWithAccess: state.documentFolder.get.folderBrokersWithAccess,
+  folderGeneralWithAccess: state.documentFolder.get.folderGeneralWithAccess
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { openModal, getDocumentFolder, removeDocumentFolder, getFilesPerOffice, removeDocumentFile },
+    { openModal, getDocumentFolder, removeDocumentFolder, getFilesPerOffice, removeDocumentFile, clearFiles },
     dispatch
   )
 

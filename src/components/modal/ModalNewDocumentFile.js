@@ -10,7 +10,8 @@ import { closeModal } from '../../redux/ducks/modal'
 import { getOfficeRegister } from '../../redux/ducks/officeRegister'
 import {
   getFolderPerOffice,
-  uploadDocumentFile /*, createDocumentFile, updateDocumentFile */
+  uploadDocumentFile,
+  getFilesPerOffice /*, createDocumentFile, updateDocumentFile */
 } from '../../redux/ducks/documentFolder'
 
 class ModalNewDocumentFile extends Component {
@@ -24,8 +25,8 @@ class ModalNewDocumentFile extends Component {
   }
 
   static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isUpdated) {
-      nextProps.getDocumentFile()
+    if (nextProps.isUpdated || nextProps.isUploaded) {
+      nextProps.getFilesPerOffice(nextProps.values.folderId)
     }
     return null
   }
@@ -72,48 +73,62 @@ class ModalNewDocumentFile extends Component {
         <Modal.Content>
           <Form>
             <Fragment>
-              <Form.Group>
-                <Form.Field width={6}>
-                  <Form.Select
-                    required
-                    label="Office Region"
-                    name="officeId"
-                    options={mapArrayToValuesForDropdown(officeOptions)}
-                    value={values.officeId}
-                    onChange={this._handleSelectChange}
-                    disabled={this.props.folderObject !== undefined}
-                  />
-                  {errors.officeId && touched.officeId && (
-                    <Label basic color="red" pointing content={errors.officeId} />
-                  )}
-                </Form.Field>
-                <Form.Field
-                  width={6}
-                  style={{ marginTop: '30px', marginLeft: '15px' }}
-                  control={Radio}
-                  label="All Offices"
-                  name="allOffices"
-                  onChange={this._handleChangeCheckBox}
-                  checked={values.allOffices}
-                  disabled={this.props.folderObject !== undefined}
-                />
-              </Form.Group>
-              {values.officeId || values.allOffices ? (
-                <Fragment>
-                  <Form.Field>
+              {!this.props.folderObject ? (
+                <Form.Group>
+                  <Form.Field width={6}>
                     <Form.Select
                       required
-                      label="Folder"
-                      name="folderId"
-                      options={mapArrayToValuesForDropdown(foldersPerOffice)}
-                      value={values.folderId}
+                      label="Office Region"
+                      name="officeId"
+                      options={mapArrayToValuesForDropdown(officeOptions)}
+                      value={values.officeId}
                       onChange={this._handleSelectChange}
                       disabled={this.props.folderObject !== undefined}
                     />
-                    {errors.folderId && touched.folderId && (
-                      <Label basic color="red" pointing content={errors.folderId} />
+                    {errors.officeId && touched.officeId && (
+                      <Label basic color="red" pointing content={errors.officeId} />
                     )}
                   </Form.Field>
+                  <Form.Field
+                    width={6}
+                    style={{ marginTop: '30px', marginLeft: '15px' }}
+                    control={Radio}
+                    label="All Offices"
+                    name="allOffices"
+                    onChange={this._handleChangeCheckBox}
+                    checked={values.allOffices}
+                    disabled={this.props.folderObject !== undefined}
+                  />
+                </Form.Group>
+              ) : null}
+              {values.officeId || values.allOffices || this.props.folderObject ? (
+                <Fragment>
+                  {!this.props.folderObject ? (
+                    <Form.Field>
+                      <Form.Select
+                        required
+                        label="Folder"
+                        name="folderId"
+                        options={mapArrayToValuesForDropdown(foldersPerOffice)}
+                        value={values.folderId}
+                        onChange={this._handleSelectChange}
+                        disabled={this.props.folderObject !== undefined}
+                      />
+                      {errors.folderId && touched.folderId && (
+                        <Label basic color="red" pointing content={errors.folderId} />
+                      )}
+                    </Form.Field>
+                  ) : (
+                    <Form.Field width={16}>
+                      <Form.Input
+                        required
+                        label="Folder"
+                        name="folderName"
+                        value={this.props.folderObject.name}
+                        readOnly
+                      />
+                    </Form.Field>
+                  )}
                   {values.folderId ? (
                     <Fragment>
                       <Form.Group>
@@ -187,13 +202,14 @@ ModalNewDocumentFile.propTypes = {
   officeOptions: PropTypes.array,
   getFolderPerOffice: PropTypes.func,
   foldersPerOffice: PropTypes.array,
-  folderObject: PropTypes.object
+  folderObject: PropTypes.object,
+  getFilesPerOffice: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
   officeId: props.folderObject ? props.folderObject.officeId : null,
-  allOffices: props.folderObject ? JSON.parse(props.folderObject.allOffices) : null,
-  folderId: props.folderObject ? props.folderObject.folder_id : null
+  allOffices: !!(props.folderObject && props.folderObject.allOffices === 1),
+  folderId: props.folderObject ? props.folderObject.id : null
 })
 
 const validationSchema = Yup.object().shape({
@@ -224,7 +240,8 @@ const mapDispatchToProps = dispatch =>
       closeModal,
       getOfficeRegister,
       getFolderPerOffice,
-      uploadDocumentFile
+      uploadDocumentFile,
+      getFilesPerOffice
     },
     dispatch
   )

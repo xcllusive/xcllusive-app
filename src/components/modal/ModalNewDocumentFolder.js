@@ -283,6 +283,7 @@ const mapPropsToValues = props => ({
   name: props.documentFolder ? props.documentFolder.name : '',
   officeId: props.documentFolder ? props.documentFolder.officeId : '',
   allOffices: props.documentFolder ? props.documentFolder.allOffices : false,
+  subFolder: props.documentFolder ? props.documentFolder.subFolder : '',
   buyerMenu: props.documentFolder ? _.includes(props.documentFolder.roles, 'BUYER_MENU') : false,
   businessMenu: props.documentFolder ? _.includes(props.documentFolder.roles, 'BUSINESS_MENU') : false,
   preSaleMenu: props.documentFolder ? _.includes(props.documentFolder.roles, 'PRESALE_MENU') : false,
