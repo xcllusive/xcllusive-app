@@ -70,7 +70,19 @@ class ModalNewGroupEmailTemplate extends Component {
                 {errors.name && touched.name && <Label basic color="red" pointing content={errors.name} />}
               </Form.Field>
             </Form.Group>
-
+            <Form.Group>
+              <Form.Field width={16}>
+                <Form.Input
+                  required
+                  label="Subject"
+                  name="subject"
+                  value={values.subject}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.name && touched.name && <Label basic color="red" pointing content={errors.name} />}
+              </Form.Field>
+            </Form.Group>
             <Form.Group>
               <Form.Field>
                 <h4>Body</h4>
@@ -137,7 +149,8 @@ const mapPropsToValues = props => ({
   folderId: props.folderObject ? props.folderObject.id : null,
   nameFolder: props.folderObject ? props.folderObject.name : '',
   name: props.templateObject ? props.templateObject.name : '',
-  body: props.templateObject ? props.templateObject.body : ''
+  body: props.templateObject ? props.templateObject.body : '',
+  subject: props.templateObject ? props.templateObject.subject : ''
 })
 
 const validationSchema = Yup.object().shape({

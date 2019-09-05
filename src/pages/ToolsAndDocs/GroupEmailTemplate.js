@@ -285,6 +285,14 @@ class GroupEmailTemplate extends Component {
                                       <Table.Row>
                                         <Table.HeaderCell>
                                           <Form>
+                                            <Form.Field width={16}>
+                                              <Form.Input
+                                                label="Subject"
+                                                name="subject"
+                                                value={template.subject}
+                                                readOnly
+                                              />
+                                            </Form.Field>
                                             <Form.Field>
                                               <ReactQuill
                                                 readOnly
@@ -300,9 +308,7 @@ class GroupEmailTemplate extends Component {
                                                 size="small"
                                                 color="green"
                                                 floated="right"
-                                                onClick={() =>
-                                                  !this.state.editMode ? this._editMode() : this._newFolder()
-                                                }
+                                                onClick={() => this._sendEmail(template)}
                                               >
                                                 <Icon name="send" />
                                                 Send
