@@ -3,18 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import {
-  Form,
-  Label,
-  Message,
-  Icon,
-  Grid,
-  Segment,
-  Dimmer,
-  Loader,
-  Header,
-  Button
-} from 'semantic-ui-react'
+import { Form, Label, Message, Icon, Grid, Segment, Dimmer, Loader, Header, Button } from 'semantic-ui-react'
 import Wrapper from '../../../components/content/Wrapper'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
@@ -36,12 +25,7 @@ class EmailTemplates extends Component {
         toolbar: [
           [{ header: [1, 2, false] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' }
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
           ['link', 'image'],
           ['clean']
         ]
@@ -94,10 +78,7 @@ class EmailTemplates extends Component {
 
   _attachQuillRefs = () => {
     // Ensure React-Quill reference is available:
-    if (
-      !this.reactQuillRef ||
-      typeof this.reactQuillRef.getEditor !== 'function'
-    ) {
+    if (!this.reactQuillRef || typeof this.reactQuillRef.getEditor !== 'function') {
       return false
     }
     // Skip if Quill reference is defined:
@@ -143,18 +124,13 @@ class EmailTemplates extends Component {
                 style={{ zIndex: 9999 }}
                 label="Templates"
                 placeholder="Please select one template bellow..."
-                options={mapArrayToValuesForDropdownTemplates(
-                  listEmailTemplates
-                )}
+                options={mapArrayToValuesForDropdownTemplates(listEmailTemplates)}
                 name="title"
                 autoComplete="title"
                 value={values.title}
                 onChange={this._handleSelectChange}
               />
-              {errors.title &&
-                touched.title && (
-                <Label basic color="red" pointing content={errors.title} />
-              )}
+              {errors.title && touched.title && <Label basic color="red" pointing content={errors.title} />}
             </Form.Field>
             {objectEmailTemplate ? (
               <Form.Field width={10} style={{ alignSelf: 'flex-end' }}>
@@ -174,11 +150,7 @@ class EmailTemplates extends Component {
           </Form.Group>
           <Dimmer.Dimmable dimmed={!objectEmailTemplate || isLoadingTemplate}>
             <Dimmer inverted active={!objectEmailTemplate || isLoadingTemplate}>
-              {isLoadingTemplate ? (
-                <Loader inverted />
-              ) : (
-                <Header as="h2">Please, select one template!</Header>
-              )}
+              {isLoadingTemplate ? <Loader inverted /> : <Header as="h2">Please, select one template!</Header>}
             </Dimmer>
             <Form.Group>
               {/* <Form.Field width={4}>
@@ -209,15 +181,7 @@ class EmailTemplates extends Component {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.subject &&
-                  touched.subject && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.subject}
-                  />
-                )}
+                {errors.subject && touched.subject && <Label basic color="red" pointing content={errors.subject} />}
               </Form.Field>
               <Form.Field style={{ alignSelf: 'center' }}>
                 <Form.Checkbox
@@ -236,14 +200,8 @@ class EmailTemplates extends Component {
                   onChange={this._handleFileUpload}
                   onBlur={handleBlur}
                 />
-                {errors.attachment &&
-                  touched.attachment && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    content={errors.attachment}
-                  />
+                {errors.attachment && touched.attachment && (
+                  <Label basic color="red" pointing content={errors.attachment} />
                 )}
               </Form.Field>
               <Form.Field style={{ alignSelf: 'center' }}>
@@ -254,18 +212,12 @@ class EmailTemplates extends Component {
                   checked={values.enableAttachment}
                 />
               </Form.Field>
-              <Form.Field
-                style={{ alignItems: 'flex-start', alignSelf: 'center' }}
-              >
+              <Form.Field style={{ alignItems: 'flex-start', alignSelf: 'center' }}>
                 <Button
                   size="tiny"
                   color="grey"
-                  disabled={
-                    objectEmailTemplate && !objectEmailTemplate.attachmentPath
-                  }
-                  onClick={() =>
-                    this._openFile(objectEmailTemplate.attachmentPath)
-                  }
+                  disabled={objectEmailTemplate && !objectEmailTemplate.attachmentPath}
+                  onClick={() => this._openFile(objectEmailTemplate.attachmentPath)}
                 >
                   <Icon name="folder open outline" />
                   Open Attachment
@@ -273,44 +225,33 @@ class EmailTemplates extends Component {
               </Form.Field>
             </Form.Group>
 
-            {objectEmailTemplate &&
-            objectEmailTemplate.handlebars &&
-            objectEmailTemplate.handlebars.length > 0 ? (
-                <Fragment>
-                  <Message info size="tiny">
-                    <Message.Header>
-                    Replace in the body`s email with tag names by what you need
-                    to use. Ex: Hi ((buyerName)).
-                    </Message.Header>
-                  </Message>
-                  <Segment>
-                    <Label.Group color="teal">
-                      {objectEmailTemplate &&
+            {objectEmailTemplate && objectEmailTemplate.handlebars && objectEmailTemplate.handlebars.length > 0 ? (
+              <Fragment>
+                <Message info size="tiny">
+                  <Message.Header>
+                    Replace in the body`s email with tag names by what you need to use. Ex: Hi ((buyerName)).
+                  </Message.Header>
+                </Message>
+                <Segment>
+                  <Label.Group color="teal">
+                    {objectEmailTemplate &&
                       objectEmailTemplate.handlebars.map((item, key) => {
                         return (
-                          <Label
-                            horizontal
-                            key={key}
-                            onClick={() => this.insertTextQuill(item)}
-                          >
+                          <Label horizontal key={key} onClick={() => this.insertTextQuill(item)}>
                             {'{{'}
                             {item}
                             {'}}'}
                           </Label>
                         )
                       })}
-                    </Label.Group>
-                  </Segment>
-                </Fragment>
-              ) : null}
+                  </Label.Group>
+                </Segment>
+              </Fragment>
+            ) : null}
 
             <Grid padded="horizontally">
               <Grid.Row columns={1}>
-                <Grid.Column
-                  floated="left"
-                  width={16}
-                  style={{ paddingLeft: 0, paddingRight: 0 }}
-                >
+                <Grid.Column floated="left" width={16} style={{ paddingLeft: 0, paddingRight: 0 }}>
                   <Form.Field>
                     <ReactQuill
                       ref={el => {

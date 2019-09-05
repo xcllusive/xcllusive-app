@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import * as Yup from 'yup'
 
 import { closeModal } from '../../redux/ducks/modal'
-import { createGroupEmailFolder } from '../../redux/ducks/groupEmail'
+import { createGroupEmailFolder, getGroupEmailFolder, updateGroupEmailFolder } from '../../redux/ducks/groupEmail'
 
 class ModalNewGroupEmailFolder extends Component {
   constructor (props) {
@@ -19,7 +19,7 @@ class ModalNewGroupEmailFolder extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     if (nextProps.isCreated || nextProps.isUpdated || nextProps.isDeleted || nextProps.isDeletedFile) {
-      nextProps.getDocumentFolder()
+      nextProps.getGroupEmailFolder()
     }
     return null
   }
@@ -66,7 +66,7 @@ class ModalNewGroupEmailFolder extends Component {
             onClick={handleSubmit}
           >
             <Icon name="save" />
-            {this.props.documentFolder ? 'Edit Folder' : 'Create Folder'}
+            {this.props.folderObject ? 'Edit Folder' : 'Create Folder'}
           </Button>
           <Button color="red" onClick={this.props.closeModal}>
             <Icon name="cancel" />
@@ -91,19 +91,18 @@ ModalNewGroupEmailFolder.propTypes = {
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
   updateLoading: PropTypes.bool,
-  getDocumentFolder: PropTypes.func,
   createGroupEmailFolder: PropTypes.func,
-  updateDocumentFolder: PropTypes.func,
   isCreated: PropTypes.bool,
   isUpdated: PropTypes.bool,
-  documentFolder: PropTypes.object,
   isDeleted: PropTypes.bool,
-  isDeletedFile: PropTypes.bool
+  folderObject: PropTypes.object,
+  getGroupEmailFolder: PropTypes.func,
+  updateGroupEmailFolder: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
-  id: props.documentFolder ? props.documentFolder.id : null,
-  name: props.documentFolder ? props.documentFolder.name : ''
+  id: props.folderObject ? props.folderObject.id : null,
+  name: props.folderObject ? props.folderObject.name : ''
 })
 
 const validationSchema = Yup.object().shape({
@@ -114,28 +113,28 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  if (props.documentFolder) {
-    props.updateDocumentFolder(values)
+  if (props.folderObject) {
+    props.updateGroupEmailFolder(values)
   } else {
     props.createGroupEmailFolder(values)
   }
 }
 
 const mapStateToProps = state => ({
-  createLoading: state.documentFolder.create.isLoading,
-  isCreated: state.documentFolder.create.isCreated,
-  updateLoading: state.documentFolder.update.isLoading,
-  isUpdated: state.documentFolder.update.isUpdated,
-  officeOptions: state.officeRegister.get.array,
-  isDeleted: state.documentFolder.delete.isDeleted,
-  isDeletedFile: state.documentFolder.deleteFile.isDeleted
+  createLoading: state.groupEmail.create.isLoading,
+  isCreated: state.groupEmail.create.isCreated,
+  updateLoading: state.groupEmail.update.isLoading,
+  isUpdated: state.groupEmail.update.isUpdated,
+  isDeleted: state.groupEmail.delete.isDeleted
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      createGroupEmailFolder
+      createGroupEmailFolder,
+      getGroupEmailFolder,
+      updateGroupEmailFolder
     },
     dispatch
   )

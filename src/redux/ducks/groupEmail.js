@@ -6,8 +6,9 @@ import {
   update,
   remove,
   listEmailTemplates,
-  removeFile,
-  createEmailTemplate
+  removeEmailTemplate,
+  createEmailTemplate,
+  updateEmailTemplate
 } from '../../services/api/groupEmail'
 
 // Action Types
@@ -31,13 +32,16 @@ export const Types = {
   GET_FOLDERS_LOADING: 'GET_FOLDERS_LOADING',
   GET_FOLDERS_SUCCESS: 'GET_FOLDERS_SUCCESS',
   GET_FOLDERS_FAILURE: 'GET_FOLDERS_FAILURE',
-  GET_EMAIL_TEMPLATES_LOADING: 'GET_EMAIL_TEMPLATES_LOADING',
-  GET_EMAIL_TEMPLATES_SUCCESS: 'GET_EMAIL_TEMPLATES_SUCCESS',
-  GET_EMAIL_TEMPLATES_FAILURE: 'GET_EMAIL_TEMPLATES_FAILURE',
-  REMOVE_DOCUMENT_FILE_LOADING: 'REMOVE_DOCUMENT_FILE_LOADING',
-  REMOVE_DOCUMENT_FILE_SUCCESS: 'REMOVE_DOCUMENT_FILE_SUCCESS',
-  REMOVE_DOCUMENT_FILE_FAILURE: 'REMOVE_DOCUMENT_FILE_FAILURE',
-  CLEAR_EMAIL_TEMPLATES: 'CLEAR_EMAIL_TEMPLATES'
+  GET_GROUP_EMAIL_TEMPLATES_LOADING: 'GET_GROUP_EMAIL_TEMPLATES_LOADING',
+  GET_GROUP_EMAIL_TEMPLATES_SUCCESS: 'GET_GROUP_EMAIL_TEMPLATES_SUCCESS',
+  GET_GROUP_EMAIL_TEMPLATES_FAILURE: 'GET_GROUP_EMAIL_TEMPLATES_FAILURE',
+  REMOVE_GROUP_EMAIL_TEMPLATE_LOADING: 'REMOVE_DOCUMENT_FILE_LOADING',
+  REMOVE_GROUP_EMAIL_TEMPLATE_SUCCESS: 'REMOVE_GROUP_EMAIL_TEMPLATE_SUCCESS',
+  REMOVE_GROUP_EMAIL_TEMPLATE_FAILURE: 'REMOVE_GROUP_EMAIL_TEMPLATE_FAILURE',
+  CLEAR_EMAIL_TEMPLATES: 'CLEAR_EMAIL_TEMPLATES',
+  UPDATE_GROUP_EMAIL_TEMPLATE_LOADING: 'UPDATE_GROUP_EMAIL_TEMPLATE_LOADING',
+  UPDATE_GROUP_EMAIL_TEMPLATE_SUCCESS: 'UPDATE_GROUP_EMAIL_TEMPLATE_SUCCESS',
+  UPDATE_GROUP_EMAIL_TEMPLATE_FAILURE: 'UPDATE_GROUP_EMAIL_TEMPLATE_FAILURE'
 }
 
 // Reducer
@@ -75,7 +79,12 @@ const initialState = {
     array: [],
     error: null
   },
-  deleteFile: {
+  createTemplate: {
+    isLoading: false,
+    isCreated: false,
+    error: null
+  },
+  deleteTemplate: {
     isLoading: false,
     isDeleted: false,
     error: null
@@ -83,6 +92,11 @@ const initialState = {
   listEmailTemplates: {
     isLoading: true,
     array: [],
+    error: null
+  },
+  updateTemplate: {
+    isLoading: false,
+    isUpdated: false,
     error: null
   }
 }
@@ -238,7 +252,7 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.GET_EMAIL_TEMPLATES_LOADING:
+    case Types.GET_GROUP_EMAIL_TEMPLATES_LOADING:
       return {
         ...state,
         listEmailTemplates: {
@@ -247,7 +261,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_EMAIL_TEMPLATES_SUCCESS:
+    case Types.GET_GROUP_EMAIL_TEMPLATES_SUCCESS:
       return {
         ...state,
         listEmailTemplates: {
@@ -257,7 +271,7 @@ export default function reducer (state = initialState, action) {
           error: null
         }
       }
-    case Types.GET_EMAIL_TEMPLATES_FAILURE:
+    case Types.GET_GROUP_EMAIL_TEMPLATES_FAILURE:
       return {
         ...state,
         listEmailTemplates: {
@@ -266,30 +280,30 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.REMOVE_DOCUMENT_FILE_LOADING:
+    case Types.REMOVE_GROUP_EMAIL_TEMPLATE_LOADING:
       return {
         ...state,
-        deleteFile: {
-          ...state.deleteFile,
+        deleteTemplate: {
+          ...state.deleteTemplate,
           isLoading: action.payload,
           isDeleted: false,
           error: null
         }
       }
-    case Types.REMOVE_DOCUMENT_FILE_SUCCESS:
+    case Types.REMOVE_GROUP_EMAIL_TEMPLATE_SUCCESS:
       return {
         ...state,
-        deleteFile: {
-          ...state.deleteFile,
+        deleteTemplate: {
+          ...state.deleteTemplate,
           isLoading: false,
           isDeleted: true
         }
       }
-    case Types.REMOVE_DOCUMENT_FILE_FAILURE:
+    case Types.REMOVE_GROUP_EMAIL_TEMPLATE_FAILURE:
       return {
         ...state,
-        deleteFile: {
-          ...state.deleteFile,
+        deleteTemplate: {
+          ...state.deleteTemplate,
           isLoading: false,
           error: action.payload
         }
@@ -307,8 +321,8 @@ export default function reducer (state = initialState, action) {
     case Types.CREATE_GROUP_EMAIL_TEMPLATE_LOADING:
       return {
         ...state,
-        create: {
-          ...state.create,
+        createTemplate: {
+          ...state.createTemplate,
           isLoading: action.payload,
           isCreated: false,
           error: null
@@ -317,8 +331,8 @@ export default function reducer (state = initialState, action) {
     case Types.CREATE_GROUP_EMAIL_TEMPLATE_SUCCESS:
       return {
         ...state,
-        create: {
-          ...state.create,
+        createTemplate: {
+          ...state.createTemplate,
           isLoading: false,
           isCreated: true,
           error: null
@@ -327,10 +341,40 @@ export default function reducer (state = initialState, action) {
     case Types.CREATE_GROUP_EMAIL_TEMPLATE_FAILURE:
       return {
         ...state,
-        create: {
-          ...state.create,
+        createTemplate: {
+          ...state.createTemplate,
           isLoading: false,
           isCreated: false,
+          error: action.payload
+        }
+      }
+    case Types.UPDATE_GROUP_EMAIL_TEMPLATE_LOADING:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: action.payload,
+          isUpdated: false,
+          error: null
+        }
+      }
+    case Types.UPDATE_GROUP_EMAIL_TEMPLATE_SUCCESS:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: true,
+          error: null
+        }
+      }
+    case Types.UPDATE_GROUP_EMAIL_TEMPLATE_FAILURE:
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          isLoading: false,
+          isUpdated: false,
           error: action.payload
         }
       }
@@ -405,13 +449,13 @@ export const updateGroupEmailFolder = groupEmail => async dispatch => {
   }
 }
 
-export const removeGroupEmailFolder = groupEmail => async dispatch => {
+export const removeGroupEmailFolder = folderObject => async dispatch => {
   dispatch({
     type: Types.REMOVE_GROUP_EMAIL_FOLDER_LOADING,
     payload: true
   })
   try {
-    const response = await remove(groupEmail)
+    const response = await remove(folderObject)
     dispatch({
       type: Types.REMOVE_GROUP_EMAIL_FOLDER_SUCCESS
     })
@@ -448,40 +492,63 @@ export const createGroupEmailTemplate = template => async dispatch => {
   }
 }
 
-export const getEmailTemplates = folderId => async dispatch => {
+export const getGroupEmailTemplates = folderId => async dispatch => {
   dispatch({
-    type: Types.GET_EMAIL_TEMPLATES_LOADING,
+    type: Types.GET_GROUP_EMAIL_TEMPLATES_LOADING,
     payload: true
   })
   try {
     const templates = await listEmailTemplates(folderId)
     dispatch({
-      type: Types.GET_EMAIL_TEMPLATES_SUCCESS,
+      type: Types.GET_GROUP_EMAIL_TEMPLATES_SUCCESS,
       payload: templates
     })
   } catch (error) {
     dispatch({
-      type: Types.GET_EMAIL_TEMPLATES_FAILURE,
+      type: Types.GET_GROUP_EMAIL_TEMPLATES_FAILURE,
       payload: error
     })
     toast.error(error)
   }
 }
 
-export const removeDocumentFile = documentFile => async dispatch => {
+export const updateGroupEmailTemplate = groupEmail => async dispatch => {
   dispatch({
-    type: Types.REMOVE_DOCUMENT_FILE_LOADING,
+    type: Types.UPDATE_GROUP_EMAIL_TEMPLATE_LOADING,
     payload: true
   })
   try {
-    const response = await removeFile(documentFile)
+    const response = await updateEmailTemplate(groupEmail)
     dispatch({
-      type: Types.REMOVE_DOCUMENT_FILE_SUCCESS
+      type: Types.UPDATE_GROUP_EMAIL_TEMPLATE_SUCCESS
+    })
+    toast.success(response.message)
+    dispatch({
+      type: ModalTypes.MODAL_CLOSE
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.UPDATE_GROUP_EMAIL_TEMPLATE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const removeGroupEmailTemplate = templateObject => async dispatch => {
+  dispatch({
+    type: Types.REMOVE_GROUP_EMAIL_TEMPLATE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await removeEmailTemplate(templateObject)
+    dispatch({
+      type: Types.REMOVE_GROUP_EMAIL_TEMPLATE_SUCCESS
     })
     toast.success(response.message)
   } catch (error) {
     dispatch({
-      type: Types.REMOVE_DOCUMENT_FILE_FAILURE,
+      type: Types.REMOVE_GROUP_EMAIL_TEMPLATE_FAILURE,
       payload: error
     })
     toast.error(error)

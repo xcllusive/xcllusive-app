@@ -5,24 +5,33 @@ import { bindActionCreators } from 'redux'
 import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import * as Yup from 'yup'
-import 'jodit'
-import 'jodit/build/jodit.min.css'
-import JoditEditor from 'jodit-react'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 import { closeModal } from '../../redux/ducks/modal'
-import { createGroupEmailTemplate } from '../../redux/ducks/groupEmail'
+import {
+  createGroupEmailTemplate,
+  getGroupEmailFolder,
+  updateGroupEmailTemplate,
+  getGroupEmailTemplates
+} from '../../redux/ducks/groupEmail'
 
 class ModalNewGroupEmailTemplate extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      modules: {
+        toolbar: null
+      },
+      formats: ['', '', '', '', '', '', '', '', '', '', '']
+    }
   }
 
   componentDidMount () {}
 
   static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isCreated || nextProps.isUpdated || nextProps.isDeleted || nextProps.isDeletedFile) {
-      nextProps.getDocumentFolder()
+    if (nextProps.isCreated || nextProps.isUpdated) {
+      nextProps.getGroupEmailTemplates()
     }
     return null
   }
@@ -34,27 +43,19 @@ class ModalNewGroupEmailTemplate extends Component {
   }
 
   render () {
-    const {
-      values,
-      touched,
-      errors,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      isValid,
-      createLoading,
-      updateLoading
-    } = this.props
+    const { values, touched, errors, handleChange, handleBlur, handleSubmit, isValid, createLoading } = this.props
     return (
       <Modal open>
         <Modal.Header align="center">{this.props.titleModal ? this.props.titleModal : ''}</Modal.Header>
         <Modal.Content>
           <Form>
-            <Form.Group>
-              <Form.Field width={16}>
-                <Form.Input required label="Folder Name" name="nameFolder" value={values.nameFolder} readOnly />
-              </Form.Field>
-            </Form.Group>
+            {!this.props.templateObject ? (
+              <Form.Group>
+                <Form.Field width={16}>
+                  <Form.Input required label="Folder Name" name="nameFolder" value={values.nameFolder} readOnly />
+                </Form.Field>
+              </Form.Group>
+            ) : null}
             <Form.Group>
               <Form.Field width={16}>
                 <Form.Input
@@ -69,12 +70,21 @@ class ModalNewGroupEmailTemplate extends Component {
                 {errors.name && touched.name && <Label basic color="red" pointing content={errors.name} />}
               </Form.Field>
             </Form.Group>
+
             <Form.Group>
               <Form.Field>
                 <h4>Body</h4>
               </Form.Field>
-              <Form.Field>
-                <JoditEditor name="body" value={values.body} config={this._config} onChange={this._handleChangeBody} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Field style={{ width: '100%' }}>
+                <ReactQuill
+                  value={values.body}
+                  onChange={this._handleChangeBody}
+                  style={{ height: '30vh' }}
+                  modules={this.state.modules}
+                  formats={this.state.formats}
+                />
               </Form.Field>
             </Form.Group>
           </Form>
@@ -83,12 +93,12 @@ class ModalNewGroupEmailTemplate extends Component {
           <Button
             color="blue"
             type="submit"
-            disabled={createLoading || updateLoading || !isValid}
-            loading={createLoading || updateLoading}
+            disabled={createLoading || !isValid}
+            loading={createLoading}
             onClick={handleSubmit}
           >
             <Icon name="save" />
-            {this.props.documentFolder ? 'Edit Template' : 'Create Template'}
+            {this.props.templateObject ? 'Edit Template' : 'Create Template'}
           </Button>
           <Button color="red" onClick={this.props.closeModal}>
             <Icon name="cancel" />
@@ -112,23 +122,22 @@ ModalNewGroupEmailTemplate.propTypes = {
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
   createLoading: PropTypes.bool,
-  updateLoading: PropTypes.bool,
-  getDocumentFolder: PropTypes.func,
+  getGroupEmailFolder: PropTypes.func,
   createGroupEmailTemplate: PropTypes.func,
-  updateDocumentFolder: PropTypes.func,
   isCreated: PropTypes.bool,
   isUpdated: PropTypes.bool,
-  documentFolder: PropTypes.object,
-  isDeleted: PropTypes.bool,
-  isDeletedFile: PropTypes.bool,
-  folderObject: PropTypes.object
+  folderObject: PropTypes.object,
+  templateObject: PropTypes.object,
+  updateGroupEmailTemplate: PropTypes.func,
+  getGroupEmailTemplates: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
+  id: props.templateObject ? props.templateObject.id : null,
   folderId: props.folderObject ? props.folderObject.id : null,
   nameFolder: props.folderObject ? props.folderObject.name : '',
-  name: props.groupEmail ? props.groupEmail.getEmailTemplate.name : '',
-  body: props.groupEmail ? props.groupEmail.body : ''
+  name: props.templateObject ? props.templateObject.name : '',
+  body: props.templateObject ? props.templateObject.body : ''
 })
 
 const validationSchema = Yup.object().shape({
@@ -139,28 +148,27 @@ const validationSchema = Yup.object().shape({
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
-  if (props.documentFolder) {
-    props.updateDocumentFolder(values)
+  if (props.templateObject) {
+    props.updateGroupEmailTemplate(values)
   } else {
     props.createGroupEmailTemplate(values)
   }
 }
 
 const mapStateToProps = state => ({
-  createLoading: state.documentFolder.create.isLoading,
-  isCreated: state.documentFolder.create.isCreated,
-  updateLoading: state.documentFolder.update.isLoading,
-  isUpdated: state.documentFolder.update.isUpdated,
-  officeOptions: state.officeRegister.get.array,
-  isDeleted: state.documentFolder.delete.isDeleted,
-  isDeletedFile: state.documentFolder.deleteFile.isDeleted
+  createLoading: state.groupEmail.create.isLoading,
+  isCreated: state.groupEmail.createTemplate.isCreated,
+  isUpdated: state.groupEmail.update.isUpdated
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      createGroupEmailTemplate
+      createGroupEmailTemplate,
+      getGroupEmailFolder,
+      updateGroupEmailTemplate,
+      getGroupEmailTemplates
     },
     dispatch
   )

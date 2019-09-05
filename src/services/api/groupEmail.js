@@ -23,19 +23,19 @@ export const get = documentFolder => {
   })
 }
 
-export const update = documentFolder => {
+export const update = folder => {
   return request({
     method: 'put',
-    url: `/groupEmail/documentFolder/${documentFolder.id}`,
-    data: documentFolder
+    url: '/groupEmail/folder',
+    data: folder
   })
 }
 
-export const remove = documentFolder => {
+export const remove = folderObject => {
   return request({
     method: 'delete',
-    url: `/groupEmail/documentFolder/${documentFolder.id}`,
-    data: documentFolder
+    url: '/groupEmail/folder',
+    data: folderObject
   })
 }
 
@@ -54,10 +54,18 @@ export const listEmailTemplates = folderId => {
   })
 }
 
-export const removeFile = documentFile => {
+export const removeEmailTemplate = templateObject => {
   return request({
     method: 'delete',
-    url: `/groupEmail/documentFile/${documentFile.id}`,
-    data: documentFile
+    url: `/groupEmail/template/${templateObject.id}`,
+    data: templateObject
+  })
+}
+
+export const updateEmailTemplate = template => {
+  return request({
+    method: 'put',
+    url: `/groupEmail/template/${template.id}`,
+    data: template
   })
 }

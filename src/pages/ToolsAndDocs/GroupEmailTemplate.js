@@ -1,19 +1,32 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Wrapper from '../../components/content/Wrapper'
+import { withFormik } from 'formik'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 import { Header, Segment, Grid, Icon, Divider, Label, Button, Table, Popup, Form } from 'semantic-ui-react'
 import _ from 'lodash'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
-import { getGroupEmailFolder, clearEmailTemplates, getEmailTemplates } from '../../redux/ducks/groupEmail'
+import {
+  getGroupEmailFolder,
+  clearEmailTemplates,
+  getGroupEmailTemplates,
+  removeGroupEmailTemplate,
+  removeGroupEmailFolder
+} from '../../redux/ducks/groupEmail'
 
 class GroupEmailTemplate extends Component {
   constructor (props) {
     super(props)
     this.state = {
       editMode: false,
-      viewEmail: null
+      viewEmail: null,
+      modules: {
+        toolbar: null
+      },
+      formats: ['', '', '', '', '', '', '', '', '', '', '']
     }
   }
 
@@ -23,6 +36,21 @@ class GroupEmailTemplate extends Component {
 
   _isUserSystemSettings = () => {
     return _.includes(this.props.userRoles, 'SYSTEM_SETTINGS_MENU')
+  }
+
+  _convertHtmlToRightText = html => {
+    let htmlConverted = html.replace(/<style([\s\S]*?)<\/style>/gi, '')
+    htmlConverted = htmlConverted.replace(/<script([\s\S]*?)<\/script>/gi, '')
+    htmlConverted = htmlConverted.replace(/<\/div>/gi, '')
+    htmlConverted = htmlConverted.replace(/<\/li>/gi, '')
+    htmlConverted = htmlConverted.replace(/<li>/gi, '  *  ')
+    htmlConverted = htmlConverted.replace(/<\/ul>/gi, '')
+    htmlConverted = htmlConverted.replace(/<p><br><\/p>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<\/p>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<br\s*[\\/]?>/gi, '\n')
+    htmlConverted = htmlConverted.replace(/<[^>]+>/gi, '')
+
+    return encodeURIComponent(htmlConverted)
   }
 
   _editDocumentFolder = documentFolder => {
@@ -40,36 +68,50 @@ class GroupEmailTemplate extends Component {
     })
   }
 
-  _listTemplates = async folderId => {
-    if (folderId === this.state.folderId) {
-      this.props.clearEmailTemplates()
-      this.setState({ folderId: null })
-    } else {
-      await this.props.getEmailTemplates(folderId)
-      this.setState({ folderId: folderId })
-    }
+  _editTemplate = templateObject => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_TEMPLATE, {
+      titleModal: 'Edit Email Template',
+      templateObject
+    })
   }
 
-  _downloadFile = file => {
+  _deleteTemplate = templateObject => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
-        title: 'Download File',
-        text: `Are you sure you want to download this file (${file.name}) ?`
+        title: 'Remove Template',
+        text: `Are you sure you want to delete this template (${templateObject.name}) ?`
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          window.open(file.url, '_blank')
+          await this.props.removeGroupEmailTemplate(templateObject)
+          this.props.getGroupEmailTemplates()
         }
       }
     })
   }
 
+  _listTemplates = async folderId => {
+    if (folderId === this.state.folderId) {
+      this.props.clearEmailTemplates()
+      this.setState({ folderId: null })
+    } else {
+      await this.props.getGroupEmailTemplates(folderId)
+      this.setState({ folderId: folderId })
+    }
+  }
+
   _sendEmail = template => {
-    window.location.href = `mailto: ?subject= &body=Hi ${template.body}`
+    const body = this._convertHtmlToRightText(template.body)
+    // const body = document.createElement(template.body)
+    window.location.href = `mailto: ?subject= &body=${body}`
   }
 
   _viewEmail = template => {
-    this.setState({ viewEmail: template.id })
+    if (this.state.viewEmail === template.id) {
+      this.setState({ viewEmail: null })
+    } else {
+      this.setState({ viewEmail: template.id })
+    }
   }
 
   _editMode = () => {
@@ -81,6 +123,28 @@ class GroupEmailTemplate extends Component {
   _newFolder = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_FOLDER, {
       titleModal: 'New Folder'
+    })
+  }
+
+  _editFolder = folderObject => {
+    this.props.openModal(TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_FOLDER, {
+      titleModal: 'New Folder',
+      folderObject
+    })
+  }
+
+  _deleteFolder = folderObject => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Remove Folder',
+        text: `Are you sure you want to delete this folder (${folderObject.name}) ?`
+      },
+      onConfirm: async isConfirmed => {
+        if (isConfirmed) {
+          await this.props.removeGroupEmailFolder(folderObject)
+          this.props.getGroupEmailFolder()
+        }
+      }
     })
   }
 
@@ -102,13 +166,40 @@ class GroupEmailTemplate extends Component {
         ) : null}
         {listFolder && listFolder.length > 0 ? (
           <Segment size="tiny">
-            <Grid style={{ marginTop: '10px' }}>
+            <Grid style={{ marginTop: '10px' }} divided="vertically">
               <Fragment>
                 {listFolder.map((folder, index) => {
                   return (
                     <Fragment key={index}>
                       <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
                         <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                          {this._isUserSystemSettings() && this.state.editMode ? (
+                            <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                              <Icon
+                                style={{ marginLeft: '5px' }}
+                                onClick={() => this._newEmailTemplate(folder)}
+                                link
+                                name="add"
+                                color="blue"
+                                size="large"
+                              />
+                              <Icon
+                                style={{ marginLeft: '5px' }}
+                                onClick={() => this._editFolder(folder)}
+                                link
+                                name="edit"
+                                color="orange"
+                                size="large"
+                              />
+                              <Icon
+                                link
+                                name="trash"
+                                color="red"
+                                size="large"
+                                onClick={() => this._deleteFolder(folder)}
+                              />
+                            </Grid.Column>
+                          ) : null}
                           <Icon
                             onClick={() => this._listTemplates(folder.id)}
                             link
@@ -125,17 +216,6 @@ class GroupEmailTemplate extends Component {
                             {folder.name}
                           </Label>
                         </Grid.Column>
-                        {this._isUserSystemSettings() && this.state.editMode ? (
-                          <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
-                            <Icon
-                              style={{ marginLeft: '5px' }}
-                              onClick={() => this._newEmailTemplate(folder)}
-                              name="add"
-                              color="blue"
-                              size="large"
-                            />
-                          </Grid.Column>
-                        ) : null}
                       </Grid.Row>
                       {listTemplates && listTemplates.length > 0 ? (
                         <Fragment>
@@ -146,6 +226,24 @@ class GroupEmailTemplate extends Component {
                                   <Table.Header>
                                     <Table.Row>
                                       <Table.HeaderCell>
+                                        {this.state.editMode ? (
+                                          <Fragment>
+                                            <Icon
+                                              link
+                                              name="trash"
+                                              color="red"
+                                              size="big"
+                                              onClick={() => this._deleteTemplate(template)}
+                                            />
+                                            <Icon
+                                              link
+                                              name="edit"
+                                              color="orange"
+                                              size="big"
+                                              onClick={() => this._editTemplate(template)}
+                                            />
+                                          </Fragment>
+                                        ) : null}
                                         <Popup
                                           content="Send"
                                           trigger={
@@ -186,9 +284,31 @@ class GroupEmailTemplate extends Component {
                                     {this.state.viewEmail === template.id ? (
                                       <Table.Row>
                                         <Table.HeaderCell>
-                                          <Form.Field>
-                                            <Form.TextArea value={template.body} />
-                                          </Form.Field>
+                                          <Form>
+                                            <Form.Field>
+                                              <ReactQuill
+                                                readOnly
+                                                onChange={this._handleChangeBody}
+                                                value={template.body}
+                                                style={{ height: '40vh' }}
+                                                modules={this.state.modules}
+                                                formats={this.state.formats}
+                                              />
+                                            </Form.Field>
+                                            <Form.Field>
+                                              <Button
+                                                size="small"
+                                                color="green"
+                                                floated="right"
+                                                onClick={() =>
+                                                  !this.state.editMode ? this._editMode() : this._newFolder()
+                                                }
+                                              >
+                                                <Icon name="send" />
+                                                Send
+                                              </Button>
+                                            </Form.Field>
+                                          </Form>
                                         </Table.HeaderCell>
                                       </Table.Row>
                                     ) : null}
@@ -214,6 +334,8 @@ class GroupEmailTemplate extends Component {
 
 GroupEmailTemplate.propTypes = {
   history: PropTypes.object,
+  values: PropTypes.object,
+  setFieldValue: PropTypes.func,
   location: PropTypes.object,
   userRoles: PropTypes.array,
   openModal: PropTypes.func,
@@ -222,9 +344,13 @@ GroupEmailTemplate.propTypes = {
   removeDocumentFolder: PropTypes.func,
   removeDocumentFile: PropTypes.func,
   clearEmailTemplates: PropTypes.func,
-  getEmailTemplates: PropTypes.func,
-  listTemplates: PropTypes.array
+  getGroupEmailTemplates: PropTypes.func,
+  listTemplates: PropTypes.array,
+  removeGroupEmailTemplate: PropTypes.func,
+  removeGroupEmailFolder: PropTypes.func
 }
+
+const mapPropsToValues = props => ({})
 
 const mapStateToProps = state => ({
   userRoles: state.auth.user.roles,
@@ -233,9 +359,23 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ openModal, getGroupEmailFolder, clearEmailTemplates, getEmailTemplates }, dispatch)
+  bindActionCreators(
+    {
+      openModal,
+      getGroupEmailFolder,
+      clearEmailTemplates,
+      getGroupEmailTemplates,
+      removeGroupEmailTemplate,
+      removeGroupEmailFolder
+    },
+    dispatch
+  )
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(GroupEmailTemplate)
+)(
+  withFormik({
+    mapPropsToValues
+  })(GroupEmailTemplate)
+)
