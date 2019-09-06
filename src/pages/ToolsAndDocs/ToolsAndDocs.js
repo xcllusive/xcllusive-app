@@ -15,20 +15,20 @@ class ToolsAndDocs extends Component {
     this.state = {
       panes: [
         {
-          menuItem: 'Group Emails',
-          render: () => <GroupEmailTemplate history={this.props.history} />
+          menuItem: 'Resources',
+          render: () => <Resources history={this.props.history} />
         },
         {
           menuItem: 'Documents',
           render: () => <DocumentFolder history={this.props.history} />
         },
         {
-          menuItem: 'Contacts',
-          render: () => <Contacts history={this.props.history} />
+          menuItem: 'Email Templates',
+          render: () => <GroupEmailTemplate history={this.props.history} />
         },
         {
-          menuItem: 'Resources',
-          render: () => <Resources history={this.props.history} />
+          menuItem: 'Contacts',
+          render: () => <Contacts history={this.props.history} />
         }
       ]
     }

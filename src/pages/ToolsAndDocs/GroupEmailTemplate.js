@@ -8,7 +8,7 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { Header, Segment, Grid, Icon, Divider, Label, Button, Table, Popup, Form } from 'semantic-ui-react'
 import _ from 'lodash'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import {
   getGroupEmailFolder,
   clearEmailTemplates,
@@ -26,7 +26,7 @@ class GroupEmailTemplate extends Component {
       modules: {
         toolbar: null
       },
-      formats: ['', '', '', '', '', '', '', '', '', '', '']
+      formats: []
     }
   }
 
@@ -64,14 +64,26 @@ class GroupEmailTemplate extends Component {
   _newEmailTemplate = folderObject => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_TEMPLATE, {
       titleModal: 'New Email Template',
-      folderObject
+      folderObject,
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.getGroupEmailTemplates(folderObject.id)
+          this.props.closeModal()
+        }
+      }
     })
   }
 
   _editTemplate = templateObject => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_TEMPLATE, {
       titleModal: 'Edit Email Template',
-      templateObject
+      templateObject,
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.getGroupEmailTemplates(templateObject.folder_id)
+          this.props.closeModal()
+        }
+      }
     })
   }
 
@@ -84,7 +96,7 @@ class GroupEmailTemplate extends Component {
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
           await this.props.removeGroupEmailTemplate(templateObject)
-          this.props.getGroupEmailTemplates()
+          this.props.getGroupEmailTemplates(templateObject.folder_id)
         }
       }
     })
@@ -102,8 +114,7 @@ class GroupEmailTemplate extends Component {
 
   _sendEmail = template => {
     const body = this._convertHtmlToRightText(template.body)
-    // const body = document.createElement(template.body)
-    window.location.href = `mailto: ?subject= &body=${body}`
+    window.location.href = `mailto: ?subject=${template.subject} &body=${body}`
   }
 
   _viewEmail = template => {
@@ -122,14 +133,26 @@ class GroupEmailTemplate extends Component {
 
   _newFolder = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_FOLDER, {
-      titleModal: 'New Folder'
+      titleModal: 'New Folder',
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.getGroupEmailFolder()
+          this.props.closeModal()
+        }
+      }
     })
   }
 
   _editFolder = folderObject => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_FOLDER, {
       titleModal: 'New Folder',
-      folderObject
+      folderObject,
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.getGroupEmailFolder()
+          this.props.closeModal()
+        }
+      }
     })
   }
 
@@ -149,7 +172,7 @@ class GroupEmailTemplate extends Component {
   }
 
   render () {
-    const { listFolder, listTemplates } = this.props
+    const { listFolder, listTemplates, folderAnalysts, folderBrokers, folderGeneral } = this.props
     return (
       <Wrapper>
         {this._isUserSystemSettings() ? (
@@ -166,167 +189,508 @@ class GroupEmailTemplate extends Component {
         ) : null}
         {listFolder && listFolder.length > 0 ? (
           <Segment size="tiny">
-            <Grid style={{ marginTop: '10px' }} divided="vertically">
+            <Grid style={{ marginTop: '10px' }}>
               <Fragment>
-                {listFolder.map((folder, index) => {
-                  return (
-                    <Fragment key={index}>
-                      <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
-                        <Grid.Column style={{ paddingRight: '0px' }} width={2}>
-                          {this._isUserSystemSettings() && this.state.editMode ? (
-                            <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
-                              <Icon
-                                style={{ marginLeft: '5px' }}
-                                onClick={() => this._newEmailTemplate(folder)}
-                                link
-                                name="add"
-                                color="blue"
-                                size="large"
-                              />
-                              <Icon
-                                style={{ marginLeft: '5px' }}
-                                onClick={() => this._editFolder(folder)}
-                                link
-                                name="edit"
-                                color="orange"
-                                size="large"
-                              />
-                              <Icon
-                                link
-                                name="trash"
-                                color="red"
-                                size="large"
-                                onClick={() => this._deleteFolder(folder)}
-                              />
+                {folderAnalysts.map((folder, index) => {
+                  if (folder) {
+                    return (
+                      <Fragment key={index}>
+                        {index === 0 ? (
+                          <Grid.Row style={{ paddingBottom: '0px' }}>
+                            <Grid.Column>
+                              <Divider horizontal>
+                                <Header as="h3" color="blue" textAlign="center" content={'Analysts'} />
+                              </Divider>
                             </Grid.Column>
-                          ) : null}
-                          <Icon
-                            onClick={() => this._listTemplates(folder.id)}
-                            link
-                            name="folder"
-                            color="yellow"
-                            size="big"
-                          />
-                          <Label
-                            style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px', marginTop: '5px' }}
-                            as="a"
-                            size="large"
-                            onClick={() => this._listTemplates(folder.id)}
-                          >
-                            {folder.name}
-                          </Label>
-                        </Grid.Column>
-                      </Grid.Row>
-                      {listTemplates && listTemplates.length > 0 ? (
-                        <Fragment>
-                          {listTemplates.map((template, index2) => {
-                            if (template.folder_id === folder.id) {
-                              return (
-                                <Table style={{ marginLeft: '50px' }} key={index2} basic="very" celled size="large">
-                                  <Table.Header>
-                                    <Table.Row>
-                                      <Table.HeaderCell>
-                                        {this.state.editMode ? (
-                                          <Fragment>
-                                            <Icon
-                                              link
-                                              name="trash"
-                                              color="red"
-                                              size="big"
-                                              onClick={() => this._deleteTemplate(template)}
-                                            />
-                                            <Icon
-                                              link
-                                              name="edit"
-                                              color="orange"
-                                              size="big"
-                                              onClick={() => this._editTemplate(template)}
-                                            />
-                                          </Fragment>
-                                        ) : null}
-                                        <Popup
-                                          content="Send"
-                                          trigger={
-                                            <Icon
-                                              link
-                                              name="send"
-                                              color="green"
-                                              size="big"
-                                              onClick={() => this._sendEmail(template)}
-                                            />
-                                          }
-                                        />
-                                        <Popup
-                                          content="View"
-                                          trigger={
-                                            <Icon
-                                              link
-                                              name="mail"
-                                              color="blue"
-                                              size="big"
-                                              onClick={() => this._viewEmail(template)}
-                                            />
-                                          }
-                                        />
-
-                                        <Label
-                                          style={{
-                                            backgroundColor: 'white',
-                                            paddingLeft: '5px'
-                                          }}
-                                          as="a"
-                                          size="large"
-                                        >
-                                          {template.name}
-                                        </Label>
-                                      </Table.HeaderCell>
-                                    </Table.Row>
-                                    {this.state.viewEmail === template.id ? (
+                          </Grid.Row>
+                        ) : null}
+                        <Grid.Row style={{ paddingTop: '0px', width: '100%' }} columns={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }}>
+                            {this._isUserSystemSettings() && this.state.editMode ? (
+                              <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                                <Icon
+                                  style={{ marginLeft: '5px' }}
+                                  onClick={() => this._newEmailTemplate(folder)}
+                                  link
+                                  name="add"
+                                  color="blue"
+                                  size="large"
+                                />
+                                <Icon
+                                  style={{ marginLeft: '5px' }}
+                                  onClick={() => this._editFolder(folder)}
+                                  link
+                                  name="edit"
+                                  color="orange"
+                                  size="large"
+                                />
+                                <Icon
+                                  link
+                                  name="trash"
+                                  color="red"
+                                  size="large"
+                                  onClick={() => this._deleteFolder(folder)}
+                                />
+                              </Grid.Column>
+                            ) : null}
+                            <Icon
+                              onClick={() => this._listTemplates(folder.id)}
+                              link
+                              name="folder"
+                              color="yellow"
+                              size="big"
+                            />
+                            <Label
+                              style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px', marginTop: '5px' }}
+                              as="a"
+                              size="large"
+                              onClick={() => this._listTemplates(folder.id)}
+                            >
+                              {folder.name}
+                            </Label>
+                          </Grid.Column>
+                        </Grid.Row>
+                        {listTemplates && listTemplates.length > 0 ? (
+                          <Fragment>
+                            {listTemplates.map((template, index2) => {
+                              if (template.folder_id === folder.id) {
+                                return (
+                                  <Table
+                                    style={{ width: '80%', marginLeft: '50px' }}
+                                    key={index2}
+                                    basic="very"
+                                    celled
+                                    size="large"
+                                  >
+                                    <Table.Header>
                                       <Table.Row>
                                         <Table.HeaderCell>
-                                          <Form>
-                                            <Form.Field width={16}>
-                                              <Form.Input
-                                                label="Subject"
-                                                name="subject"
-                                                value={template.subject}
-                                                readOnly
+                                          {this.state.editMode ? (
+                                            <Fragment>
+                                              <Icon
+                                                link
+                                                name="trash"
+                                                color="red"
+                                                size="big"
+                                                onClick={() => this._deleteTemplate(template)}
                                               />
-                                            </Form.Field>
-                                            <Form.Field>
-                                              <ReactQuill
-                                                readOnly
-                                                onChange={this._handleChangeBody}
-                                                value={template.body}
-                                                style={{ height: '40vh' }}
-                                                modules={this.state.modules}
-                                                formats={this.state.formats}
+                                              <Icon
+                                                link
+                                                name="edit"
+                                                color="orange"
+                                                size="big"
+                                                onClick={() => this._editTemplate(template)}
                                               />
-                                            </Form.Field>
-                                            <Form.Field>
-                                              <Button
-                                                size="small"
+                                            </Fragment>
+                                          ) : null}
+                                          <Popup
+                                            content="View"
+                                            trigger={
+                                              <Icon
+                                                link
+                                                name="mail"
+                                                color="blue"
+                                                size="big"
+                                                onClick={() => this._viewEmail(template)}
+                                              />
+                                            }
+                                          />
+                                          <Popup
+                                            content="Send"
+                                            trigger={
+                                              <Icon
+                                                link
+                                                name="send"
                                                 color="green"
-                                                floated="right"
+                                                size="big"
                                                 onClick={() => this._sendEmail(template)}
-                                              >
-                                                <Icon name="send" />
-                                                Send
-                                              </Button>
-                                            </Form.Field>
-                                          </Form>
+                                              />
+                                            }
+                                          />
+                                          <Label
+                                            style={{
+                                              backgroundColor: 'white',
+                                              paddingLeft: '5px'
+                                            }}
+                                            as="a"
+                                            size="large"
+                                          >
+                                            {template.name}
+                                          </Label>
                                         </Table.HeaderCell>
                                       </Table.Row>
-                                    ) : null}
-                                  </Table.Header>
-                                </Table>
-                              )
-                            }
-                          })}
-                        </Fragment>
-                      ) : null}
-                    </Fragment>
-                  )
+                                      {this.state.viewEmail === template.id ? (
+                                        <Table.Row>
+                                          <Table.HeaderCell>
+                                            <Form>
+                                              <Form.Field width={16}>
+                                                <Form.Input
+                                                  label="Subject"
+                                                  name="subject"
+                                                  value={template.subject}
+                                                  readOnly
+                                                />
+                                              </Form.Field>
+                                              <Form.Field style={{ fontWeight: 'normal' }}>
+                                                <ReactQuill
+                                                  style={{ height: '40vh' }}
+                                                  readOnly
+                                                  value={template.body}
+                                                  modules={this.state.modules}
+                                                  formats={this.state.formats}
+                                                />
+                                              </Form.Field>
+                                            </Form>
+                                          </Table.HeaderCell>
+                                        </Table.Row>
+                                      ) : null}
+                                    </Table.Header>
+                                  </Table>
+                                )
+                              }
+                            })}
+                            <Divider style={{ width: '100%' }} clearing />
+                          </Fragment>
+                        ) : (
+                          <Divider style={{ width: '100%' }} clearing />
+                        )}
+                      </Fragment>
+                    )
+                  }
+                })}
+                {folderBrokers.map((folder, index) => {
+                  if (folder) {
+                    return (
+                      <Fragment key={index}>
+                        {index === 0 ? (
+                          <Grid.Row style={{ paddingBottom: '0px' }}>
+                            <Grid.Column>
+                              <Divider horizontal>
+                                <Header as="h3" color="blue" textAlign="center" content={'Brokers'} />
+                              </Divider>
+                            </Grid.Column>
+                          </Grid.Row>
+                        ) : null}
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }}>
+                            {this._isUserSystemSettings() && this.state.editMode ? (
+                              <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                                <Icon
+                                  style={{ marginLeft: '5px' }}
+                                  onClick={() => this._newEmailTemplate(folder)}
+                                  link
+                                  name="add"
+                                  color="blue"
+                                  size="large"
+                                />
+                                <Icon
+                                  style={{ marginLeft: '5px' }}
+                                  onClick={() => this._editFolder(folder)}
+                                  link
+                                  name="edit"
+                                  color="orange"
+                                  size="large"
+                                />
+                                <Icon
+                                  link
+                                  name="trash"
+                                  color="red"
+                                  size="large"
+                                  onClick={() => this._deleteFolder(folder)}
+                                />
+                              </Grid.Column>
+                            ) : null}
+                            <Icon
+                              onClick={() => this._listTemplates(folder.id)}
+                              link
+                              name="folder"
+                              color="yellow"
+                              size="big"
+                            />
+                            <Label
+                              style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px', marginTop: '5px' }}
+                              as="a"
+                              size="large"
+                              onClick={() => this._listTemplates(folder.id)}
+                            >
+                              {folder.name}
+                            </Label>
+                          </Grid.Column>
+                        </Grid.Row>
+                        {listTemplates && listTemplates.length > 0 ? (
+                          <Fragment>
+                            {listTemplates.map((template, index2) => {
+                              if (template.folder_id === folder.id) {
+                                return (
+                                  <Table
+                                    style={{ width: '80%', marginLeft: '50px' }}
+                                    key={index2}
+                                    basic="very"
+                                    celled
+                                    size="large"
+                                  >
+                                    <Table.Header>
+                                      <Table.Row>
+                                        <Table.HeaderCell>
+                                          {this.state.editMode ? (
+                                            <Fragment>
+                                              <Icon
+                                                link
+                                                name="trash"
+                                                color="red"
+                                                size="big"
+                                                onClick={() => this._deleteTemplate(template)}
+                                              />
+                                              <Icon
+                                                link
+                                                name="edit"
+                                                color="orange"
+                                                size="big"
+                                                onClick={() => this._editTemplate(template)}
+                                              />
+                                            </Fragment>
+                                          ) : null}
+                                          <Popup
+                                            content="View"
+                                            trigger={
+                                              <Icon
+                                                link
+                                                name="mail"
+                                                color="blue"
+                                                size="big"
+                                                onClick={() => this._viewEmail(template)}
+                                              />
+                                            }
+                                          />
+                                          <Popup
+                                            content="Send"
+                                            trigger={
+                                              <Icon
+                                                link
+                                                name="send"
+                                                color="green"
+                                                size="big"
+                                                onClick={() => this._sendEmail(template)}
+                                              />
+                                            }
+                                          />
+                                          <Label
+                                            style={{
+                                              backgroundColor: 'white',
+                                              paddingLeft: '5px'
+                                            }}
+                                            as="a"
+                                            size="large"
+                                          >
+                                            {template.name}
+                                          </Label>
+                                        </Table.HeaderCell>
+                                      </Table.Row>
+                                      {this.state.viewEmail === template.id ? (
+                                        <Table.Row>
+                                          <Table.HeaderCell>
+                                            <Form>
+                                              <Form.Field width={16}>
+                                                <Form.Input
+                                                  label="Subject"
+                                                  name="subject"
+                                                  value={template.subject}
+                                                  readOnly
+                                                />
+                                              </Form.Field>
+                                              <Form.Field style={{ fontWeight: 'normal' }}>
+                                                <ReactQuill
+                                                  readOnly
+                                                  value={template.body}
+                                                  style={{ height: '40vh' }}
+                                                  modules={this.state.modules}
+                                                  formats={this.state.formats}
+                                                />
+                                              </Form.Field>
+                                            </Form>
+                                          </Table.HeaderCell>
+                                        </Table.Row>
+                                      ) : null}
+                                    </Table.Header>
+                                  </Table>
+                                )
+                              }
+                            })}
+                            <Divider style={{ width: '100%' }} clearing />
+                          </Fragment>
+                        ) : (
+                          <Divider style={{ width: '100%' }} clearing />
+                        )}
+                      </Fragment>
+                    )
+                  }
+                })}
+                {folderGeneral.map((folder, index) => {
+                  if (folder) {
+                    return (
+                      <Fragment key={index}>
+                        {index === 0 ? (
+                          <Grid.Row style={{ paddingBottom: '0px' }}>
+                            <Grid.Column>
+                              <Divider horizontal>
+                                <Header as="h3" color="blue" textAlign="center" content={'General'} />
+                              </Divider>
+                            </Grid.Column>
+                          </Grid.Row>
+                        ) : null}
+                        <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }}>
+                            {this._isUserSystemSettings() && this.state.editMode ? (
+                              <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
+                                <Icon
+                                  style={{ marginLeft: '5px' }}
+                                  onClick={() => this._newEmailTemplate(folder)}
+                                  link
+                                  name="add"
+                                  color="blue"
+                                  size="large"
+                                />
+                                <Icon
+                                  style={{ marginLeft: '5px' }}
+                                  onClick={() => this._editFolder(folder)}
+                                  link
+                                  name="edit"
+                                  color="orange"
+                                  size="large"
+                                />
+                                <Icon
+                                  link
+                                  name="trash"
+                                  color="red"
+                                  size="large"
+                                  onClick={() => this._deleteFolder(folder)}
+                                />
+                              </Grid.Column>
+                            ) : null}
+                            <Icon
+                              onClick={() => this._listTemplates(folder.id)}
+                              link
+                              name="folder"
+                              color="yellow"
+                              size="big"
+                            />
+                            <Label
+                              style={{ backgroundColor: 'white', color: 'black', paddingLeft: '5px', marginTop: '5px' }}
+                              as="a"
+                              size="large"
+                              onClick={() => this._listTemplates(folder.id)}
+                            >
+                              {folder.name}
+                            </Label>
+                          </Grid.Column>
+                        </Grid.Row>
+                        {listTemplates && listTemplates.length > 0 ? (
+                          <Fragment>
+                            {listTemplates.map((template, index2) => {
+                              if (template.folder_id === folder.id) {
+                                return (
+                                  <Table
+                                    style={{ width: '80%', marginLeft: '50px' }}
+                                    key={index2}
+                                    basic="very"
+                                    celled
+                                    size="large"
+                                  >
+                                    <Table.Header>
+                                      <Table.Row>
+                                        <Table.HeaderCell>
+                                          {this.state.editMode ? (
+                                            <Fragment>
+                                              <Icon
+                                                link
+                                                name="trash"
+                                                color="red"
+                                                size="big"
+                                                onClick={() => this._deleteTemplate(template)}
+                                              />
+                                              <Icon
+                                                link
+                                                name="edit"
+                                                color="orange"
+                                                size="big"
+                                                onClick={() => this._editTemplate(template)}
+                                              />
+                                            </Fragment>
+                                          ) : null}
+                                          <Popup
+                                            content="View"
+                                            trigger={
+                                              <Icon
+                                                link
+                                                name="mail"
+                                                color="blue"
+                                                size="big"
+                                                onClick={() => this._viewEmail(template)}
+                                              />
+                                            }
+                                          />
+                                          <Popup
+                                            content="Send"
+                                            trigger={
+                                              <Icon
+                                                link
+                                                name="send"
+                                                color="green"
+                                                size="big"
+                                                onClick={() => this._sendEmail(template)}
+                                              />
+                                            }
+                                          />
+                                          <Label
+                                            style={{
+                                              backgroundColor: 'white',
+                                              paddingLeft: '5px'
+                                            }}
+                                            as="a"
+                                            size="large"
+                                          >
+                                            {template.name}
+                                          </Label>
+                                        </Table.HeaderCell>
+                                      </Table.Row>
+                                      {this.state.viewEmail === template.id ? (
+                                        <Table.Row>
+                                          <Table.HeaderCell>
+                                            <Form>
+                                              <Form.Field width={16}>
+                                                <Form.Input
+                                                  label="Subject"
+                                                  name="subject"
+                                                  value={template.subject}
+                                                  readOnly
+                                                />
+                                              </Form.Field>
+                                              <Form.Field style={{ fontWeight: 'normal' }}>
+                                                <ReactQuill
+                                                  readOnly
+                                                  value={template.body}
+                                                  style={{ height: '40vh' }}
+                                                  modules={this.state.modules}
+                                                  formats={this.state.formats}
+                                                />
+                                              </Form.Field>
+                                            </Form>
+                                          </Table.HeaderCell>
+                                        </Table.Row>
+                                      ) : null}
+                                    </Table.Header>
+                                  </Table>
+                                )
+                              }
+                            })}
+                            <Divider style={{ width: '100%' }} clearing />
+                          </Fragment>
+                        ) : (
+                          <Divider style={{ width: '100%' }} clearing />
+                        )}
+                      </Fragment>
+                    )
+                  }
                 })}
               </Fragment>
             </Grid>
@@ -353,7 +717,11 @@ GroupEmailTemplate.propTypes = {
   getGroupEmailTemplates: PropTypes.func,
   listTemplates: PropTypes.array,
   removeGroupEmailTemplate: PropTypes.func,
-  removeGroupEmailFolder: PropTypes.func
+  removeGroupEmailFolder: PropTypes.func,
+  folderAnalysts: PropTypes.array,
+  folderBrokers: PropTypes.array,
+  folderGeneral: PropTypes.array,
+  closeModal: PropTypes.func
 }
 
 const mapPropsToValues = props => ({})
@@ -361,6 +729,9 @@ const mapPropsToValues = props => ({})
 const mapStateToProps = state => ({
   userRoles: state.auth.user.roles,
   listFolder: state.groupEmail.get.array,
+  folderAnalysts: state.groupEmail.get.folderAnalysts,
+  folderBrokers: state.groupEmail.get.folderBrokers,
+  folderGeneral: state.groupEmail.get.folderGeneral,
   listTemplates: state.groupEmail.listEmailTemplates.array
 })
 
@@ -372,7 +743,8 @@ const mapDispatchToProps = dispatch =>
       clearEmailTemplates,
       getGroupEmailTemplates,
       removeGroupEmailTemplate,
-      removeGroupEmailFolder
+      removeGroupEmailFolder,
+      closeModal
     },
     dispatch
   )

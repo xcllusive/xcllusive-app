@@ -23,18 +23,13 @@ class ModalNewGroupEmailTemplate extends Component {
       modules: {
         toolbar: null
       },
-      formats: ['', '', '', '', '', '', '', '', '', '', '']
+      formats: ['', '', '', '', '', '', '', '', '', '', ''],
+      isCreated: true,
+      isUpdated: true
     }
   }
 
   componentDidMount () {}
-
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isCreated || nextProps.isUpdated) {
-      nextProps.getGroupEmailTemplates()
-    }
-    return null
-  }
 
   _config = () => {}
 
@@ -141,7 +136,8 @@ ModalNewGroupEmailTemplate.propTypes = {
   folderObject: PropTypes.object,
   templateObject: PropTypes.object,
   updateGroupEmailTemplate: PropTypes.func,
-  getGroupEmailTemplates: PropTypes.func
+  getGroupEmailTemplates: PropTypes.func,
+  onConfirm: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -157,14 +153,24 @@ const validationSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required.')
     .min(2, 'Name required minimum 2 characters.')
-    .max(200, 'Name require max 200 characters.')
+    .max(200, 'Name require max 200 characters.'),
+  body: Yup.string()
+    .required('Body is required.')
+    .min(2, 'Body required minimum 2 characters.')
+    .max(200, 'Body require max 200 characters.'),
+  subject: Yup.string()
+    .required('Subject is required.')
+    .min(2, 'Subject required minimum 2 characters.')
+    .max(200, 'Subject require max 200 characters.')
 })
 
 const handleSubmit = (values, { props, setSubmitting }) => {
   if (props.templateObject) {
     props.updateGroupEmailTemplate(values)
+    props.onConfirm(values)
   } else {
     props.createGroupEmailTemplate(values)
+    props.onConfirm(values)
   }
 }
 

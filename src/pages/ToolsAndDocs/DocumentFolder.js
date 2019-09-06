@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Header, Segment, Grid, Icon, Divider, Label, Table } from 'semantic-ui-react'
 import _ from 'lodash'
-import { TypesModal, openModal } from '../../redux/ducks/modal'
+import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import {
   getDocumentFolder,
   removeDocumentFolder,
@@ -32,7 +32,13 @@ class DocumentFolder extends Component {
 
   _newDocumentFolder = () => {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_DOCUMENT_FOLDER, {
-      titleModal: 'New Folder'
+      titleModal: 'New Folder',
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.getDocumentFolder()
+          this.props.closeModal()
+        }
+      }
     })
   }
 
@@ -41,13 +47,6 @@ class DocumentFolder extends Component {
     this.props.openModal(TypesModal.MODAL_TYPE_NEW_DOCUMENT_FOLDER, {
       titleModal: 'Edit Folder',
       documentFolder
-    })
-  }
-
-  _newDocumentFile = folderObject => {
-    this.props.openModal(TypesModal.MODAL_TYPE_NEW_DOCUMENT_FILE, {
-      titleModal: 'New File',
-      folderObject
     })
   }
 
@@ -75,12 +74,19 @@ class DocumentFolder extends Component {
     })
   }
 
+  // _folderNameTotalFiles (folderOffice) {
+  //   let total = 0
+  //   this.props.totalFilesPerFolder.forEach(item => {
+  //     if (item.folder_id === folderOffice.id) total = item.count
+  //   })
+  //   return `${folderOffice.name} ${total}`
+  // }
   _folderNameTotalFiles (folderOffice) {
     let total = 0
     this.props.totalFilesPerFolder.forEach(item => {
       if (item.folder_id === folderOffice.id) total = item.count
     })
-    return `${folderOffice.name} [${total}]`
+    return `${total}`
   }
 
   _iconColorName = (format, type) => {
@@ -137,7 +143,7 @@ class DocumentFolder extends Component {
                           </Grid.Row>
                         ) : null}
                         <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
-                          <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }}>
                             <Icon
                               onClick={() => this._listFiles(folderOffice.id)}
                               link
@@ -151,20 +157,10 @@ class DocumentFolder extends Component {
                               size="large"
                               onClick={() => this._listFiles(folderOffice.id)}
                             >
-                              {this._folderNameTotalFiles(folderOffice)}{' '}
+                              {folderOffice.name}
                             </Label>
+                            <label>{this._folderNameTotalFiles(folderOffice)}</label>
                           </Grid.Column>
-                          {this._isUserSystemSettings() ? (
-                            <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
-                              <Icon
-                                style={{ marginLeft: '5px' }}
-                                onClick={() => this._newDocumentFile(folderOffice)}
-                                name="add"
-                                color="blue"
-                                size="large"
-                              />
-                            </Grid.Column>
-                          ) : null}
                         </Grid.Row>
                         {listFiles && listFiles.length > 0 ? (
                           <Fragment>
@@ -200,8 +196,11 @@ class DocumentFolder extends Component {
                                 )
                               }
                             })}
+                            <Divider style={{ width: '100%' }} clearing />
                           </Fragment>
-                        ) : null}
+                        ) : (
+                          <Divider style={{ width: '100%' }} clearing />
+                        )}
                       </Fragment>
                     )
                   }
@@ -220,7 +219,7 @@ class DocumentFolder extends Component {
                           </Grid.Row>
                         ) : null}
                         <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
-                          <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }}>
                             <Icon
                               onClick={() => this._listFiles(folderOffice.id)}
                               link
@@ -234,20 +233,10 @@ class DocumentFolder extends Component {
                               size="large"
                               onClick={() => this._listFiles(folderOffice.id)}
                             >
-                              {this._folderNameTotalFiles(folderOffice)}{' '}
+                              {folderOffice.name}
                             </Label>
+                            <label>{this._folderNameTotalFiles(folderOffice)}</label>
                           </Grid.Column>
-                          {this._isUserSystemSettings() ? (
-                            <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
-                              <Icon
-                                style={{ marginLeft: '5px' }}
-                                onClick={() => this._newDocumentFile(folderOffice)}
-                                name="add"
-                                color="blue"
-                                size="large"
-                              />
-                            </Grid.Column>
-                          ) : null}
                         </Grid.Row>
                         {listFiles && listFiles.length > 0 ? (
                           <Fragment>
@@ -283,8 +272,11 @@ class DocumentFolder extends Component {
                                 )
                               }
                             })}
+                            <Divider style={{ width: '100%' }} clearing />
                           </Fragment>
-                        ) : null}
+                        ) : (
+                          <Divider style={{ width: '100%' }} clearing />
+                        )}
                       </Fragment>
                     )
                   }
@@ -303,7 +295,7 @@ class DocumentFolder extends Component {
                           </Grid.Row>
                         ) : null}
                         <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
-                          <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                          <Grid.Column style={{ paddingRight: '0px' }}>
                             <Icon
                               onClick={() => this._listFiles(folderOffice.id)}
                               link
@@ -317,20 +309,10 @@ class DocumentFolder extends Component {
                               size="large"
                               onClick={() => this._listFiles(folderOffice.id)}
                             >
-                              {this._folderNameTotalFiles(folderOffice)}{' '}
+                              {folderOffice.name}
                             </Label>
+                            <label>{this._folderNameTotalFiles(folderOffice)}</label>
                           </Grid.Column>
-                          {this._isUserSystemSettings() ? (
-                            <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
-                              <Icon
-                                style={{ marginLeft: '5px' }}
-                                onClick={() => this._newDocumentFile(folderOffice)}
-                                name="add"
-                                color="blue"
-                                size="large"
-                              />
-                            </Grid.Column>
-                          ) : null}
                         </Grid.Row>
                         {listFiles && listFiles.length > 0 ? (
                           <Fragment>
@@ -366,8 +348,11 @@ class DocumentFolder extends Component {
                                 )
                               }
                             })}
+                            <Divider style={{ width: '100%' }} clearing />
                           </Fragment>
-                        ) : null}
+                        ) : (
+                          <Divider style={{ width: '100%' }} clearing />
+                        )}
                       </Fragment>
                     )
                   }
@@ -389,7 +374,7 @@ class DocumentFolder extends Component {
                         return (
                           <Fragment key={index1}>
                             <Grid.Row style={{ paddingTop: '0px' }} columns={2}>
-                              <Grid.Column style={{ paddingRight: '0px' }} width={2}>
+                              <Grid.Column style={{ paddingRight: '0px' }}>
                                 <Icon
                                   onClick={() => this._listFiles(folderOffice.id)}
                                   link
@@ -403,22 +388,11 @@ class DocumentFolder extends Component {
                                   size="large"
                                   onClick={() => this._listFiles(folderOffice.id)}
                                 >
-                                  {this._folderNameTotalFiles(folderOffice)}{' '}
+                                  {folderOffice.name}
                                 </Label>
+                                <label>{this._folderNameTotalFiles(folderOffice)}</label>
                               </Grid.Column>
-                              {this._isUserSystemSettings() ? (
-                                <Grid.Column style={{ paddingLeft: '0px', marginTop: '3px' }}>
-                                  <Icon
-                                    style={{ marginLeft: '5px' }}
-                                    onClick={() => this._newDocumentFile(folderOffice)}
-                                    name="add"
-                                    color="blue"
-                                    size="large"
-                                  />
-                                </Grid.Column>
-                              ) : null}
                             </Grid.Row>
-
                             {listFiles && listFiles.length > 0 ? (
                               <Fragment>
                                 {listFiles.map((files, index2) => {
@@ -459,8 +433,11 @@ class DocumentFolder extends Component {
                                     )
                                   }
                                 })}
+                                <Divider style={{ width: '100%' }} clearing />
                               </Fragment>
-                            ) : null}
+                            ) : (
+                              <Divider style={{ width: '100%' }} clearing />
+                            )}
                           </Fragment>
                         )
                       })}
@@ -494,7 +471,8 @@ DocumentFolder.propTypes = {
   clearFiles: PropTypes.func,
   folderAnalystsWithAccess: PropTypes.array,
   folderBrokersWithAccess: PropTypes.array,
-  folderGeneralWithAccess: PropTypes.array
+  folderGeneralWithAccess: PropTypes.array,
+  closeModal: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -510,7 +488,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { openModal, getDocumentFolder, removeDocumentFolder, getFilesPerOffice, removeDocumentFile, clearFiles },
+    {
+      openModal,
+      getDocumentFolder,
+      removeDocumentFolder,
+      getFilesPerOffice,
+      removeDocumentFile,
+      clearFiles,
+      closeModal
+    },
     dispatch
   )
 

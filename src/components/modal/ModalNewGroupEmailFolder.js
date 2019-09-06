@@ -2,12 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withFormik } from 'formik'
 import { bindActionCreators } from 'redux'
-import { Modal, Form, Label, Icon, Button } from 'semantic-ui-react'
+import { Modal, Form, Label, Icon, Button, Divider, Checkbox } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import * as Yup from 'yup'
-
+import styled from 'styled-components'
 import { closeModal } from '../../redux/ducks/modal'
 import { createGroupEmailFolder, getGroupEmailFolder, updateGroupEmailFolder } from '../../redux/ducks/groupEmail'
+const CheckboxFormatted = styled.div`
+  padding-right: 1em;
+`
 
 class ModalNewGroupEmailFolder extends Component {
   constructor (props) {
@@ -17,11 +20,8 @@ class ModalNewGroupEmailFolder extends Component {
 
   componentDidMount () {}
 
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isCreated || nextProps.isUpdated || nextProps.isDeleted || nextProps.isDeletedFile) {
-      nextProps.getGroupEmailFolder()
-    }
-    return null
+  _handleChangeCheckBoxSubFolder (type) {
+    this.props.setFieldValue('subFolder', type)
   }
 
   render () {
@@ -55,13 +55,43 @@ class ModalNewGroupEmailFolder extends Component {
                 {errors.name && touched.name && <Label basic color="red" pointing content={errors.name} />}
               </Form.Field>
             </Form.Group>
+            <Divider horizontal clearing>
+              Sub Folder
+            </Divider>
+            <Form.Group>
+              <Form.Field>
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label="Brokers"
+                  name="subFolder"
+                  value={values.subFolder}
+                  checked={values.subFolder === 'Brokers'}
+                  onChange={() => this._handleChangeCheckBoxSubFolder('Brokers')}
+                />
+                <Checkbox
+                  as={CheckboxFormatted}
+                  label="Analysts"
+                  name="subFolder"
+                  value={values.subFolder}
+                  checked={values.subFolder === 'Analysts'}
+                  onChange={() => this._handleChangeCheckBoxSubFolder('Analysts')}
+                />
+                <Checkbox
+                  label="General"
+                  name="subFolder"
+                  value={values.subFolder}
+                  checked={values.subFolder === 'General'}
+                  onChange={() => this._handleChangeCheckBoxSubFolder('General')}
+                />
+              </Form.Field>
+            </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
           <Button
             color="blue"
             type="submit"
-            disabled={createLoading || updateLoading || !isValid}
+            disabled={createLoading || updateLoading || !isValid || !values.subFolder}
             loading={createLoading || updateLoading}
             onClick={handleSubmit}
           >
@@ -97,12 +127,14 @@ ModalNewGroupEmailFolder.propTypes = {
   isDeleted: PropTypes.bool,
   folderObject: PropTypes.object,
   getGroupEmailFolder: PropTypes.func,
-  updateGroupEmailFolder: PropTypes.func
+  updateGroupEmailFolder: PropTypes.func,
+  onConfirm: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
   id: props.folderObject ? props.folderObject.id : null,
-  name: props.folderObject ? props.folderObject.name : ''
+  name: props.folderObject ? props.folderObject.name : '',
+  subFolder: props.folderObject ? props.folderObject.subFolder : ''
 })
 
 const validationSchema = Yup.object().shape({
@@ -115,8 +147,10 @@ const validationSchema = Yup.object().shape({
 const handleSubmit = (values, { props, setSubmitting }) => {
   if (props.folderObject) {
     props.updateGroupEmailFolder(values)
+    props.onConfirm(values)
   } else {
     props.createGroupEmailFolder(values)
+    props.onConfirm(values)
   }
 }
 

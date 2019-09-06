@@ -33,12 +33,12 @@ class ModalNewDocumentFolder extends Component {
     // this.props.getDocumentFolder()
   }
 
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.isCreated || nextProps.isUpdated || nextProps.isDeleted || nextProps.isDeletedFile) {
-      nextProps.getDocumentFolder()
-    }
-    return null
-  }
+  // static getDerivedStateFromProps = nextProps => {
+  //   if (nextProps.isCreated || nextProps.isUpdated || nextProps.isDeleted || nextProps.isDeletedFile) {
+  //     nextProps.getDocumentFolder()
+  //   }
+  //   return null
+  // }
 
   _handleSelectChange = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
@@ -275,7 +275,8 @@ ModalNewDocumentFolder.propTypes = {
   getOfficeRegister: PropTypes.func,
   documentFolder: PropTypes.object,
   isDeleted: PropTypes.bool,
-  isDeletedFile: PropTypes.bool
+  isDeletedFile: PropTypes.bool,
+  onConfirm: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -303,8 +304,10 @@ const validationSchema = Yup.object().shape({
 const handleSubmit = (values, { props, setSubmitting }) => {
   if (props.documentFolder) {
     props.updateDocumentFolder(values)
+    props.onConfirm(values)
   } else {
     props.createDocumentFolder(values)
+    props.onConfirm(values)
   }
 }
 

@@ -50,11 +50,9 @@ const initialState = {
   get: {
     isLoading: true,
     array: [],
-    folderAllOffices: [],
-    totalFilesPerFolder: [],
-    folderAnalystsWithAccess: [],
-    folderBrokersWithAccess: [],
-    folderGeneralWithAccess: [],
+    folderAnalysts: [],
+    folderBrokers: [],
+    folderGeneral: [],
     error: null,
     pages: 0,
     activePage: 1
@@ -119,11 +117,9 @@ export default function reducer (state = initialState, action) {
           ...state.get,
           isLoading: false,
           array: action.payload.data,
-          folderAllOffices: action.payload.folderAllOfficesWithAccess,
-          folderAnalystsWithAccess: action.payload.folderAnalystsWithAccess,
-          folderBrokersWithAccess: action.payload.folderBrokersWithAccess,
-          folderGeneralWithAccess: action.payload.folderGeneralWithAccess,
-          totalFilesPerFolder: action.payload.totalFilesPerFolder,
+          folderAnalysts: action.payload.folderAnalysts,
+          folderBrokers: action.payload.folderBrokers,
+          folderGeneral: action.payload.folderGeneral,
           error: null
         }
       }
