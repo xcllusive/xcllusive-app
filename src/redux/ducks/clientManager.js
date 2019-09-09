@@ -9,7 +9,8 @@ import {
   requestOwnersApproval as requestOwnersApprovalAPI,
   sendEnquiryToOwner as sendEnquiryToOwnerAPI,
   sendEmailCtcBusiness as sendEmailCtcBusinessAPI,
-  sendSms as sendSmsAPI
+  sendSms as sendSmsAPI,
+  getAllEnquiries as getAllEnquiriesAPI
 } from '../../services/api/clientManager'
 
 export const Types = {
@@ -39,7 +40,10 @@ export const Types = {
   SEND_EMAIL_CTC_BUSINESS_FAILURE: 'SEND_EMAIL_CTC_BUSINESS_FAILURE',
   SEND_SMS_LOADING: 'SEND_SMS_LOADING',
   SEND_SMS_SUCCESS: 'SEND_SMS_SUCCESS',
-  SEND_SMS_FAILURE: 'SEND_SMS_FAILURE'
+  SEND_SMS_FAILURE: 'SEND_SMS_FAILURE',
+  GET_ALL_ENQUIRIES_LOADING: 'GET_ALL_ENQUIRIES_LOADING',
+  GET_ALL_ENQUIRIES_SUCCESS: 'GET_ALL_ENQUIRIES_SUCCESS',
+  GET_ALL_ENQUIRIES_FAILURE: 'GET_ALL_ENQUIRIES_FAILURE'
 }
 
 // Reducer
@@ -88,6 +92,12 @@ const initialState = {
   sendSms: {
     isLoading: false,
     isSent: false,
+    error: null
+  },
+  getAllEnquiries: {
+    isLoading: false,
+    array: [],
+    totalEnquiries: 0,
     error: null
   }
 }
@@ -346,6 +356,35 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_ALL_ENQUIRIES_LOADING:
+      return {
+        ...state,
+        getAllEnquiries: {
+          ...state.getAllEnquiries,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_ALL_ENQUIRIES_SUCCESS:
+      return {
+        ...state,
+        getAllEnquiries: {
+          ...state.getAllEnquiries,
+          isLoading: false,
+          array: action.payload.data,
+          totalEnquiries: action.payload.totalEnquiries,
+          error: null
+        }
+      }
+    case Types.GET_ALL_ENQUIRIES_FAILURE:
+      return {
+        ...state,
+        getAllEnquiries: {
+          ...state.getAllEnquiries,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -528,5 +567,25 @@ export const sendSms = (buyer, business, phone, message) => async dispatch => {
       payload: error
     })
     toast.error(error)
+  }
+}
+
+export const getAllEnquiries = business => async dispatch => {
+  dispatch({
+    type: Types.GET_ALL_ENQUIRIES_LOADING,
+    payload: true
+  })
+  try {
+    const enquiries = await getAllEnquiriesAPI(business)
+    dispatch({
+      type: Types.GET_ALL_ENQUIRIES_SUCCESS,
+      payload: enquiries
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_ALL_ENQUIRIES_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
   }
 }

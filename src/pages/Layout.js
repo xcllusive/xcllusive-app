@@ -37,6 +37,7 @@ import CtcBusinessList from './Business/CtcBusinessList'
 import CtcBusinessesListPerOffice from './Management/Xcllusive/Reports/CtcBusinessesListPerOffice'
 import AgreementInvoice from './Business/AgreementInvoice'
 import ToolsAndDocs from './ToolsAndDocs/ToolsAndDocs'
+import ShowEnquiries from './ClientManager/ShowEnquiries'
 
 const Layout = ({ match, logout, menu, user }) => (
   <Fragment>
@@ -158,6 +159,12 @@ const Layout = ({ match, logout, menu, user }) => (
         exact
         component={BuyerDetailsCM}
         path={`${match.path}clientManager/buyer/:id`}
+        allowedRoles="CLIENT_MANAGER_MENU"
+      />
+      <AuthorizationRoute
+        exact
+        component={ShowEnquiries}
+        path={`${match.path}clientManager/enquiries/:idBusiness`}
         allowedRoles="CLIENT_MANAGER_MENU"
       />
       <AuthorizationRoute

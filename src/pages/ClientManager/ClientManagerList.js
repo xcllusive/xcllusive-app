@@ -15,7 +15,8 @@ import {
   Message,
   Form,
   Label,
-  Segment
+  Segment,
+  Divider
 } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
@@ -137,20 +138,6 @@ class ClientManagerList extends Component {
   _renderBuyerLog = buyerLog => {
     this.props.getLog(this.state.buyer.id)
     this.setState({ buyerLog })
-  }
-
-  _toggleModalSendEnquiryToOwner = () => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
-      options: {
-        title: 'Send Enquiry to Owner',
-        text: 'Are you sure you want to send the enquiry to owner?'
-      },
-      onConfirm: isConfirmed => {
-        if (isConfirmed) {
-          this.props.sendEnquiryToOwner(this.state.buyer.id, this.state.business.id)
-        }
-      }
-    })
   }
 
   _toggleModalEmailBuyer = () => {
@@ -475,11 +462,18 @@ class ClientManagerList extends Component {
       },
       onConfirm: phone => {
         if (phone) {
-          const message = `\nPlease find below enquiry for your business: \n\nBuyer Name: ${buyer.firstName} ${
-            buyer.surname
-          } \nPhone: ${buyer.telephone1} \nEmail: ${buyer.email} \n\nRegards, \nTeam Xcllusive.`
+          const message = `\nPlease find below enquiry for your business: \n\nBuyer Name: ${buyer.firstName} ${buyer.surname} \nPhone: ${buyer.telephone1} \nEmail: ${buyer.email} \n\nRegards, \nTeam Xcllusive.`
           this.props.sendSms(buyer, business, phone, message)
         }
+      }
+    })
+  }
+
+  _showEnquiries = business => {
+    this.props.history.push({
+      pathname: `/clientManager/enquiries/${business.id}`,
+      state: {
+        business
       }
     })
   }
@@ -499,7 +493,6 @@ class ClientManagerList extends Component {
       isLoadingEmailBuyer,
       isLoadingEnquiryBusiness,
       isLoadingRequestOwnersApproval,
-      isLoadingSendEnquiryToOwner,
       values
     } = this.props
     // Verify IM Rule
@@ -713,26 +706,6 @@ class ClientManagerList extends Component {
                         <Icon name="send" />
                         Send IM
                       </Button>
-                      {this.state.business && this.state.business.company_id === 2 ? (
-                        <Fragment>
-                          <Button
-                            size="small"
-                            color="green"
-                            onClick={() => this._sendEmailCtcBusiness(this.state.buyer, this.state.business)}
-                          >
-                            <Icon name="mail" />
-                            Send Email
-                          </Button>
-                          <Button
-                            size="small"
-                            color="green"
-                            onClick={() => this._sendSms(this.state.buyer, this.state.business)}
-                          >
-                            <Icon name="mobile alternate" />
-                            Send SMS
-                          </Button>
-                        </Fragment>
-                      ) : null}
                       <Button size="small" color="grey" onClick={() => this._backToSearch()}>
                         <Icon name="arrow left" />
                         Back to Search
@@ -842,72 +815,99 @@ class ClientManagerList extends Component {
                         </p>
                       </Message>
                     ) : null}
-                    <Grid.Column floated="left" width={2}>
-                      <Button
-                        size="small"
-                        color="teal"
-                        onClick={() => this._toggleModalEnquiryBusiness()}
-                        disabled={!this.state.buyer || isLoadingEnquiryBusiness}
-                        loading={isLoadingEnquiryBusiness}
-                      >
-                        <Icon name="write" />
-                        Enquiry Business
-                      </Button>
-                      <Button
-                        size="small"
-                        color="blue"
-                        onClick={() => this._toggleModalRequestOwnersApproval()}
-                        disabled={
-                          !this.state.buyer ||
-                          isLoadingRequestOwnersApproval ||
-                          (!this.state.buyer.caReceived && !this.state.business.notifyOwner)
-                        }
-                        loading={isLoadingRequestOwnersApproval}
-                      >
-                        <Icon name="mail" />
-                        Request Owners Approval
-                      </Button>
-                      <Button
-                        size="small"
-                        color="blue"
-                        disabled={
-                          !this.state.buyer ||
-                          isLoadingSendEnquiryToOwner ||
-                          !this.state.buyer.caReceived ||
-                          !this.state.business.notifyOwner ||
-                          this.state.business.productId !== 2
-                        }
-                        loading={isLoadingSendEnquiryToOwner}
-                        onClick={() => this._toggleModalSendEnquiryToOwner()}
-                      >
-                        <Icon name="send" />
-                        Send Enquiry to Owner
-                      </Button>
-                      <Button
-                        size="small"
-                        color="blue"
-                        onClick={() => this._ownersApprovalReceived()}
-                        loading={isLoadingEmailBuyer}
-                        disabled={!this.state.business.notifyOwner}
-                      >
-                        <Icon name="mail" />
-                        Owners Approval Received
-                      </Button>
-                      <Button
-                        size="small"
-                        color="blue"
-                        disabled={!this.state.buyer || isLoadingEmailBuyer || this.state.business.stageId !== 5}
-                        onClick={() => this._toggleModalEmailBuyer()}
-                        loading={isLoadingEmailBuyer}
-                      >
-                        <Icon name="mail" />
-                        Email Buyer
-                      </Button>
-                      <Button size="small" color="grey" onClick={() => this._renderBusiness(null)}>
-                        <Icon name="arrow left" />
-                        Back to Search
-                      </Button>
-                    </Grid.Column>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <Button
+                          size="small"
+                          color="orange"
+                          onClick={() => this._toggleModalEnquiryBusiness()}
+                          disabled={!this.state.buyer || isLoadingEnquiryBusiness}
+                          loading={isLoadingEnquiryBusiness}
+                        >
+                          <Icon name="write" />
+                          Enquiry Business
+                        </Button>
+                        {this.state.business &&
+                        this.state.buyer &&
+                        this.state.business.company_id === 2 &&
+                        this.state.business.ctcStageId === 6 ? (
+                            <Fragment>
+                              <Button
+                                size="small"
+                                color="orange"
+                                disabled={
+                                  (this.state.business.company_id !== 2 && this.state.business.ctcStageId !== 6) ||
+                                !this.state.buyer
+                                }
+                                onClick={() => this._sendEmailCtcBusiness(this.state.buyer, this.state.business)}
+                              >
+                                <Icon name="mail" />
+                              Send Enquiry Email
+                              </Button>
+                              <Button
+                                size="small"
+                                color="orange"
+                                onClick={() => this._sendSms(this.state.buyer, this.state.business)}
+                              >
+                                <Icon name="mobile alternate" />
+                              Send Enquiry SMS
+                              </Button>
+                            </Fragment>
+                          ) : null}
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Divider style={{ marginTop: '5px', marginBottom: '5px' }}></Divider>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <Button
+                          size="small"
+                          color="blue"
+                          onClick={() => this._toggleModalRequestOwnersApproval()}
+                          disabled={
+                            !this.state.buyer ||
+                            isLoadingRequestOwnersApproval ||
+                            (!this.state.buyer.caReceived && !this.state.business.notifyOwner)
+                          }
+                          loading={isLoadingRequestOwnersApproval}
+                        >
+                          <Icon name="mail" />
+                          Request Owners Approval
+                        </Button>
+                        <Button
+                          size="small"
+                          color="blue"
+                          onClick={() => this._ownersApprovalReceived()}
+                          loading={isLoadingEmailBuyer}
+                          disabled={!this.state.business.notifyOwner}
+                        >
+                          <Icon name="mail" />
+                          Owners Approval Received
+                        </Button>
+                        <Button
+                          size="small"
+                          color="blue"
+                          disabled={!this.state.buyer || isLoadingEmailBuyer || this.state.business.stageId !== 5}
+                          onClick={() => this._toggleModalEmailBuyer()}
+                          loading={isLoadingEmailBuyer}
+                        >
+                          <Icon name="mail" />
+                          Email Buyer
+                        </Button>
+                      </Grid.Column>
+                    </Grid.Row>
+                    <Divider style={{ marginTop: '5px', marginBottom: '5px' }}></Divider>
+                    <Grid.Row>
+                      <Grid.Column>
+                        <Button size="small" color="blue" onClick={() => this._showEnquiries(this.state.business)}>
+                          <Icon name="folder open" />
+                          Show Enquiries
+                        </Button>
+                        <Button size="small" color="grey" onClick={() => this._renderBusiness(null)}>
+                          <Icon name="arrow left" />
+                          Back to Search
+                        </Button>
+                      </Grid.Column>
+                    </Grid.Row>
                   </Fragment>
                 ) : null}
               </Segment>
@@ -1050,7 +1050,6 @@ const mapStateToProps = state => ({
   isLoadingEmailBuyer: state.clientManager.emailBuyer.isLoading,
   isLoadingEnquiryBusiness: state.clientManager.enquired.isLoading,
   isLoadingRequestOwnersApproval: state.clientManager.requestOwnersApproval.isLoading,
-  isLoadingSendEnquiryToOwner: state.clientManager.sendEnquiryToOwner.isLoading,
   businessObject: state.business.get.object,
   objectEmailTemplate: state.emailTemplates.get.object,
   newBuyerObject: state.buyer.create.newBuyer,

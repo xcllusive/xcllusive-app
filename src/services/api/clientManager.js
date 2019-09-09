@@ -95,3 +95,12 @@ export const sendSms = (buyer, business, phone, message) =>
       message
     }
   })
+
+export const getAllEnquiries = business => {
+  const params = {}
+  params.businessId = business.id
+  return request({
+    url: '/business/show-enquiries',
+    params
+  })
+}

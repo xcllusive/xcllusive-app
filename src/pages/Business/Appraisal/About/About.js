@@ -101,10 +101,10 @@ class AboutPage extends Component {
                 <Segment style={{ marginLeft: '-15px', backgroundColor: '#008eff26' }}>
                   <Form.Group widths="equal">
                     <Form.Field>
-                      <label>Business Type</label>
+                      <label>Business Industry</label>
                       <Dropdown
                         name="typeId"
-                        placeholder="Business Type"
+                        placeholder="Business Industry"
                         fluid
                         search
                         selection
@@ -117,7 +117,7 @@ class AboutPage extends Component {
                     </Form.Field>
                     <Form.Field>
                       <Form.Input
-                        label="Business Industry"
+                        label="Business Type"
                         name="industry"
                         autoComplete="industry"
                         value={values.industry}

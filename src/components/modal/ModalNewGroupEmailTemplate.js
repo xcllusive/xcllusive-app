@@ -92,6 +92,7 @@ class ModalNewGroupEmailTemplate extends Component {
                   modules={this.state.modules}
                   formats={this.state.formats}
                 />
+                {errors.body && touched.body && <Label basic color="red" pointing content={errors.body} />}
               </Form.Field>
             </Form.Group>
           </Form>
@@ -157,7 +158,7 @@ const validationSchema = Yup.object().shape({
   body: Yup.string()
     .required('Body is required.')
     .min(2, 'Body required minimum 2 characters.')
-    .max(200, 'Body require max 200 characters.'),
+    .max(5000, 'Body require max 5000 characters.'),
   subject: Yup.string()
     .required('Subject is required.')
     .min(2, 'Subject required minimum 2 characters.')

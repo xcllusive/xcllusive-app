@@ -40,6 +40,7 @@ class ModalReassignBusiness extends Component {
       return
     }
     await this.props.reassignBusiness({
+      company: this.props.company,
       businessId: this.props.businessId,
       listingAgentId: this.props.values.listingAgent,
       listingAgentCtcId: this.props.values.listingAgentCtc
