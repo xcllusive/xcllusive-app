@@ -43,6 +43,7 @@ import {
 import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
 
 import Wrapper from '../../components/content/Wrapper'
+// import { ctcLogoEmail } from '../../constants/images'
 
 class ClientManagerList extends Component {
   constructor (props) {
@@ -426,14 +427,16 @@ class ClientManagerList extends Component {
   }
 
   _sendEmailCtcBusiness = (buyer, business) => {
-    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+    this.props.openModal(TypesModal.MODAL_TYPE_SEND_EMAIL, {
       options: {
-        title: 'Send Informations to Buyer',
-        text: 'Are you sure you want to send the informations to the buyer?'
+        title: 'Send Enquiry CTC',
+        emailTemplate: 16,
+        to: business.vendorEmail
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this.props.sendEmailCtcBusiness(buyer, business)
+          console.log(isConfirmed)
+          this.props.sendEmailCtcBusiness(isConfirmed, buyer, business)
         }
       }
     })
@@ -603,15 +606,16 @@ class ClientManagerList extends Component {
                 ) : null}
                 {this.state.buyer && listBuyerList.length > 0 ? (
                   <Fragment>
-                    <Label
-                      style={{ marginBottom: '0px' }}
-                      as="a"
-                      color={this.state.buyer.xcllusiveBuyer ? 'blue' : 'green'}
-                      pointing="below"
-                      size="large"
-                    >
-                      {this.state.buyer.xcllusiveBuyer ? 'Xcllusive Buyer' : 'CTC Buyer'}
-                    </Label>
+                    {this.state.buyer.xcllusiveBuyer ? (
+                      <Label style={{ marginBottom: '0px' }} as="a" color="blue" pointing="below" size="large">
+                        Xcllusive Buyer
+                      </Label>
+                    ) : null}
+                    {this.state.buyer.ctcBuyer ? (
+                      <Label style={{ marginBottom: '0px' }} as="a" color="green" pointing="below" size="large">
+                        CTC Buyer
+                      </Label>
+                    ) : null}
                     <Table style={{ paddingRight: '300px' }} size="small" basic="very" compact>
                       <Table.Body>
                         <Table.Row>
@@ -1025,7 +1029,8 @@ ClientManagerList.propTypes = {
   isReceivedCa: PropTypes.bool,
   newBusinessObject: PropTypes.object,
   sendEmailCtcBusiness: PropTypes.func,
-  sendSms: PropTypes.func
+  sendSms: PropTypes.func,
+  bodyEmailCtc: PropTypes.string
 }
 
 const mapPropsToValues = () => ({
@@ -1053,7 +1058,8 @@ const mapStateToProps = state => ({
   businessObject: state.business.get.object,
   objectEmailTemplate: state.emailTemplates.get.object,
   newBuyerObject: state.buyer.create.newBuyer,
-  newBusinessObject: state.business.create.object
+  newBusinessObject: state.business.create.object,
+  bodyEmailCtc: state.clientManager.sendEmailCtcBusiness.body
 })
 
 const mapDispatchToProps = dispatch =>

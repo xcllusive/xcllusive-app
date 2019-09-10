@@ -38,6 +38,7 @@ import ModalNewDocumentFolder from './ModalNewDocumentFolder'
 import ModalNewDocumentFile from './ModalNewDocumentFile'
 import ModalNewGroupEmailFolder from './ModalNewGroupEmailFolder'
 import ModalNewGroupEmailTemplate from './ModalNewGroupEmailTemplate'
+import ModalSendEmail from './ModalSendEmail'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -78,7 +79,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_NEW_DOCUMENT_FOLDER]: ModalNewDocumentFolder,
   [TypesModal.MODAL_TYPE_NEW_DOCUMENT_FILE]: ModalNewDocumentFile,
   [TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_FOLDER]: ModalNewGroupEmailFolder,
-  [TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_TEMPLATE]: ModalNewGroupEmailTemplate
+  [TypesModal.MODAL_TYPE_NEW_GROUP_EMAIL_TEMPLATE]: ModalNewGroupEmailTemplate,
+  [TypesModal.MODAL_TYPE_SEND_EMAIL]: ModalSendEmail
 }
 
 const ModalRoot = ({ type, props }) => {

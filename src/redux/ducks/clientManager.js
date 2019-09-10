@@ -530,13 +530,13 @@ export const sendEnquiryToOwner = (buyerId, businessId) => async dispatch => {
   }
 }
 
-export const sendEmailCtcBusiness = (buyer, business) => async dispatch => {
+export const sendEmailCtcBusiness = (values, buyer, business) => async dispatch => {
   dispatch({
     type: Types.SEND_EMAIL_CTC_BUSINESS_LOADING,
     payload: true
   })
   try {
-    const response = await sendEmailCtcBusinessAPI(buyer, business)
+    const response = await sendEmailCtcBusinessAPI(values, buyer, business)
     dispatch({
       type: Types.SEND_EMAIL_CTC_BUSINESS_SUCCESS
     })
