@@ -93,6 +93,10 @@ class ModalGroupEmailSmsUsers extends Component {
         return item.id !== values.id
       })
       this.setState({ array })
+      const arrayEmailsOrSms = this.state.arrayEmailsOrSms.filter(item => {
+        return this.props.emailOrSms === 'email' ? item !== values.email : item !== values.phoneMobile
+      })
+      this.setState({ arrayEmailsOrSms })
     }
   }
 
