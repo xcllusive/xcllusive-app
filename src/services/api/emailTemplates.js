@@ -46,3 +46,11 @@ export const update = template => {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
 }
+
+export const getCompiled = (id, businessId, buyerId) => {
+  return request({
+    method: 'get',
+    url: '/email-template/compiled',
+    params: { id, businessId, buyerId }
+  })
+}

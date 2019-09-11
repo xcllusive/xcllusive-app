@@ -10,7 +10,7 @@ import 'jodit'
 import 'jodit/build/jodit.min.css'
 import JoditEditor from 'jodit-react'
 
-import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
+import { getEmailTemplateCompiled } from '../../redux/ducks/emailTemplates'
 
 class ModalSendEmail extends Component {
   constructor (props) {
@@ -19,7 +19,7 @@ class ModalSendEmail extends Component {
   }
 
   componentDidMount () {
-    this.props.getEmailTemplate(this.props.options.emailTemplate)
+    this.props.getEmailTemplateCompiled(this.props.options.emailTemplate, this.props.businessId, this.props.buyerId)
   }
 
   componentWillUnmount () {
@@ -119,15 +119,18 @@ ModalSendEmail.propTypes = {
   errors: PropTypes.object,
   setFieldValue: PropTypes.func,
   isValid: PropTypes.bool,
-  getEmailTemplate: PropTypes.func,
+  getEmailTemplateCompiled: PropTypes.func,
   objectEmailTemplate: PropTypes.object,
   isLoadingEmail: PropTypes.bool,
-  onConfirm: PropTypes.func
+  onConfirm: PropTypes.func,
+  bodyEmailTemplate: PropTypes.string,
+  businessId: PropTypes.number,
+  buyerId: PropTypes.number
 }
 
 const mapStateToProps = state => ({
   isLoadingEmail: state.emailTemplates.get.isLoading,
-  objectEmailTemplate: state.emailTemplates.get.object
+  objectEmailTemplate: state.emailTemplates.getCompiled.object
 })
 
 const mapPropsToValues = props => ({
@@ -140,7 +143,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       closeModal,
-      getEmailTemplate
+      getEmailTemplateCompiled
     },
     dispatch
   )

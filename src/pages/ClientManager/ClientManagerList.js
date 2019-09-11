@@ -433,9 +433,10 @@ class ClientManagerList extends Component {
         emailTemplate: 16,
         to: business.vendorEmail
       },
+      businessId: business.id,
+      buyerId: buyer.id,
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          console.log(isConfirmed)
           this.props.sendEmailCtcBusiness(isConfirmed, buyer, business)
         }
       }
@@ -465,8 +466,7 @@ class ClientManagerList extends Component {
       },
       onConfirm: phone => {
         if (phone) {
-          const message = `\nPlease find below enquiry for your business: \n\nBuyer Name: ${buyer.firstName} ${buyer.surname} \nPhone: ${buyer.telephone1} \nEmail: ${buyer.email} \n\nRegards, \nTeam Xcllusive.`
-          this.props.sendSms(buyer, business, phone, message)
+          this.props.sendSms(buyer, business, phone, '')
         }
       }
     })
