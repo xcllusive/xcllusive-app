@@ -3,6 +3,7 @@ import { Tab } from 'semantic-ui-react'
 import EmailTemplates from './EmailTemplates'
 import AgreementTemplates from './AgreementTemplates'
 import InvoiceTemplates from './InvoiceTemplates'
+import SmsTemplates from './SmsTemplates'
 
 class TemplatesPage extends Component {
   constructor (props) {
@@ -20,6 +21,10 @@ class TemplatesPage extends Component {
         {
           menuItem: 'Invoice Templates',
           render: () => <InvoiceTemplates />
+        },
+        {
+          menuItem: 'SMS Templates',
+          render: () => <SmsTemplates></SmsTemplates>
         }
       ]
     }

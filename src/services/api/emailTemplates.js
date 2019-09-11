@@ -1,11 +1,12 @@
 import request from './'
 
-export const getAll = brokersEmail => {
+export const getAll = (brokersEmail, smsTemplate) => {
   return request({
     method: 'get',
     url: '/email-template',
     params: {
-      brokersEmail
+      brokersEmail,
+      smsTemplate
     }
   })
 }
