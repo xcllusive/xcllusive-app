@@ -16,10 +16,11 @@ export const getMarketingReportTest = (dateFrom, dateTo) => {
   })
 }
 
-export const getAllAnalysts = () => {
+export const getAllAnalysts = companyId => {
   return request({
     method: 'get',
-    url: 'reports/all-analysts'
+    url: 'reports/all-analysts',
+    params: { companyId }
   })
 }
 

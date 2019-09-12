@@ -544,13 +544,13 @@ export const clearMarketingReports = () => async dispatch => {
   })
 }
 
-export const getAllAnalysts = () => async dispatch => {
+export const getAllAnalysts = (companyId = 1) => async dispatch => {
   dispatch({
     type: Types.GET_ALL_ANALYSTS_LOADING,
     payload: true
   })
   try {
-    const getMarketingReport = await getAllAnalystsAPI()
+    const getMarketingReport = await getAllAnalystsAPI(companyId)
     dispatch({
       type: Types.GET_ALL_ANALYSTS_SUCCESS,
       payload: getMarketingReport.data

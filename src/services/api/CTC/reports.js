@@ -38,3 +38,11 @@ export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => {
     params: { analystId, dateFrom, dateTo, stageId }
   })
 }
+
+export const getEnquiryReport = (dateFrom, dateTo, listOfIdOfAnalysts) => {
+  return request({
+    method: 'get',
+    url: 'ctc-reports/enquiry-report',
+    params: { dateFrom, dateTo, listOfIdOfAnalysts }
+  })
+}

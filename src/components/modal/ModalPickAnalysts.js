@@ -18,7 +18,7 @@ class ModalPickAnalysts extends Component {
   }
 
   componentDidMount () {
-    this.props.getAllAnalysts()
+    this.props.getAllAnalysts(this.props.options.company_id)
   }
 
   _handleConfirm = async isConfirmed => {
@@ -104,7 +104,8 @@ class ModalPickAnalysts extends Component {
 ModalPickAnalysts.propTypes = {
   closeModal: PropTypes.func.isRequired,
   options: PropTypes.shape({
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    company_id: PropTypes.number.isRequired
   }).isRequired,
   handleChange: PropTypes.func,
   values: PropTypes.object,

@@ -3,7 +3,8 @@ import {
   getBusinessesPerAnalyst as getBusinessesPerAnalystAPI,
   getAllAnalysts as getAllAnalystsAPI,
   getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI,
-  getAnalystReport as getAnalystReportAPI
+  getAnalystReport as getAnalystReportAPI,
+  getEnquiryReport as getEnquiryReportAPI
 } from '../../../services/api/CTC/reports'
 import { toast } from 'react-toastify'
 
@@ -28,7 +29,12 @@ export const Types = {
   GET_CTC_ANALYST_REPORT_LOADING: 'GET_CTC_ANALYST_REPORT_LOADING',
   GET_CTC_ANALYST_REPORT_SUCCESS: 'GET_CTC_ANALYST_REPORT_SUCCESS',
   GET_CTC_ANALYST_REPORT_FAILURE: 'GET_CTC_ANALYST_REPORT_FAILURE',
-  KEEP_CTC_ANALYST_PARAMS: 'KEEP_CTC_ANALYST_PARAMS'
+  KEEP_CTC_ANALYST_PARAMS: 'KEEP_CTC_ANALYST_PARAMS',
+  GET_CTC_ENQUIRY_REPORT_LOADING: 'GET_CTC_ENQUIRY_REPORT_LOADING',
+  GET_CTC_ENQUIRY_REPORT_SUCCESS: 'GET_CTC_ENQUIRY_REPORT_SUCCESS',
+  GET_CTC_ENQUIRY_REPORT_FAILURE: 'GET_CTC_ENQUIRY_REPORT_FAILURE',
+  KEEP_CTC_ENQUIRY_PARAMS: 'KEEP_CTC_ENQUIRY_PARAMS',
+  CLEAR_CTC_ENQUIRIES_REPORT: 'CLEAR_CTC_ENQUIRIES_REPORT'
 }
 
 // Reducer
@@ -68,7 +74,13 @@ const initialState = {
     isLoading: false,
     array: null,
     error: null
-  }
+  },
+  getEnquiryReport: {
+    isLoading: false,
+    objectEnquiry: null,
+    error: null
+  },
+  keepEnquiryParams: null
 }
 
 export default function reducer (state = initialState, action) {
@@ -243,6 +255,49 @@ export default function reducer (state = initialState, action) {
         ...state,
         keepAnalystParams: action.payload
       }
+    case Types.GET_CTC_ENQUIRY_REPORT_LOADING:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_CTC_ENQUIRY_REPORT_SUCCESS:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: false,
+          objectEnquiry: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_CTC_ENQUIRY_REPORT_FAILURE:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.KEEP_CTC_ENQUIRY_PARAMS:
+      return {
+        ...state,
+        keepEnquiryParams: action.payload
+      }
+    case Types.CLEAR_CTC_ENQUIRIES_REPORT:
+      return {
+        ...state,
+        getEnquiryReport: {
+          ...state.getEnquiryReport,
+          isLoading: false,
+          error: null,
+          objectEnquiry: null
+        }
+      }
     default:
       return state
   }
@@ -369,4 +424,40 @@ export const getAnalystReport = (analystId, dateFrom, dateTo, stageId) => async 
     })
     toast.error(error)
   }
+}
+
+export const getEnquiryReport = (
+  dateFrom,
+  dateTo,
+  listOfIdOfAnalysts = false,
+  arraySelectedAnalysts = false,
+  showAllEnquiries
+) => async dispatch => {
+  dispatch({
+    type: Types.GET_CTC_ENQUIRY_REPORT_LOADING,
+    payload: true
+  })
+  try {
+    const getEnquiryReport = await getEnquiryReportAPI(dateFrom, dateTo, listOfIdOfAnalysts)
+    dispatch({
+      type: Types.GET_CTC_ENQUIRY_REPORT_SUCCESS,
+      payload: getEnquiryReport.data
+    })
+    dispatch({
+      type: Types.KEEP_CTC_ENQUIRY_PARAMS,
+      payload: { dateFrom, dateTo, arraySelectedAnalysts, showAllEnquiries }
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_CTC_ENQUIRY_REPORT_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const clearEnquiriesReports = () => async dispatch => {
+  dispatch({
+    type: Types.CLEAR_CTC_ENQUIRIES_REPORT
+  })
 }

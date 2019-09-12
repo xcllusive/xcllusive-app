@@ -6,6 +6,7 @@ import { Tab } from 'semantic-ui-react'
 import Marketing from './Marketing'
 import Analyst from './Analyst'
 import { setLastCtcTabSelected } from '../../../../redux/ducks/CTC/reports'
+import Enquiry from './Enquiry'
 
 class Reports extends Component {
   constructor (props) {
@@ -19,6 +20,10 @@ class Reports extends Component {
         {
           menuItem: 'Analysts',
           render: () => <Analyst history={this.props.history} />
+        },
+        {
+          menuItem: 'Enquiries',
+          render: () => <Enquiry history={this.props.history} />
         }
       ]
     }

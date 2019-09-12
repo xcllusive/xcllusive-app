@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Grid, Form, Button, Segment, Header, Table, Dimmer, Loader, Radio, Divider } from 'semantic-ui-react'
 import { TypesModal, openModal } from '../../../../redux/ducks/modal'
-import { getEnquiryReport, clearEnquiriesReports } from '../../../../redux/ducks/reports'
+import { getEnquiryReport, clearEnquiriesReports } from '../../../../redux/ducks/CTC/reports'
 import Wrapper from '../../../../components/content/Wrapper'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -74,7 +74,7 @@ class EnquiryReports extends Component {
     this.props.openModal(TypesModal.MODAL_PICK_ANALYSTS, {
       options: {
         title: 'Select the Analysts you want:',
-        company_id: 1
+        company_id: 2
       },
       onConfirm: async isConfirmed => {
         if (isConfirmed) {
@@ -336,9 +336,9 @@ const mapPropsToValues = props => {
 }
 
 const mapStateToProps = state => ({
-  savedRecords: state.reports.keepEnquiryParams,
-  isLoading: state.reports.getEnquiryReport.isLoading,
-  objectEnquiry: state.reports.getEnquiryReport.objectEnquiry
+  savedRecords: state.reportsCtc.keepEnquiryParams,
+  isLoading: state.reportsCtc.getEnquiryReport.isLoading,
+  objectEnquiry: state.reportsCtc.getEnquiryReport.objectEnquiry
 })
 
 const mapDispatchToProps = dispatch =>
