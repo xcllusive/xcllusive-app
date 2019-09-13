@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { Types as ModalTypes } from './modal'
 import {
   get,
   getAll,
@@ -13,7 +14,8 @@ import {
   getAllPerUser,
   uploadIM as uploadIMAPI,
   verifyDuplicatedBusiness as verifyDuplicatedBusinessAPI,
-  verifyBusinessFirstOpenByAgent as verifyBusinessFirstOpenByAgentAPI
+  verifyBusinessFirstOpenByAgent as verifyBusinessFirstOpenByAgentAPI,
+  addIssueToBusiness as addIssueToBusinessAPI
 } from '../../services/api/business'
 
 import { getAllFromBusiness } from '../../services/api/businessLog'
@@ -66,7 +68,10 @@ export const Types = {
   CLEAR_DUPLICATED_BUSINESS: 'CLEAR_DUPLICATED_BUSINESS',
   VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_LOADING: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_LOADING',
   VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_SUCCESS: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_SUCCESS',
-  VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE'
+  VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE',
+  ADD_ISSUE_LOADING: 'ADD_ISSUE_LOADING',
+  ADD_ISSUE_SUCCESS: 'ADD_ISSUE_SUCCESS',
+  ADD_ISSUE_FAILURE: 'ADD_ISSUE_FAILURE'
 }
 
 // Reducer
@@ -155,6 +160,11 @@ const initialState = {
   verifyBusinessFirstOpenByAgent: {
     isLoading: false,
     object: null,
+    error: null
+  },
+  add: {
+    isLoading: false,
+    isAdded: false,
     error: null
   }
 }
@@ -626,6 +636,36 @@ export default function reducer (state = initialState, action) {
           object: null
         }
       }
+    case Types.ADD_ISSUE_LOADING:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          isLoading: action.payload,
+          isAdded: false,
+          error: null
+        }
+      }
+    case Types.ADD_ISSUE_SUCCESS:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          isLoading: false,
+          isAdded: true,
+          error: null
+        }
+      }
+    case Types.ADD_ISSUE_FAILURE:
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          isLoading: false,
+          isAdded: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -946,5 +986,28 @@ export const verifyBusinessFirstOpenByAgent = businessId => async dispatch => {
       payload: error
     })
     toast.error(error.message)
+  }
+}
+
+export const addIssueToBusiness = (issueId, business) => async dispatch => {
+  dispatch({
+    type: Types.ADD_ISSUE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await addIssueToBusinessAPI(issueId, business)
+    dispatch({
+      type: Types.ADD_ISSUE_SUCCESS
+    })
+    toast.success(response.message)
+    dispatch({
+      type: ModalTypes.MODAL_CLOSE
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.ADD_ISSUE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
   }
 }

@@ -31,6 +31,7 @@ import resource from './ducks/resource'
 import contact from './ducks/contact'
 import documentFolder from './ducks/documentFolder'
 import groupEmail from './ducks/groupEmail'
+import issue from './ducks/issue'
 
 export default combineReducers({
   modal,
@@ -63,5 +64,6 @@ export default combineReducers({
   contact,
   documentFolder,
   groupEmail,
+  issue,
   router: routerReducer
 })

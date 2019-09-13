@@ -140,3 +140,11 @@ export const verifyBusinessFirstOpenByAgent = businessId => {
     url: `/business/${businessId}/verify-first-open-by-agent`
   })
 }
+
+export const addIssueToBusiness = (issueId, business) => {
+  return request({
+    method: 'put',
+    url: '/business/add-issue',
+    data: { issueId, business }
+  })
+}

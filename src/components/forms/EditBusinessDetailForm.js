@@ -264,6 +264,17 @@ class EditBusinessDetailForm extends Component {
     this._openModalStageSold(true)
   }
 
+  _selectIssue = () => {
+    this.props.openModal(TypesModal.MODAL_SELECT_ISSUE, {
+      business: this.props.business,
+      onConfirm: isConfirmed => {
+        if (isConfirmed) {
+          this.props.getBusiness(this.props.business.id)
+        }
+      }
+    })
+  }
+
   render () {
     const {
       values,
@@ -539,7 +550,7 @@ class EditBusinessDetailForm extends Component {
                   color="twitter"
                   disabled={
                     this.props.history.location &&
-                      this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
+                    this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`
                   }
                   onClick={() =>
                     this.props.history.push({
@@ -553,7 +564,7 @@ class EditBusinessDetailForm extends Component {
                   floated="left"
                 >
                   <Icon name="file" />
-                    Agreement/Invoice
+                  Agreement/Invoice
                 </Button>
               </Form>
             </Grid.Column>
@@ -820,6 +831,18 @@ class EditBusinessDetailForm extends Component {
                     Save
                   </Form.Button>
                 </Form.Group>
+                {this.props.business.company_id === 2 && this.props.business.ctcStageId === 6 ? (
+                  <Form.Button
+                    // disabled={isSubmitting || !isValid}
+                    // loading={isLoadingIM}
+                    color="orange"
+                    size="small"
+                    onClick={() => this._selectIssue()}
+                  >
+                    <Icon name="tasks" />
+                    Issue
+                  </Form.Button>
+                ) : null}
                 <Form.Group>
                   {this._isUserClientManager() ? (
                     <Form.Button
