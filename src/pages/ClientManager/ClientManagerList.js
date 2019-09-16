@@ -801,7 +801,11 @@ class ClientManagerList extends Component {
                         {this.state.business.BusinessStage ? (
                           <Table.Row>
                             <Table.HeaderCell>Stage</Table.HeaderCell>
-                            <Table.Cell>{this.state.business.BusinessStage.label}</Table.Cell>
+                            <Table.Cell>
+                              {this.state.business.company_id === 1
+                                ? this.state.business.BusinessStage.label
+                                : this.state.business.CtcBusinessStage.label}
+                            </Table.Cell>
                           </Table.Row>
                         ) : null}
                         {/* {this.state.business.productId === 2 ? (
