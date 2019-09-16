@@ -15,7 +15,8 @@ import {
   uploadIM as uploadIMAPI,
   verifyDuplicatedBusiness as verifyDuplicatedBusinessAPI,
   verifyBusinessFirstOpenByAgent as verifyBusinessFirstOpenByAgentAPI,
-  addIssueToBusiness as addIssueToBusinessAPI
+  addIssueToBusiness as addIssueToBusinessAPI,
+  removeIssueFromBusiness as removeIssueFromBusinessAPI
 } from '../../services/api/business'
 
 import { getAllFromBusiness } from '../../services/api/businessLog'
@@ -71,7 +72,10 @@ export const Types = {
   VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE: 'VERIFY_BUSINESS_FIRST_OPEN_BY_AGENT_FAILURE',
   ADD_ISSUE_LOADING: 'ADD_ISSUE_LOADING',
   ADD_ISSUE_SUCCESS: 'ADD_ISSUE_SUCCESS',
-  ADD_ISSUE_FAILURE: 'ADD_ISSUE_FAILURE'
+  ADD_ISSUE_FAILURE: 'ADD_ISSUE_FAILURE',
+  REMOVE_ISSUE_BUSINESS_LOADING: 'REMOVE_ISSUE_BUSINESS_LOADING',
+  REMOVE_ISSUE_BUSINESS_SUCCESS: 'REMOVE_ISSUE_BUSINESS_SUCCESS',
+  REMOVE_ISSUE_BUSINESS_FAILURE: 'REMOVE_ISSUE_BUSINESS_FAILURE'
 }
 
 // Reducer
@@ -97,6 +101,7 @@ const initialState = {
     stageNotWantOptions: [],
     ctcSourceOptions: [],
     ctcStageOptions: [],
+    issueList: [],
     error: null
   },
   create: {
@@ -165,6 +170,11 @@ const initialState = {
   add: {
     isLoading: false,
     isAdded: false,
+    error: null
+  },
+  deleteIssue: {
+    isLoading: false,
+    isDeleted: false,
     error: null
   }
 }
@@ -259,6 +269,7 @@ export default function reducer (state = initialState, action) {
           stageNotWantOptions: action.payload.stageNotWantList,
           ctcSourceOptions: action.payload.ctcSourceList,
           ctcStageOptions: action.payload.ctcStageList,
+          issueList: action.payload.issueList,
           error: null
         },
         update: {
@@ -666,6 +677,36 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.REMOVE_ISSUE_BUSINESS_LOADING:
+      return {
+        ...state,
+        deleteIssue: {
+          ...state.deleteIssue,
+          isLoading: action.payload,
+          isDeleted: false,
+          error: null
+        }
+      }
+    case Types.REMOVE_ISSUE_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        deleteIssue: {
+          ...state.deleteIssue,
+          isLoading: false,
+          isDeleted: true,
+          error: null
+        }
+      }
+    case Types.REMOVE_ISSUE_BUSINESS_FAILURE:
+      return {
+        ...state,
+        deleteIssue: {
+          ...state.deleteIssue,
+          isLoading: false,
+          isDeleted: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -1006,6 +1047,29 @@ export const addIssueToBusiness = (issueId, business) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.ADD_ISSUE_FAILURE,
+      payload: error
+    })
+    toast.error(error)
+  }
+}
+
+export const removeIssueFromBusiness = (issueId, businessId) => async dispatch => {
+  dispatch({
+    type: Types.REMOVE_ISSUE_BUSINESS_LOADING,
+    payload: true
+  })
+  try {
+    const response = await removeIssueFromBusinessAPI(issueId, businessId)
+    dispatch({
+      type: Types.REMOVE_ISSUE_BUSINESS_SUCCESS
+    })
+    toast.success(response.message)
+    dispatch({
+      type: ModalTypes.MODAL_CLOSE
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.REMOVE_ISSUE_BUSINESS_FAILURE,
       payload: error
     })
     toast.error(error)

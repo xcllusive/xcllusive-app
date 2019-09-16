@@ -15,8 +15,8 @@ import Templates from './Templates/Templates'
 import { getSystemSettings } from '../../redux/ducks/systemSettings'
 // import Admin from './Admin/Admin'
 import Emails from './Emails/Emails'
-import Buyers from './Export/Buyers'
 import DocumentFolderEdit from './FolderAndFiles/DocumentFolderEdit'
+import Export from './Export/Export'
 
 class SystemSettingsPage extends Component {
   constructor (props) {
@@ -49,7 +49,7 @@ class SystemSettingsPage extends Component {
         },
         {
           menuItem: 'Export',
-          render: () => <Buyers />
+          render: () => <Export></Export>
         }
         // ,
         // {

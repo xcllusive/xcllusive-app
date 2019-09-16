@@ -28,3 +28,12 @@ export const exportBuyers = (dateFrom, dateTo) => {
     responseType: 'blob'
   })
 }
+
+export const exportIssue = issueId => {
+  return request({
+    method: 'post',
+    url: '/system-settings/export-issue',
+    data: { issueId },
+    responseType: 'blob'
+  })
+}

@@ -144,7 +144,15 @@ export const verifyBusinessFirstOpenByAgent = businessId => {
 export const addIssueToBusiness = (issueId, business) => {
   return request({
     method: 'put',
-    url: '/business/add-issue',
+    url: '/business/issue',
     data: { issueId, business }
+  })
+}
+
+export const removeIssueFromBusiness = (issueId, businessId) => {
+  return request({
+    method: 'delete',
+    url: '/business/issue',
+    data: { issueId, businessId }
   })
 }

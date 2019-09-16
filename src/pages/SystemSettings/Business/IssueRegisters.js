@@ -12,25 +12,19 @@ class IssueRegisters extends Component {
     await this.props.listIssue()
   }
 
-  _toggleModalConfirm = (id, registerType) => {
+  _toggleModalConfirm = id => {
     this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
       options: {
         title: 'Delete Issue',
-        text: 'Are you sure you want to delete issue?',
-        id,
-        registerType
+        text: 'Are you sure you want to delete issue?'
       },
-      onConfirm: isConfirmed => {
+      onConfirm: async isConfirmed => {
         if (isConfirmed) {
-          this._removeIssue(isConfirmed.id, isConfirmed.registerType)
+          await this.props.removeIssue(id)
+          this.props.listIssue()
         }
       }
     })
-  }
-
-  _removeIssue = async id => {
-    await this.props.removeIssue({ id })
-    this.props.listIssue()
   }
 
   _editIssue = issue => {
@@ -97,12 +91,12 @@ class IssueRegisters extends Component {
                           <Table.Cell>{issueOptions.id}</Table.Cell>
                           <Table.Cell>{issueOptions.label}</Table.Cell>
                           <Table.Cell>
-                            <Icon link name="edit" onClick={() => this._editIssue(issueOptions, 1)} />
+                            <Icon link name="edit" onClick={() => this._editIssue(issueOptions)} />
                             <Icon
                               link
                               name="trash"
                               color="red"
-                              onClick={() => this._toggleModalConfirm(issueOptions.id, 1)}
+                              onClick={() => this._toggleModalConfirm(issueOptions.id)}
                             />
                           </Table.Cell>
                         </Table.Row>

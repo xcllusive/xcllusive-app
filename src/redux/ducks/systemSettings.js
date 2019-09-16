@@ -1,5 +1,11 @@
 import { toast } from 'react-toastify'
-import { get, update, execute, exportBuyers as exportBuyersAPI } from '../../services/api/systemSettings'
+import {
+  get,
+  update,
+  execute,
+  exportBuyers as exportBuyersAPI,
+  exportIssue as exportIssueAPI
+} from '../../services/api/systemSettings'
 import download from '../../utils/file-download'
 import moment from 'moment'
 
@@ -17,7 +23,10 @@ export const Types = {
   EXECUTE_JAVASCRIPT_FAILURE: 'EXECUTE_JAVASCRIPT_FAILURE',
   EXPORT_BUYERS_LOADING: 'EXPORT_BUYERS_LOADING',
   EXPORT_BUYERS_SUCCESS: 'EXPORT_BUYERS_SUCCESS',
-  EXPORT_BUYERS_FAILURE: 'EXPORT_BUYERS_FAILURE'
+  EXPORT_BUYERS_FAILURE: 'EXPORT_BUYERS_FAILURE',
+  EXPORT_BUSINESS_ISSUE_LOADING: 'EXPORT_BUSINESS_ISSUE_LOADING',
+  EXPORT_BUSINESS_ISSUE_SUCCESS: 'EXPORT_BUSINESS_ISSUE_SUCCESS',
+  EXPORT_BUSINESS_ISSUE_FAILURE: 'EXPORT_BUSINESS_ISSUE_FAILURE'
 }
 
 // Reducer
@@ -40,6 +49,11 @@ const initialState = {
     error: null
   },
   exportBuyers: {
+    array: [],
+    isLoading: false,
+    error: null
+  },
+  exportIssue: {
     array: [],
     isLoading: false,
     error: null
@@ -161,6 +175,34 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.EXPORT_BUSINESS_ISSUE_LOADING:
+      return {
+        ...state,
+        exportIssue: {
+          ...state.exportIssue,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.EXPORT_BUSINESS_ISSUE_SUCCESS:
+      return {
+        ...state,
+        exportIssue: {
+          ...state.exportIssue,
+          isLoading: false,
+          array: action.payload,
+          error: null
+        }
+      }
+    case Types.EXPORT_BUSINESS_ISSUE_FAILURE:
+      return {
+        ...state,
+        exportIssue: {
+          ...state.exportIssue,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -244,5 +286,25 @@ export const executeJavaScript = () => async dispatch => {
       payload: error
     })
     toast.error(error)
+  }
+}
+
+export const exportIssue = issueId => async dispatch => {
+  dispatch({
+    type: Types.EXPORT_BUSINESS_ISSUE_LOADING,
+    payload: true
+  })
+  try {
+    const response = await exportIssueAPI(issueId)
+    dispatch({
+      type: Types.EXPORT_BUSINESS_ISSUE_SUCCESS,
+      payload: response
+    })
+    download(response, `issue${moment().format('DD_MM_YYYY_hh_mm_ss')}.xlsx`)
+  } catch (error) {
+    dispatch({
+      type: Types.EXPORT_BUSINESS_ISSUE_FAILURE,
+      payload: error
+    })
   }
 }

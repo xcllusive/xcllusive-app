@@ -236,17 +236,18 @@ export const updateIssue = issue => async dispatch => {
   }
 }
 
-export const removeIssue = issue => async dispatch => {
+export const removeIssue = issueId => async dispatch => {
   dispatch({
     type: Types.REMOVE_ISSUE_LOADING,
     payload: true
   })
   try {
-    const response = await remove(issue)
+    const response = await remove(issueId)
     dispatch({
       type: Types.REMOVE_ISSUE_SUCCESS
     })
-    toast.success(response.message)
+    if (!response.message) toast.error('You can NOT delete this issue! It has been using in one or more businesses')
+    else toast.success(response.message)
   } catch (error) {
     dispatch({
       type: Types.REMOVE_ISSUE_FAILURE,

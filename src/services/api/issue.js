@@ -24,10 +24,9 @@ export const update = issue => {
   })
 }
 
-export const remove = issueType => {
+export const remove = issueId => {
   return request({
     method: 'delete',
-    url: `/issue/${issueType.id}`,
-    data: issueType
+    url: `/issue/${issueId}`
   })
 }

@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import { withFormik } from 'formik'
-import { Form, Icon, Grid, Radio, Label, Button, Dimmer, Loader, Dropdown } from 'semantic-ui-react'
+import { Form, Icon, Grid, Radio, Label, Button, Dimmer, Loader, Dropdown, Segment, Header } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import { TypesModal, openModal } from '../../redux/ducks/modal'
 import Wrapper from '../../components/content/Wrapper'
-import { updateBusiness, getBusiness, uploadIM } from '../../redux/ducks/business'
+import { updateBusiness, getBusiness, uploadIM, removeIssueFromBusiness } from '../../redux/ducks/business'
 import { getBusinessFromBuyer, updateBusinessFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import { getUserLogged } from '../../redux/ducks/user'
@@ -275,6 +275,23 @@ class EditBusinessDetailForm extends Component {
     })
   }
 
+  _removeIssue = issue => {
+    this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      options: {
+        title: 'Remove Issue',
+        text: issue.closed
+          ? 'This issue is already closed!'
+          : 'Are you sure you want to remove this issue from the business?'
+      },
+      onConfirm: async isConfirmed => {
+        if (isConfirmed && !issue.closed) {
+          await this.props.removeIssueFromBusiness(issue.id, this.props.business.id)
+          this.props.getBusiness(this.props.business.id)
+        }
+      }
+    })
+  }
+
   render () {
     const {
       values,
@@ -297,7 +314,8 @@ class EditBusinessDetailForm extends Component {
       isLoadingGet,
       ctcSourceOptions,
       ctcStageOptions,
-      userLogged
+      userLogged,
+      issueList
     } = this.props
     const { state } = this.state
     return (
@@ -880,6 +898,25 @@ class EditBusinessDetailForm extends Component {
               </Form>
             </Grid.Column>
           </Grid.Row>
+          {issueList && issueList.length > 0 && this.props.business.company_id === 2 ? (
+            <Grid.Row>
+              <Segment>
+                <Header style={{ marginTop: '5px' }} size="small" floated="left">
+                  Issues:
+                </Header>
+                {issueList.map(issue => (
+                  <Label
+                    key={issue.id}
+                    onClick={() => (this._isUserClientManager() ? this._removeIssue(issue) : null)}
+                    as="a"
+                  >
+                    {issue.label}
+                    <Icon name={!issue.closed ? 'delete' : null} />
+                  </Label>
+                ))}
+              </Segment>
+            </Grid.Row>
+          ) : null}
         </Grid>
       </Wrapper>
     )
@@ -927,7 +964,9 @@ EditBusinessDetailForm.propTypes = {
   isLoadingCtcStage: PropTypes.bool,
   getUserLogged: PropTypes.func,
   userLogged: PropTypes.object,
-  updateStageSold: PropTypes.bool
+  updateStageSold: PropTypes.bool,
+  issueList: PropTypes.array,
+  removeIssueFromBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => {
@@ -1131,7 +1170,11 @@ const mapStateToProps = (state, props) => {
       props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
         ? state.buyer.getBusinessFromBuyer.ctcStageOptions
         : state.business.get.ctcStageOptions,
-    userLogged: state.user.getLogged.object
+    userLogged: state.user.getLogged.object,
+    issueList:
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
+        ? state.buyer.getBusinessFromBuyer.issueList
+        : state.business.get.issueList
   }
 }
 
@@ -1145,7 +1188,8 @@ const mapDispatchToProps = dispatch => {
       uploadIM,
       updateBusinessFromBuyer,
       getBusinessFromBuyer,
-      getUserLogged
+      getUserLogged,
+      removeIssueFromBusiness
     },
     dispatch
   )
