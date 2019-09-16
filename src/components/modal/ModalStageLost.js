@@ -10,7 +10,7 @@ import { Modal, Form, Label, Icon, Button, Radio, Divider, Message } from 'seman
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { updateStageLost } from '../../redux/ducks/business'
+import { updateStageLost, getBusiness } from '../../redux/ducks/business'
 
 class StageLostForm extends Component {
   _handleDateChange = date => {
@@ -60,6 +60,7 @@ class StageLostForm extends Component {
     }
     await this.props.updateStageLost(this.props.values)
     this.props.closeModal()
+    this.props.getBusiness(this.props.business.id)
   }
 
   render () {
@@ -341,7 +342,8 @@ StageLostForm.propTypes = {
   }).isRequired,
   callBack: PropTypes.func.isRequired,
   updateStageLost: PropTypes.func,
-  business: PropTypes.object
+  business: PropTypes.object,
+  getBusiness: PropTypes.func
 }
 
 const mapPropsToValues = props => ({
@@ -365,7 +367,7 @@ const mapStateToProps = state => ({
   stageNotWantOptions: state.business.get.stageNotWantOptions
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ updateStageLost, closeModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ updateStageLost, closeModal, getBusiness }, dispatch)
 
 export default connect(
   mapStateToProps,
