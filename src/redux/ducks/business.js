@@ -75,7 +75,8 @@ export const Types = {
   ADD_ISSUE_FAILURE: 'ADD_ISSUE_FAILURE',
   REMOVE_ISSUE_BUSINESS_LOADING: 'REMOVE_ISSUE_BUSINESS_LOADING',
   REMOVE_ISSUE_BUSINESS_SUCCESS: 'REMOVE_ISSUE_BUSINESS_SUCCESS',
-  REMOVE_ISSUE_BUSINESS_FAILURE: 'REMOVE_ISSUE_BUSINESS_FAILURE'
+  REMOVE_ISSUE_BUSINESS_FAILURE: 'REMOVE_ISSUE_BUSINESS_FAILURE',
+  SET_BUSINESS_LAST_TAB_SELECTED: 'SET_BUSINESS_LAST_TAB_SELECTED'
 }
 
 // Reducer
@@ -176,6 +177,9 @@ const initialState = {
     isLoading: false,
     isDeleted: false,
     error: null
+  },
+  setLastTabSelected: {
+    index: 0
   }
 }
 
@@ -707,6 +711,14 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SET_BUSINESS_LAST_TAB_SELECTED:
+      return {
+        ...state,
+        setLastTabSelected: {
+          ...state.setLastTabSelected,
+          index: action.payload
+        }
+      }
     default:
       return state
   }
@@ -1074,4 +1086,11 @@ export const removeIssueFromBusiness = (issueId, businessId) => async dispatch =
     })
     toast.error(error)
   }
+}
+
+export const setLastBusinessTabSelected = indexLastTab => async dispatch => {
+  dispatch({
+    type: Types.SET_BUSINESS_LAST_TAB_SELECTED,
+    payload: indexLastTab
+  })
 }

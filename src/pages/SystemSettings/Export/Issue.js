@@ -14,7 +14,9 @@ class Issue extends Component {
   }
 
   _exportBuyers = values => {
-    this.props.exportIssue(values.issueId)
+    this.props.issueOptions.map(item => {
+      if (item.value === values.issueId) this.props.exportIssue(values.issueId, item.text)
+    })
   }
 
   _handleSelectChange = (e, { name, value }) => {

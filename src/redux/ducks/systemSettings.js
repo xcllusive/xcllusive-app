@@ -289,7 +289,7 @@ export const executeJavaScript = () => async dispatch => {
   }
 }
 
-export const exportIssue = issueId => async dispatch => {
+export const exportIssue = (issueId, label) => async dispatch => {
   dispatch({
     type: Types.EXPORT_BUSINESS_ISSUE_LOADING,
     payload: true
@@ -300,7 +300,8 @@ export const exportIssue = issueId => async dispatch => {
       type: Types.EXPORT_BUSINESS_ISSUE_SUCCESS,
       payload: response
     })
-    download(response, `issue${moment().format('DD_MM_YYYY_hh_mm_ss')}.xlsx`)
+    download(response, `issue_${label}.xlsx`)
+    toast.success('File starting the download...')
   } catch (error) {
     dispatch({
       type: Types.EXPORT_BUSINESS_ISSUE_FAILURE,

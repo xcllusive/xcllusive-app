@@ -19,7 +19,13 @@ class BusinessLogList extends Component {
         {arrayLogsFromBusiness && arrayLogsFromBusiness.length > 0 ? (
           <Grid.Row>
             <Grid.Column>
-              <Table size={'small'} color="blue" celled inverted selectable>
+              <Table
+                size={'small'}
+                color={this.props.business.company_id === 1 ? 'blue' : 'green'}
+                celled
+                inverted
+                selectable
+              >
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Log</Table.HeaderCell>

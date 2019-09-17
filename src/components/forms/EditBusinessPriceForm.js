@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Form, Icon, Grid, Segment, Header } from 'semantic-ui-react'
 import Wrapper from '../content/Wrapper'
-import { updateBusiness } from '../../redux/ducks/business'
+import { updateBusiness, getBusiness } from '../../redux/ducks/business'
 import numeral from 'numeral'
 
-class EditBusinessDetailForm extends Component {
+class EditBusinessPriceForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -47,10 +47,8 @@ class EditBusinessDetailForm extends Component {
   }
 
   async componentWillUnmount () {
-    // console.log(this.props.isSubmitting, this.props.isValid)
-    if (this.props.isSubmitting || this.props.isValid) {
+    if (this.props.isSubmitting || (this.props.isValid && !this.props.isUpdated)) {
       await this.props.updateBusiness(this.props.values)
-      // this.props.getBusiness(this.props.business.id)
     }
   }
 
@@ -62,7 +60,16 @@ class EditBusinessDetailForm extends Component {
   }
 
   render () {
-    const { values, handleChange, handleBlur, handleSubmit, isValid, isSubmitting, isLoadingUpdate } = this.props
+    const {
+      values,
+      handleChange,
+      handleBlur,
+      handleSubmit,
+      isValid,
+      isSubmitting,
+      isLoadingUpdate,
+      isUserClientManager
+    } = this.props
     return (
       <Wrapper>
         {/* <Dimmer inverted active={isLoadingGet}>
@@ -72,7 +79,7 @@ class EditBusinessDetailForm extends Component {
           <Grid divided>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment size="mini" inverted color="blue">
+                <Segment size="mini" inverted color={this.props.business.company_id === 1 ? 'blue' : 'green'}>
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
@@ -91,7 +98,6 @@ class EditBusinessDetailForm extends Component {
                     value={this.state.listedPrice}
                     onChange={this._numberFormat}
                     onBlur={handleBlur}
-                    readOnly
                   />
                   <Form.Input
                     label="Current Price"
@@ -148,7 +154,7 @@ class EditBusinessDetailForm extends Component {
                 </Form.Group>
               </Grid.Column>
               <Grid.Column>
-                <Segment size="mini" inverted color="blue">
+                <Segment size="mini" inverted color={this.props.business.company_id === 1 ? 'blue' : 'green'}>
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
@@ -196,7 +202,7 @@ class EditBusinessDetailForm extends Component {
                     value={values.settlementDate}
                   />
                   <Form.Input
-                    readOnly
+                    readOnly={!isUserClientManager}
                     label="Sold Price"
                     name="soldPrice"
                     autoComplete="soldPrice"
@@ -252,7 +258,7 @@ class EditBusinessDetailForm extends Component {
   }
 }
 
-EditBusinessDetailForm.propTypes = {
+EditBusinessPriceForm.propTypes = {
   values: PropTypes.object,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -262,7 +268,10 @@ EditBusinessDetailForm.propTypes = {
   isSubmitting: PropTypes.bool,
   business: PropTypes.object,
   setFieldValue: PropTypes.func,
-  updateBusiness: PropTypes.func
+  updateBusiness: PropTypes.func,
+  getBusiness: PropTypes.func,
+  isUpdated: PropTypes.bool,
+  isUserClientManager: PropTypes.bool
 }
 
 const mapPropsToValues = props => {
@@ -308,18 +317,20 @@ const mapPropsToValues = props => {
   }
 }
 
-const handleSubmit = (values, { props, setSubmitting }) => {
-  props.updateBusiness(values).then(setSubmitting(false))
+const handleSubmit = async (values, { props, setSubmitting }) => {
+  await props.updateBusiness(values).then(setSubmitting(false))
+  props.getBusiness(values.id)
 }
 
 const mapStateToProps = state => {
   return {
-    isLoadingUpdate: state.business.update.isLoading
+    isLoadingUpdate: state.business.update.isLoading,
+    isUpdated: state.business.update.isUpdated
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ updateBusiness }, dispatch)
+  return bindActionCreators({ updateBusiness, getBusiness }, dispatch)
 }
 
 export default connect(
@@ -330,5 +341,5 @@ export default connect(
     mapPropsToValues,
     handleSubmit,
     enableReinitialize: true
-  })(EditBusinessDetailForm)
+  })(EditBusinessPriceForm)
 )

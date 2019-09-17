@@ -8,9 +8,14 @@ import numeral from 'numeral'
 import _ from 'lodash'
 import Wrapper from '../../components/content/Wrapper'
 import EditBusinessDetailForm from '../../components/forms/EditBusinessDetailForm'
-import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceFormOld'
+import EditBusinessPriceForm from '../../components/forms/EditBusinessPriceForm'
 
-import { getBusiness, cleanBusiness, verifyBusinessFirstOpenByAgent } from '../../redux/ducks/business'
+import {
+  getBusiness,
+  cleanBusiness,
+  verifyBusinessFirstOpenByAgent,
+  setLastBusinessTabSelected
+} from '../../redux/ducks/business'
 import { getBusinessFromBuyer, getBusinessLogFromBuyer } from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import BusinessLogList from './BusinessLogList'
@@ -156,8 +161,14 @@ class BusinessEditPage extends Component {
     }
   }
 
+  _handleSelect = async (e, { activeIndex }) => {
+    await this.props.setLastBusinessTabSelected(activeIndex)
+    this.props.getBusiness(this.props.business.id)
+  }
+
   render () {
     const { isLoading, business, history, isLoadingGetFromBuyer, match } = this.props
+
     if (isLoading && isLoadingGetFromBuyer) {
       return (
         <Dimmer
@@ -243,13 +254,16 @@ class BusinessEditPage extends Component {
           </Grid.Row>
           <Grid.Row style={{ paddingTop: 0 }}>
             <Tab
+              activeIndex={this.props.indexLastTabSelected}
+              onTabChange={this._handleSelect}
+              renderActiveOnly
               style={{ width: '100%', padding: '0 15px' }}
               menu={{ secondary: true, pointing: true }}
               panes={[
                 {
                   menuItem: 'Business Detail',
                   render: () => (
-                    <Tab.Pane style={{ backgroundColor: '#f1f1f1' }} className="BusinessDetail" attached={false}>
+                    <Tab.Pane style={{ backgroundColor: '#f1f1f1' }} className="BusinessDetail">
                       <Segment size="mini" inverted color={this.props.business.company_id === 1 ? 'blue' : 'green'}>
                         <Grid>
                           <Grid.Row columns={3}>
@@ -265,23 +279,29 @@ class BusinessEditPage extends Component {
                             </Grid.Column>
                             <Grid.Column>
                               <Header as="h4" floated="right" inverted>
-                                Enquiry Date: {moment(business.dateTimeCreated).format('DD/MM/YYYY')}
+                                Enquiry Date: {moment(this.props.business.dateTimeCreated).format('DD/MM/YYYY')}
                               </Header>
                             </Grid.Column>
                           </Grid.Row>
                         </Grid>
                       </Segment>
-                      {<EditBusinessDetailForm business={business} history={history} match={match} />}
+                      {
+                        <EditBusinessDetailForm
+                          business={this.props.business}
+                          history={this.props.history}
+                          match={this.props.match}
+                        />
+                      }
                     </Tab.Pane>
                   )
                 },
                 {
                   menuItem: 'Pricing/Information',
                   render: () => (
-                    <Tab.Pane style={{ backgroundColor: '#f1f1f1' }} attached={false}>
+                    <Tab.Pane style={{ backgroundColor: '#f1f1f1' }}>
                       <EditBusinessPriceForm
-                        business={business}
-                        history={history}
+                        business={this.props.business}
+                        history={this.props.history}
                         isUserClientManager={this.state.isUserClientManager}
                       />
                     </Tab.Pane>
@@ -354,7 +374,9 @@ BusinessEditPage.propTypes = {
   isLoadingGetFromBuyer: PropTypes.bool,
   getBusinessLogFromBuyer: PropTypes.func,
   userRoles: PropTypes.array,
-  verifyBusinessFirstOpenByAgent: PropTypes.func
+  verifyBusinessFirstOpenByAgent: PropTypes.func,
+  setLastBusinessTabSelected: PropTypes.func,
+  indexLastTabSelected: PropTypes.number
 }
 
 const mapDispatchToProps = dispatch => {
@@ -365,7 +387,8 @@ const mapDispatchToProps = dispatch => {
       getLogFromBusiness,
       getBusinessFromBuyer,
       getBusinessLogFromBuyer,
-      verifyBusinessFirstOpenByAgent
+      verifyBusinessFirstOpenByAgent,
+      setLastBusinessTabSelected
     },
     dispatch
   )
@@ -405,7 +428,12 @@ const mapStateToProps = (state, props) => {
       (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
         ? state.buyer.getBusinessFromBuyer.isUpdated
         : state.business.get.isUpdated,
-    userRoles: state.auth.user.roles
+    userRoles: state.auth.user.roles,
+    indexLastTabSelected:
+      (props.location.state && props.location.state.fromBuyerMenu) ||
+      (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
+        ? state.buyer.getBusinessFromBuyer.isUpdated
+        : state.business.setLastTabSelected.index
   }
 }
 
