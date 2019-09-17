@@ -99,35 +99,20 @@ class BusinessEditPage extends Component {
   }
 
   _getStage (id) {
-    if (id === 1) {
-      return 'Potential Listing'
-    }
-    if (id === 2) {
-      return 'Listing Negotiation'
-    }
-    if (id === 3) {
-      return 'Sales Memo'
-    }
-    if (id === 4) {
-      return 'For Sale'
-    }
-    if (id === 5) {
-      return 'Under Offer'
-    }
-    if (id === 6) {
-      return 'Sold'
-    }
-    if (id === 7) {
-      return 'Withdrawn'
-    }
-    if (id === 8) {
-      return 'Lost'
-    }
-    if (id === 9) {
-      return 'Appraisal'
-    }
-    if (id === 10) {
-      return 'Data Gathering'
+    if (this.props.business.company_id === 1) {
+      const stage = this.props.stageOptions.map(item => {
+        if (item.value === id) {
+          return item.text
+        }
+      })
+      return stage
+    } else {
+      const stage = this.props.ctcStageOptions.map(item => {
+        if (item.value === id) {
+          return item.text
+        }
+      })
+      return stage
     }
   }
 
@@ -247,7 +232,9 @@ class BusinessEditPage extends Component {
                 <Statistic.Label>Age</Statistic.Label>
               </Statistic>
               <Statistic color="green">
-                <Statistic.Value>{this._getStage(this.props.business.stageId)}</Statistic.Value>
+                <Statistic.Value>
+                  {this._getStage(business.company_id === 1 ? business.stageId : business.ctcStageId)}
+                </Statistic.Value>
                 <Statistic.Label>Stage</Statistic.Label>
               </Statistic>
             </Statistic.Group>
@@ -376,7 +363,9 @@ BusinessEditPage.propTypes = {
   userRoles: PropTypes.array,
   verifyBusinessFirstOpenByAgent: PropTypes.func,
   setLastBusinessTabSelected: PropTypes.func,
-  indexLastTabSelected: PropTypes.number
+  indexLastTabSelected: PropTypes.number,
+  stageOptions: PropTypes.array,
+  ctcStageOptions: PropTypes.array
 }
 
 const mapDispatchToProps = dispatch => {
@@ -433,7 +422,15 @@ const mapStateToProps = (state, props) => {
       (props.location.state && props.location.state.fromBuyerMenu) ||
       (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
         ? state.buyer.getBusinessFromBuyer.isUpdated
-        : state.business.setLastTabSelected.index
+        : state.business.setLastTabSelected.index,
+    stageOptions:
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
+        ? state.buyer.getBusinessFromBuyer.stageOptions
+        : state.business.get.stageOptions,
+    ctcStageOptions:
+      props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`
+        ? state.buyer.getBusinessFromBuyer.ctcStageOptions
+        : state.business.get.ctcStageOptions
   }
 }
 

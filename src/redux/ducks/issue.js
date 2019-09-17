@@ -172,12 +172,12 @@ export default function reducer (state = initialState, action) {
 
 // Action Creators
 
-export const listIssue = (limit = 5, page = null, listIssue = false) => async dispatch => {
+export const listIssue = (limit = 5, page = null, listIssue = false, businessId = false) => async dispatch => {
   dispatch({
     type: Types.GET_ISSUE_LOADING
   })
   try {
-    const issue = await list(limit, page, listIssue)
+    const issue = await list(limit, page, listIssue, businessId)
     dispatch({
       type: Types.GET_ISSUE_SUCCESS,
       payload: issue

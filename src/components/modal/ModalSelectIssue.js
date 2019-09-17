@@ -20,9 +20,8 @@ class ModalSelectIssue extends Component {
     this.props.listIssue(
       null,
       null,
-      this.props.business.listIssues_id && JSON.parse(this.props.business.listIssues_id).length > 0
-        ? JSON.parse(this.props.business.listIssues_id)
-        : false
+      this.props.business.listIssues_id && JSON.parse(this.props.business.listIssues_id).length > 0 ? null : false,
+      this.props.business.id
     )
   }
 

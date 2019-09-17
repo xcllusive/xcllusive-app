@@ -1,10 +1,10 @@
 import request from './'
 
-export const list = (limit = null, page = null, listIssue) => {
+export const list = (limit = null, page = null, listIssue = false, businessId = false) => {
   return request({
     method: 'get',
     url: '/issue',
-    params: { limit, page, listIssue }
+    params: { limit, page, listIssue, businessId }
   })
 }
 

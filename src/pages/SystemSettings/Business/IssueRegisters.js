@@ -107,7 +107,7 @@ class IssueRegisters extends Component {
                 <Pagination
                   size="mini"
                   onPageChange={(e, data) => this._handlePaginationChange(e, data)}
-                  defaultActivePage={this.props.issueActivePage}
+                  defaultActivePage={this.props.issueActivePage ? this.props.issueActivePage : 1}
                   totalPages={this.props.issuePages}
                   firstItem={null}
                   lastItem={null}
