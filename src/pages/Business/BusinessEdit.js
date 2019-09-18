@@ -16,7 +16,11 @@ import {
   verifyBusinessFirstOpenByAgent,
   setLastBusinessTabSelected
 } from '../../redux/ducks/business'
-import { getBusinessFromBuyer, getBusinessLogFromBuyer } from '../../redux/ducks/buyer'
+import {
+  getBusinessFromBuyer,
+  getBusinessLogFromBuyer,
+  setLastBusinessTabFromBuyerSelected
+} from '../../redux/ducks/buyer'
 import { getLogFromBusiness } from '../../redux/ducks/businessLog'
 import BusinessLogList from './BusinessLogList'
 
@@ -99,21 +103,19 @@ class BusinessEditPage extends Component {
   }
 
   _getStage (id) {
+    let stageOptions = []
     if (this.props.business.company_id === 1) {
-      const stage = this.props.stageOptions.map(item => {
-        if (item.value === id) {
-          return item.text
-        }
-      })
-      return stage
+      stageOptions = this.props.stageOptions
     } else {
-      const stage = this.props.ctcStageOptions.map(item => {
-        if (item.value === id) {
-          return item.text
-        }
-      })
-      return stage
+      stageOptions = this.props.ctcStageOptions
     }
+
+    const stage = stageOptions.map(item => {
+      if (item.value === id) {
+        return item.text
+      }
+    })
+    return stage
   }
 
   _diffDays = date => {
@@ -147,8 +149,13 @@ class BusinessEditPage extends Component {
   }
 
   _handleSelect = async (e, { activeIndex }) => {
-    await this.props.setLastBusinessTabSelected(activeIndex)
-    this.props.getBusiness(this.props.business.id)
+    if (this.props.history.location.pathname === `/business/${this.props.match.params.id}/from-buyer`) {
+      await this.props.setLastBusinessTabFromBuyerSelected(activeIndex)
+      this.props.getBusinessFromBuyer(this.props.match.params.id)
+    } else {
+      await this.props.setLastBusinessTabSelected(activeIndex)
+      this.props.getBusiness(this.props.business.id)
+    }
   }
 
   render () {
@@ -365,7 +372,8 @@ BusinessEditPage.propTypes = {
   setLastBusinessTabSelected: PropTypes.func,
   indexLastTabSelected: PropTypes.number,
   stageOptions: PropTypes.array,
-  ctcStageOptions: PropTypes.array
+  ctcStageOptions: PropTypes.array,
+  setLastBusinessTabFromBuyerSelected: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch => {
@@ -377,7 +385,8 @@ const mapDispatchToProps = dispatch => {
       getBusinessFromBuyer,
       getBusinessLogFromBuyer,
       verifyBusinessFirstOpenByAgent,
-      setLastBusinessTabSelected
+      setLastBusinessTabSelected,
+      setLastBusinessTabFromBuyerSelected
     },
     dispatch
   )
@@ -421,7 +430,7 @@ const mapStateToProps = (state, props) => {
     indexLastTabSelected:
       (props.location.state && props.location.state.fromBuyerMenu) ||
       (props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`)
-        ? state.buyer.getBusinessFromBuyer.isUpdated
+        ? state.buyer.setLastTabSelected.index
         : state.business.setLastTabSelected.index,
     stageOptions:
       props.history.location && props.history.location.pathname === `/business/${props.match.params.id}/from-buyer`

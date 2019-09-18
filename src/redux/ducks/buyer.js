@@ -72,7 +72,8 @@ export const Types = {
   VERIFY_DUPLICATED_BUYER_LOADING: 'VERIFY_DUPLICATED_BUYER_LOADING',
   VERIFY_DUPLICATED_BUYER_SUCCESS: 'VERIFY_DUPLICATED_BUYER_SUCCESS',
   VERIFY_DUPLICATED_BUYER_FAILURE: 'VERIFY_DUPLICATED_BUYER_FAILURE',
-  CLEAR_BUYER: 'CLEAR_BUYER'
+  CLEAR_BUYER: 'CLEAR_BUYER',
+  SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED: 'SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED'
 }
 
 // Reducer
@@ -183,6 +184,9 @@ const initialState = {
     isLoading: false,
     isUpdated: false,
     error: null
+  },
+  setLastTabSelected: {
+    index: 0
   }
 }
 
@@ -699,6 +703,14 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED:
+      return {
+        ...state,
+        setLastTabSelected: {
+          ...state.setLastTabSelected,
+          index: action.payload
+        }
+      }
     case Types.CLEAR_BUYER:
       return initialState
     default:
@@ -1050,5 +1062,12 @@ export const verifyDuplicatedBuyer = values => async dispatch => {
 export const clearBuyer = () => async dispatch => {
   dispatch({
     type: Types.CLEAR_BUYER
+  })
+}
+
+export const setLastBusinessTabFromBuyerSelected = indexLastTab => async dispatch => {
+  dispatch({
+    type: Types.SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED,
+    payload: indexLastTab
   })
 }
