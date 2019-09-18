@@ -248,18 +248,19 @@ export const updateSystemSettings = systemSettings => async dispatch => {
   }
 }
 
-export const exportBuyers = (dateFrom, dateTo) => async dispatch => {
+export const exportBuyers = (dateFrom, dateTo, company) => async dispatch => {
   dispatch({
     type: Types.EXPORT_BUYERS_LOADING,
     payload: true
   })
   try {
-    const response = await exportBuyersAPI(dateFrom, dateTo)
+    const response = await exportBuyersAPI(dateFrom, dateTo, company)
     dispatch({
       type: Types.EXPORT_BUYERS_SUCCESS,
       payload: response
     })
-    download(response, `buyers${moment().format('DD_MM_YYYY_hh_mm_ss')}.xlsx`)
+    if (response.type !== 'text/html') download(response, `buyers${moment().format('DD_MM_YYYY_hh_mm_ss')}.xlsx`)
+    else toast.error('No buyers in the period informed')
   } catch (error) {
     dispatch({
       type: Types.EXPORT_BUYERS_FAILURE,

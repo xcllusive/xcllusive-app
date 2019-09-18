@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Grid, Form, Button, Header, Segment } from 'semantic-ui-react'
+import { Grid, Form, Button, Header, Segment, Radio } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { TypesModal, openModal } from '../../../redux/ducks/modal'
@@ -41,8 +41,13 @@ class Buyers extends Component {
   _exportBuyers = values => {
     this.props.exportBuyers(
       moment(values.dateFrom).format('YYYY-MM-DD 00:00:00'),
-      moment(values.dateTo).format('YYYY-MM-DD 23:59:59')
+      moment(values.dateTo).format('YYYY-MM-DD 23:59:59'),
+      values.company
     )
+  }
+
+  _handleChangeCheckBox = (e, { name }) => {
+    this.props.setFieldValue(name, !this.props.values[name])
   }
 
   render () {
@@ -57,6 +62,22 @@ class Buyers extends Component {
             <Grid>
               <Grid.Row style={{ paddingBottom: '0px' }}>
                 <Grid.Column>
+                  <Form.Group>
+                    <Form.Field
+                      control={Radio}
+                      label="Xcllusive Businesses"
+                      name="company"
+                      onChange={this._handleChangeCheckBox}
+                      checked={values.company}
+                    />
+                    <Form.Field
+                      control={Radio}
+                      label="CTC Businesses"
+                      name="company"
+                      onChange={this._handleChangeCheckBox}
+                      checked={!values.company}
+                    />
+                  </Form.Group>
                   <Form.Group>
                     <Form.Field>
                       <label
@@ -119,7 +140,8 @@ Buyers.propTypes = {
 const mapPropsToValues = props => {
   return {
     dateFrom: moment().startOf('month'),
-    dateTo: moment()
+    dateTo: moment(),
+    company: true
   }
 }
 

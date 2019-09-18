@@ -20,11 +20,11 @@ export const execute = () => {
   })
 }
 
-export const exportBuyers = (dateFrom, dateTo) => {
+export const exportBuyers = (dateFrom, dateTo, company) => {
   return request({
     method: 'post',
     url: '/system-settings/export-buyers',
-    data: { dateFrom, dateTo },
+    data: { dateFrom, dateTo, company },
     responseType: 'blob'
   })
 }
