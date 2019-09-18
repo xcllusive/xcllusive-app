@@ -133,7 +133,7 @@ class ClientManagerList extends Component {
     this.setState({ business: null })
     this.setState({ showMsgBusiness: true })
     const value = 'BS' + id
-    this.props.getBusinesses(value, [4, 5])
+    this.props.getBusinesses(value, [4, 5], false, 6)
   }
 
   _renderBuyerLog = buyerLog => {
@@ -247,7 +247,7 @@ class ClientManagerList extends Component {
     })
     if (value !== '') {
       if (this.props.values.searchAllBusinesses) this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
-      else this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5]), 1000)
+      else this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5], false, 6), 1000)
     }
   }
 
@@ -422,7 +422,7 @@ class ClientManagerList extends Component {
     if (this.state.inputSearchBusiness !== '') {
       if (this.props.values.searchAllBusinesses) {
         this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness), 1000)
-      } else this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5]), 1000)
+      } else this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5], false, 6), 1000)
     }
   }
 
