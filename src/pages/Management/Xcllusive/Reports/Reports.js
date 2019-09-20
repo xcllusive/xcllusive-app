@@ -9,6 +9,7 @@ import Analyst from './Analyst'
 import { setLastXcllusiveTabSelected } from '../../../../redux/ducks/reports'
 import Enquiry from './Enquiry'
 import DailyActivity from './DailyActivity'
+import SoldBySource from './SoldBySource'
 
 class Reports extends Component {
   constructor (props) {
@@ -34,6 +35,10 @@ class Reports extends Component {
         {
           menuItem: 'Daily Activity',
           render: () => <DailyActivity history={this.props.history} />
+        },
+        {
+          menuItem: 'Sold By Source',
+          render: () => <SoldBySource history={this.props.history}></SoldBySource>
         }
       ]
     }

@@ -3,13 +3,14 @@ import {
   getAllAnalysts as getAllAnalystsAPI,
   getAnalystReport as getAnalystReportAPI,
   getQtdeBusinessesStagePerUser as getQtdeBusinessesStagePerUserAPI,
-  getBusinessesPerAnalyst as getBusinessesPerAnalystAPI,
+  getBusinessesPerAnalystSource as getBusinessesPerAnalystSourceAPI,
   getEnquiryReport as getEnquiryReportAPI,
   activityRequestControlPerUser as activityRequestControlPerUserAPI,
   getUsersPerRegion as getUsersPerRegionAPI,
   getDailyTimeActivityReport as getDailyTimeActivityReportAPI,
   getCtcBusinessesPerOffice as getCtcBusinessesPerOfficeAPI,
-  getMarketingReportTest as getMarketingReportTestAPI
+  getMarketingReportTest as getMarketingReportTestAPI,
+  getSoldBySource as getSoldBySourceAPI
 } from '../../services/api/reports'
 import { toast } from 'react-toastify'
 
@@ -29,9 +30,9 @@ export const Types = {
   GET_BUSINESSES_STAGE_PER_USER_LOADING: 'GET_BUSINESSES_STAGE_PER_USER_LOADING',
   GET_BUSINESSES_STAGE_PER_USER_SUCCESS: 'GET_BUSINESSES_STAGE_PER_USER_SUCCESS',
   GET_BUSINESSES_STAGE_PER_USER_FAILURE: 'GET_BUSINESSES_STAGE_PER_USER_FAILURE',
-  GET_BUSINESSES_PER_ANALYST_LOADING: 'GET_BUSINESSES_PER_ANALYST_LOADING',
-  GET_BUSINESSES_PER_ANALYST_SUCCESS: 'GET_BUSINESSES_PER_ANALYST_SUCCESS',
-  GET_BUSINESSES_PER_ANALYST_FAILURE: 'GET_BUSINESSES_PER_ANALYST_FAILURE',
+  GET_BUSINESSES_PER_ANALYST_SOURCE_LOADING: 'GET_BUSINESSES_PER_ANALYST_SOURCE_LOADING',
+  GET_BUSINESSES_PER_ANALYST_SOURCE_SUCCESS: 'GET_BUSINESSES_PER_ANALYST_SOURCE_SUCCESS',
+  GET_BUSINESSES_PER_ANALYST_SOURCE_FAILURE: 'GET_BUSINESSES_PER_ANALYST_SOURCE_FAILURE',
   KEEP_MARKETING_RECORDS: 'KEEP_MARKETING_RECORDS',
   SET_LAST_TAB_SELECTED: 'SET_LAST_TAB_SELECTED',
   KEEP_ANALYST_PARAMS: 'KEEP_ANALYST_PARAMS',
@@ -54,7 +55,11 @@ export const Types = {
   SET_LAST_XCLLUSIVE_TAB_SELECTED: 'SET_LAST_XCLLUSIVE_TAB_SELECTED',
   GET_CTC_BUSINESSES_PER_OFFICE_LOADING: 'GET_CTC_BUSINESSES_PER_OFFICE_LOADING',
   GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS: 'GET_CTC_BUSINESSES_PER_OFFICE_SUCCESS',
-  GET_CTC_BUSINESSES_PER_OFFICE_FAILURE: 'GET_CTC_BUSINESSES_PER_OFFICE_FAILURE'
+  GET_CTC_BUSINESSES_PER_OFFICE_FAILURE: 'GET_CTC_BUSINESSES_PER_OFFICE_FAILURE',
+  GET_SOLD_BY_SOURCE_LOADING: 'GET_SOLD_BY_SOURCE_LOADING',
+  GET_SOLD_BY_SOURCE_SUCCESS: 'GET_SOLD_BY_SOURCE_SUCCESS',
+  GET_SOLD_BY_SOURCE_FAILURE: 'GET_SOLD_BY_SOURCE_FAILURE',
+  KEEP_SOLD_BY_SOURCE_RECORDS: 'KEEP_SOLD_BY_SOURCE_RECORDS'
 }
 
 // Reducer
@@ -86,7 +91,7 @@ const initialState = {
     qtde: null,
     error: null
   },
-  getBusinessesAnalyst: {
+  getBusinessesAnalystSource: {
     isLoading: false,
     object: {},
     error: null
@@ -128,6 +133,16 @@ const initialState = {
     isLoading: false,
     object: {},
     error: null
+  },
+  getSoldBySource: {
+    isLoading: false,
+    arraySoldBySource: [],
+    totalEngaged: 0,
+    totalSold: 0,
+    error: null
+  },
+  keepSoldBySourceRecords: {
+    records: null
   }
 }
 
@@ -251,30 +266,30 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
-    case Types.GET_BUSINESSES_PER_ANALYST_LOADING:
+    case Types.GET_BUSINESSES_PER_ANALYST_SOURCE_LOADING:
       return {
         ...state,
-        getBusinessesAnalyst: {
-          ...state.getBusinessesAnalyst,
+        getBusinessesAnalystSource: {
+          ...state.getBusinessesAnalystSource,
           isLoading: action.payload,
           error: null
         }
       }
-    case Types.GET_BUSINESSES_PER_ANALYST_SUCCESS:
+    case Types.GET_BUSINESSES_PER_ANALYST_SOURCE_SUCCESS:
       return {
         ...state,
-        getBusinessesAnalyst: {
-          ...state.getBusinessesAnalyst,
+        getBusinessesAnalystSource: {
+          ...state.getBusinessesAnalystSource,
           isLoading: false,
           object: action.payload,
           error: null
         }
       }
-    case Types.GET_BUSINESSES_PER_ANALYST_FAILURE:
+    case Types.GET_BUSINESSES_PER_ANALYST_SOURCE_FAILURE:
       return {
         ...state,
-        getBusinessesAnalyst: {
-          ...state.getBusinessesAnalyst,
+        getBusinessesAnalystSource: {
+          ...state.getBusinessesAnalystSource,
           isLoading: false,
           error: action.payload
         }
@@ -483,6 +498,44 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_SOLD_BY_SOURCE_LOADING:
+      return {
+        ...state,
+        getSoldBySource: {
+          ...state.getSoldBySource,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.GET_SOLD_BY_SOURCE_SUCCESS:
+      return {
+        ...state,
+        getSoldBySource: {
+          ...state.getSoldBySource,
+          isLoading: false,
+          arraySoldBySource: action.payload.data,
+          totalEngaged: action.payload.totalEngaged,
+          totalSold: action.payload.totalSold,
+          error: null
+        }
+      }
+    case Types.GET_SOLD_BY_SOURCE_FAILURE:
+      return {
+        ...state,
+        getSoldBySource: {
+          ...state.getSoldBySource,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    case Types.KEEP_SOLD_BY_SOURCE_RECORDS:
+      return {
+        ...state,
+        keepSoldBySourceRecords: {
+          ...state.keepSoldBySourceRecords,
+          records: action.payload
+        }
+      }
     default:
       return state
   }
@@ -608,20 +661,20 @@ export const getQtdeBusinessesStagePerUser = (analystId, dateFrom, dateTo) => as
   }
 }
 
-export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => async dispatch => {
+export const getBusinessesPerAnalystSource = (analystSourceId, dateFrom, dateTo, type) => async dispatch => {
   dispatch({
-    type: Types.GET_BUSINESSES_PER_ANALYST_LOADING,
+    type: Types.GET_BUSINESSES_PER_ANALYST_SOURCE_LOADING,
     payload: true
   })
   try {
-    const getBusinessesAnalyst = await getBusinessesPerAnalystAPI(analystId, dateFrom, dateTo)
+    const getBusinessesAnalyst = await getBusinessesPerAnalystSourceAPI(analystSourceId, dateFrom, dateTo, type)
     dispatch({
-      type: Types.GET_BUSINESSES_PER_ANALYST_SUCCESS,
+      type: Types.GET_BUSINESSES_PER_ANALYST_SOURCE_SUCCESS,
       payload: getBusinessesAnalyst.data
     })
   } catch (error) {
     dispatch({
-      type: Types.GET_BUSINESSES_PER_ANALYST_FAILURE,
+      type: Types.GET_BUSINESSES_PER_ANALYST_SOURCE_FAILURE,
       payload: error
     })
     toast.error(error)
@@ -784,6 +837,30 @@ export const getDailyTimeActivityReport = (id, date) => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_DAILY_TIME_ACTIVITY_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const getSoldBySource = (dateFrom, dateTo) => async dispatch => {
+  dispatch({
+    type: Types.GET_SOLD_BY_SOURCE_LOADING,
+    payload: true
+  })
+  try {
+    const soldBySource = await getSoldBySourceAPI(dateFrom, dateTo)
+    dispatch({
+      type: Types.GET_SOLD_BY_SOURCE_SUCCESS,
+      payload: soldBySource
+    })
+    dispatch({
+      type: Types.KEEP_SOLD_BY_SOURCE_RECORDS,
+      payload: { dateFrom, dateTo }
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_SOLD_BY_SOURCE_FAILURE,
       payload: error
     })
     toast.error(error.message)

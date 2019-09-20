@@ -40,11 +40,11 @@ export const getQtdeBusinessesStagePerUser = (analystId, dateFrom, dateTo) => {
   })
 }
 
-export const getBusinessesPerAnalyst = (analystId, dateFrom, dateTo) => {
+export const getBusinessesPerAnalystSource = (analystSourceId, dateFrom, dateTo, type) => {
   return request({
     method: 'get',
-    url: 'reports/businesses-list-analyst',
-    params: { analystId, dateFrom, dateTo }
+    url: 'reports/businesses-list-analyst-source',
+    params: { analystSourceId, dateFrom, dateTo, type }
   })
 }
 
@@ -85,5 +85,13 @@ export const getDailyTimeActivityReport = (id, date) => {
     method: 'get',
     url: '/reports/daily-time-activity-report',
     params: { id, date }
+  })
+}
+
+export const getSoldBySource = (dateFrom, dateTo) => {
+  return request({
+    method: 'get',
+    url: 'reports/sold-by-source',
+    params: { dateFrom, dateTo }
   })
 }

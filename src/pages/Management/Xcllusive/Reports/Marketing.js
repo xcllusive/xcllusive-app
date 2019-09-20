@@ -56,13 +56,14 @@ class MarketingReports extends Component {
     )
   }
 
-  _goToBusinessesListPerAnalyst = leadsPerAnalyst => {
+  _goToBusinessesListPerAnalyst = (leads, type) => {
     this.props.history.push({
-      pathname: `management/businesses-list-analyst/${leadsPerAnalyst.listingAgent_id}`,
+      pathname: `management/businesses-list/${type === 'analyst' ? leads.listingAgent_id : leads.sourceId}`,
       state: {
-        analystObject: leadsPerAnalyst,
+        leadsObject: leads,
         dateFrom: this.props.values.dateFrom,
-        dateTo: this.props.values.dateTo
+        dateTo: this.props.values.dateTo,
+        type
       }
     })
   }
@@ -154,14 +155,16 @@ class MarketingReports extends Component {
                         return (
                           <Table key={index} celled striped selectable compact size="small">
                             <Table.Header>
-                              <Table.Row >
+                              <Table.Row>
                                 <Table.HeaderCell style={{ width: '300px', textAlign: 'left' }}>
                                   <h4 style={{ color: '#2185d0' }}>{leadsPerAnalyst[0].dataRegion}</h4>
                                 </Table.HeaderCell>
                                 <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>
                                   Total Leads
                                 </Table.HeaderCell>
-                                <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>Signed Up</Table.HeaderCell>
+                                <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>
+                                  Signed Up
+                                </Table.HeaderCell>
                                 <Table.HeaderCell style={{ width: '300px', textAlign: 'center' }}>
                                   Convertion Rate
                                 </Table.HeaderCell>
@@ -171,7 +174,7 @@ class MarketingReports extends Component {
                               if (item.listingAgent_id) {
                                 return (
                                   <Table.Body key={item.listingAgent_id}>
-                                    <Table.Row >
+                                    <Table.Row>
                                       <Table.Cell>
                                         <Grid>
                                           <Grid.Row columns={2}>
@@ -179,22 +182,16 @@ class MarketingReports extends Component {
                                               <Icon
                                                 link
                                                 name="magnify"
-                                                onClick={() => this._goToBusinessesListPerAnalyst(item)}
+                                                onClick={() => this._goToBusinessesListPerAnalyst(item, 'analyst')}
                                               />
                                             </Grid.Column>
-                                            <Grid.Column>
-                                              {`${item.firstName} ${item.lastName}`}
-                                            </Grid.Column>
+                                            <Grid.Column>{`${item.firstName} ${item.lastName}`}</Grid.Column>
                                           </Grid.Row>
                                         </Grid>
                                       </Table.Cell>
                                       <Table.Cell style={{ textAlign: 'right' }}>{item.totalLeads}</Table.Cell>
-                                      <Table.Cell style={{ textAlign: 'right' }}>
-                                        {item.signed}
-                                      </Table.Cell>
-                                      <Table.Cell style={{ textAlign: 'right' }}>
-                                        {item.convertionRate}
-                                      </Table.Cell>
+                                      <Table.Cell style={{ textAlign: 'right' }}>{item.signed}</Table.Cell>
+                                      <Table.Cell style={{ textAlign: 'right' }}>{item.convertionRate}</Table.Cell>
                                     </Table.Row>
                                   </Table.Body>
                                 )
@@ -291,8 +288,23 @@ class MarketingReports extends Component {
                               {leadsPerSource.map((leadsPerSource, index) => {
                                 return (
                                   <Table.Body key={index}>
-                                    <Table.Row >
-                                      <Table.Cell>{leadsPerSource.sourceLabel}</Table.Cell>
+                                    <Table.Row>
+                                      <Table.Cell>
+                                        <Grid>
+                                          <Grid.Row columns={2}>
+                                            <Grid.Column width={1}>
+                                              <Icon
+                                                link
+                                                name="magnify"
+                                                onClick={() =>
+                                                  this._goToBusinessesListPerAnalyst(leadsPerSource, 'source')
+                                                }
+                                              />
+                                            </Grid.Column>
+                                            <Grid.Column>{leadsPerSource.sourceLabel}</Grid.Column>
+                                          </Grid.Row>
+                                        </Grid>
+                                      </Table.Cell>
                                       <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
                                         {leadsPerSource.totalLeads}
                                       </Table.Cell>
@@ -303,7 +315,6 @@ class MarketingReports extends Component {
                                         {leadsPerSource.convertionRate}
                                       </Table.Cell>
                                     </Table.Row>
-
                                   </Table.Body>
                                 )
                               })}

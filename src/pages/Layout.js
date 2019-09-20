@@ -30,7 +30,7 @@ import MakeTaxInvoice from './Business/Invoice/MakeTaxInvoice'
 import AppraisalMenu from './Business/Appraisal/AppraisalMenu'
 import AppraisalList from './Business/Appraisal/AppraisalList'
 import HistoricalWeeklyReport from './Management/Xcllusive/Reports/HistoricalWeekly'
-import BusinessesListPerAnalyst from './Management/Xcllusive/Reports/BusinessesListPerAnalyst'
+import BusinessesListPerAnalystSource from './Management/Xcllusive/Reports/BusinessesListPerAnalystSource'
 import DailyTimeActivityReports from './Management/Xcllusive/Reports/DailyTimeActivity'
 import BusinessesCtcListPerAnalyst from './Management/CTC/Reports/BusinessesListPerAnalyst'
 import CtcBusinessList from './Business/CtcBusinessList'
@@ -217,8 +217,8 @@ const Layout = ({ match, logout, menu, user }) => (
       />
       <AuthorizationRoute
         exact
-        component={BusinessesListPerAnalyst}
-        path={`${match.path}management/businesses-list-analyst/:idUser`}
+        component={BusinessesListPerAnalystSource}
+        path={`${match.path}management/businesses-list/:id`}
         allowedRoles="MANAGEMENT_MENU"
       />
       <AuthorizationRoute

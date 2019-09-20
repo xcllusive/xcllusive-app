@@ -5,21 +5,22 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import { Grid, Table, Segment, Header, Button, Icon } from 'semantic-ui-react'
 import Wrapper from '../../../../components/content/Wrapper'
-import { getBusinessesPerAnalyst } from '../../../../redux/ducks/reports'
+import { getBusinessesPerAnalystSource } from '../../../../redux/ducks/reports'
 import moment from 'moment'
 import numeral from 'numeral'
 
-class BusinessesListPerAnalyst extends Component {
+class BusinessesListPerAnalystSource extends Component {
   constructor (props) {
     super(props)
     this.state = {}
   }
   componentDidMount () {
     if (this.props.savedRecords) {
-      this.props.getBusinessesPerAnalyst(
-        this.props.match.params.idUser,
+      this.props.getBusinessesPerAnalystSource(
+        this.props.match.params.id,
         moment(new Date(this.props.savedRecords.dateFrom)).format('YYYY/MM/DD 00:00:00'),
-        moment(new Date(this.props.savedRecords.dateTo)).format('YYYY/MM/DD 23:59:59')
+        moment(new Date(this.props.savedRecords.dateTo)).format('YYYY/MM/DD 23:59:59'),
+        this.props.location.state.type
       )
     }
   }
@@ -58,13 +59,10 @@ class BusinessesListPerAnalyst extends Component {
 
   render () {
     const { businessesLeads, businessesSignedUp } = this.props
-    const { analystObject } = this.props.location.state
+    const { leadsObject, type } = this.props.location.state
     return (
       <Wrapper>
-        <Header style={{ marginTop: '10px' }} textAlign="center">
-          {`${analystObject.firstName} ${analystObject.lastName}`}
-        </Header>
-        <Grid>
+        <Grid style={{ marginTop: '10px' }}>
           <Grid.Row columns={1}>
             <Grid.Column floated="left">
               <Header>
@@ -76,6 +74,13 @@ class BusinessesListPerAnalyst extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Header textAlign="center">
+          {type === 'analyst'
+            ? `${leadsObject.firstName} ${leadsObject.lastName}`
+            : type === 'source'
+              ? `${leadsObject.sourceLabel} (${leadsObject.dataRegion})`
+              : leadsObject.sourceLabel}
+        </Header>
         <Segment style={{ paddingLeft: '0px', paddingRight: '0px', paddingBottom: '0px' }} size="small">
           <Fragment>
             <Grid>
@@ -87,7 +92,7 @@ class BusinessesListPerAnalyst extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header style={{ marginRight: '10px' }} as="h4" color="red" textAlign="right">
-                    Total: {analystObject.totalLeads}
+                    Total: {type === 'analyst' ? leadsObject.totalLeads : leadsObject.totalPerSource}
                   </Header>
                 </Grid.Column>
               </Grid.Row>
@@ -160,7 +165,7 @@ class BusinessesListPerAnalyst extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Header style={{ marginRight: '10px' }} as="h4" color="red" textAlign="right">
-                    Total: {analystObject.signed}
+                    Total: {type === 'analyst' ? leadsObject.signed : leadsObject.countBusinessSold}
                   </Header>
                 </Grid.Column>
               </Grid.Row>
@@ -203,12 +208,12 @@ class BusinessesListPerAnalyst extends Component {
   }
 }
 
-BusinessesListPerAnalyst.propTypes = {
+BusinessesListPerAnalystSource.propTypes = {
   values: PropTypes.object,
   setFieldValue: PropTypes.func,
   location: PropTypes.object,
   history: PropTypes.object,
-  getBusinessesPerAnalyst: PropTypes.func,
+  getBusinessesPerAnalystSource: PropTypes.func,
   businessesLeads: PropTypes.array,
   businessesSignedUp: PropTypes.array,
   match: PropTypes.object,
@@ -221,18 +226,23 @@ const mapPropsToValues = props => {
   }
 }
 
-const mapStateToProps = state => ({
-  businessesLeads: state.reports.getBusinessesAnalyst.object.listBusinessesDateCreated,
-  businessesSignedUp: state.reports.getBusinessesAnalyst.object.listBusinessesSalesMemorandum,
-  savedRecords: state.reports.keepMarketingRecords.records
-})
+const mapStateToProps = (state, props) => {
+  return {
+    businessesLeads: state.reports.getBusinessesAnalystSource.object.listBusinessesDateCreated,
+    businessesSignedUp: state.reports.getBusinessesAnalystSource.object.listBusinessIMSold,
+    savedRecords:
+      props.location.state.type === 'analyst'
+        ? state.reports.keepMarketingRecords.records
+        : state.reports.keepSoldBySourceRecords.records
+  }
+}
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getBusinessesPerAnalyst }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ getBusinessesPerAnalystSource }, dispatch)
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(
   withFormik({
     mapPropsToValues
-  })(BusinessesListPerAnalyst)
+  })(BusinessesListPerAnalystSource)
 )
