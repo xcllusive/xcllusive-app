@@ -56,14 +56,15 @@ class MarketingReports extends Component {
     )
   }
 
-  _goToBusinessesListPerAnalyst = (leads, type) => {
+  _goToBusinessesListPerAnalyst = (leads, type, officeId = false) => {
     this.props.history.push({
       pathname: `management/businesses-list/${type === 'analyst' ? leads.listingAgent_id : leads.sourceId}`,
       state: {
         leadsObject: leads,
         dateFrom: this.props.values.dateFrom,
         dateTo: this.props.values.dateTo,
-        type
+        type,
+        officeId
       }
     })
   }
@@ -285,7 +286,7 @@ class MarketingReports extends Component {
                                   <Table.HeaderCell style={{ width: '300px', textAlign: 'right' }} />
                                 </Table.Row>
                               </Table.Header>
-                              {leadsPerSource.map((leadsPerSource, index) => {
+                              {leadsPerSource.map((source, index) => {
                                 return (
                                   <Table.Body key={index}>
                                     <Table.Row>
@@ -297,22 +298,26 @@ class MarketingReports extends Component {
                                                 link
                                                 name="magnify"
                                                 onClick={() =>
-                                                  this._goToBusinessesListPerAnalyst(leadsPerSource, 'source')
+                                                  this._goToBusinessesListPerAnalyst(
+                                                    source,
+                                                    'source',
+                                                    leadsPerSource[0].officeId
+                                                  )
                                                 }
                                               />
                                             </Grid.Column>
-                                            <Grid.Column>{leadsPerSource.sourceLabel}</Grid.Column>
+                                            <Grid.Column>{source.sourceLabel}</Grid.Column>
                                           </Grid.Row>
                                         </Grid>
                                       </Table.Cell>
                                       <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                        {leadsPerSource.totalLeads}
+                                        {source.totalLeads}
                                       </Table.Cell>
                                       <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                        {leadsPerSource.totalSignedUp}
+                                        {source.totalSignedUp}
                                       </Table.Cell>
                                       <Table.Cell style={{ width: '300px', textAlign: 'right' }}>
-                                        {leadsPerSource.convertionRate}
+                                        {source.convertionRate}
                                       </Table.Cell>
                                     </Table.Row>
                                   </Table.Body>
@@ -354,7 +359,22 @@ class MarketingReports extends Component {
                         {arrayTotalPerSource.map(totalPerSource => {
                           return (
                             <Table.Row key={totalPerSource.sourceId}>
-                              <Table.Cell>{totalPerSource['source.label']}</Table.Cell>
+                              <Table.Cell>
+                                <Grid>
+                                  <Grid.Row columns={2}>
+                                    <Grid.Column width={1}>
+                                      <Icon
+                                        link
+                                        name="magnify"
+                                        onClick={() =>
+                                          this._goToBusinessesListPerAnalyst(totalPerSource, 'totalSource')
+                                        }
+                                      />
+                                    </Grid.Column>
+                                    <Grid.Column>{totalPerSource['source.label']}</Grid.Column>
+                                  </Grid.Row>
+                                </Grid>
+                              </Table.Cell>
                               <Table.Cell style={{ textAlign: 'right' }}>{totalPerSource.count}</Table.Cell>
                             </Table.Row>
                           )

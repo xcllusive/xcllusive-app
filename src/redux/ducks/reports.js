@@ -139,6 +139,7 @@ const initialState = {
     arraySoldBySource: [],
     totalEngaged: 0,
     totalSold: 0,
+    totalSoldPrice: 0,
     error: null
   },
   keepSoldBySourceRecords: {
@@ -516,6 +517,7 @@ export default function reducer (state = initialState, action) {
           arraySoldBySource: action.payload.data,
           totalEngaged: action.payload.totalEngaged,
           totalSold: action.payload.totalSold,
+          totalSoldPrice: action.payload.totalSoldPrice,
           error: null
         }
       }
@@ -661,13 +663,19 @@ export const getQtdeBusinessesStagePerUser = (analystId, dateFrom, dateTo) => as
   }
 }
 
-export const getBusinessesPerAnalystSource = (analystSourceId, dateFrom, dateTo, type) => async dispatch => {
+export const getBusinessesPerAnalystSource = (analystSourceId, dateFrom, dateTo, type, officeId) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_PER_ANALYST_SOURCE_LOADING,
     payload: true
   })
   try {
-    const getBusinessesAnalyst = await getBusinessesPerAnalystSourceAPI(analystSourceId, dateFrom, dateTo, type)
+    const getBusinessesAnalyst = await getBusinessesPerAnalystSourceAPI(
+      analystSourceId,
+      dateFrom,
+      dateTo,
+      type,
+      officeId
+    )
     dispatch({
       type: Types.GET_BUSINESSES_PER_ANALYST_SOURCE_SUCCESS,
       payload: getBusinessesAnalyst.data

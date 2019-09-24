@@ -188,19 +188,19 @@ class SoldBySource extends Component {
                         </Table.Body>
                         <Table.Footer fullWidth>
                           <Table.Row>
-                            <Table.HeaderCell>
-                              <b>TOTAL New Enquiries:</b>
-                            </Table.HeaderCell>
+                            <Table.HeaderCell></Table.HeaderCell>
                             <Table.HeaderCell textAlign="right">
                               <b>{this.props.totalEngaged}</b>
                             </Table.HeaderCell>
+                            <Table.HeaderCell></Table.HeaderCell>
+                            <Table.HeaderCell textAlign="right">
+                              <b>{this.props.totalSold}</b>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell></Table.HeaderCell>
+                            <Table.HeaderCell style={{ textAlign: 'right' }}>
+                              {numeral(this.props.totalSoldPrice).format('$0,0.[99]')}
+                            </Table.HeaderCell>
                           </Table.Row>
-                          <Table.Header></Table.Header>
-                          <Table.HeaderCell textAlign="right">
-                            <b>{this.props.totalSold}</b>
-                          </Table.HeaderCell>
-                          <Table.Header></Table.Header>
-                          <Table.Header></Table.Header>
                         </Table.Footer>
                       </Table>
                     </Grid.Column>
@@ -226,7 +226,8 @@ SoldBySource.propTypes = {
   savedRecords: PropTypes.object,
   arraySoldBySource: PropTypes.array,
   totalEngaged: PropTypes.number,
-  totalSold: PropTypes.number
+  totalSold: PropTypes.number,
+  totalSoldPrice: PropTypes.number
 }
 
 const mapPropsToValues = props => {
@@ -240,7 +241,8 @@ const mapStateToProps = state => ({
   arraySoldBySource: state.reports.getSoldBySource.arraySoldBySource,
   savedRecords: state.reports.keepSoldBySourceRecords.records,
   totalEngaged: state.reports.getSoldBySource.totalEngaged,
-  totalSold: state.reports.getSoldBySource.totalSold
+  totalSold: state.reports.getSoldBySource.totalSold,
+  totalSoldPrice: state.reports.getSoldBySource.totalSoldPrice
 })
 
 const mapDispatchToProps = dispatch =>

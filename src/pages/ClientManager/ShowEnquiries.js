@@ -23,7 +23,7 @@ class ShowEnquiries extends Component {
   }
 
   render () {
-    const { isLoadingEnquiries, enquiries, totalEnquiries } = this.props
+    const { isLoadingEnquiries, enquiries, totalEnquiries, history } = this.props
     const { business } = this.props.location.state
 
     if (isLoadingEnquiries) {
@@ -85,7 +85,11 @@ class ShowEnquiries extends Component {
                   </Table.Header>
                   <Table.Body>
                     {enquiries.map(enquirie => (
-                      <Table.Row active key={enquirie.id}>
+                      <Table.Row
+                        active
+                        key={enquirie.id}
+                        onClick={() => history.push(`/buyer/${enquirie.Buyer.id}/business/${business.id}`)}
+                      >
                         <Table.Cell>{`${enquirie.Buyer.firstName} ${enquirie.Buyer.surname}`}</Table.Cell>
                         <Table.Cell>{enquirie.Buyer.email}</Table.Cell>
                         <Table.Cell>{enquirie.Buyer.telephone1}</Table.Cell>
