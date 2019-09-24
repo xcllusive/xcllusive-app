@@ -254,10 +254,11 @@ class MakeNewScorePage extends Component {
     this._findItemArray(name, value)
   }
 
-  _modalConfirmCalculateScore = values => {
+  _modalConfirmCalculateScore = async values => {
     values.total = this._calculateScore()
     if (this.props.score) {
-      this.props.updateScore(values)
+      await this.props.updateScore(values)
+      this.props.getScore(this.props.match.params.idScore)
     } else {
       this.props.openModal(TypesModal.MODAL_TYPE_CONFIRM, {
         options: {
@@ -399,7 +400,7 @@ class MakeNewScorePage extends Component {
           <Grid style={{ marginTop: 0 }}>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
@@ -479,13 +480,14 @@ class MakeNewScorePage extends Component {
                     header="Enquiries In Last Four Weeks Generated Text:"
                     title={this.state.objectEnquiries.textReport}
                     icon={this.state.objectEnquiries.weight}
+                    backgroundColor="#d4d4d53b"
                   />
                 ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
@@ -545,13 +547,14 @@ class MakeNewScorePage extends Component {
                     header="Percieved Price from Buyers Generated Text"
                     title={this.state.objectPrice.textReport}
                     icon={this.state.objectPrice.weight}
+                    backgroundColor="#d4d4d53b"
                   />
                 ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
@@ -611,13 +614,14 @@ class MakeNewScorePage extends Component {
                     header="Information/Transparency/Momentum Generated Text:"
                     title={this.state.objectMomentum.textReport}
                     icon={this.state.objectMomentum.weight}
+                    backgroundColor="#d4d4d53b"
                   />
                 ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
@@ -677,13 +681,14 @@ class MakeNewScorePage extends Component {
                     header="Current Interest Generated Text:"
                     title={this.state.objectInterest.textReport}
                     icon={this.state.objectInterest.weight}
+                    backgroundColor="#d4d4d53b"
                   />
                 ) : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
                   <Grid>
                     <Grid.Row columns={2}>
                       <Grid.Column>
@@ -743,6 +748,7 @@ class MakeNewScorePage extends Component {
                     header="Buyer Percieved Risk Generated Text:"
                     title={this.state.objectRisk.textReport}
                     icon={this.state.objectRisk.weight}
+                    backgroundColor="#d4d4d53b"
                   />
                 ) : null}
               </Grid.Column>
@@ -761,7 +767,7 @@ class MakeNewScorePage extends Component {
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
                   <Grid style={{ marginTop: 0 }}>
                     <Grid.Row columns={3}>
                       <Grid.Column>
@@ -773,7 +779,7 @@ class MakeNewScorePage extends Component {
                           disabled={!isValid}
                         >
                           <Icon name="calculator" />
-                          {score ? 'Recalculate Your Score' : 'Calculate Your Score'}
+                          {score ? 'Recalculate and Save' : 'Calculate and Save'}
                         </Button>
                       </Grid.Column>
                       <Grid.Column>
@@ -806,7 +812,7 @@ class MakeNewScorePage extends Component {
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                <Segment>
+                <Segment style={{ backgroundColor: '#d4d4d53b' }}>
                   <Grid style={{ marginTop: 0 }}>
                     <Grid.Row columns={2}>
                       <Grid.Column>

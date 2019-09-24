@@ -23,12 +23,7 @@ const IconType = ({ icon }) => {
     return (
       <Fragment>
         <Card.Meta style={{ marginTop: 10 }}>Satisfactory</Card.Meta>
-        <Icon
-          color="green"
-          size="huge"
-          name="smile"
-          style={{ marginTop: 20 }}
-        />
+        <Icon color="green" size="huge" name="smile" style={{ marginTop: 20 }} />
       </Fragment>
     )
   }
@@ -43,7 +38,7 @@ class CardScore extends Component {
 
   render () {
     return (
-      <Card fluid style={{ height: '100%' }}>
+      <Card fluid style={{ height: '100%', backgroundColor: this.props.backgroundColor }}>
         <Card.Content textAlign="center">
           <Card.Header>{this.props.header}</Card.Header>
           <Card.Description style={{ marginTop: 10 }}>
@@ -60,7 +55,8 @@ class CardScore extends Component {
 CardScore.propTypes = {
   header: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  icon: PropTypes.number.isRequired
+  icon: PropTypes.number.isRequired,
+  backgroundColor: PropTypes.string.isRequired
 }
 
 IconType.propTypes = {
