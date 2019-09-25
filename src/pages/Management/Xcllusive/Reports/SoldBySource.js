@@ -232,8 +232,8 @@ SoldBySource.propTypes = {
 
 const mapPropsToValues = props => {
   return {
-    dateFrom: props.savedRecords ? moment(new Date(props.savedRecords.dateFrom)) : moment().startOf('month'),
-    dateTo: props.savedRecords ? moment(new Date(props.savedRecords.dateTo)) : moment()
+    dateFrom: props.savedRecords ? moment(props.savedRecords.dateFrom) : moment().startOf('month'),
+    dateTo: props.savedRecords ? moment(props.savedRecords.dateTo) : moment()
   }
 }
 

@@ -21,8 +21,8 @@ class BusinessesListPerAnalystSource extends Component {
     if (this.props.savedRecords) {
       this.props.getBusinessesPerAnalystSource(
         this.props.match.params.id,
-        moment(new Date(this.props.savedRecords.dateFrom)).format('YYYY/MM/DD 00:00:00'),
-        moment(new Date(this.props.savedRecords.dateTo)).format('YYYY/MM/DD 23:59:59'),
+        moment(this.props.savedRecords.dateFrom).format('YYYY/MM/DD 00:00:00'),
+        moment(this.props.savedRecords.dateTo).format('YYYY/MM/DD 23:59:59'),
         this.props.location.state.type,
         this.props.location.state.officeId
       )
