@@ -6,7 +6,7 @@ export const get = id => {
   })
 }
 
-export const getAll = (search, stageId, filterLog, ctcStageId) => {
+export const getAll = (search, stageId, filterLog, company) => {
   const params = {}
 
   if (search && search.length > 0) params.search = search
@@ -19,8 +19,8 @@ export const getAll = (search, stageId, filterLog, ctcStageId) => {
   if (filterLog) {
     params.filterLog = filterLog
   }
-  if (ctcStageId && ctcStageId > 0) {
-    params.ctcStageId = ctcStageId
+  if (company) {
+    params.company = company
   }
 
   return request({

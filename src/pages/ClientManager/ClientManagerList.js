@@ -16,7 +16,8 @@ import {
   Form,
   Label,
   Segment,
-  Divider
+  Divider,
+  Checkbox
 } from 'semantic-ui-react'
 
 import { connect } from 'react-redux'
@@ -27,7 +28,7 @@ import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
 import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
 import { getBusinesses, getBusiness, createBusiness, updateBusiness } from '../../redux/ducks/business'
 import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
-
+import styled from 'styled-components'
 import {
   enquiryBusiness,
   sendCa,
@@ -44,6 +45,10 @@ import { getEmailTemplate } from '../../redux/ducks/emailTemplates'
 
 import Wrapper from '../../components/content/Wrapper'
 // import { ctcLogoEmail } from '../../constants/images'
+
+const CheckboxFormatted = styled.div`
+  padding-right: 1em;
+`
 
 class ClientManagerList extends Component {
   constructor (props) {
@@ -133,7 +138,7 @@ class ClientManagerList extends Component {
     this.setState({ business: null })
     this.setState({ showMsgBusiness: true })
     const value = 'BS' + id
-    this.props.getBusinesses(value, [4, 5], false, 6)
+    this.props.getBusinesses(value, [4, 5], false, 'xcllusive')
   }
 
   _renderBuyerLog = buyerLog => {
@@ -246,8 +251,15 @@ class ClientManagerList extends Component {
       business: null
     })
     if (value !== '') {
-      if (this.props.values.searchAllBusinesses) this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
-      else this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5], false, 6), 1000)
+      if (this.props.values.searchBusinesses === 'all') {
+        this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
+      }
+      if (this.props.values.searchBusinesses === 'xcllusive') {
+        this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5], false, 'xcllusive'), 1000)
+      }
+      if (this.props.values.searchBusinesses === 'ctc') {
+        this.timer = setTimeout(() => this.props.getBusinesses(value, 6, false, 'ctc'), 1000)
+      }
     }
   }
 
@@ -411,8 +423,8 @@ class ClientManagerList extends Component {
     })
   }
 
-  _handleChangeCheckBox = async (e, { name }) => {
-    await this.props.setFieldValue(name, !this.props.values[name])
+  _handleChangeCheckBox = async (e, { name, value }) => {
+    await this.props.setFieldValue(name, value)
     this.setState({ showMsgBusiness: false })
     if (this.timer) clearTimeout(this.timer)
     this.setState({
@@ -420,9 +432,18 @@ class ClientManagerList extends Component {
       business: null
     })
     if (this.state.inputSearchBusiness !== '') {
-      if (this.props.values.searchAllBusinesses) {
+      if (this.props.values.searchBusinesses === 'all') {
         this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness), 1000)
-      } else this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5], false, 6), 1000)
+      }
+      if (this.props.values.searchBusinesses === 'xcllusive') {
+        this.timer = setTimeout(
+          () => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5], false, 'xcllusive'),
+          1000
+        )
+      }
+      if (this.props.values.searchBusinesses === 'ctc') {
+        this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, 6, false, 'ctc'), 1000)
+      }
     }
   }
 
@@ -498,80 +519,97 @@ class ClientManagerList extends Component {
       isLoadingRequestOwnersApproval,
       values
     } = this.props
-    // Verify IM Rule
-    // if (this.state.buyer) {
-    //   console.log(this.state.buyer.caReceived, this.state.ownersApprovalReceived, this.state.buyer.scanfilePath)
-    // }
-    // if (this.state.buyer) {
-    //   console.log(
-    //     !this.state.buyer.caReceived && (this.state.buyer.scanfilePath === '' || this.state.buyer.scanfilePath === null)
-    //   )
-    // }
     return (
       <Wrapper>
         <Grid padded="horizontally" style={{ marginTop: 0 }}>
-          <Grid.Row columns={4}>
-            <Grid.Column floated="left" width={4}>
-              <h2>
-                <b>
-                  <div align="left"> Buyer</div>
-                </b>
-              </h2>
-              <Input
-                fluid
-                icon="search"
-                loading={isLoadingBuyerList}
-                placeholder="Find buyers..."
-                onChange={this._onSearchBuyer}
-                value={this.state.inputSearchBuyer}
-              />
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Grid.Row>
+                <h2>
+                  <b>
+                    <div align="left"> Buyer</div>
+                  </b>
+                </h2>
+              </Grid.Row>
+              <Grid.Row style={{ marginTop: '40px' }}>
+                <Input
+                  fluid
+                  icon="search"
+                  loading={isLoadingBuyerList}
+                  placeholder="Find buyers..."
+                  onChange={this._onSearchBuyer}
+                  value={this.state.inputSearchBuyer}
+                />
+              </Grid.Row>
+              <Grid.Row style={{ marginTop: '10px', textAlign: 'end' }}>
+                <Button size="small" onClick={() => this._newBuyer('Xcllusive')} color="facebook">
+                  <Icon name="add" />
+                  Xcllusive Buyer
+                </Button>
+                <Button size="small" onClick={() => this._newBuyer('CTC')} color="green">
+                  <Icon name="add" />
+                  CTC Buyer
+                </Button>
+              </Grid.Row>
             </Grid.Column>
-            <Grid.Column style={{ marginTop: '47px' }} floated="right">
-              <Button size="small" onClick={() => this._newBuyer('Xcllusive')} color="facebook">
-                <Icon name="add" />
-                New Xcllusive Buyer
-              </Button>
-              <Button size="small" onClick={() => this._newBuyer('CTC')} color="green">
-                <Icon name="add" />
-                New CTC Buyer
-              </Button>
-            </Grid.Column>
-            <Grid.Column floated="left" width={4}>
-              <h2>
-                <b>
-                  <div align="left"> Business </div>
-                </b>
-              </h2>
-              <Grid style={{ paddingTop: '0px', paddingBottom: '0px' }}>
-                <Grid.Row style={{ paddingTop: '0px' }} columns={1}>
-                  <Grid.Column textAlign="right">
-                    <Form.Checkbox
-                      label="Search all businesses"
-                      name="searchAllBusinesses"
+            <Grid.Column>
+              <Grid.Row>
+                <h2>
+                  <b>
+                    <div align="left"> Business </div>
+                  </b>
+                </h2>
+              </Grid.Row>
+              <Grid.Row>
+                <Form.Group>
+                  <Grid.Column style={{ marginTop: '10px', textAlign: 'end' }} width={5} verticalAlign="middle">
+                    <Checkbox
+                      as={CheckboxFormatted}
+                      label="All"
+                      name="searchBusinesses"
+                      value="all"
                       onChange={this._handleChangeCheckBox}
-                      checked={values.searchAllBusinesses}
+                      checked={values.searchBusinesses === 'all'}
+                    />
+                    <Checkbox
+                      as={CheckboxFormatted}
+                      label="Xcllusive"
+                      name="searchBusinesses"
+                      value="xcllusive"
+                      onChange={this._handleChangeCheckBox}
+                      checked={values.searchBusinesses === 'xcllusive'}
+                    />
+                    <Checkbox
+                      label="CTC"
+                      name="searchBusinesses"
+                      value="ctc"
+                      onChange={this._handleChangeCheckBox}
+                      checked={values.searchBusinesses === 'ctc'}
                     />
                   </Grid.Column>
-                </Grid.Row>
-              </Grid>
-              <Input
-                fluid
-                icon="search"
-                loading={isLoadingBusinessList}
-                placeholder="Find businesses..."
-                onChange={this._onSearchBusiness}
-                value={this.state.inputSearchBusiness}
-              />
-            </Grid.Column>
-            <Grid.Column style={{ marginTop: '47px' }}>
-              <Button size="small" onClick={() => this._newBusiness('Xcllusive')} color="facebook">
-                <Icon name="add" />
-                New Xcllusive Business
-              </Button>
-              <Button size="small" onClick={() => this._newBusiness('CTC')} color="green">
-                <Icon name="add" />
-                New CTC Business
-              </Button>
+                </Form.Group>
+              </Grid.Row>
+              <Grid.Row>
+                <Input
+                  style={{ marginTop: '10px' }}
+                  fluid
+                  icon="search"
+                  loading={isLoadingBusinessList}
+                  placeholder="Find businesses..."
+                  onChange={this._onSearchBusiness}
+                  value={this.state.inputSearchBusiness}
+                />
+              </Grid.Row>
+              <Grid.Row style={{ marginTop: '10px', textAlign: 'end' }}>
+                <Button size="small" onClick={() => this._newBusiness('Xcllusive')} color="facebook">
+                  <Icon name="add" />
+                  Xcllusive Business
+                </Button>
+                <Button size="small" onClick={() => this._newBusiness('CTC')} color="green">
+                  <Icon name="add" />
+                  CTC Business
+                </Button>
+              </Grid.Row>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row columns={2}>
@@ -741,7 +779,9 @@ class ClientManagerList extends Component {
                           <Table.Row active key={business.id} onClick={() => this._renderBusiness(business)}>
                             <Table.Cell>{`BS${business.id}`}</Table.Cell>
                             <Table.Cell>{business.businessName}</Table.Cell>
-                            <Table.Cell>{business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}</Table.Cell>
+                            <Table.Cell style={{ color: business.company_id === 1 ? '#2285d0' : '#21ba45' }}>
+                              <b>{business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}</b>
+                            </Table.Cell>
                             <Table.Cell>{numeral(business.listedPrice).format('0,0.00')}</Table.Cell>
                             <Table.Cell>{business.description}</Table.Cell>
                           </Table.Row>
@@ -1038,7 +1078,7 @@ ClientManagerList.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  searchAllBusinesses: false
+  searchBusinesses: 'xcllusive'
 })
 
 const mapStateToProps = state => ({

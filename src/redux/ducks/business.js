@@ -779,14 +779,14 @@ export const getBusinesses = (
   search = false,
   stageId = false,
   filterLog = false,
-  ctcStageId = false
+  company = false
 ) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESSES_LOADING,
     payload: true
   })
   try {
-    const businesses = await getAll(search, stageId, filterLog, ctcStageId)
+    const businesses = await getAll(search, stageId, filterLog, company)
     dispatch({
       type: Types.GET_BUSINESSES_SUCCESS,
       payload: businesses
