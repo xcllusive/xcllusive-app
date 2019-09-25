@@ -236,6 +236,16 @@ class ModalEditBuyer extends Component {
                 />
               </Form.Field>
             </Form.Group>
+            <Form.Group>
+              <Form.TextArea
+                style={{ height: '15vh' }}
+                label="Buyer Notes"
+                width={16}
+                name="buyerNotes"
+                value={values.buyerNotes}
+                onChange={handleChange}
+              />
+            </Form.Group>
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -294,7 +304,8 @@ const mapPropsToValues = props => {
     priceFrom: props.buyer ? props.buyer.priceFrom : '',
     priceTo: props.buyer ? props.buyer.priceTo : '',
     emailOptional: props.buyer && props.buyer.emailOptional ? props.buyer.emailOptional : '',
-    telephone1Number: props.buyer ? props.buyer.telephone1Number : ''
+    telephone1Number: props.buyer ? props.buyer.telephone1Number : '',
+    buyerNotes: props.buyer ? props.buyer.buyerNotes : ''
   }
 }
 

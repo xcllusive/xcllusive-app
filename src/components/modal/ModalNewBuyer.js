@@ -86,7 +86,7 @@ class ModalNewBuyer extends Component {
       handleSubmit
     } = this.props
     return (
-      <Modal open dimmer={'blurring'}>
+      <Modal open dimmer={'blurring'} size="large">
         <Modal.Header align="center">{title}</Modal.Header>
         <Modal.Content>
           <Form>
@@ -241,6 +241,16 @@ class ModalNewBuyer extends Component {
                 />
               </Form.Field>
             </Form.Group>
+            <Form.Group>
+              <Form.TextArea
+                style={{ height: '15vh' }}
+                label="Buyer Notes"
+                width={16}
+                name="buyerNotes"
+                value={values.buyerNotes}
+                onChange={handleChange}
+              />
+            </Form.Group>
           </Form>
           {duplicatedBuyerObject ? (
             <Message warning>
@@ -330,7 +340,8 @@ const mapPropsToValues = () => ({
   telephone2: '',
   priceFrom: 0,
   priceTo: 0,
-  telephone1Number: ''
+  telephone1Number: '',
+  buyerNotes: ''
 })
 
 const validationSchema = Yup.object().shape({

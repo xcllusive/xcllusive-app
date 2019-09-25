@@ -302,6 +302,105 @@ class BuyerDetails extends Component {
               {business ? business.businessName : null}
             </Header>
           </Segment>
+          <Segment style={{ backgroundColor: '#ecf4fb' }}>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={6}>
+                  <Segment style={{ height: '100%' }}>
+                    <Dimmer.Dimmable dimmed={isLoadingBuyer} style={{ height: '100%' }}>
+                      <Dimmer inverted active={isLoadingBuyer}>
+                        <Loader>Loading</Loader>
+                      </Dimmer>
+                      {buyer ? (
+                        <Fragment>
+                          <Header style={{ margin: 0 }} as="h4" content="Brokers Notes" />
+                          <Form style={{ height: '100%' }}>
+                            <Form.Group style={{ height: '100%' }}>
+                              <Form.TextArea
+                                style={{ height: '90%' }}
+                                rows={0}
+                                width={16}
+                                name="buyerNotes"
+                                value={values.buyerNotes}
+                                onChange={handleChange}
+                              />
+                            </Form.Group>
+                          </Form>
+                        </Fragment>
+                      ) : null}
+                    </Dimmer.Dimmable>
+                  </Segment>
+                </Grid.Column>
+                <Grid.Column width={10}>
+                  <Segment>
+                    <Dimmer.Dimmable dimmed={isLoadingBuyer}>
+                      <Dimmer inverted active={isLoadingBuyer}>
+                        <Loader>Loading</Loader>
+                      </Dimmer>
+                      <Form>
+                        <Form.Group>
+                          <Form.Field width={16}>
+                            <Form.TextArea
+                              label="Buyer Profile"
+                              name="profile"
+                              autoComplete="profile"
+                              value={values.profile}
+                              onChange={handleChange}
+                              disabled={true}
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.Field width={16}>
+                            <Form.TextArea
+                              label="Business Type"
+                              name="businessType"
+                              autoComplete="businessType"
+                              value={values.businessType}
+                              onChange={handleChange}
+                              disabled={true}
+                            />
+                          </Form.Field>
+                          <Form.Field>
+                            <Form.Select
+                              label="Buyer Type"
+                              options={mapArrayToValuesForDropdown(typeOptions)}
+                              name="typeId"
+                              autoComplete="typeId"
+                              value={values.typeId}
+                              onChange={this._handleSelectChange}
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.Field>
+                            <Form.Select
+                              label="Price From"
+                              options={priceOptions}
+                              name="priceFrom"
+                              autoComplete="priceFrom"
+                              value={values.priceFrom}
+                              onChange={this._handleSelectChange}
+                            />
+                          </Form.Field>
+                          <Form.Field>
+                            <Form.Select
+                              label="Price To"
+                              options={priceOptions}
+                              name="priceTo"
+                              autoComplete="priceTo"
+                              value={values.priceTo}
+                              onChange={this._handleSelectChange}
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                      </Form>
+                    </Dimmer.Dimmable>
+                  </Segment>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Segment>
           <Segment style={{ height: '300px', backgroundColor: '#d4d4d53b' }}>
             <Grid>
               <Grid.Row>
@@ -437,102 +536,9 @@ class BuyerDetails extends Component {
           </Segment>
         </Fragment>
         <Segment style={{ backgroundColor: '#d4d4d53b' }}>
-          <Grid>
+          <Grid centered>
             <Grid.Row>
-              <Grid.Column width={4}>
-                <Segment style={{ height: '100%' }}>
-                  <Dimmer.Dimmable dimmed={isLoadingBuyer} style={{ height: '100%' }}>
-                    <Dimmer inverted active={isLoadingBuyer}>
-                      <Loader>Loading</Loader>
-                    </Dimmer>
-                    {buyer ? (
-                      <Fragment>
-                        <Header style={{ margin: 0 }} as="h4" content="Brokers Notes" />
-                        <Form style={{ height: '100%' }}>
-                          <Form.Group style={{ height: '100%' }}>
-                            <Form.TextArea
-                              style={{ height: '90%' }}
-                              rows={0}
-                              width={16}
-                              name="buyerNotes"
-                              value={values.buyerNotes}
-                              onChange={handleChange}
-                            />
-                          </Form.Group>
-                        </Form>
-                      </Fragment>
-                    ) : null}
-                  </Dimmer.Dimmable>
-                </Segment>
-              </Grid.Column>
-              <Grid.Column width={8}>
-                <Segment>
-                  <Dimmer.Dimmable dimmed={isLoadingBuyer}>
-                    <Dimmer inverted active={isLoadingBuyer}>
-                      <Loader>Loading</Loader>
-                    </Dimmer>
-                    <Form>
-                      <Form.Group>
-                        <Form.Field width={16}>
-                          <Form.TextArea
-                            label="Buyer Profile"
-                            name="profile"
-                            autoComplete="profile"
-                            value={values.profile}
-                            onChange={handleChange}
-                            disabled={true}
-                          />
-                        </Form.Field>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Field width={16}>
-                          <Form.TextArea
-                            label="Business Type"
-                            name="businessType"
-                            autoComplete="businessType"
-                            value={values.businessType}
-                            onChange={handleChange}
-                            disabled={true}
-                          />
-                        </Form.Field>
-                        <Form.Field>
-                          <Form.Select
-                            label="Buyer Type"
-                            options={mapArrayToValuesForDropdown(typeOptions)}
-                            name="typeId"
-                            autoComplete="typeId"
-                            value={values.typeId}
-                            onChange={this._handleSelectChange}
-                          />
-                        </Form.Field>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Field>
-                          <Form.Select
-                            label="Price From"
-                            options={priceOptions}
-                            name="priceFrom"
-                            autoComplete="priceFrom"
-                            value={values.priceFrom}
-                            onChange={this._handleSelectChange}
-                          />
-                        </Form.Field>
-                        <Form.Field>
-                          <Form.Select
-                            label="Price To"
-                            options={priceOptions}
-                            name="priceTo"
-                            autoComplete="priceTo"
-                            value={values.priceTo}
-                            onChange={this._handleSelectChange}
-                          />
-                        </Form.Field>
-                      </Form.Group>
-                    </Form>
-                  </Dimmer.Dimmable>
-                </Segment>
-              </Grid.Column>
-              <Grid.Column width={4}>
+              <Grid.Column width={7}>
                 <Dimmer.Dimmable dimmed={isLoadingPreviousBusiness}>
                   <Dimmer inverted active={isLoadingPreviousBusiness}>
                     <Loader>Loading</Loader>
@@ -540,7 +546,7 @@ class BuyerDetails extends Component {
                   <Table celled selectable compact striped size="small">
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell>Previous Businesses</Table.HeaderCell>
+                        <Table.HeaderCell style={{ textAlign: 'center' }}>Previous Businesses</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
