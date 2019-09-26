@@ -424,7 +424,13 @@ class ClientManagerList extends Component {
   }
 
   _handleChangeCheckBox = async (e, { name, value }) => {
-    await this.props.setFieldValue(name, value)
+    if (name === 'allStages') await this.props.setFieldValue(name, !this.props.values[name])
+    else await this.props.setFieldValue(name, value)
+
+    if (this.props.values.searchBusinesses === 'all' && !this.props.values.allStages) {
+      await this.props.setFieldValue('allStages', true)
+    }
+
     this.setState({ showMsgBusiness: false })
     if (this.timer) clearTimeout(this.timer)
     this.setState({
@@ -436,13 +442,27 @@ class ClientManagerList extends Component {
         this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness), 1000)
       }
       if (this.props.values.searchBusinesses === 'xcllusive') {
-        this.timer = setTimeout(
-          () => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5], false, 'xcllusive'),
-          1000
-        )
+        if (this.props.values.allStages) {
+          this.timer = setTimeout(
+            () => this.props.getBusinesses(this.state.inputSearchBusiness, false, false, 'xcllusive'),
+            1000
+          )
+        } else {
+          this.timer = setTimeout(
+            () => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5], false, 'xcllusive'),
+            1000
+          )
+        }
       }
       if (this.props.values.searchBusinesses === 'ctc') {
-        this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, 6, false, 'ctc'), 1000)
+        if (this.props.values.allStages) {
+          this.timer = setTimeout(
+            () => this.props.getBusinesses(this.state.inputSearchBusiness, false, false, 'ctc'),
+            1000
+          )
+        } else {
+          this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, 6, false, 'ctc'), 1000)
+        }
       }
     }
   }
@@ -562,30 +582,45 @@ class ClientManagerList extends Component {
               </Grid.Row>
               <Grid.Row>
                 <Form.Group>
-                  <Grid.Column style={{ marginTop: '10px', textAlign: 'end' }} width={5} verticalAlign="middle">
-                    <Checkbox
-                      as={CheckboxFormatted}
-                      label="All"
-                      name="searchBusinesses"
-                      value="all"
-                      onChange={this._handleChangeCheckBox}
-                      checked={values.searchBusinesses === 'all'}
-                    />
-                    <Checkbox
-                      as={CheckboxFormatted}
-                      label="Xcllusive"
-                      name="searchBusinesses"
-                      value="xcllusive"
-                      onChange={this._handleChangeCheckBox}
-                      checked={values.searchBusinesses === 'xcllusive'}
-                    />
-                    <Checkbox
-                      label="CTC"
-                      name="searchBusinesses"
-                      value="ctc"
-                      onChange={this._handleChangeCheckBox}
-                      checked={values.searchBusinesses === 'ctc'}
-                    />
+                  <Grid.Column style={{ marginTop: '10px' }}>
+                    <Grid>
+                      <Grid.Row columns={2}>
+                        <Grid.Column style={{ textAlign: 'initial' }} width={4}>
+                          <Checkbox
+                            as={CheckboxFormatted}
+                            label="All Stages"
+                            name="allStages"
+                            onChange={this._handleChangeCheckBox}
+                            checked={values.allStages}
+                          />
+                        </Grid.Column>
+                        <Grid.Column style={{ textAlign: 'end' }} width={12}>
+                          <Checkbox
+                            as={CheckboxFormatted}
+                            label="All"
+                            name="searchBusinesses"
+                            value="all"
+                            onChange={this._handleChangeCheckBox}
+                            checked={values.searchBusinesses === 'all'}
+                          />
+                          <Checkbox
+                            as={CheckboxFormatted}
+                            label="Xcllusive"
+                            name="searchBusinesses"
+                            value="xcllusive"
+                            onChange={this._handleChangeCheckBox}
+                            checked={values.searchBusinesses === 'xcllusive'}
+                          />
+                          <Checkbox
+                            label="CTC"
+                            name="searchBusinesses"
+                            value="ctc"
+                            onChange={this._handleChangeCheckBox}
+                            checked={values.searchBusinesses === 'ctc'}
+                          />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Grid.Column>
                 </Form.Group>
               </Grid.Row>
@@ -1078,7 +1113,8 @@ ClientManagerList.propTypes = {
 }
 
 const mapPropsToValues = () => ({
-  searchBusinesses: 'xcllusive'
+  searchBusinesses: 'all',
+  allStages: false
 })
 
 const mapStateToProps = state => ({
