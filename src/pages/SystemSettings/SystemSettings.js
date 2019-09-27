@@ -13,7 +13,7 @@ import Buyer from './Buyer/Buyer'
 import Templates from './Templates/Templates'
 
 import { getSystemSettings } from '../../redux/ducks/systemSettings'
-// import Admin from './Admin/Admin'
+import Admin from './Admin/Admin'
 import Emails from './Emails/Emails'
 import DocumentFolderEdit from './FolderAndFiles/DocumentFolderEdit'
 import Export from './Export/Export'
@@ -50,12 +50,11 @@ class SystemSettingsPage extends Component {
         {
           menuItem: 'Export',
           render: () => <Export></Export>
+        },
+        {
+          menuItem: 'Admin',
+          render: () => <Admin />
         }
-        // ,
-        // {
-        //   menuItem: 'Admin',
-        //   render: () => <Admin />
-        // }
       ]
     }
   }

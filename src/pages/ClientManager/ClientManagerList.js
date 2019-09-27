@@ -138,7 +138,7 @@ class ClientManagerList extends Component {
     this.setState({ business: null })
     this.setState({ showMsgBusiness: true })
     const value = 'BS' + id
-    this.props.getBusinesses(value, [4, 5], false, 'xcllusive')
+    this.props.getBusinesses(value, [4, 5], false, 'xcllusive', false)
   }
 
   _renderBuyerLog = buyerLog => {
@@ -252,13 +252,19 @@ class ClientManagerList extends Component {
     })
     if (value !== '') {
       if (this.props.values.searchBusinesses === 'all') {
-        this.timer = setTimeout(() => this.props.getBusinesses(value), 1000)
+        this.timer = setTimeout(() => this.props.getBusinesses(value, false, false, false, this.props.values.allStages), 1000)
       }
       if (this.props.values.searchBusinesses === 'xcllusive') {
-        this.timer = setTimeout(() => this.props.getBusinesses(value, [4, 5], false, 'xcllusive'), 1000)
+        this.timer = setTimeout(
+          () => this.props.getBusinesses(value, [4, 5], false, 'xcllusive', this.props.values.allStages),
+          1000
+        )
       }
       if (this.props.values.searchBusinesses === 'ctc') {
-        this.timer = setTimeout(() => this.props.getBusinesses(value, 6, false, 'ctc'), 1000)
+        this.timer = setTimeout(
+          () => this.props.getBusinesses(value, 6, false, 'ctc', this.props.values.allStages),
+          1000
+        )
       }
     }
   }
@@ -427,9 +433,9 @@ class ClientManagerList extends Component {
     if (name === 'allStages') await this.props.setFieldValue(name, !this.props.values[name])
     else await this.props.setFieldValue(name, value)
 
-    if (this.props.values.searchBusinesses === 'all' && !this.props.values.allStages) {
-      await this.props.setFieldValue('allStages', true)
-    }
+    // if (this.props.values.searchBusinesses === 'all' && !this.props.values.allStages) {
+    //   await this.props.setFieldValue('allStages', true)
+    // }
 
     this.setState({ showMsgBusiness: false })
     if (this.timer) clearTimeout(this.timer)
@@ -439,17 +445,34 @@ class ClientManagerList extends Component {
     })
     if (this.state.inputSearchBusiness !== '') {
       if (this.props.values.searchBusinesses === 'all') {
-        this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness), 1000)
+        this.timer = setTimeout(
+          () => this.props.getBusinesses(this.state.inputSearchBusiness, false, false, this.props.values.allStages),
+          1000
+        )
       }
       if (this.props.values.searchBusinesses === 'xcllusive') {
         if (this.props.values.allStages) {
           this.timer = setTimeout(
-            () => this.props.getBusinesses(this.state.inputSearchBusiness, false, false, 'xcllusive'),
+            () =>
+              this.props.getBusinesses(
+                this.state.inputSearchBusiness,
+                false,
+                false,
+                'xcllusive',
+                this.props.values.allStages
+              ),
             1000
           )
         } else {
           this.timer = setTimeout(
-            () => this.props.getBusinesses(this.state.inputSearchBusiness, [4, 5], false, 'xcllusive'),
+            () =>
+              this.props.getBusinesses(
+                this.state.inputSearchBusiness,
+                [4, 5],
+                false,
+                'xcllusive',
+                this.props.values.allStages
+              ),
             1000
           )
         }
@@ -457,11 +480,22 @@ class ClientManagerList extends Component {
       if (this.props.values.searchBusinesses === 'ctc') {
         if (this.props.values.allStages) {
           this.timer = setTimeout(
-            () => this.props.getBusinesses(this.state.inputSearchBusiness, false, false, 'ctc'),
+            () =>
+              this.props.getBusinesses(
+                this.state.inputSearchBusiness,
+                false,
+                false,
+                'ctc',
+                this.props.values.allStages
+              ),
             1000
           )
         } else {
-          this.timer = setTimeout(() => this.props.getBusinesses(this.state.inputSearchBusiness, 6, false, 'ctc'), 1000)
+          this.timer = setTimeout(
+            () =>
+              this.props.getBusinesses(this.state.inputSearchBusiness, 6, false, 'ctc', this.props.values.allStages),
+            1000
+          )
         }
       }
     }
@@ -815,7 +849,7 @@ class ClientManagerList extends Component {
                             <Table.Cell>{`BS${business.id}`}</Table.Cell>
                             <Table.Cell>{business.businessName}</Table.Cell>
                             <Table.Cell style={{ color: business.company_id === 1 ? '#2285d0' : '#21ba45' }}>
-                              <b>{business.company_id === 1 ? 'Xcllusive Business' : 'CTC Business'}</b>
+                              <b>{business.company_id === 1 ? 'Xcllusive' : 'CTC'}</b>
                             </Table.Cell>
                             <Table.Cell>{numeral(business.listedPrice).format('0,0.00')}</Table.Cell>
                             <Table.Cell>{business.description}</Table.Cell>

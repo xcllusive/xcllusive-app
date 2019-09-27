@@ -55,23 +55,26 @@ class ModalNewBusiness extends Component {
 
   _findTelephoneDuplicated = (e, { name, value }) => {
     this.props.setFieldValue(name, value)
-    const findDuplicatedPhone = _.find(
-      this.props.phonesEmailBusinesses,
-      o =>
-        o.vendorPhone1 !== null &&
-        (o.vendorPhone1.split(' ').join('') === value.split(' ').join('') ||
-          o.vendorPhone1.split('-').join('') === value.split('-').join('') ||
-          o.vendorPhone1 === value)
-    )
-    if (findDuplicatedPhone && findDuplicatedPhone.vendorPhone1 !== '') {
-      this.setState({
-        phoneMsg: findDuplicatedPhone
-      })
-    } else {
-      this.setState({
-        phoneMsg: false
-      })
+    if (name === 'vendorPhone1') {
+      const findDuplicatedPhone = _.find(
+        this.props.phonesEmailBusinesses,
+        o =>
+          o.vendorPhone1 !== null &&
+          (o.vendorPhone1.split(' ').join('') === value.split(' ').join('') ||
+            o.vendorPhone1.split('-').join('') === value.split('-').join('') ||
+            o.vendorPhone1 === value)
+      )
+      if (findDuplicatedPhone && findDuplicatedPhone.vendorPhone1 !== '') {
+        this.setState({
+          phoneMsg: findDuplicatedPhone
+        })
+      } else {
+        this.setState({
+          phoneMsg: false
+        })
+      }
     }
+    this._handleChangeTelephone(value, name)
   }
 
   _findEmailDuplicated = (e, { name, value }) => {
@@ -119,6 +122,21 @@ class ModalNewBusiness extends Component {
     this.props.values.willReassign = false
     this.props.values.listingAgentCtc = null
     this.props.values.ctcStageId = null
+  }
+
+  _handleChangeTelephone = (value, name) => {
+    const onlyNumbers = value
+    let replaced = onlyNumbers.replace(/-/gi, '')
+    replaced = replaced.replace(/ /gi, '')
+    replaced = replaced.replace(/;/gi, '')
+    replaced = replaced.replace(/<[^>]+>/gi, '')
+    replaced = replaced.replace(/<[^>]>/gi, '')
+    replaced = replaced.replace(/[.*+?^${}()|[\]\\]/g, '')
+    let zero = ''
+    if (replaced.substring(0, 1) === '0') zero = 0
+    const toString = parseInt(replaced)
+    if (name === 'vendorPhone1') this.props.setFieldValue('vendorPhone1Number', `${zero}${toString.toString()}`)
+    if (name === 'vendorPhone2') this.props.setFieldValue('vendorPhone2Number', `${zero}${toString.toString()}`)
   }
 
   render () {
@@ -211,9 +229,7 @@ class ModalNewBusiness extends Component {
                     basic
                     color="red"
                     pointing
-                    content={`This phone has been already added for this business: [BS${this.state.phoneMsg.id} - ${
-                      this.state.phoneMsg.businessName
-                    }]`}
+                    content={`This phone has been already added for this business: [BS${this.state.phoneMsg.id} - ${this.state.phoneMsg.businessName}]`}
                   />
                 )}
               </Form.Field>
@@ -223,7 +239,7 @@ class ModalNewBusiness extends Component {
                   name="vendorPhone2"
                   autoComplete="vendorPhone2"
                   value={values.vendorPhone2}
-                  onChange={handleChange}
+                  onChange={this._findTelephoneDuplicated}
                   onBlur={handleBlur}
                 />
                 {errors.vendorPhone2 && touched.vendorPhone2 && (
@@ -262,9 +278,7 @@ class ModalNewBusiness extends Component {
                     basic
                     color="red"
                     pointing
-                    content={`This email has been already added for this business: [BS${this.state.emailMsg.id} - ${
-                      this.state.emailMsg.businessName
-                    }]`}
+                    content={`This email has been already added for this business: [BS${this.state.emailMsg.id} - ${this.state.emailMsg.businessName}]`}
                   />
                 )}
               </Form.Field>
@@ -560,7 +574,9 @@ const mapPropsToValues = props => ({
   ctcSourceId: props.ctcSourceId ? props.ctcSourceId : '',
   company: props.company ? props.company : '',
   where: props.where ? props.where : '',
-  willReassign: props.willReassign ? props.willReassign : false
+  willReassign: props.willReassign ? props.willReassign : false,
+  vendorPhone1Number: 0,
+  vendorPhone2Number: 0
 })
 
 const validationSchema = Yup.object().shape({

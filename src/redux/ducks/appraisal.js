@@ -641,7 +641,6 @@ export const downloadAppraisal = (appraisal, draft = false, fromAppraisalList = 
     dispatch({
       type: Types.DOWNLOAD_APPRAISAL_SUCCESS
     })
-    console.log(response)
     download(response, `BS${appraisal.Business.id}-${appraisal.Business.businessName}.pdf`)
   } catch (error) {
     dispatch({
