@@ -135,17 +135,36 @@ class DocumentFolderEdit extends Component {
     } else if (
       format === 'vnd.openxmlformats-officedocument.wordprocess' ||
       format === 'vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-      format === 'docx'
+      format === 'docx' ||
+      format === 'dotx' ||
+      format === 'docm' ||
+      format === 'dotm'
     ) {
       return type === 'icon' ? 'file word outline' : 'blue'
     } else if (
       format === 'vnd.openxmlformats-officedocument.spreadsheet' ||
       format === 'xml' ||
       format === 'csv' ||
-      format === 'xlsx'
+      format === 'xlsx' ||
+      format === 'xls' ||
+      format === 'xltx' ||
+      format === 'xlsm' ||
+      format === 'xltm' ||
+      format === 'xlam' ||
+      format === 'xlsb'
     ) {
       return type === 'icon' ? 'file excel outline' : 'green'
-    } else if (format === 'vnd.openxmlformats-officedocument.presentationml.presentation' || format === 'pptx') {
+    } else if (
+      format === 'vnd.openxmlformats-officedocument.presentationml.presentation' ||
+      format === 'pptx' ||
+      format === 'ppt' ||
+      format === 'potx' ||
+      format === 'ppsx' ||
+      format === 'ppam' ||
+      format === 'pptm' ||
+      format === 'potm' ||
+      format === 'ppsm'
+    ) {
       return type === 'icon' ? 'file powerpoint outline' : 'purple'
     } else {
       return type === 'icon' ? 'file text outline' : 'grey'

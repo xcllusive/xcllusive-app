@@ -105,3 +105,33 @@ export const getAllEnquiries = business => {
     params
   })
 }
+
+export const getBusinessesAdvancedSearch = values => {
+  const params = {}
+  if (values.businessName && values.businessName !== '') params.businessName = values.businessName
+  if (values.firstNameV && values.firstNameV !== '') params.firstNameV = values.firstNameV
+  if (values.lastNameV && values.lastNameV !== '') params.lastNameV = values.businessName
+  if (values.vendorEmail && values.vendorEmail !== '') params.vendorEmail = values.vendorEmail
+  if (values.vendoPhone1 && values.vendoPhone1 !== '') params.vendoPhone1 = values.vendoPhone1
+  if (values.suburb && values.suburb !== '') params.suburb = values.suburb
+  if (values.postCode && values.postCode !== '') params.postCode = values.postCode
+  if (values.businessType && values.businessType !== '') params.businessType = values.businessType
+  if (values.businessProduct && values.businessProduct !== '') params.businessProduct = values.businessName
+  if (values.industry && values.industry !== '') params.industry = values.industry
+  if (values.priceFrom && values.priceFrom !== '') params.priceFrom = values.priceFrom
+  if (values.priceTo && values.priceTo !== '') params.priceTo = values.priceTo
+  if (values.listingAgent_id && values.listingAgent_id !== '') params.listingAgent_id = values.listingAgent_id
+  if (values.listingAgentCtc_id && values.listingAgentCtc_id !== '') {
+    params.listingAgentCtc_id = values.listingAgentCtc_id
+  }
+  if (values.sourceId && values.sourceId !== '') params.sourceId = values.sourceId
+  if (values.stageId && values.stageId !== '') params.stageId = values.stageId
+  if (values.ctcStageId && values.ctcStageId !== '') params.ctcStageId = values.ctcStageId
+  if (values.ctcSourceId && values.ctcSourceId !== '') params.ctcSourceId = values.ctcSourceId
+  params.company = !!values.company
+
+  return request({
+    url: '/business/advanced-search',
+    params
+  })
+}

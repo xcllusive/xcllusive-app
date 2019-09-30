@@ -252,7 +252,10 @@ class ClientManagerList extends Component {
     })
     if (value !== '') {
       if (this.props.values.searchBusinesses === 'all') {
-        this.timer = setTimeout(() => this.props.getBusinesses(value, false, false, false, this.props.values.allStages), 1000)
+        this.timer = setTimeout(
+          () => this.props.getBusinesses(value, false, false, false, this.props.values.allStages),
+          1000
+        )
       }
       if (this.props.values.searchBusinesses === 'xcllusive') {
         this.timer = setTimeout(
@@ -669,15 +672,27 @@ class ClientManagerList extends Component {
                   value={this.state.inputSearchBusiness}
                 />
               </Grid.Row>
-              <Grid.Row style={{ marginTop: '10px', textAlign: 'end' }}>
-                <Button size="small" onClick={() => this._newBusiness('Xcllusive')} color="facebook">
-                  <Icon name="add" />
-                  Xcllusive Business
-                </Button>
-                <Button size="small" onClick={() => this._newBusiness('CTC')} color="green">
-                  <Icon name="add" />
-                  CTC Business
-                </Button>
+              <Grid.Row style={{ marginTop: '10px' }}>
+                <Grid>
+                  <Grid.Row columns={2}>
+                    <Grid.Column width={5}>
+                      <Button size="small" onClick={() => history.push('/clientManager/advanced-search')} color="twitter">
+                        <Icon name="add" />
+                        Advanced Search
+                      </Button>
+                    </Grid.Column>
+                    <Grid.Column style={{ textAlign: 'end' }} width={11}>
+                      <Button size="small" onClick={() => this._newBusiness('Xcllusive')} color="facebook">
+                        <Icon name="add" />
+                        Xcllusive Business
+                      </Button>
+                      <Button size="small" onClick={() => this._newBusiness('CTC')} color="green">
+                        <Icon name="add" />
+                        CTC Business
+                      </Button>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
               </Grid.Row>
             </Grid.Column>
           </Grid.Row>

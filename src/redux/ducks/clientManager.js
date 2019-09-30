@@ -10,7 +10,8 @@ import {
   sendEnquiryToOwner as sendEnquiryToOwnerAPI,
   sendEmailCtcBusiness as sendEmailCtcBusinessAPI,
   sendSms as sendSmsAPI,
-  getAllEnquiries as getAllEnquiriesAPI
+  getAllEnquiries as getAllEnquiriesAPI,
+  getBusinessesAdvancedSearch as getBusinessesAdvancedSearchAPI
 } from '../../services/api/clientManager'
 
 export const Types = {
@@ -43,7 +44,10 @@ export const Types = {
   SEND_SMS_FAILURE: 'SEND_SMS_FAILURE',
   GET_ALL_ENQUIRIES_LOADING: 'GET_ALL_ENQUIRIES_LOADING',
   GET_ALL_ENQUIRIES_SUCCESS: 'GET_ALL_ENQUIRIES_SUCCESS',
-  GET_ALL_ENQUIRIES_FAILURE: 'GET_ALL_ENQUIRIES_FAILURE'
+  GET_ALL_ENQUIRIES_FAILURE: 'GET_ALL_ENQUIRIES_FAILURE',
+  GET_BUSINESS_ADVANCED_SEARCH_LOADING: 'GET_BUSINESS_ADVANCED_SEARCH_LOADING',
+  GET_BUSINESS_ADVANCED_SEARCH_SUCCESS: 'GET_BUSINESS_ADVANCED_SEARCH_SUCCESS',
+  GET_BUSINESS_ADVANCED_SEARCH_FAILURE: 'GET_BUSINESS_ADVANCED_SEARCH_FAILURE'
 }
 
 // Reducer
@@ -584,6 +588,26 @@ export const getAllEnquiries = business => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.GET_ALL_ENQUIRIES_FAILURE,
+      payload: error
+    })
+    toast.error(error.message)
+  }
+}
+
+export const getBusinessesAdvancedSearch = values => async dispatch => {
+  dispatch({
+    type: Types.GET_BUSINESS_ADVANCED_SEARCH_LOADING,
+    payload: true
+  })
+  try {
+    const enquiries = await getBusinessesAdvancedSearchAPI(values)
+    dispatch({
+      type: Types.GET_BUSINESS_ADVANCED_SEARCH_SUCCESS,
+      payload: enquiries
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.GET_BUSINESS_ADVANCED_SEARCH_FAILURE,
       payload: error
     })
     toast.error(error.message)

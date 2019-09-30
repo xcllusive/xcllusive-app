@@ -45,3 +45,9 @@ export const activeInactive = user => {
     data: user
   })
 }
+
+export const getBrokers = () => {
+  return request({
+    url: '/user/brokers'
+  })
+}
