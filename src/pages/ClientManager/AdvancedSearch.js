@@ -3,7 +3,23 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
-import { Form, Label, Segment, Header, Button, Dropdown, Radio, Grid } from 'semantic-ui-react'
+import numeral from 'numeral'
+import {
+  Form,
+  Label,
+  Segment,
+  Header,
+  Button,
+  Dropdown,
+  Radio,
+  Grid,
+  Table,
+  Icon,
+  Dimmer,
+  Loader,
+  Divider,
+  Pagination
+} from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
 import { openModal } from '../../redux/ducks/modal'
@@ -17,7 +33,8 @@ class AdvancedSearch extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      priceOptions: OptionsPriceSelectBuyer
+      priceOptions: OptionsPriceSelectBuyer,
+      inUse: false
     }
   }
 
@@ -67,6 +84,39 @@ class AdvancedSearch extends Component {
 
   _handleSearch = () => {
     this.props.getBusinessesAdvancedSearch(this.props.values)
+    this.setState({
+      inUse: true
+    })
+  }
+
+  _handlePaginationChange = (e, { activePage }) => {
+    this.props.getBusinessesAdvancedSearch(this.props.values, 50, activePage)
+  }
+
+  _handleClear = () => {
+    console.log(this.props.values)
+    this.props.values = {}
+    this.props.setFieldValue({
+      firstNameV: '',
+      lastNameV: '',
+      vendorEmail: '',
+      vendorPhone1: '',
+      suburb: '',
+      postCode: '',
+      businessType: '',
+      businessProduct: '',
+      industry: '',
+      priceFrom: '',
+      priceTo: '',
+      brokerAccountName: '',
+      listingAgent_id: '',
+      listingAgentCtc_id: '',
+      sourceId: '',
+      stageId: '',
+      ctcStageId: '',
+      ctcSourceId: '',
+      company: true
+    })
   }
 
   render () {
@@ -84,12 +134,18 @@ class AdvancedSearch extends Component {
       stageOptions,
       ctcStageOptions,
       ctcSourceOptions,
-      ctcAnalysts
+      ctcAnalysts,
+      businessesList,
+      isLoadingList,
+      isFound,
+      activePageList,
+      pagesList,
+      totalBusiness
     } = this.props
-    const { priceOptions } = this.state
+    const { priceOptions, inUse } = this.state
     return (
       <Wrapper>
-        <Segment style={{ backgroundColor: '#008eff26' }}>
+        <Segment style={{ marginTop: '10px', backgroundColor: '#008eff26' }} size="tiny">
           <Header as="h3" textAlign="center">
             Advanced Search
           </Header>
@@ -185,6 +241,7 @@ class AdvancedSearch extends Component {
                 {errors.postCode && touched.postCode && <Label basic color="red" pointing content={errors.postCode} />}
               </Form.Field>
             </Form.Group>
+            <Divider style={{ marginTop: '30px', paddingBottom: '10px' }}></Divider>
             <Form.Group widths="equal">
               <Form.Field>
                 <label>Business Type</label>
@@ -203,6 +260,17 @@ class AdvancedSearch extends Component {
                 )}
               </Form.Field>
               <Form.Field>
+                <Form.Input
+                  label="Industry"
+                  name="industry"
+                  autoComplete="industry"
+                  value={values.industry}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.industry && touched.industry && <Label basic color="red" pointing content={errors.industry} />}
+              </Form.Field>
+              <Form.Field>
                 <Form.Select
                   label="Product"
                   options={mapArrayToValuesForDropdown(productOptions)}
@@ -215,19 +283,6 @@ class AdvancedSearch extends Component {
                   <Label basic color="red" pointing content={errors.businessProduct} />
                 )}
               </Form.Field>
-              <Form.Field>
-                <Form.Input
-                  label="Industry"
-                  name="industry"
-                  autoComplete="industry"
-                  value={values.industry}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.industry && touched.industry && <Label basic color="red" pointing content={errors.industry} />}
-              </Form.Field>
-            </Form.Group>
-            <Form.Group>
               <Form.Field>
                 <Form.Select
                   label="Price From"
@@ -249,6 +304,7 @@ class AdvancedSearch extends Component {
                 />
               </Form.Field>
             </Form.Group>
+            <Divider style={{ marginTop: '30px', paddingBottom: '10px' }}></Divider>
             <Form.Group>
               <Form.Field
                 style={{ marginLeft: '10px', marginTop: '35px' }}
@@ -270,16 +326,18 @@ class AdvancedSearch extends Component {
                 <Form.Field width={3}>
                   <label>Broker</label>
                   <Dropdown
-                    name="broker"
+                    name="brokerAccountName"
                     fluid
                     search
                     selection
                     options={this._mapValuesToArray(usersBroker)}
-                    value={values.broker}
+                    value={values.brokerAccountName}
                     onChange={this._handleSelectChange}
                     onSearchChange={this._handleSearchChange}
                   />
-                  {errors.broker && touched.broker && <Label basic color="red" pointing content={errors.broker} />}
+                  {errors.brokerAccountName && touched.brokerAccountName && (
+                    <Label basic color="red" pointing content={errors.brokerAccountName} />
+                  )}
                 </Form.Field>
               ) : null}
               {values.company ? (
@@ -299,6 +357,7 @@ class AdvancedSearch extends Component {
                   </Form.Field>
                   <Form.Field width={4}>
                     <Form.Select
+                      style={{ backgroundColor: '#fffca2a8' }}
                       label="Business Stage"
                       options={mapArrayToValuesForDropdown(stageOptions)}
                       name="stageId"
@@ -337,6 +396,7 @@ class AdvancedSearch extends Component {
                   </Form.Field>
                   <Form.Field width={4}>
                     <Form.Select
+                      style={{ backgroundColor: '#fffca2a8' }}
                       label="Business Stage"
                       options={mapArrayToValuesForDropdown(ctcStageOptions)}
                       name="ctcStageId"
@@ -361,8 +421,8 @@ class AdvancedSearch extends Component {
               )}
             </Form.Group>
             <Grid>
-              <Grid.Row>
-                <Grid.Column style={{ textAlign: 'center' }}>
+              <Grid.Row columns={2}>
+                <Grid.Column style={{ textAlign: 'right' }}>
                   <Form.Field>
                     <Button
                       style={{ width: '200px' }}
@@ -370,9 +430,21 @@ class AdvancedSearch extends Component {
                       icon="search"
                       labelPosition="right"
                       content="Search"
-                      loading={this.state.isLoadingBusinessesSold}
-                      disabled={this.state.isLoadingBusinessesSold}
+                      loading={isLoadingList}
                       onClick={this._handleSearch}
+                    />
+                  </Form.Field>
+                </Grid.Column>
+                <Grid.Column style={{ textAlign: 'right' }}>
+                  <Form.Field>
+                    <Button
+                      size="small"
+                      color="yellow"
+                      icon="eraser"
+                      labelPosition="right"
+                      content="Clear"
+                      loading={isLoadingList}
+                      onClick={() => this._handleClear()}
                     />
                   </Form.Field>
                 </Grid.Column>
@@ -380,33 +452,78 @@ class AdvancedSearch extends Component {
             </Grid>
           </Form>
         </Segment>
-        <Segment style={{ backgroundColor: '#daf3e4' }} size="tiny">
-          {/* <Table color="blue" celled inverted size="small" compact selectable structured collapsing>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell style={{ backgroundColor: '#115ea2' }} textAlign="center" colSpan="12">
-                  Sold Business Information
-                </Table.HeaderCell>
-              </Table.Row>
-              <Table.Row>
-                <Table.HeaderCell rowSpan="1">Business Type</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            {listSelected ? (
-              <Table.Body>
-                {listSelected.map(selectedList => (
-                  <Table.Row active key={selectedList.id}>
-                    <Table.Cell>
-                      <Icon link name="search" onClick={() => window.open(`/business/${selectedList.business_id}`)} />
-                      {selectedList.label ? selectedList.label : selectedList.BusinessType.label}
-                    </Table.Cell>
+        {businessesList && businessesList.length > 0 ? (
+          <Segment style={{ backgroundColor: '#daf3e4' }} size="small">
+            <Dimmer.Dimmable dimmed>
+              <Dimmer inverted active={isLoadingList}>
+                <Loader>Loading</Loader>
+              </Dimmer>
+              <Grid>
+                <Grid.Row columns={2}>
+                  <Grid.Column textAlign="left">
+                    <Header style={{ marginTop: '10px' }} as="h4">
+                      Businesses Found: {totalBusiness}
+                    </Header>
+                  </Grid.Column>
+                  <Grid.Column textAlign="right">
+                    <Pagination
+                      size="mini"
+                      onPageChange={(e, data) => this._handlePaginationChange(e, data)}
+                      defaultActivePage={activePageList}
+                      totalPages={pagesList}
+                      firstItem={null}
+                      lastItem={null}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              <Table size="small" compact color="blue" celled inverted selectable>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell textAlign="center">ID</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Name</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Vendor Name</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Suburb</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Industry</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Price</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Listing Agent</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Broker</Table.HeaderCell>
                   </Table.Row>
-                ))}
-              </Table.Body>
-            ) : null}
-          </Table>
-         */}
-        </Segment>
+                </Table.Header>
+                <Table.Body>
+                  {businessesList.map(business => (
+                    <Table.Row onClick={() => window.open(`/business/${business.id}`)} active key={business.id}>
+                      <Table.Cell>
+                        <Icon link name="search" onClick={() => window.open(`/business/${business.id}`)} />
+                        {business.id}
+                      </Table.Cell>
+                      <Table.Cell>{business.businessName}</Table.Cell>
+                      <Table.Cell>{business.vendorName}</Table.Cell>
+                      <Table.Cell>{business.suburb}</Table.Cell>
+                      <Table.Cell>{business.industry}</Table.Cell>
+                      <Table.Cell>{numeral(business.price).format('$0,0')}</Table.Cell>
+                      <Table.Cell>{business.analystName}</Table.Cell>
+                      <Table.Cell>{business.brokerName}</Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Dimmer.Dimmable>
+          </Segment>
+        ) : (
+          <Fragment>
+            <Dimmer.Dimmable dimmed>
+              <Dimmer inverted active={isLoadingList}>
+                <Loader>Loading</Loader>
+              </Dimmer>
+              {inUse && isFound ? (
+                <Header as="h4" textAlign="center">
+                  Ops... no records found!
+                </Header>
+              ) : null}
+            </Dimmer.Dimmable>
+          </Fragment>
+        )}
       </Wrapper>
     )
   }
@@ -436,7 +553,13 @@ AdvancedSearch.propTypes = {
   ctcStageOptions: PropTypes.array,
   ctcSourceOptions: PropTypes.array,
   ctcAnalysts: PropTypes.array,
-  getBusinessesAdvancedSearch: PropTypes.func
+  getBusinessesAdvancedSearch: PropTypes.func,
+  businessesList: PropTypes.array,
+  isLoadingList: PropTypes.bool,
+  isFound: PropTypes.bool,
+  activePageList: PropTypes.number,
+  pagesList: PropTypes.number,
+  totalBusiness: PropTypes.number
 }
 
 const mapPropsToValues = props => ({
@@ -444,7 +567,7 @@ const mapPropsToValues = props => ({
   firstNameV: '',
   lastNameV: '',
   vendorEmail: '',
-  vendoPhone1: '',
+  vendorPhone1: '',
   suburb: '',
   postCode: '',
   businessType: '',
@@ -452,6 +575,7 @@ const mapPropsToValues = props => ({
   industry: '',
   priceFrom: '',
   priceTo: '',
+  brokerAccountName: '',
   listingAgent_id: '',
   listingAgentCtc_id: '',
   sourceId: '',
@@ -471,7 +595,13 @@ const mapStateToProps = state => {
     usersBroker: state.user.getBrokers.array,
     sourceOptions: state.businessRegister.get.source.array,
     ctcStageOptions: state.businessRegister.get.ctcStage.array,
-    ctcSourceOptions: state.businessRegister.get.ctcBusinessSource.array
+    ctcSourceOptions: state.businessRegister.get.ctcBusinessSource.array,
+    businessesList: state.clientManager.getBusinessesAdvancedSearch.array,
+    isLoadingList: state.clientManager.getBusinessesAdvancedSearch.isLoading,
+    activePageList: state.clientManager.getBusinessesAdvancedSearch.activePage,
+    pagesList: state.clientManager.getBusinessesAdvancedSearch.pages,
+    isFound: state.clientManager.getBusinessesAdvancedSearch.isFound,
+    totalBusiness: state.clientManager.getBusinessesAdvancedSearch.totalBusiness
   }
 }
 

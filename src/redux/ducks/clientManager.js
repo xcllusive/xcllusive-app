@@ -103,6 +103,15 @@ const initialState = {
     array: [],
     totalEnquiries: 0,
     error: null
+  },
+  getBusinessesAdvancedSearch: {
+    isLoading: false,
+    array: [],
+    pages: 0,
+    activePage: 1,
+    totalBusiness: 0,
+    isFound: false,
+    error: null
   }
 }
 
@@ -389,6 +398,38 @@ export default function reducer (state = initialState, action) {
           error: action.payload
         }
       }
+    case Types.GET_BUSINESS_ADVANCED_SEARCH_LOADING:
+      return {
+        ...state,
+        getBusinessesAdvancedSearch: {
+          ...state.getBusinessesAdvancedSearch,
+          isLoading: action.payload,
+          isFound: false,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_ADVANCED_SEARCH_SUCCESS:
+      return {
+        ...state,
+        getBusinessesAdvancedSearch: {
+          ...state.getBusinessesAdvancedSearch,
+          isLoading: false,
+          array: action.payload.data,
+          pages: action.payload.itemCount,
+          totalBusiness: action.payload.pageCount,
+          isFound: true,
+          error: null
+        }
+      }
+    case Types.GET_BUSINESS_ADVANCED_SEARCH_FAILURE:
+      return {
+        ...state,
+        getBusinessesAdvancedSearch: {
+          ...state.getBusinessesAdvancedSearch,
+          isLoading: false,
+          error: action.payload
+        }
+      }
     default:
       return state
   }
@@ -594,13 +635,13 @@ export const getAllEnquiries = business => async dispatch => {
   }
 }
 
-export const getBusinessesAdvancedSearch = values => async dispatch => {
+export const getBusinessesAdvancedSearch = (values, limit = 50, page) => async dispatch => {
   dispatch({
     type: Types.GET_BUSINESS_ADVANCED_SEARCH_LOADING,
     payload: true
   })
   try {
-    const enquiries = await getBusinessesAdvancedSearchAPI(values)
+    const enquiries = await getBusinessesAdvancedSearchAPI(values, limit, page)
     dispatch({
       type: Types.GET_BUSINESS_ADVANCED_SEARCH_SUCCESS,
       payload: enquiries

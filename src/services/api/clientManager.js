@@ -106,13 +106,17 @@ export const getAllEnquiries = business => {
   })
 }
 
-export const getBusinessesAdvancedSearch = values => {
+export const getBusinessesAdvancedSearch = (values, limit, page) => {
   const params = {}
+
+  if (limit) params.limit = limit
+  if (page) params.page = page
+
   if (values.businessName && values.businessName !== '') params.businessName = values.businessName
   if (values.firstNameV && values.firstNameV !== '') params.firstNameV = values.firstNameV
-  if (values.lastNameV && values.lastNameV !== '') params.lastNameV = values.businessName
+  if (values.lastNameV && values.lastNameV !== '') params.lastNameV = values.lastNameV
   if (values.vendorEmail && values.vendorEmail !== '') params.vendorEmail = values.vendorEmail
-  if (values.vendoPhone1 && values.vendoPhone1 !== '') params.vendoPhone1 = values.vendoPhone1
+  if (values.vendorPhone1 && values.vendorPhone1 !== '') params.vendorPhone1 = values.vendorPhone1
   if (values.suburb && values.suburb !== '') params.suburb = values.suburb
   if (values.postCode && values.postCode !== '') params.postCode = values.postCode
   if (values.businessType && values.businessType !== '') params.businessType = values.businessType
@@ -120,9 +124,10 @@ export const getBusinessesAdvancedSearch = values => {
   if (values.industry && values.industry !== '') params.industry = values.industry
   if (values.priceFrom && values.priceFrom !== '') params.priceFrom = values.priceFrom
   if (values.priceTo && values.priceTo !== '') params.priceTo = values.priceTo
-  if (values.listingAgent_id && values.listingAgent_id !== '') params.listingAgent_id = values.listingAgent_id
+  if (values.brokerAccountName && values.brokerAccountName !== '') params.brokerAccountName = values.brokerAccountName
+  if (values.listingAgent_id && values.listingAgent_id !== '') params.xcllusiveAnalyst = values.listingAgent_id
   if (values.listingAgentCtc_id && values.listingAgentCtc_id !== '') {
-    params.listingAgentCtc_id = values.listingAgentCtc_id
+    params.ctcAnalyst = values.listingAgentCtc_id
   }
   if (values.sourceId && values.sourceId !== '') params.sourceId = values.sourceId
   if (values.stageId && values.stageId !== '') params.stageId = values.stageId
