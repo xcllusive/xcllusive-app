@@ -1,4 +1,5 @@
 import request from './'
+import moment from 'moment'
 
 export const sendCa = (buyerId, businessId) =>
   request({
@@ -134,6 +135,8 @@ export const getBusinessesAdvancedSearch = (values, limit, page) => {
   if (values.ctcStageId && values.ctcStageId !== '') params.ctcStageId = values.ctcStageId
   if (values.ctcSourceId && values.ctcSourceId !== '') params.ctcSourceId = values.ctcSourceId
   params.company = !!values.company
+  if (values.dateFrom && values.dateFrom !== '') params.dateFrom = moment(values.dateFrom).format('YYYY-MM-DD 00:00:00')
+  if (values.dateTo && values.dateTo !== '') params.dateTo = moment(values.dateTo).format('YYYY-MM-DD 00:00:00')
 
   return request({
     url: '/business/advanced-search',

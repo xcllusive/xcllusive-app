@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 import numeral from 'numeral'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import moment from 'moment'
 import {
   Form,
   Label,
@@ -22,7 +25,7 @@ import {
 } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import Wrapper from '../../components/content/Wrapper'
-import { openModal } from '../../redux/ducks/modal'
+import { openModal, TypesModal } from '../../redux/ducks/modal'
 import { getUsers, getBrokers } from '../../redux/ducks/user'
 import { getBusinessRegister } from '../../redux/ducks/businessRegister'
 import { mapArrayToValuesForDropdown } from '../../utils/sharedFunctionArray'
@@ -94,28 +97,32 @@ class AdvancedSearch extends Component {
   }
 
   _handleClear = () => {
-    console.log(this.props.values)
-    this.props.values = {}
-    this.props.setFieldValue({
-      firstNameV: '',
-      lastNameV: '',
-      vendorEmail: '',
-      vendorPhone1: '',
-      suburb: '',
-      postCode: '',
-      businessType: '',
-      businessProduct: '',
-      industry: '',
-      priceFrom: '',
-      priceTo: '',
-      brokerAccountName: '',
-      listingAgent_id: '',
-      listingAgentCtc_id: '',
-      sourceId: '',
-      stageId: '',
-      ctcStageId: '',
-      ctcSourceId: '',
-      company: true
+    window.location.reload()
+  }
+
+  _handleDateFromChange = date => {
+    if (moment(date).diff(moment(this.props.values.dateTo)) > 0) {
+      this._showMsg('smaller')
+    } else {
+      this.props.setFieldValue('dateFrom', date)
+    }
+  }
+
+  _handleDateToChange = date => {
+    if (moment(this.props.values.dateFrom).isSameOrAfter(moment(date))) {
+      this._showMsg('bigger')
+    } else {
+      this.props.setFieldValue('dateTo', date)
+    }
+  }
+
+  _showMsg = message => {
+    this.props.openModal(TypesModal.MODAL_TYPE_SHOW_MSG, {
+      options: {
+        title: 'Alert:',
+        content: 'Got it!',
+        text: message === 'bigger' ? 'Date To must be bigger than Date From' : 'Date From must be smaller than Date To'
+      }
     })
   }
 
@@ -420,6 +427,37 @@ class AdvancedSearch extends Component {
                 </Fragment>
               )}
             </Form.Group>
+            <Form.Group style={{ marginLeft: '20px' }}>
+              <Form.Field>
+                <label
+                  style={{
+                    marginTop: '5px',
+                    marginRight: '15px',
+                    fontSize: '.92857143em',
+                    color: 'rgba(0,0,0,.87)',
+                    fontWeight: '700'
+                  }}
+                >
+                  Date From:
+                </label>
+                <DatePicker selected={values.dateFrom} onChange={this._handleDateFromChange} />
+              </Form.Field>
+              <Form.Field>
+                <label
+                  style={{
+                    marginTop: '5px',
+                    marginRight: '15px',
+                    fontSize: '.92857143em',
+                    color: 'rgba(0,0,0,.87)',
+                    fontWeight: '700'
+                  }}
+                >
+                  Date To:
+                </label>
+                <DatePicker selected={values.dateTo} onChange={this._handleDateToChange} />
+              </Form.Field>
+            </Form.Group>
+
             <Grid>
               <Grid.Row columns={2}>
                 <Grid.Column style={{ textAlign: 'right' }}>
@@ -443,7 +481,6 @@ class AdvancedSearch extends Component {
                       icon="eraser"
                       labelPosition="right"
                       content="Clear"
-                      loading={isLoadingList}
                       onClick={() => this._handleClear()}
                     />
                   </Form.Field>
@@ -583,6 +620,8 @@ const mapPropsToValues = props => ({
   ctcStageId: '',
   ctcSourceId: '',
   company: true
+  // dateFrom: moment(),
+  // dateTo: moment()
 })
 
 const mapStateToProps = state => {

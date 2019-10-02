@@ -554,7 +554,8 @@ class ClientManagerList extends Component {
     this.props.history.push({
       pathname: `/clientManager/enquiries/${business.id}`,
       state: {
-        business
+        business,
+        comingFrom: 'clientManager'
       }
     })
   }
@@ -676,8 +677,12 @@ class ClientManagerList extends Component {
                 <Grid>
                   <Grid.Row columns={2}>
                     <Grid.Column width={5}>
-                      <Button size="small" onClick={() => history.push('/clientManager/advanced-search')} color="twitter">
-                        <Icon name="add" />
+                      <Button
+                        size="small"
+                        onClick={() => history.push('/clientManager/advanced-search')}
+                        color="twitter"
+                      >
+                        <Icon name="magnify" />
                         Advanced Search
                       </Button>
                     </Grid.Column>

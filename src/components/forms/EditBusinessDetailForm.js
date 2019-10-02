@@ -292,6 +292,16 @@ class EditBusinessDetailForm extends Component {
     })
   }
 
+  _showEnquiries = business => {
+    this.props.history.push({
+      pathname: `/business/enquiries/${business.id}`,
+      state: {
+        business,
+        comingFrom: 'business'
+      }
+    })
+  }
+
   render () {
     const {
       values,
@@ -862,6 +872,15 @@ class EditBusinessDetailForm extends Component {
                   </Form.Button>
                 ) : null}
                 <Form.Group>
+                  <Form.Button
+                    // disabled={isSubmitting || !isValid}
+                    color="blue"
+                    size="small"
+                    onClick={() => this._showEnquiries(this.props.business)}
+                  >
+                    <Icon name="folder open" />
+                    Show Enquiries
+                  </Form.Button>
                   {this._isUserClientManager() ? (
                     <Form.Button
                       // disabled={isSubmitting || !isValid}

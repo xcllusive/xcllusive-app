@@ -176,6 +176,12 @@ const Layout = ({ match, logout, menu, user }) => (
       />
       <AuthorizationRoute
         exact
+        component={ShowEnquiries}
+        path={`${match.path}business/enquiries/:idBusiness`}
+        allowedRoles="BUSINESS_MENU"
+      />
+      <AuthorizationRoute
+        exact
         component={BuyerDetails}
         path={`${match.path}buyer/:idBuyer/business/:idBusiness`}
         allowedRoles="BUYER_MENU"
