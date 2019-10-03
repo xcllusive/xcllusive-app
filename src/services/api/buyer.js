@@ -112,6 +112,13 @@ export const updateBusinessFromBuyer = business => {
   })
 }
 
+export const checkCaReminder = today => {
+  return request({
+    method: 'put',
+    url: '/buyer/ca-reminder'
+  })
+}
+
 export const getBusinessLogFromBuyer = (businessId, search) => {
   const params = {
     businessId

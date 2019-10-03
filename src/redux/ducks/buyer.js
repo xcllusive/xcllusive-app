@@ -16,7 +16,8 @@ import {
   updateBusinessFromBuyer as updateBusinessFromBuyerAPI,
   getBusinessLogFromBuyer as getBusinessLogFromBuyerAPI,
   updateBusinessLogFromBuyer as updateBusinessLogFromBuyerAPI,
-  finaliseBusinessLogFromBuyer as finaliseBusinessLogFromBuyerAPI
+  finaliseBusinessLogFromBuyer as finaliseBusinessLogFromBuyerAPI,
+  checkCaReminder as checkCaReminderAPI
 } from '../../services/api/buyer'
 
 // Action Types
@@ -73,7 +74,10 @@ export const Types = {
   VERIFY_DUPLICATED_BUYER_SUCCESS: 'VERIFY_DUPLICATED_BUYER_SUCCESS',
   VERIFY_DUPLICATED_BUYER_FAILURE: 'VERIFY_DUPLICATED_BUYER_FAILURE',
   CLEAR_BUYER: 'CLEAR_BUYER',
-  SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED: 'SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED'
+  SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED: 'SET_BUSINESS_LAST_TAB_FROM_BUYER_SELECTED',
+  CHECK_CA_REMINDER_LOADING: 'CHECK_CA_REMINDER_LOADING',
+  CHECK_CA_REMINDER_SUCCESS: 'CHECK_CA_REMINDER_SUCCESS',
+  CHECK_CA_REMINDER_FAILURE: 'CHECK_CA_REMINDER_FAILURE'
 }
 
 // Reducer
@@ -187,6 +191,11 @@ const initialState = {
   },
   setLastTabSelected: {
     index: 0
+  },
+  checkCaReminder: {
+    isLoading: false,
+    isChecked: false,
+    error: null
   }
 }
 
@@ -711,6 +720,35 @@ export default function reducer (state = initialState, action) {
           index: action.payload
         }
       }
+    case Types.CHECK_CA_REMINDER_LOADING:
+      return {
+        ...state,
+        checkCaReminder: {
+          ...state.checkCaReminder,
+          isLoading: action.payload,
+          error: null
+        }
+      }
+    case Types.CHECK_CA_REMINDER_SUCCESS:
+      return {
+        ...state,
+        checkCaReminder: {
+          ...state.checkCaReminder,
+          isLoading: false,
+          isChecked: action.payload,
+          error: null
+        }
+      }
+    case Types.CHECK_CA_REMINDER_FAILURE:
+      return {
+        ...state,
+        checkCaReminder: {
+          ...state.checkCaReminder,
+          isLoading: false,
+          isChecked: false,
+          error: action.payload
+        }
+      }
     case Types.CLEAR_BUYER:
       return initialState
     default:
@@ -757,6 +795,25 @@ export const updateBuyer = buyer => async dispatch => {
   } catch (error) {
     dispatch({
       type: Types.UPDATE_BUYER_FAILURE,
+      payload: error
+    })
+  }
+}
+
+export const checkCaReminder = () => async dispatch => {
+  dispatch({
+    type: Types.CHECK_CA_REMINDER_LOADING,
+    payload: true
+  })
+  try {
+    await checkCaReminderAPI()
+    dispatch({
+      type: Types.CHECK_CA_REMINDER_SUCCESS
+      // payload: buyer
+    })
+  } catch (error) {
+    dispatch({
+      type: Types.CHECK_CA_REMINDER_FAILURE,
       payload: error
     })
   }

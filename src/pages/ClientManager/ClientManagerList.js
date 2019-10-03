@@ -25,7 +25,7 @@ import { bindActionCreators } from 'redux'
 import { withFormik } from 'formik'
 
 import { TypesModal, openModal, closeModal } from '../../redux/ducks/modal'
-import { getBuyers, createBuyer, updateBuyer } from '../../redux/ducks/buyer'
+import { getBuyers, createBuyer, updateBuyer, checkCaReminder } from '../../redux/ducks/buyer'
 import { getBusinesses, getBusiness, createBusiness, updateBusiness } from '../../redux/ducks/business'
 import { getLog, clearBuyerLog } from '../../redux/ducks/buyerLog'
 import styled from 'styled-components'
@@ -82,9 +82,7 @@ class ClientManagerList extends Component {
   }
 
   componentDidMount () {
-    // this.props.getBuyers()
-    // this.props.getBusinesses(false, [4, 5])
-    //  this.props.getLog()
+    this.props.checkCaReminder()
   }
 
   componentDidUpdate () {
@@ -1163,7 +1161,8 @@ ClientManagerList.propTypes = {
   newBusinessObject: PropTypes.object,
   sendEmailCtcBusiness: PropTypes.func,
   sendSms: PropTypes.func,
-  bodyEmailCtc: PropTypes.string
+  bodyEmailCtc: PropTypes.string,
+  checkCaReminder: PropTypes.func
 }
 
 const mapPropsToValues = () => ({
@@ -1219,7 +1218,8 @@ const mapDispatchToProps = dispatch =>
       closeModal,
       updateBusiness,
       sendEmailCtcBusiness,
-      sendSms
+      sendSms,
+      checkCaReminder
     },
     dispatch
   )
