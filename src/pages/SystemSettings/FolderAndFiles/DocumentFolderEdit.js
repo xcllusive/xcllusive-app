@@ -269,7 +269,7 @@ class DocumentFolderEdit extends Component {
                                             color="red"
                                             size="large"
                                             link
-                                            onClick={() => this._removeDocumentFile(folderOffice)}
+                                            onClick={() => this._removeDocumentFile(files)}
                                           />
                                           <Icon
                                             link
@@ -376,7 +376,7 @@ class DocumentFolderEdit extends Component {
                                             color="red"
                                             size="large"
                                             link
-                                            onClick={() => this._removeDocumentFile(folderOffice)}
+                                            onClick={() => this._removeDocumentFile(files)}
                                           />
                                           <Icon
                                             link
@@ -483,7 +483,7 @@ class DocumentFolderEdit extends Component {
                                             color="red"
                                             size="large"
                                             link
-                                            onClick={() => this._removeDocumentFile(folderOffice)}
+                                            onClick={() => this._removeDocumentFile(files)}
                                           />
                                           <Icon
                                             link
@@ -600,7 +600,7 @@ class DocumentFolderEdit extends Component {
                                                 color="red"
                                                 size="large"
                                                 link
-                                                onClick={() => this._removeDocumentFile(folderOffice)}
+                                                onClick={() => this._removeDocumentFile(files)}
                                               />
                                               <Icon
                                                 link
