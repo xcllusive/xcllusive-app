@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Tab } from 'semantic-ui-react'
 import Reports from './Reports/Reports'
+import MessageMercury from './MessageMercury'
 
 class XcllusiveManagementReports extends Component {
   constructor (props) {
@@ -13,6 +14,10 @@ class XcllusiveManagementReports extends Component {
         {
           menuItem: 'Reports',
           render: () => <Reports history={this.props.history} />
+        },
+        {
+          menuItem: 'Message Mercury',
+          render: () => <MessageMercury></MessageMercury>
         }
       ]
     }
