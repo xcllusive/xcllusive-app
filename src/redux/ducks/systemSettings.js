@@ -240,6 +240,7 @@ export const updateSystemSettings = systemSettings => async dispatch => {
       type: Types.UPDATE_SYSTEM_SETTINGS_SUCCESS,
       payload: systemSettings
     })
+    toast.success('Settings saved successfully.')
   } catch (error) {
     dispatch({
       type: Types.UPDATE_SYSTEM_SETTINGS_FAILURE,
