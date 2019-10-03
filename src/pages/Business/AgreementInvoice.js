@@ -194,7 +194,7 @@ class AgreementInvoice extends Component {
           if (whereFrom === 'all') {
             await this.props.sendAgreement({
               businessId: this.props.location.state.business.id,
-              body: this.props.propertyAgreement.body,
+              body: this.props.propertyAgreement ? this.props.propertyAgreement.body : object.body,
               mail: object
             })
           }
