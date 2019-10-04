@@ -314,10 +314,10 @@ class BuyerDetails extends Component {
                       {buyer ? (
                         <Fragment>
                           <Header style={{ margin: 0 }} as="h4" content="Brokers Notes" />
-                          <Form style={{ height: '100%' }}>
-                            <Form.Group style={{ height: '100%' }}>
+                          <Form>
+                            <Form.Group style={{ height: '80%' }}>
                               <Form.TextArea
-                                style={{ height: '90%' }}
+                                style={{ height: '17em' }}
                                 rows={0}
                                 width={16}
                                 name="buyerNotes"
@@ -325,6 +325,12 @@ class BuyerDetails extends Component {
                                 onChange={handleChange}
                               />
                             </Form.Group>
+                            {buyer.brokersNotesDate ? (
+
+                              <label style={{ color: 'grey' }}>{`Modified on ${moment(buyer.brokersNotesDate).format(
+                                'MMMM YYYY'
+                              )} by ${buyer.brokersNotesModifiedBy_id}`}</label>
+                            ) : null}
                           </Form>
                         </Fragment>
                       ) : null}
@@ -636,6 +642,8 @@ const mapPropsToValues = props => {
     buyerLog_followUp: '',
     buyerLog_text: '',
     newLog: false
+    // brokersNotesDate: props.buyer ? moment(props.buyer.brokersNotesDate).format('MMMM YYYY') : '',
+    // brokersNotesModifiedBy_id: props.buyer ? props.buyer.brokersNotesModifiedBy_id : ''
   }
 }
 
