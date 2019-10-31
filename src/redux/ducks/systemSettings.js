@@ -260,6 +260,7 @@ export const exportBuyers = (dateFrom, dateTo, company) => async dispatch => {
       type: Types.EXPORT_BUYERS_SUCCESS,
       payload: response
     })
+    console.log(response)
     if (response.type !== 'text/html') download(response, `buyers${moment().format('DD_MM_YYYY_hh_mm_ss')}.xlsx`)
     else toast.error('No buyers in the period informed')
   } catch (error) {

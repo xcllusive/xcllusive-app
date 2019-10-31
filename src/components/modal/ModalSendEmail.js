@@ -65,6 +65,20 @@ class ModalSendEmail extends Component {
                   {errors.to && touched.to && <Label basic color="red" pointing content={errors.to} />}
                 </Form.Field>
               </Form.Group>
+              {values.cc ? (
+                <Form.Group>
+                  <Form.Field width={16}>
+                    <Form.Input
+                      label="CC Email"
+                      name="cc"
+                      autoComplete="cc"
+                      value={values.cc}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                  </Form.Field>
+                </Form.Group>
+              ) : null}
               <Form.Group>
                 <Form.Field width={16}>
                   <Form.Input
@@ -110,7 +124,8 @@ ModalSendEmail.propTypes = {
   options: PropTypes.shape({
     title: PropTypes.string.isRequired,
     emailTemplate: PropTypes.number.isRequired,
-    to: PropTypes.string.isRequired
+    to: PropTypes.string.isRequired,
+    cc: PropTypes.string.isRequired
   }).isRequired,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -135,6 +150,7 @@ const mapStateToProps = state => ({
 
 const mapPropsToValues = props => ({
   to: props.options ? props.options.to : '',
+  cc: props.options ? props.options.cc : '',
   subject: props.objectEmailTemplate ? props.objectEmailTemplate.subject : '',
   body: props.objectEmailTemplate ? props.objectEmailTemplate.body : ''
 })

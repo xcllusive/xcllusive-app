@@ -444,6 +444,18 @@ class EditBusinessDetailForm extends Component {
                       <Label basic color="red" pointing content={errors.vendorEmail} />
                     )}
                   </Form.Field>
+                  <Form.Field>
+                    <Form.Input
+                      label="CC Email"
+                      name="ccEmail"
+                      autoComplete="ccEmail"
+                      value={values.ccEmail}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                  </Form.Field>
+                </Form.Group>
+                <Form.Group widths="equal">
                   {this.props.business.company_id === 1 ? (
                     <Form.Field>
                       <label>Source</label>
@@ -481,7 +493,6 @@ class EditBusinessDetailForm extends Component {
                       )}
                     </Form.Field>
                   )}
-
                   <Form.Field>
                     <Form.Input
                       label="Source Notes"
@@ -999,6 +1010,7 @@ const mapPropsToValues = props => {
       vendorPhone2,
       vendorPhone3,
       vendorEmail,
+      ccEmail,
       sourceNotes,
       description,
       businessNameSecondary,
@@ -1033,6 +1045,7 @@ const mapPropsToValues = props => {
       vendorPhone2,
       vendorPhone3,
       vendorEmail,
+      ccEmail,
       sourceNotes,
       description,
       businessNameSecondary,
@@ -1069,6 +1082,7 @@ const mapPropsToValues = props => {
     vendorPhone2: '',
     vendorPhone3: '',
     vendorEmail: '',
+    ccEmail: '',
     sourceNotes: '',
     description: '',
     businessNameSecondary: '',

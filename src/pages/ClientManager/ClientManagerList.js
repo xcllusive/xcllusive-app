@@ -507,7 +507,8 @@ class ClientManagerList extends Component {
       options: {
         title: 'Send Enquiry CTC',
         emailTemplate: 16,
-        to: business.vendorEmail
+        to: business.vendorEmail,
+        cc: business.ccEmail
       },
       businessId: business.id,
       buyerId: buyer.id,
