@@ -5,7 +5,7 @@ import { logout } from '../../redux/ducks/auth'
 const client = axios.create({
   // baseURL: 'http://docker-xcllusive-test-api.ap-southeast-2.elasticbeanstalk.com'
   // baseURL: 'http://xcllusive-api-prod.ap-southeast-2.elasticbeanstalk.com'
-  //baseURL: process.env.REACT_APP_API_URL
+  // baseURL: process.env.REACT_APP_API_URL
   // baseURL: 'http://localhost:5000'
   baseURL: 'https://api-nonprod.cloud.xcllusive.com.au/'
 })
