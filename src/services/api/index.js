@@ -7,7 +7,8 @@ const client = axios.create({
   // baseURL: 'http://xcllusive-api-prod.ap-southeast-2.elasticbeanstalk.com'
   // baseURL: process.env.REACT_APP_API_URL
   // baseURL: 'http://localhost:5000'
-  baseURL: 'https://api-old.xcllusive.com.au/'
+  // baseURL: 'https://api-old.xcllusive.com.au/'
+  baseURL: 'https://api-prod.cloud.xcllusive.com.au'
 })
 
 const request = async options => {
