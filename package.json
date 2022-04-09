@@ -31,7 +31,7 @@
     "jest": "23.4.1",
     "jodit-react": "^1.0.26",
     "lint-staged": "^7.2.0",
-    "moment": "^2.21.0",
+    "moment": "^2.29.2",
     "numeral": "^2.0.6",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "4.0.0",
